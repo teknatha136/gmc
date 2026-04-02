@@ -1,0 +1,21 @@
+# SELISE GMC
+
+This is **not a code repository**. This directory tracks everything related to **SELISE GMC** — the setup of a new SELISE office in Gelephu Mindfulness City, Bhutan, under SELISE Group AG (HQ: Zurich, Switzerland).
+
+This is a long-term project (2+ years minimum). Subdirectories will grow over time — each major area has its own CLAUDE.md with detailed context.
+
+## Subdirectories
+- `pelsung/` — Pelsung digital training program (multi-year, multi-cohort). See `pelsung/CLAUDE.md`.
+
+## Project-wide files
+- `TIMELINE.md` — Running journal of major events. Do some search and put short summaries.
+
+## Conventions
+- Subdirectories own their own CLAUDE.md as they grow
+- Keep documents practical and actionable
+- Sensitive data (trainee PII, CIDs) must not be exposed in logs or public docs
+- Prefer preserving historical materials over overwriting them
+
+# Updating CLAUDE.md files
+- Update each CLAUDE.md with relevant context for that area (e.g. Pelsung training program details in `pelsung/CLAUDE.md`)
+- Update with required information after each task if required
