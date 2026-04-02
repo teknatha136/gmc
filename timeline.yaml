@@ -1,0 +1,95 @@
+# SELISE GMC — Timeline
+# Source of truth. Use /timeline skill to add entries.
+# Fields: date, title, body, tags[], people[], location, category, program
+#
+# Categories: gmc-setup, training, planning, travel, milestone, event
+# Programs: pelsung-c3 (cohort 3), pelsung-c4, gmc-office, etc.
+# Tags: free-form, for filtering (e.g. presentation, logistics, AI, curriculum)
+
+- date: 2026-03-08
+  title: SELISE X Pelsung presentation to Cohort 3
+  category: milestone
+  program: pelsung-c3
+  tags: [presentation, pelsung, cohort-3, gelephu]
+  people: [Tek Nath Acharya]
+  location: Pelrithang, Royal Bhutan Army Wing IX, Gelephu
+  body: >
+    Tek Nath Acharya presented "SELISE X Pelsung" to the 3rd cohort of Pelsung.
+    Introduced SELISE Group AG and its 14+ year track record (700 employees,
+    1200+ projects, global delivery hubs). Outlined the vision for launching
+    SELISE GMC aligned with the Gelephu Mindfulness City initiative. Announced
+    plans to form a Digital Sub-Cohort of up to 50 candidates trained across
+    4 verticals — Software Development, Business Analysis, UX Design, and
+    QA/Testing — with a structured program including corporate skills training
+    and core specialization, leading to potential hiring into SELISE.
+
+- date: 2026-03-24
+  title: GMC project directory initialized
+  category: gmc-setup
+  program: gmc-office
+  tags: [setup, project-init]
+  people: [Tek Nath Acharya]
+  location: Thimphu
+  body: >
+    Initialized GMC project directory. Preparing for office setup and
+    Pelsung training program.
+
+- date: 2026-04-02
+  title: Training approach call with Rajiv Hassan
+  category: planning
+  program: pelsung-c3
+  tags: [SELISE Blocks, Agent OS, spec-driven, AI, curriculum]
+  people: [Tek Nath Acharya, Rajiv Hassan]
+  location: Remote
+  body: >
+    Call with Rajiv Hassan (CPO, SELISE Group AG) to discuss training approach.
+    Two key directions: (1) Use SELISE Blocks — the company's composable aPaaS
+    platform with modular microservices and packaged business capabilities — as
+    the foundation for trainee projects. (2) Adopt Agent OS for spec-driven
+    development, aligning with the AI-era hourglass model where coding standards
+    and specs drive AI-powered implementation.
+
+- date: 2026-04-04
+  title: Tek travels to Gelephu
+  category: travel
+  program: pelsung-c3
+  tags: [travel, gelephu, logistics]
+  people: [Tek Nath Acharya]
+  location: Thimphu → Gelephu
+  body: >
+    Tek Nath Acharya travels to Gelephu ahead of training program start.
+
+- date: 2026-04-05
+  title: Bhuwan travels to Gelephu
+  category: travel
+  program: pelsung-c3
+  tags: [travel, gelephu, logistics]
+  people: [Bhuwan Sharma]
+  location: Thimphu → Gelephu
+  body: >
+    Bhuwan Sharma travels to Gelephu to join the training team.
+
+- date: 2026-04-07
+  title: Desuung training complete, SELISE training begins
+  category: milestone
+  program: pelsung-c3
+  tags: [training-start, desuung, cohort-3]
+  people: [Tek Nath Acharya, Bhuwan Sharma]
+  location: Gelephu
+  body: >
+    Pelsung Cohort 3 completes Desuung training. SELISE Digital Training
+    Program begins for 45 trainees across 4 verticals: Software Development
+    (FE-focused), Software Design (UX/UI), Software Testing (QA), Software
+    Business Analysis.
+
+- date: 2026-06-01
+  title: Exhibition / Showcase Day
+  category: event
+  program: pelsung-c3
+  tags: [exhibition, demo-day, graduation, His Majesty]
+  people: []
+  location: Gelephu
+  body: >
+    Exhibition/Showcase Day (exact date TBD). Trainers and trainees present
+    what was built during the program. Pelsung Cohort 3 graduation — His
+    Majesty may be present.

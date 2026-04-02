@@ -8,7 +8,7 @@ This is a long-term project (2+ years minimum). Subdirectories will grow over ti
 - `pelsung/` — Pelsung digital training program (multi-year, multi-cohort). See `pelsung/CLAUDE.md`.
 
 ## Project-wide files
-- `TIMELINE.md` — Running journal of major events. Do some search and put short summaries.
+- `timeline.yaml` — **Source of truth** for all events. Structured YAML with date, title, category, program, tags, people, location, body. Use `/timeline` skill to add entries. Filterable by category/program/tags for generating reports/docs.
 
 ## Conventions
 - Subdirectories own their own CLAUDE.md as they grow
