@@ -1,0 +1,19 @@
+# People Notes — Cohort 3
+# Quick observations, role suggestions, action items, and anything noteworthy about trainees.
+# Added via the /note skill or manually.
+#
+# Structure per person:
+#   - name, cid, vertical (if assigned), then a list of dated notes
+#   - Each note has: date, text, and optional tags (role-suggestion, action-item, skill, observation, flag)
+
+trainees:
+  - name: Dawa Zangmo
+    cid: "11702001098"
+    vertical: ba
+    notes:
+      - date: 2026-04-07
+        text: Consider for admin position — fluent in 6 languages, strong communication skills
+        tags: [role-suggestion, skill]
+      - date: 2026-04-07
+        text: "Check if she can drive"
+        tags: [action-item]
