@@ -1,0 +1,3707 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Apr 10 · Professional Skills & AI Basics — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ===== RESET & BASE ===== */
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --blue: #0073aa;
+        --indigo: #1447e6;
+        --amber: #f99c00;
+        --green: #00a544;
+        --purple: #ac4bff;
+        --red: #dc2626;
+        --text: #171717;
+        --muted: #6a7282;
+        --faint: #99a1af;
+        --surf: #ffffff;
+        --bg: #f8f9fb;
+        --border: #e5e7eb;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        font-family: "DM Sans", system-ui, sans-serif;
+        background: #111;
+        overflow: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ===== PRESENTATION SHELL ===== */
+      #deck {
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .slide {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 5vh 7vw;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateX(60px);
+        transition:
+          opacity 0.35s ease,
+          transform 0.35s ease;
+        background: var(--surf);
+        overflow: hidden;
+      }
+      .slide.active {
+        opacity: 1;
+        pointer-events: all;
+        transform: translateX(0);
+      }
+      .slide.exit {
+        opacity: 0;
+        transform: translateX(-60px);
+      }
+
+      /* ===== SLIDE ACCENT BAR ===== */
+      .slide::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+      }
+      .accent-gradient::before {
+        background: linear-gradient(
+          90deg,
+          var(--blue),
+          var(--indigo),
+          var(--amber)
+        );
+      }
+      .accent-blue::before {
+        background: var(--blue);
+      }
+      .accent-indigo::before {
+        background: var(--indigo);
+      }
+      .accent-amber::before {
+        background: var(--amber);
+      }
+      .accent-green::before {
+        background: var(--green);
+      }
+
+      /* ===== SLIDE BACKGROUNDS ===== */
+      .bg-dark {
+        background: #0f172a;
+        color: white;
+      }
+      .bg-blue {
+        background: linear-gradient(135deg, #0073aa 0%, #005c88 100%);
+        color: white;
+      }
+      .bg-indigo {
+        background: linear-gradient(135deg, #1447e6 0%, #0c2e8a 100%);
+        color: white;
+      }
+      .bg-amber {
+        background: linear-gradient(135deg, #f99c00 0%, #e07e00 100%);
+        color: white;
+      }
+      .bg-green {
+        background: linear-gradient(135deg, #00a544 0%, #007d33 100%);
+        color: white;
+      }
+      .bg-subtle {
+        background: #f8f9fb;
+      }
+
+      /* ===== PROGRESS BAR ===== */
+      #progress {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        height: 3px;
+        background: linear-gradient(
+          90deg,
+          var(--blue),
+          var(--indigo),
+          var(--amber)
+        );
+        transition: width 0.3s ease;
+        z-index: 100;
+      }
+
+      /* ===== NAV CONTROLS ===== */
+      #nav {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(15, 23, 42, 0.75);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 100px;
+        padding: 8px 16px;
+        z-index: 100;
+      }
+      .nav-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        transition: background 0.2s;
+      }
+      .nav-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+      }
+      #slide-counter {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.7);
+        font-weight: 600;
+        min-width: 52px;
+        text-align: center;
+      }
+
+      /* ===== FULLSCREEN BTN ===== */
+      #fs-btn {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(8px);
+        color: white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        z-index: 100;
+        transition: background 0.2s;
+      }
+      #fs-btn:hover {
+        background: rgba(15, 23, 42, 0.9);
+      }
+
+      /* ===== CLICK ZONES — pointer-events:none so buttons underneath stay clickable ===== */
+      #zone-prev,
+      #zone-next {
+        pointer-events: none;
+      }
+
+      /* ============================
+       TYPOGRAPHY
+    ============================ */
+      .eyebrow {
+        font-size: clamp(0.65rem, 1vw, 0.8rem);
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        opacity: 0.6;
+        margin-bottom: 0.6rem;
+      }
+      h1.display {
+        font-family: "DM Serif Display", serif;
+        font-size: clamp(3rem, 6vw, 5.5rem);
+        font-weight: 400;
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+      }
+      h2.heading {
+        font-family: "DM Serif Display", serif;
+        font-size: clamp(2rem, 4.5vw, 3.8rem);
+        font-weight: 400;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+      }
+      h3.subheading {
+        font-size: clamp(1.2rem, 2.5vw, 1.9rem);
+        font-weight: 700;
+        line-height: 1.2;
+      }
+      p.body-lg {
+        font-size: clamp(1rem, 1.8vw, 1.35rem);
+        line-height: 1.6;
+      }
+      p.body-md {
+        font-size: clamp(0.9rem, 1.5vw, 1.15rem);
+        line-height: 1.6;
+      }
+
+      /* ============================
+       LAYOUT HELPERS
+    ============================ */
+      .center {
+        text-align: center;
+        width: 100%;
+      }
+      .left {
+        text-align: left;
+        width: 100%;
+      }
+      .cols-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: clamp(1.5rem, 3vw, 3rem);
+        width: 100%;
+      }
+      .cols-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: clamp(1rem, 2vw, 2rem);
+        width: 100%;
+      }
+      .stack {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+      }
+
+      /* ============================
+       PILL / BADGE
+    ============================ */
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 0.3rem 0.9rem;
+        border-radius: 100px;
+        font-size: clamp(0.65rem, 1vw, 0.78rem);
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+      }
+      .pill-blue {
+        background: rgba(0, 115, 170, 0.15);
+        color: var(--blue);
+      }
+      .pill-indigo {
+        background: rgba(20, 71, 230, 0.12);
+        color: var(--indigo);
+      }
+      .pill-amber {
+        background: rgba(249, 156, 0, 0.15);
+        color: #9a6200;
+      }
+      .pill-green {
+        background: rgba(0, 165, 68, 0.12);
+        color: var(--green);
+      }
+      .pill-white {
+        background: rgba(255, 255, 255, 0.18);
+        color: white;
+      }
+      .pill-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+
+      /* ============================
+       CARD
+    ============================ */
+      .card {
+        background: var(--bg);
+        border: 1.5px solid var(--border);
+        border-radius: clamp(10px, 1.5vw, 18px);
+        padding: clamp(1rem, 2vw, 1.75rem);
+      }
+      .card-dark {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1.5px solid rgba(255, 255, 255, 0.15);
+        border-radius: clamp(10px, 1.5vw, 18px);
+        padding: clamp(1rem, 2vw, 1.75rem);
+      }
+      .card h4 {
+        font-size: clamp(0.85rem, 1.5vw, 1.1rem);
+        font-weight: 700;
+        margin-bottom: 0.6rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .card ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+      }
+      .card ul li {
+        font-size: clamp(0.8rem, 1.3vw, 1rem);
+        color: var(--muted);
+        padding-left: 1.2rem;
+        position: relative;
+        line-height: 1.45;
+      }
+      .card ul li::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: var(--faint);
+        font-size: 0.8em;
+        top: 0.1em;
+      }
+
+      /* ============================
+       BULLET REVEAL
+    ============================ */
+      .reveal-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: clamp(0.6rem, 1.2vw, 1.1rem);
+        width: 100%;
+      }
+      .reveal-list li {
+        font-size: clamp(1rem, 1.8vw, 1.4rem);
+        color: var(--muted);
+        padding-left: 2rem;
+        position: relative;
+        line-height: 1.45;
+        opacity: 0;
+        transform: translateY(10px);
+        transition:
+          opacity 0.3s ease,
+          transform 0.3s ease;
+      }
+      .reveal-list li.shown {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .reveal-list li::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: var(--faint);
+      }
+      .reveal-list.dark li {
+        color: rgba(255, 255, 255, 0.8);
+      }
+      .reveal-list.dark li::before {
+        color: rgba(255, 255, 255, 0.35);
+      }
+      .reveal-hint {
+        font-size: clamp(0.7rem, 1vw, 0.82rem);
+        opacity: 0.45;
+        margin-top: 0.75rem;
+        font-style: italic;
+      }
+
+      /* ============================
+       SLIDE 1 — TITLE
+    ============================ */
+      .title-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        text-align: center;
+        max-width: 900px;
+      }
+      .date-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 100px;
+        padding: 0.4rem 1.1rem;
+        font-size: clamp(0.7rem, 1vw, 0.82rem);
+        font-weight: 600;
+        color: var(--muted);
+        letter-spacing: 0.04em;
+      }
+      .date-badge .db-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--amber);
+      }
+      .class-tags {
+        display: flex;
+        gap: 0.75rem;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .class-tag {
+        padding: 0.4rem 1rem;
+        border-radius: 8px;
+        font-size: clamp(0.78rem, 1.2vw, 0.92rem);
+        font-weight: 600;
+      }
+      .tag-blue {
+        background: #e6f3f9;
+        color: var(--blue);
+      }
+      .tag-indigo {
+        background: #e8edfb;
+        color: var(--indigo);
+      }
+
+      /* ============================
+       AGENDA SLIDE
+    ============================ */
+      .agenda-row {
+        display: flex;
+        align-items: center;
+        gap: clamp(0.75rem, 1.5vw, 1.5rem);
+        padding: clamp(0.6rem, 1vw, 0.9rem) clamp(0.75rem, 1.5vw, 1.25rem);
+        border-radius: 12px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        cursor: pointer;
+        transition:
+          border-color 0.18s,
+          background 0.18s,
+          transform 0.15s;
+        user-select: none;
+      }
+      .agenda-row:hover {
+        border-color: var(--indigo);
+        background: #f0f3ff;
+        transform: translateX(4px);
+      }
+      .agenda-row.break-row {
+        background: #f0fdf4;
+        border-color: #a3e0bc;
+      }
+      .agenda-row.break-row:hover {
+        border-color: var(--green);
+        background: #e6ffed;
+      }
+      .ar-time {
+        font-size: clamp(0.72rem, 1vw, 0.85rem);
+        font-weight: 700;
+        color: var(--faint);
+        min-width: clamp(80px, 8vw, 110px);
+      }
+      .ar-dot {
+        width: clamp(8px, 1vw, 10px);
+        height: clamp(8px, 1vw, 10px);
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .ar-label {
+        font-size: clamp(0.88rem, 1.4vw, 1.1rem);
+        font-weight: 600;
+      }
+      .ar-badge {
+        margin-left: auto;
+        font-size: clamp(0.65rem, 0.9vw, 0.75rem);
+        font-weight: 700;
+        padding: 0.2rem 0.6rem;
+        border-radius: 100px;
+        letter-spacing: 0.04em;
+      }
+
+      /* ============================
+       SECTION BREAK SLIDE
+    ============================ */
+      .section-num {
+        font-family: "DM Serif Display", serif;
+        font-size: clamp(5rem, 14vw, 12rem);
+        line-height: 1;
+        opacity: 0.08;
+        position: absolute;
+        right: 5vw;
+        bottom: -2vh;
+        pointer-events: none;
+        font-weight: 400;
+      }
+
+      /* ============================
+       COMM FLOW DIAGRAM
+    ============================ */
+      .comm-flow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        width: 100%;
+        flex-wrap: nowrap;
+      }
+      .cf-node {
+        background: var(--surf);
+        border: 2px solid var(--border);
+        border-radius: 12px;
+        padding: clamp(0.6rem, 1.2vw, 1rem) clamp(0.8rem, 1.5vw, 1.25rem);
+        font-size: clamp(0.75rem, 1.1vw, 0.95rem);
+        font-weight: 600;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.3rem;
+        min-width: clamp(70px, 9vw, 110px);
+        text-align: center;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .cf-node:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      }
+      .cf-node .cf-icon {
+        font-size: clamp(1.2rem, 2vw, 1.8rem);
+      }
+      .cf-arrow {
+        font-size: clamp(1rem, 1.5vw, 1.3rem);
+        color: var(--faint);
+        padding: 0 clamp(2px, 0.5vw, 8px);
+        flex-shrink: 0;
+      }
+      .cf-sender {
+        border-color: var(--blue);
+        color: var(--blue);
+      }
+      .cf-msg {
+        border-color: var(--amber);
+        color: #9a6200;
+      }
+      .cf-channel {
+        border-color: var(--purple);
+        color: var(--purple);
+      }
+      .cf-receiver {
+        border-color: var(--green);
+        color: var(--green);
+      }
+      .cf-feedback {
+        border-color: var(--faint);
+        color: var(--muted);
+      }
+      .cf-label {
+        margin-top: clamp(0.75rem, 1.5vw, 1.25rem);
+        display: flex;
+        gap: clamp(0.5rem, 1.5vw, 2rem);
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .cf-label span {
+        font-size: clamp(0.65rem, 0.9vw, 0.78rem);
+        color: var(--muted);
+        padding: 0.2rem 0.6rem;
+        background: var(--bg);
+        border-radius: 6px;
+        border: 1px solid var(--border);
+      }
+
+      /* ============================
+       EISENHOWER MATRIX
+    ============================ */
+      .matrix-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        width: 100%;
+        max-width: 680px;
+      }
+      .matrix-col-hdrs {
+        display: grid;
+        grid-template-columns: clamp(50px, 5vw, 70px) 1fr 1fr;
+        gap: 6px;
+      }
+      .mch {
+        text-align: center;
+        font-size: clamp(0.65rem, 0.9vw, 0.8rem);
+        font-weight: 700;
+        color: var(--muted);
+        padding: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .matrix-body {
+        display: grid;
+        grid-template-columns: clamp(50px, 5vw, 70px) 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 6px;
+      }
+      .mrh {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: clamp(0.65rem, 0.9vw, 0.8rem);
+        font-weight: 700;
+        color: var(--muted);
+        writing-mode: vertical-lr;
+        transform: rotate(180deg);
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .mq {
+        border-radius: 14px;
+        padding: clamp(0.8rem, 1.5vw, 1.25rem);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.3rem;
+        text-align: center;
+        cursor: pointer;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .mq:hover {
+        transform: scale(1.03);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      }
+      .mq .mq-icon {
+        font-size: clamp(1.4rem, 2.5vw, 2rem);
+      }
+      .mq .mq-title {
+        font-size: clamp(0.8rem, 1.2vw, 1rem);
+        font-weight: 700;
+      }
+      .mq .mq-sub {
+        font-size: clamp(0.65rem, 0.9vw, 0.8rem);
+        color: var(--muted);
+        line-height: 1.3;
+      }
+      .q1 {
+        background: #fff7e6;
+        border: 2px solid #fcd9a0;
+      }
+      .q2 {
+        background: #e6f3f9;
+        border: 2px solid #b3d7ec;
+      }
+      .q3 {
+        background: #f0fdf4;
+        border: 2px solid #a3e0bc;
+      }
+      .q4 {
+        background: #fef2f2;
+        border: 2px solid #fbc7c7;
+      }
+
+      /* ============================
+       EMAIL MOCK
+    ============================ */
+      .email-mock {
+        background: white;
+        border: 1.5px solid var(--border);
+        border-radius: 14px;
+        overflow: hidden;
+        width: 100%;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+      }
+      .em-header {
+        background: var(--bg);
+        border-bottom: 1px solid var(--border);
+        padding: clamp(0.75rem, 1.2vw, 1rem) clamp(1rem, 1.5vw, 1.5rem);
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+      }
+      .em-field {
+        font-size: clamp(0.75rem, 1.1vw, 0.9rem);
+        display: flex;
+        gap: 0.5rem;
+      }
+      .em-label {
+        color: var(--faint);
+        font-weight: 600;
+        min-width: 55px;
+      }
+      .em-val {
+        color: var(--muted);
+      }
+      .em-val strong {
+        color: var(--text);
+      }
+      .em-body {
+        padding: clamp(1rem, 1.5vw, 1.5rem);
+        font-size: clamp(0.8rem, 1.2vw, 0.95rem);
+        color: var(--muted);
+        line-height: 1.7;
+      }
+      .ann {
+        display: inline-block;
+        background: var(--indigo);
+        color: white;
+        font-size: 0.6em;
+        font-weight: 700;
+        padding: 0.05rem 0.45rem;
+        border-radius: 4px;
+        vertical-align: middle;
+        margin-left: 4px;
+      }
+
+      /* ============================
+       QUIZ SLIDE
+    ============================ */
+      .quiz-options {
+        display: flex;
+        flex-direction: column;
+        gap: clamp(0.6rem, 1vw, 0.9rem);
+        width: 100%;
+        max-width: 720px;
+      }
+      .quiz-opt {
+        padding: clamp(0.8rem, 1.3vw, 1.1rem) clamp(1rem, 1.8vw, 1.5rem);
+        border-radius: 12px;
+        border: 2px solid var(--border);
+        background: var(--bg);
+        cursor: pointer;
+        font-size: clamp(0.9rem, 1.4vw, 1.1rem);
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        transition: all 0.2s ease;
+      }
+      .quiz-opt:hover {
+        border-color: var(--indigo);
+        background: #f0f3ff;
+      }
+      .quiz-opt.correct {
+        border-color: var(--green);
+        background: #f0fdf4;
+        color: #065f30;
+      }
+      .quiz-opt.wrong {
+        border-color: var(--red);
+        background: #fef2f2;
+        color: #7f1d1d;
+      }
+      .quiz-opt.dim {
+        opacity: 0.45;
+      }
+      .quiz-opt .qo-letter {
+        width: clamp(26px, 3vw, 32px);
+        height: clamp(26px, 3vw, 32px);
+        min-width: clamp(26px, 3vw, 32px);
+        border-radius: 50%;
+        background: var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: clamp(0.75rem, 1vw, 0.88rem);
+        font-weight: 700;
+        color: var(--muted);
+        transition: all 0.2s;
+      }
+      .quiz-opt.correct .qo-letter {
+        background: var(--green);
+        color: white;
+      }
+      .quiz-opt.wrong .qo-letter {
+        background: var(--red);
+        color: white;
+      }
+      .quiz-feedback {
+        margin-top: clamp(0.5rem, 1vw, 0.9rem);
+        padding: clamp(0.7rem, 1vw, 1rem) clamp(1rem, 1.5vw, 1.25rem);
+        border-radius: 10px;
+        font-size: clamp(0.82rem, 1.2vw, 0.98rem);
+        display: none;
+        width: 100%;
+        max-width: 720px;
+      }
+      .quiz-feedback.show {
+        display: block;
+      }
+      .qf-correct {
+        background: #f0fdf4;
+        border: 1px solid #a3e0bc;
+        color: #065f30;
+      }
+      .qf-wrong {
+        background: #fef2f2;
+        border: 1px solid #fbc7c7;
+        color: #7f1d1d;
+      }
+
+      /* ============================
+       SUBJECT LINE CHECKER
+    ============================ */
+      .sl-items {
+        display: flex;
+        flex-direction: column;
+        gap: clamp(0.6rem, 1vw, 0.9rem);
+        width: 100%;
+      }
+      .sl-item {
+        display: flex;
+        align-items: center;
+        gap: clamp(0.75rem, 1.2vw, 1rem);
+        padding: clamp(0.7rem, 1.2vw, 1rem) clamp(1rem, 1.5vw, 1.25rem);
+        border-radius: 10px;
+        border: 2px solid var(--border);
+        background: var(--bg);
+        cursor: pointer;
+        transition: all 0.25s;
+      }
+      .sl-item .sl-text {
+        font-size: clamp(0.88rem, 1.3vw, 1.05rem);
+        font-weight: 500;
+        font-family: "Courier New", monospace;
+        flex: 1;
+      }
+      .sl-verdict {
+        font-size: clamp(0.72rem, 1vw, 0.82rem);
+        font-weight: 700;
+        padding: 0.2rem 0.7rem;
+        border-radius: 100px;
+        display: none;
+      }
+      .sl-item.good {
+        border-color: var(--green);
+        background: #f0fdf4;
+      }
+      .sl-item.bad {
+        border-color: var(--red);
+        background: #fef2f2;
+      }
+      .sl-item.good .sl-verdict {
+        display: inline-block;
+        background: var(--green);
+        color: white;
+      }
+      .sl-item.bad .sl-verdict {
+        display: inline-block;
+        background: var(--red);
+        color: white;
+      }
+      .sl-icon {
+        font-size: clamp(1rem, 1.5vw, 1.3rem);
+      }
+
+      /* ============================
+       PROMPT ANATOMY
+    ============================ */
+      .prompt-terminal {
+        background: #1a1a2e;
+        border-radius: 14px;
+        overflow: hidden;
+        width: 100%;
+        max-width: 820px;
+      }
+      .pt-titlebar {
+        background: #2d2d40;
+        padding: 10px 16px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .pt-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+      .pt-dot.r {
+        background: #ff5f56;
+      }
+      .pt-dot.y {
+        background: #febc2e;
+      }
+      .pt-dot.g {
+        background: #28c840;
+      }
+      .pt-body {
+        padding: clamp(1rem, 2vw, 1.75rem);
+        font-family: "Courier New", monospace;
+        font-size: clamp(0.78rem, 1.2vw, 1rem);
+        line-height: 2;
+      }
+      .pt-line {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .pt-tag {
+        display: inline-block;
+        font-size: clamp(0.55rem, 0.8vw, 0.68rem);
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-family: "DM Sans", sans-serif;
+        flex-shrink: 0;
+        margin-top: 0.2em;
+        line-height: 1.6;
+      }
+      .pt-text {
+        line-height: 1.6;
+      }
+      .ctx {
+        color: #7dd3fc;
+      }
+      .ctx-tag {
+        background: #1e4f72;
+        color: #7dd3fc;
+      }
+      .task {
+        color: #86efac;
+      }
+      .task-tag {
+        background: #14532d;
+        color: #86efac;
+      }
+      .fmt {
+        color: #fde68a;
+      }
+      .fmt-tag {
+        background: #713f12;
+        color: #fde68a;
+      }
+      .ex {
+        color: #c4b5fd;
+      }
+      .ex-tag {
+        background: #3b0764;
+        color: #c4b5fd;
+      }
+      .pt-legend {
+        display: flex;
+        gap: clamp(0.6rem, 1.2vw, 1.5rem);
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: clamp(0.75rem, 1.5vw, 1.25rem);
+      }
+      .pt-legend span {
+        font-size: clamp(0.68rem, 0.9vw, 0.8rem);
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .leg-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+
+      /* ============================
+       WEAK vs STRONG
+    ============================ */
+      .vs-wrap {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: clamp(1rem, 2vw, 2rem);
+        width: 100%;
+      }
+      .vs-col h4 {
+        font-size: clamp(0.78rem, 1.1vw, 0.95rem);
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        margin-bottom: 0.6rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .weak-col h4 {
+        color: var(--red);
+      }
+      .strong-col h4 {
+        color: var(--green);
+      }
+      .vs-prompt {
+        background: #1a1a2e;
+        border-radius: 10px;
+        padding: clamp(0.8rem, 1.3vw, 1.1rem) clamp(0.9rem, 1.5vw, 1.25rem);
+        font-family: "Courier New", monospace;
+        font-size: clamp(0.78rem, 1.1vw, 0.95rem);
+        line-height: 1.65;
+        color: #e2e8f0;
+        min-height: clamp(80px, 12vw, 130px);
+      }
+      .vs-prompt.weak-bg {
+        border-left: 3px solid var(--red);
+      }
+      .vs-prompt.strong-bg {
+        border-left: 3px solid var(--green);
+      }
+
+      /* ============================
+       DO / DON'T
+    ============================ */
+      .do-dont {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: clamp(1rem, 2vw, 2rem);
+        width: 100%;
+      }
+      .do-col,
+      .dont-col {
+        border-radius: 14px;
+        padding: clamp(1rem, 1.8vw, 1.5rem);
+      }
+      .do-col {
+        background: #f0fdf4;
+        border: 1.5px solid #a3e0bc;
+      }
+      .dont-col {
+        background: #fef2f2;
+        border: 1.5px solid #fbc7c7;
+      }
+      .do-col h4 {
+        color: var(--green);
+        font-size: clamp(0.85rem, 1.3vw, 1.05rem);
+        margin-bottom: 0.75rem;
+      }
+      .dont-col h4 {
+        color: var(--red);
+        font-size: clamp(0.85rem, 1.3vw, 1.05rem);
+        margin-bottom: 0.75rem;
+      }
+      .do-col ul,
+      .dont-col ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .do-col ul li,
+      .dont-col ul li {
+        font-size: clamp(0.8rem, 1.2vw, 0.98rem);
+        padding-left: 1.5rem;
+        position: relative;
+        color: var(--muted);
+        line-height: 1.4;
+      }
+      .do-col ul li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: var(--green);
+        font-weight: 700;
+      }
+      .dont-col ul li::before {
+        content: "✗";
+        position: absolute;
+        left: 0;
+        color: var(--red);
+        font-weight: 700;
+      }
+
+      /* ============================
+       TIMER SLIDE
+    ============================ */
+      .timer-display {
+        font-family: "DM Serif Display", serif;
+        font-size: clamp(4rem, 12vw, 9rem);
+        font-weight: 400;
+        letter-spacing: -0.03em;
+        line-height: 1;
+        color: white;
+      }
+      .timer-ring {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .timer-svg {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+      .timer-controls {
+        display: flex;
+        gap: clamp(0.75rem, 1.5vw, 1.25rem);
+        margin-top: clamp(1rem, 2vw, 2rem);
+      }
+      .timer-btn {
+        padding: clamp(0.6rem, 1vw, 0.9rem) clamp(1.2rem, 2vw, 1.8rem);
+        border-radius: 100px;
+        border: none;
+        cursor: pointer;
+        font-size: clamp(0.88rem, 1.2vw, 1rem);
+        font-weight: 700;
+        transition: all 0.2s;
+      }
+      .tbtn-start {
+        background: white;
+        color: var(--indigo);
+      }
+      .tbtn-reset {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        border: 1.5px solid rgba(255, 255, 255, 0.3);
+      }
+      .tbtn-start:hover {
+        transform: scale(1.05);
+      }
+      .tbtn-reset:hover {
+        background: rgba(255, 255, 255, 0.25);
+      }
+      .timer-tasks {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        max-width: 480px;
+        width: 100%;
+      }
+      .tt-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: clamp(0.85rem, 1.2vw, 1rem);
+        color: rgba(255, 255, 255, 0.8);
+      }
+      .tt-num {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.18);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+
+      /* ============================
+       WRAP-UP GRID
+    ============================ */
+      .wu-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: clamp(0.75rem, 1.5vw, 1.25rem);
+        width: 100%;
+      }
+      .wu-card {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 14px;
+        padding: clamp(0.9rem, 1.5vw, 1.3rem);
+        text-align: center;
+      }
+      .wu-card .wu-icon {
+        font-size: clamp(1.5rem, 2.5vw, 2rem);
+        margin-bottom: 0.4rem;
+      }
+      .wu-card h4 {
+        font-size: clamp(0.82rem, 1.2vw, 1rem);
+        font-weight: 700;
+        margin-bottom: 0.3rem;
+        opacity: 0.9;
+      }
+      .wu-card p {
+        font-size: clamp(0.72rem, 1vw, 0.85rem);
+        opacity: 0.65;
+        line-height: 1.4;
+      }
+
+      /* ============================
+       BREAK SLIDE ANIMATION
+    ============================ */
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-12px);
+        }
+      }
+      .float {
+        animation: float 3s ease-in-out infinite;
+      }
+      @keyframes pulse-ring {
+        0% {
+          transform: scale(0.95);
+          opacity: 0.7;
+        }
+        50% {
+          transform: scale(1.05);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(0.95);
+          opacity: 0.7;
+        }
+      }
+      .pulse {
+        animation: pulse-ring 2.5s ease-in-out infinite;
+      }
+
+      /* ============================
+       SLIDE NUMBER LABEL
+    ============================ */
+      .slide-label {
+        position: absolute;
+        top: clamp(12px, 2vh, 22px);
+        left: clamp(16px, 2.5vw, 28px);
+        font-size: clamp(0.62rem, 0.85vw, 0.75rem);
+        font-weight: 600;
+        color: var(--faint);
+        letter-spacing: 0.04em;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .slide-label .snum {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 1px 6px;
+        font-size: 0.65rem;
+      }
+      .bg-dark .slide-label,
+      .bg-blue .slide-label,
+      .bg-indigo .slide-label,
+      .bg-amber .slide-label,
+      .bg-green .slide-label {
+        color: rgba(255, 255, 255, 0.45);
+      }
+      .bg-dark .slide-label .snum,
+      .bg-blue .slide-label .snum,
+      .bg-indigo .slide-label .snum,
+      .bg-amber .slide-label .snum,
+      .bg-green .slide-label .snum {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.15);
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      /* ============================
+       INTERACTION HINT
+    ============================ */
+      .interact-hint {
+        position: absolute;
+        bottom: clamp(50px, 7vh, 70px);
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: clamp(0.65rem, 0.9vw, 0.75rem);
+        color: var(--faint);
+        font-style: italic;
+        white-space: nowrap;
+      }
+      .bg-dark .interact-hint,
+      .bg-indigo .interact-hint {
+        color: rgba(255, 255, 255, 0.3);
+      }
+
+      /* ============================
+       DISCUSSION PROMPT SLIDE
+    ============================ */
+      .disc-prompt {
+        font-family: "DM Serif Display", serif;
+        font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+        font-weight: 400;
+        line-height: 1.25;
+        text-align: center;
+        color: white;
+        max-width: 780px;
+      }
+      .hand-icons {
+        display: flex;
+        gap: clamp(0.5rem, 1.5vw, 1.5rem);
+        justify-content: center;
+        font-size: clamp(1.5rem, 3vw, 2.5rem);
+        margin-top: clamp(1rem, 2vw, 2rem);
+      }
+
+      /* AI types visual */
+      .ai-types {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: clamp(0.75rem, 1.5vw, 1.25rem);
+        width: 100%;
+      }
+      .ai-type-card {
+        border-radius: 14px;
+        padding: clamp(1rem, 1.8vw, 1.5rem);
+        text-align: center;
+        border: 2px solid var(--border);
+        background: var(--bg);
+        transition: transform 0.2s;
+      }
+      .ai-type-card:hover {
+        transform: translateY(-4px);
+      }
+      .ai-type-card .atc-icon {
+        font-size: clamp(2rem, 3.5vw, 3rem);
+        margin-bottom: 0.5rem;
+      }
+      .ai-type-card h4 {
+        font-size: clamp(0.85rem, 1.3vw, 1.05rem);
+        font-weight: 700;
+        margin-bottom: 0.35rem;
+      }
+      .ai-type-card p {
+        font-size: clamp(0.75rem, 1vw, 0.88rem);
+        color: var(--muted);
+        line-height: 1.4;
+      }
+      .atc-llm {
+        border-color: var(--indigo);
+      }
+      .atc-image {
+        border-color: var(--purple);
+      }
+      .atc-audio {
+        border-color: var(--green);
+      }
+
+      /* prompt rules */
+      .rule-cards {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: clamp(0.75rem, 1.5vw, 1.25rem);
+        width: 100%;
+      }
+      .rule-card {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1.5px solid rgba(255, 255, 255, 0.15);
+        border-radius: 14px;
+        padding: clamp(1rem, 1.8vw, 1.5rem);
+        display: flex;
+        gap: clamp(0.75rem, 1.2vw, 1rem);
+        align-items: flex-start;
+      }
+      .rc-num {
+        width: clamp(32px, 3.5vw, 42px);
+        height: clamp(32px, 3.5vw, 42px);
+        min-width: clamp(32px, 3.5vw, 42px);
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "DM Serif Display", serif;
+        font-size: clamp(1rem, 1.5vw, 1.3rem);
+        font-weight: 400;
+        color: white;
+      }
+      .rc-body h4 {
+        font-size: clamp(0.88rem, 1.3vw, 1.05rem);
+        font-weight: 700;
+        color: white;
+        margin-bottom: 0.3rem;
+      }
+      .rc-body p {
+        font-size: clamp(0.78rem, 1.1vw, 0.92rem);
+        color: rgba(255, 255, 255, 0.65);
+        line-height: 1.4;
+      }
+
+      /* pledge */
+      .pledge-boxes {
+        display: flex;
+        flex-direction: column;
+        gap: clamp(0.6rem, 1.2vw, 1rem);
+        width: 100%;
+        max-width: 700px;
+      }
+      .pledge-box {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1.5px solid rgba(255, 255, 255, 0.18);
+        border-radius: 14px;
+        padding: clamp(0.9rem, 1.5vw, 1.25rem) clamp(1rem, 1.8vw, 1.5rem);
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+      .pb-icon {
+        font-size: clamp(1.3rem, 2vw, 1.75rem);
+      }
+      .pb-q {
+        font-size: clamp(0.88rem, 1.3vw, 1.05rem);
+        color: rgba(255, 255, 255, 0.85);
+        font-weight: 500;
+        line-height: 1.4;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+      <!-- ══════════════════════════════════════════
+       SLIDE 1 — TITLE
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-gradient" data-slide="1">
+        <div class="slide-label">
+          <span class="snum">01</span> SELISE × Pelsung · Cohort 3
+        </div>
+        <div class="title-grid center">
+          <div>
+            <div class="date-badge">
+              <span class="db-dot"></span>
+              April 10, 2026 · Foundation Phase · 10:00 – 14:00
+            </div>
+          </div>
+          <h1 class="display" style="color: var(--text)">
+            <span style="color: var(--blue)">Professional</span><br />
+            <span style="color: var(--indigo)">Skills</span>
+            <span style="color: var(--amber); font-style: italic"> &amp; </span>
+            <span style="color: var(--indigo)">AI Basics</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted)">
+            Classes 02 &amp; 03 · 4 hours · 44 trainees · Foundation Phase
+          </p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">02 · Professional Skills</span>
+            <span class="class-tag tag-indigo"
+              >03 · AI Basics &amp; Prompting</span
+            >
+          </div>
+        </div>
+        <div class="interact-hint">
+          Press → or click the right side to advance
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 2 — AGENDA
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 720px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              Today's 4-Hour Journey
+            </h2>
+          </div>
+          <div class="agenda-row" onclick="goTo(3)">
+            <span class="ar-time">10:00 – 10:15</span>
+            <span class="ar-dot" style="background: var(--amber)"></span>
+            <span class="ar-label"
+              >👋 Icebreaker — Two Truths, One Work Style</span
+            >
+            <span class="ar-badge" style="background: #fff7e6; color: #9a6200"
+              >15 min</span
+            >
+          </div>
+          <div class="agenda-row" onclick="goTo(4)">
+            <span class="ar-time">10:15 – 10:45</span>
+            <span class="ar-dot" style="background: var(--blue)"></span>
+            <span class="ar-label">💬 Communication Fundamentals</span>
+            <span
+              class="ar-badge"
+              style="background: #e6f3f9; color: var(--blue)"
+              >30 min</span
+            >
+          </div>
+          <div class="agenda-row" onclick="goTo(7)">
+            <span class="ar-time">10:45 – 11:05</span>
+            <span class="ar-dot" style="background: var(--blue)"></span>
+            <span class="ar-label">📧 Email Etiquette</span>
+            <span
+              class="ar-badge"
+              style="background: #e6f3f9; color: var(--blue)"
+              >20 min</span
+            >
+          </div>
+          <div class="agenda-row" onclick="goTo(10)">
+            <span class="ar-time">11:05 – 11:35</span>
+            <span class="ar-dot" style="background: var(--amber)"></span>
+            <span class="ar-label">✍ Exercise 1 — Email Rewrite</span>
+            <span class="ar-badge" style="background: #fff7e6; color: #9a6200"
+              >30 min</span
+            >
+          </div>
+          <div class="agenda-row" onclick="goTo(11)">
+            <span class="ar-time">11:35 – 11:55</span>
+            <span class="ar-dot" style="background: var(--blue)"></span>
+            <span class="ar-label">⏰ Time Management</span>
+            <span
+              class="ar-badge"
+              style="background: #e6f3f9; color: var(--blue)"
+              >20 min</span
+            >
+          </div>
+          <div class="agenda-row break-row" onclick="goTo(14)">
+            <span class="ar-time">11:55 – 12:10</span>
+            <span class="ar-dot" style="background: var(--green)"></span>
+            <span class="ar-label">☕ Break</span>
+            <span
+              class="ar-badge"
+              style="background: #dcfce7; color: var(--green)"
+              >15 min</span
+            >
+          </div>
+          <div class="agenda-row" onclick="goTo(16)">
+            <span class="ar-time">12:10 – 12:35</span>
+            <span class="ar-dot" style="background: var(--indigo)"></span>
+            <span class="ar-label">🤖 What is AI?</span>
+            <span
+              class="ar-badge"
+              style="background: #e8edfb; color: var(--indigo)"
+              >25 min</span
+            >
+          </div>
+          <div class="agenda-row" onclick="goTo(19)">
+            <span class="ar-time">12:35 – 13:00</span>
+            <span class="ar-dot" style="background: var(--indigo)"></span>
+            <span class="ar-label">✏️ Prompting Techniques</span>
+            <span
+              class="ar-badge"
+              style="background: #e8edfb; color: var(--indigo)"
+              >25 min</span
+            >
+          </div>
+          <div class="agenda-row" onclick="goTo(22)">
+            <span class="ar-time">13:00 – 13:30</span>
+            <span class="ar-dot" style="background: var(--amber)"></span>
+            <span class="ar-label">✍ Exercise 2 — Prompt Battle</span>
+            <span class="ar-badge" style="background: #fff7e6; color: #9a6200"
+              >30 min</span
+            >
+          </div>
+          <div class="agenda-row" onclick="goTo(23)">
+            <span class="ar-time">13:30 – 13:45</span>
+            <span class="ar-dot" style="background: var(--indigo)"></span>
+            <span class="ar-label">⚖️ AI Dos &amp; Don'ts</span>
+            <span
+              class="ar-badge"
+              style="background: #e8edfb; color: var(--indigo)"
+              >15 min</span
+            >
+          </div>
+          <div class="agenda-row" onclick="goTo(25)">
+            <span class="ar-time">13:45 – 14:00</span>
+            <span class="ar-dot" style="background: var(--amber)"></span>
+            <span class="ar-label"
+              >✍ Exercise 3 — AI + Professional Pledge</span
+            >
+            <span class="ar-badge" style="background: #fff7e6; color: #9a6200"
+              >15 min</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 3 — SECTION BREAK: PROFESSIONAL SKILLS
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-blue" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span> Class 02 · 10:00 – 11:55
+          </div>
+          <h1 class="display" style="color: white">Professional<br />Skills</h1>
+          <p
+            class="body-lg"
+            style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem"
+          >
+            Communication · Email Etiquette · Time Management
+          </p>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 4 — ICEBREAKER
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-amber" data-slide="4">
+        <div class="slide-label">
+          <span class="snum">04</span> Icebreaker · 10:00
+        </div>
+        <div class="center" style="max-width: 700px">
+          <h2 class="heading" style="color: white; margin-bottom: 1rem">
+            Two Truths,<br />One Work Style
+          </h2>
+          <p
+            class="body-lg"
+            style="color: rgba(255, 255, 255, 0.85); margin-bottom: 2rem"
+          >
+            Share <strong style="color: white">3 statements</strong> about your
+            work style.<br />Two are true. One is false.
+          </p>
+          <div
+            class="card-dark"
+            style="text-align: left; max-width: 520px; margin: 0 auto 1.5rem"
+          >
+            <p
+              style="
+                font-size: clamp(0.8rem, 1.2vw, 0.95rem);
+                color: rgba(255, 255, 255, 0.8);
+                line-height: 1.7;
+              "
+            >
+              <strong style="color: white">Example (trainer goes first):</strong
+              ><br />
+              "I reply to every message within 5 minutes."<br />
+              "I use 3 different to-do apps."<br />
+              "I've never sent a work email."
+            </p>
+          </div>
+          <p
+            style="
+              font-size: clamp(0.78rem, 1.1vw, 0.9rem);
+              color: rgba(255, 255, 255, 0.65);
+            "
+          >
+            5–6 volunteers · class guesses which is the lie
+          </p>
+        </div>
+        <div class="hand-icons">
+          <span>🙋</span><span>🙋‍♀️</span><span>🙋‍♂️</span><span>🙋</span
+          ><span>🙋‍♀️</span>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 5 — COMMUNICATION MODEL
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="5">
+        <div class="slide-label">
+          <span class="snum">05</span> Communication · 10:15
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 900px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">Communication Fundamentals</div>
+            <h2 class="heading">How Communication Works</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem">
+              Noise can enter at any step
+            </p>
+          </div>
+          <div class="comm-flow" style="margin: clamp(1rem, 2.5vw, 2rem) 0">
+            <div class="cf-node cf-sender">
+              <span class="cf-icon">🧑‍💻</span><span>Sender</span>
+            </div>
+            <div class="cf-arrow">→</div>
+            <div class="cf-node cf-msg">
+              <span class="cf-icon">💭</span><span>Message</span>
+            </div>
+            <div class="cf-arrow">→</div>
+            <div class="cf-node cf-channel">
+              <span class="cf-icon">📡</span><span>Channel</span>
+            </div>
+            <div class="cf-arrow">→</div>
+            <div class="cf-node cf-receiver">
+              <span class="cf-icon">🧑‍💼</span><span>Receiver</span>
+            </div>
+            <div class="cf-arrow">→</div>
+            <div class="cf-node cf-feedback">
+              <span class="cf-icon">🔁</span><span>Feedback</span>
+            </div>
+          </div>
+          <div class="cf-label">
+            <span>❌ Unclear intent</span>
+            <span>❌ Wrong channel</span>
+            <span>❌ Distracted receiver</span>
+            <span>❌ No confirmation</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 6 — 3 TYPES OF COMMUNICATION
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="6">
+        <div class="slide-label">
+          <span class="snum">06</span> Communication Types
+        </div>
+        <div class="stack" style="align-items: center; width: 100%">
+          <div class="center">
+            <h2
+              class="heading"
+              style="
+                font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+                margin-bottom: clamp(1rem, 2vw, 1.75rem);
+              "
+            >
+              3 Types You Use Every Day
+            </h2>
+          </div>
+          <div class="cols-3">
+            <div class="card" style="border-top: 3px solid var(--blue)">
+              <h4 style="color: var(--blue)">🗣️ Verbal</h4>
+              <ul>
+                <li>Speak at a pace others can follow</li>
+                <li>Avoid filler words (um, like, basically)</li>
+                <li>Confirm: "Does that make sense?"</li>
+                <li>Volume &amp; tone matter</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--indigo)">
+              <h4 style="color: var(--indigo)">✍️ Written</h4>
+              <ul>
+                <li>One idea per sentence</li>
+                <li>Lead with most important info</li>
+                <li>Bullet points for lists</li>
+                <li>Shorter is almost always better</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--purple)">
+              <h4 style="color: var(--purple)">👁️ Non-Verbal</h4>
+              <ul>
+                <li>Eye contact = engaged &amp; confident</li>
+                <li>Open posture = approachable</li>
+                <li>Nodding = active listening</li>
+                <li>Response time = urgency signal</li>
+              </ul>
+            </div>
+          </div>
+          <div
+            class="card"
+            style="
+              background: var(--bg);
+              border: 2px dashed var(--border);
+              text-align: center;
+              padding: clamp(0.75rem, 1.5vw, 1.1rem);
+              max-width: 700px;
+            "
+          >
+            <p class="body-md" style="color: var(--muted)">
+              🎯
+              <strong style="color: var(--text)"
+                >Choose the right channel:</strong
+              >
+              Urgent &amp; quick → <strong>Chat</strong> · Documented decision →
+              <strong>Email</strong> · Nuanced/emotional → <strong>Call</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 7 — DISCUSSION MOMENT
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-dark" data-slide="7">
+        <div class="slide-label">
+          <span class="snum">07</span> Discussion · 5 min
+        </div>
+        <div class="center" style="max-width: 760px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            🎤 Class Discussion
+          </div>
+          <p class="disc-prompt">
+            "Think of a time communication broke down.<br />
+            <span style="color: var(--amber)">What went wrong?</span>"
+          </p>
+          <p
+            style="
+              color: rgba(255, 255, 255, 0.5);
+              font-size: clamp(0.82rem, 1.2vw, 1rem);
+              margin-top: 2rem;
+              line-height: 1.6;
+            "
+          >
+            Take 3–4 answers · Map each to the model:<br />
+            Sender problem? · Wrong channel? · No feedback?
+          </p>
+          <div class="hand-icons">
+            <span class="pulse">🙋</span
+            ><span class="pulse" style="animation-delay: 0.5s">🙋‍♀️</span
+            ><span class="pulse" style="animation-delay: 1s">🙋‍♂️</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 8 — EMAIL ETIQUETTE RULES
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="8">
+        <div class="slide-label">
+          <span class="snum">08</span> Email Etiquette · 10:45
+        </div>
+        <div class="stack" style="align-items: center; width: 100%">
+          <div class="center">
+            <div class="pill pill-blue">Email Etiquette</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              The Rules of Professional Email
+            </h2>
+          </div>
+          <div class="cols-2" style="max-width: 900px">
+            <div class="card" style="border-top: 3px solid var(--blue)">
+              <h4 style="color: var(--blue)">📝 Subject Line</h4>
+              <ul>
+                <li>
+                  <strong>Bad:</strong> "Hi" / "Question" / "Important!!!"
+                </li>
+                <li>
+                  <strong>Good:</strong> "[Action needed] API docs by Apr 15"
+                </li>
+                <li>Use tags: [FYI] [Action needed] [Decision]</li>
+                <li>Under 60 characters. Never blank.</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--indigo)">
+              <h4 style="color: var(--indigo)">👥 To / CC / BCC</h4>
+              <ul>
+                <li><strong>To:</strong> People who must act</li>
+                <li><strong>CC:</strong> People who need to know</li>
+                <li><strong>BCC:</strong> Sensitive situations only</li>
+                <li>Reply-All = only if everyone needs it</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--green)">
+              <h4 style="color: var(--green)">✅ Always Include</h4>
+              <ul>
+                <li>A greeting (Hi [Name],)</li>
+                <li>A clear ask or purpose</li>
+                <li>A deadline if relevant</li>
+                <li>A sign-off (Thanks, [Name])</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--red)">
+              <h4 style="color: var(--red)">⚠️ Common Mistakes</h4>
+              <ul>
+                <li>300-word essays for simple asks</li>
+                <li>"Per my last email..." (passive-aggressive)</li>
+                <li>Sending while angry — draft, walk away, re-read</li>
+                <li>CC-ing manager as a power move</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 9 — EMAIL ANATOMY
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="9">
+        <div class="slide-label">
+          <span class="snum">09</span> Anatomy of a Good Email
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; width: 100%; max-width: 820px"
+        >
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              A Well-Structured Email
+            </h2>
+          </div>
+          <div class="email-mock">
+            <div class="em-header">
+              <div class="em-field">
+                <span class="em-label">From:</span
+                ><span class="em-val"
+                  >Karma Wangchuk &lt;karma@selise.ch&gt;</span
+                >
+              </div>
+              <div class="em-field">
+                <span class="em-label">To:</span
+                ><span class="em-val"
+                  >Bhuwan Sharma &lt;bhuwan@selise.ch&gt;</span
+                >
+              </div>
+              <div class="em-field">
+                <span class="em-label">CC:</span
+                ><span class="em-val"
+                  >Tek Nath Acharya &lt;tek@selise.ch&gt;</span
+                >
+              </div>
+              <div class="em-field">
+                <span class="em-label">Subject:</span
+                ><span class="em-val"
+                  ><strong
+                    >[Action needed] API documentation — feedback by Apr
+                    14</strong
+                  >
+                  <span
+                    class="ann"
+                    style="background: var(--amber); color: white"
+                    >CLEAR SUBJECT</span
+                  ></span
+                >
+              </div>
+            </div>
+            <div class="em-body">
+              <p>Hi Bhuwan, <span class="ann">GREETING</span></p>
+              <br />
+              <p>
+                I've finished the first draft of the API documentation and would
+                like your review before we share it with the QA team.
+              </p>
+              <br />
+              <p>
+                <strong>What I need from you:</strong>
+                <span class="ann">CLEAR ASK</span>
+              </p>
+              <p>
+                → Review the endpoint descriptions for accuracy<br />
+                → Flag anything unclear or missing<br />
+                → Reply with comments by <strong>Tuesday, April 14</strong>
+                <span class="ann" style="background: var(--green)"
+                  >DEADLINE</span
+                >
+              </p>
+              <br />
+              <p>
+                The document is here: [link] &nbsp; Thanks,<br />
+                Karma <span class="ann">SIGN-OFF</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 10 — SUBJECT LINE QUIZ (INTERACTIVE)
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="10">
+        <div class="slide-label">
+          <span class="snum">10</span> Interactive · Subject Lines
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; width: 100%; max-width: 760px"
+        >
+          <div class="center">
+            <div class="pill pill-blue">Click to reveal — Good or Bad?</div>
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              Rate These Subject Lines
+            </h2>
+          </div>
+          <div class="sl-items" id="sl-list">
+            <div
+              class="sl-item"
+              onclick="rateSubject(this, 'bad')"
+              data-rated="false"
+            >
+              <span class="sl-icon">📧</span>
+              <span class="sl-text">Hi</span>
+              <span class="sl-verdict">BAD ✗</span>
+            </div>
+            <div
+              class="sl-item"
+              onclick="rateSubject(this, 'good')"
+              data-rated="false"
+            >
+              <span class="sl-icon">📧</span>
+              <span class="sl-text"
+                >[Action needed] API docs review — deadline Apr 14</span
+              >
+              <span class="sl-verdict">GOOD ✓</span>
+            </div>
+            <div
+              class="sl-item"
+              onclick="rateSubject(this, 'bad')"
+              data-rated="false"
+            >
+              <span class="sl-icon">📧</span>
+              <span class="sl-text">IMPORTANT!!! Please read!!!</span>
+              <span class="sl-verdict">BAD ✗</span>
+            </div>
+            <div
+              class="sl-item"
+              onclick="rateSubject(this, 'good')"
+              data-rated="false"
+            >
+              <span class="sl-icon">📧</span>
+              <span class="sl-text"
+                >[FYI] Sprint 3 demo recording now available</span
+              >
+              <span class="sl-verdict">GOOD ✓</span>
+            </div>
+            <div
+              class="sl-item"
+              onclick="rateSubject(this, 'bad')"
+              data-rated="false"
+            >
+              <span class="sl-icon">📧</span>
+              <span class="sl-text">Question</span>
+              <span class="sl-verdict">BAD ✗</span>
+            </div>
+            <div
+              class="sl-item"
+              onclick="rateSubject(this, 'good')"
+              data-rated="false"
+            >
+              <span class="sl-icon">📧</span>
+              <span class="sl-text"
+                >[Decision needed] Choose between Figma and Adobe XD by
+                Friday</span
+              >
+              <span class="sl-verdict">GOOD ✓</span>
+            </div>
+          </div>
+          <p
+            class="interact-hint"
+            style="position: static; transform: none; margin-top: 0.5rem"
+          >
+            Click each subject line to reveal if it's good or bad
+          </p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 11 — EXERCISE 1 TIMER
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-indigo" data-slide="11">
+        <div class="slide-label">
+          <span class="snum">11</span> Exercise 1 · 11:05 – 11:35
+        </div>
+        <div
+          style="
+            display: flex;
+            gap: clamp(2rem, 5vw, 5rem);
+            align-items: center;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+          "
+        >
+          <div class="center">
+            <div class="pill pill-white" style="margin: 0 auto 1rem">
+              ✍ Exercise 1 · Groups of 4–5
+            </div>
+            <h2 class="heading" style="color: white; margin-bottom: 0.5rem">
+              Email Rewrite<br />Challenge
+            </h2>
+            <div class="timer-ring">
+              <div class="timer-display" id="timer1">30:00</div>
+            </div>
+            <div class="timer-controls">
+              <button
+                class="timer-btn tbtn-start"
+                onclick="startTimer('timer1', 30)"
+              >
+                ▶ Start
+              </button>
+              <button
+                class="timer-btn tbtn-reset"
+                onclick="resetTimer('timer1', 30)"
+              >
+                ↺ Reset
+              </button>
+            </div>
+          </div>
+          <div class="timer-tasks">
+            <p
+              style="
+                color: rgba(255, 255, 255, 0.6);
+                font-size: clamp(0.72rem, 1vw, 0.82rem);
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+                margin-bottom: 0.5rem;
+              "
+            >
+              Scenarios (rotate between groups)
+            </p>
+            <div class="tt-item">
+              <div class="tt-num">A</div>
+              <span
+                >"hey can you do the thing we talked about yesterday by tomorrow
+                thanks" → proper deadline email</span
+              >
+            </div>
+            <div class="tt-item">
+              <div class="tt-num">B</div>
+              <span>300-word rambling leave request → 5 lines max</span>
+            </div>
+            <div class="tt-item">
+              <div class="tt-num">C</div>
+              <span
+                >Reply-all chain of 12 messages about lunch → one clear Slack
+                message</span
+              >
+            </div>
+            <p
+              style="
+                color: rgba(255, 255, 255, 0.45);
+                font-size: clamp(0.7rem, 0.9vw, 0.8rem);
+                margin-top: 1rem;
+              "
+            >
+              Rewrite → Share aloud → Class gives feedback → Trainer wraps
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 12 — TIME MANAGEMENT
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="12">
+        <div class="slide-label">
+          <span class="snum">12</span> Time Management · 11:35
+        </div>
+        <div class="stack" style="align-items: center; width: 100%">
+          <div class="center">
+            <div class="pill pill-blue">Time Management</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              Where Does Your Time Actually Go?
+            </h2>
+          </div>
+          <ul class="reveal-list" id="tm-list" style="max-width: 680px">
+            <li>
+              Every morning you wake up with <strong>24 hours</strong> — same as
+              everyone else, no exceptions
+            </li>
+            <li>
+              The difference is not having more time — it's
+              <strong>knowing what to say no to</strong>
+            </li>
+            <li>
+              Most wasted time isn't laziness — it's
+              <strong>unclear priorities and digital distraction</strong>
+            </li>
+            <li>
+              In a software team, your wasted time = someone else's blocked task
+            </li>
+            <li>
+              The goal: protect <strong>deep work time</strong> like it's a
+              meeting you can never skip
+            </li>
+          </ul>
+          <p class="reveal-hint" id="tm-hint">
+            Click space button to reveal points
+          </p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 13 — EISENHOWER MATRIX
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="13">
+        <div class="slide-label">
+          <span class="snum">13</span> Eisenhower Matrix
+        </div>
+        <div
+          style="
+            display: flex;
+            gap: clamp(1.5rem, 3vw, 3rem);
+            align-items: center;
+            width: 100%;
+            max-width: 980px;
+            justify-content: center;
+            flex-wrap: wrap;
+          "
+        >
+          <div style="flex: 1; min-width: 260px">
+            <h2
+              class="heading"
+              style="
+                font-size: clamp(1.5rem, 2.8vw, 2.2rem);
+                margin-bottom: 0.5rem;
+              "
+            >
+              The Eisenhower<br />Matrix
+            </h2>
+            <p class="body-md" style="color: var(--muted); margin-bottom: 1rem">
+              Sort every task into one of 4 quadrants based on
+              <strong>urgency</strong> and <strong>importance</strong>.
+            </p>
+            <ul
+              style="
+                list-style: none;
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+              "
+            >
+              <li
+                style="
+                  font-size: clamp(0.8rem, 1.2vw, 0.95rem);
+                  color: var(--muted);
+                "
+              >
+                🔥 <strong>Q1 Do First</strong> — deadlines, crises
+              </li>
+              <li
+                style="
+                  font-size: clamp(0.8rem, 1.2vw, 0.95rem);
+                  color: var(--muted);
+                "
+              >
+                📅 <strong>Q2 Schedule</strong> — learning, planning
+              </li>
+              <li
+                style="
+                  font-size: clamp(0.8rem, 1.2vw, 0.95rem);
+                  color: var(--muted);
+                "
+              >
+                🤝 <strong>Q3 Delegate</strong> — interruptions, some meetings
+              </li>
+              <li
+                style="
+                  font-size: clamp(0.8rem, 1.2vw, 0.95rem);
+                  color: var(--muted);
+                "
+              >
+                🗑️ <strong>Q4 Eliminate</strong> — doom-scrolling, notifications
+              </li>
+            </ul>
+          </div>
+          <div class="matrix-wrap">
+            <div class="matrix-col-hdrs">
+              <div></div>
+              <div class="mch">⚡ Urgent</div>
+              <div class="mch">🌙 Not Urgent</div>
+            </div>
+            <div class="matrix-body">
+              <div class="mrh">Important</div>
+              <div class="mq q1">
+                <span class="mq-icon">🔥</span>
+                <span class="mq-title">Do First</span>
+                <span class="mq-sub">Bugs, client deadlines, crises</span>
+              </div>
+              <div class="mq q2">
+                <span class="mq-icon">📅</span>
+                <span class="mq-title">Schedule</span>
+                <span class="mq-sub">Learning, planning, health</span>
+              </div>
+              <div class="mrh">Not Important</div>
+              <div class="mq q3">
+                <span class="mq-icon">🤝</span>
+                <span class="mq-title">Delegate</span>
+                <span class="mq-sub">Some meetings, admin tasks</span>
+              </div>
+              <div class="mq q4">
+                <span class="mq-icon">🗑️</span>
+                <span class="mq-title">Eliminate</span>
+                <span class="mq-sub"
+                  >Doom-scrolling, 12-reply Slack chains</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 14 — TIME QUIZ
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="14">
+        <div class="slide-label">
+          <span class="snum">14</span> Interactive · Eisenhower Sort
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; width: 100%; max-width: 760px"
+        >
+          <div class="center">
+            <div class="pill pill-blue">Quick Sort — Which Quadrant?</div>
+            <h2
+              class="heading"
+              style="
+                font-size: clamp(1.6rem, 3vw, 2.4rem);
+                margin-bottom: 0.3rem;
+              "
+            >
+              Where does this task go?
+            </h2>
+            <p
+              id="eq-question"
+              class="body-lg"
+              style="color: var(--muted); margin-bottom: 1.25rem"
+            >
+              —
+            </p>
+          </div>
+          <div class="quiz-options" id="eq-opts">
+            <div class="quiz-opt" onclick="sortTask(this, 1)">
+              <div class="qo-letter">Q1</div>
+              <span>🔥 Do First — Urgent &amp; Important</span>
+            </div>
+            <div class="quiz-opt" onclick="sortTask(this, 2)">
+              <div class="qo-letter">Q2</div>
+              <span>📅 Schedule — Not Urgent but Important</span>
+            </div>
+            <div class="quiz-opt" onclick="sortTask(this, 3)">
+              <div class="qo-letter">Q3</div>
+              <span>🤝 Delegate — Urgent but Not Important</span>
+            </div>
+            <div class="quiz-opt" onclick="sortTask(this, 4)">
+              <div class="qo-letter">Q4</div>
+              <span>🗑️ Eliminate — Neither Urgent nor Important</span>
+            </div>
+          </div>
+          <div class="quiz-feedback" id="eq-feedback"></div>
+          <button
+            onclick="nextTask()"
+            style="
+              margin-top: 0.75rem;
+              padding: 0.5rem 1.25rem;
+              border-radius: 100px;
+              border: 1.5px solid var(--border);
+              background: var(--bg);
+              cursor: pointer;
+              font-size: clamp(0.8rem, 1.1vw, 0.9rem);
+              font-weight: 600;
+              color: var(--muted);
+            "
+          >
+            Next Task →
+          </button>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 15 — BREAK
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-green" data-slide="15">
+        <div class="slide-label">
+          <span class="snum">15</span> Break · 11:55
+        </div>
+        <div class="center">
+          <div
+            class="float"
+            style="font-size: clamp(3rem, 8vw, 6rem); margin-bottom: 1rem"
+          >
+            ☕
+          </div>
+          <h2 class="heading" style="color: white">Break Time</h2>
+          <p
+            class="body-lg"
+            style="color: rgba(255, 255, 255, 0.8); margin: 0.75rem 0 2rem"
+          >
+            11:55 – 12:10 · Step outside, stretch, grab water
+          </p>
+          <div class="timer-ring">
+            <div class="timer-display" id="timer-break">15:00</div>
+          </div>
+          <div class="timer-controls">
+            <button
+              class="timer-btn tbtn-start"
+              onclick="startTimer('timer-break', 15)"
+            >
+              ▶ Start Break Timer
+            </button>
+            <button
+              class="timer-btn tbtn-reset"
+              onclick="resetTimer('timer-break', 15)"
+            >
+              ↺ Reset
+            </button>
+          </div>
+          <p
+            style="
+              color: rgba(255, 255, 255, 0.55);
+              font-size: clamp(0.8rem, 1.2vw, 0.95rem);
+              margin-top: 1.5rem;
+            "
+          >
+            Back sharp at <strong style="color: white">12:10</strong> for AI
+            Basics &amp; Prompting
+          </p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 16 — SECTION BREAK: AI
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-indigo" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span> Class 03 · 12:10 – 14:00
+          </div>
+          <h1 class="display" style="color: white">
+            AI Basics<br />&amp; Prompting
+          </h1>
+          <p
+            class="body-lg"
+            style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem"
+          >
+            What AI is · ChatGPT vs Claude · Writing prompts that actually work
+          </p>
+        </div>
+        <div class="section-num" style="color: white">03</div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 17 — WHAT IS AI?
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo" data-slide="17">
+        <div class="slide-label">
+          <span class="snum">17</span> What is AI? · 12:10
+        </div>
+        <div class="stack" style="align-items: center; width: 100%">
+          <div class="center">
+            <div class="pill pill-indigo">Artificial Intelligence</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              What is AI, Really?
+            </h2>
+            <p
+              class="body-md"
+              style="
+                color: var(--muted);
+                max-width: 600px;
+                margin: 0.5rem auto 1.5rem;
+              "
+            >
+              Not robots. Not magic. Not a replacement for your brain.
+            </p>
+          </div>
+          <div class="ai-types">
+            <div class="ai-type-card atc-llm">
+              <div class="atc-icon">💬</div>
+              <h4 style="color: var(--indigo)">Language AI (LLM)</h4>
+              <p>
+                Reads and writes text. ChatGPT, Claude, Gemini. Trained on
+                billions of documents.
+              </p>
+            </div>
+            <div class="ai-type-card atc-image">
+              <div class="atc-icon">🎨</div>
+              <h4 style="color: var(--purple)">Image AI</h4>
+              <p>
+                Generates or edits images. Midjourney, DALL·E, Stable Diffusion.
+              </p>
+            </div>
+            <div class="ai-type-card atc-audio">
+              <div class="atc-icon">🎵</div>
+              <h4 style="color: var(--green)">Audio / Video AI</h4>
+              <p>
+                Transcribes, generates, or edits voice and video. Whisper, Suno,
+                Runway.
+              </p>
+            </div>
+          </div>
+          <div
+            class="card"
+            style="
+              background: #f0f3ff;
+              border: 2px dashed #c5d0f7;
+              text-align: center;
+              max-width: 700px;
+            "
+          >
+            <p class="body-md" style="color: var(--indigo)">
+              🧠 An LLM is a
+              <strong>very sophisticated autocomplete</strong> —<br />it
+              predicts the most likely next word, over and over, at massive
+              scale.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 18 — CHATGPT vs CLAUDE
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo bg-subtle" data-slide="18">
+        <div class="slide-label">
+          <span class="snum">18</span> ChatGPT vs Claude
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; width: 100%; max-width: 860px"
+        >
+          <div class="center">
+            <h2
+              class="heading"
+              style="
+                font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+                margin-bottom: clamp(1rem, 2vw, 1.75rem);
+              "
+            >
+              The Two Tools You'll Use
+            </h2>
+          </div>
+          <div class="cols-2">
+            <div class="card" style="border: 2px solid #10a37f">
+              <h4 style="color: #10a37f; font-size: clamp(1rem, 1.6vw, 1.2rem)">
+                💚 ChatGPT
+              </h4>
+              <ul>
+                <li>Made by <strong>OpenAI</strong></li>
+                <li>Current flagship: <strong>GPT-4o</strong></li>
+                <li>Most widely known worldwide</li>
+                <li>Has web search (paid tier)</li>
+                <li>Great for: writing, coding, general tasks</li>
+                <li>Free tier available</li>
+              </ul>
+            </div>
+            <div class="card" style="border: 2px solid #c77e3e">
+              <h4 style="color: #c77e3e; font-size: clamp(1rem, 1.6vw, 1.2rem)">
+                🟤 Claude
+              </h4>
+              <ul>
+                <li>Made by <strong>Anthropic</strong></li>
+                <li>Current flagship: <strong>Claude Sonnet 4</strong></li>
+                <li>Designed to be safer &amp; more careful</li>
+                <li>Very long context window (large docs)</li>
+                <li>
+                  Great for: coding (Claude Code), long documents, nuanced
+                  reasoning
+                </li>
+                <li>Free tier available</li>
+              </ul>
+            </div>
+          </div>
+          <div
+            class="card"
+            style="
+              background: var(--bg);
+              border: 1.5px solid var(--border);
+              text-align: center;
+              max-width: 700px;
+            "
+          >
+            <p class="body-md" style="color: var(--muted)">
+              💡 <strong style="color: var(--text)">Which to use?</strong> Both
+              are excellent — in this program we'll lean on
+              <strong>Claude</strong>, especially
+              <strong>Claude Code</strong> for software development work.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 19 — LIVE DEMO PROMPT
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-dark" data-slide="19">
+        <div class="slide-label"><span class="snum">19</span> Live Demo</div>
+        <div class="center" style="max-width: 800px">
+          <div class="pill pill-white" style="margin: 0 auto 1rem">
+            🖥️ Live Demo on Projector
+          </div>
+          <h2 class="heading" style="color: white; margin-bottom: 1.5rem">
+            Watch how AI adapts to context
+          </h2>
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 1rem;
+              width: 100%;
+            "
+          >
+            <div
+              style="
+                background: #1a1a2e;
+                border: 1.5px solid #7dd3fc;
+                border-radius: 12px;
+                padding: clamp(0.75rem, 1.5vw, 1.25rem);
+              "
+            >
+              <p
+                style="
+                  font-size: clamp(0.65rem, 0.9vw, 0.75rem);
+                  color: #7dd3fc;
+                  font-weight: 700;
+                  letter-spacing: 0.06em;
+                  text-transform: uppercase;
+                  margin-bottom: 0.5rem;
+                "
+              >
+                Prompt 1
+              </p>
+              <p
+                style="
+                  font-family: &quot;Courier New&quot;, monospace;
+                  color: #e2e8f0;
+                  font-size: clamp(0.82rem, 1.2vw, 1rem);
+                  line-height: 1.6;
+                "
+              >
+                "Explain what a software API is to a 10-year-old."
+              </p>
+            </div>
+            <div
+              style="
+                background: #1a1a2e;
+                border: 1.5px solid #86efac;
+                border-radius: 12px;
+                padding: clamp(0.75rem, 1.5vw, 1.25rem);
+              "
+            >
+              <p
+                style="
+                  font-size: clamp(0.65rem, 0.9vw, 0.75rem);
+                  color: #86efac;
+                  font-weight: 700;
+                  letter-spacing: 0.06em;
+                  text-transform: uppercase;
+                  margin-bottom: 0.5rem;
+                "
+              >
+                Prompt 2
+              </p>
+              <p
+                style="
+                  font-family: &quot;Courier New&quot;, monospace;
+                  color: #e2e8f0;
+                  font-size: clamp(0.82rem, 1.2vw, 1rem);
+                  line-height: 1.6;
+                "
+              >
+                "Now explain it to a senior software engineer."
+              </p>
+            </div>
+          </div>
+          <p
+            style="
+              color: rgba(255, 255, 255, 0.5);
+              margin-top: 1.25rem;
+              font-size: clamp(0.8rem, 1.1vw, 0.95rem);
+            "
+          >
+            👀 Notice how the model shifts its vocabulary, examples, and depth —
+            <strong style="color: white"
+              >same question, different context</strong
+            >
+          </p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 20 — PROMPT ANATOMY
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo" data-slide="20">
+        <div class="slide-label">
+          <span class="snum">20</span> Prompting · 12:35
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; width: 100%; max-width: 880px"
+        >
+          <div class="center">
+            <div class="pill pill-indigo">The Art of Prompting</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              Anatomy of a Great Prompt
+            </h2>
+          </div>
+          <div class="prompt-terminal">
+            <div class="pt-titlebar">
+              <div class="pt-dot r"></div>
+              <div class="pt-dot y"></div>
+              <div class="pt-dot g"></div>
+              <span
+                style="
+                  color: rgba(255, 255, 255, 0.4);
+                  font-size: 0.75rem;
+                  margin-left: 8px;
+                "
+                >prompt.txt</span
+              >
+            </div>
+            <div class="pt-body">
+              <div class="pt-line">
+                <span class="pt-tag ctx-tag">Context</span
+                ><span class="pt-text ctx"
+                  >I am a software developer at a company building a digital ID
+                  system for Bhutan.</span
+                >
+              </div>
+              <div class="pt-line">
+                <span class="pt-tag task-tag">Task</span
+                ><span class="pt-text task"
+                  >Write a professional email to a client explaining a 2-week
+                  delay in the API delivery.</span
+                >
+              </div>
+              <div class="pt-line">
+                <span class="pt-tag fmt-tag">Format</span
+                ><span class="pt-text fmt"
+                  >Use a formal but empathetic tone. Keep it under 150 words.
+                  Include a subject line.</span
+                >
+              </div>
+              <div class="pt-line">
+                <span class="pt-tag ex-tag">Example</span
+                ><span class="pt-text ex"
+                  >Subject line style: "[Project name] Update — [topic]"</span
+                >
+              </div>
+            </div>
+          </div>
+          <div class="pt-legend">
+            <span
+              ><span class="leg-dot" style="background: #7dd3fc"></span> Context
+              — who/what/where you are</span
+            >
+            <span
+              ><span class="leg-dot" style="background: #86efac"></span> Task —
+              exactly what you want</span
+            >
+            <span
+              ><span class="leg-dot" style="background: #fde68a"></span> Format
+              — how you want it</span
+            >
+            <span
+              ><span class="leg-dot" style="background: #c4b5fd"></span> Example
+              — optional, very powerful</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 21 — 4 RULES OF PROMPTING
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-indigo" data-slide="21">
+        <div class="slide-label"><span class="snum">21</span> 4 Rules</div>
+        <div
+          class="stack"
+          style="align-items: center; width: 100%; max-width: 900px"
+        >
+          <div class="center" style="margin-bottom: 1rem">
+            <h2
+              class="heading"
+              style="color: white; font-size: clamp(1.8rem, 3.5vw, 2.8rem)"
+            >
+              4 Rules of Great Prompting
+            </h2>
+          </div>
+          <div class="rule-cards">
+            <div class="rule-card">
+              <div class="rc-num">1</div>
+              <div class="rc-body">
+                <h4>Give it a Role</h4>
+                <p>
+                  "You are a senior UX designer reviewing a mobile app..."
+                  Role-setting shifts the quality and perspective dramatically.
+                </p>
+              </div>
+            </div>
+            <div class="rule-card">
+              <div class="rc-num">2</div>
+              <div class="rc-body">
+                <h4>Be Specific About Output</h4>
+                <p>
+                  Vague: "Write about APIs." Specific: "Write a 3-paragraph
+                  explanation of REST APIs for a non-coder using analogies."
+                </p>
+              </div>
+            </div>
+            <div class="rule-card">
+              <div class="rc-num">3</div>
+              <div class="rc-body">
+                <h4>Iterate — Don't Settle</h4>
+                <p>
+                  AI is a conversation. If the first response isn't right: "Make
+                  it shorter and less formal." Keep refining in the same chat.
+                </p>
+              </div>
+            </div>
+            <div class="rule-card">
+              <div class="rc-num">4</div>
+              <div class="rc-body">
+                <h4>Give Examples</h4>
+                <p>
+                  "Here's an example of the style I want: [paste]. Now write
+                  something similar about [topic]." This is few-shot prompting.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 22 — WEAK vs STRONG PROMPTS
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo bg-subtle" data-slide="22">
+        <div class="slide-label">
+          <span class="snum">22</span> Interactive · Weak vs Strong
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; width: 100%; max-width: 920px"
+        >
+          <div class="center">
+            <div class="pill pill-indigo">Click to flip between examples</div>
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              Weak vs Strong Prompts
+            </h2>
+          </div>
+          <div id="vs-container" style="width: 100%">
+            <div class="vs-wrap" id="vs-pair-0">
+              <div class="vs-col weak-col">
+                <h4>✗ Weak</h4>
+                <div class="vs-prompt weak-bg">
+                  Write about time management.
+                </div>
+              </div>
+              <div class="vs-col strong-col">
+                <h4>✓ Strong</h4>
+                <div class="vs-prompt strong-bg">
+                  You are a productivity coach speaking to 20-year-old tech
+                  trainees in Bhutan with no prior corporate experience. Write a
+                  5-tip guide to time management that is practical and uses
+                  software team examples. Keep each tip under 50 words.
+                </div>
+              </div>
+            </div>
+            <div class="vs-wrap" id="vs-pair-1" style="display: none">
+              <div class="vs-col weak-col">
+                <h4>✗ Weak</h4>
+                <div class="vs-prompt weak-bg">Fix my code.</div>
+              </div>
+              <div class="vs-col strong-col">
+                <h4>✓ Strong</h4>
+                <div class="vs-prompt strong-bg">
+                  I have a JavaScript function that should filter an array of
+                  user objects by age. It's returning nothing. Here is the code:
+                  [code]. Identify the bug, explain why it's wrong, and give me
+                  the fixed version.
+                </div>
+              </div>
+            </div>
+            <div class="vs-wrap" id="vs-pair-2" style="display: none">
+              <div class="vs-col weak-col">
+                <h4>✗ Weak</h4>
+                <div class="vs-prompt weak-bg">Write an email.</div>
+              </div>
+              <div class="vs-col strong-col">
+                <h4>✓ Strong</h4>
+                <div class="vs-prompt strong-bg">
+                  Write a 5-line professional email to a client explaining that
+                  the project is delayed by 1 week due to a technical blocker.
+                  Use an empathetic but confident tone. Start with the most
+                  important fact: the new delivery date.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 0.75rem; margin-top: 0.5rem">
+            <button
+              onclick="showVsPair(0)"
+              id="vb0"
+              style="
+                padding: 0.4rem 1rem;
+                border-radius: 100px;
+                border: 1.5px solid var(--border);
+                background: var(--indigo);
+                color: white;
+                cursor: pointer;
+                font-size: clamp(0.75rem, 1vw, 0.85rem);
+                font-weight: 600;
+              "
+            >
+              Example 1
+            </button>
+            <button
+              onclick="showVsPair(1)"
+              id="vb1"
+              style="
+                padding: 0.4rem 1rem;
+                border-radius: 100px;
+                border: 1.5px solid var(--border);
+                background: var(--bg);
+                color: var(--muted);
+                cursor: pointer;
+                font-size: clamp(0.75rem, 1vw, 0.85rem);
+                font-weight: 600;
+              "
+            >
+              Example 2
+            </button>
+            <button
+              onclick="showVsPair(2)"
+              id="vb2"
+              style="
+                padding: 0.4rem 1rem;
+                border-radius: 100px;
+                border: 1.5px solid var(--border);
+                background: var(--bg);
+                color: var(--muted);
+                cursor: pointer;
+                font-size: clamp(0.75rem, 1vw, 0.85rem);
+                font-weight: 600;
+              "
+            >
+              Example 3
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 23 — EXERCISE 2 TIMER
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-indigo" data-slide="23">
+        <div class="slide-label">
+          <span class="snum">23</span> Exercise 2 · 13:00 – 13:30
+        </div>
+        <div
+          style="
+            display: flex;
+            gap: clamp(2rem, 5vw, 5rem);
+            align-items: center;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+          "
+        >
+          <div class="center">
+            <div class="pill pill-white" style="margin: 0 auto 1rem">
+              ✍ Exercise 2 · Pairs
+            </div>
+            <h2 class="heading" style="color: white; margin-bottom: 0.5rem">
+              The Prompt Battle
+            </h2>
+            <div class="timer-ring">
+              <div class="timer-display" id="timer2">30:00</div>
+            </div>
+            <div class="timer-controls">
+              <button
+                class="timer-btn tbtn-start"
+                onclick="startTimer('timer2', 30)"
+              >
+                ▶ Start
+              </button>
+              <button
+                class="timer-btn tbtn-reset"
+                onclick="resetTimer('timer2', 30)"
+              >
+                ↺ Reset
+              </button>
+            </div>
+          </div>
+          <div class="timer-tasks">
+            <p
+              style="
+                color: rgba(255, 255, 255, 0.6);
+                font-size: clamp(0.72rem, 1vw, 0.82rem);
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+                margin-bottom: 0.5rem;
+              "
+            >
+              Each pair gets a task (rotate)
+            </p>
+            <div class="tt-item">
+              <div class="tt-num">A</div>
+              <span
+                >Email to a client requesting more info before proceeding</span
+              >
+            </div>
+            <div class="tt-item">
+              <div class="tt-num">B</div>
+              <span
+                >Explain what a database is to someone who's never used a
+                computer</span
+              >
+            </div>
+            <div class="tt-item">
+              <div class="tt-num">C</div>
+              <span
+                >5-day study plan for learning HTML and CSS from scratch</span
+              >
+            </div>
+            <div class="tt-item">
+              <div class="tt-num">D</div>
+              <span
+                >Job posting for a junior software tester at a tech company in
+                Bhutan</span
+              >
+            </div>
+            <p
+              style="
+                color: rgba(255, 255, 255, 0.45);
+                font-size: clamp(0.7rem, 0.9vw, 0.8rem);
+                margin-top: 1rem;
+              "
+            >
+              Round 1: Weak vs Strong (10 min) · Round 2: Refine in 3 messages
+              (8 min) · Share (8 min) · Debrief (4 min)
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 24 — AI DOS & DON'TS
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo" data-slide="24">
+        <div class="slide-label">
+          <span class="snum">24</span> AI Ethics · 13:30
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; width: 100%; max-width: 900px"
+        >
+          <div class="center">
+            <div class="pill pill-indigo">
+              ⚖️ AI Ethics &amp; Responsible Use
+            </div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              AI Dos &amp; Don'ts
+            </h2>
+          </div>
+          <div class="do-dont">
+            <div class="do-col">
+              <h4>✅ Do</h4>
+              <ul>
+                <li>Use AI to draft, then <strong>edit it yourself</strong></li>
+                <li>
+                  Verify facts — especially <strong>numbers &amp; dates</strong>
+                </li>
+                <li>Use AI to learn — ask it to explain, not just answer</li>
+                <li>
+                  Treat it as a thinking partner, not a replacement for thinking
+                </li>
+                <li>Tell your team when you've used AI to produce something</li>
+              </ul>
+            </div>
+            <div class="dont-col">
+              <h4>❌ Don't</h4>
+              <ul>
+                <li>
+                  Paste <strong>confidential client data</strong> into public AI
+                  tools
+                </li>
+                <li>Submit AI output without reviewing it first</li>
+                <li>
+                  Blindly trust code AI writes — always read &amp; test it
+                </li>
+                <li>
+                  Assume AI knows the latest news — it has a
+                  <strong>training cutoff</strong>
+                </li>
+                <li>
+                  Share passwords, personal IDs, or sensitive info in prompts
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div
+            class="card"
+            style="
+              background: #f0f3ff;
+              border: 2px solid #c5d0f7;
+              text-align: center;
+              max-width: 720px;
+            "
+          >
+            <p class="body-md" style="color: var(--indigo)">
+              🔨 <strong>AI is a power tool, not a cheat code.</strong><br />
+              A carpenter with a nail gun is 10× more productive — but they
+              still need to know where to put the nails.<br />
+              <strong
+                >Your job: know <em>what</em> to build. AI helps you build it
+                faster.</strong
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 25 — KNOWLEDGE CHECK QUIZ
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo bg-subtle" data-slide="25">
+        <div class="slide-label">
+          <span class="snum">25</span> Knowledge Check · Interactive
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; width: 100%; max-width: 760px"
+        >
+          <div class="center">
+            <div class="pill pill-indigo">🧠 Quick Fire</div>
+            <h2
+              class="heading"
+              style="font-size: clamp(1.6rem, 3vw, 2.4rem)"
+              id="kc-q-text"
+            >
+              Loading question...
+            </h2>
+            <p
+              style="
+                color: var(--muted);
+                font-size: clamp(0.75rem, 1vw, 0.85rem);
+                margin-bottom: 1rem;
+              "
+              id="kc-q-num"
+            >
+              Question 1 of 3
+            </p>
+          </div>
+          <div class="quiz-options" id="kc-opts"></div>
+          <div class="quiz-feedback" id="kc-feedback"></div>
+          <button
+            onclick="nextKC()"
+            id="kc-next"
+            style="
+              margin-top: 0.75rem;
+              display: none;
+              padding: 0.5rem 1.25rem;
+              border-radius: 100px;
+              border: 1.5px solid var(--border);
+              background: var(--bg);
+              cursor: pointer;
+              font-size: clamp(0.8rem, 1.1vw, 0.9rem);
+              font-weight: 600;
+              color: var(--muted);
+            "
+          >
+            Next Question →
+          </button>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 26 — EXERCISE 3 PLEDGE
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-dark" data-slide="26">
+        <div class="slide-label">
+          <span class="snum">26</span> Exercise 3 · 13:45 – 14:00
+        </div>
+        <div
+          style="
+            display: flex;
+            gap: clamp(2rem, 4vw, 4rem);
+            align-items: center;
+            width: 100%;
+            justify-content: center;
+            max-width: 1000px;
+            flex-wrap: wrap;
+          "
+        >
+          <div style="text-align: center">
+            <div class="pill pill-white" style="margin: 0 auto 1rem">
+              ✍ Individual · 8 min write · 5 min share
+            </div>
+            <h2 class="heading" style="color: white; margin-bottom: 0.5rem">
+              My Pledge
+            </h2>
+            <p
+              style="
+                color: rgba(255, 255, 255, 0.6);
+                font-size: clamp(0.82rem, 1.2vw, 0.95rem);
+                margin-bottom: 1.5rem;
+              "
+            >
+              Write privately. Share one answer if you're comfortable.
+            </p>
+            <div class="timer-ring">
+              <div class="timer-display" id="timer3">08:00</div>
+            </div>
+            <div class="timer-controls">
+              <button
+                class="timer-btn tbtn-start"
+                onclick="startTimer('timer3', 8)"
+              >
+                ▶ Start Writing
+              </button>
+              <button
+                class="timer-btn tbtn-reset"
+                onclick="resetTimer('timer3', 8)"
+              >
+                ↺ Reset
+              </button>
+            </div>
+          </div>
+          <div class="pledge-boxes">
+            <div class="pledge-box">
+              <div class="pb-icon">🏆</div>
+              <div class="pb-q">
+                One <strong>professional habit</strong> I want to build in the
+                next 8 weeks — communication, email, or time management.
+              </div>
+            </div>
+            <div class="pledge-box">
+              <div class="pb-icon">🤖</div>
+              <div class="pb-q">
+                One <strong>AI task</strong> I'm excited to try using Claude or
+                ChatGPT in this training program.
+              </div>
+            </div>
+            <div class="pledge-box">
+              <div class="pb-icon">🚫</div>
+              <div class="pb-q">
+                One <strong>AI boundary</strong> I will set for myself —
+                something I'll always do myself, no matter what.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 27 — WRAP UP
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-indigo" data-slide="27">
+        <div class="slide-label"><span class="snum">27</span> Wrap Up</div>
+        <div
+          class="stack"
+          style="align-items: center; width: 100%; max-width: 980px"
+        >
+          <div class="center">
+            <h2
+              class="heading"
+              style="color: white; font-size: clamp(1.8rem, 3.5vw, 2.8rem)"
+            >
+              What You Covered Today
+            </h2>
+            <p
+              style="
+                color: rgba(255, 255, 255, 0.65);
+                margin: 0.5rem 0 1.5rem;
+                font-size: clamp(0.88rem, 1.3vw, 1.05rem);
+              "
+            >
+              4 hours · 2 classes · Tools for life inside and outside the office
+            </p>
+          </div>
+          <div class="wu-grid">
+            <div class="wu-card">
+              <div class="wu-icon">💬</div>
+              <h4>Communication</h4>
+              <p>
+                Sender–receiver model, active listening, choosing the right
+                channel.
+              </p>
+            </div>
+            <div class="wu-card">
+              <div class="wu-icon">📧</div>
+              <h4>Email Etiquette</h4>
+              <p>
+                Subject lines, CC/BCC, short emails, getting what you need in
+                one message.
+              </p>
+            </div>
+            <div class="wu-card">
+              <div class="wu-icon">⏰</div>
+              <h4>Time Management</h4>
+              <p>
+                Eisenhower Matrix, time blocking, protecting deep work, digital
+                discipline.
+              </p>
+            </div>
+            <div class="wu-card">
+              <div class="wu-icon">🤖</div>
+              <h4>AI Basics</h4>
+              <p>
+                How LLMs work, ChatGPT vs Claude, what AI is genuinely good and
+                bad at.
+              </p>
+            </div>
+            <div class="wu-card">
+              <div class="wu-icon">✏️</div>
+              <h4>Prompting</h4>
+              <p>
+                Context → Task → Format → Example. Give roles. Be specific.
+                Iterate.
+              </p>
+            </div>
+            <div class="wu-card">
+              <div class="wu-icon">⚖️</div>
+              <h4>AI Ethics</h4>
+              <p>
+                Don't paste confidential data. Verify outputs. Be transparent.
+                Think first.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 28 — END
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-gradient" data-slide="28">
+        <div class="slide-label"><span class="snum">28</span></div>
+        <div class="center" style="max-width: 700px">
+          <div style="font-size: clamp(3rem, 8vw, 5rem); margin-bottom: 1.5rem">
+            🇧🇹
+          </div>
+          <h1 class="display" style="font-size: clamp(2rem, 5vw, 4rem)">
+            <span style="color: var(--blue)">Great work,</span><br />
+            <span style="color: var(--indigo)">Pelsung</span>
+            <span style="color: var(--amber); font-style: italic">
+              Cohort 3</span
+            >
+          </h1>
+          <p class="body-lg" style="color: var(--muted); margin: 1rem 0 0.5rem">
+            See you in the next class — bring your curiosity and your questions.
+          </p>
+          <p
+            style="font-size: clamp(0.75rem, 1vw, 0.85rem); color: var(--faint)"
+          >
+            SELISE × Pelsung · Foundation Phase · April 10, 2026
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- /#deck -->
+
+    <!-- ===== CONTROLS ===== -->
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 28</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">
+      ⛶
+    </button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      /* ============================
+   SLIDE ENGINE
+============================ */
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      let current = 0;
+
+      function goTo(n) {
+        slides[current].classList.remove("active");
+        slides[current].classList.add("exit");
+        setTimeout(
+          () =>
+            slides[
+              current < n ? current : n + (n < current ? 0 : 0)
+            ].classList.remove("exit"),
+          380,
+        );
+        // clean up exit from old
+        const old = current;
+        setTimeout(() => slides[old].classList.remove("exit"), 380);
+        current = Math.max(0, Math.min(n, total - 1));
+        slides[current].classList.add("active");
+        document.getElementById("slide-counter").textContent =
+          `${current + 1} / ${total}`;
+        document.getElementById("progress").style.width =
+          `${((current + 1) / total) * 100}%`;
+        // reset reveal lists on slide change
+        initReveal(slides[current]);
+      }
+
+      function nextSlide() {
+        if (current < total - 1) goTo(current + 1);
+      }
+      function prevSlide() {
+        if (current > 0) goTo(current - 1);
+      }
+
+      // Keyboard
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight" || e.key === " ") {
+          e.preventDefault();
+          handleForward();
+        }
+        if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          prevSlide();
+        }
+        if (e.key === "f" || e.key === "F") toggleFullscreen();
+      });
+
+      // Deck-level click: left 15% = prev, right 15% = forward
+      // Ignored when clicking any interactive element
+      document.getElementById("deck").addEventListener("click", function (e) {
+        if (
+          e.target.closest(
+            "button, .quiz-opt, .sl-item, .mq, a, input, select, textarea, .agenda-row, [data-noclick]",
+          )
+        )
+          return;
+        const pct = e.clientX / window.innerWidth;
+        if (pct < 0.15) prevSlide();
+        else if (pct > 0.85) handleForward();
+      });
+
+      function handleForward() {
+        const active = slides[current];
+        const list = active.querySelector(".reveal-list");
+        if (list) {
+          const hidden = list.querySelectorAll("li:not(.shown)");
+          if (hidden.length > 0) {
+            hidden[0].classList.add("shown");
+            const hint = active.querySelector(".reveal-hint");
+            if (hint && hidden.length === 1) hint.style.opacity = "0";
+            return;
+          }
+        }
+        nextSlide();
+      }
+
+      // Init reveal lists
+      function initReveal(slide) {
+        const list = slide.querySelector(".reveal-list");
+        if (!list) return;
+        list
+          .querySelectorAll("li")
+          .forEach((li) => li.classList.remove("shown"));
+        const hint = slide.querySelector(".reveal-hint");
+        if (hint) hint.style.opacity = "1";
+      }
+
+      // Init first slide
+      slides[0].classList.add("active");
+      document.getElementById("progress").style.width = `${(1 / total) * 100}%`;
+
+      /* ============================
+   FULLSCREEN
+============================ */
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+          document.exitFullscreen().catch(() => {});
+        }
+      }
+
+      /* ============================
+   TIMERS
+============================ */
+      const timerState = {};
+
+      function startTimer(id, minutes) {
+        if (timerState[id]?.interval) return;
+        if (!timerState[id]) timerState[id] = { remaining: minutes * 60 };
+        timerState[id].interval = setInterval(() => {
+          timerState[id].remaining--;
+          const el = document.getElementById(id);
+          if (!el) return;
+          if (timerState[id].remaining <= 0) {
+            clearInterval(timerState[id].interval);
+            timerState[id].interval = null;
+            el.textContent = "00:00";
+            el.style.color = "#ff5f56";
+            el.closest(".slide").style.animation = "none";
+            return;
+          }
+          const m = Math.floor(timerState[id].remaining / 60)
+            .toString()
+            .padStart(2, "0");
+          const s = (timerState[id].remaining % 60).toString().padStart(2, "0");
+          el.textContent = `${m}:${s}`;
+          if (timerState[id].remaining <= 60) el.style.color = "#febc2e";
+        }, 1000);
+      }
+
+      function resetTimer(id, minutes) {
+        if (timerState[id]?.interval) {
+          clearInterval(timerState[id].interval);
+          timerState[id].interval = null;
+        }
+        timerState[id] = { remaining: minutes * 60 };
+        const el = document.getElementById(id);
+        if (el) {
+          const m = minutes.toString().padStart(2, "0");
+          el.textContent = `${m}:00`;
+          el.style.color = "";
+        }
+      }
+
+      /* ============================
+   SUBJECT LINE CHECKER
+============================ */
+      function rateSubject(el, verdict) {
+        if (el.dataset.rated === "true") return;
+        el.dataset.rated = "true";
+        el.classList.add(verdict);
+      }
+
+      /* ============================
+   EISENHOWER TASK SORT QUIZ
+============================ */
+      const tasks = [
+        {
+          q: '"A client just reported a critical bug in the live product and is waiting for a fix."',
+          correct: 1,
+          explanation:
+            "🔥 Q1 — Urgent AND Important. Drop everything, fix the bug.",
+        },
+        {
+          q: '"Block time this week to study the new framework we\'re adopting next month."',
+          correct: 2,
+          explanation:
+            "📅 Q2 — Not urgent yet but Important. Schedule it or it never happens.",
+        },
+        {
+          q: '"Someone asks you to book a meeting room for a team lunch."',
+          correct: 3,
+          explanation:
+            "🤝 Q3 — Urgent (they need an answer now) but Not Important to your core work. Delegate or handle in 2 min.",
+        },
+        {
+          q: '"Scrolling through Instagram for the past 45 minutes at work."',
+          correct: 4,
+          explanation:
+            "🗑️ Q4 — Not Urgent, Not Important. Eliminate or time-limit it.",
+        },
+        {
+          q: '"Writing your weekly progress report for the trainer — due today."',
+          correct: 1,
+          explanation: "🔥 Q1 — Deadline today makes it urgent AND important.",
+        },
+      ];
+      let taskIdx = 0;
+
+      function loadTask() {
+        if (taskIdx >= tasks.length) taskIdx = 0;
+        const t = tasks[taskIdx];
+        document.getElementById("eq-question").textContent = t.q;
+        const fb = document.getElementById("eq-feedback");
+        fb.className = "quiz-feedback";
+        fb.textContent = "";
+        document.querySelectorAll("#eq-opts .quiz-opt").forEach((o) => {
+          o.classList.remove("correct", "wrong", "dim");
+        });
+      }
+
+      function sortTask(el, q) {
+        const t = tasks[taskIdx];
+        const fb = document.getElementById("eq-feedback");
+        document
+          .querySelectorAll("#eq-opts .quiz-opt")
+          .forEach((o) => o.classList.add("dim"));
+        el.classList.remove("dim");
+        if (q === t.correct) {
+          el.classList.add("correct");
+          fb.className = "quiz-feedback qf-correct show";
+          fb.textContent = "✓ Correct! " + t.explanation;
+        } else {
+          el.classList.add("wrong");
+          fb.className = "quiz-feedback qf-wrong show";
+          fb.textContent = "✗ Not quite. " + t.explanation;
+        }
+      }
+
+      function nextTask() {
+        taskIdx++;
+        loadTask();
+      }
+
+      // Init on load
+      loadTask();
+
+      /* ============================
+   WEAK vs STRONG SWITCHER
+============================ */
+      function showVsPair(n) {
+        document.querySelectorAll('[id^="vs-pair-"]').forEach((el, i) => {
+          el.style.display = i === n ? "grid" : "none";
+        });
+        document.querySelectorAll('[id^="vb"]').forEach((btn, i) => {
+          btn.style.background = i === n ? "var(--indigo)" : "var(--bg)";
+          btn.style.color = i === n ? "white" : "var(--muted)";
+          btn.style.borderColor = i === n ? "var(--indigo)" : "var(--border)";
+        });
+      }
+
+      /* ============================
+   KNOWLEDGE CHECK QUIZ
+============================ */
+      const kcQuestions = [
+        {
+          q: "Claude gives you code that looks correct. You should copy-paste it directly into production without reviewing it.",
+          opts: [
+            "True — AI-generated code is reliable",
+            "False — always read and test it first",
+            "It depends on how good the prompt was",
+            "Only if it passed a syntax check",
+          ],
+          correct: 1,
+          feedback:
+            "✓ Correct! AI code can look right and still have logic errors, security issues, or be missing context about your system. Always review before running.",
+        },
+        {
+          q: "Your manager asks you to summarize a 50-page NDA for a client. Is it okay to paste the full document into ChatGPT?",
+          opts: [
+            "Yes — AI keeps everything private",
+            "Yes — just delete it after",
+            "No — confidential documents must not go into public AI tools",
+            "Only if you use the paid tier",
+          ],
+          correct: 2,
+          feedback:
+            "✓ Correct! Public AI tools may use inputs to improve their models. Confidential or legal documents must never be pasted in without approved enterprise tools.",
+        },
+        {
+          q: "Claude tells you the population of Bhutan is 3.2 million as of 2025. You should:",
+          opts: [
+            "Accept it — AI is always accurate on facts",
+            "Use it only in casual conversation, not in reports",
+            "Verify it from an authoritative source like the World Bank or official census",
+            "Ask Claude to double-check itself",
+          ],
+          correct: 2,
+          feedback:
+            "✓ Correct! AI can hallucinate statistics. For anything factual in a professional context, always verify with a primary or authoritative source.",
+        },
+      ];
+      let kcIdx = 0;
+
+      function loadKC() {
+        const q = kcQuestions[kcIdx];
+        document.getElementById("kc-q-text").textContent = q.q;
+        document.getElementById("kc-q-num").textContent =
+          `Question ${kcIdx + 1} of ${kcQuestions.length}`;
+        const opts = document.getElementById("kc-opts");
+        opts.innerHTML = "";
+        q.opts.forEach((opt, i) => {
+          const letters = ["A", "B", "C", "D"];
+          const el = document.createElement("div");
+          el.className = "quiz-opt";
+          el.innerHTML = `<div class="qo-letter">${letters[i]}</div><span>${opt}</span>`;
+          el.onclick = () => answerKC(i, el);
+          opts.appendChild(el);
+        });
+        document.getElementById("kc-feedback").className = "quiz-feedback";
+        document.getElementById("kc-feedback").textContent = "";
+        document.getElementById("kc-next").style.display = "none";
+      }
+
+      function answerKC(i, el) {
+        const q = kcQuestions[kcIdx];
+        const fb = document.getElementById("kc-feedback");
+        document.querySelectorAll("#kc-opts .quiz-opt").forEach((o) => {
+          o.classList.add("dim");
+          o.onclick = null;
+        });
+        el.classList.remove("dim");
+        if (i === q.correct) {
+          el.classList.add("correct");
+          fb.className = "quiz-feedback qf-correct show";
+        } else {
+          el.classList.add("wrong");
+          // highlight correct
+          document
+            .querySelectorAll("#kc-opts .quiz-opt")
+            [q.correct].classList.add("correct");
+          document
+            .querySelectorAll("#kc-opts .quiz-opt")
+            [q.correct].classList.remove("dim");
+          fb.className = "quiz-feedback qf-wrong show";
+        }
+        fb.textContent = q.feedback;
+        if (kcIdx < kcQuestions.length - 1)
+          document.getElementById("kc-next").style.display = "inline-block";
+      }
+
+      function nextKC() {
+        kcIdx++;
+        if (kcIdx < kcQuestions.length) loadKC();
+      }
+
+      loadKC();
+    </script>
+  </body>
+</html>
