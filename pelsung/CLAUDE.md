@@ -54,6 +54,7 @@ pelsung/
 │   ├── trainee-analysis.md             #   Demographics & background analysis
 │   ├── cv-review.md                    #   Individual CV reviews & vertical recommendations
 │   ├── documents/                      #   Per-trainee folders (45 folders, cv + certificate)
+│   ├── people-notes.yaml               #   Per-trainee observations, notes, action items (via /note skill)
 │   ├── progress/                       #   Attendance, grades, weekly evaluations
 │   └── projects/                       #   Capstone project outputs
 ├── cohort-4/                           # (future) Same structure as cohort-3
