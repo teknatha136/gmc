@@ -7,6 +7,14 @@
 #   - Each note has: date, text, and optional tags (role-suggestion, action-item, skill, observation, flag)
 
 trainees:
+  - name: Yugel Tshering
+    cid: ""
+    vertical: dev
+    notes:
+      - date: 2026-04-08
+        text: "Listed as 'Ugyen Tshering' in roster but CV says 'Yugel Tshering'. Spotted incorrect day-of-week (Wednesday vs Thursday) in Tek's welcome message to the cohort group. Attentive to detail."
+        tags: [observation, strength]
+
   - name: Dawa Zangmo
     cid: "11702001098"
     vertical: ba
