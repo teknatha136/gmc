@@ -10,7 +10,7 @@
 | ------------------------ | ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Software Development** | 13    | Sonam Choki, Yeshi Dorji, Sangay Choda, Puran Adhikari, Karma Lhamo, Thinley Dorji, Tashi Phuntsho, Sabika Chhetri, Sonam Dendup, Sonam Rinchen, Yugel Tshering*, Sangay Choden**, Subhadra Ghalley**                 |
 | **Software Design**      | 9     | Rinzin Seldon, Thinley Pem, Yeshey Wangchuk, Ugyen Choden, Sonam Rigdhen Thinley, Jamyang Sherab†, Phub Lham**, Karma Yezer**, Yezer Pelzang**                                                                          |
-| **Software Testing**     | 10    | Leki Choden, Rigzang Dorji, Kinga Wangmo, Thrinlay Dhendup Wangchen, Jigme Choden, Ugyen Tshomo, Ugyen Jamtsho, Nima Yoezer**, Deki Pelden**, Tshewang Choden**                                                       |
+| **Software Testing**     | 9     | Leki Choden, ~~Rigzang Dorji~~*(transferred out)*, Kinga Wangmo, Thrinlay Dhendup Wangchen, Jigme Choden, Ugyen Tshomo, Ugyen Jamtsho, Nima Yoezer**, Deki Pelden**, Tshewang Choden**                                  |
 | **Business Analysis**    | 14    | Kezang Nima, Lhakpa Tshering Nesor, Sonam Tshering, Man Dhoj Raika, Tashi Nima, Chedup Tamang, Dawa Zangmo, Nidup Dorji (BBA), Nidup Dorji (Env Mgmt), Kinley Dorji, Neten Dema, Tshering Peldon, Sonam Rinzin, Karma |
 
 *\* Listed as "Ugyen Tshering" in spreadsheet but CV says "Yugel Tshering"*
@@ -164,13 +164,14 @@ BA is overloaded (14) and Design is thin (8). Suggested rebalancing:
 - **Notable:** Built Obstacle Avoiding Robot (Arduino); Mobile Controlled Lift Prototype; Udemy Python cert
 - **Why Dev:** Strongest engineering-to-dev profile. Python, embedded systems, Arduino projects.
 
-### 18. Rigzang Dorji — Testing ⭐
+### 18. ~~Rigzang Dorji — Testing ⭐~~ *(Transferred to Innovate for GMC, 2026-04-08)*
 
 - **Education:** Diploma in ICT (Cyber Security), WIN College of Australia, completed Jan 2026
 - **Experience:** None
 - **Skills:** Cyber security (network security, threat analysis, risk management), secure coding practices, ICT administration
 - **Notable:** Youngest (age 20); multilingual (4 languages); cyber security focus
 - **Why Testing:** Security background = finding vulnerabilities, risk assessment, systematic analysis — core testing competencies
+- **Status:** ⚠️ Transferred out of SELISE cohort to Innovate for GMC (approved 2026-04-08)
 
 ### 19. Kinga Wangmo — Testing
 
@@ -411,7 +412,7 @@ BA is overloaded (14) and Design is thin (8). Suggested rebalancing:
 | **Puran Adhikari**    | BE Mechatronics, Python, embedded systems, Arduino robots, drones. Engineering→Dev bridge.                   |
 | **Yeshi Dorji**       | Professional frontend dev experience. Already knows HTML/CSS/JS/Git in production.                           |
 | **Sonam Tshering**    | King's Certificate, banking systems/ERP, advanced Excel. Strongest BA candidate.                             |
-| **Rigzang Dorji**     | Cyber security diploma. Natural tester — vulnerability/risk mindset.                                         |
+| ~~**Rigzang Dorji**~~     | ~~Cyber security diploma. Natural tester — vulnerability/risk mindset.~~ *(transferred out 2026-04-08)*       |
 | **Nidup Dorji (Env)** | Dean's List, 81%, international banking officer. Strongest analytical BA.                                    |
 
 ---
@@ -431,10 +432,10 @@ BA is overloaded (14) and Design is thin (8). Suggested rebalancing:
 - **Target: 9–10. Jamyang's addition helps significantly.**
 
 ### Software Testing (10 recommended)
-- Rigzang Dorji (cyber security) is the standout
+- ~~Rigzang Dorji (cyber security) was the standout~~ — transferred to Innovate for GMC (2026-04-08)
 - Several engineering backgrounds (Leki Choden, Kinga Wangmo, Jigme Choden) — systematic/quality mindset
 - Science backgrounds (Tshewang Choden, Ugyen Jamtsho, Thrinlay Dhendup Wangchen) — methodical
-- **Target: 10**
+- **Target: 9** (down from 10 after Rigzang's transfer)
 
 ### Business Analysis (14 recommended — needs rebalancing)
 - 11 commerce/business graduates — natural fit

@@ -10,7 +10,7 @@ This directory will grow over multiple cohorts and years (minimum 2-year engagem
 ### Training Overview
 - **Start:** April 9, 2026 (Welcome & Orientation)
 - **Duration:** ~8 weeks + capstone + exhibition
-- **Trainees:** 46 (45 original SELISE sub-cohort + 1 transfer from Innovate for GMC)
+- **Trainees:** 45 (45 original SELISE sub-cohort + 1 transfer in from Innovate for GMC − 1 transfer out: Rigzang Dorji to Innovate for GMC, 2026-04-08)
 - **Verticals:** Software Development (FE-focused), Software Design (UX/UI), Software Testing (QA), Business Analysis
 - **Exhibition/Demo Day:** TBD (may coincide with Pelsung graduation; His Majesty may attend)
 

@@ -15,6 +15,17 @@ trainees:
         text: "Listed as 'Ugyen Tshering' in roster but CV says 'Yugel Tshering'. Spotted incorrect day-of-week (Wednesday vs Thursday) in Tek's welcome message to the cohort group. Attentive to detail."
         tags: [observation, strength]
 
+  - name: Rigzang Dorji
+    cid: "11306001781"
+    vertical: testing
+    notes:
+      - date: 2026-04-08
+        text: "Transfer approved — moving from SELISE cohort to Innovate for GMC cohort per his written request (dated 2026-04-08). Was assigned to Testing vertical as standout candidate (cyber security background, youngest in cohort at 20). Significant loss for Testing vertical — was the strongest technical foundation in that group."
+        tags: [flag, observation]
+      - date: 2026-04-08
+        text: "Reassess Testing vertical leadership now that Rigzang is leaving — he was expected to lead security-related sessions and CTF exercises."
+        tags: [action-item]
+
   - name: Dawa Zangmo
     cid: "11702001098"
     vertical: ba

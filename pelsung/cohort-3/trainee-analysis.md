@@ -6,8 +6,8 @@
 
 | Metric | Value |
 |--------|-------|
-| Total trainees | 46 (45 original + 1 transfer) |
-| Gender | 28M / 18F (61/39) |
+| Total trainees | 45 (45 original + 1 transfer in − 1 transfer out) |
+| Gender | 27M / 18F (60/40) |
 | Age range | 20–37 (avg 25.4) |
 | Bachelor's | 32 |
 | Diploma | 13 |
@@ -21,7 +21,7 @@
 | Company | Count |
 |---------|-------|
 | Chhung | 15 (+1 transfer) |
-| Singye | 12 |
+| Singye | 11 (−1 transfer out) |
 | Taag | 10 |
 | Druk | 8 |
 
@@ -37,7 +37,7 @@
 | Sonam Choki | Computer System & Network | Jigme Namgyel Engineering College |
 | Yeshi Dorji | Diploma in Information Technology | Athang Training Academy |
 | Sangay Choda | Bachelor of Computer Application | Mahatma Gandhi University, Shillong |
-| Rigzang Dorji | Diploma in Information Technology | WIN College of Australia |
+| ~~Rigzang Dorji~~ | ~~Diploma in Information Technology~~ | ~~WIN College of Australia~~ *(transferred to Innovate for GMC, 2026-04-08)* |
 | Tashi Phuntsho | BSc Computer Science | Sherubtse College |
 | Sabika Chhetri | BCA | SRM University |
 | Sonam Rinchen | Diploma in Computer System & Network | Jigme Namgyel Engineering College |
