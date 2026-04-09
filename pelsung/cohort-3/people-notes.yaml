@@ -7,6 +7,94 @@
 #   - Each note has: date, text, and optional tags (role-suggestion, action-item, skill, observation, flag)
 
 trainees:
+  - name: Sangay Choda
+    cid: ""
+    vertical: dev
+    notes:
+      - date: 2026-04-09
+        text: Business/admin background — BCA graduate, worked as Administrative Assistant at a primary school for 8 years
+        tags: [skill, observation]
+
+  - name: Sabika Chhetri
+    cid: ""
+    vertical: dev
+    notes:
+      - date: 2026-04-09
+        text: Appears to have no experience in class, but CV shows she is the only actual Software Developer in the cohort (EMIS production work). May be quiet or not presenting herself — worth engaging directly to surface her background.
+        tags: [flag, observation, action-item]
+
+  - name: Sonam Choki
+    cid: ""
+    vertical: dev
+    notes:
+      - date: 2026-04-09
+        text: Looks confident; strong tech background — Docker, Python, Laravel, CTF participant
+        tags: [strength, observation]
+
+  - name: Sonam Dendup
+    cid: ""
+    vertical: dev
+    notes:
+      - date: 2026-04-09
+        text: Civil Engineering diploma (JNEC); works as instructor at a technical training institute
+        tags: [skill, observation]
+
+  - name: Sonam Rinzin
+    cid: ""
+    vertical: ba
+    notes:
+      - date: 2026-04-09
+        text: Language & Literature degree (College of Language and Culture Studies); curious about tech — good sign for engagement
+        tags: [observation, strength]
+
+  - name: Sonam Tshering
+    cid: ""
+    vertical: ba
+    notes:
+      - date: 2026-04-09
+        text: B.Com Accounting from Gedu College; working as Accounts Officer at Bhutan National Bank
+        tags: [skill, observation]
+
+  - name: Tshering Peldon
+    cid: ""
+    vertical: ba
+    notes:
+      - date: 2026-04-09
+        text: Has studied finance (B.Com) and looks interested in the program
+        tags: [observation, skill]
+
+  - name: Tshewang Choden
+    cid: ""
+    vertical: testing
+    notes:
+      - date: 2026-04-09
+        text: Works as environment officer (Bhutan Power Corp); expressed interest in Business Analysis and project management
+        tags: [skill, observation, role-suggestion]
+
+  - name: Ugyen Tshomo
+    cid: ""
+    vertical: testing
+    notes:
+      - date: 2026-04-09
+        text: Well spoken — strong verbal communication
+        tags: [strength, skill]
+
+  - name: Yeshi Dorji
+    cid: ""
+    vertical: dev
+    notes:
+      - date: 2026-04-09
+        text: Has a tech degree (Diploma in IT, Athang Training Academy); professional frontend development experience
+        tags: [skill, observation]
+
+  - name: Yeshey Wangchuk
+    cid: ""
+    vertical: design
+    notes:
+      - date: 2026-04-09
+        text: English degree background; has learned Python, HTML, and JS basics — can be nurtured
+        tags: [skill, strength, observation]
+
   - name: Yugel Tshering
     cid: ""
     vertical: dev
@@ -14,6 +102,70 @@ trainees:
       - date: 2026-04-08
         text: "Listed as 'Ugyen Tshering' in roster but CV says 'Yugel Tshering'. Spotted incorrect day-of-week (Wednesday vs Thursday) in Tek's welcome message to the cohort group. Attentive to detail."
         tags: [observation, strength]
+
+  - name: Deki Pelden
+    cid: ""
+    vertical: testing
+    notes:
+      - date: 2026-04-09
+        text: EVS background (Sherubtse College), no prior tech experience, but appears passionate about technology
+        tags: [observation, skill]
+
+  - name: Jigme Choden
+    cid: ""
+    vertical: testing
+    notes:
+      - date: 2026-04-09
+        text: Mechanical Engineering diploma (JNEC); currently Section Officer at Chhukha Hydropower Plant
+        tags: [skill, observation]
+
+  - name: Kinley Dorji
+    cid: ""
+    vertical: ba
+    notes:
+      - date: 2026-04-09
+        text: BBA (Marketing) graduate; interested in Business Analysis
+        tags: [observation, strength]
+
+  - name: Lhakpa Tshering Nesor
+    cid: ""
+    vertical: ba
+    notes:
+      - date: 2026-04-09
+        text: No professional or tech experience (tour guide background only)
+        tags: [observation]
+
+  - name: Puran Adhikari
+    cid: ""
+    vertical: dev
+    notes:
+      - date: 2026-04-09
+        text: Comes from a tech background (BE Mechatronics); can be trained — good growth potential
+        tags: [skill, observation, strength]
+
+  - name: Neten Dema
+    cid: ""
+    vertical: ba
+    notes:
+      - date: 2026-04-09
+        text: B.Com Finance graduate from Gedu College; interested in Business Analysis
+        tags: [observation, strength]
+
+  - name: Nidup Dorji (Env Mgmt)
+    cid: ""
+    vertical: ba
+    notes:
+      - date: 2026-04-09
+        text: Currently employed at BNB (International Banking Officer); expressed interest in Business Analysis
+        tags: [skill, observation, strength]
+
+  - name: Phub Lham
+    cid: ""
+    vertical: design
+    notes:
+      - date: 2026-04-09
+        text: BSc Physics background; expressed interest in learning SDLC
+        tags: [skill, observation]
 
   - name: Rigzang Dorji
     cid: "11306001781"
@@ -26,6 +178,14 @@ trainees:
         text: "Reassess Testing vertical leadership now that Rigzang is leaving — he was expected to lead security-related sessions and CTF exercises."
         tags: [action-item]
 
+  - name: Chedup Tamang
+    cid: ""
+    vertical: ba
+    notes:
+      - date: 2026-04-09
+        text: Expressed interest in doing Business Analysis
+        tags: [observation, strength]
+
   - name: Dawa Zangmo
     cid: "11702001098"
     vertical: ba
@@ -36,3 +196,6 @@ trainees:
       - date: 2026-04-07
         text: "Check if she can drive"
         tags: [action-item]
+      - date: 2026-04-09
+        text: Strong admin fit — fluent in 6 languages, good communication skills, organised
+        tags: [role-suggestion, observation]
