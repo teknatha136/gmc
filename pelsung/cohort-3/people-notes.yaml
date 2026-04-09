@@ -9,7 +9,7 @@
 trainees:
   - name: Sangay Choda
     cid: ""
-    vertical: dev
+    vertical: ba / admin later on.
     notes:
       - date: 2026-04-09
         text: Business/admin background — BCA graduate, worked as Administrative Assistant at a primary school for 8 years
@@ -73,7 +73,7 @@ trainees:
 
   - name: Ugyen Tshomo
     cid: ""
-    vertical: testing
+    vertical: ba / testing
     notes:
       - date: 2026-04-09
         text: Well spoken — strong verbal communication
@@ -89,7 +89,7 @@ trainees:
 
   - name: Yeshey Wangchuk
     cid: ""
-    vertical: design
+    vertical: dev / maybe testing lateron.
     notes:
       - date: 2026-04-09
         text: English degree background; has learned Python, HTML, and JS basics — can be nurtured
@@ -161,7 +161,7 @@ trainees:
 
   - name: Phub Lham
     cid: ""
-    vertical: design
+    vertical: dev / testing.
     notes:
       - date: 2026-04-09
         text: BSc Physics background; expressed interest in learning SDLC
