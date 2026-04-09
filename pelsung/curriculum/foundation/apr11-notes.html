@@ -6,24 +6,24 @@
     <title>Class Notes — Apr 11 · Internet &amp; APIs</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap"
       rel="stylesheet"
     />
     <style>
       :root {
-        --blue: #0073aa;
-        --indigo: #1447e6;
-        --amber: #f99c00;
-        --green: #00a544;
-        --purple: #ac4bff;
-        --red: #dc2626;
-        --text: #171717;
-        --muted: #6a7282;
-        --faint: #99a1af;
+        --blue: #0066B2;
+        --indigo: #001F35;
+        --amber: #247EC1;
+        --green: #7BC950;
+        --purple: #4796D1;
+        --red: #D80032;
+        --text: #1B2021;
+        --muted: #7B7C7F;
+        --faint: #9CA3AF;
         --surf: #ffffff;
-        --bg: #f8f9fb;
-        --border: #e5e7eb;
-        --border-l: #f3f4f6;
+        --bg: #F9F9F9;
+        --border: #EDEDED;
+        --border-l: #F5F5F5;
       }
       * {
         margin: 0;
@@ -31,7 +31,7 @@
         box-sizing: border-box;
       }
       body {
-        font-family: "DM Sans", system-ui, sans-serif;
+        font-family: "Open Sans", 'Aptos', sans-serif;
         background: var(--bg);
         color: var(--text);
         -webkit-font-smoothing: antialiased;
@@ -54,12 +54,7 @@
         left: 0;
         right: 0;
         height: 5px;
-        background: linear-gradient(
-          90deg,
-          var(--blue),
-          var(--indigo),
-          var(--amber)
-        );
+        background: linear-gradient(135deg, #0067A3, #002D72);
       }
       .hero-badge {
         display: inline-flex;
@@ -83,7 +78,7 @@
         background: var(--amber);
       }
       .hero h1 {
-        font-family: "DM Serif Display", serif;
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
         font-size: clamp(2rem, 5vw, 3.5rem);
         font-weight: 400;
         letter-spacing: -0.02em;
@@ -122,11 +117,11 @@
         font-weight: 600;
       }
       .tag-blue {
-        background: #e6f3f9;
+        background: #E6F0F8;
         color: var(--blue);
       }
       .tag-indigo {
-        background: #e8edfb;
+        background: #E6E9EC;
         color: var(--indigo);
       }
       .hero-stats {
@@ -143,7 +138,7 @@
         text-align: center;
       }
       .stat-val {
-        font-family: "DM Serif Display", serif;
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
         font-size: 1.6rem;
         font-weight: 400;
         line-height: 1;
@@ -237,23 +232,23 @@
         margin-bottom: 0.6rem;
       }
       .pill-blue {
-        background: #e6f3f9;
+        background: #E6F0F8;
         color: var(--blue);
       }
       .pill-indigo {
-        background: #e8edfb;
+        background: #E6E9EC;
         color: var(--indigo);
       }
       .pill-amber {
-        background: #fff7e6;
-        color: #9a6200;
+        background: #EBF0F7;
+        color: #1C5B8C;
       }
       .pill-green {
-        background: #f0fdf4;
+        background: #F0F7EC;
         color: var(--green);
       }
       .section-title {
-        font-family: "DM Serif Display", serif;
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
         font-size: 2rem;
         font-weight: 400;
         letter-spacing: -0.02em;
@@ -282,7 +277,7 @@
         margin-bottom: 0.5rem;
       }
       .concept h3 {
-        font-family: "DM Serif Display", serif;
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
         font-size: 1.4rem;
         font-weight: 400;
         margin-bottom: 0.75rem;
@@ -326,19 +321,19 @@
         margin: 1rem 0;
       }
       .hb-blue {
-        background: #e6f3f9;
+        background: #E6F0F8;
         border-left: 4px solid var(--blue);
       }
       .hb-indigo {
-        background: #e8edfb;
+        background: #E6E9EC;
         border-left: 4px solid var(--indigo);
       }
       .hb-amber {
-        background: #fff7e6;
+        background: #EBF0F7;
         border-left: 4px solid var(--amber);
       }
       .hb-green {
-        background: #f0fdf4;
+        background: #F0F7EC;
         border-left: 4px solid var(--green);
       }
       .hb-label {
@@ -381,7 +376,7 @@
         border-bottom: 3px solid transparent;
       }
       .url-label {
-        font-family: "DM Sans", sans-serif;
+        font-family: "Open Sans", sans-serif;
         font-size: 0.62rem;
         font-weight: 700;
         text-transform: uppercase;
@@ -399,7 +394,7 @@
         margin-bottom: 0.3rem;
       }
       .up-protocol .url-text {
-        background: #e6f3f9;
+        background: #E6F0F8;
         color: var(--blue);
         border-color: var(--blue);
       }
@@ -407,7 +402,7 @@
         color: var(--blue);
       }
       .up-domain .url-text {
-        background: #e8edfb;
+        background: #E6E9EC;
         color: var(--indigo);
         border-color: var(--indigo);
       }
@@ -415,7 +410,7 @@
         color: var(--indigo);
       }
       .up-tld .url-text {
-        background: #f0fdf4;
+        background: #F0F7EC;
         color: var(--green);
         border-color: var(--green);
       }
@@ -423,31 +418,31 @@
         color: var(--green);
       }
       .up-path .url-text {
-        background: #fff7e6;
-        color: #9a6200;
+        background: #EBF0F7;
+        color: #1C5B8C;
         border-color: var(--amber);
       }
       .up-path .url-label {
-        color: #9a6200;
+        color: #1C5B8C;
       }
       .up-query .url-text {
-        background: #fdf2f8;
-        color: #9d174d;
+        background: #F2E8EA;
+        color: #8B001E;
         border-color: #ec4899;
       }
       .up-query .url-label {
-        color: #9d174d;
+        color: #8B001E;
       }
 
       /* JSON BLOCK */
       .json-block {
-        background: #1a1a2e;
+        background: #001F35;
         border-radius: 12px;
         overflow: hidden;
         margin: 1rem 0;
       }
       .jb-bar {
-        background: #2d2d40;
+        background: #0A2A45;
         padding: 8px 14px;
         display: flex;
         align-items: center;
@@ -526,19 +521,19 @@
         display: inline-block;
       }
       .mb-get {
-        background: #e6f3f9;
+        background: #E6F0F8;
         color: var(--blue);
       }
       .mb-post {
-        background: #f0fdf4;
+        background: #F0F7EC;
         color: var(--green);
       }
       .mb-put {
-        background: #fff7e6;
-        color: #9a6200;
+        background: #EBF0F7;
+        color: #1C5B8C;
       }
       .mb-delete {
-        background: #fef2f2;
+        background: #F2E8EA;
         color: var(--red);
       }
       .td-code {
@@ -568,7 +563,7 @@
         border-collapse: collapse;
       }
       .db-tbl th {
-        background: #e8edfb;
+        background: #E6E9EC;
         color: var(--indigo);
         font-size: 0.68rem;
         font-weight: 700;
@@ -576,7 +571,7 @@
         letter-spacing: 0.06em;
         padding: 0.5rem 0.9rem;
         text-align: left;
-        border-bottom: 1px solid #c5d0f7;
+        border-bottom: 1px solid #C0C8D0;
       }
       .db-tbl td {
         padding: 0.45rem 0.9rem;
@@ -606,7 +601,7 @@
         margin: 2rem 0;
       }
       .summary h4 {
-        font-family: "DM Serif Display", serif;
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
         font-size: 1.15rem;
         font-weight: 400;
         margin-bottom: 1rem;
@@ -637,8 +632,8 @@
 
       /* PRACTICE */
       .practice {
-        background: #fffaf0;
-        border: 1.5px solid #fcd9a0;
+        background: #F0F4FA;
+        border: 1.5px solid #A3C4E0;
         border-radius: 14px;
         padding: 1.5rem 1.75rem;
         margin: 2rem 0;
@@ -646,7 +641,7 @@
       .practice h4 {
         font-size: 1rem;
         font-weight: 700;
-        color: #7a5000;
+        color: #1C5B8C;
         margin-bottom: 1rem;
         display: flex;
         align-items: center;
@@ -667,7 +662,7 @@
         color: var(--text);
       }
       .practice ol li code {
-        background: #f3f4f6;
+        background: #F5F5F5;
         padding: 1px 5px;
         border-radius: 4px;
         font-family: "Courier New", monospace;
@@ -687,7 +682,7 @@
         line-height: 1.8;
       }
       .foot-brand {
-        font-family: "DM Serif Display", serif;
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
         font-size: 1.1rem;
         font-weight: 400;
         margin-bottom: 0.5rem;
@@ -706,6 +701,7 @@
   </head>
   <body>
     <div class="hero">
+      <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE Digital Platforms" style="height: 48px; margin-bottom: 1rem; display: block;">
       <div class="hero-badge">
         <span class="dot"></span>Classes 04 &amp; 05 · April 11, 2026
       </div>
@@ -833,7 +829,7 @@
           IPv4 addresses look like this:
           <code
             style="
-              background: #e8edfb;
+              background: #E6E9EC;
               color: var(--indigo);
               padding: 2px 6px;
               border-radius: 4px;
@@ -936,7 +932,7 @@
             <strong style="color: var(--blue)">Protocol</strong> —
             <code
               style="
-                background: #e6f3f9;
+                background: #E6F0F8;
                 color: var(--blue);
                 padding: 1px 4px;
                 border-radius: 3px;
@@ -949,7 +945,7 @@
             <strong style="color: var(--indigo)">Domain</strong> —
             <code
               style="
-                background: #e8edfb;
+                background: #E6E9EC;
                 color: var(--indigo);
                 padding: 1px 4px;
                 border-radius: 3px;
@@ -962,7 +958,7 @@
             <strong style="color: var(--green)">TLD</strong> —
             <code
               style="
-                background: #f0fdf4;
+                background: #F0F7EC;
                 color: var(--green);
                 padding: 1px 4px;
                 border-radius: 3px;
@@ -973,11 +969,11 @@
             commercial
           </li>
           <li>
-            <strong style="color: #9a6200">Path</strong> —
+            <strong style="color: #1C5B8C">Path</strong> —
             <code
               style="
-                background: #fff7e6;
-                color: #9a6200;
+                background: #EBF0F7;
+                color: #1C5B8C;
                 padding: 1px 4px;
                 border-radius: 3px;
                 font-size: 0.85em;
@@ -986,11 +982,11 @@
             >: Which specific page or file on the server
           </li>
           <li>
-            <strong style="color: #9d174d">Query string</strong> —
+            <strong style="color: #8B001E">Query string</strong> —
             <code
               style="
-                background: #fdf2f8;
-                color: #9d174d;
+                background: #F2E8EA;
+                color: #8B001E;
                 padding: 1px 4px;
                 border-radius: 3px;
                 font-size: 0.85em;
@@ -1039,8 +1035,8 @@
         >
           <div
             style="
-              background: #f0fdf4;
-              border: 1.5px solid #a3e0bc;
+              background: #F0F7EC;
+              border: 1.5px solid #B5DBA7;
               border-radius: 10px;
               padding: 1rem;
               text-align: center;
@@ -1048,7 +1044,7 @@
           >
             <div
               style="
-                font-family: &quot;DM Serif Display&quot;, serif;
+                font-family: &quot;Bahnschrift&quot;, 'Segoe UI', sans-serif;
                 font-size: 1.8rem;
                 color: var(--green);
                 line-height: 1;
@@ -1073,8 +1069,8 @@
           </div>
           <div
             style="
-              background: #e6f3f9;
-              border: 1.5px solid #b3d7ec;
+              background: #E6F0F8;
+              border: 1.5px solid #B0D4E9;
               border-radius: 10px;
               padding: 1rem;
               text-align: center;
@@ -1082,7 +1078,7 @@
           >
             <div
               style="
-                font-family: &quot;DM Serif Display&quot;, serif;
+                font-family: &quot;Bahnschrift&quot;, 'Segoe UI', sans-serif;
                 font-size: 1.8rem;
                 color: var(--blue);
                 line-height: 1;
@@ -1107,8 +1103,8 @@
           </div>
           <div
             style="
-              background: #fff7e6;
-              border: 1.5px solid #fcd9a0;
+              background: #EBF0F7;
+              border: 1.5px solid #A3C4E0;
               border-radius: 10px;
               padding: 1rem;
               text-align: center;
@@ -1116,9 +1112,9 @@
           >
             <div
               style="
-                font-family: &quot;DM Serif Display&quot;, serif;
+                font-family: &quot;Bahnschrift&quot;, 'Segoe UI', sans-serif;
                 font-size: 1.8rem;
-                color: #9a6200;
+                color: #1C5B8C;
                 line-height: 1;
               "
             >
@@ -1128,7 +1124,7 @@
               style="
                 font-size: 0.78rem;
                 font-weight: 700;
-                color: #9a6200;
+                color: #1C5B8C;
                 text-transform: uppercase;
                 margin: 0.2rem 0;
               "
@@ -1141,8 +1137,8 @@
           </div>
           <div
             style="
-              background: #f5f0ff;
-              border: 1.5px solid #d8b4fe;
+              background: #ECF2F8;
+              border: 1.5px solid #A3C4E0;
               border-radius: 10px;
               padding: 1rem;
               text-align: center;
@@ -1150,7 +1146,7 @@
           >
             <div
               style="
-                font-family: &quot;DM Serif Display&quot;, serif;
+                font-family: &quot;Bahnschrift&quot;, 'Segoe UI', sans-serif;
                 font-size: 1.8rem;
                 color: var(--purple);
                 line-height: 1;
@@ -1175,8 +1171,8 @@
           </div>
           <div
             style="
-              background: #fef2f2;
-              border: 1.5px solid #fbc7c7;
+              background: #F2E8EA;
+              border: 1.5px solid #E0B5B9;
               border-radius: 10px;
               padding: 1rem;
               text-align: center;
@@ -1184,7 +1180,7 @@
           >
             <div
               style="
-                font-family: &quot;DM Serif Display&quot;, serif;
+                font-family: &quot;Bahnschrift&quot;, 'Segoe UI', sans-serif;
                 font-size: 1.8rem;
                 color: var(--red);
                 line-height: 1;
@@ -1354,7 +1350,7 @@
             <strong>String values</strong> — text, always in double quotes:
             <code
               style="
-                background: #f3f4f6;
+                background: #F5F5F5;
                 padding: 1px 4px;
                 border-radius: 3px;
                 font-family: &quot;Courier New&quot;, monospace;
@@ -1367,7 +1363,7 @@
             <strong>Number values</strong> — no quotes needed:
             <code
               style="
-                background: #f3f4f6;
+                background: #F5F5F5;
                 padding: 1px 4px;
                 border-radius: 3px;
                 font-family: &quot;Courier New&quot;, monospace;
@@ -1380,7 +1376,7 @@
             <strong>Boolean values</strong> —
             <code
               style="
-                background: #f3f4f6;
+                background: #F5F5F5;
                 padding: 1px 4px;
                 border-radius: 3px;
                 font-family: &quot;Courier New&quot;, monospace;
@@ -1391,7 +1387,7 @@
             or
             <code
               style="
-                background: #f3f4f6;
+                background: #F5F5F5;
                 padding: 1px 4px;
                 border-radius: 3px;
                 font-family: &quot;Courier New&quot;, monospace;
@@ -1404,7 +1400,7 @@
             <strong>Arrays</strong> — a list of values inside square brackets:
             <code
               style="
-                background: #f3f4f6;
+                background: #F5F5F5;
                 padding: 1px 4px;
                 border-radius: 3px;
                 font-family: &quot;Courier New&quot;, monospace;
@@ -1586,8 +1582,8 @@
         >
           <div
             style="
-              background: #e6f3f9;
-              border: 1.5px solid #b3d7ec;
+              background: #E6F0F8;
+              border: 1.5px solid #B0D4E9;
               border-radius: 10px;
               padding: 1.1rem;
             "
@@ -1660,8 +1656,8 @@
           </div>
           <div
             style="
-              background: #f0fdf4;
-              border: 1.5px solid #a3e0bc;
+              background: #F0F7EC;
+              border: 1.5px solid #B5DBA7;
               border-radius: 10px;
               padding: 1.1rem;
             "
@@ -1800,6 +1796,7 @@
     <!-- /container -->
 
     <div class="page-footer">
+      <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE Digital Platforms" style="height: 32px; margin-bottom: 0.5rem; display: block; margin-left: auto; margin-right: auto; opacity: 0.6;">
       <p class="foot-brand">
         <span class="b1">SELISE</span> <span class="x">×</span>
         <span class="b2">Pelsung</span>

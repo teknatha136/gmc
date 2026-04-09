@@ -62,27 +62,60 @@ Generate all three files in a single response. Write complete, working HTML — 
 ### Design system (use exactly — all three files share this)
 
 ```css
-/* Fonts — always load from Google Fonts */
-DM Sans (body, UI), DM Serif Display (headings, display text)
-https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display&display=swap
+/* Fonts — per SELISE Brand Guidelines */
+/* Load Open Sans from Google Fonts; Bahnschrift is a system font (Windows) */
+Open Sans (body, UI), Bahnschrift (headings, display text)
+https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap
 
-/* Brand colors */
---blue:   #0073aa   /* SELISE blue */
---indigo: #1447e6   /* Pelsung blue */
---amber:  #f99c00
---green:  #00a544
---purple: #ac4bff
---red:    #dc2626
---text:   #171717
---muted:  #6a7282
---faint:  #99a1af
---surf:   #ffffff
---bg:     #f8f9fb
---border: #e5e7eb
+/* Font stacks */
+--font-heading: 'Bahnschrift', 'Segoe UI', sans-serif;
+--font-body:    'Open Sans', 'Aptos', sans-serif;
+--font-code:    'Courier New', monospace;
 
-/* Signature gradient (top accent bar + progress bars) */
-linear-gradient(90deg, #0073aa, #1447e6, #f99c00)
+/* SELISE Brand Colors (from official SELISE Brand Book) */
+--blue:   #0066B2   /* SELISE Blue — primary brand color */
+--indigo: #001F35   /* Oxford Blue — deep accent */
+--amber:  #247EC1   /* SELISE Blue 80% — secondary accent */
+--green:  #7BC950   /* Lime Green — positive/success (use sparingly) */
+--purple: #4796D1   /* SELISE Blue 60% — tertiary accent */
+--red:    #D80032   /* Crimson — warnings/errors */
+--text:   #1B2021   /* Eerie Black — primary text */
+--muted:  #7B7C7F   /* Globe Grey — secondary text */
+--faint:  #9CA3AF
+--surf:   #FFFFFF
+--bg:     #F9F9F9
+--border: #EDEDED
+
+/* SELISE Blue Shade Ramp (for tints/shades) */
+/* 100%: #0066B2 | 80%: #247EC1 | 60%: #4796D1 | 40%: #6BAEE0 | 20%: #7DBAE8 | 10%: #8EC6F0 */
+
+/* Official SELISE Gradients */
+--gradient-dark:  linear-gradient(135deg, #0067A3, #002D72)  /* Hero sections, accent bars, footers */
+--gradient-mid:   linear-gradient(135deg, #5BAEFF, #0073C6)  /* Banners, CTAs */
+--gradient-light: linear-gradient(135deg, #F9F9F9, #EDEDED)  /* Subtle backgrounds */
+
+/* Signature accent bar (top of pages + progress bars) — use Dark Gradient */
+linear-gradient(135deg, #0067A3, #002D72)
 ```
+
+### SELISE Logo placement (MANDATORY on all materials)
+
+Logo files are in `selise-brand/assets/`:
+- `SELISE_Logo_Primary_Small.png` — color logo for light backgrounds
+- `SELISE_Logo_Reversed.png` — white logo for dark backgrounds
+
+**Rules (from SELISE Brand Book):**
+- Logo on every page/slide — top-left, top-right, or bottom-centered
+- Slides: small watermark (opacity 0.4) on content slides; prominent on title slide
+- Documents: logo in hero section + footer
+- Use reversed (white) version on dark backgrounds
+- Relative paths from curriculum files: `../../../selise-brand/assets/` (foundation) or `../../selise-brand/assets/` (curriculum root)
+
+### Color usage rules (from SELISE Brand Book)
+
+**Do:** Use blues, greys, blacks, whites, and occasionally greens.
+**Don't:** Use bright colors (red, purple, orange) beyond the brand palette.
+**Ratio:** 60% primary / 30% secondary / 10% accent (6:3:1 rule).
 
 Reference existing files for design fidelity — read them if you need to check a specific component:
 - Slides: `pelsung/curriculum/foundation/apr10-slides.html`

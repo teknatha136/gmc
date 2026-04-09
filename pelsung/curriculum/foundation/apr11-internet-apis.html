@@ -6,26 +6,26 @@
     <title>Trainer Guide — Classes 04 &amp; 05 · Apr 11</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap"
       rel="stylesheet"
     />
     <style>
       :root {
-        --blue: #0073aa;
-        --indigo: #1447e6;
-        --amber: #f99c00;
-        --green: #00a544;
-        --purple: #ac4bff;
-        --red: #dc2626;
-        --text: #171717;
-        --muted: #6a7282;
-        --faint: #99a1af;
+        --blue: #0066B2;
+        --indigo: #001F35;
+        --amber: #247EC1;
+        --green: #7BC950;
+        --purple: #4796D1;
+        --red: #D80032;
+        --text: #1B2021;
+        --muted: #7B7C7F;
+        --faint: #9CA3AF;
         --surf: #ffffff;
-        --bg: #f8f9fb;
-        --border: #e5e7eb;
-        --border-l: #f3f4f6;
-        --c04: #0073aa;
-        --c05: #1447e6;
+        --bg: #F9F9F9;
+        --border: #EDEDED;
+        --border-l: #F5F5F5;
+        --c04: #0066B2;
+        --c05: #001F35;
       }
       * {
         margin: 0;
@@ -33,7 +33,7 @@
         box-sizing: border-box;
       }
       body {
-        font-family: "DM Sans", system-ui, sans-serif;
+        font-family: "Open Sans", 'Aptos', sans-serif;
         background: var(--bg);
         color: var(--text);
         -webkit-font-smoothing: antialiased;
@@ -56,12 +56,7 @@
         left: 0;
         right: 0;
         height: 4px;
-        background: linear-gradient(
-          90deg,
-          var(--blue),
-          var(--indigo),
-          var(--amber)
-        );
+        background: linear-gradient(135deg, #0067A3, #002D72);
       }
       .hero-meta {
         display: inline-flex;
@@ -85,7 +80,7 @@
         background: var(--amber);
       }
       .hero h1 {
-        font-family: "DM Serif Display", serif;
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
         font-size: clamp(2.2rem, 5vw, 3.2rem);
         font-weight: 400;
         letter-spacing: -0.02em;
@@ -121,7 +116,7 @@
         text-align: center;
       }
       .stat-val {
-        font-family: "DM Serif Display", serif;
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
         font-size: 1.6rem;
         font-weight: 400;
         line-height: 1;
@@ -189,16 +184,16 @@
         color: var(--muted);
       }
       .tl-04 {
-        background: linear-gradient(180deg, #e6f3f9, #f0f8ff);
+        background: linear-gradient(180deg, #E6F0F8, #EFF5FB);
       }
       .tl-break {
-        background: linear-gradient(180deg, #f0fdf4, #f7fff9);
+        background: linear-gradient(180deg, #F0F7EC, #F5FAF2);
       }
       .tl-buf {
         background: linear-gradient(180deg, #fafafa, #ffffff);
       }
       .tl-05 {
-        background: linear-gradient(180deg, #e8edfb, #f0f3ff);
+        background: linear-gradient(180deg, #E6E9EC, #EEF0F2);
       }
 
       /* SECTION HEADER */
@@ -218,23 +213,23 @@
         margin-bottom: 0.75rem;
       }
       .pill-04 {
-        background: #e6f3f9;
+        background: #E6F0F8;
         color: var(--c04);
       }
       .pill-05 {
-        background: #e8edfb;
+        background: #E6E9EC;
         color: var(--c05);
       }
       .pill-ex {
-        background: #fff7e6;
-        color: #b97400;
+        background: #EBF0F7;
+        color: #1C5B8C;
       }
       .pill-break {
-        background: #f0fdf4;
+        background: #F0F7EC;
         color: var(--green);
       }
       .section-title {
-        font-family: "DM Serif Display", serif;
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
         font-size: 2.2rem;
         font-weight: 400;
         letter-spacing: -0.02em;
@@ -263,14 +258,14 @@
         color: var(--muted);
       }
       .obj-chip.c04 {
-        border-color: #b3d7ec;
+        border-color: #B0D4E9;
         color: var(--c04);
-        background: #e6f3f9;
+        background: #E6F0F8;
       }
       .obj-chip.c05 {
-        border-color: #c5d0f7;
+        border-color: #C0C8D0;
         color: var(--c05);
-        background: #e8edfb;
+        background: #E6E9EC;
       }
 
       /* BLOCKS */
@@ -357,8 +352,8 @@
 
       /* TIP CALLOUT */
       .tip {
-        background: #fffbf0;
-        border: 1px solid #fcd9a0;
+        background: #F0F4FA;
+        border: 1px solid #A3C4E0;
         border-radius: 10px;
         padding: 1rem 1.25rem;
         margin: 0.75rem 0;
@@ -373,20 +368,20 @@
       }
       .tip p {
         font-size: 0.88rem;
-        color: #7a5000;
+        color: #1C5B8C;
         line-height: 1.55;
         font-style: italic;
         margin: 0;
       }
       .tip strong {
         font-style: normal;
-        color: #5a3a00;
+        color: #0D3A5E;
       }
 
       /* DISCUSSION PROMPT */
       .discuss {
-        background: #f0f3ff;
-        border: 1px solid #c5d0f7;
+        background: #EEF0F2;
+        border: 1px solid #C0C8D0;
         border-radius: 10px;
         padding: 1rem 1.25rem;
         margin: 0.75rem 0;
@@ -409,8 +404,8 @@
 
       /* EXERCISE BLOCK */
       .exercise {
-        background: #fffaf0;
-        border: 1.5px solid #fcd9a0;
+        background: #F0F4FA;
+        border: 1.5px solid #A3C4E0;
         border-radius: 16px;
         padding: 1.75rem 2rem;
         margin: 1.5rem 0;
@@ -439,11 +434,11 @@
         margin-left: auto;
         font-size: 0.75rem;
         font-weight: 600;
-        color: #9a6200;
-        background: #fff7e6;
+        color: #1C5B8C;
+        background: #EBF0F7;
         padding: 0.2rem 0.65rem;
         border-radius: 100px;
-        border: 1px solid #fcd9a0;
+        border: 1px solid #A3C4E0;
       }
       .ex-steps {
         list-style: none;
@@ -476,21 +471,21 @@
         top: 0.05rem;
       }
       .ex-watch {
-        background: #f5f0ff;
-        border: 1px solid #d8b4fe;
+        background: #ECF2F8;
+        border: 1px solid #A3C4E0;
         border-radius: 8px;
         padding: 0.75rem 1rem;
         margin: 0.75rem 0;
         font-size: 0.85rem;
-        color: #5b21b6;
+        color: #0A3B6B;
       }
       .ex-watch strong {
-        color: #3b0764;
+        color: #001F35;
       }
 
       /* CODE SNIPPET */
       .code-snip {
-        background: #1a1a2e;
+        background: #001F35;
         border-radius: 8px;
         padding: 0.75rem 1rem;
         font-family: "Courier New", monospace;
@@ -519,7 +514,7 @@
         margin-top: 3rem;
       }
       .closing-title {
-        font-family: "DM Serif Display", serif;
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
         font-size: 1.5rem;
         font-weight: 400;
         margin-bottom: 1.25rem;
@@ -557,6 +552,7 @@
   </head>
   <body>
     <div class="hero">
+      <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE Digital Platforms" style="height: 48px; margin-bottom: 1rem; display: block;">
       <div class="hero-meta">
         <span class="dot"></span>Trainer Guide · Classes 04 &amp; 05 ·
         Foundation Phase
@@ -916,7 +912,7 @@
             Open browser and go to
             <code
               style="
-                background: #f3f4f6;
+                background: #F5F5F5;
                 padding: 1px 4px;
                 border-radius: 3px;
                 font-size: 0.85em;
@@ -1114,7 +1110,7 @@
           <li>
             <code
               style="
-                background: #f3f4f6;
+                background: #F5F5F5;
                 padding: 1px 4px;
                 border-radius: 3px;
                 font-size: 0.85em;
@@ -1124,7 +1120,7 @@
             → all trainees ·
             <code
               style="
-                background: #f3f4f6;
+                background: #F5F5F5;
                 padding: 1px 4px;
                 border-radius: 3px;
                 font-size: 0.85em;
@@ -1200,7 +1196,7 @@
             Go to
             <code
               style="
-                background: #f3f4f6;
+                background: #F5F5F5;
                 padding: 1px 4px;
                 border-radius: 3px;
                 font-size: 0.85em;
@@ -1216,7 +1212,7 @@
             Change URL to
             <code
               style="
-                background: #f3f4f6;
+                background: #F5F5F5;
                 padding: 1px 4px;
                 border-radius: 3px;
                 font-size: 0.85em;
@@ -1229,7 +1225,7 @@
             Explore
             <code
               style="
-                background: #f3f4f6;
+                background: #F5F5F5;
                 padding: 1px 4px;
                 border-radius: 3px;
                 font-size: 0.85em;
@@ -1239,7 +1235,7 @@
             and
             <code
               style="
-                background: #f3f4f6;
+                background: #F5F5F5;
                 padding: 1px 4px;
                 border-radius: 3px;
                 font-size: 0.85em;
@@ -1251,7 +1247,7 @@
             Bonus:
             <code
               style="
-                background: #f3f4f6;
+                background: #F5F5F5;
                 padding: 1px 4px;
                 border-radius: 3px;
                 font-size: 0.85em;
@@ -1479,6 +1475,7 @@
     </div>
 
     <footer>
+      <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE Digital Platforms" style="height: 32px; margin-bottom: 0.5rem; display: block; margin-left: auto; margin-right: auto; opacity: 0.6;">
       SELISE × Pelsung · Trainer Guide · Classes 04 &amp; 05 · April 11, 2026 ·
       Foundation Phase · Cohort 3
     </footer>

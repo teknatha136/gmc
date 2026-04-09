@@ -5,29 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Classes 02 & 03 — Professional Skills + AI Basics & Prompting</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap" rel="stylesheet">
   <style>
     :root {
-      --blue-selise: #0073aa;
-      --blue-pelsung: #1447e6;
-      --amber: #f99c00;
-      --green: #00a544;
-      --purple: #ac4bff;
-      --text: #171717;
-      --text-muted: #6a7282;
-      --text-faint: #99a1af;
+      --blue-selise: #0066B2;
+      --blue-pelsung: #001F35;
+      --amber: #247EC1;
+      --green: #7BC950;
+      --purple: #4796D1;
+      --text: #1B2021;
+      --text-muted: #7B7C7F;
+      --text-faint: #9CA3AF;
       --surface: #ffffff;
-      --bg: #f8f9fb;
-      --border: #e5e7eb;
-      --border-light: #f3f4f6;
-      --pro: #0073aa;
-      --ai: #1447e6;
+      --bg: #F9F9F9;
+      --border: #EDEDED;
+      --border-light: #F5F5F5;
+      --pro: #0066B2;
+      --ai: #001F35;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      font-family: 'DM Sans', system-ui, sans-serif;
+      font-family: 'Open Sans', 'Aptos', sans-serif;
       background: var(--bg);
       color: var(--text);
       -webkit-font-smoothing: antialiased;
@@ -48,7 +48,7 @@
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 4px;
-      background: linear-gradient(90deg, var(--blue-selise), var(--blue-pelsung), var(--amber));
+      background: linear-gradient(135deg, #0067A3, #002D72);
     }
     .hero-meta {
       display: inline-flex;
@@ -67,7 +67,7 @@
     }
     .hero-meta .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); }
     .hero h1 {
-      font-family: 'DM Serif Display', serif;
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
       font-size: 3rem;
       font-weight: 400;
       letter-spacing: -0.02em;
@@ -97,7 +97,7 @@
       font-size: 1.6rem;
       font-weight: 700;
       line-height: 1;
-      font-family: 'DM Serif Display', serif;
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
     }
     .stat-val.blue { color: var(--blue-selise); }
     .stat-val.indigo { color: var(--blue-pelsung); }
@@ -123,12 +123,12 @@
       text-transform: uppercase;
       margin-bottom: 0.75rem;
     }
-    .pill-pro { background: #e6f3f9; color: var(--pro); }
-    .pill-ai { background: #e8edfb; color: var(--ai); }
-    .pill-ex { background: #fff7e6; color: #b97400; }
-    .pill-break { background: #f0fdf4; color: var(--green); }
+    .pill-pro { background: #E6F0F8; color: var(--pro); }
+    .pill-ai { background: #E6E9EC; color: var(--ai); }
+    .pill-ex { background: #EBF0F7; color: #1C5B8C; }
+    .pill-break { background: #F0F7EC; color: var(--green); }
     .section-title {
-      font-family: 'DM Serif Display', serif;
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
       font-size: 2.2rem;
       font-weight: 400;
       letter-spacing: -0.02em;
@@ -160,10 +160,10 @@
     .tl-seg .tl-time { font-weight: 700; font-size: 0.72rem; color: var(--text-faint); }
     .tl-seg .tl-label { font-weight: 600; color: var(--text); font-size: 0.8rem; line-height: 1.3; }
     .tl-seg .tl-dur { font-size: 0.7rem; color: var(--text-muted); }
-    .tl-pro { background: linear-gradient(180deg, #e6f3f9 0%, #f0f8ff 100%); }
-    .tl-ai { background: linear-gradient(180deg, #e8edfb 0%, #f0f3ff 100%); }
-    .tl-ex { background: linear-gradient(180deg, #fff7e6 0%, #fffbf0 100%); }
-    .tl-break { background: linear-gradient(180deg, #f0fdf4 0%, #f7fff9 100%); }
+    .tl-pro { background: linear-gradient(180deg, #E6F0F8 0%, #EFF5FB 100%); }
+    .tl-ai { background: linear-gradient(180deg, #E6E9EC 0%, #EEF0F2 100%); }
+    .tl-ex { background: linear-gradient(180deg, #EBF0F7 0%, #F0F4FA 100%); }
+    .tl-break { background: linear-gradient(180deg, #F0F7EC 0%, #F5FAF2 100%); }
 
     /* ===== CONTENT BLOCKS ===== */
     .block {
@@ -215,9 +215,9 @@
       font-weight: 500;
       border: 1px solid;
     }
-    .chip-pro { background: #f0f7fc; border-color: #b3d7ec; color: var(--pro); }
-    .chip-ai { background: #f0f3ff; border-color: #c5d0f7; color: var(--ai); }
-    .chip-ex { background: #fff9ee; border-color: #fcd9a0; color: #9a6200; }
+    .chip-pro { background: #f0f7fc; border-color: #B0D4E9; color: var(--pro); }
+    .chip-ai { background: #EEF0F2; border-color: #C0C8D0; color: var(--ai); }
+    .chip-ex { background: #EEF2F9; border-color: #A3C4E0; color: #1C5B8C; }
 
     /* ===== CONTENT CARDS GRID ===== */
     .cards-grid {
@@ -310,7 +310,7 @@
       padding: 0 0.4rem;
     }
     .cf-sender { border-color: var(--pro); color: var(--pro); }
-    .cf-msg { border-color: var(--amber); color: #9a6200; }
+    .cf-msg { border-color: var(--amber); color: #1C5B8C; }
     .cf-channel { border-color: var(--purple); color: var(--purple); }
     .cf-receiver { border-color: var(--green); color: var(--green); }
     .cf-feedback { border-color: var(--text-faint); color: var(--text-muted); }
@@ -396,14 +396,14 @@
     .mf-cell .mf-icon { font-size: 1.5rem; }
     .mf-cell .mf-label { font-size: 0.78rem; font-weight: 700; }
     .mf-cell .mf-sub { font-size: 0.7rem; color: var(--text-muted); }
-    .q1 { background: #fff7e6; border: 1.5px solid #fcd9a0; }
-    .q2 { background: #e6f3f9; border: 1.5px solid #b3d7ec; }
-    .q3 { background: #f0fdf4; border: 1.5px solid #a3e0bc; }
-    .q4 { background: #fef2f2; border: 1.5px solid #fbc7c7; }
+    .q1 { background: #EBF0F7; border: 1.5px solid #A3C4E0; }
+    .q2 { background: #E6F0F8; border: 1.5px solid #B0D4E9; }
+    .q3 { background: #F0F7EC; border: 1.5px solid #B5DBA7; }
+    .q4 { background: #F2E8EA; border: 1.5px solid #E0B5B9; }
 
     /* Prompt anatomy */
     .prompt-anat {
-      background: #1a1a2e;
+      background: #001F35;
       border-radius: 12px;
       padding: 1.5rem;
       font-family: 'Courier New', monospace;
@@ -429,7 +429,7 @@
     .lbl-ctx { background: #1e4f72; color: #7dd3fc; }
     .lbl-task { background: #14532d; color: #86efac; }
     .lbl-fmt { background: #713f12; color: #fde68a; }
-    .lbl-ex { background: #3b0764; color: #c4b5fd; }
+    .lbl-ex { background: #001F35; color: #c4b5fd; }
 
     /* AI comparison */
     .ai-compare {
@@ -470,7 +470,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: 'DM Serif Display', serif;
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
       font-size: 1.5rem;
       color: var(--text-faint);
       padding-top: 1rem;
@@ -488,27 +488,27 @@
       margin-bottom: 1.5rem;
     }
     .do-card {
-      background: #f0fdf4;
-      border: 1px solid #a3e0bc;
+      background: #F0F7EC;
+      border: 1px solid #B5DBA7;
       border-radius: 12px;
       padding: 1.25rem;
     }
     .dont-card {
-      background: #fef2f2;
-      border: 1px solid #fbc7c7;
+      background: #F2E8EA;
+      border: 1px solid #E0B5B9;
       border-radius: 12px;
       padding: 1.25rem;
     }
     .do-card h4 { color: var(--green); font-size: 0.9rem; margin-bottom: 0.75rem; }
-    .dont-card h4 { color: #dc2626; font-size: 0.9rem; margin-bottom: 0.75rem; }
+    .dont-card h4 { color: #D80032; font-size: 0.9rem; margin-bottom: 0.75rem; }
     .do-card ul, .dont-card ul { list-style: none; display: flex; flex-direction: column; gap: 0.45rem; }
     .do-card ul li, .dont-card ul li { font-size: 0.83rem; padding-left: 1.4rem; position: relative; color: var(--text-muted); }
     .do-card ul li::before { content: '✓'; position: absolute; left: 0; color: var(--green); font-weight: 700; }
-    .dont-card ul li::before { content: '✗'; position: absolute; left: 0; color: #dc2626; font-weight: 700; }
+    .dont-card ul li::before { content: '✗'; position: absolute; left: 0; color: #D80032; font-weight: 700; }
 
     /* Exercise block */
     .exercise {
-      background: #fffbf0;
+      background: #F0F4FA;
       border: 1.5px solid var(--amber);
       border-radius: 16px;
       padding: 1.75rem 2rem;
@@ -599,7 +599,7 @@
     /* Tip box */
     .tip {
       background: #f0f7fc;
-      border: 1px solid #b3d7ec;
+      border: 1px solid #B0D4E9;
       border-radius: 10px;
       padding: 0.9rem 1.1rem;
       font-size: 0.85rem;
@@ -613,8 +613,8 @@
 
     /* Break banner */
     .break-banner {
-      background: linear-gradient(135deg, #f0fdf4, #e6ffed);
-      border: 1.5px solid #a3e0bc;
+      background: linear-gradient(135deg, #F0F7EC, #EAF5E3);
+      border: 1.5px solid #B5DBA7;
       border-radius: 16px;
       padding: 1.5rem 2rem;
       text-align: center;
@@ -631,7 +631,7 @@
 
     /* Wrap-up box */
     .wrapup {
-      background: linear-gradient(135deg, var(--blue-pelsung) 0%, #0c2e8a 100%);
+      background: linear-gradient(135deg, var(--blue-pelsung) 0%, #000D19 100%);
       color: white;
       border-radius: 20px;
       padding: 2.5rem;
@@ -639,7 +639,7 @@
       text-align: center;
     }
     .wrapup h2 {
-      font-family: 'DM Serif Display', serif;
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
       font-size: 1.9rem;
       font-weight: 400;
       margin-bottom: 0.5rem;
@@ -673,7 +673,7 @@
     }
     .prompt-eg .pe-label {
       display: inline-block;
-      background: #1447e6;
+      background: #001F35;
       color: white;
       font-size: 0.65rem;
       font-weight: 700;
@@ -682,7 +682,7 @@
       padding: 0.1rem 0.5rem;
       border-radius: 4px;
       margin-bottom: 0.5rem;
-      font-family: 'DM Sans', sans-serif;
+      font-family: 'Open Sans', sans-serif;
     }
     .prompt-eg p { color: var(--text); }
 
@@ -780,13 +780,13 @@
       border-radius: 4px;
       vertical-align: middle;
       margin-left: 0.3rem;
-      font-family: 'DM Sans', sans-serif;
+      font-family: 'Open Sans', sans-serif;
     }
 
     /* Knowledge check */
     .kc-box {
-      background: #f0f3ff;
-      border: 1.5px solid #c5d0f7;
+      background: #EEF0F2;
+      border: 1.5px solid #C0C8D0;
       border-radius: 14px;
       padding: 1.5rem 1.75rem;
       margin-bottom: 1.5rem;
@@ -844,6 +844,7 @@
 
 <!-- ===== HERO ===== -->
 <div class="hero">
+  <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE Digital Platforms" style="height: 48px; margin-bottom: 1rem; display: block;">
   <div class="hero-meta">
     <div class="dot"></div>
     Pelsung Cohort 3 · Foundation Phase · April 10, 2026
@@ -1564,6 +1565,7 @@
 
 <!-- ===== FOOTER ===== -->
 <div class="footer">
+  <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE Digital Platforms" style="height: 28px; margin-bottom: 0.5rem; display: inline-block; opacity: 0.5;"><br>
   <strong>SELISE × Pelsung</strong> · Cohort 3, 2026 · Foundation Phase · Class 02 &amp; 03 · April 10, 2026 · Trainer: Bhuwan Sharma
 </div>
 

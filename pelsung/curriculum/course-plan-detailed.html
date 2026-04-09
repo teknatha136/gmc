@@ -5,24 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SELISE × Pelsung — Detailed Course Plan (Trainer Edition)</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Open Sans:wght@400;500;600;700;800&display=swap');
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Open Sans', system-ui, sans-serif;
     background: #fff;
-    color: #242424;
+    color: #1B2021;
     padding: 3rem;
     max-width: 1100px;
     margin: 0 auto;
     line-height: 1.6;
   }
 
-  .header { text-align: center; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid #e2e6ea; }
-  .header h1 { font-size: 2.4rem; font-weight: 800; color: #0073aa; }
-  .header h1 span { color: #313131; }
-  .header p { color: #888; font-size: 1.1rem; margin-top: 0.25rem; }
-  .header .edition { display: inline-block; margin-top: 0.75rem; background: #fff3cd; color: #856404; padding: 0.35rem 1rem; border-radius: 6px; font-size: 0.9rem; font-weight: 600; border: 1px solid #ffc107; }
+  .header::before {
+    content: '';
+    display: block;
+    height: 5px;
+    background: linear-gradient(135deg, #0067A3, #002D72);
+    margin-bottom: 1.5rem;
+  }
+  .header { text-align: center; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid #EDEDED; }
+  .header h1 { font-size: 2.4rem; font-weight: 800; color: #0066B2; }
+  .header h1 span { color: #1B2021; }
+  .header p { color: #7B7C7F; font-size: 1.1rem; margin-top: 0.25rem; }
+  .header .edition { display: inline-block; margin-top: 0.75rem; background: #EBF0F7; color: #1C5B8C; padding: 0.35rem 1rem; border-radius: 6px; font-size: 0.9rem; font-weight: 600; border: 1px solid #247EC1; }
 
   /* Vertical sections */
   .vertical-section { margin-bottom: 3.5rem; }
@@ -37,13 +44,13 @@
   .vertical-header h2 { font-size: 1.5rem; font-weight: 800; }
   .vertical-header .count { font-size: 0.9rem; opacity: 0.8; font-weight: 600; }
 
-  .bg-dev { background: #0073aa; }
-  .bg-design { background: #9b51e0; }
-  .bg-testing { background: #00d084; color: #1a3a2a; }
-  .bg-ba { background: #fcb900; color: #313131; }
+  .bg-dev { background: #0066B2; }
+  .bg-design { background: #4796D1; }
+  .bg-testing { background: #7BC950; color: #2A4D14; }
+  .bg-ba { background: #247EC1; color: #1B2021; }
 
   .vertical-body {
-    border: 2px solid #e2e6ea;
+    border: 2px solid #EDEDED;
     border-top: none;
     border-radius: 0 0 12px 12px;
     padding: 1.5rem;
@@ -51,14 +58,14 @@
 
   /* Cohort profile */
   .cohort-profile {
-    background: #f8f9fb;
-    border: 1px solid #e8eaed;
+    background: #F9F9F9;
+    border: 1px solid #EDEDED;
     border-radius: 10px;
     padding: 1.25rem 1.5rem;
     margin-bottom: 1.5rem;
   }
 
-  .cohort-profile h3 { font-size: 1.1rem; font-weight: 700; color: #242424; margin-bottom: 0.75rem; }
+  .cohort-profile h3 { font-size: 1.1rem; font-weight: 700; color: #1B2021; margin-bottom: 0.75rem; }
 
   .profile-grid {
     display: grid;
@@ -67,48 +74,48 @@
   }
   @media (max-width: 700px) { .profile-grid { grid-template-columns: 1fr; } }
 
-  .profile-box h4 { font-size: 0.85rem; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem; }
+  .profile-box h4 { font-size: 0.85rem; font-weight: 700; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem; }
   .profile-box ul { list-style: none; padding: 0; }
-  .profile-box li { font-size: 0.95rem; color: #444; padding: 0.2rem 0; }
-  .profile-box li strong { color: #242424; }
+  .profile-box li { font-size: 0.95rem; color: #3A3B3D; padding: 0.2rem 0; }
+  .profile-box li strong { color: #1B2021; }
 
-  .star { color: #fcb900; }
+  .star { color: #247EC1; }
 
   /* Trainer note */
   .trainer-note {
-    background: #fff8e1;
-    border-left: 4px solid #fcb900;
+    background: #EBF0F7;
+    border-left: 4px solid #247EC1;
     padding: 0.85rem 1.1rem;
     border-radius: 0 8px 8px 0;
     margin: 1rem 0;
     font-size: 0.95rem;
-    color: #5d4e00;
+    color: #1C5B8C;
   }
-  .trainer-note strong { color: #856404; }
+  .trainer-note strong { color: #1C5B8C; }
 
   .trainer-warn {
-    background: #fce4ec;
-    border-left: 4px solid #e53935;
+    background: #F2E8EA;
+    border-left: 4px solid #D80032;
     padding: 0.85rem 1.1rem;
     border-radius: 0 8px 8px 0;
     margin: 1rem 0;
     font-size: 0.95rem;
-    color: #b71c1c;
+    color: #8B001E;
   }
 
   .trainer-tip {
-    background: #e8f5e9;
-    border-left: 4px solid #43a047;
+    background: #F0F7EC;
+    border-left: 4px solid #5A9A3B;
     padding: 0.85rem 1.1rem;
     border-radius: 0 8px 8px 0;
     margin: 1rem 0;
     font-size: 0.95rem;
-    color: #1b5e20;
+    color: #2A4D14;
   }
 
   /* Class cards */
   .class-card {
-    border: 1.5px solid #e8eaed;
+    border: 1.5px solid #EDEDED;
     border-radius: 10px;
     margin-bottom: 0.75rem;
     overflow: hidden;
@@ -119,90 +126,91 @@
     justify-content: space-between;
     align-items: center;
     padding: 0.75rem 1.1rem;
-    background: #fafbfc;
+    background: #F9F9F9;
     cursor: pointer;
     user-select: none;
   }
 
-  .class-card-header:hover { background: #f1f4f7; }
+  .class-card-header:hover { background: #F5F5F5; }
 
   .class-card-header .class-id {
     font-size: 0.78rem;
     font-weight: 700;
-    color: #aaa;
+    color: #9CA3AF;
     min-width: 55px;
   }
 
   .class-card-header .class-name {
     font-size: 1.05rem;
     font-weight: 700;
-    color: #242424;
+    color: #1B2021;
     flex: 1;
   }
 
   .class-card-header .topics-preview {
     font-size: 0.85rem;
-    color: #999;
+    color: #9CA3AF;
     text-align: right;
     max-width: 40%;
   }
 
   .class-card-body {
     padding: 1rem 1.25rem;
-    border-top: 1px solid #eee;
+    border-top: 1px solid #EDEDED;
     display: none;
   }
 
   .class-card.open .class-card-body { display: block; }
 
-  .class-card-body h4 { font-size: 0.85rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.05em; margin: 0.75rem 0 0.35rem; }
+  .class-card-body h4 { font-size: 0.85rem; font-weight: 700; color: #7B7C7F; text-transform: uppercase; letter-spacing: 0.05em; margin: 0.75rem 0 0.35rem; }
   .class-card-body h4:first-child { margin-top: 0; }
 
   .class-card-body ul { padding-left: 1.25rem; margin-bottom: 0.5rem; }
-  .class-card-body li { font-size: 0.95rem; color: #444; padding: 0.15rem 0; }
+  .class-card-body li { font-size: 0.95rem; color: #3A3B3D; padding: 0.15rem 0; }
 
-  .class-card-body .note { font-size: 0.9rem; color: #666; font-style: italic; margin: 0.5rem 0; }
+  .class-card-body .note { font-size: 0.9rem; color: #5A5B5E; font-style: italic; margin: 0.5rem 0; }
 
-  .border-dev { border-left: 4px solid #0073aa; }
-  .border-design { border-left: 4px solid #9b51e0; }
-  .border-testing { border-left: 4px solid #00d084; }
-  .border-ba { border-left: 4px solid #fcb900; }
+  .border-dev { border-left: 4px solid #0066B2; }
+  .border-design { border-left: 4px solid #4796D1; }
+  .border-testing { border-left: 4px solid #7BC950; }
+  .border-ba { border-left: 4px solid #247EC1; }
 
   /* Peer mentor table */
   table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 0.95rem; }
-  th { text-align: left; padding: 0.5rem 0.75rem; background: #f5f7fa; border: 1px solid #e2e6ea; font-weight: 700; color: #555; font-size: 0.85rem; }
-  td { padding: 0.5rem 0.75rem; border: 1px solid #e2e6ea; color: #444; }
+  th { text-align: left; padding: 0.5rem 0.75rem; background: #F9F9F9; border: 1px solid #EDEDED; font-weight: 700; color: #4A4B4D; font-size: 0.85rem; }
+  td { padding: 0.5rem 0.75rem; border: 1px solid #EDEDED; color: #3A3B3D; }
 
   .tag { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600; margin-right: 0.25rem; }
-  .tag-strong { background: #e8f5e9; color: #2e7d32; }
-  .tag-medium { background: #fff3e0; color: #e65100; }
-  .tag-beginner { background: #fce4ec; color: #c62828; }
+  .tag-strong { background: #F0F7EC; color: #2A4D14; }
+  .tag-medium { background: #EBF0F7; color: #1C5B8C; }
+  .tag-beginner { background: #F2E8EA; color: #8B001E; }
 
   .section-divider {
     margin: 2rem 0;
     border: none;
-    border-top: 2px dashed #e2e6ea;
+    border-top: 2px dashed #EDEDED;
   }
 
   .expand-all {
-    background: #f5f7fa;
-    border: 1px solid #e2e6ea;
+    background: #F9F9F9;
+    border: 1px solid #EDEDED;
     padding: 0.5rem 1rem;
     border-radius: 6px;
     cursor: pointer;
     font-size: 0.9rem;
     font-weight: 600;
-    color: #666;
+    color: #5A5B5E;
     margin-bottom: 1rem;
   }
   .expand-all:hover { background: #eef1f4; }
 
-  .footer { text-align: center; margin-top: 3rem; color: #bbb; font-size: 0.85rem; }
+  .footer { text-align: center; margin-top: 3rem; color: #BFBFC0; font-size: 0.85rem; }
 </style>
 </head>
 <body>
 
 <div class="header">
+  <img src="../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE Digital Platforms" style="height: 48px; margin-bottom: 1rem; display: block; margin-left: auto; margin-right: auto;">
   <h1>SELISE <span>× Pelsung</span></h1>
   <p>Detailed Course Plan — Matched to Trainee Backgrounds</p>
   <div class="edition">Trainer Edition — Not for distribution to trainees</div>
@@ -802,7 +810,7 @@
 <!-- =========================================================== -->
 <div class="vertical-section">
   <div class="vertical-header bg-design">
-    <h2>&#9998; Software Design</h2>
+    <h2>&#9CA3AF8; Software Design</h2>
     <div class="count">~8–10 trainees</div>
   </div>
   <div class="vertical-body">
@@ -878,13 +886,13 @@
       <div class="class-card-header" onclick="this.parentElement.classList.toggle('open')">
         <span class="class-id">Des 02</span>
         <span class="class-name">User Research</span>
-        <span class="topics-preview">Interviews, Surveys, Competitive analysis</span>
+        <span class="topics-preview">Open Sansviews, Surveys, Competitive analysis</span>
       </div>
       <div class="class-card-body">
         <h4>Topics</h4>
         <ul>
           <li>Why research: assumptions vs evidence</li>
-          <li>Interview techniques: open questions, active listening</li>
+          <li>Open Sansview techniques: open questions, active listening</li>
           <li>Surveys: when to use, question types</li>
           <li>Competitive analysis: looking at similar products</li>
         </ul>
@@ -892,7 +900,7 @@
         <ul>
           <li>Phub Lham was a surveyor/dashboard manager at NSB (National Statistics Bureau) — she literally did data collection professionally. Let her share her experience with the group.</li>
           <li>Yezer Pelzang organized quiz competitions and community events — he knows how to engage people with questions.</li>
-          <li><strong>Exercise:</strong> Interview each other about a problem they face in Gelephu (transport, services, information access). Use this real data for future design exercises throughout the program.</li>
+          <li><strong>Exercise:</strong> Open Sansview each other about a problem they face in Gelephu (transport, services, information access). Use this real data for future design exercises throughout the program.</li>
         </ul>
       </div>
     </div>
@@ -987,7 +995,7 @@
         </ul>
         <h4>Trainer Notes</h4>
         <ul>
-          <li>Use SELISE's own brand colors (#0073aa, #00a0d2) and the GMC visual identity as a real-world reference.</li>
+          <li>Use SELISE's own brand colors (#0066B2, #00a0d2) and the GMC visual identity as a real-world reference.</li>
           <li>Show good and bad examples of typography (Bhutanese government websites vs modern apps). Let them critique existing designs.</li>
           <li><strong>Exercise:</strong> Design a complete UI kit in Figma: 3 button states, 2 input fields, 1 card, 1 navigation bar. Use SELISE colors. This becomes their reusable library for the rest of the program.</li>
         </ul>
@@ -1264,9 +1272,9 @@
           <h4>Strong Analytical / Professional</h4>
           <ul>
             <li><strong>Sonam Tshering</strong> <span class="star">★</span> — Banking officer (BNB). King's Certificate. Advanced Excel, ERP. <span class="tag tag-strong">Top BA</span></li>
-            <li><strong>Nidup Dorji (Env)</strong> <span class="star">★</span> — International banking officer (BNB). Dean's List, 81%. <span class="tag tag-strong">Top BA</span></li>
+            <li><strong>Nidup Dorji (Env)</strong> <span class="star">★</span> — Open Sansnational banking officer (BNB). Dean's List, 81%. <span class="tag tag-strong">Top BA</span></li>
             <li><strong>Tashi Nima</strong> <span class="star">★</span> — 2+ years management. NSB enumerator. Social media marketing. Tally.</li>
-            <li><strong>Neten Dema</strong> — Internal auditor (NPPF). Labour Force Survey enumerator. B.Com Finance.</li>
+            <li><strong>Neten Dema</strong> — Open Sansnal auditor (NPPF). Labour Force Survey enumerator. B.Com Finance.</li>
             <li><strong>Dawa Zangmo</strong> — Procurement officer. Supply chain, vendor mgmt. 2+ years.</li>
           </ul>
         </div>
@@ -1334,7 +1342,7 @@
       <div class="class-card-header" onclick="this.parentElement.classList.toggle('open')">
         <span class="class-id">BA 03–05</span>
         <span class="class-name">Requirements: Elicitation, Documentation, User Stories</span>
-        <span class="topics-preview">Interviews, BRD/FRD, "As a user…", INVEST</span>
+        <span class="topics-preview">Open Sansviews, BRD/FRD, "As a user…", INVEST</span>
       </div>
       <div class="class-card-body">
         <h4>Topics (3 classes)</h4>

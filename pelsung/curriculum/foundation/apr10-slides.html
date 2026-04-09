@@ -6,7 +6,7 @@
     <title>Apr 10 · Professional Skills & AI Basics — SELISE × Pelsung</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap"
       rel="stylesheet"
     />
     <style>
@@ -20,25 +20,25 @@
       }
 
       :root {
-        --blue: #0073aa;
-        --indigo: #1447e6;
-        --amber: #f99c00;
-        --green: #00a544;
-        --purple: #ac4bff;
-        --red: #dc2626;
-        --text: #171717;
-        --muted: #6a7282;
-        --faint: #99a1af;
+        --blue: #0066B2;
+        --indigo: #001F35;
+        --amber: #247EC1;
+        --green: #7BC950;
+        --purple: #4796D1;
+        --red: #D80032;
+        --text: #1B2021;
+        --muted: #7B7C7F;
+        --faint: #9CA3AF;
         --surf: #ffffff;
-        --bg: #f8f9fb;
-        --border: #e5e7eb;
+        --bg: #F9F9F9;
+        --border: #EDEDED;
       }
 
       html,
       body {
         width: 100%;
         height: 100%;
-        font-family: "DM Sans", system-ui, sans-serif;
+        font-family: "Open Sans", 'Aptos', sans-serif;
         background: #111;
         overflow: hidden;
         -webkit-font-smoothing: antialiased;
@@ -89,12 +89,7 @@
         height: 5px;
       }
       .accent-gradient::before {
-        background: linear-gradient(
-          90deg,
-          var(--blue),
-          var(--indigo),
-          var(--amber)
-        );
+        background: linear-gradient(135deg, #0067A3, #002D72);
       }
       .accent-blue::before {
         background: var(--blue);
@@ -111,27 +106,27 @@
 
       /* ===== SLIDE BACKGROUNDS ===== */
       .bg-dark {
-        background: #0f172a;
+        background: #001F35;
         color: white;
       }
       .bg-blue {
-        background: linear-gradient(135deg, #0073aa 0%, #005c88 100%);
+        background: linear-gradient(135deg, #0066B2 0%, #004A80 100%);
         color: white;
       }
       .bg-indigo {
-        background: linear-gradient(135deg, #1447e6 0%, #0c2e8a 100%);
+        background: linear-gradient(135deg, #001F35 0%, #000D19 100%);
         color: white;
       }
       .bg-amber {
-        background: linear-gradient(135deg, #f99c00 0%, #e07e00 100%);
+        background: linear-gradient(135deg, #247EC1 0%, #185A8D 100%);
         color: white;
       }
       .bg-green {
-        background: linear-gradient(135deg, #00a544 0%, #007d33 100%);
+        background: linear-gradient(135deg, #7BC950 0%, #5A9A3B 100%);
         color: white;
       }
       .bg-subtle {
-        background: #f8f9fb;
+        background: #F9F9F9;
       }
 
       /* ===== PROGRESS BAR ===== */
@@ -140,12 +135,7 @@
         bottom: 0;
         left: 0;
         height: 3px;
-        background: linear-gradient(
-          90deg,
-          var(--blue),
-          var(--indigo),
-          var(--amber)
-        );
+        background: linear-gradient(135deg, #0067A3, #002D72);
         transition: width 0.3s ease;
         z-index: 100;
       }
@@ -233,14 +223,14 @@
         margin-bottom: 0.6rem;
       }
       h1.display {
-        font-family: "DM Serif Display", serif;
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
         font-size: clamp(3rem, 6vw, 5.5rem);
         font-weight: 400;
         line-height: 1.05;
         letter-spacing: -0.02em;
       }
       h2.heading {
-        font-family: "DM Serif Display", serif;
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
         font-size: clamp(2rem, 4.5vw, 3.8rem);
         font-weight: 400;
         line-height: 1.1;
@@ -315,7 +305,7 @@
       }
       .pill-amber {
         background: rgba(249, 156, 0, 0.15);
-        color: #9a6200;
+        color: #1C5B8C;
       }
       .pill-green {
         background: rgba(0, 165, 68, 0.12);
@@ -464,11 +454,11 @@
         font-weight: 600;
       }
       .tag-blue {
-        background: #e6f3f9;
+        background: #E6F0F8;
         color: var(--blue);
       }
       .tag-indigo {
-        background: #e8edfb;
+        background: #E6E9EC;
         color: var(--indigo);
       }
 
@@ -492,16 +482,16 @@
       }
       .agenda-row:hover {
         border-color: var(--indigo);
-        background: #f0f3ff;
+        background: #EEF0F2;
         transform: translateX(4px);
       }
       .agenda-row.break-row {
-        background: #f0fdf4;
-        border-color: #a3e0bc;
+        background: #F0F7EC;
+        border-color: #B5DBA7;
       }
       .agenda-row.break-row:hover {
         border-color: var(--green);
-        background: #e6ffed;
+        background: #EAF5E3;
       }
       .ar-time {
         font-size: clamp(0.72rem, 1vw, 0.85rem);
@@ -532,7 +522,7 @@
        SECTION BREAK SLIDE
     ============================ */
       .section-num {
-        font-family: "DM Serif Display", serif;
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
         font-size: clamp(5rem, 14vw, 12rem);
         line-height: 1;
         opacity: 0.08;
@@ -590,7 +580,7 @@
       }
       .cf-msg {
         border-color: var(--amber);
-        color: #9a6200;
+        color: #1C5B8C;
       }
       .cf-channel {
         border-color: var(--purple);
@@ -694,20 +684,20 @@
         line-height: 1.3;
       }
       .q1 {
-        background: #fff7e6;
-        border: 2px solid #fcd9a0;
+        background: #EBF0F7;
+        border: 2px solid #A3C4E0;
       }
       .q2 {
-        background: #e6f3f9;
-        border: 2px solid #b3d7ec;
+        background: #E6F0F8;
+        border: 2px solid #B0D4E9;
       }
       .q3 {
-        background: #f0fdf4;
-        border: 2px solid #a3e0bc;
+        background: #F0F7EC;
+        border: 2px solid #B5DBA7;
       }
       .q4 {
-        background: #fef2f2;
-        border: 2px solid #fbc7c7;
+        background: #F2E8EA;
+        border: 2px solid #E0B5B9;
       }
 
       /* ============================
@@ -788,17 +778,17 @@
       }
       .quiz-opt:hover {
         border-color: var(--indigo);
-        background: #f0f3ff;
+        background: #EEF0F2;
       }
       .quiz-opt.correct {
         border-color: var(--green);
-        background: #f0fdf4;
-        color: #065f30;
+        background: #F0F7EC;
+        color: #2A4D14;
       }
       .quiz-opt.wrong {
         border-color: var(--red);
-        background: #fef2f2;
-        color: #7f1d1d;
+        background: #F2E8EA;
+        color: #8B001E;
       }
       .quiz-opt.dim {
         opacity: 0.45;
@@ -838,14 +828,14 @@
         display: block;
       }
       .qf-correct {
-        background: #f0fdf4;
-        border: 1px solid #a3e0bc;
-        color: #065f30;
+        background: #F0F7EC;
+        border: 1px solid #B5DBA7;
+        color: #2A4D14;
       }
       .qf-wrong {
-        background: #fef2f2;
-        border: 1px solid #fbc7c7;
-        color: #7f1d1d;
+        background: #F2E8EA;
+        border: 1px solid #E0B5B9;
+        color: #8B001E;
       }
 
       /* ============================
@@ -883,11 +873,11 @@
       }
       .sl-item.good {
         border-color: var(--green);
-        background: #f0fdf4;
+        background: #F0F7EC;
       }
       .sl-item.bad {
         border-color: var(--red);
-        background: #fef2f2;
+        background: #F2E8EA;
       }
       .sl-item.good .sl-verdict {
         display: inline-block;
@@ -907,14 +897,14 @@
        PROMPT ANATOMY
     ============================ */
       .prompt-terminal {
-        background: #1a1a2e;
+        background: #001F35;
         border-radius: 14px;
         overflow: hidden;
         width: 100%;
         max-width: 820px;
       }
       .pt-titlebar {
-        background: #2d2d40;
+        background: #0A2A45;
         padding: 10px 16px;
         display: flex;
         align-items: center;
@@ -953,7 +943,7 @@
         text-transform: uppercase;
         padding: 2px 7px;
         border-radius: 4px;
-        font-family: "DM Sans", sans-serif;
+        font-family: "Open Sans", sans-serif;
         flex-shrink: 0;
         margin-top: 0.2em;
         line-height: 1.6;
@@ -986,7 +976,7 @@
         color: #c4b5fd;
       }
       .ex-tag {
-        background: #3b0764;
+        background: #001F35;
         color: #c4b5fd;
       }
       .pt-legend {
@@ -1036,7 +1026,7 @@
         color: var(--green);
       }
       .vs-prompt {
-        background: #1a1a2e;
+        background: #001F35;
         border-radius: 10px;
         padding: clamp(0.8rem, 1.3vw, 1.1rem) clamp(0.9rem, 1.5vw, 1.25rem);
         font-family: "Courier New", monospace;
@@ -1067,12 +1057,12 @@
         padding: clamp(1rem, 1.8vw, 1.5rem);
       }
       .do-col {
-        background: #f0fdf4;
-        border: 1.5px solid #a3e0bc;
+        background: #F0F7EC;
+        border: 1.5px solid #B5DBA7;
       }
       .dont-col {
-        background: #fef2f2;
-        border: 1.5px solid #fbc7c7;
+        background: #F2E8EA;
+        border: 1.5px solid #E0B5B9;
       }
       .do-col h4 {
         color: var(--green);
@@ -1118,7 +1108,7 @@
        TIMER SLIDE
     ============================ */
       .timer-display {
-        font-family: "DM Serif Display", serif;
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
         font-size: clamp(4rem, 12vw, 9rem);
         font-weight: 400;
         letter-spacing: -0.03em;
@@ -1319,7 +1309,7 @@
        DISCUSSION PROMPT SLIDE
     ============================ */
       .disc-prompt {
-        font-family: "DM Serif Display", serif;
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
         font-size: clamp(1.6rem, 3.5vw, 2.8rem);
         font-weight: 400;
         line-height: 1.25;
@@ -1402,7 +1392,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-family: "DM Serif Display", serif;
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
         font-size: clamp(1rem, 1.5vw, 1.3rem);
         font-weight: 400;
         color: white;
@@ -1445,6 +1435,27 @@
         font-weight: 500;
         line-height: 1.4;
       }
+
+      /* ===== SELISE LOGO ON SLIDES ===== */
+      .slide::after {
+        content: '';
+        position: absolute;
+        top: 16px;
+        right: 20px;
+        width: 90px;
+        height: 30px;
+        background: url('../../../selise-brand/assets/SELISE_Logo_Primary_Small.png') no-repeat center/contain;
+        opacity: 0.4;
+        z-index: 2;
+      }
+      .slide.bg-dark::after,
+      .slide.bg-blue::after,
+      .slide.bg-indigo::after,
+      .slide.bg-amber::after,
+      .slide.bg-green::after {
+        background-image: url('../../../selise-brand/assets/SELISE_Logo_Reversed.png');
+        opacity: 0.6;
+      }
     </style>
   </head>
   <body>
@@ -1458,6 +1469,7 @@
         </div>
         <div class="title-grid center">
           <div>
+            <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE Digital Platforms" style="height: 56px; margin-bottom: 1.5rem;">
             <div class="date-badge">
               <span class="db-dot"></span>
               April 10, 2026 · Foundation Phase · 10:00 – 14:00
@@ -1501,7 +1513,7 @@
             <span class="ar-label"
               >👋 Icebreaker — Two Truths, One Work Style</span
             >
-            <span class="ar-badge" style="background: #fff7e6; color: #9a6200"
+            <span class="ar-badge" style="background: #EBF0F7; color: #1C5B8C"
               >15 min</span
             >
           </div>
@@ -1511,7 +1523,7 @@
             <span class="ar-label">💬 Communication Fundamentals</span>
             <span
               class="ar-badge"
-              style="background: #e6f3f9; color: var(--blue)"
+              style="background: #E6F0F8; color: var(--blue)"
               >30 min</span
             >
           </div>
@@ -1521,7 +1533,7 @@
             <span class="ar-label">📧 Email Etiquette</span>
             <span
               class="ar-badge"
-              style="background: #e6f3f9; color: var(--blue)"
+              style="background: #E6F0F8; color: var(--blue)"
               >20 min</span
             >
           </div>
@@ -1529,7 +1541,7 @@
             <span class="ar-time">11:05 – 11:35</span>
             <span class="ar-dot" style="background: var(--amber)"></span>
             <span class="ar-label">✍ Exercise 1 — Email Rewrite</span>
-            <span class="ar-badge" style="background: #fff7e6; color: #9a6200"
+            <span class="ar-badge" style="background: #EBF0F7; color: #1C5B8C"
               >30 min</span
             >
           </div>
@@ -1539,7 +1551,7 @@
             <span class="ar-label">⏰ Time Management</span>
             <span
               class="ar-badge"
-              style="background: #e6f3f9; color: var(--blue)"
+              style="background: #E6F0F8; color: var(--blue)"
               >20 min</span
             >
           </div>
@@ -1559,7 +1571,7 @@
             <span class="ar-label">🤖 What is AI?</span>
             <span
               class="ar-badge"
-              style="background: #e8edfb; color: var(--indigo)"
+              style="background: #E6E9EC; color: var(--indigo)"
               >25 min</span
             >
           </div>
@@ -1569,7 +1581,7 @@
             <span class="ar-label">✏️ Prompting Techniques</span>
             <span
               class="ar-badge"
-              style="background: #e8edfb; color: var(--indigo)"
+              style="background: #E6E9EC; color: var(--indigo)"
               >25 min</span
             >
           </div>
@@ -1577,7 +1589,7 @@
             <span class="ar-time">13:00 – 13:30</span>
             <span class="ar-dot" style="background: var(--amber)"></span>
             <span class="ar-label">✍ Exercise 2 — Prompt Battle</span>
-            <span class="ar-badge" style="background: #fff7e6; color: #9a6200"
+            <span class="ar-badge" style="background: #EBF0F7; color: #1C5B8C"
               >30 min</span
             >
           </div>
@@ -1587,7 +1599,7 @@
             <span class="ar-label">⚖️ AI Dos &amp; Don'ts</span>
             <span
               class="ar-badge"
-              style="background: #e8edfb; color: var(--indigo)"
+              style="background: #E6E9EC; color: var(--indigo)"
               >15 min</span
             >
           </div>
@@ -1597,7 +1609,7 @@
             <span class="ar-label"
               >✍ Exercise 3 — AI + Professional Pledge</span
             >
-            <span class="ar-badge" style="background: #fff7e6; color: #9a6200"
+            <span class="ar-badge" style="background: #EBF0F7; color: #1C5B8C"
               >15 min</span
             >
           </div>
@@ -2486,8 +2498,8 @@
           <div
             class="card"
             style="
-              background: #f0f3ff;
-              border: 2px dashed #c5d0f7;
+              background: #EEF0F2;
+              border: 2px dashed #C0C8D0;
               text-align: center;
               max-width: 700px;
             "
@@ -2596,7 +2608,7 @@
           >
             <div
               style="
-                background: #1a1a2e;
+                background: #001F35;
                 border: 1.5px solid #7dd3fc;
                 border-radius: 12px;
                 padding: clamp(0.75rem, 1.5vw, 1.25rem);
@@ -2627,7 +2639,7 @@
             </div>
             <div
               style="
-                background: #1a1a2e;
+                background: #001F35;
                 border: 1.5px solid #86efac;
                 border-radius: 12px;
                 padding: clamp(0.75rem, 1.5vw, 1.25rem);
@@ -3088,8 +3100,8 @@
           <div
             class="card"
             style="
-              background: #f0f3ff;
-              border: 2px solid #c5d0f7;
+              background: #EEF0F2;
+              border: 2px solid #C0C8D0;
               text-align: center;
               max-width: 720px;
             "
