@@ -1,0 +1,1811 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Class Notes — Apr 11 · Internet &amp; APIs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --blue: #0073aa;
+        --indigo: #1447e6;
+        --amber: #f99c00;
+        --green: #00a544;
+        --purple: #ac4bff;
+        --red: #dc2626;
+        --text: #171717;
+        --muted: #6a7282;
+        --faint: #99a1af;
+        --surf: #ffffff;
+        --bg: #f8f9fb;
+        --border: #e5e7eb;
+        --border-l: #f3f4f6;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "DM Sans", system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+        line-height: 1.65;
+      }
+
+      /* HERO */
+      .hero {
+        background: var(--surf);
+        border-bottom: 1px solid var(--border);
+        padding: 4rem 2rem 3rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(
+          90deg,
+          var(--blue),
+          var(--indigo),
+          var(--amber)
+        );
+      }
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 100px;
+        padding: 0.35rem 1rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--muted);
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        margin-bottom: 1.5rem;
+      }
+      .hero-badge .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--amber);
+      }
+      .hero h1 {
+        font-family: "DM Serif Display", serif;
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        line-height: 1.15;
+        margin-bottom: 0.75rem;
+      }
+      .c-blue {
+        color: var(--blue);
+      }
+      .c-indigo {
+        color: var(--indigo);
+      }
+      .amp {
+        color: var(--amber);
+        font-style: italic;
+      }
+      .hero-sub {
+        font-size: 1rem;
+        color: var(--muted);
+        margin-bottom: 2rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .hero-tags {
+        display: flex;
+        justify-content: center;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+        margin-bottom: 2rem;
+      }
+      .hero-tag {
+        padding: 0.3rem 0.9rem;
+        border-radius: 8px;
+        font-size: 0.78rem;
+        font-weight: 600;
+      }
+      .tag-blue {
+        background: #e6f3f9;
+        color: var(--blue);
+      }
+      .tag-indigo {
+        background: #e8edfb;
+        color: var(--indigo);
+      }
+      .hero-stats {
+        display: inline-flex;
+        gap: 2rem;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1rem 2rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .stat {
+        text-align: center;
+      }
+      .stat-val {
+        font-family: "DM Serif Display", serif;
+        font-size: 1.6rem;
+        font-weight: 400;
+        line-height: 1;
+      }
+      .stat-val.blue {
+        color: var(--blue);
+      }
+      .stat-val.indigo {
+        color: var(--indigo);
+      }
+      .stat-val.amber {
+        color: var(--amber);
+      }
+      .stat-label {
+        font-size: 0.72rem;
+        color: var(--faint);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-top: 0.2rem;
+      }
+
+      /* LAYOUT */
+      .container {
+        max-width: 880px;
+        margin: 0 auto;
+        padding: 0 2rem 6rem;
+      }
+
+      /* TOC */
+      .toc {
+        background: var(--surf);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.75rem 2rem;
+        margin: 2.5rem 0;
+      }
+      .toc h3 {
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--faint);
+        margin-bottom: 1.25rem;
+      }
+      .toc-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.4rem 2rem;
+      }
+      .toc-item {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-size: 0.875rem;
+        color: var(--muted);
+        text-decoration: none;
+        padding: 0.3rem 0;
+        border-bottom: 1px solid var(--border-l);
+        transition: color 0.15s;
+      }
+      .toc-item:hover {
+        color: var(--indigo);
+      }
+      .toc-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .toc-time {
+        margin-left: auto;
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: var(--faint);
+      }
+
+      /* SECTION HEADERS */
+      .section-hd {
+        padding: 3.5rem 0 1.5rem;
+      }
+      .section-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.3rem 0.9rem;
+        border-radius: 100px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 0.6rem;
+      }
+      .pill-blue {
+        background: #e6f3f9;
+        color: var(--blue);
+      }
+      .pill-indigo {
+        background: #e8edfb;
+        color: var(--indigo);
+      }
+      .pill-amber {
+        background: #fff7e6;
+        color: #9a6200;
+      }
+      .pill-green {
+        background: #f0fdf4;
+        color: var(--green);
+      }
+      .section-title {
+        font-family: "DM Serif Display", serif;
+        font-size: 2rem;
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        margin-bottom: 0.4rem;
+      }
+      .section-desc {
+        font-size: 1rem;
+        color: var(--muted);
+        margin-bottom: 1.75rem;
+      }
+
+      /* CONCEPT BLOCKS */
+      .concept {
+        background: var(--surf);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 1.75rem 2rem;
+        margin-bottom: 1.5rem;
+      }
+      .concept-label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: var(--faint);
+        margin-bottom: 0.5rem;
+      }
+      .concept h3 {
+        font-family: "DM Serif Display", serif;
+        font-size: 1.4rem;
+        font-weight: 400;
+        margin-bottom: 0.75rem;
+      }
+      .concept p {
+        font-size: 0.95rem;
+        color: var(--muted);
+        line-height: 1.7;
+        margin-bottom: 0.75rem;
+      }
+      .concept ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin: 0.25rem 0;
+      }
+      .concept ul li {
+        font-size: 0.92rem;
+        color: var(--muted);
+        padding-left: 1.4rem;
+        position: relative;
+        line-height: 1.55;
+      }
+      .concept ul li::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: var(--faint);
+        font-size: 0.85em;
+        top: 0.1em;
+      }
+      .concept ul li strong {
+        color: var(--text);
+      }
+
+      /* HIGHLIGHT BOX (analogy / key idea) */
+      .highlight-box {
+        border-radius: 12px;
+        padding: 1.25rem 1.5rem;
+        margin: 1rem 0;
+      }
+      .hb-blue {
+        background: #e6f3f9;
+        border-left: 4px solid var(--blue);
+      }
+      .hb-indigo {
+        background: #e8edfb;
+        border-left: 4px solid var(--indigo);
+      }
+      .hb-amber {
+        background: #fff7e6;
+        border-left: 4px solid var(--amber);
+      }
+      .hb-green {
+        background: #f0fdf4;
+        border-left: 4px solid var(--green);
+      }
+      .hb-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: var(--faint);
+        margin-bottom: 0.4rem;
+      }
+      .highlight-box p {
+        font-size: 0.9rem;
+        color: var(--text);
+        line-height: 1.6;
+        margin: 0;
+      }
+      .highlight-box p strong {
+        font-weight: 700;
+      }
+
+      /* URL VISUAL */
+      .url-anatomy {
+        display: flex;
+        align-items: flex-end;
+        flex-wrap: wrap;
+        gap: 0;
+        font-family: "Courier New", monospace;
+        margin: 1rem 0;
+      }
+      .url-part {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .url-text {
+        font-size: clamp(0.9rem, 2vw, 1.1rem);
+        font-weight: 700;
+        padding: 0.3rem 0.5rem;
+        border-radius: 6px 6px 0 0;
+        border-bottom: 3px solid transparent;
+      }
+      .url-label {
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.62rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-top: 0.3rem;
+        opacity: 0.8;
+        text-align: center;
+      }
+      .url-sep {
+        font-size: clamp(0.9rem, 2vw, 1.1rem);
+        font-weight: 700;
+        color: var(--faint);
+        padding-bottom: 0.3rem;
+        align-self: flex-end;
+        margin-bottom: 0.3rem;
+      }
+      .up-protocol .url-text {
+        background: #e6f3f9;
+        color: var(--blue);
+        border-color: var(--blue);
+      }
+      .up-protocol .url-label {
+        color: var(--blue);
+      }
+      .up-domain .url-text {
+        background: #e8edfb;
+        color: var(--indigo);
+        border-color: var(--indigo);
+      }
+      .up-domain .url-label {
+        color: var(--indigo);
+      }
+      .up-tld .url-text {
+        background: #f0fdf4;
+        color: var(--green);
+        border-color: var(--green);
+      }
+      .up-tld .url-label {
+        color: var(--green);
+      }
+      .up-path .url-text {
+        background: #fff7e6;
+        color: #9a6200;
+        border-color: var(--amber);
+      }
+      .up-path .url-label {
+        color: #9a6200;
+      }
+      .up-query .url-text {
+        background: #fdf2f8;
+        color: #9d174d;
+        border-color: #ec4899;
+      }
+      .up-query .url-label {
+        color: #9d174d;
+      }
+
+      /* JSON BLOCK */
+      .json-block {
+        background: #1a1a2e;
+        border-radius: 12px;
+        overflow: hidden;
+        margin: 1rem 0;
+      }
+      .jb-bar {
+        background: #2d2d40;
+        padding: 8px 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.72rem;
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .jb-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+      }
+      .jb-body {
+        padding: 1.25rem 1.5rem;
+        font-family: "Courier New", monospace;
+        font-size: 0.88rem;
+        line-height: 1.9;
+      }
+      .jk {
+        color: #7dd3fc;
+      }
+      .jv-str {
+        color: #86efac;
+      }
+      .jv-num {
+        color: #fde68a;
+      }
+      .jv-bool {
+        color: #c4b5fd;
+      }
+      .jv-punc {
+        color: rgba(255, 255, 255, 0.3);
+      }
+      .jv-arr {
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      /* REST TABLE */
+      .rest-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 6px;
+        margin: 1rem 0;
+      }
+      .rest-table th {
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: var(--faint);
+        text-align: left;
+        padding: 0.3rem 0.75rem 0.5rem;
+      }
+      .rest-table td {
+        font-size: 0.88rem;
+        padding: 0.6rem 0.75rem;
+        background: var(--surf);
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        color: var(--muted);
+      }
+      .rest-table tr td:first-child {
+        border-radius: 8px 0 0 8px;
+        border-left: 1px solid var(--border);
+      }
+      .rest-table tr td:last-child {
+        border-radius: 0 8px 8px 0;
+        border-right: 1px solid var(--border);
+      }
+      .mb {
+        font-family: "Courier New", monospace;
+        font-size: 0.82rem;
+        font-weight: 700;
+        padding: 0.2rem 0.55rem;
+        border-radius: 5px;
+        display: inline-block;
+      }
+      .mb-get {
+        background: #e6f3f9;
+        color: var(--blue);
+      }
+      .mb-post {
+        background: #f0fdf4;
+        color: var(--green);
+      }
+      .mb-put {
+        background: #fff7e6;
+        color: #9a6200;
+      }
+      .mb-delete {
+        background: #fef2f2;
+        color: var(--red);
+      }
+      .td-code {
+        font-family: "Courier New", monospace;
+        font-size: 0.78rem;
+        color: var(--indigo);
+      }
+
+      /* DB TABLE */
+      .db-wrap {
+        background: var(--surf);
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+        margin: 1rem 0;
+      }
+      .db-title-bar {
+        background: var(--bg);
+        border-bottom: 1px solid var(--border);
+        padding: 0.65rem 1rem;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--indigo);
+      }
+      .db-tbl {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .db-tbl th {
+        background: #e8edfb;
+        color: var(--indigo);
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        padding: 0.5rem 0.9rem;
+        text-align: left;
+        border-bottom: 1px solid #c5d0f7;
+      }
+      .db-tbl td {
+        padding: 0.45rem 0.9rem;
+        font-size: 0.84rem;
+        color: var(--muted);
+        border-bottom: 1px solid var(--border-l);
+        font-family: "Courier New", monospace;
+      }
+      .db-tbl tr:last-child td {
+        border-bottom: none;
+      }
+      .db-pk {
+        color: var(--amber);
+        font-weight: 700;
+      }
+      .db-fk {
+        color: var(--blue);
+        font-weight: 600;
+      }
+
+      /* SUMMARY BOX */
+      .summary {
+        background: var(--surf);
+        border: 1.5px solid var(--border);
+        border-radius: 14px;
+        padding: 1.5rem 1.75rem;
+        margin: 2rem 0;
+      }
+      .summary h4 {
+        font-family: "DM Serif Display", serif;
+        font-size: 1.15rem;
+        font-weight: 400;
+        margin-bottom: 1rem;
+      }
+      .summary ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+      }
+      .summary ul li {
+        font-size: 0.9rem;
+        color: var(--muted);
+        padding-left: 1.75rem;
+        position: relative;
+        line-height: 1.5;
+      }
+      .summary ul li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: var(--green);
+        font-weight: 700;
+      }
+      .summary ul li strong {
+        color: var(--text);
+      }
+
+      /* PRACTICE */
+      .practice {
+        background: #fffaf0;
+        border: 1.5px solid #fcd9a0;
+        border-radius: 14px;
+        padding: 1.5rem 1.75rem;
+        margin: 2rem 0;
+      }
+      .practice h4 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #7a5000;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .practice ol {
+        padding-left: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+      }
+      .practice ol li {
+        font-size: 0.9rem;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+      .practice ol li strong {
+        color: var(--text);
+      }
+      .practice ol li code {
+        background: #f3f4f6;
+        padding: 1px 5px;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+        font-size: 0.85em;
+      }
+
+      /* FOOTER */
+      .page-footer {
+        text-align: center;
+        padding: 3rem 0 2rem;
+        border-top: 1px solid var(--border);
+        margin-top: 4rem;
+      }
+      .page-footer p {
+        font-size: 0.75rem;
+        color: var(--faint);
+        line-height: 1.8;
+      }
+      .foot-brand {
+        font-family: "DM Serif Display", serif;
+        font-size: 1.1rem;
+        font-weight: 400;
+        margin-bottom: 0.5rem;
+      }
+      .foot-brand .b1 {
+        color: var(--blue);
+      }
+      .foot-brand .x {
+        color: var(--amber);
+        font-style: italic;
+      }
+      .foot-brand .b2 {
+        color: var(--indigo);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hero">
+      <div class="hero-badge">
+        <span class="dot"></span>Classes 04 &amp; 05 · April 11, 2026
+      </div>
+      <h1>
+        <span class="c-blue">How the Internet Works</span><br /><span
+          class="amp"
+          >&amp;</span
+        >
+        <span class="c-indigo">APIs, Data &amp; Databases</span>
+      </h1>
+      <p class="hero-sub">
+        Your reference sheet for today's sessions — keep this and read it again
+        tonight. The concepts here are foundational to everything you'll build.
+      </p>
+      <div class="hero-tags">
+        <span class="hero-tag tag-blue">IP Addresses</span>
+        <span class="hero-tag tag-blue">DNS</span>
+        <span class="hero-tag tag-blue">HTTP / HTTPS</span>
+        <span class="hero-tag tag-blue">Status Codes</span>
+        <span class="hero-tag tag-indigo">APIs</span>
+        <span class="hero-tag tag-indigo">JSON</span>
+        <span class="hero-tag tag-indigo">REST</span>
+        <span class="hero-tag tag-indigo">Databases</span>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-val blue">4h</div>
+          <div class="stat-label">Today's Session</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val indigo">2</div>
+          <div class="stat-label">Topics</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val amber">3</div>
+          <div class="stat-label">Exercises</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="toc">
+        <h3>Contents</h3>
+        <div class="toc-grid">
+          <a href="#internet" class="toc-item"
+            ><span class="toc-dot" style="background: var(--blue)"></span>What
+            is the Internet?<span class="toc-time">9:35</span></a
+          >
+          <a href="#api" class="toc-item"
+            ><span class="toc-dot" style="background: var(--indigo)"></span>What
+            is an API?<span class="toc-time">11:15</span></a
+          >
+          <a href="#ip" class="toc-item"
+            ><span class="toc-dot" style="background: var(--blue)"></span>IP
+            Addresses<span class="toc-time">9:35</span></a
+          >
+          <a href="#json" class="toc-item"
+            ><span class="toc-dot" style="background: var(--indigo)"></span>JSON
+            Format<span class="toc-time">11:30</span></a
+          >
+          <a href="#dns" class="toc-item"
+            ><span class="toc-dot" style="background: var(--blue)"></span>DNS —
+            The Phonebook<span class="toc-time">9:50</span></a
+          >
+          <a href="#rest" class="toc-item"
+            ><span class="toc-dot" style="background: var(--indigo)"></span>REST
+            APIs &amp; HTTP Methods<span class="toc-time">11:45</span></a
+          >
+          <a href="#url" class="toc-item"
+            ><span class="toc-dot" style="background: var(--blue)"></span
+            >Anatomy of a URL<span class="toc-time">10:00</span></a
+          >
+          <a href="#databases" class="toc-item"
+            ><span class="toc-dot" style="background: var(--indigo)"></span
+            >Databases<span class="toc-time">12:45</span></a
+          >
+          <a href="#http" class="toc-item"
+            ><span class="toc-dot" style="background: var(--blue)"></span>HTTP,
+            HTTPS &amp; Status Codes<span class="toc-time">10:15</span></a
+          >
+          <a href="#practice" class="toc-item"
+            ><span class="toc-dot" style="background: var(--amber)"></span
+            >Practice at Home<span class="toc-time"></span
+          ></a>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════
+       SECTION 1: HOW THE INTERNET WORKS
+  ════════════════════════════ -->
+      <div class="section-hd">
+        <div class="section-pill pill-blue">Class 04 · 9:30 – 10:45</div>
+        <h2 class="section-title" id="internet">How the Internet Works</h2>
+        <p class="section-desc">
+          The internet is not magic — it's infrastructure. Once you understand
+          how it works, you can debug problems, read error messages, and build
+          things that work reliably.
+        </p>
+      </div>
+
+      <!-- THE INTERNET -->
+      <div class="concept" id="ip">
+        <div class="concept-label">Foundation</div>
+        <h3>The Internet &amp; IP Addresses</h3>
+        <p>
+          The internet is a global network of billions of computers that are all
+          connected together. Not wirelessly through the air — physically,
+          through underground and undersea cables, via satellites, and through
+          large data centres in cities around the world.
+        </p>
+        <p>
+          For two computers to communicate, they each need an address. That
+          address is called an <strong>IP address</strong> (Internet Protocol
+          address).
+        </p>
+        <div class="highlight-box hb-blue">
+          <div class="hb-label">Analogy</div>
+          <p>
+            Think of your house address. The postman can't deliver a letter to
+            you without knowing where you live. In the same way, the internet
+            can't deliver data to your device without knowing your IP address.
+          </p>
+        </div>
+        <p>
+          IPv4 addresses look like this:
+          <code
+            style="
+              background: #e8edfb;
+              color: var(--indigo);
+              padding: 2px 6px;
+              border-radius: 4px;
+              font-family: &quot;Courier New&quot;, monospace;
+            "
+            >192.168.1.1</code
+          >
+          — four numbers, each between 0 and 255, separated by dots. There are
+          about 4 billion possible IPv4 addresses, which is no longer enough for
+          all the devices in the world. IPv6 was invented to solve this problem.
+        </p>
+        <ul>
+          <li>
+            Your laptop, phone, and the selise.ch server all have IP addresses
+          </li>
+          <li>
+            <strong>Public IP</strong>: visible to the whole internet (your
+            router's address)
+          </li>
+          <li>
+            <strong>Private IP</strong>: only visible on your local network
+            (e.g., 192.168.x.x)
+          </li>
+        </ul>
+      </div>
+
+      <!-- DNS -->
+      <div class="concept" id="dns">
+        <div class="concept-label">Domain Name System</div>
+        <h3>DNS — The Internet's Phonebook</h3>
+        <p>
+          You remember <strong>names</strong> — like selise.ch or google.com.
+          But computers connect using <strong>numbers</strong> — IP addresses.
+          DNS is the system that translates between the two.
+        </p>
+        <p>When you type a domain name in your browser:</p>
+        <ul>
+          <li>
+            Your browser first checks its local <strong>cache</strong> — has it
+            looked this up recently?
+          </li>
+          <li>
+            If not, it asks a <strong>DNS resolver</strong> (usually provided by
+            your ISP or Google/Cloudflare)
+          </li>
+          <li>
+            The resolver looks up the domain name and returns the matching IP
+            address
+          </li>
+          <li>Your browser then connects to that IP address</li>
+        </ul>
+        <div class="highlight-box hb-blue">
+          <div class="hb-label">Key fact</div>
+          <p>
+            A DNS lookup takes less than <strong>100 milliseconds</strong> —
+            faster than you can blink. And once your browser has looked it up,
+            it caches the result so it doesn't have to do it again for a while.
+          </p>
+        </div>
+        <p>
+          If DNS breaks (which happens occasionally), websites appear to be
+          offline even though the servers are perfectly fine — your browser just
+          can't find the address.
+        </p>
+      </div>
+
+      <!-- URL ANATOMY -->
+      <div class="concept" id="url">
+        <div class="concept-label">URLs</div>
+        <h3>Anatomy of a URL</h3>
+        <p>
+          Every URL (Uniform Resource Locator) is an address that points to a
+          specific resource on the internet. Each part tells the browser
+          something different.
+        </p>
+        <div class="url-anatomy">
+          <div class="url-part up-protocol">
+            <span class="url-text">https</span
+            ><span class="url-label">Protocol</span>
+          </div>
+          <span class="url-sep">://</span>
+          <div class="url-part up-domain">
+            <span class="url-text">selise</span
+            ><span class="url-label">Domain</span>
+          </div>
+          <div class="url-part up-tld">
+            <span class="url-text">.ch</span><span class="url-label">TLD</span>
+          </div>
+          <div class="url-part up-path">
+            <span class="url-text">/careers</span
+            ><span class="url-label">Path</span>
+          </div>
+          <div class="url-part up-query">
+            <span class="url-text">?lang=en</span
+            ><span class="url-label">Query</span>
+          </div>
+        </div>
+        <ul>
+          <li>
+            <strong style="color: var(--blue)">Protocol</strong> —
+            <code
+              style="
+                background: #e6f3f9;
+                color: var(--blue);
+                padding: 1px 4px;
+                border-radius: 3px;
+                font-size: 0.85em;
+              "
+              >https</code
+            >: Use encrypted HTTPS (never plain HTTP for sensitive data)
+          </li>
+          <li>
+            <strong style="color: var(--indigo)">Domain</strong> —
+            <code
+              style="
+                background: #e8edfb;
+                color: var(--indigo);
+                padding: 1px 4px;
+                border-radius: 3px;
+                font-size: 0.85em;
+              "
+              >selise</code
+            >: The registered name of the organisation
+          </li>
+          <li>
+            <strong style="color: var(--green)">TLD</strong> —
+            <code
+              style="
+                background: #f0fdf4;
+                color: var(--green);
+                padding: 1px 4px;
+                border-radius: 3px;
+                font-size: 0.85em;
+              "
+              >.ch</code
+            >: Top-level domain. .ch = Switzerland, .bt = Bhutan, .com =
+            commercial
+          </li>
+          <li>
+            <strong style="color: #9a6200">Path</strong> —
+            <code
+              style="
+                background: #fff7e6;
+                color: #9a6200;
+                padding: 1px 4px;
+                border-radius: 3px;
+                font-size: 0.85em;
+              "
+              >/careers</code
+            >: Which specific page or file on the server
+          </li>
+          <li>
+            <strong style="color: #9d174d">Query string</strong> —
+            <code
+              style="
+                background: #fdf2f8;
+                color: #9d174d;
+                padding: 1px 4px;
+                border-radius: 3px;
+                font-size: 0.85em;
+              "
+              >?lang=en</code
+            >: Extra parameters sent to the server (like a filter)
+          </li>
+        </ul>
+      </div>
+
+      <!-- HTTP & HTTPS -->
+      <div class="concept" id="http">
+        <div class="concept-label">Protocols &amp; Status Codes</div>
+        <h3>HTTP, HTTPS &amp; Status Codes</h3>
+        <p>
+          <strong>HTTP</strong> (HyperText Transfer Protocol) is the rulebook
+          for how browsers and servers communicate. It defines how requests are
+          formatted, how responses are structured, and what the different types
+          of requests mean.
+        </p>
+        <p>
+          <strong>HTTPS</strong> is HTTP with encryption added (using TLS —
+          Transport Layer Security). All data sent between your browser and the
+          server is scrambled so that nobody else on the network can read it.
+        </p>
+        <div class="highlight-box hb-green">
+          <div class="hb-label">Practical rule</div>
+          <p>
+            Always check for the <strong>padlock icon</strong> in the browser
+            address bar before typing a password or card number. No padlock = no
+            HTTPS = your data is travelling in plain text.
+          </p>
+        </div>
+        <p>
+          <strong>Status codes</strong> are 3-digit numbers the server sends
+          back with every response. They tell you instantly whether the request
+          succeeded or failed:
+        </p>
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 0.75rem;
+            margin: 1rem 0;
+          "
+        >
+          <div
+            style="
+              background: #f0fdf4;
+              border: 1.5px solid #a3e0bc;
+              border-radius: 10px;
+              padding: 1rem;
+              text-align: center;
+            "
+          >
+            <div
+              style="
+                font-family: &quot;DM Serif Display&quot;, serif;
+                font-size: 1.8rem;
+                color: var(--green);
+                line-height: 1;
+              "
+            >
+              200
+            </div>
+            <div
+              style="
+                font-size: 0.78rem;
+                font-weight: 700;
+                color: var(--green);
+                text-transform: uppercase;
+                margin: 0.2rem 0;
+              "
+            >
+              OK
+            </div>
+            <div style="font-size: 0.75rem; color: var(--muted)">
+              Request succeeded
+            </div>
+          </div>
+          <div
+            style="
+              background: #e6f3f9;
+              border: 1.5px solid #b3d7ec;
+              border-radius: 10px;
+              padding: 1rem;
+              text-align: center;
+            "
+          >
+            <div
+              style="
+                font-family: &quot;DM Serif Display&quot;, serif;
+                font-size: 1.8rem;
+                color: var(--blue);
+                line-height: 1;
+              "
+            >
+              301
+            </div>
+            <div
+              style="
+                font-size: 0.78rem;
+                font-weight: 700;
+                color: var(--blue);
+                text-transform: uppercase;
+                margin: 0.2rem 0;
+              "
+            >
+              Moved
+            </div>
+            <div style="font-size: 0.75rem; color: var(--muted)">
+              New permanent URL
+            </div>
+          </div>
+          <div
+            style="
+              background: #fff7e6;
+              border: 1.5px solid #fcd9a0;
+              border-radius: 10px;
+              padding: 1rem;
+              text-align: center;
+            "
+          >
+            <div
+              style="
+                font-family: &quot;DM Serif Display&quot;, serif;
+                font-size: 1.8rem;
+                color: #9a6200;
+                line-height: 1;
+              "
+            >
+              404
+            </div>
+            <div
+              style="
+                font-size: 0.78rem;
+                font-weight: 700;
+                color: #9a6200;
+                text-transform: uppercase;
+                margin: 0.2rem 0;
+              "
+            >
+              Not Found
+            </div>
+            <div style="font-size: 0.75rem; color: var(--muted)">
+              Page doesn't exist
+            </div>
+          </div>
+          <div
+            style="
+              background: #f5f0ff;
+              border: 1.5px solid #d8b4fe;
+              border-radius: 10px;
+              padding: 1rem;
+              text-align: center;
+            "
+          >
+            <div
+              style="
+                font-family: &quot;DM Serif Display&quot;, serif;
+                font-size: 1.8rem;
+                color: var(--purple);
+                line-height: 1;
+              "
+            >
+              403
+            </div>
+            <div
+              style="
+                font-size: 0.78rem;
+                font-weight: 700;
+                color: var(--purple);
+                text-transform: uppercase;
+                margin: 0.2rem 0;
+              "
+            >
+              Forbidden
+            </div>
+            <div style="font-size: 0.75rem; color: var(--muted)">
+              No permission
+            </div>
+          </div>
+          <div
+            style="
+              background: #fef2f2;
+              border: 1.5px solid #fbc7c7;
+              border-radius: 10px;
+              padding: 1rem;
+              text-align: center;
+            "
+          >
+            <div
+              style="
+                font-family: &quot;DM Serif Display&quot;, serif;
+                font-size: 1.8rem;
+                color: var(--red);
+                line-height: 1;
+              "
+            >
+              500
+            </div>
+            <div
+              style="
+                font-size: 0.78rem;
+                font-weight: 700;
+                color: var(--red);
+                text-transform: uppercase;
+                margin: 0.2rem 0;
+              "
+            >
+              Server Error
+            </div>
+            <div style="font-size: 0.75rem; color: var(--muted)">
+              Server-side problem
+            </div>
+          </div>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--faint); font-style: italic">
+          Memory shortcut: 4xx = your fault (bad request) · 5xx = server's fault
+          · 2xx = success
+        </p>
+      </div>
+
+      <!-- SUMMARY BOX 1 -->
+      <div class="summary">
+        <h4>Class 04 — Key Takeaways</h4>
+        <ul>
+          <li>
+            <strong>Every device has an IP address</strong> — the internet uses
+            these numbers to route data to the right place
+          </li>
+          <li>
+            <strong>DNS translates names to numbers</strong> — you type
+            selise.ch, DNS gives your browser the IP address to connect to
+          </li>
+          <li>
+            <strong>A URL has 5 parts</strong> — protocol, domain, TLD, path,
+            and optional query string. Each part tells the browser something
+            different
+          </li>
+          <li>
+            <strong>HTTPS is mandatory for sensitive data</strong> — look for
+            the padlock. HTTP sends data in plain text; HTTPS encrypts it
+          </li>
+          <li>
+            <strong>Status codes summarise every response</strong> — 200 =
+            success, 404 = not found, 500 = server broke
+          </li>
+          <li>
+            <strong
+              >Every web request travels: Browser → Internet → Server →
+              back</strong
+            >
+            — DNS, TCP connection, HTTP request, server processing, HTTP
+            response, browser rendering
+          </li>
+        </ul>
+      </div>
+
+      <!-- ════════════════════════════
+       SECTION 2: APIs, DATA & DATABASES
+  ════════════════════════════ -->
+      <div class="section-hd">
+        <div class="section-pill pill-indigo">Class 05 · 11:15 – 13:30</div>
+        <h2 class="section-title" id="api">APIs, Data &amp; Databases</h2>
+        <p class="section-desc">
+          APIs are how software systems talk to each other. Almost every app you
+          use — from weather to maps to banking — works by calling APIs.
+          Understanding them is foundational to every role in this programme.
+        </p>
+      </div>
+
+      <!-- API -->
+      <div class="concept">
+        <div class="concept-label">Application Programming Interface</div>
+        <h3>What is an API?</h3>
+        <p>
+          An API (Application Programming Interface) is a way for two pieces of
+          software to communicate with each other. It defines what requests you
+          can make, what format to use, and what responses you'll get back.
+        </p>
+        <div class="highlight-box hb-indigo">
+          <div class="hb-label">The Restaurant Analogy</div>
+          <p>
+            You're the <strong>client</strong>. The waiter is the
+            <strong>API</strong>. The kitchen is the <strong>server</strong>.
+            The pantry is the <strong>database</strong>.<br /><br />
+            You tell the waiter what you want (your request). The waiter goes to
+            the kitchen (without you). The kitchen prepares it using ingredients
+            from the pantry. The waiter brings it back (the response). You never
+            enter the kitchen — the waiter is the only interface.
+          </p>
+        </div>
+        <ul>
+          <li>
+            APIs let apps share data without exposing their internal systems
+          </li>
+          <li>
+            When you "Log in with Google", your app calls Google's OAuth API
+          </li>
+          <li>
+            When you check the weather, your app calls a weather service API
+          </li>
+          <li>
+            Claude Code calls Anthropic's API every time you ask it something
+          </li>
+          <li>
+            SELISE's products all expose APIs that client systems connect to
+          </li>
+        </ul>
+      </div>
+
+      <!-- JSON -->
+      <div class="concept" id="json">
+        <div class="concept-label">Data Format</div>
+        <h3>JSON — How APIs Send Data</h3>
+        <p>
+          JSON (JavaScript Object Notation) is the most common format for
+          sending data between an API and a client. It's human-readable and
+          works in every programming language.
+        </p>
+        <div class="json-block">
+          <div class="jb-bar">
+            <span class="jb-dot" style="background: #ff5f56"></span
+            ><span class="jb-dot" style="background: #febc2e"></span
+            ><span class="jb-dot" style="background: #28c840"></span
+            ><span style="margin-left: 8px">trainee.json</span>
+          </div>
+          <div class="jb-body">
+            <span class="jv-punc">{</span><br />
+            &nbsp;&nbsp;<span class="jk">"name"</span
+            ><span class="jv-punc">: </span
+            ><span class="jv-str">"Karma Dorji"</span
+            ><span class="jv-punc">,</span><br />
+            &nbsp;&nbsp;<span class="jk">"city"</span
+            ><span class="jv-punc">: </span><span class="jv-str">"Gelephu"</span
+            ><span class="jv-punc">,</span><br />
+            &nbsp;&nbsp;<span class="jk">"age"</span
+            ><span class="jv-punc">: </span><span class="jv-num">24</span
+            ><span class="jv-punc">,</span><br />
+            &nbsp;&nbsp;<span class="jk">"enrolled"</span
+            ><span class="jv-punc">: </span><span class="jv-bool">true</span
+            ><span class="jv-punc">,</span><br />
+            &nbsp;&nbsp;<span class="jk">"skills"</span
+            ><span class="jv-punc">: </span><span class="jv-arr">[</span
+            ><span class="jv-str">"Python"</span><span class="jv-punc">, </span
+            ><span class="jv-str">"SQL"</span><span class="jv-arr">]</span
+            ><span class="jv-punc">,</span><br />
+            &nbsp;&nbsp;<span class="jk">"vertical"</span
+            ><span class="jv-punc">: </span
+            ><span class="jv-str">"Software Dev"</span><br />
+            <span class="jv-punc">}</span>
+          </div>
+        </div>
+        <ul>
+          <li>
+            <strong>Keys</strong> — always a string in double quotes. The label
+            for the field.
+          </li>
+          <li>
+            <strong>String values</strong> — text, always in double quotes:
+            <code
+              style="
+                background: #f3f4f6;
+                padding: 1px 4px;
+                border-radius: 3px;
+                font-family: &quot;Courier New&quot;, monospace;
+                font-size: 0.85em;
+              "
+              >"Gelephu"</code
+            >
+          </li>
+          <li>
+            <strong>Number values</strong> — no quotes needed:
+            <code
+              style="
+                background: #f3f4f6;
+                padding: 1px 4px;
+                border-radius: 3px;
+                font-family: &quot;Courier New&quot;, monospace;
+                font-size: 0.85em;
+              "
+              >24</code
+            >
+          </li>
+          <li>
+            <strong>Boolean values</strong> —
+            <code
+              style="
+                background: #f3f4f6;
+                padding: 1px 4px;
+                border-radius: 3px;
+                font-family: &quot;Courier New&quot;, monospace;
+                font-size: 0.85em;
+              "
+              >true</code
+            >
+            or
+            <code
+              style="
+                background: #f3f4f6;
+                padding: 1px 4px;
+                border-radius: 3px;
+                font-family: &quot;Courier New&quot;, monospace;
+                font-size: 0.85em;
+              "
+              >false</code
+            >, no quotes
+          </li>
+          <li>
+            <strong>Arrays</strong> — a list of values inside square brackets:
+            <code
+              style="
+                background: #f3f4f6;
+                padding: 1px 4px;
+                border-radius: 3px;
+                font-family: &quot;Courier New&quot;, monospace;
+                font-size: 0.85em;
+              "
+              >["Python", "SQL"]</code
+            >
+          </li>
+          <li>
+            <strong>Nested objects</strong> — an object inside an object, using
+            curly braces inside curly braces
+          </li>
+        </ul>
+      </div>
+
+      <!-- REST -->
+      <div class="concept" id="rest">
+        <div class="concept-label">REST &amp; HTTP Methods</div>
+        <h3>REST APIs &amp; HTTP Methods</h3>
+        <p>
+          <strong>REST</strong> (Representational State Transfer) is the most
+          popular way to design APIs. REST APIs use URLs to represent
+          <em>resources</em> (things like users, posts, products) and HTTP
+          methods to describe <em>what to do with them</em>.
+        </p>
+        <div class="highlight-box hb-indigo">
+          <div class="hb-label">REST URL pattern</div>
+          <p>
+            <code style="font-family: &quot;Courier New&quot;, monospace"
+              >/trainees</code
+            >
+            → all trainees<br />
+            <code style="font-family: &quot;Courier New&quot;, monospace"
+              >/trainees/42</code
+            >
+            → trainee with ID 42<br />
+            <code style="font-family: &quot;Courier New&quot;, monospace"
+              >/trainees/42/classes</code
+            >
+            → all classes that trainee 42 attended
+          </p>
+        </div>
+        <p>
+          The <strong>HTTP method</strong> in the request tells the server what
+          action to perform:
+        </p>
+        <table class="rest-table">
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th>Action</th>
+              <th>CRUD</th>
+              <th>Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="mb mb-get">GET</span></td>
+              <td>Read / fetch data</td>
+              <td>Read</td>
+              <td class="td-code">GET /trainees</td>
+            </tr>
+            <tr>
+              <td><span class="mb mb-post">POST</span></td>
+              <td>Create new record</td>
+              <td>Create</td>
+              <td class="td-code">POST /trainees</td>
+            </tr>
+            <tr>
+              <td><span class="mb mb-put">PUT</span></td>
+              <td>Update existing record</td>
+              <td>Update</td>
+              <td class="td-code">PUT /trainees/42</td>
+            </tr>
+            <tr>
+              <td><span class="mb mb-delete">DELETE</span></td>
+              <td>Remove a record</td>
+              <td>Delete</td>
+              <td class="td-code">DELETE /trainees/42</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="highlight-box hb-amber">
+          <div class="hb-label">Remember: CRUD</div>
+          <p>
+            Every application ever built does four things:
+            <strong>Create, Read, Update, Delete</strong> — called CRUD. REST
+            maps these directly to POST, GET, PUT, DELETE. Learn these four and
+            you understand the foundation of every API you'll ever work with.
+          </p>
+        </div>
+      </div>
+
+      <!-- DATABASES -->
+      <div class="concept" id="databases">
+        <div class="concept-label">Data Storage</div>
+        <h3>Databases — Organised Storage for Data</h3>
+        <p>
+          A <strong>database</strong> is an organised system for storing data
+          persistently (meaning it survives when you turn off the server). Think
+          of it like a collection of very powerful, interconnected spreadsheets.
+        </p>
+        <div class="db-wrap">
+          <div class="db-title-bar">🗄️ trainees — example SQL table</div>
+          <table class="db-tbl">
+            <thead>
+              <tr>
+                <th>id</th>
+                <th>name</th>
+                <th>city</th>
+                <th>vertical</th>
+                <th>cohort</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="db-pk">1</td>
+                <td>Karma Dorji</td>
+                <td>Gelephu</td>
+                <td>Software Dev</td>
+                <td>3</td>
+              </tr>
+              <tr>
+                <td class="db-pk">2</td>
+                <td>Tenzin Wangmo</td>
+                <td>Thimphu</td>
+                <td>UI/UX Design</td>
+                <td>3</td>
+              </tr>
+              <tr>
+                <td class="db-pk">3</td>
+                <td>Pema Choden</td>
+                <td>Paro</td>
+                <td>QA Testing</td>
+                <td>3</td>
+              </tr>
+              <tr>
+                <td style="color: var(--faint)">…</td>
+                <td style="color: var(--faint)">…</td>
+                <td style="color: var(--faint)">…</td>
+                <td style="color: var(--faint)">…</td>
+                <td style="color: var(--faint)">…</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ul>
+          <li>
+            <strong>Table</strong> — one type of data (like one spreadsheet). A
+            database has many tables.
+          </li>
+          <li>
+            <strong>Row</strong> — one record. In the table above, one row = one
+            trainee.
+          </li>
+          <li>
+            <strong>Column</strong> — one field. Every row has the same columns
+            (name, city, etc.).
+          </li>
+          <li>
+            <strong>Primary key</strong> — a unique ID for each row. The
+            <span style="color: var(--amber); font-weight: 700">id</span> column
+            — no two rows share the same value.
+          </li>
+          <li>
+            <strong>Foreign key</strong> — a column that points to a row in
+            another table (e.g.,
+            <span style="color: var(--blue); font-weight: 600">trainee_id</span>
+            in an Attendance table).
+          </li>
+        </ul>
+        <div
+          style="
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+          "
+        >
+          <div
+            style="
+              background: #e6f3f9;
+              border: 1.5px solid #b3d7ec;
+              border-radius: 10px;
+              padding: 1.1rem;
+            "
+          >
+            <p
+              style="
+                font-size: 0.8rem;
+                font-weight: 700;
+                color: var(--blue);
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+                margin-bottom: 0.6rem;
+              "
+            >
+              🗃️ SQL (Relational)
+            </p>
+            <ul
+              style="
+                list-style: none;
+                display: flex;
+                flex-direction: column;
+                gap: 0.4rem;
+              "
+            >
+              <li
+                style="
+                  font-size: 0.85rem;
+                  color: var(--muted);
+                  padding-left: 1rem;
+                  position: relative;
+                "
+              >
+                <span style="position: absolute; left: 0">→</span>Tables with
+                fixed columns
+              </li>
+              <li
+                style="
+                  font-size: 0.85rem;
+                  color: var(--muted);
+                  padding-left: 1rem;
+                  position: relative;
+                "
+              >
+                <span style="position: absolute; left: 0">→</span>Great for
+                structured data
+              </li>
+              <li
+                style="
+                  font-size: 0.85rem;
+                  color: var(--muted);
+                  padding-left: 1rem;
+                  position: relative;
+                "
+              >
+                <span style="position: absolute; left: 0">→</span>PostgreSQL,
+                MySQL, SQLite
+              </li>
+              <li
+                style="
+                  font-size: 0.85rem;
+                  color: var(--muted);
+                  padding-left: 1rem;
+                  position: relative;
+                "
+              >
+                <span style="position: absolute; left: 0">→</span>Used in most
+                SELISE products
+              </li>
+            </ul>
+          </div>
+          <div
+            style="
+              background: #f0fdf4;
+              border: 1.5px solid #a3e0bc;
+              border-radius: 10px;
+              padding: 1.1rem;
+            "
+          >
+            <p
+              style="
+                font-size: 0.8rem;
+                font-weight: 700;
+                color: var(--green);
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+                margin-bottom: 0.6rem;
+              "
+            >
+              📄 NoSQL (Document)
+            </p>
+            <ul
+              style="
+                list-style: none;
+                display: flex;
+                flex-direction: column;
+                gap: 0.4rem;
+              "
+            >
+              <li
+                style="
+                  font-size: 0.85rem;
+                  color: var(--muted);
+                  padding-left: 1rem;
+                  position: relative;
+                "
+              >
+                <span style="position: absolute; left: 0">→</span>Stores JSON
+                documents
+              </li>
+              <li
+                style="
+                  font-size: 0.85rem;
+                  color: var(--muted);
+                  padding-left: 1rem;
+                  position: relative;
+                "
+              >
+                <span style="position: absolute; left: 0">→</span>Flexible —
+                fields can vary
+              </li>
+              <li
+                style="
+                  font-size: 0.85rem;
+                  color: var(--muted);
+                  padding-left: 1rem;
+                  position: relative;
+                "
+              >
+                <span style="position: absolute; left: 0">→</span>MongoDB,
+                Firestore
+              </li>
+              <li
+                style="
+                  font-size: 0.85rem;
+                  color: var(--muted);
+                  padding-left: 1rem;
+                  position: relative;
+                "
+              >
+                <span style="position: absolute; left: 0">→</span>Good for
+                fast-changing data
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUMMARY BOX 2 -->
+      <div class="summary">
+        <h4>Class 05 — Key Takeaways</h4>
+        <ul>
+          <li>
+            <strong>An API is the interface between client and server</strong> —
+            you never access a database directly. The API controls what you can
+            ask for and what you get back.
+          </li>
+          <li>
+            <strong>JSON is the language of APIs</strong> — key-value pairs,
+            strings in quotes, numbers without quotes, true/false for booleans,
+            [ ] for arrays
+          </li>
+          <li>
+            <strong>REST uses URLs + methods</strong> — the URL describes the
+            resource (/trainees/42), the method describes the action (GET, POST,
+            PUT, DELETE)
+          </li>
+          <li>
+            <strong>CRUD = the four operations of every app</strong> — Create
+            (POST), Read (GET), Update (PUT), Delete (DELETE)
+          </li>
+          <li>
+            <strong>A database table = rows and columns</strong> — each row is
+            one record, each column is one field, the primary key uniquely
+            identifies each row
+          </li>
+          <li>
+            <strong>SQL vs NoSQL</strong> — SQL for structured relational data,
+            NoSQL for flexible document-style data. Most real apps use both.
+          </li>
+        </ul>
+      </div>
+
+      <!-- PRACTICE -->
+      <div class="practice" id="practice">
+        <h4>✍ Practice at Home</h4>
+        <ol>
+          <li>
+            Open your browser and go to
+            <code>jsonplaceholder.typicode.com/users</code>. Read the JSON. Try
+            changing the URL to <code>/users/3</code> and
+            <code>/posts?userId=1</code>. What pattern do you notice?
+          </li>
+          <li>
+            Visit any 3 websites. For each one, write down the full URL and
+            label each part: protocol, domain, TLD, path, query string (if any).
+          </li>
+          <li>
+            Open DevTools on any website (F12 or Cmd+Option+I). Go to the
+            Network tab and refresh. Look at the list of requests — what status
+            codes do you see? Click on one and look at its Headers tab.
+          </li>
+          <li>
+            <strong>Schema design challenge:</strong> Design a database for a
+            small library. What tables do you need? What columns? How do they
+            connect? Draw it on paper.
+          </li>
+        </ol>
+      </div>
+    </div>
+    <!-- /container -->
+
+    <div class="page-footer">
+      <p class="foot-brand">
+        <span class="b1">SELISE</span> <span class="x">×</span>
+        <span class="b2">Pelsung</span>
+      </p>
+      <p>Classes 04 &amp; 05 · April 11, 2026 · Foundation Phase · Cohort 3</p>
+      <p>How the Internet Works &amp; APIs, Data &amp; Databases</p>
+    </div>
+  </body>
+</html>

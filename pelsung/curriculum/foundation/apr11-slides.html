@@ -1,0 +1,3514 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Apr 11 · Internet & APIs — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      :root {
+        --blue: #0073aa;
+        --indigo: #1447e6;
+        --amber: #f99c00;
+        --green: #00a544;
+        --purple: #ac4bff;
+        --red: #dc2626;
+        --text: #171717;
+        --muted: #6a7282;
+        --faint: #99a1af;
+        --surf: #ffffff;
+        --bg: #f8f9fb;
+        --border: #e5e7eb;
+      }
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        font-family: "DM Sans", system-ui, sans-serif;
+        background: #111;
+        overflow: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+      #deck {
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+        overflow: hidden;
+      }
+      .slide {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 5vh 7vw;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateX(60px);
+        transition:
+          opacity 0.35s ease,
+          transform 0.35s ease;
+        background: var(--surf);
+        overflow: hidden;
+      }
+      .slide.active {
+        opacity: 1;
+        pointer-events: all;
+        transform: translateX(0);
+      }
+      .slide.exit {
+        opacity: 0;
+        transform: translateX(-60px);
+      }
+      .slide::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+      }
+      .accent-gradient::before {
+        background: linear-gradient(
+          90deg,
+          var(--blue),
+          var(--indigo),
+          var(--amber)
+        );
+      }
+      .accent-blue::before {
+        background: var(--blue);
+      }
+      .accent-indigo::before {
+        background: var(--indigo);
+      }
+      .accent-amber::before {
+        background: var(--amber);
+      }
+      .accent-green::before {
+        background: var(--green);
+      }
+      .bg-dark {
+        background: #0f172a;
+        color: white;
+      }
+      .bg-blue {
+        background: linear-gradient(135deg, #0073aa 0%, #005c88 100%);
+        color: white;
+      }
+      .bg-indigo {
+        background: linear-gradient(135deg, #1447e6 0%, #0c2e8a 100%);
+        color: white;
+      }
+      .bg-amber {
+        background: linear-gradient(135deg, #f99c00 0%, #e07e00 100%);
+        color: white;
+      }
+      .bg-green {
+        background: linear-gradient(135deg, #00a544 0%, #007d33 100%);
+        color: white;
+      }
+      .bg-subtle {
+        background: #f8f9fb;
+      }
+      #progress {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        height: 3px;
+        background: linear-gradient(
+          90deg,
+          var(--blue),
+          var(--indigo),
+          var(--amber)
+        );
+        transition: width 0.3s ease;
+        z-index: 100;
+      }
+      #nav {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(15, 23, 42, 0.75);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 100px;
+        padding: 8px 16px;
+        z-index: 100;
+      }
+      .nav-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        transition: background 0.2s;
+      }
+      .nav-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+      }
+      #slide-counter {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.7);
+        font-weight: 600;
+        min-width: 52px;
+        text-align: center;
+      }
+      #fs-btn {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(8px);
+        color: white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        z-index: 100;
+        transition: background 0.2s;
+      }
+      #fs-btn:hover {
+        background: rgba(15, 23, 42, 0.9);
+      }
+      .eyebrow {
+        font-size: clamp(0.65rem, 1vw, 0.8rem);
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        opacity: 0.6;
+        margin-bottom: 0.6rem;
+      }
+      h1.display {
+        font-family: "DM Serif Display", serif;
+        font-size: clamp(3rem, 6vw, 5.5rem);
+        font-weight: 400;
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+      }
+      h2.heading {
+        font-family: "DM Serif Display", serif;
+        font-size: clamp(2rem, 4.5vw, 3.8rem);
+        font-weight: 400;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+      }
+      p.body-lg {
+        font-size: clamp(1rem, 1.8vw, 1.35rem);
+        line-height: 1.6;
+      }
+      p.body-md {
+        font-size: clamp(0.9rem, 1.5vw, 1.15rem);
+        line-height: 1.6;
+      }
+      .center {
+        text-align: center;
+        width: 100%;
+      }
+      .left {
+        text-align: left;
+        width: 100%;
+      }
+      .cols-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: clamp(1.5rem, 3vw, 3rem);
+        width: 100%;
+      }
+      .cols-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: clamp(1rem, 2vw, 2rem);
+        width: 100%;
+      }
+      .stack {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 0.3rem 0.9rem;
+        border-radius: 100px;
+        font-size: clamp(0.65rem, 1vw, 0.78rem);
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+      }
+      .pill-blue {
+        background: rgba(0, 115, 170, 0.15);
+        color: var(--blue);
+      }
+      .pill-indigo {
+        background: rgba(20, 71, 230, 0.12);
+        color: var(--indigo);
+      }
+      .pill-amber {
+        background: rgba(249, 156, 0, 0.15);
+        color: #9a6200;
+      }
+      .pill-green {
+        background: rgba(0, 165, 68, 0.12);
+        color: var(--green);
+      }
+      .pill-white {
+        background: rgba(255, 255, 255, 0.18);
+        color: white;
+      }
+      .pill-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+      .card {
+        background: var(--bg);
+        border: 1.5px solid var(--border);
+        border-radius: clamp(10px, 1.5vw, 18px);
+        padding: clamp(1rem, 2vw, 1.75rem);
+      }
+      .card-dark {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1.5px solid rgba(255, 255, 255, 0.15);
+        border-radius: clamp(10px, 1.5vw, 18px);
+        padding: clamp(1rem, 2vw, 1.75rem);
+      }
+      .card h4 {
+        font-size: clamp(0.85rem, 1.5vw, 1.1rem);
+        font-weight: 700;
+        margin-bottom: 0.6rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .card ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+      }
+      .card ul li {
+        font-size: clamp(0.8rem, 1.3vw, 1rem);
+        color: var(--muted);
+        padding-left: 1.2rem;
+        position: relative;
+        line-height: 1.45;
+      }
+      .card ul li::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: var(--faint);
+        font-size: 0.8em;
+        top: 0.1em;
+      }
+      .reveal-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: clamp(0.6rem, 1.2vw, 1.1rem);
+        width: 100%;
+      }
+      .reveal-list li {
+        font-size: clamp(1rem, 1.8vw, 1.4rem);
+        color: var(--muted);
+        padding-left: 2rem;
+        position: relative;
+        line-height: 1.45;
+        opacity: 0;
+        transform: translateY(10px);
+        transition:
+          opacity 0.3s ease,
+          transform 0.3s ease;
+      }
+      .reveal-list li.shown {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .reveal-list li::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: var(--faint);
+      }
+      .reveal-list.dark li {
+        color: rgba(255, 255, 255, 0.8);
+      }
+      .reveal-list.dark li::before {
+        color: rgba(255, 255, 255, 0.35);
+      }
+      .reveal-hint {
+        font-size: clamp(0.7rem, 1vw, 0.82rem);
+        opacity: 0.45;
+        margin-top: 0.75rem;
+        font-style: italic;
+      }
+      .date-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 100px;
+        padding: 0.4rem 1.1rem;
+        font-size: clamp(0.7rem, 1vw, 0.82rem);
+        font-weight: 600;
+        color: var(--muted);
+        letter-spacing: 0.04em;
+      }
+      .date-badge .db-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--amber);
+      }
+      .class-tags {
+        display: flex;
+        gap: 0.75rem;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .class-tag {
+        padding: 0.4rem 1rem;
+        border-radius: 8px;
+        font-size: clamp(0.78rem, 1.2vw, 0.92rem);
+        font-weight: 600;
+      }
+      .tag-blue {
+        background: #e6f3f9;
+        color: var(--blue);
+      }
+      .tag-indigo {
+        background: #e8edfb;
+        color: var(--indigo);
+      }
+      .agenda-row {
+        display: flex;
+        align-items: center;
+        gap: clamp(0.75rem, 1.5vw, 1.5rem);
+        padding: clamp(0.6rem, 1vw, 0.9rem) clamp(0.75rem, 1.5vw, 1.25rem);
+        border-radius: 12px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        cursor: pointer;
+        transition:
+          border-color 0.18s,
+          background 0.18s,
+          transform 0.15s;
+        user-select: none;
+      }
+      .agenda-row:hover {
+        border-color: var(--indigo);
+        background: #f0f3ff;
+        transform: translateX(4px);
+      }
+      .agenda-row.break-row {
+        background: #f0fdf4;
+        border-color: #a3e0bc;
+      }
+      .agenda-row.break-row:hover {
+        border-color: var(--green);
+        background: #e6ffed;
+      }
+      .ar-time {
+        font-size: clamp(0.72rem, 1vw, 0.85rem);
+        font-weight: 700;
+        color: var(--faint);
+        min-width: clamp(80px, 8vw, 110px);
+      }
+      .ar-dot {
+        width: clamp(8px, 1vw, 10px);
+        height: clamp(8px, 1vw, 10px);
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .ar-label {
+        font-size: clamp(0.88rem, 1.4vw, 1.1rem);
+        font-weight: 600;
+      }
+      .ar-badge {
+        margin-left: auto;
+        font-size: clamp(0.65rem, 0.9vw, 0.75rem);
+        font-weight: 700;
+        padding: 0.2rem 0.6rem;
+        border-radius: 100px;
+        letter-spacing: 0.04em;
+      }
+      .section-num {
+        font-family: "DM Serif Display", serif;
+        font-size: clamp(5rem, 14vw, 12rem);
+        line-height: 1;
+        opacity: 0.08;
+        position: absolute;
+        right: 5vw;
+        bottom: -2vh;
+        pointer-events: none;
+        font-weight: 400;
+      }
+      .disc-prompt {
+        font-family: "DM Serif Display", serif;
+        font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+        font-weight: 400;
+        line-height: 1.25;
+        text-align: center;
+        color: white;
+        max-width: 780px;
+      }
+      .hand-icons {
+        display: flex;
+        gap: clamp(0.5rem, 1.5vw, 1.5rem);
+        justify-content: center;
+        font-size: clamp(1.5rem, 3vw, 2.5rem);
+        margin-top: clamp(1rem, 2vw, 2rem);
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-12px);
+        }
+      }
+      .float {
+        animation: float 3s ease-in-out infinite;
+      }
+      @keyframes pulse-ring {
+        0% {
+          transform: scale(0.95);
+          opacity: 0.7;
+        }
+        50% {
+          transform: scale(1.05);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(0.95);
+          opacity: 0.7;
+        }
+      }
+      .pulse {
+        animation: pulse-ring 2.5s ease-in-out infinite;
+      }
+      .slide-label {
+        position: absolute;
+        top: clamp(12px, 2vh, 22px);
+        left: clamp(16px, 2.5vw, 28px);
+        font-size: clamp(0.62rem, 0.85vw, 0.75rem);
+        font-weight: 600;
+        color: var(--faint);
+        letter-spacing: 0.04em;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .slide-label .snum {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 1px 6px;
+        font-size: 0.65rem;
+      }
+      .bg-dark .slide-label,
+      .bg-blue .slide-label,
+      .bg-indigo .slide-label,
+      .bg-amber .slide-label,
+      .bg-green .slide-label {
+        color: rgba(255, 255, 255, 0.45);
+      }
+      .bg-dark .slide-label .snum,
+      .bg-blue .slide-label .snum,
+      .bg-indigo .slide-label .snum,
+      .bg-amber .slide-label .snum,
+      .bg-green .slide-label .snum {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.15);
+        color: rgba(255, 255, 255, 0.5);
+      }
+      .interact-hint {
+        position: absolute;
+        bottom: clamp(50px, 7vh, 70px);
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: clamp(0.65rem, 0.9vw, 0.75rem);
+        color: var(--faint);
+        font-style: italic;
+        white-space: nowrap;
+      }
+      .bg-dark .interact-hint,
+      .bg-indigo .interact-hint {
+        color: rgba(255, 255, 255, 0.3);
+      }
+      .timer-display {
+        font-family: "DM Serif Display", serif;
+        font-size: clamp(4rem, 12vw, 9rem);
+        font-weight: 400;
+        letter-spacing: -0.03em;
+        line-height: 1;
+        color: white;
+      }
+      .timer-controls {
+        display: flex;
+        gap: clamp(0.75rem, 1.5vw, 1.25rem);
+        margin-top: clamp(1rem, 2vw, 2rem);
+      }
+      .timer-btn {
+        padding: clamp(0.6rem, 1vw, 0.9rem) clamp(1.2rem, 2vw, 1.8rem);
+        border-radius: 100px;
+        border: none;
+        cursor: pointer;
+        font-size: clamp(0.88rem, 1.2vw, 1rem);
+        font-weight: 700;
+        transition: all 0.2s;
+      }
+      .tbtn-start {
+        background: white;
+        color: var(--indigo);
+      }
+      .tbtn-reset {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        border: 1.5px solid rgba(255, 255, 255, 0.3);
+      }
+      .tbtn-start:hover {
+        transform: scale(1.05);
+      }
+      .tbtn-reset:hover {
+        background: rgba(255, 255, 255, 0.25);
+      }
+      .timer-tasks {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        max-width: 480px;
+        width: 100%;
+      }
+      .tt-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        font-size: clamp(0.85rem, 1.2vw, 1rem);
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.45;
+      }
+      .tt-num {
+        width: 24px;
+        height: 24px;
+        min-width: 24px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.18);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      .wu-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: clamp(0.75rem, 1.5vw, 1.25rem);
+        width: 100%;
+      }
+      .wu-card {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 14px;
+        padding: clamp(0.9rem, 1.5vw, 1.3rem);
+        text-align: center;
+      }
+      .wu-card .wu-icon {
+        font-size: clamp(1.5rem, 2.5vw, 2rem);
+        margin-bottom: 0.4rem;
+      }
+      .wu-card h4 {
+        font-size: clamp(0.82rem, 1.2vw, 1rem);
+        font-weight: 700;
+        margin-bottom: 0.3rem;
+        opacity: 0.9;
+      }
+      .wu-card p {
+        font-size: clamp(0.72rem, 1vw, 0.85rem);
+        opacity: 0.65;
+        line-height: 1.4;
+      }
+      .quiz-options {
+        display: flex;
+        flex-direction: column;
+        gap: clamp(0.6rem, 1vw, 0.9rem);
+        width: 100%;
+        max-width: 720px;
+      }
+      .quiz-opt {
+        padding: clamp(0.8rem, 1.3vw, 1.1rem) clamp(1rem, 1.8vw, 1.5rem);
+        border-radius: 12px;
+        border: 2px solid var(--border);
+        background: var(--bg);
+        cursor: pointer;
+        font-size: clamp(0.9rem, 1.4vw, 1.1rem);
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        transition: all 0.2s ease;
+      }
+      .quiz-opt:hover {
+        border-color: var(--indigo);
+        background: #f0f3ff;
+      }
+      .quiz-opt.correct {
+        border-color: var(--green);
+        background: #f0fdf4;
+        color: #065f30;
+      }
+      .quiz-opt.wrong {
+        border-color: var(--red);
+        background: #fef2f2;
+        color: #7f1d1d;
+      }
+      .quiz-opt.dim {
+        opacity: 0.45;
+        pointer-events: none;
+      }
+      .quiz-opt .qo-letter {
+        width: clamp(26px, 3vw, 32px);
+        height: clamp(26px, 3vw, 32px);
+        min-width: clamp(26px, 3vw, 32px);
+        border-radius: 50%;
+        background: var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: clamp(0.75rem, 1vw, 0.88rem);
+        font-weight: 700;
+        color: var(--muted);
+        transition: all 0.2s;
+      }
+      .quiz-opt.correct .qo-letter {
+        background: var(--green);
+        color: white;
+      }
+      .quiz-opt.wrong .qo-letter {
+        background: var(--red);
+        color: white;
+      }
+      .quiz-feedback {
+        margin-top: clamp(0.5rem, 1vw, 0.9rem);
+        padding: clamp(0.7rem, 1vw, 1rem) clamp(1rem, 1.5vw, 1.25rem);
+        border-radius: 10px;
+        font-size: clamp(0.82rem, 1.2vw, 0.98rem);
+        display: none;
+        width: 100%;
+        max-width: 720px;
+      }
+      .quiz-feedback.show {
+        display: block;
+      }
+      .qf-correct {
+        background: #f0fdf4;
+        border: 1px solid #a3e0bc;
+        color: #065f30;
+      }
+      .qf-wrong {
+        background: #fef2f2;
+        border: 1px solid #fbc7c7;
+        color: #7f1d1d;
+      }
+
+      /* ===== URL ANATOMY ===== */
+      .url-anatomy {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0;
+        width: 100%;
+        max-width: 900px;
+        font-family: "Courier New", monospace;
+      }
+      .url-part {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        cursor: default;
+      }
+      .url-text {
+        font-size: clamp(0.95rem, 1.7vw, 1.35rem);
+        font-weight: 700;
+        padding: clamp(0.3rem, 0.6vw, 0.5rem) clamp(0.4rem, 0.8vw, 0.7rem);
+        border-radius: 8px 8px 0 0;
+        border-bottom: 3px solid transparent;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .url-part:hover .url-text {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+      }
+      .url-label {
+        font-family: "DM Sans", sans-serif;
+        font-size: clamp(0.58rem, 0.82vw, 0.72rem);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-top: 0.3rem;
+        opacity: 0.75;
+      }
+      .url-sep {
+        font-family: "Courier New", monospace;
+        font-size: clamp(0.95rem, 1.7vw, 1.35rem);
+        font-weight: 700;
+        color: var(--faint);
+        padding-bottom: clamp(0.3rem, 0.6vw, 0.5rem);
+        align-self: flex-end;
+        margin-bottom: 0.3rem;
+      }
+      .up-protocol .url-text {
+        background: #e6f3f9;
+        color: var(--blue);
+        border-color: var(--blue);
+      }
+      .up-protocol .url-label {
+        color: var(--blue);
+      }
+      .up-subdomain .url-text {
+        background: #f5f0ff;
+        color: var(--purple);
+        border-color: var(--purple);
+      }
+      .up-subdomain .url-label {
+        color: var(--purple);
+      }
+      .up-domain .url-text {
+        background: #e8edfb;
+        color: var(--indigo);
+        border-color: var(--indigo);
+      }
+      .up-domain .url-label {
+        color: var(--indigo);
+      }
+      .up-tld .url-text {
+        background: #f0fdf4;
+        color: var(--green);
+        border-color: var(--green);
+      }
+      .up-tld .url-label {
+        color: var(--green);
+      }
+      .up-path .url-text {
+        background: #fff7e6;
+        color: #9a6200;
+        border-color: var(--amber);
+      }
+      .up-path .url-label {
+        color: #9a6200;
+      }
+      .up-query .url-text {
+        background: #fdf2f8;
+        color: #9d174d;
+        border-color: #ec4899;
+      }
+      .up-query .url-label {
+        color: #9d174d;
+      }
+
+      /* ===== DNS FLOW ===== */
+      .dns-flow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0;
+        width: 100%;
+      }
+      .dns-node {
+        background: var(--surf);
+        border: 2px solid var(--border);
+        border-radius: 12px;
+        padding: clamp(0.6rem, 1.2vw, 1rem) clamp(0.75rem, 1.4vw, 1.1rem);
+        font-size: clamp(0.72rem, 1.05vw, 0.88rem);
+        font-weight: 600;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.3rem;
+        min-width: clamp(70px, 9vw, 105px);
+        text-align: center;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .dns-node:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      }
+      .dns-icon {
+        font-size: clamp(1.2rem, 2vw, 1.6rem);
+      }
+      .dns-arrow {
+        font-size: clamp(0.9rem, 1.3vw, 1.2rem);
+        color: var(--faint);
+        padding: 0 clamp(2px, 0.4vw, 6px);
+        flex-shrink: 0;
+      }
+      .dns-you {
+        border-color: var(--blue);
+        color: var(--blue);
+      }
+      .dns-resolver {
+        border-color: var(--amber);
+        color: #9a6200;
+      }
+      .dns-root {
+        border-color: var(--purple);
+        color: var(--purple);
+      }
+      .dns-result {
+        border-color: var(--green);
+        color: var(--green);
+      }
+
+      /* ===== CLIENT-SERVER ===== */
+      .cs-flow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        width: 100%;
+        max-width: 820px;
+        flex-wrap: nowrap;
+      }
+      .cs-node {
+        background: var(--surf);
+        border: 2px solid var(--border);
+        border-radius: 14px;
+        padding: clamp(0.8rem, 1.4vw, 1.2rem) clamp(1rem, 1.8vw, 1.5rem);
+        text-align: center;
+        min-width: clamp(90px, 11vw, 140px);
+        transition: transform 0.2s;
+      }
+      .cs-node:hover {
+        transform: translateY(-4px);
+      }
+      .cs-icon {
+        font-size: clamp(1.8rem, 3vw, 2.5rem);
+        display: block;
+        margin-bottom: 0.3rem;
+      }
+      .cs-title {
+        font-size: clamp(0.78rem, 1.1vw, 0.95rem);
+        font-weight: 700;
+      }
+      .cs-sub {
+        font-size: clamp(0.6rem, 0.85vw, 0.72rem);
+        color: var(--muted);
+        margin-top: 0.15rem;
+      }
+      .cs-arrow-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0 clamp(0.5rem, 1vw, 1rem);
+        gap: 0.2rem;
+      }
+      .cs-arr {
+        font-size: clamp(1.2rem, 2vw, 1.6rem);
+        color: var(--faint);
+      }
+      .cs-arr-label {
+        font-size: clamp(0.55rem, 0.8vw, 0.65rem);
+        color: var(--faint);
+        text-align: center;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+      }
+      .cs-client {
+        border-color: var(--blue);
+      }
+      .cs-client .cs-title {
+        color: var(--blue);
+      }
+      .cs-internet {
+        border-color: var(--faint);
+      }
+      .cs-server {
+        border-color: var(--indigo);
+      }
+      .cs-server .cs-title {
+        color: var(--indigo);
+      }
+
+      /* ===== STATUS CODES ===== */
+      .status-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: clamp(0.5rem, 1vw, 0.9rem);
+        width: 100%;
+        max-width: 860px;
+      }
+      .sc-card {
+        border-radius: 14px;
+        padding: clamp(0.8rem, 1.4vw, 1.2rem);
+        text-align: center;
+        border: 2px solid transparent;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+        cursor: default;
+      }
+      .sc-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      }
+      .sc-code {
+        font-family: "DM Serif Display", serif;
+        font-size: clamp(1.5rem, 3vw, 2.5rem);
+        font-weight: 400;
+        line-height: 1;
+        margin-bottom: 0.3rem;
+      }
+      .sc-name {
+        font-size: clamp(0.68rem, 1vw, 0.82rem);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.2rem;
+      }
+      .sc-desc {
+        font-size: clamp(0.6rem, 0.85vw, 0.72rem);
+        opacity: 0.7;
+        line-height: 1.3;
+      }
+      .sc-2xx {
+        background: #f0fdf4;
+        border-color: #a3e0bc;
+      }
+      .sc-2xx .sc-code {
+        color: var(--green);
+      }
+      .sc-3xx {
+        background: #e6f3f9;
+        border-color: #b3d7ec;
+      }
+      .sc-3xx .sc-code {
+        color: var(--blue);
+      }
+      .sc-4xx {
+        background: #fff7e6;
+        border-color: #fcd9a0;
+      }
+      .sc-4xx .sc-code {
+        color: #9a6200;
+      }
+      .sc-5xx {
+        background: #fef2f2;
+        border-color: #fbc7c7;
+      }
+      .sc-5xx .sc-code {
+        color: var(--red);
+      }
+      .sc-403 {
+        background: #f5f0ff;
+        border-color: #d8b4fe;
+      }
+      .sc-403 .sc-code {
+        color: var(--purple);
+      }
+
+      /* ===== JSON VIEWER ===== */
+      .json-view {
+        background: #1a1a2e;
+        border-radius: 14px;
+        overflow: hidden;
+        width: 100%;
+        max-width: 660px;
+        font-family: "Courier New", monospace;
+      }
+      .jv-bar {
+        background: #2d2d40;
+        padding: 8px 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .jv-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+      .jv-body {
+        padding: clamp(1rem, 1.8vw, 1.5rem);
+        font-size: clamp(0.78rem, 1.1vw, 0.95rem);
+        line-height: 1.9;
+      }
+      .jk {
+        color: #7dd3fc;
+      }
+      .jv-str {
+        color: #86efac;
+      }
+      .jv-num {
+        color: #fde68a;
+      }
+      .jv-bool {
+        color: #c4b5fd;
+      }
+      .jv-punc {
+        color: rgba(255, 255, 255, 0.3);
+      }
+      .jv-arr {
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      /* ===== REST METHODS TABLE ===== */
+      .method-table {
+        width: 100%;
+        max-width: 820px;
+        border-collapse: separate;
+        border-spacing: 0 8px;
+      }
+      .method-table th {
+        font-size: clamp(0.6rem, 0.85vw, 0.72rem);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--faint);
+        text-align: left;
+        padding: 0 clamp(0.75rem, 1.2vw, 1rem) 0.5rem;
+      }
+      .method-table td {
+        font-size: clamp(0.82rem, 1.2vw, 0.95rem);
+        padding: clamp(0.6rem, 1vw, 0.8rem) clamp(0.75rem, 1.2vw, 1rem);
+        background: var(--bg);
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
+      .method-table tr td:first-child {
+        border-radius: 10px 0 0 10px;
+        border-left: 1px solid var(--border);
+        border-right: none;
+      }
+      .method-table tr td:not(:first-child):not(:last-child) {
+        border-left: none;
+        border-right: none;
+      }
+      .method-table tr td:last-child {
+        border-radius: 0 10px 10px 0;
+        border-right: 1px solid var(--border);
+        border-left: none;
+      }
+      .method-badge {
+        font-family: "Courier New", monospace;
+        font-size: clamp(0.75rem, 1.05vw, 0.88rem);
+        font-weight: 700;
+        padding: 0.25rem 0.65rem;
+        border-radius: 6px;
+        display: inline-block;
+      }
+      .mb-get {
+        background: #e6f3f9;
+        color: var(--blue);
+      }
+      .mb-post {
+        background: #f0fdf4;
+        color: var(--green);
+      }
+      .mb-put {
+        background: #fff7e6;
+        color: #9a6200;
+      }
+      .mb-delete {
+        background: #fef2f2;
+        color: var(--red);
+      }
+      .td-muted {
+        color: var(--muted);
+      }
+      .td-code {
+        font-family: "Courier New", monospace;
+        font-size: clamp(0.72rem, 1vw, 0.85rem);
+        color: var(--indigo);
+      }
+
+      /* ===== DATABASE TABLE ===== */
+      .db-wrap {
+        background: var(--surf);
+        border: 1.5px solid var(--border);
+        border-radius: 14px;
+        overflow: hidden;
+        width: 100%;
+        max-width: 720px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+      }
+      .db-title {
+        background: var(--bg);
+        border-bottom: 1px solid var(--border);
+        padding: 0.75rem 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-size: clamp(0.8rem, 1.1vw, 0.92rem);
+        font-weight: 700;
+        color: var(--indigo);
+      }
+      .db-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .db-table th {
+        background: #e8edfb;
+        color: var(--indigo);
+        font-size: clamp(0.68rem, 0.95vw, 0.8rem);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        padding: 0.6rem 1rem;
+        text-align: left;
+        border-bottom: 1px solid #c5d0f7;
+      }
+      .db-table td {
+        padding: clamp(0.4rem, 0.7vw, 0.6rem) 1rem;
+        font-size: clamp(0.76rem, 1.05vw, 0.88rem);
+        color: var(--muted);
+        border-bottom: 1px solid var(--border);
+        font-family: "Courier New", monospace;
+      }
+      .db-table tr:last-child td {
+        border-bottom: none;
+      }
+      .db-table tr:hover td {
+        background: #f0f3ff;
+      }
+      .db-pk {
+        color: var(--amber);
+        font-weight: 700;
+      }
+      .db-fk {
+        color: var(--blue);
+        font-weight: 600;
+      }
+
+      /* ===== API ANALOGY ===== */
+      .api-analogy {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        width: 100%;
+        flex-wrap: nowrap;
+        max-width: 900px;
+      }
+      .aa-node {
+        background: var(--surf);
+        border: 2px solid var(--border);
+        border-radius: 14px;
+        padding: clamp(0.8rem, 1.4vw, 1.2rem);
+        text-align: center;
+        min-width: clamp(90px, 11vw, 135px);
+        transition: transform 0.2s;
+      }
+      .aa-node:hover {
+        transform: translateY(-4px);
+      }
+      .aa-icon {
+        font-size: clamp(1.8rem, 3vw, 2.5rem);
+        display: block;
+        margin-bottom: 0.3rem;
+      }
+      .aa-title {
+        font-size: clamp(0.78rem, 1.1vw, 0.95rem);
+        font-weight: 700;
+      }
+      .aa-sub {
+        font-size: clamp(0.58rem, 0.85vw, 0.7rem);
+        color: var(--muted);
+        margin-top: 0.15rem;
+        line-height: 1.3;
+      }
+      .aa-arr-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0 clamp(0.4rem, 0.8vw, 0.75rem);
+        gap: 0.2rem;
+      }
+      .aa-arr {
+        font-size: clamp(1rem, 1.5vw, 1.3rem);
+        color: var(--faint);
+      }
+      .aa-arr-lbl {
+        font-size: clamp(0.55rem, 0.78vw, 0.65rem);
+        color: var(--faint);
+        text-align: center;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+      }
+      .aa-you {
+        border-color: var(--blue);
+      }
+      .aa-you .aa-title {
+        color: var(--blue);
+      }
+      .aa-api {
+        border-color: var(--amber);
+      }
+      .aa-api .aa-title {
+        color: #9a6200;
+      }
+      .aa-kitchen {
+        border-color: var(--indigo);
+      }
+      .aa-kitchen .aa-title {
+        color: var(--indigo);
+      }
+      .aa-db {
+        border-color: var(--green);
+      }
+      .aa-db .aa-title {
+        color: var(--green);
+      }
+
+      /* ===== DATA FLOW ===== */
+      .data-flow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0;
+        width: 100%;
+      }
+      .df-node {
+        border-radius: 14px;
+        padding: clamp(0.7rem, 1.2vw, 1rem) clamp(0.9rem, 1.6vw, 1.3rem);
+        text-align: center;
+        min-width: clamp(80px, 10vw, 120px);
+        border: 2px solid transparent;
+      }
+      .df-browser {
+        background: #e6f3f9;
+        border-color: var(--blue);
+      }
+      .df-api {
+        background: #fff7e6;
+        border-color: var(--amber);
+      }
+      .df-server {
+        background: #e8edfb;
+        border-color: var(--indigo);
+      }
+      .df-database {
+        background: #f0fdf4;
+        border-color: var(--green);
+      }
+      .df-icon {
+        font-size: clamp(1.4rem, 2.5vw, 2rem);
+        display: block;
+        margin-bottom: 0.3rem;
+      }
+      .df-label {
+        font-size: clamp(0.72rem, 1vw, 0.85rem);
+        font-weight: 700;
+      }
+      .df-sub {
+        font-size: clamp(0.58rem, 0.82vw, 0.68rem);
+        color: var(--muted);
+        margin-top: 0.1rem;
+        line-height: 1.3;
+      }
+      .df-arr-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0 clamp(0.2rem, 0.4vw, 0.4rem);
+      }
+      .df-arr {
+        font-size: clamp(0.9rem, 1.3vw, 1.1rem);
+        color: var(--faint);
+      }
+      .df-arr-lbl {
+        font-size: clamp(0.5rem, 0.72vw, 0.62rem);
+        color: var(--faint);
+        text-align: center;
+        letter-spacing: 0.03em;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+      <!-- ══ S1 TITLE ══ -->
+      <div class="slide accent-gradient bg-dark" data-slide="1">
+        <div class="slide-label">
+          <span class="snum">01</span> SELISE × Pelsung · Cohort 3
+        </div>
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            text-align: center;
+            max-width: 900px;
+          "
+        >
+          <div class="date-badge">
+            <span class="db-dot"></span>April 11, 2026 · Foundation Phase · 9:30
+            – 13:30
+          </div>
+          <h1 class="display" style="color: white">
+            <span style="color: #7dd3fc">How the</span><br />
+            <span style="color: white">Internet</span>
+            <span style="color: var(--amber); font-style: italic"> &amp; </span>
+            <span style="color: #a5b4fc">APIs</span>
+          </h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.65)">
+            Classes 04 &amp; 05 · 45 trainees · Foundation Phase
+          </p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">04 · How the Internet Works</span>
+            <span class="class-tag tag-indigo"
+              >05 · APIs, Data &amp; Databases</span
+            >
+          </div>
+        </div>
+        <div class="interact-hint">Press → or click right side to advance</div>
+      </div>
+
+      <!-- ══ S2 AGENDA ══ -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 720px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              Today's 4-Hour Journey
+            </h2>
+          </div>
+          <div class="agenda-row" onclick="goTo(2)">
+            <span class="ar-time">9:30 – 10:45</span>
+            <span class="ar-dot" style="background: var(--blue)"></span>
+            <span class="ar-label">🌐 How the Internet Works</span>
+            <span
+              class="ar-badge"
+              style="background: #e6f3f9; color: var(--blue)"
+              >75 min</span
+            >
+          </div>
+          <div class="agenda-row break-row">
+            <span class="ar-time">10:45 – 11:00</span>
+            <span class="ar-dot" style="background: var(--green)"></span>
+            <span class="ar-label">☕ Break</span>
+            <span
+              class="ar-badge"
+              style="background: #dcfce7; color: var(--green)"
+              >15 min</span
+            >
+          </div>
+          <div class="agenda-row" onclick="goTo(14)">
+            <span class="ar-time">11:15 – 13:30</span>
+            <span class="ar-dot" style="background: var(--indigo)"></span>
+            <span class="ar-label">🔌 APIs, Data &amp; Databases</span>
+            <span
+              class="ar-badge"
+              style="background: #e8edfb; color: var(--indigo)"
+              >135 min</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S3 SECTION: CLASS 04 ══ -->
+      <div class="slide bg-blue" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span>Class 04 · 9:30 – 10:45
+          </div>
+          <h1 class="display" style="color: white">
+            How the<br />Internet Works
+          </h1>
+          <p
+            class="body-lg"
+            style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem"
+          >
+            IP Addresses · DNS · HTTP · Client-Server
+          </p>
+        </div>
+        <div class="section-num" style="color: white">04</div>
+      </div>
+
+      <!-- ══ S4 DISCUSSION ══ -->
+      <div class="slide bg-dark" data-slide="4">
+        <div class="slide-label">
+          <span class="snum">04</span> Opening Question
+        </div>
+        <div class="center" style="max-width: 780px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            🎤 Open Discussion
+          </div>
+          <p class="disc-prompt">
+            "You open WhatsApp and send a message to your friend in Thimphu.<br /><span
+              style="color: var(--amber)"
+              >What happens in those 0.3 seconds?</span
+            >"
+          </p>
+          <p
+            style="
+              color: rgba(255, 255, 255, 0.45);
+              font-size: clamp(0.82rem, 1.2vw, 1rem);
+              margin-top: 2rem;
+              line-height: 1.6;
+            "
+          >
+            Take 4–5 answers · no wrong answers · we'll revisit at the end of
+            this session
+          </p>
+          <div class="hand-icons">
+            <span class="pulse">🙋</span
+            ><span class="pulse" style="animation-delay: 0.5s">🙋‍♀️</span
+            ><span class="pulse" style="animation-delay: 1s">🙋‍♂️</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S5 THE INTERNET ══ -->
+      <div class="slide accent-blue" data-slide="5">
+        <div class="slide-label">
+          <span class="snum">05</span> The Internet · 9:35
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">Class 04 · Foundation</div>
+            <h2 class="heading">What is the Internet?</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem">
+              A global network of billions of connected computers
+            </p>
+          </div>
+          <div class="cols-3">
+            <div
+              class="card"
+              style="border-top: 3px solid var(--blue); text-align: center"
+            >
+              <div
+                style="
+                  font-size: clamp(2rem, 3.5vw, 3rem);
+                  margin-bottom: 0.5rem;
+                "
+              >
+                🌍
+              </div>
+              <h4 style="color: var(--blue); justify-content: center">
+                Global Scale
+              </h4>
+              <p
+                style="
+                  font-size: clamp(0.78rem, 1.1vw, 0.92rem);
+                  color: var(--muted);
+                  line-height: 1.5;
+                "
+              >
+                5.4 billion internet users · 40+ billion connected devices
+              </p>
+            </div>
+            <div
+              class="card"
+              style="border-top: 3px solid var(--indigo); text-align: center"
+            >
+              <div
+                style="
+                  font-size: clamp(2rem, 3.5vw, 3rem);
+                  margin-bottom: 0.5rem;
+                "
+              >
+                🔗
+              </div>
+              <h4 style="color: var(--indigo); justify-content: center">
+                Every Device Connected
+              </h4>
+              <p
+                style="
+                  font-size: clamp(0.78rem, 1.1vw, 0.92rem);
+                  color: var(--muted);
+                  line-height: 1.5;
+                "
+              >
+                Your phone, laptop, even smart TVs — each has a unique address
+              </p>
+            </div>
+            <div
+              class="card"
+              style="border-top: 3px solid var(--green); text-align: center"
+            >
+              <div
+                style="
+                  font-size: clamp(2rem, 3.5vw, 3rem);
+                  margin-bottom: 0.5rem;
+                "
+              >
+                🏗️
+              </div>
+              <h4 style="color: var(--green); justify-content: center">
+                Physical Infrastructure
+              </h4>
+              <p
+                style="
+                  font-size: clamp(0.78rem, 1.1vw, 0.92rem);
+                  color: var(--muted);
+                  line-height: 1.5;
+                "
+              >
+                Undersea cables, satellites, routers, data centres in every
+                country
+              </p>
+            </div>
+          </div>
+          <div
+            class="card"
+            style="
+              background: var(--bg);
+              border: 2px dashed var(--border);
+              text-align: center;
+              padding: clamp(0.75rem, 1.5vw, 1.1rem);
+              max-width: 700px;
+            "
+          >
+            <p class="body-md" style="color: var(--muted)">
+              🇧🇹 The internet
+              <strong style="color: var(--text)">reaches Gelephu</strong>
+              through optical fibre from India and via Druknet's national
+              backbone — the same infrastructure your devices use every day
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S6 IP ADDRESSES ══ -->
+      <div class="slide accent-blue bg-subtle" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> IP Addresses</div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 880px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">IP Addresses</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              Every Device Has an Address
+            </h2>
+          </div>
+          <div class="cols-2">
+            <div class="card" style="border-top: 3px solid var(--blue)">
+              <h4 style="color: var(--blue)">🏠 Think of a Postal Address</h4>
+              <ul>
+                <li>Your house has an address so people can find it</li>
+                <li>
+                  Your device has an IP address so the internet can find it
+                </li>
+                <li>IP = Internet Protocol</li>
+                <li>Every device on the internet needs one</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--indigo)">
+              <h4 style="color: var(--indigo)">🔢 What an IP Looks Like</h4>
+              <div
+                style="
+                  display: flex;
+                  gap: 4px;
+                  align-items: center;
+                  margin: 0.8rem 0;
+                  flex-wrap: wrap;
+                "
+              >
+                <span
+                  style="
+                    background: #e8edfb;
+                    border: 2px solid var(--indigo);
+                    border-radius: 8px;
+                    padding: 0.4rem 0.8rem;
+                    font-family: &quot;Courier New&quot;, monospace;
+                    font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+                    font-weight: 700;
+                    color: var(--indigo);
+                  "
+                  >192</span
+                >
+                <span style="color: var(--faint); font-weight: 700">.</span>
+                <span
+                  style="
+                    background: #e8edfb;
+                    border: 2px solid var(--indigo);
+                    border-radius: 8px;
+                    padding: 0.4rem 0.8rem;
+                    font-family: &quot;Courier New&quot;, monospace;
+                    font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+                    font-weight: 700;
+                    color: var(--indigo);
+                  "
+                  >168</span
+                >
+                <span style="color: var(--faint); font-weight: 700">.</span>
+                <span
+                  style="
+                    background: #e8edfb;
+                    border: 2px solid var(--indigo);
+                    border-radius: 8px;
+                    padding: 0.4rem 0.8rem;
+                    font-family: &quot;Courier New&quot;, monospace;
+                    font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+                    font-weight: 700;
+                    color: var(--indigo);
+                  "
+                  >1</span
+                >
+                <span style="color: var(--faint); font-weight: 700">.</span>
+                <span
+                  style="
+                    background: #e8edfb;
+                    border: 2px solid var(--indigo);
+                    border-radius: 8px;
+                    padding: 0.4rem 0.8rem;
+                    font-family: &quot;Courier New&quot;, monospace;
+                    font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+                    font-weight: 700;
+                    color: var(--indigo);
+                  "
+                  >1</span
+                >
+              </div>
+              <ul>
+                <li>4 numbers, each 0–255</li>
+                <li>IPv4: ~4 billion addresses (running out!)</li>
+                <li>IPv6: new format, essentially unlimited</li>
+              </ul>
+            </div>
+          </div>
+          <div
+            class="card"
+            style="
+              background: var(--bg);
+              border: 2px dashed var(--border);
+              max-width: 720px;
+              padding: clamp(0.75rem, 1.5vw, 1rem);
+            "
+          >
+            <p class="body-md" style="color: var(--muted); text-align: center">
+              selise.ch has the IP address
+              <strong
+                style="
+                  color: var(--indigo);
+                  font-family: &quot;Courier New&quot;, monospace;
+                "
+                >185.34.33.33</strong
+              >
+              — that's how your browser really finds it
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S7 DNS ══ -->
+      <div class="slide accent-blue" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> DNS · 9:45</div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">Domain Name System</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              DNS — The Phonebook of the Internet
+            </h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem">
+              You remember names. Computers need numbers. DNS translates.
+            </p>
+          </div>
+          <div class="dns-flow">
+            <div class="dns-node dns-you">
+              <span class="dns-icon">💻</span>
+              <span>You type<br /><strong>selise.ch</strong></span>
+            </div>
+            <span class="dns-arrow">→</span>
+            <div class="dns-node dns-resolver">
+              <span class="dns-icon">🔍</span>
+              <span>DNS<br />Resolver</span>
+            </div>
+            <span class="dns-arrow">→</span>
+            <div class="dns-node dns-root">
+              <span class="dns-icon">📋</span>
+              <span>DNS<br />Database</span>
+            </div>
+            <span class="dns-arrow">→</span>
+            <div class="dns-node dns-result">
+              <span class="dns-icon">✅</span>
+              <span>IP:<br /><strong>185.34.33.33</strong></span>
+            </div>
+            <span class="dns-arrow">→</span>
+            <div class="dns-node dns-you">
+              <span class="dns-icon">🚀</span>
+              <span>Browser<br />connects!</span>
+            </div>
+          </div>
+          <div
+            class="card"
+            style="
+              background: var(--bg);
+              border: 2px dashed var(--border);
+              max-width: 680px;
+              padding: clamp(0.75rem, 1.5vw, 1rem);
+              text-align: center;
+            "
+          >
+            <p class="body-md" style="color: var(--muted)">
+              ⚡ This entire lookup takes
+              <strong style="color: var(--text)">under 100 milliseconds</strong>
+              — faster than a blink. Results are cached so you don't wait every
+              time.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S8 URL ANATOMY ══ -->
+      <div class="slide accent-blue bg-subtle" data-slide="8">
+        <div class="slide-label">
+          <span class="snum">08</span> URL Anatomy · 9:55
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">URLs</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              Anatomy of a URL
+            </h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem">
+              Every part of an address tells the browser something
+            </p>
+          </div>
+          <div class="url-anatomy">
+            <div class="url-part up-protocol">
+              <span class="url-text">https</span
+              ><span class="url-label">Protocol</span>
+            </div>
+            <span class="url-sep">://</span>
+            <div class="url-part up-domain">
+              <span class="url-text">selise</span
+              ><span class="url-label">Domain</span>
+            </div>
+            <div class="url-part up-tld">
+              <span class="url-text">.ch</span
+              ><span class="url-label">TLD</span>
+            </div>
+            <div class="url-part up-path">
+              <span class="url-text">/careers</span
+              ><span class="url-label">Path</span>
+            </div>
+            <div class="url-part up-query">
+              <span class="url-text">?lang=en</span
+              ><span class="url-label">Query</span>
+            </div>
+          </div>
+          <div class="cols-2" style="max-width: 800px; margin-top: 0.5rem">
+            <div class="card" style="padding: clamp(0.75rem, 1.2vw, 1rem)">
+              <ul>
+                <li>
+                  <strong style="color: var(--blue)">https</strong> — "use
+                  encryption, this is HTTPS"
+                </li>
+                <li>
+                  <strong style="color: var(--indigo)">selise</strong> — the
+                  company's domain name
+                </li>
+                <li>
+                  <strong style="color: var(--green)">.ch</strong> — top-level
+                  domain (Switzerland)
+                </li>
+              </ul>
+            </div>
+            <div class="card" style="padding: clamp(0.75rem, 1.2vw, 1rem)">
+              <ul>
+                <li>
+                  <strong style="color: #9a6200">/careers</strong> — the
+                  specific page on the server
+                </li>
+                <li>
+                  <strong style="color: #9d174d">?lang=en</strong> — extra
+                  instructions (show English)
+                </li>
+                <li>
+                  <strong style="color: var(--muted)">#section</strong> — scroll
+                  to anchor (not shown)
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S9 CLIENT-SERVER ══ -->
+      <div class="slide accent-blue" data-slide="9">
+        <div class="slide-label">
+          <span class="snum">09</span> Client &amp; Server · 10:05
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">Client-Server Model</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              Client asks. Server answers.
+            </h2>
+          </div>
+          <div class="cs-flow">
+            <div class="cs-node cs-client">
+              <span class="cs-icon">💻</span>
+              <span class="cs-title">Client</span>
+              <span class="cs-sub">Your browser<br />in Gelephu</span>
+            </div>
+            <div class="cs-arrow-wrap">
+              <span class="cs-arr">→</span>
+              <span class="cs-arr-label">HTTP Request</span>
+              <span style="font-size: 0.6rem; color: var(--faint)"
+                >GET /careers</span
+              >
+            </div>
+            <div class="cs-node cs-internet">
+              <span class="cs-icon">🌐</span>
+              <span class="cs-title" style="color: var(--muted)">Internet</span>
+              <span class="cs-sub">Cables &amp;<br />routers</span>
+            </div>
+            <div class="cs-arrow-wrap">
+              <span
+                class="cs-arr"
+                style="transform: scaleX(-1); display: inline-block"
+                >→</span
+              >
+              <span class="cs-arr-label">HTTP Response</span>
+              <span style="font-size: 0.6rem; color: var(--faint)"
+                >200 OK + HTML</span
+              >
+            </div>
+            <div class="cs-node cs-server">
+              <span class="cs-icon">🖥️</span>
+              <span class="cs-title">Server</span>
+              <span class="cs-sub">selise.ch<br />in Zürich</span>
+            </div>
+          </div>
+          <div class="cols-2" style="max-width: 700px">
+            <div class="card" style="border-left: 4px solid var(--blue)">
+              <h4 style="color: var(--blue)">💻 Client</h4>
+              <ul>
+                <li>The one <strong>asking</strong> for data</li>
+                <li>Usually your browser</li>
+                <li>Also: mobile apps, Claude Code</li>
+              </ul>
+            </div>
+            <div class="card" style="border-left: 4px solid var(--indigo)">
+              <h4 style="color: var(--indigo)">🖥️ Server</h4>
+              <ul>
+                <li>The one <strong>answering</strong> with data</li>
+                <li>A computer running 24/7</li>
+                <li>Can serve thousands at once</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S10 HTTP & HTTPS ══ -->
+      <div class="slide accent-blue bg-subtle" data-slide="10">
+        <div class="slide-label">
+          <span class="snum">10</span> HTTP &amp; HTTPS · 10:15
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">Protocols</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              HTTP — The Language of the Web
+            </h2>
+          </div>
+          <div class="cols-2">
+            <div class="card" style="border-top: 4px solid #e07e00">
+              <h4>🔓 HTTP</h4>
+              <ul>
+                <li>HyperText Transfer Protocol</li>
+                <li>The rules for how browsers and servers talk</li>
+                <li>Data travels in <strong>plain text</strong></li>
+                <li>Anyone on the network can read it</li>
+                <li>
+                  URL starts with
+                  <code
+                    style="
+                      background: #f3f4f6;
+                      padding: 1px 4px;
+                      border-radius: 3px;
+                    "
+                    >http://</code
+                  >
+                </li>
+              </ul>
+            </div>
+            <div class="card" style="border-top: 4px solid var(--green)">
+              <h4 style="color: var(--green)">🔒 HTTPS — HTTP + Security</h4>
+              <ul>
+                <li>S = Secure (uses TLS encryption)</li>
+                <li>Data is <strong>encrypted</strong> end-to-end</li>
+                <li>Padlock icon in the browser bar</li>
+                <li>Required for passwords, payments, forms</li>
+                <li>
+                  URL starts with
+                  <code
+                    style="
+                      background: #f3f4f6;
+                      padding: 1px 4px;
+                      border-radius: 3px;
+                    "
+                    >https://</code
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div
+            class="card"
+            style="
+              background: var(--bg);
+              border: 2px dashed var(--border);
+              text-align: center;
+              max-width: 700px;
+              padding: clamp(0.75rem, 1.5vw, 1rem);
+            "
+          >
+            <p class="body-md" style="color: var(--muted)">
+              🛡️
+              <strong style="color: var(--text)">Always check for HTTPS</strong>
+              before entering a password or card number. If the padlock is
+              missing — don't type it.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S11 STATUS CODES ══ -->
+      <div class="slide accent-blue" data-slide="11">
+        <div class="slide-label">
+          <span class="snum">11</span> Status Codes · 10:25
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">HTTP Status Codes</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              The Server's Reply Code
+            </h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem">
+              Every HTTP response starts with a 3-digit number
+            </p>
+          </div>
+          <div class="status-grid">
+            <div class="sc-card sc-2xx">
+              <div class="sc-code">200</div>
+              <div class="sc-name">OK</div>
+              <div class="sc-desc">Request succeeded. Here's your data.</div>
+            </div>
+            <div class="sc-card sc-3xx">
+              <div class="sc-code">301</div>
+              <div class="sc-name">Moved</div>
+              <div class="sc-desc">Page has a new permanent address.</div>
+            </div>
+            <div class="sc-card sc-4xx">
+              <div class="sc-code">404</div>
+              <div class="sc-name">Not Found</div>
+              <div class="sc-desc">Page doesn't exist on this server.</div>
+            </div>
+            <div class="sc-card sc-403">
+              <div class="sc-code">403</div>
+              <div class="sc-name">Forbidden</div>
+              <div class="sc-desc">You don't have permission.</div>
+            </div>
+            <div class="sc-card sc-5xx">
+              <div class="sc-code">500</div>
+              <div class="sc-name">Server Error</div>
+              <div class="sc-desc">Something broke on the server.</div>
+            </div>
+          </div>
+          <p
+            style="
+              font-size: clamp(0.72rem, 1vw, 0.85rem);
+              color: var(--faint);
+              font-style: italic;
+            "
+          >
+            2xx = success · 3xx = redirect · 4xx = your fault · 5xx = server's
+            fault
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S12 URL JOURNEY ══ -->
+      <div class="slide accent-blue bg-subtle" data-slide="12">
+        <div class="slide-label">
+          <span class="snum">12</span> The Full Journey · 10:30
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 800px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">Step by Step</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.6rem)">
+              You Type
+              <span
+                style="
+                  color: var(--indigo);
+                  font-family: &quot;Courier New&quot;, monospace;
+                "
+                >selise.ch</span
+              >
+            </h2>
+          </div>
+          <ul class="reveal-list">
+            <li>
+              ① Browser checks its <strong>cache</strong> — has it visited
+              selise.ch recently?
+            </li>
+            <li>
+              ② <strong>DNS lookup</strong> — asks DNS resolver: "what's the IP
+              for selise.ch?" → gets
+              <code
+                style="
+                  background: #e8edfb;
+                  color: var(--indigo);
+                  padding: 1px 5px;
+                  border-radius: 3px;
+                "
+                >185.34.33.33</code
+              >
+            </li>
+            <li>
+              ③ Browser opens a <strong>TCP connection</strong> to that IP
+              address (port 443 for HTTPS)
+            </li>
+            <li>
+              ④ <strong>TLS handshake</strong> — browser and server agree on
+              encryption keys
+            </li>
+            <li>
+              ⑤ Browser sends:
+              <code
+                style="
+                  background: #e6f3f9;
+                  color: var(--blue);
+                  padding: 1px 5px;
+                  border-radius: 3px;
+                "
+                >GET / HTTP/1.1 Host: selise.ch</code
+              >
+            </li>
+            <li>⑥ Server processes the request, finds the homepage files</li>
+            <li>
+              ⑦ Server responds:
+              <code
+                style="
+                  background: #f0fdf4;
+                  color: var(--green);
+                  padding: 1px 5px;
+                  border-radius: 3px;
+                "
+                >200 OK</code
+              >
+              + sends back HTML
+            </li>
+            <li>
+              ⑧ Browser <strong>parses HTML</strong>, fetches CSS/JS/images,
+              renders the page ✅
+            </li>
+          </ul>
+          <p class="reveal-hint">Press → to reveal each step</p>
+        </div>
+      </div>
+
+      <!-- ══ S13 QUIZ 1 ══ -->
+      <div class="slide accent-blue" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> Quick Check</div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 760px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">🧠 Quiz</div>
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              What does DNS do?
+            </h2>
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-opt" onclick="answerQ(this, false, 'q1')">
+              <span class="qo-letter">A</span>Encrypts your internet connection
+              so others can't read it
+            </div>
+            <div
+              class="quiz-opt"
+              data-correct="true"
+              onclick="answerQ(this, true, 'q1')"
+            >
+              <span class="qo-letter">B</span>Translates human-readable domain
+              names into IP addresses
+            </div>
+            <div class="quiz-opt" onclick="answerQ(this, false, 'q1')">
+              <span class="qo-letter">C</span>Speeds up your internet by caching
+              websites nearby
+            </div>
+            <div class="quiz-opt" onclick="answerQ(this, false, 'q1')">
+              <span class="qo-letter">D</span>Stores website files on a server
+              close to you
+            </div>
+          </div>
+          <div class="quiz-feedback qf-correct" id="q1-ok">
+            ✅ Correct! DNS = Domain Name System. It's like a phonebook — you
+            give it a name (selise.ch) and it gives back a number (IP address).
+          </div>
+          <div class="quiz-feedback qf-wrong" id="q1-no">
+            Not quite — that's what HTTPS/TLS does. DNS is the phonebook that
+            converts domain names to IP addresses. B is correct.
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S14 EXERCISE 1 ══ -->
+      <div class="slide bg-amber" data-slide="14">
+        <div class="slide-label">
+          <span class="snum">14</span> Exercise 1 · 10:30
+        </div>
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            max-width: 820px;
+            width: 100%;
+          "
+        >
+          <div class="center">
+            <div class="pill pill-white" style="margin: 0 auto 1rem">
+              ✍ Hands-on · 15 min
+            </div>
+            <h2
+              class="heading"
+              style="color: white; font-size: clamp(1.8rem, 3.5vw, 2.8rem)"
+            >
+              URL Hunt &amp; DevTools
+            </h2>
+          </div>
+          <div id="timer1" class="timer-display">15:00</div>
+          <div class="timer-controls">
+            <button
+              class="timer-btn tbtn-start"
+              onclick="startTimer('timer1', 15)"
+            >
+              ▶ Start
+            </button>
+            <button
+              class="timer-btn tbtn-reset"
+              onclick="resetTimer('timer1', 15)"
+            >
+              ↺ Reset
+            </button>
+          </div>
+          <div class="timer-tasks">
+            <div class="tt-item">
+              <span class="tt-num">1</span
+              ><span
+                >Open your browser. Go to <strong>selise.ch</strong>. In your
+                notebook, write the full URL you land on.</span
+              >
+            </div>
+            <div class="tt-item">
+              <span class="tt-num">2</span
+              ><span
+                >Break the URL into parts:
+                <strong>protocol, domain, TLD, path</strong>. Label each
+                one.</span
+              >
+            </div>
+            <div class="tt-item">
+              <span class="tt-num">3</span
+              ><span
+                >Open DevTools: press <strong>F12</strong> (Windows) or
+                <strong>Cmd+Option+I</strong> (Mac). Click the
+                <strong>Network</strong> tab.</span
+              >
+            </div>
+            <div class="tt-item">
+              <span class="tt-num">4</span
+              ><span
+                >Refresh the page. Count:
+                <strong>How many requests did the browser make?</strong> What's
+                the status code of the first one?</span
+              >
+            </div>
+            <div class="tt-item">
+              <span class="tt-num">5</span
+              ><span
+                >Navigate to two more pages on selise.ch. Notice how the URL
+                changes for each one.</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S15 BREAK ══ -->
+      <div class="slide bg-green" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span></div>
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            text-align: center;
+          "
+        >
+          <div class="float" style="font-size: clamp(3rem, 6vw, 5rem)">☕</div>
+          <h2 class="heading" style="color: white">Break Time</h2>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.75)">
+            Back at <strong style="color: white">11:15</strong> for APIs &amp;
+            Databases
+          </p>
+          <div
+            id="timer-break"
+            class="timer-display"
+            style="font-size: clamp(3rem, 9vw, 7rem)"
+          >
+            15:00
+          </div>
+          <div class="timer-controls">
+            <button
+              class="timer-btn tbtn-start"
+              onclick="startTimer('timer-break', 15)"
+            >
+              ▶ Start
+            </button>
+            <button
+              class="timer-btn tbtn-reset"
+              onclick="resetTimer('timer-break', 15)"
+            >
+              ↺ Reset
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S16 SECTION: CLASS 05 ══ -->
+      <div class="slide bg-indigo" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span>Class 05 · 11:15 – 13:30
+          </div>
+          <h1 class="display" style="color: white">
+            APIs, Data<br />&amp; Databases
+          </h1>
+          <p
+            class="body-lg"
+            style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem"
+          >
+            APIs · JSON · REST · Databases · SQL vs NoSQL
+          </p>
+        </div>
+        <div class="section-num" style="color: white">05</div>
+      </div>
+
+      <!-- ══ S17 DISCUSSION ══ -->
+      <div class="slide bg-dark" data-slide="17">
+        <div class="slide-label">
+          <span class="snum">17</span> Opening Question
+        </div>
+        <div class="center" style="max-width: 780px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            🍽️ Think About This
+          </div>
+          <p class="disc-prompt">
+            "You order momo at a restaurant.<br />You don't go into the kitchen
+            yourself.<br /><span style="color: var(--amber)"
+              >Who does the talking for you?</span
+            >"
+          </p>
+          <p
+            style="
+              color: rgba(255, 255, 255, 0.45);
+              font-size: clamp(0.82rem, 1.2vw, 1rem);
+              margin-top: 2rem;
+              line-height: 1.6;
+            "
+          >
+            The waiter is the interface between you and the kitchen. APIs work
+            the same way.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S18 WHAT IS AN API ══ -->
+      <div class="slide accent-indigo" data-slide="18">
+        <div class="slide-label"><span class="snum">18</span> APIs · 11:15</div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-indigo">
+              Application Programming Interface
+            </div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              An API is the waiter
+            </h2>
+          </div>
+          <div class="api-analogy">
+            <div class="aa-node aa-you">
+              <span class="aa-icon">🧑‍💻</span><span class="aa-title">You</span
+              ><span class="aa-sub">Client / App<br />placing an order</span>
+            </div>
+            <div class="aa-arr-wrap">
+              <span class="aa-arr">→</span
+              ><span class="aa-arr-lbl">Request</span>
+            </div>
+            <div class="aa-node aa-api">
+              <span class="aa-icon">🧑‍🍳</span><span class="aa-title">API</span
+              ><span class="aa-sub">The waiter<br />takes your order</span>
+            </div>
+            <div class="aa-arr-wrap">
+              <span class="aa-arr">→</span
+              ><span class="aa-arr-lbl">Forwards</span>
+            </div>
+            <div class="aa-node aa-kitchen">
+              <span class="aa-icon">🖥️</span><span class="aa-title">Server</span
+              ><span class="aa-sub">The kitchen<br />processes it</span>
+            </div>
+            <div class="aa-arr-wrap">
+              <span class="aa-arr">→</span
+              ><span class="aa-arr-lbl">Accesses</span>
+            </div>
+            <div class="aa-node aa-db">
+              <span class="aa-icon">🗄️</span
+              ><span class="aa-title">Database</span
+              ><span class="aa-sub">The pantry<br />stores ingredients</span>
+            </div>
+          </div>
+          <div class="cols-2" style="max-width: 800px">
+            <div class="card" style="border-left: 4px solid var(--indigo)">
+              <h4 style="color: var(--indigo)">Why APIs exist</h4>
+              <ul>
+                <li>You never touch the database directly</li>
+                <li>The API enforces rules (who can get what)</li>
+                <li>Apps talk to each other via APIs</li>
+                <li>WhatsApp, Google Maps, weather apps — all use APIs</li>
+              </ul>
+            </div>
+            <div class="card" style="border-left: 4px solid var(--amber)">
+              <h4>Real examples</h4>
+              <ul>
+                <li>Weather app gets data from a weather API</li>
+                <li>You log in with Google — that's an API</li>
+                <li>Claude Code calls the Anthropic API</li>
+                <li>SELISE's products expose APIs for clients</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S19 JSON ══ -->
+      <div class="slide accent-indigo bg-subtle" data-slide="19">
+        <div class="slide-label"><span class="snum">19</span> JSON · 11:30</div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-indigo">Data Format</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              JSON — How APIs Send Data
+            </h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem">
+              JavaScript Object Notation · human-readable · machine-parseable
+            </p>
+          </div>
+          <div
+            style="
+              display: flex;
+              gap: clamp(1rem, 2vw, 2rem);
+              width: 100%;
+              align-items: flex-start;
+              flex-wrap: wrap;
+              justify-content: center;
+            "
+          >
+            <div
+              class="json-view"
+              style="flex: 1; min-width: 280px; max-width: 500px"
+            >
+              <div class="jv-bar">
+                <span class="jv-dot" style="background: #ff5f56"></span
+                ><span class="jv-dot" style="background: #febc2e"></span
+                ><span class="jv-dot" style="background: #28c840"></span
+                ><span style="margin-left: 8px">trainee.json</span>
+              </div>
+              <div class="jv-body">
+                <span class="jv-punc">{</span><br />
+                &nbsp;&nbsp;<span class="jk">"name"</span
+                ><span class="jv-punc">:</span>
+                <span class="jv-str">"Karma Dorji"</span
+                ><span class="jv-punc">,</span><br />
+                &nbsp;&nbsp;<span class="jk">"city"</span
+                ><span class="jv-punc">:</span>
+                <span class="jv-str">"Gelephu"</span
+                ><span class="jv-punc">,</span><br />
+                &nbsp;&nbsp;<span class="jk">"age"</span
+                ><span class="jv-punc">:</span> <span class="jv-num">24</span
+                ><span class="jv-punc">,</span><br />
+                &nbsp;&nbsp;<span class="jk">"enrolled"</span
+                ><span class="jv-punc">:</span> <span class="jv-bool">true</span
+                ><span class="jv-punc">,</span><br />
+                &nbsp;&nbsp;<span class="jk">"skills"</span
+                ><span class="jv-punc">:</span> <span class="jv-arr">[</span
+                ><span class="jv-str">"Python"</span
+                ><span class="jv-punc">,</span> <span class="jv-str">"SQL"</span
+                ><span class="jv-arr">]</span><span class="jv-punc">,</span
+                ><br />
+                &nbsp;&nbsp;<span class="jk">"vertical"</span
+                ><span class="jv-punc">:</span>
+                <span class="jv-str">"Software Dev"</span><br />
+                <span class="jv-punc">}</span>
+              </div>
+            </div>
+            <div
+              class="stack"
+              style="flex: 1; min-width: 240px; max-width: 360px; gap: 0.75rem"
+            >
+              <div class="card" style="padding: clamp(0.75rem, 1.2vw, 1rem)">
+                <h4
+                  style="
+                    color: var(--blue);
+                    font-size: clamp(0.8rem, 1.1vw, 0.95rem);
+                  "
+                >
+                  🔵 Keys (blue)
+                </h4>
+                <p
+                  style="
+                    font-size: clamp(0.72rem, 1vw, 0.85rem);
+                    color: var(--muted);
+                  "
+                >
+                  Always strings in quotes. The label for each field.
+                </p>
+              </div>
+              <div class="card" style="padding: clamp(0.75rem, 1.2vw, 1rem)">
+                <h4
+                  style="
+                    color: var(--green);
+                    font-size: clamp(0.8rem, 1.1vw, 0.95rem);
+                  "
+                >
+                  🟢 String values (green)
+                </h4>
+                <p
+                  style="
+                    font-size: clamp(0.72rem, 1vw, 0.85rem);
+                    color: var(--muted);
+                  "
+                >
+                  Text, always in double quotes.
+                </p>
+              </div>
+              <div class="card" style="padding: clamp(0.75rem, 1.2vw, 1rem)">
+                <h4 style="font-size: clamp(0.8rem, 1.1vw, 0.95rem)">
+                  🟡 Numbers · 🟣 Booleans · 🔢 Arrays
+                </h4>
+                <p
+                  style="
+                    font-size: clamp(0.72rem, 1vw, 0.85rem);
+                    color: var(--muted);
+                  "
+                >
+                  Numbers without quotes · true/false · lists with [&nbsp;]
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S20 REST APIS ══ -->
+      <div class="slide accent-indigo" data-slide="20">
+        <div class="slide-label">
+          <span class="snum">20</span> REST APIs · 11:45
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-indigo">REST</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              REST — A Common Language for APIs
+            </h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem">
+              Representational State Transfer · predictable, resource-based URLs
+            </p>
+          </div>
+          <div
+            class="card"
+            style="
+              border-top: 3px solid var(--indigo);
+              max-width: 780px;
+              width: 100%;
+            "
+          >
+            <p
+              style="
+                font-size: clamp(0.72rem, 1vw, 0.82rem);
+                color: var(--faint);
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+                margin-bottom: 0.75rem;
+              "
+            >
+              Base URL: https://api.pelsung.bt
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 0.6rem">
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 0.75rem;
+                  padding: 0.5rem 0.75rem;
+                  background: var(--bg);
+                  border-radius: 8px;
+                  border: 1px solid var(--border);
+                "
+              >
+                <span
+                  style="
+                    font-family: &quot;Courier New&quot;, monospace;
+                    font-size: clamp(0.78rem, 1.1vw, 0.9rem);
+                    color: var(--indigo);
+                    font-weight: 700;
+                    min-width: 180px;
+                  "
+                  >/trainees</span
+                >
+                <span
+                  style="
+                    font-size: clamp(0.75rem, 1.05vw, 0.88rem);
+                    color: var(--muted);
+                  "
+                  >All trainees in the system</span
+                >
+              </div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 0.75rem;
+                  padding: 0.5rem 0.75rem;
+                  background: var(--bg);
+                  border-radius: 8px;
+                  border: 1px solid var(--border);
+                "
+              >
+                <span
+                  style="
+                    font-family: &quot;Courier New&quot;, monospace;
+                    font-size: clamp(0.78rem, 1.1vw, 0.9rem);
+                    color: var(--indigo);
+                    font-weight: 700;
+                    min-width: 180px;
+                  "
+                  >/trainees/42</span
+                >
+                <span
+                  style="
+                    font-size: clamp(0.75rem, 1.05vw, 0.88rem);
+                    color: var(--muted);
+                  "
+                  >Trainee with ID 42 specifically</span
+                >
+              </div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 0.75rem;
+                  padding: 0.5rem 0.75rem;
+                  background: var(--bg);
+                  border-radius: 8px;
+                  border: 1px solid var(--border);
+                "
+              >
+                <span
+                  style="
+                    font-family: &quot;Courier New&quot;, monospace;
+                    font-size: clamp(0.78rem, 1.1vw, 0.9rem);
+                    color: var(--indigo);
+                    font-weight: 700;
+                    min-width: 180px;
+                  "
+                  >/trainees/42/classes</span
+                >
+                <span
+                  style="
+                    font-size: clamp(0.75rem, 1.05vw, 0.88rem);
+                    color: var(--muted);
+                  "
+                  >All classes attended by trainee 42</span
+                >
+              </div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 0.75rem;
+                  padding: 0.5rem 0.75rem;
+                  background: var(--bg);
+                  border-radius: 8px;
+                  border: 1px solid var(--border);
+                "
+              >
+                <span
+                  style="
+                    font-family: &quot;Courier New&quot;, monospace;
+                    font-size: clamp(0.78rem, 1.1vw, 0.9rem);
+                    color: var(--indigo);
+                    font-weight: 700;
+                    min-width: 180px;
+                  "
+                  >/classes?phase=foundation</span
+                >
+                <span
+                  style="
+                    font-size: clamp(0.75rem, 1.05vw, 0.88rem);
+                    color: var(--muted);
+                  "
+                  >Filter classes by phase</span
+                >
+              </div>
+            </div>
+          </div>
+          <p
+            style="
+              font-size: clamp(0.72rem, 1vw, 0.85rem);
+              color: var(--muted);
+              font-style: italic;
+              text-align: center;
+            "
+          >
+            The URL tells you what resource you're working with. The HTTP method
+            tells you what to do with it.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S21 HTTP METHODS ══ -->
+      <div class="slide accent-indigo bg-subtle" data-slide="21">
+        <div class="slide-label">
+          <span class="snum">21</span> HTTP Methods · 11:55
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-indigo">HTTP Methods</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              What to Do With the Resource
+            </h2>
+          </div>
+          <table class="method-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Action</th>
+                <th>CRUD</th>
+                <th>Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="method-badge mb-get">GET</span></td>
+                <td class="td-muted">Read / fetch data</td>
+                <td class="td-muted">Read</td>
+                <td class="td-code">GET /trainees → get all trainees</td>
+              </tr>
+              <tr>
+                <td><span class="method-badge mb-post">POST</span></td>
+                <td class="td-muted">Create new record</td>
+                <td class="td-muted">Create</td>
+                <td class="td-code">POST /trainees → add new trainee</td>
+              </tr>
+              <tr>
+                <td><span class="method-badge mb-put">PUT</span></td>
+                <td class="td-muted">Update existing record</td>
+                <td class="td-muted">Update</td>
+                <td class="td-code">PUT /trainees/42 → edit trainee 42</td>
+              </tr>
+              <tr>
+                <td><span class="method-badge mb-delete">DELETE</span></td>
+                <td class="td-muted">Remove a record</td>
+                <td class="td-muted">Delete</td>
+                <td class="td-code">DELETE /trainees/42 → remove trainee</td>
+              </tr>
+            </tbody>
+          </table>
+          <div
+            class="card"
+            style="
+              background: var(--bg);
+              border: 2px dashed var(--border);
+              text-align: center;
+              max-width: 700px;
+              padding: clamp(0.75rem, 1.5vw, 1rem);
+            "
+          >
+            <p class="body-md" style="color: var(--muted)">
+              🗝️ <strong style="color: var(--text)">CRUD</strong> = Create,
+              Read, Update, Delete — every database app does these four things
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S22 QUIZ 2 ══ -->
+      <div class="slide accent-indigo" data-slide="22">
+        <div class="slide-label"><span class="snum">22</span> Quick Check</div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 760px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-indigo">🧠 Quiz</div>
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              You want to read a user's profile from an API.<br />Which HTTP
+              method do you use?
+            </h2>
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-opt" onclick="answerQ(this, false, 'q2')">
+              <span class="qo-letter">A</span>POST — to submit the user's
+              profile to the server
+            </div>
+            <div class="quiz-opt" onclick="answerQ(this, false, 'q2')">
+              <span class="qo-letter">B</span>DELETE — to request the profile be
+              sent to you
+            </div>
+            <div
+              class="quiz-opt"
+              data-correct="true"
+              onclick="answerQ(this, true, 'q2')"
+            >
+              <span class="qo-letter">C</span>GET — to fetch / read data from
+              the server
+            </div>
+            <div class="quiz-opt" onclick="answerQ(this, false, 'q2')">
+              <span class="qo-letter">D</span>PUT — to retrieve data and update
+              it at the same time
+            </div>
+          </div>
+          <div class="quiz-feedback qf-correct" id="q2-ok">
+            ✅ Correct! GET = read. You're not changing anything — just asking
+            the server to send you the data.
+          </div>
+          <div class="quiz-feedback qf-wrong" id="q2-no">
+            Not quite. GET is the method for reading/fetching data. POST creates
+            new data, PUT updates, DELETE removes. C is correct.
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S23 EXERCISE 2 ══ -->
+      <div class="slide bg-amber" data-slide="23">
+        <div class="slide-label">
+          <span class="snum">23</span> Exercise 2 · 12:10
+        </div>
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            max-width: 820px;
+            width: 100%;
+          "
+        >
+          <div class="center">
+            <div class="pill pill-white" style="margin: 0 auto 1rem">
+              ✍ Hands-on · 30 min
+            </div>
+            <h2
+              class="heading"
+              style="color: white; font-size: clamp(1.8rem, 3.5vw, 2.8rem)"
+            >
+              Try a Live API
+            </h2>
+          </div>
+          <div id="timer2" class="timer-display">30:00</div>
+          <div class="timer-controls">
+            <button
+              class="timer-btn tbtn-start"
+              onclick="startTimer('timer2', 30)"
+            >
+              ▶ Start
+            </button>
+            <button
+              class="timer-btn tbtn-reset"
+              onclick="resetTimer('timer2', 30)"
+            >
+              ↺ Reset
+            </button>
+          </div>
+          <div class="timer-tasks">
+            <div class="tt-item">
+              <span class="tt-num">1</span
+              ><span
+                >Open your browser and go to:
+                <strong>jsonplaceholder.typicode.com/users</strong> — this is a
+                real public API</span
+              >
+            </div>
+            <div class="tt-item">
+              <span class="tt-num">2</span
+              ><span
+                >Look at the JSON.
+                <strong>How many users are there?</strong> What fields does each
+                user have?</span
+              >
+            </div>
+            <div class="tt-item">
+              <span class="tt-num">3</span
+              ><span
+                >Change the URL to <strong>/users/1</strong> — what's the
+                difference? (one vs all)</span
+              >
+            </div>
+            <div class="tt-item">
+              <span class="tt-num">4</span
+              ><span
+                >Try <strong>/posts</strong> and
+                <strong>/users/1/posts</strong> — what different data
+                appears?</span
+              >
+            </div>
+            <div class="tt-item">
+              <span class="tt-num">5</span
+              ><span
+                >Bonus: try <strong>/users?username=Bret</strong> — filtering
+                with query parameters</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S24 DATABASES ══ -->
+      <div class="slide accent-indigo" data-slide="24">
+        <div class="slide-label">
+          <span class="snum">24</span> Databases · 12:45
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-indigo">Databases</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              Organised Storage for Data
+            </h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem">
+              Think: Excel spreadsheet — but massive, fast, and reliable
+            </p>
+          </div>
+          <div class="db-wrap">
+            <div class="db-title">🗄️ trainees (table) — 45 rows</div>
+            <table class="db-table">
+              <thead>
+                <tr>
+                  <th>id</th>
+                  <th>name</th>
+                  <th>city</th>
+                  <th>vertical</th>
+                  <th>cohort</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="db-pk">1</td>
+                  <td>Karma Dorji</td>
+                  <td>Gelephu</td>
+                  <td>Software Dev</td>
+                  <td>3</td>
+                </tr>
+                <tr>
+                  <td class="db-pk">2</td>
+                  <td>Tenzin Wangmo</td>
+                  <td>Thimphu</td>
+                  <td>UI/UX Design</td>
+                  <td>3</td>
+                </tr>
+                <tr>
+                  <td class="db-pk">3</td>
+                  <td>Pema Choden</td>
+                  <td>Paro</td>
+                  <td>QA Testing</td>
+                  <td>3</td>
+                </tr>
+                <tr>
+                  <td class="db-pk">4</td>
+                  <td>Sonam Yeshi</td>
+                  <td>Gelephu</td>
+                  <td>Business Analysis</td>
+                  <td>3</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--faint)">…</td>
+                  <td style="color: var(--faint)">…</td>
+                  <td style="color: var(--faint)">…</td>
+                  <td style="color: var(--faint)">…</td>
+                  <td style="color: var(--faint)">…</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="cols-3" style="max-width: 800px">
+            <div
+              class="card"
+              style="padding: clamp(0.7rem, 1.2vw, 1rem); text-align: center"
+            >
+              <div style="font-size: 1.5rem; margin-bottom: 0.3rem">📋</div>
+              <h4
+                style="
+                  justify-content: center;
+                  font-size: clamp(0.78rem, 1.1vw, 0.92rem);
+                "
+              >
+                Table
+              </h4>
+              <p
+                style="
+                  font-size: clamp(0.65rem, 0.9vw, 0.78rem);
+                  color: var(--muted);
+                "
+              >
+                A spreadsheet-like structure for one type of data
+              </p>
+            </div>
+            <div
+              class="card"
+              style="padding: clamp(0.7rem, 1.2vw, 1rem); text-align: center"
+            >
+              <div style="font-size: 1.5rem; margin-bottom: 0.3rem">➡️</div>
+              <h4
+                style="
+                  justify-content: center;
+                  font-size: clamp(0.78rem, 1.1vw, 0.92rem);
+                "
+              >
+                Row
+              </h4>
+              <p
+                style="
+                  font-size: clamp(0.65rem, 0.9vw, 0.78rem);
+                  color: var(--muted);
+                "
+              >
+                One record — one trainee, one class, one transaction
+              </p>
+            </div>
+            <div
+              class="card"
+              style="padding: clamp(0.7rem, 1.2vw, 1rem); text-align: center"
+            >
+              <div style="font-size: 1.5rem; margin-bottom: 0.3rem">⬇️</div>
+              <h4
+                style="
+                  justify-content: center;
+                  font-size: clamp(0.78rem, 1.1vw, 0.92rem);
+                "
+              >
+                Column
+              </h4>
+              <p
+                style="
+                  font-size: clamp(0.65rem, 0.9vw, 0.78rem);
+                  color: var(--muted);
+                "
+              >
+                A field — name, city, vertical. Same type for every row.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S25 FULL APP FLOW ══ -->
+      <div class="slide accent-indigo bg-subtle" data-slide="25">
+        <div class="slide-label">
+          <span class="snum">25</span> How It All Connects · 13:05
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-indigo">Full Picture</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              How Data Flows in an App
+            </h2>
+          </div>
+          <div class="data-flow">
+            <div class="df-node df-browser">
+              <span class="df-icon">💻</span
+              ><span class="df-label" style="color: var(--blue)">Browser</span
+              ><span class="df-sub">You click a button</span>
+            </div>
+            <div class="df-arr-wrap">
+              <span class="df-arr">→</span
+              ><span class="df-arr-lbl">HTTP<br />Request</span>
+            </div>
+            <div class="df-node df-api">
+              <span class="df-icon">🔌</span
+              ><span class="df-label" style="color: #9a6200">API</span
+              ><span class="df-sub">Routes the request</span>
+            </div>
+            <div class="df-arr-wrap">
+              <span class="df-arr">→</span
+              ><span class="df-arr-lbl">Function<br />call</span>
+            </div>
+            <div class="df-node df-server">
+              <span class="df-icon">⚙️</span
+              ><span class="df-label" style="color: var(--indigo)"
+                >Server Logic</span
+              ><span class="df-sub">Processes rules</span>
+            </div>
+            <div class="df-arr-wrap">
+              <span class="df-arr">→</span
+              ><span class="df-arr-lbl">SQL<br />query</span>
+            </div>
+            <div class="df-node df-database">
+              <span class="df-icon">🗄️</span
+              ><span class="df-label" style="color: var(--green)">Database</span
+              ><span class="df-sub">Returns data</span>
+            </div>
+          </div>
+          <div
+            style="
+              text-align: center;
+              font-size: clamp(1rem, 1.8vw, 1.3rem);
+              color: var(--muted);
+            "
+          >
+            ↩ Response travels back the same path as JSON ↩
+          </div>
+          <div class="cols-2" style="max-width: 800px">
+            <div class="card" style="border-left: 4px solid var(--blue)">
+              <h4 style="color: var(--blue)">🗃️ SQL Databases</h4>
+              <ul>
+                <li>Tables with fixed columns</li>
+                <li>Great for structured, relational data</li>
+                <li>PostgreSQL, MySQL, SQLite</li>
+                <li>Used in most SELISE products</li>
+              </ul>
+            </div>
+            <div class="card" style="border-left: 4px solid var(--green)">
+              <h4 style="color: var(--green)">📄 NoSQL Databases</h4>
+              <ul>
+                <li>Stores JSON documents, not tables</li>
+                <li>Flexible schema — fields can vary</li>
+                <li>MongoDB, Firestore, DynamoDB</li>
+                <li>Great for fast-changing data structures</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S26 EXERCISE 3 ══ -->
+      <div class="slide bg-amber" data-slide="26">
+        <div class="slide-label">
+          <span class="snum">26</span> Exercise 3 · 13:10
+        </div>
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            max-width: 820px;
+            width: 100%;
+          "
+        >
+          <div class="center">
+            <div class="pill pill-white" style="margin: 0 auto 1rem">
+              ✍ Design Challenge · 20 min
+            </div>
+            <h2
+              class="heading"
+              style="color: white; font-size: clamp(1.8rem, 3.5vw, 2.8rem)"
+            >
+              Design a Database Schema
+            </h2>
+          </div>
+          <div id="timer3" class="timer-display">20:00</div>
+          <div class="timer-controls">
+            <button
+              class="timer-btn tbtn-start"
+              onclick="startTimer('timer3', 20)"
+            >
+              ▶ Start
+            </button>
+            <button
+              class="timer-btn tbtn-reset"
+              onclick="resetTimer('timer3', 20)"
+            >
+              ↺ Reset
+            </button>
+          </div>
+          <div class="timer-tasks">
+            <div class="tt-item">
+              <span class="tt-num">📋</span
+              ><span
+                ><strong>Scenario:</strong> Design the database for the Pelsung
+                program itself</span
+              >
+            </div>
+            <div class="tt-item">
+              <span class="tt-num">1</span
+              ><span
+                >You need 3 tables:
+                <strong>Trainees, Classes, Attendance</strong></span
+              >
+            </div>
+            <div class="tt-item">
+              <span class="tt-num">2</span
+              ><span
+                >For each table:
+                <strong>What columns does it need?</strong> Which is the unique
+                ID (primary key)?</span
+              >
+            </div>
+            <div class="tt-item">
+              <span class="tt-num">3</span
+              ><span
+                >How does <strong>Attendance</strong> link Trainees and Classes
+                together?</span
+              >
+            </div>
+            <div class="tt-item">
+              <span class="tt-num">4</span
+              ><span
+                >Draw it on paper or your notes. Compare with the person next to
+                you — did you choose the same columns?</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S27 WRAP-UP ══ -->
+      <div class="slide bg-dark" data-slide="27">
+        <div class="slide-label">
+          <span class="snum">27</span> Wrap-up · 13:30
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-white" style="margin: 0 auto 1rem">
+              ✅ What You Learned Today
+            </div>
+            <h2
+              class="heading"
+              style="color: white; font-size: clamp(1.8rem, 3.5vw, 2.6rem)"
+            >
+              Key Takeaways
+            </h2>
+          </div>
+          <div class="wu-grid">
+            <div class="wu-card">
+              <div class="wu-icon">🌐</div>
+              <h4>The Internet</h4>
+              <p>
+                A global network. Every device has an IP address. DNS translates
+                names → numbers.
+              </p>
+            </div>
+            <div class="wu-card">
+              <div class="wu-icon">🔒</div>
+              <h4>HTTP &amp; HTTPS</h4>
+              <p>
+                The language of the web. HTTPS adds encryption. Status codes
+                tell you what happened.
+              </p>
+            </div>
+            <div class="wu-card">
+              <div class="wu-icon">🍽️</div>
+              <h4>APIs</h4>
+              <p>
+                The waiter between client and server. You never touch the
+                kitchen (database) directly.
+              </p>
+            </div>
+            <div class="wu-card">
+              <div class="wu-icon">📄</div>
+              <h4>JSON</h4>
+              <p>
+                How APIs send data. Key-value pairs. Human-readable. Universal
+                across all languages.
+              </p>
+            </div>
+            <div class="wu-card">
+              <div class="wu-icon">🔌</div>
+              <h4>REST + Methods</h4>
+              <p>
+                GET reads, POST creates, PUT updates, DELETE removes. CRUD
+                operations on resources.
+              </p>
+            </div>
+            <div class="wu-card">
+              <div class="wu-icon">🗄️</div>
+              <h4>Databases</h4>
+              <p>
+                Tables, rows, columns. SQL = structured. NoSQL = flexible. The
+                pantry behind every app.
+              </p>
+            </div>
+          </div>
+          <div style="text-align: center; margin-top: 0.5rem">
+            <p
+              style="
+                color: rgba(255, 255, 255, 0.5);
+                font-size: clamp(0.75rem, 1vw, 0.88rem);
+              "
+            >
+              Next:
+              <strong style="color: rgba(255, 255, 255, 0.8)"
+                >Class 06 — Dev Tools &amp; Version Control</strong
+              >
+              · VS Code · Git &amp; GitHub · Terminal basics
+            </p>
+            <p
+              style="
+                color: rgba(255, 255, 255, 0.3);
+                font-size: clamp(0.65rem, 0.85vw, 0.75rem);
+                margin-top: 0.4rem;
+              "
+            >
+              SELISE × Pelsung · Foundation Phase · April 11, 2026
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /#deck -->
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 27</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">
+      ⛶
+    </button>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      let current = 0;
+
+      function goTo(n) {
+        slides[current].classList.remove("active");
+        slides[current].classList.add("exit");
+        const old = current;
+        setTimeout(() => slides[old].classList.remove("exit"), 380);
+        current = Math.max(0, Math.min(n, total - 1));
+        slides[current].classList.add("active");
+        document.getElementById("slide-counter").textContent =
+          `${current + 1} / ${total}`;
+        document.getElementById("progress").style.width =
+          `${((current + 1) / total) * 100}%`;
+        initReveal(slides[current]);
+      }
+
+      function nextSlide() {
+        if (current < total - 1) goTo(current + 1);
+      }
+      function prevSlide() {
+        if (current > 0) goTo(current - 1);
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight" || e.key === " ") {
+          e.preventDefault();
+          handleForward();
+        }
+        if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          prevSlide();
+        }
+        if (e.key === "f" || e.key === "F") toggleFullscreen();
+      });
+
+      document.getElementById("deck").addEventListener("click", function (e) {
+        if (
+          e.target.closest(
+            "button,.quiz-opt,a,input,select,textarea,.agenda-row,[data-noclick]",
+          )
+        )
+          return;
+        const pct = e.clientX / window.innerWidth;
+        if (pct < 0.15) prevSlide();
+        else if (pct > 0.85) handleForward();
+      });
+
+      function handleForward() {
+        const active = slides[current];
+        const list = active.querySelector(".reveal-list");
+        if (list) {
+          const hidden = list.querySelectorAll("li:not(.shown)");
+          if (hidden.length > 0) {
+            hidden[0].classList.add("shown");
+            const hint = active.querySelector(".reveal-hint");
+            if (hint && hidden.length === 1) hint.style.opacity = "0";
+            return;
+          }
+        }
+        nextSlide();
+      }
+
+      function initReveal(slide) {
+        const list = slide.querySelector(".reveal-list");
+        if (!list) return;
+        list
+          .querySelectorAll("li")
+          .forEach((li) => li.classList.remove("shown"));
+        const hint = slide.querySelector(".reveal-hint");
+        if (hint) hint.style.opacity = "1";
+      }
+
+      slides[0].classList.add("active");
+      document.getElementById("progress").style.width = `${(1 / total) * 100}%`;
+
+      function toggleFullscreen() {
+        if (!document.fullscreenElement)
+          document.documentElement.requestFullscreen().catch(() => {});
+        else document.exitFullscreen().catch(() => {});
+      }
+
+      const timerState = {};
+      function startTimer(id, minutes) {
+        if (timerState[id]?.interval) return;
+        if (!timerState[id]) timerState[id] = { remaining: minutes * 60 };
+        timerState[id].interval = setInterval(() => {
+          timerState[id].remaining--;
+          const el = document.getElementById(id);
+          if (!el) return;
+          if (timerState[id].remaining <= 0) {
+            clearInterval(timerState[id].interval);
+            timerState[id].interval = null;
+            el.textContent = "00:00";
+            el.style.color = "#ff5f56";
+            return;
+          }
+          const m = Math.floor(timerState[id].remaining / 60)
+            .toString()
+            .padStart(2, "0");
+          const s = (timerState[id].remaining % 60).toString().padStart(2, "0");
+          el.textContent = `${m}:${s}`;
+          if (timerState[id].remaining <= 60) el.style.color = "#febc2e";
+        }, 1000);
+      }
+      function resetTimer(id, minutes) {
+        if (timerState[id]?.interval) {
+          clearInterval(timerState[id].interval);
+          timerState[id].interval = null;
+        }
+        timerState[id] = { remaining: minutes * 60 };
+        const el = document.getElementById(id);
+        if (el) {
+          el.textContent = `${minutes.toString().padStart(2, "0")}:00`;
+          el.style.color = "";
+        }
+      }
+
+      function answerQ(el, isCorrect, qid) {
+        const opts = el.closest(".quiz-options").querySelectorAll(".quiz-opt");
+        opts.forEach((o) => {
+          o.style.pointerEvents = "none";
+          o.classList.add("dim");
+        });
+        el.classList.remove("dim");
+        if (isCorrect) {
+          el.classList.add("correct");
+        } else {
+          el.classList.add("wrong");
+          opts.forEach((o) => {
+            if (o.dataset.correct === "true") {
+              o.classList.remove("dim");
+              o.classList.add("correct");
+            }
+          });
+        }
+        const fb = document.getElementById(
+          isCorrect ? qid + "-ok" : qid + "-no",
+        );
+        if (fb) fb.classList.add("show");
+      }
+    </script>
+  </body>
+</html>
