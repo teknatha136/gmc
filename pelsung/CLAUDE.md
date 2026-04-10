@@ -77,4 +77,5 @@ pelsung/
 - Materials from earlier cohorts are preserved, never overwritten
 - Trainee data (names, CIDs, contact info) is sensitive — don't expose in logs or public docs
 - The parent `timeline.yaml` is the source of truth for all events (structured, filterable)
-- Visual documents (HTML) use SELISE (#0073aa) + Pelsung (#1447e6, #f99c00) blended brand colors
+- Visual documents (HTML) must follow official SELISE Brand Guidelines (see root `CLAUDE.md` and `selise-brand/SELISE-Brand-Guidelines.md`)
+- The Pelrithang presentation (`presentations/SELISE X PELSUNG.pptx`) is the gold-standard brand reference

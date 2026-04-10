@@ -10,6 +10,11 @@ This is a long-term project (2+ years minimum). Subdirectories will grow over ti
 ## Project-wide files
 - `timeline.yaml` — **Source of truth** for all events. Structured YAML with date, title, category, program, tags, people, location, body. Use `/timeline` skill to add entries. Filterable by category/program/tags for generating reports/docs.
 
+## SELISE Brand & Identity
+- **Domain:** `selisegroup.com` (not `selise.ch` — that's the old domain). Use `@selisegroup.com` for all email addresses.
+- **Brand guidelines:** All materials MUST follow the official SELISE Brand Guidelines in `selise-brand/SELISE-Brand-Guidelines.md`. This is non-negotiable per CEO (Julian).
+- **Brand assets:** Logo files in `selise-brand/assets/` — SELISE logo must appear on every generated page/slide.
+
 ## Conventions
 - Subdirectories own their own CLAUDE.md as they grow
 - Keep documents practical and actionable
