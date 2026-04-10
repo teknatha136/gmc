@@ -79,4 +79,4 @@ pelsung/
 - The parent `timeline.yaml` is the source of truth for all events (structured, filterable)
 - Visual documents (HTML) must follow official SELISE Brand Guidelines (see root `CLAUDE.md` and `selise-brand/SELISE-Brand-Guidelines.md`)
 - The Pelrithang presentation (`presentations/SELISE X PELSUNG.pptx`) is the gold-standard brand reference
-- **RCI (not RACI):** SELISE uses RCI (Responsible, Consulted, Informed) — "Accountable" is dropped per Julian's theory that it has no German equivalent. Use RCI when assigning project/team roles.
+- **RACI for training, RCI for SELISE:** Teach the industry-standard RACI matrix in Pelsung, then introduce SELISE's RCI adaptation (A dropped — Julian's insight that "Accountable" has no clean German equivalent; R is always exactly one person). Trainees should understand both.
