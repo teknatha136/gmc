@@ -9,8 +9,8 @@
 | Vertical                 | Count | Names                                                                                                                                                                                                                 |
 | ------------------------ | ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Software Development** | 13    | Sonam Choki, Yeshi Dorji, Sangay Choda, Puran Adhikari, Karma Lhamo, Thinley Dorji, Tashi Phuntsho, Sabika Chhetri, Sonam Dendup, Sonam Rinchen, Yugel Tshering*, Sangay Choden**, Subhadra Ghalley**                 |
-| **Software Design**      | 9     | Rinzin Seldon, Thinley Pem, Yeshey Wangchuk, Ugyen Choden, Sonam Rigdhen Thinley, Jamyang Sherab†, Phub Lham**, Karma Yezer**, Yezer Pelzang**                                                                          |
-| **Software Testing**     | 9     | Leki Choden, ~~Rigzang Dorji~~*(transferred out)*, Kinga Wangmo, Thrinlay Dhendup Wangchen, Jigme Choden, Ugyen Tshomo, Ugyen Jamtsho, Nima Yoezer**, Deki Pelden**, Tshewang Choden**                                  |
+| **Software Design**      | 9     | Rinzin Seldon, Thinley Pem, Yeshey Wangchuk, Ugyen Choden, Sonam Rigdhen Thinley, Jamyang Sherab†, Phub Lham**, Karma Yezer**, Yezer Pelzang**                                                                        |
+| **Software Testing**     | 9     | Leki Choden, ~~Rigzang Dorji~~*(transferred out)*, Kinga Wangmo, Thrinlay Dhendup Wangchen, Jigme Choden, Ugyen Tshomo, Ugyen Jamtsho, Nima Yoezer**, Deki Pelden**, Tshewang Choden**                                |
 | **Business Analysis**    | 14    | Kezang Nima, Lhakpa Tshering Nesor, Sonam Tshering, Man Dhoj Raika, Tashi Nima, Chedup Tamang, Dawa Zangmo, Nidup Dorji (BBA), Nidup Dorji (Env Mgmt), Kinley Dorji, Neten Dema, Tshering Peldon, Sonam Rinzin, Karma |
 
 *\* Listed as "Ugyen Tshering" in spreadsheet but CV says "Yugel Tshering"*
@@ -412,7 +412,7 @@ BA is overloaded (14) and Design is thin (8). Suggested rebalancing:
 | **Puran Adhikari**    | BE Mechatronics, Python, embedded systems, Arduino robots, drones. Engineering→Dev bridge.                   |
 | **Yeshi Dorji**       | Professional frontend dev experience. Already knows HTML/CSS/JS/Git in production.                           |
 | **Sonam Tshering**    | King's Certificate, banking systems/ERP, advanced Excel. Strongest BA candidate.                             |
-| ~~**Rigzang Dorji**~~     | ~~Cyber security diploma. Natural tester — vulnerability/risk mindset.~~ *(transferred out 2026-04-08)*       |
+| ~~**Rigzang Dorji**~~ | ~~Cyber security diploma. Natural tester — vulnerability/risk mindset.~~ *(transferred out 2026-04-08)*      |
 | **Nidup Dorji (Env)** | Dean's List, 81%, international banking officer. Strongest analytical BA.                                    |
 
 ---
