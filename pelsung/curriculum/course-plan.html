@@ -517,13 +517,15 @@
       border-radius: 8px;
       max-width: 300px;
       z-index: 1000;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.15s;
     }
 
-    .tip-bubble.visible { opacity: 1; }
+    .tip-bubble.visible {
+      opacity: 1;
+    }
 
     /* ===== FOOTER ===== */
     .footer {
@@ -540,7 +542,8 @@
 
   <!-- ===== HERO ===== -->
   <div class="hero">
-    <img src="../../selise-brand/assets/SELISE_Logo_Primary.png" alt="SELISE Digital Platforms" style="height: 48px; margin-bottom: 1rem;">
+    <img src="../../selise-brand/assets/SELISE_Logo_Primary.png" alt="SELISE Digital Platforms"
+      style="height: 48px; margin-bottom: 1rem;">
     <h1><span class="selise">SELISE</span> <span class="times">&times;</span> <span class="pelsung">Pelsung</span></h1>
     <p class="subtitle">Digital Training Course Plan</p>
   </div>
@@ -566,7 +569,9 @@
             <div class="f-topics"><span>SELISE culture</span>
               <span>Program overview</span>
               <span>Expectations & end goals</span>
-              <span class="has-tip" data-tip="Icebreaker activities, introductions, share backgrounds and expectations — building trust before the program begins">Getting to know each other</span>
+              <span class="has-tip"
+                data-tip="Icebreaker activities, introductions, share backgrounds and expectations — building trust before the program begins">Getting
+                to know each other</span>
             </div>
           </div>
         </div>
@@ -607,8 +612,13 @@
           <div class="f-num">06</div>
           <div class="f-content">
             <div class="f-title">Dev Tools & Version Control</div>
-            <div class="f-topics"><span>VS Code</span><span>Git & GitHub</span><span>GitHub
-                Projects</span><span>Terminal basics</span><span>Environment setup</span></div>
+            <div class="f-topics"><span>VS Code</span>
+              <span>Git & GitHub</span>
+              <span>GitHub Projects</span>
+              <span>Terminal basics</span>
+              <span>HTML Basics</span>
+              <span>CSS Basics</span>
+            </div>
           </div>
         </div>
         <div class="f-card">
@@ -714,7 +724,8 @@
               <div class="t-body">
                 <div class="t-title">JavaScript Basics</div>
                 <div class="t-tags">
-                  <span>Variables</span><span>Functions</span><span>Loops</span><span>Conditionals</span></div>
+                  <span>Variables</span><span>Functions</span><span>Loops</span><span>Conditionals</span>
+                </div>
               </div>
             </div>
             <div class="t-item">
@@ -1470,26 +1481,26 @@
     <img src="../../selise-brand/assets/SELISE_Logo_Primary.png" alt="SELISE" style="height: 32px;">
   </div>
 
-<div class="tip-bubble" id="tipBubble"></div>
-<script>
-  const bubble = document.getElementById('tipBubble');
-  document.querySelectorAll('.has-tip').forEach(el => {
-    el.addEventListener('mouseenter', e => {
-      bubble.textContent = el.dataset.tip;
-      bubble.classList.add('visible');
-      const r = el.getBoundingClientRect();
-      bubble.style.left = r.left + 'px';
-      bubble.style.top = (r.bottom + 8) + 'px';
-      // keep on screen
-      requestAnimationFrame(() => {
-        const br = bubble.getBoundingClientRect();
-        if (br.right > window.innerWidth - 12) bubble.style.left = (window.innerWidth - br.width - 12) + 'px';
-        if (br.left < 12) bubble.style.left = '12px';
+  <div class="tip-bubble" id="tipBubble"></div>
+  <script>
+    const bubble = document.getElementById('tipBubble');
+    document.querySelectorAll('.has-tip').forEach(el => {
+      el.addEventListener('mouseenter', e => {
+        bubble.textContent = el.dataset.tip;
+        bubble.classList.add('visible');
+        const r = el.getBoundingClientRect();
+        bubble.style.left = r.left + 'px';
+        bubble.style.top = (r.bottom + 8) + 'px';
+        // keep on screen
+        requestAnimationFrame(() => {
+          const br = bubble.getBoundingClientRect();
+          if (br.right > window.innerWidth - 12) bubble.style.left = (window.innerWidth - br.width - 12) + 'px';
+          if (br.left < 12) bubble.style.left = '12px';
+        });
       });
+      el.addEventListener('mouseleave', () => bubble.classList.remove('visible'));
     });
-    el.addEventListener('mouseleave', () => bubble.classList.remove('visible'));
-  });
-</script>
+  </script>
 
 </body>
 

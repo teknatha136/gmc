@@ -1,0 +1,1130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dev Tools &amp; Version Control — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      /* Page-specific additions */
+      .code-block {
+        background: #001F35;
+        border-radius: 14px;
+        overflow: hidden;
+        width: 100%;
+        max-width: 720px;
+        font-family: "Courier New", monospace;
+      }
+      .cb-bar {
+        background: #0A2A45;
+        padding: 8px 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-family: "Open Sans", sans-serif;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .cb-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+      .cb-body {
+        padding: clamp(1rem, 1.8vw, 1.5rem);
+        font-size: clamp(0.78rem, 1.1vw, 0.95rem);
+        line-height: 1.9;
+        color: rgba(255, 255, 255, 0.85);
+      }
+      .cb-cmd {
+        color: #86efac;
+      }
+      .cb-comment {
+        color: rgba(255, 255, 255, 0.35);
+        font-style: italic;
+      }
+      .cb-kw {
+        color: #7dd3fc;
+      }
+      .cb-str {
+        color: #fde68a;
+      }
+      .cb-prompt {
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .workflow-flow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0;
+        width: 100%;
+        max-width: 960px;
+      }
+      .wf-node {
+        background: var(--surf);
+        border: 2px solid var(--border);
+        border-radius: 14px;
+        padding: clamp(0.8rem, 1.3vw, 1.1rem) clamp(0.9rem, 1.5vw, 1.3rem);
+        text-align: center;
+        min-width: clamp(100px, 12vw, 140px);
+        transition: transform 0.2s;
+      }
+      .wf-node:hover {
+        transform: translateY(-3px);
+      }
+      .wf-icon {
+        font-size: clamp(1.4rem, 2.5vw, 2rem);
+        display: block;
+        margin-bottom: 0.3rem;
+      }
+      .wf-title {
+        font-size: clamp(0.75rem, 1.05vw, 0.9rem);
+        font-weight: 700;
+      }
+      .wf-sub {
+        font-size: clamp(0.58rem, 0.82vw, 0.7rem);
+        color: var(--muted);
+        margin-top: 0.15rem;
+      }
+      .wf-arr {
+        font-size: clamp(1rem, 1.5vw, 1.3rem);
+        color: var(--faint);
+        padding: 0 clamp(0.3rem, 0.6vw, 0.6rem);
+      }
+      .wf-local {
+        border-color: var(--blue);
+      }
+      .wf-local .wf-title {
+        color: var(--blue);
+      }
+      .wf-remote {
+        border-color: var(--indigo);
+      }
+      .wf-remote .wf-title {
+        color: var(--indigo);
+      }
+      .wf-review {
+        border-color: var(--amber);
+      }
+      .wf-review .wf-title {
+        color: #1C5B8C;
+      }
+      .wf-merge {
+        border-color: var(--green);
+      }
+      .wf-merge .wf-title {
+        color: var(--green);
+      }
+      .kanban {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: clamp(0.75rem, 1.4vw, 1.2rem);
+        width: 100%;
+        max-width: 820px;
+      }
+      .kb-col {
+        background: var(--bg);
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        padding: clamp(0.75rem, 1.3vw, 1rem);
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .kb-title {
+        font-size: clamp(0.68rem, 1vw, 0.82rem);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--muted);
+        padding-bottom: 0.4rem;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 0.2rem;
+      }
+      .kb-card {
+        background: var(--surf);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 0.55rem 0.7rem;
+        font-size: clamp(0.72rem, 1vw, 0.85rem);
+        color: var(--text);
+        line-height: 1.4;
+      }
+      .kb-tag {
+        display: inline-block;
+        font-size: clamp(0.58rem, 0.82vw, 0.68rem);
+        font-weight: 700;
+        padding: 1px 6px;
+        border-radius: 4px;
+        margin-right: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      .kbt-bug {
+        background: #F2E8EA;
+        color: var(--red);
+      }
+      .kbt-feat {
+        background: #E6F0F8;
+        color: var(--blue);
+      }
+      .kbt-doc {
+        background: #F0F7EC;
+        color: var(--green);
+      }
+      .kb-col.done {
+        background: #F0F7EC;
+        border-color: #B5DBA7;
+      }
+      .kb-col.progress {
+        background: #EBF0F7;
+        border-color: #A3C4E0;
+      }
+      .step-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: clamp(0.6rem, 1vw, 0.9rem);
+        width: 100%;
+        max-width: 720px;
+      }
+      .step-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.9rem;
+        padding: clamp(0.7rem, 1.1vw, 1rem) clamp(0.9rem, 1.3vw, 1.2rem);
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        border-left: 3px solid var(--amber);
+      }
+      .step-num {
+        width: clamp(26px, 3vw, 32px);
+        height: clamp(26px, 3vw, 32px);
+        min-width: clamp(26px, 3vw, 32px);
+        border-radius: 50%;
+        background: var(--amber);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: clamp(0.78rem, 1vw, 0.9rem);
+        font-weight: 700;
+      }
+      .step-body {
+        font-size: clamp(0.82rem, 1.2vw, 1rem);
+        color: var(--text);
+        line-height: 1.5;
+      }
+      .step-body code {
+        background: #E6E9EC;
+        padding: 1px 6px;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+        font-size: 0.9em;
+        color: var(--indigo);
+      }
+      .step-body .sb-sub {
+        font-size: 0.88em;
+        color: var(--muted);
+        display: block;
+        margin-top: 0.25rem;
+      }
+      .feat-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: clamp(0.8rem, 1.5vw, 1.25rem);
+        width: 100%;
+        max-width: 960px;
+      }
+      .feat-card {
+        background: var(--bg);
+        border: 1.5px solid var(--border);
+        border-radius: 14px;
+        padding: clamp(1rem, 1.6vw, 1.4rem);
+        text-align: center;
+        border-top: 3px solid var(--blue);
+      }
+      .feat-card.indigo {
+        border-top-color: var(--indigo);
+      }
+      .feat-card.amber {
+        border-top-color: var(--amber);
+      }
+      .feat-card.green {
+        border-top-color: var(--green);
+      }
+      .feat-icon {
+        font-size: clamp(2rem, 3.2vw, 2.6rem);
+        margin-bottom: 0.4rem;
+      }
+      .feat-card h4 {
+        font-size: clamp(0.85rem, 1.3vw, 1.05rem);
+        font-weight: 700;
+        margin-bottom: 0.4rem;
+        justify-content: center;
+      }
+      .feat-card p {
+        font-size: clamp(0.72rem, 1vw, 0.88rem);
+        color: var(--muted);
+        line-height: 1.45;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+      <!-- ══ S1 TITLE ══ -->
+      <div class="slide accent-gradient bg-dark" data-slide="1">
+        <div class="slide-label">
+          <span class="snum">01</span> SELISE × Pelsung · Cohort 3
+        </div>
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            text-align: center;
+            max-width: 900px;
+          "
+        >
+          <img
+            src="../../../selise-brand/assets/SELISE_Logo_Reversed.png"
+            alt="SELISE Digital Platforms"
+            style="height: 56px; margin-bottom: 1.5rem"
+          />
+          <h1 class="display" style="color: white">
+            <span style="color: #7dd3fc">Dev Tools</span>
+            <span style="color: var(--amber); font-style: italic"> &amp; </span><br />
+            <span style="color: white">Version Control</span>
+          </h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.65)">
+            Class 06a · Foundation Phase
+          </p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">VS Code</span>
+            <span class="class-tag tag-indigo">Git &amp; GitHub</span>
+            <span class="class-tag tag-indigo">GitHub Projects</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → or click right side to advance</div>
+      </div>
+
+      <!-- ══ S2 AGENDA ══ -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 720px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              What We'll Cover
+            </h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.3rem">
+              The tools every developer, designer, tester, and BA will use every day
+            </p>
+          </div>
+          <div class="agenda-row" onclick="goTo(2)">
+            <span class="ar-dot" style="background: var(--blue)"></span>
+            <span class="ar-label">💻 VS Code — your daily workspace</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(7)">
+            <span class="ar-dot" style="background: var(--indigo)"></span>
+            <span class="ar-label">🌿 Git — saving &amp; tracking your work</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(12)">
+            <span class="ar-dot" style="background: var(--blue)"></span>
+            <span class="ar-label">🐙 GitHub — working with others</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(16)">
+            <span class="ar-dot" style="background: var(--amber)"></span>
+            <span class="ar-label">📋 GitHub Projects — tracking issues &amp; work</span>
+          </div>
+          <div class="agenda-row break-row">
+            <span class="ar-dot" style="background: var(--green)"></span>
+            <span class="ar-label">☕ Break (20 min)</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(18)">
+            <span class="ar-dot" style="background: var(--amber)"></span>
+            <span class="ar-label">✍ Hands-on: Your first commit &amp; PR</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S3 SECTION: VS CODE ══ -->
+      <div class="slide bg-blue" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span>Section 1
+          </div>
+          <h1 class="display" style="color: white">VS Code</h1>
+          <p
+            class="body-lg"
+            style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem"
+          >
+            The editor where you'll spend most of your day
+          </p>
+        </div>
+        <div class="section-num" style="color: white">06a</div>
+      </div>
+
+      <!-- ══ S4 WHAT IS VS CODE ══ -->
+      <div class="slide accent-blue" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> VS Code</div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">Visual Studio Code</div>
+            <h2 class="heading">A free editor from Microsoft</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem">
+              Used by most developers in the world · runs on Windows, macOS, Linux
+            </p>
+          </div>
+          <div class="cols-2" style="max-width: 800px">
+            <div class="card" style="border-left: 4px solid var(--blue)">
+              <h4 style="color: var(--blue)">💡 It's just a text editor</h4>
+              <ul>
+                <li>You write code in files — VS Code helps you do it faster</li>
+                <li>Syntax highlighting, auto-complete, error squiggles</li>
+                <li>File explorer on the left, editor in the middle</li>
+                <li>Free &amp; open source — nothing to buy</li>
+              </ul>
+            </div>
+            <div class="card" style="border-left: 4px solid var(--indigo)">
+              <h4 style="color: var(--indigo)">🧩 Extensible by design</h4>
+              <ul>
+                <li>Thousands of extensions add new capabilities</li>
+                <li>Language support, themes, linters, AI assistants</li>
+                <li>Built-in terminal — no separate window needed</li>
+                <li>Git panel shows what changed in your files</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S5 VS CODE KEY FEATURES ══ -->
+      <div class="slide accent-blue bg-subtle" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span> Features</div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 1000px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">Core Features</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              Four things you'll use every day
+            </h2>
+          </div>
+          <div class="feat-grid" style="grid-template-columns: repeat(4, 1fr)">
+            <div class="feat-card">
+              <div class="feat-icon">📁</div>
+              <h4>File Explorer</h4>
+              <p>See your whole project on the left. Click to open any file.</p>
+            </div>
+            <div class="feat-card indigo">
+              <div class="feat-icon">⌨️</div>
+              <h4>Integrated Terminal</h4>
+              <p>Run commands without leaving the editor. Opens at the bottom.</p>
+            </div>
+            <div class="feat-card amber">
+              <div class="feat-icon">🌿</div>
+              <h4>Git Panel</h4>
+              <p>See every change you made. Commit, push, pull — all in one place.</p>
+            </div>
+            <div class="feat-card green">
+              <div class="feat-icon">🧩</div>
+              <h4>Extensions</h4>
+              <p>Marketplace of add-ons. Install language support, themes, AI tools.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S6 AI EXTENSIONS ══ -->
+      <div class="slide accent-blue" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> VS Code + AI</div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-indigo">AI-Powered Coding</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              AI lives inside your editor
+            </h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem">
+              Installed as extensions · suggests, writes, and explains code as you work
+            </p>
+          </div>
+          <div class="cols-2" style="max-width: 820px">
+            <div class="card" style="border-top: 3px solid var(--indigo)">
+              <h4 style="color: var(--indigo)">🧠 Claude Code</h4>
+              <p style="font-size: clamp(0.82rem, 1.15vw, 0.95rem); color: var(--muted); margin-bottom: 0.6rem">
+                Anthropic's AI coding assistant. Runs inside VS Code and in the terminal.
+              </p>
+              <ul>
+                <li>Reads your whole project for context</li>
+                <li>Writes new code, edits existing files, explains errors</li>
+                <li>The primary AI tool in this programme</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--blue)">
+              <h4 style="color: var(--blue)">✨ GitHub Copilot</h4>
+              <p style="font-size: clamp(0.82rem, 1.15vw, 0.95rem); color: var(--muted); margin-bottom: 0.6rem">
+                GitHub's autocomplete AI. Suggests the next few lines as you type.
+              </p>
+              <ul>
+                <li>Press Tab to accept a suggestion</li>
+                <li>Great for boilerplate and repetitive code</li>
+                <li>Works well alongside Claude Code</li>
+              </ul>
+            </div>
+          </div>
+          <p style="color: var(--faint); font-size: clamp(0.78rem, 1.05vw, 0.88rem); font-style: italic; text-align: center; max-width: 720px; margin-top: 0.5rem">
+            AI is an assistant — you still have to understand what it writes. That's what this whole programme is teaching you.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S7 SECTION: GIT ══ -->
+      <div class="slide bg-indigo" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span>Section 2
+          </div>
+          <h1 class="display" style="color: white">Version<br />Control</h1>
+          <p
+            class="body-lg"
+            style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem"
+          >
+            Git — the history book for your code
+          </p>
+        </div>
+        <div class="section-num" style="color: white">06a</div>
+      </div>
+
+      <!-- ══ S8 DISCUSSION: THE PROBLEM ══ -->
+      <div class="slide bg-dark" data-slide="8">
+        <div class="slide-label">
+          <span class="snum">08</span> Opening Question
+        </div>
+        <div class="center" style="max-width: 820px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            🤔 Think About This
+          </div>
+          <p class="disc-prompt">
+            "Three of you are editing the same document at the same time.<br /><span
+              style="color: var(--amber)"
+              >How do you make sure nobody's work gets lost?</span
+            >"
+          </p>
+          <p
+            style="
+              color: rgba(255, 255, 255, 0.45);
+              font-size: clamp(0.82rem, 1.2vw, 1rem);
+              margin-top: 2rem;
+              line-height: 1.6;
+            "
+          >
+            Before Git, developers used file names like
+            <span style="color: var(--amber)">report_final_v3_REAL_v2.docx</span>.
+            Git solved this.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S9 WHAT IS GIT ══ -->
+      <div class="slide accent-indigo" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> Git</div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-indigo">Version Control</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              Git is a time machine for your code
+            </h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem">
+              Every change is saved · you can go back to any point · multiple people can work together
+            </p>
+          </div>
+          <div class="cols-3">
+            <div class="feat-card">
+              <div class="feat-icon">📸</div>
+              <h4>Commit</h4>
+              <p>A snapshot of your project at one moment. Like saving a game.</p>
+            </div>
+            <div class="feat-card indigo">
+              <div class="feat-icon">🌿</div>
+              <h4>Branch</h4>
+              <p>A parallel line of work. Try ideas without breaking the main version.</p>
+            </div>
+            <div class="feat-card green">
+              <div class="feat-icon">🔀</div>
+              <h4>Merge</h4>
+              <p>Combine two branches. Your work joins the main line once reviewed.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S10 LOCAL VS REMOTE ══ -->
+      <div class="slide accent-indigo bg-subtle" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> Local vs Remote</div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-indigo">Two Copies of Your Code</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              Local &nbsp;↔&nbsp; Remote
+            </h2>
+          </div>
+          <div class="workflow-flow">
+            <div class="wf-node wf-local">
+              <div class="wf-icon">💻</div>
+              <div class="wf-title">Local</div>
+              <div class="wf-sub">Your laptop<br />Where you edit</div>
+            </div>
+            <div class="wf-arr">⟷</div>
+            <div class="wf-node wf-remote">
+              <div class="wf-icon">☁️</div>
+              <div class="wf-title">Remote</div>
+              <div class="wf-sub">GitHub<br />Shared with team</div>
+            </div>
+          </div>
+          <div class="cols-2" style="max-width: 800px; margin-top: 1rem">
+            <div class="card" style="border-left: 4px solid var(--blue)">
+              <h4 style="color: var(--blue)">Local actions</h4>
+              <ul>
+                <li><strong>git add</strong> — stage changes</li>
+                <li><strong>git commit</strong> — save snapshot locally</li>
+                <li><strong>git branch</strong> — start a new line of work</li>
+              </ul>
+            </div>
+            <div class="card" style="border-left: 4px solid var(--indigo)">
+              <h4 style="color: var(--indigo)">Remote actions</h4>
+              <ul>
+                <li><strong>git clone</strong> — copy a repo to your laptop</li>
+                <li><strong>git push</strong> — send your commits to GitHub</li>
+                <li><strong>git pull</strong> — get others' commits</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S11 GIT COMMANDS ══ -->
+      <div class="slide accent-indigo" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> Git Commands</div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-indigo">A Normal Day With Git</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              The 5 commands you'll use 95% of the time
+            </h2>
+          </div>
+          <div class="code-block">
+            <div class="cb-bar">
+              <span class="cb-dot" style="background: #ff5f56"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              <span style="margin-left: 8px">terminal — a typical session</span>
+            </div>
+            <div class="cb-body">
+              <span class="cb-comment"># 1. Get the latest from GitHub</span><br />
+              <span class="cb-prompt">$</span> <span class="cb-cmd">git pull</span><br /><br />
+              <span class="cb-comment"># 2. Make changes in VS Code... then check what changed</span><br />
+              <span class="cb-prompt">$</span> <span class="cb-cmd">git status</span><br /><br />
+              <span class="cb-comment"># 3. Stage the files you want to commit</span><br />
+              <span class="cb-prompt">$</span> <span class="cb-cmd">git add</span> <span class="cb-str">index.html style.css</span><br /><br />
+              <span class="cb-comment"># 4. Save a snapshot with a message</span><br />
+              <span class="cb-prompt">$</span> <span class="cb-cmd">git commit</span> -m <span class="cb-str">"Add homepage heading"</span><br /><br />
+              <span class="cb-comment"># 5. Send it to GitHub</span><br />
+              <span class="cb-prompt">$</span> <span class="cb-cmd">git push</span>
+            </div>
+          </div>
+          <p style="color: var(--faint); font-size: clamp(0.75rem, 1vw, 0.85rem); font-style: italic; text-align: center; margin-top: 0.5rem">
+            VS Code's Git panel does all of this with buttons — but knowing the commands helps when things break.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S12 SECTION: GITHUB ══ -->
+      <div class="slide bg-blue" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span>Section 3
+          </div>
+          <h1 class="display" style="color: white">GitHub</h1>
+          <p
+            class="body-lg"
+            style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem"
+          >
+            Where the world's code lives
+          </p>
+        </div>
+        <div class="section-num" style="color: white">06a</div>
+      </div>
+
+      <!-- ══ S13 WHAT GITHUB ADDS ══ -->
+      <div class="slide accent-blue" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> GitHub</div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">Git, Hosted</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              Git runs on your laptop.<br />GitHub runs in the cloud.
+            </h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem">
+              Owned by Microsoft · 100+ million developers · home to almost every open-source project
+            </p>
+          </div>
+          <div class="cols-2" style="max-width: 820px">
+            <div class="card" style="border-left: 4px solid var(--blue)">
+              <h4 style="color: var(--blue)">💾 Backup &amp; sharing</h4>
+              <ul>
+                <li>Your code is safe even if your laptop dies</li>
+                <li>Teammates anywhere in the world can clone it</li>
+                <li>SELISE Bhutan + Zurich teams collaborate this way</li>
+              </ul>
+            </div>
+            <div class="card" style="border-left: 4px solid var(--indigo)">
+              <h4 style="color: var(--indigo)">👥 Collaboration layer</h4>
+              <ul>
+                <li><strong>Pull requests</strong> — propose &amp; review changes</li>
+                <li><strong>Issues</strong> — track bugs &amp; feature requests</li>
+                <li><strong>Projects</strong> — Kanban boards for planning</li>
+                <li><strong>Actions</strong> — automate testing &amp; deploys</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S14 WORKFLOW ══ -->
+      <div class="slide accent-blue bg-subtle" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> The Workflow</div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 1080px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">The Standard Flow</div>
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              From idea to merged code
+            </h2>
+          </div>
+          <div class="workflow-flow">
+            <div class="wf-node wf-remote">
+              <div class="wf-icon">📥</div>
+              <div class="wf-title">Clone</div>
+              <div class="wf-sub">Copy repo<br />to laptop</div>
+            </div>
+            <div class="wf-arr">→</div>
+            <div class="wf-node wf-local">
+              <div class="wf-icon">🌱</div>
+              <div class="wf-title">Branch</div>
+              <div class="wf-sub">New line<br />of work</div>
+            </div>
+            <div class="wf-arr">→</div>
+            <div class="wf-node wf-local">
+              <div class="wf-icon">✏️</div>
+              <div class="wf-title">Edit &amp; Commit</div>
+              <div class="wf-sub">Save<br />snapshots</div>
+            </div>
+            <div class="wf-arr">→</div>
+            <div class="wf-node wf-remote">
+              <div class="wf-icon">📤</div>
+              <div class="wf-title">Push</div>
+              <div class="wf-sub">Send to<br />GitHub</div>
+            </div>
+            <div class="wf-arr">→</div>
+            <div class="wf-node wf-review">
+              <div class="wf-icon">👀</div>
+              <div class="wf-title">PR + Review</div>
+              <div class="wf-sub">Teammate<br />approves</div>
+            </div>
+            <div class="wf-arr">→</div>
+            <div class="wf-node wf-merge">
+              <div class="wf-icon">✅</div>
+              <div class="wf-title">Merge</div>
+              <div class="wf-sub">Joins main<br />branch</div>
+            </div>
+          </div>
+          <p style="color: var(--faint); font-size: clamp(0.78rem, 1.05vw, 0.9rem); font-style: italic; text-align: center; margin-top: 1rem">
+            This loop happens dozens of times a day across every team at SELISE.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S15 PULL REQUESTS ══ -->
+      <div class="slide accent-blue" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span> Pull Requests</div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">PR</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              A Pull Request is a conversation about code
+            </h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem">
+              "I made these changes. Please review before we merge."
+            </p>
+          </div>
+          <div class="cols-3">
+            <div class="feat-card">
+              <div class="feat-icon">📝</div>
+              <h4>Describe the change</h4>
+              <p>Title, summary, screenshots if it's UI. Why does this change matter?</p>
+            </div>
+            <div class="feat-card indigo">
+              <div class="feat-icon">💬</div>
+              <h4>Reviewers comment</h4>
+              <p>Line-by-line feedback. Request changes or approve.</p>
+            </div>
+            <div class="feat-card green">
+              <div class="feat-icon">🚀</div>
+              <h4>Merge when approved</h4>
+              <p>Code joins the main branch. Automated tests run. Deploy happens.</p>
+            </div>
+          </div>
+          <p style="color: var(--faint); font-size: clamp(0.78rem, 1.05vw, 0.88rem); font-style: italic; text-align: center; margin-top: 0.5rem; max-width: 720px">
+            No code goes to production without a PR review. This is how SELISE maintains quality with teams across Bhutan, Switzerland, and beyond.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S16 SECTION: GITHUB PROJECTS ══ -->
+      <div class="slide bg-amber" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span>Section 4
+          </div>
+          <h1 class="display" style="color: white">GitHub<br />Projects</h1>
+          <p
+            class="body-lg"
+            style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem"
+          >
+            Issues · Kanban boards · planning your team's work
+          </p>
+        </div>
+        <div class="section-num" style="color: white">06a</div>
+      </div>
+
+      <!-- ══ S17 ISSUES + KANBAN ══ -->
+      <div class="slide accent-amber bg-subtle" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span> Issues &amp; Boards</div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 1000px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-amber">Planning &amp; Tracking</div>
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              Every task is an Issue. Every Issue moves across a board.
+            </h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem">
+              When you close an Issue by linking a PR, it moves to Done automatically
+            </p>
+          </div>
+          <div class="kanban">
+            <div class="kb-col">
+              <div class="kb-title">📋 To Do</div>
+              <div class="kb-card">
+                <span class="kb-tag kbt-feat">feat</span>Add trainee profile page
+              </div>
+              <div class="kb-card">
+                <span class="kb-tag kbt-bug">bug</span>Login fails on Safari mobile
+              </div>
+              <div class="kb-card">
+                <span class="kb-tag kbt-doc">doc</span>Write README for API repo
+              </div>
+            </div>
+            <div class="kb-col progress">
+              <div class="kb-title">🔨 In Progress</div>
+              <div class="kb-card">
+                <span class="kb-tag kbt-feat">feat</span>Cohort dashboard chart
+                <div style="color: var(--faint); font-size: 0.72rem; margin-top: 0.3rem">assigned · PR #42</div>
+              </div>
+              <div class="kb-card">
+                <span class="kb-tag kbt-bug">bug</span>Fix timezone on attendance
+                <div style="color: var(--faint); font-size: 0.72rem; margin-top: 0.3rem">assigned · PR #43</div>
+              </div>
+            </div>
+            <div class="kb-col done">
+              <div class="kb-title">✅ Done</div>
+              <div class="kb-card">
+                <span class="kb-tag kbt-feat">feat</span>GitHub login button
+                <div style="color: var(--green); font-size: 0.72rem; margin-top: 0.3rem">merged · PR #38</div>
+              </div>
+              <div class="kb-card">
+                <span class="kb-tag kbt-doc">doc</span>Setup guide updated
+                <div style="color: var(--green); font-size: 0.72rem; margin-top: 0.3rem">merged · PR #40</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S18 SECTION: HANDS-ON ══ -->
+      <div class="slide bg-amber" data-slide="18">
+        <div class="slide-label"><span class="snum">18</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            ✍ Hands-On
+          </div>
+          <h1 class="display" style="color: white">Your First<br />Commit &amp; PR</h1>
+          <p
+            class="body-lg"
+            style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem"
+          >
+            By the end of this exercise, your name will be in a shared GitHub repo
+          </p>
+        </div>
+        <div class="section-num" style="color: white">06a</div>
+      </div>
+
+      <!-- ══ S19 EXERCISE STEPS ══ -->
+      <div class="slide accent-amber bg-subtle" data-slide="19">
+        <div class="slide-label"><span class="snum">19</span> Exercise</div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 920px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-amber">Follow Along · Raise Hand If Stuck</div>
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              The 7-step journey
+            </h2>
+          </div>
+          <ul class="step-list">
+            <li class="step-item">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <strong>Create a GitHub account</strong> at
+                <code>github.com</code> (if you don't have one).
+                <span class="sb-sub">Use your real name — this is your public work identity.</span>
+              </div>
+            </li>
+            <li class="step-item">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <strong>Install VS Code</strong> from
+                <code>code.visualstudio.com</code> and sign in with GitHub.
+                <span class="sb-sub">Sign-in lets VS Code push &amp; pull without typing passwords.</span>
+              </div>
+            </li>
+            <li class="step-item">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <strong>Clone the starter repo</strong>:
+                <code>pelsung-cohort-3/hello-trainees</code>
+                <span class="sb-sub">Use VS Code's <em>Clone Repository</em> button — no terminal needed for now.</span>
+              </div>
+            </li>
+            <li class="step-item">
+              <div class="step-num">4</div>
+              <div class="step-body">
+                <strong>Create a new branch</strong> named
+                <code>add-yourname</code> (e.g. <code>add-karma</code>).
+              </div>
+            </li>
+            <li class="step-item">
+              <div class="step-num">5</div>
+              <div class="step-body">
+                <strong>Edit <code>trainees.md</code></strong> — add a line with
+                your name, vertical guess, and one hobby.
+              </div>
+            </li>
+            <li class="step-item">
+              <div class="step-num">6</div>
+              <div class="step-body">
+                <strong>Commit &amp; push</strong> — commit message:
+                <code>"Add &lt;your name&gt; to trainees"</code>. Use VS Code's Git panel.
+              </div>
+            </li>
+            <li class="step-item">
+              <div class="step-num">7</div>
+              <div class="step-body">
+                <strong>Open a Pull Request on GitHub</strong> — title:
+                <code>"Add &lt;your name&gt; to trainees"</code>, request the
+                trainer as reviewer.
+                <span class="sb-sub">When approved &amp; merged, your name becomes part of the shared file forever.</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ══ S20 WRAP-UP ══ -->
+      <div class="slide accent-gradient bg-indigo" data-slide="20">
+        <div class="slide-label">
+          <span class="snum">20</span> Wrap-up
+        </div>
+        <div class="stack" style="max-width: 980px; width: 100%; align-items: center; gap: 1.5rem">
+          <div class="center">
+            <div class="pill pill-white">🎯 What You Know Now</div>
+            <h2 class="heading" style="color: white; font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              Key Takeaways
+            </h2>
+          </div>
+          <div class="wu-grid" style="grid-template-columns: repeat(4, 1fr)">
+            <div class="wu-card">
+              <div class="wu-icon">💻</div>
+              <h4>VS Code</h4>
+              <p>
+                Your editor. File explorer, terminal, Git panel, AI extensions — all in one window.
+              </p>
+            </div>
+            <div class="wu-card">
+              <div class="wu-icon">🌿</div>
+              <h4>Git</h4>
+              <p>
+                Local version control. Commit snapshots, branch for new work, merge when ready.
+              </p>
+            </div>
+            <div class="wu-card">
+              <div class="wu-icon">🐙</div>
+              <h4>GitHub</h4>
+              <p>
+                Remote home for your code. Push, pull, open PRs, review teammates' work.
+              </p>
+            </div>
+            <div class="wu-card">
+              <div class="wu-icon">📋</div>
+              <h4>Projects</h4>
+              <p>
+                Issues for tasks, Kanban boards for flow, PRs linked to issues.
+              </p>
+            </div>
+          </div>
+          <div style="text-align: center; margin-top: 0.5rem">
+            <p style="color: rgba(255, 255, 255, 0.5); font-size: clamp(0.75rem, 1vw, 0.88rem)">
+              Next (after the break):
+              <strong style="color: rgba(255, 255, 255, 0.9)">HTML &amp; CSS Basics</strong>
+              · Class 06b · the language of web pages
+            </p>
+            <p style="color: rgba(255, 255, 255, 0.3); font-size: clamp(0.65rem, 0.85vw, 0.75rem); margin-top: 0.4rem">
+              SELISE × Pelsung · Foundation Phase
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /#deck -->
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 20</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      let current = 0;
+
+      function goTo(n) {
+        slides[current].classList.remove("active");
+        slides[current].classList.add("exit");
+        const old = current;
+        setTimeout(() => slides[old].classList.remove("exit"), 380);
+        current = Math.max(0, Math.min(n, total - 1));
+        slides[current].classList.add("active");
+        document.getElementById("slide-counter").textContent =
+          `${current + 1} / ${total}`;
+        document.getElementById("progress").style.width =
+          `${((current + 1) / total) * 100}%`;
+        initReveal(slides[current]);
+      }
+      function nextSlide() {
+        if (current < total - 1) goTo(current + 1);
+      }
+      function prevSlide() {
+        if (current > 0) goTo(current - 1);
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight" || e.key === " ") {
+          e.preventDefault();
+          handleForward();
+        }
+        if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          prevSlide();
+        }
+        if (e.key === "f" || e.key === "F") toggleFullscreen();
+      });
+
+      document.getElementById("deck").addEventListener("click", function (e) {
+        if (
+          e.target.closest(
+            "button,a,input,select,textarea,.agenda-row,[data-noclick]",
+          )
+        )
+          return;
+        const pct = e.clientX / window.innerWidth;
+        if (pct < 0.15) prevSlide();
+        else if (pct > 0.85) handleForward();
+      });
+
+      function handleForward() {
+        const active = slides[current];
+        const list = active.querySelector(".reveal-list");
+        if (list) {
+          const hidden = list.querySelectorAll("li:not(.shown)");
+          if (hidden.length > 0) {
+            hidden[0].classList.add("shown");
+            const hint = active.querySelector(".reveal-hint");
+            if (hint && hidden.length === 1) hint.style.opacity = "0";
+            return;
+          }
+        }
+        nextSlide();
+      }
+
+      function initReveal(slide) {
+        const list = slide.querySelector(".reveal-list");
+        if (!list) return;
+        list
+          .querySelectorAll("li")
+          .forEach((li) => li.classList.remove("shown"));
+        const hint = slide.querySelector(".reveal-hint");
+        if (hint) hint.style.opacity = "1";
+      }
+
+      slides[0].classList.add("active");
+      document.getElementById("progress").style.width = `${(1 / total) * 100}%`;
+
+      function toggleFullscreen() {
+        if (!document.fullscreenElement)
+          document.documentElement.requestFullscreen().catch(() => {});
+        else document.exitFullscreen().catch(() => {});
+      }
+    </script>
+  </body>
+</html>

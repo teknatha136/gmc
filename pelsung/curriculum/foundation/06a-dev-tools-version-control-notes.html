@@ -1,0 +1,1171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Class 06a — Dev Tools &amp; Version Control · Pelsung Foundation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --blue: #0066B2;
+        --indigo: #001F35;
+        --amber: #247EC1;
+        --green: #7BC950;
+        --purple: #4796D1;
+        --red: #D80032;
+        --text: #1B2021;
+        --muted: #7B7C7F;
+        --faint: #9CA3AF;
+        --surf: #ffffff;
+        --bg: #F9F9F9;
+        --border: #EDEDED;
+        --border-l: #F5F5F5;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Open Sans", 'Aptos', sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+        line-height: 1.65;
+      }
+
+      /* HERO */
+      .hero {
+        background: var(--surf);
+        border-bottom: 1px solid var(--border);
+        padding: 4rem 2rem 3rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(135deg, #0067A3, #002D72);
+      }
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 100px;
+        padding: 0.35rem 1rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--muted);
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        margin-bottom: 1.5rem;
+      }
+      .hero-badge .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--amber);
+      }
+      .hero h1 {
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        line-height: 1.15;
+        margin-bottom: 0.75rem;
+      }
+      .c-blue {
+        color: var(--blue);
+      }
+      .c-indigo {
+        color: var(--indigo);
+      }
+      .amp {
+        color: var(--amber);
+        font-style: italic;
+      }
+      .hero-sub {
+        font-size: 1rem;
+        color: var(--muted);
+        margin-bottom: 2rem;
+        max-width: 640px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .hero-tags {
+        display: flex;
+        justify-content: center;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+        margin-bottom: 0;
+      }
+      .hero-tag {
+        padding: 0.3rem 0.9rem;
+        border-radius: 8px;
+        font-size: 0.78rem;
+        font-weight: 600;
+      }
+      .tag-blue {
+        background: #E6F0F8;
+        color: var(--blue);
+      }
+      .tag-indigo {
+        background: #E6E9EC;
+        color: var(--indigo);
+      }
+      .tag-amber {
+        background: #EBF0F7;
+        color: #1C5B8C;
+      }
+
+      /* LAYOUT */
+      .container {
+        max-width: 880px;
+        margin: 0 auto;
+        padding: 0 2rem 6rem;
+      }
+
+      /* TOC */
+      .toc {
+        background: var(--surf);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.75rem 2rem;
+        margin: 2.5rem 0;
+      }
+      .toc h3 {
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--faint);
+        margin-bottom: 1.25rem;
+      }
+      .toc-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.4rem 2rem;
+      }
+      .toc-item {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-size: 0.875rem;
+        color: var(--muted);
+        text-decoration: none;
+        padding: 0.3rem 0;
+        border-bottom: 1px solid var(--border-l);
+        transition: color 0.15s;
+      }
+      .toc-item:hover {
+        color: var(--indigo);
+      }
+      .toc-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+
+      /* SECTION HEADERS */
+      .section-hd {
+        padding: 3.5rem 0 1.5rem;
+      }
+      .section-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.3rem 0.9rem;
+        border-radius: 100px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 0.6rem;
+      }
+      .pill-blue {
+        background: #E6F0F8;
+        color: var(--blue);
+      }
+      .pill-indigo {
+        background: #E6E9EC;
+        color: var(--indigo);
+      }
+      .pill-amber {
+        background: #EBF0F7;
+        color: #1C5B8C;
+      }
+      .pill-green {
+        background: #F0F7EC;
+        color: var(--green);
+      }
+      .section-title {
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
+        font-size: 2rem;
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        margin-bottom: 0.4rem;
+      }
+      .section-desc {
+        font-size: 1rem;
+        color: var(--muted);
+        margin-bottom: 1.75rem;
+      }
+
+      /* CONCEPT BLOCKS */
+      .concept {
+        background: var(--surf);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 1.75rem 2rem;
+        margin-bottom: 1.5rem;
+      }
+      .concept-label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: var(--faint);
+        margin-bottom: 0.5rem;
+      }
+      .concept h3 {
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
+        font-size: 1.4rem;
+        font-weight: 400;
+        margin-bottom: 0.75rem;
+      }
+      .concept p {
+        font-size: 0.95rem;
+        color: var(--muted);
+        line-height: 1.7;
+        margin-bottom: 0.75rem;
+      }
+      .concept ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin: 0.25rem 0;
+      }
+      .concept ul li {
+        font-size: 0.92rem;
+        color: var(--muted);
+        padding-left: 1.4rem;
+        position: relative;
+        line-height: 1.55;
+      }
+      .concept ul li::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: var(--faint);
+        font-size: 0.85em;
+        top: 0.1em;
+      }
+      .concept ul li strong {
+        color: var(--text);
+      }
+
+      /* HIGHLIGHT */
+      .highlight-box {
+        border-radius: 12px;
+        padding: 1.25rem 1.5rem;
+        margin: 1rem 0;
+      }
+      .hb-blue {
+        background: #E6F0F8;
+        border-left: 4px solid var(--blue);
+      }
+      .hb-indigo {
+        background: #E6E9EC;
+        border-left: 4px solid var(--indigo);
+      }
+      .hb-amber {
+        background: #EBF0F7;
+        border-left: 4px solid var(--amber);
+      }
+      .hb-green {
+        background: #F0F7EC;
+        border-left: 4px solid var(--green);
+      }
+      .hb-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: var(--faint);
+        margin-bottom: 0.4rem;
+      }
+      .highlight-box p {
+        font-size: 0.9rem;
+        color: var(--text);
+        line-height: 1.6;
+        margin: 0;
+      }
+      .highlight-box p strong {
+        font-weight: 700;
+      }
+      .highlight-box p + p {
+        margin-top: 0.6rem;
+      }
+
+      /* CODE BLOCK */
+      .code-block {
+        background: #001F35;
+        border-radius: 12px;
+        overflow: hidden;
+        margin: 1rem 0;
+      }
+      .cb-bar {
+        background: #0A2A45;
+        padding: 8px 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.72rem;
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .cb-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+      }
+      .cb-body {
+        padding: 1.1rem 1.4rem;
+        font-family: "Courier New", monospace;
+        font-size: 0.85rem;
+        line-height: 1.85;
+        color: rgba(255, 255, 255, 0.85);
+      }
+      .cb-cmd {
+        color: #86efac;
+      }
+      .cb-comment {
+        color: rgba(255, 255, 255, 0.35);
+        font-style: italic;
+      }
+      .cb-prompt {
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .cb-str {
+        color: #fde68a;
+      }
+
+      /* INLINE CODE */
+      code.inline {
+        background: #F5F5F5;
+        padding: 1px 6px;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+        font-size: 0.88em;
+        color: var(--indigo);
+      }
+
+      /* WORKFLOW STRIP */
+      .flow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.3rem;
+        margin: 1rem 0;
+      }
+      .flow-step {
+        background: var(--bg);
+        border: 1.5px solid var(--border);
+        border-radius: 10px;
+        padding: 0.5rem 0.8rem;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: var(--text);
+        text-align: center;
+        min-width: 90px;
+      }
+      .flow-step.blue {
+        border-color: var(--blue);
+        color: var(--blue);
+        background: #E6F0F8;
+      }
+      .flow-step.indigo {
+        border-color: var(--indigo);
+        color: var(--indigo);
+        background: #E6E9EC;
+      }
+      .flow-step.amber {
+        border-color: var(--amber);
+        color: #1C5B8C;
+        background: #EBF0F7;
+      }
+      .flow-step.green {
+        border-color: var(--green);
+        color: var(--green);
+        background: #F0F7EC;
+      }
+      .flow-arr {
+        color: var(--faint);
+        font-size: 1rem;
+        padding: 0 0.2rem;
+      }
+
+      /* FEATURE MINI-GRID */
+      .mini-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        margin: 1rem 0;
+      }
+      .mini-card {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 1rem 1.15rem;
+      }
+      .mini-card h5 {
+        font-size: 0.88rem;
+        font-weight: 700;
+        margin-bottom: 0.35rem;
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+      }
+      .mini-card h5.blue {
+        color: var(--blue);
+      }
+      .mini-card h5.indigo {
+        color: var(--indigo);
+      }
+      .mini-card p {
+        font-size: 0.85rem;
+        color: var(--muted);
+        line-height: 1.55;
+        margin: 0;
+      }
+
+      /* SUMMARY */
+      .summary {
+        background: var(--surf);
+        border: 1.5px solid var(--border);
+        border-radius: 14px;
+        padding: 1.5rem 1.75rem;
+        margin: 2rem 0;
+      }
+      .summary h4 {
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
+        font-size: 1.15rem;
+        font-weight: 400;
+        margin-bottom: 1rem;
+      }
+      .summary ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+      }
+      .summary ul li {
+        font-size: 0.9rem;
+        color: var(--muted);
+        padding-left: 1.75rem;
+        position: relative;
+        line-height: 1.5;
+      }
+      .summary ul li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: var(--green);
+        font-weight: 700;
+      }
+      .summary ul li strong {
+        color: var(--text);
+      }
+
+      /* PRACTICE */
+      .practice {
+        background: #F0F4FA;
+        border: 1.5px solid #A3C4E0;
+        border-radius: 14px;
+        padding: 1.5rem 1.75rem;
+        margin: 2rem 0;
+      }
+      .practice h4 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1C5B8C;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .practice ol {
+        padding-left: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+      }
+      .practice ol li {
+        font-size: 0.9rem;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+      .practice ol li strong {
+        color: var(--text);
+      }
+      .practice ol li code {
+        background: #F5F5F5;
+        padding: 1px 5px;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+        font-size: 0.85em;
+      }
+
+      /* FOOTER */
+      .page-footer {
+        text-align: center;
+        padding: 3rem 0 2rem;
+        border-top: 1px solid var(--border);
+        margin-top: 4rem;
+      }
+      .page-footer p {
+        font-size: 0.75rem;
+        color: var(--faint);
+        line-height: 1.8;
+      }
+      .foot-brand {
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
+        font-size: 1.1rem;
+        font-weight: 400;
+        margin-bottom: 0.5rem;
+      }
+      .foot-brand .b1 {
+        color: var(--blue);
+      }
+      .foot-brand .x {
+        color: var(--amber);
+        font-style: italic;
+      }
+      .foot-brand .b2 {
+        color: var(--indigo);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hero">
+      <img
+        src="../../../selise-brand/assets/SELISE_Logo_Primary.png"
+        alt="SELISE Digital Platforms"
+        style="height: 48px; margin-bottom: 1rem; display: block; margin-left: auto; margin-right: auto;"
+      />
+      <div class="hero-badge">
+        <span class="dot"></span>Class 06a · Foundation Phase
+      </div>
+      <h1>
+        <span class="c-blue">Dev Tools</span>
+        <span class="amp">&amp;</span>
+        <span class="c-indigo">Version Control</span>
+      </h1>
+      <p class="hero-sub">
+        Your reference sheet for VS Code, Git, GitHub, and GitHub Projects —
+        the everyday tools you'll use in every vertical for the rest of this
+        programme and your career.
+      </p>
+      <div class="hero-tags">
+        <span class="hero-tag tag-blue">VS Code</span>
+        <span class="hero-tag tag-indigo">Git</span>
+        <span class="hero-tag tag-indigo">GitHub</span>
+        <span class="hero-tag tag-amber">Projects</span>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="toc">
+        <h3>Contents</h3>
+        <div class="toc-grid">
+          <a href="#vscode" class="toc-item"
+            ><span class="toc-dot" style="background: var(--blue)"></span>VS Code</a
+          >
+          <a href="#git" class="toc-item"
+            ><span class="toc-dot" style="background: var(--indigo)"></span>Git &amp;
+            Version Control</a
+          >
+          <a href="#github" class="toc-item"
+            ><span class="toc-dot" style="background: var(--blue)"></span>GitHub</a
+          >
+          <a href="#projects" class="toc-item"
+            ><span class="toc-dot" style="background: var(--amber)"></span>GitHub
+            Projects</a
+          >
+          <a href="#summary" class="toc-item"
+            ><span class="toc-dot" style="background: var(--green)"></span>Key
+            Takeaways</a
+          >
+          <a href="#practice" class="toc-item"
+            ><span class="toc-dot" style="background: var(--amber)"></span>Practice
+            at Home</a
+          >
+        </div>
+      </div>
+
+      <!-- ════════════════════════════
+           VS CODE
+      ════════════════════════════ -->
+      <div class="section-hd">
+        <div class="section-pill pill-blue">Section 1</div>
+        <h2 class="section-title" id="vscode">VS Code — Your Workspace</h2>
+        <p class="section-desc">
+          Visual Studio Code (VS Code) is a free code editor made by Microsoft.
+          It's the most-used editor among developers worldwide, and it's what
+          you'll use every day in this programme.
+        </p>
+      </div>
+
+      <div class="concept">
+        <div class="concept-label">The Editor</div>
+        <h3>What is VS Code?</h3>
+        <p>
+          At its core, VS Code is just a text editor — you open files and type
+          code into them. But it's designed for programmers, so it adds a lot
+          of helpful features on top: syntax highlighting (colour-coded code),
+          auto-complete, error warnings, and a huge library of extensions.
+        </p>
+        <div class="highlight-box hb-blue">
+          <div class="hb-label">Three panels you'll see all day</div>
+          <p>
+            <strong>Left:</strong> file explorer — every file in your project.<br />
+            <strong>Middle:</strong> the editor — where you actually type.<br />
+            <strong>Bottom:</strong> the integrated terminal — run commands
+            without leaving VS Code.
+          </p>
+        </div>
+        <ul>
+          <li>Free and open-source — nothing to pay for, ever</li>
+          <li>Runs on Windows, macOS, and Linux the same way</li>
+          <li>
+            Built-in Git support — you can see what changed, commit, and push
+            with buttons instead of commands
+          </li>
+          <li>
+            Integrated terminal means you don't need a separate terminal app
+          </li>
+        </ul>
+      </div>
+
+      <div class="concept">
+        <div class="concept-label">Extensions</div>
+        <h3>Extensions — Power-Ups for VS Code</h3>
+        <p>
+          Extensions are small add-ons that teach VS Code new tricks. You
+          install them from the Extensions panel (square icon on the left
+          sidebar). There are tens of thousands of free extensions.
+        </p>
+        <div class="mini-grid">
+          <div class="mini-card">
+            <h5 class="blue">🎨 Language support</h5>
+            <p>
+              Adds syntax highlighting, auto-complete, and error checking for
+              specific languages (e.g. Python, Java, Go).
+            </p>
+          </div>
+          <div class="mini-card">
+            <h5 class="blue">🌈 Themes</h5>
+            <p>
+              Change how the editor looks — dark themes, light themes, colour
+              schemes. Picks what's comfortable for your eyes.
+            </p>
+          </div>
+          <div class="mini-card">
+            <h5 class="blue">🧹 Linters &amp; formatters</h5>
+            <p>
+              Tools that check for bugs or auto-format your code. Prettier and
+              ESLint are the most common for web projects.
+            </p>
+          </div>
+          <div class="mini-card">
+            <h5 class="blue">🤖 AI assistants</h5>
+            <p>
+              Claude Code and GitHub Copilot live here. They read your code and
+              help you write, fix, or understand it.
+            </p>
+          </div>
+        </div>
+        <div class="highlight-box hb-indigo">
+          <div class="hb-label">AI in this programme</div>
+          <p>
+            <strong>Claude Code</strong> is the primary AI tool for Pelsung.
+            It can read your entire project, write new code, edit existing
+            files, and explain what's happening. You'll start using it from
+            Class 03 onward and it'll be with you through to the capstone.
+          </p>
+          <p>
+            <strong>GitHub Copilot</strong> is complementary — it offers
+            line-by-line autocomplete as you type. Many developers use both.
+          </p>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════
+           GIT
+      ════════════════════════════ -->
+      <div class="section-hd">
+        <div class="section-pill pill-indigo">Section 2</div>
+        <h2 class="section-title" id="git">Git — Version Control</h2>
+        <p class="section-desc">
+          Git is the tool developers use to track changes to their code and
+          work together without stepping on each other's work. Every
+          professional team on earth uses Git.
+        </p>
+      </div>
+
+      <div class="concept">
+        <div class="concept-label">What It Is</div>
+        <h3>Version Control, Explained</h3>
+        <p>
+          Imagine you're writing a report and save many versions:
+          <code class="inline">report.docx</code>,
+          <code class="inline">report_v2.docx</code>,
+          <code class="inline">report_final.docx</code>,
+          <code class="inline">report_final_REAL.docx</code>. It works — sort
+          of — but it's chaotic, and it breaks down completely when three
+          people are editing the same file at the same time.
+        </p>
+        <p>
+          Git solves this. It keeps an invisible history of every change ever
+          made to every file, lets you label each change with a message, and
+          lets multiple people work in parallel without losing anyone's work.
+        </p>
+        <div class="highlight-box hb-indigo">
+          <div class="hb-label">The Google Docs analogy</div>
+          <p>
+            Think of Google Docs' "version history" — you can always go back
+            to how the document looked yesterday, or last week. Git is the
+            same idea, but far more powerful, and for code instead of
+            documents. It works offline too — your history lives right on
+            your laptop.
+          </p>
+        </div>
+      </div>
+
+      <div class="concept">
+        <div class="concept-label">Three Core Ideas</div>
+        <h3>Commits, Branches, Merges</h3>
+        <p>
+          Three words you'll hear every day. Learn these and you understand
+          85% of what Git is doing.
+        </p>
+        <ul>
+          <li>
+            <strong>Commit</strong> — a snapshot of your project at a specific
+            moment. Each commit has a short message ("Add login page") and
+            records exactly what changed. You can always go back to any
+            previous commit.
+          </li>
+          <li>
+            <strong>Branch</strong> — a parallel line of work. You can
+            experiment on a branch without affecting the main version. Teams
+            usually have a <code class="inline">main</code> branch for
+            stable code, and short-lived branches for each new feature or
+            bug fix.
+          </li>
+          <li>
+            <strong>Merge</strong> — combining two branches. When your
+            feature branch is done and reviewed, you merge it into
+            <code class="inline">main</code>, and your work joins the team's
+            shared history.
+          </li>
+        </ul>
+      </div>
+
+      <div class="concept">
+        <div class="concept-label">Where Your Code Lives</div>
+        <h3>Local vs. Remote</h3>
+        <p>
+          There are always (at least) two copies of your project: the one on
+          your laptop (<strong>local</strong>) and the one on GitHub
+          (<strong>remote</strong>). Git commands either change the local
+          copy, or sync the two.
+        </p>
+        <div class="mini-grid">
+          <div class="mini-card">
+            <h5 class="blue">💻 Local (your laptop)</h5>
+            <p>
+              <code class="inline">git add</code> — stage files<br />
+              <code class="inline">git commit</code> — save a snapshot<br />
+              <code class="inline">git branch</code> — new line of work
+            </p>
+          </div>
+          <div class="mini-card">
+            <h5 class="indigo">☁️ Remote (GitHub)</h5>
+            <p>
+              <code class="inline">git clone</code> — copy a repo down<br />
+              <code class="inline">git push</code> — send commits up<br />
+              <code class="inline">git pull</code> — get others' commits
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept">
+        <div class="concept-label">Everyday Commands</div>
+        <h3>A Typical Git Session</h3>
+        <p>
+          This is what a normal day using Git looks like. VS Code's Git panel
+          does all this with buttons — but knowing the commands helps when
+          things go wrong.
+        </p>
+        <div class="code-block">
+          <div class="cb-bar">
+            <span class="cb-dot" style="background: #ff5f56"></span>
+            <span class="cb-dot" style="background: #febc2e"></span>
+            <span class="cb-dot" style="background: #28c840"></span>
+            <span style="margin-left: 8px">terminal</span>
+          </div>
+          <div class="cb-body">
+            <span class="cb-comment"># Get the latest from GitHub before you start</span
+            ><br />
+            <span class="cb-prompt">$</span> <span class="cb-cmd">git pull</span
+            ><br /><br />
+            <span class="cb-comment"># See what files you've changed</span><br />
+            <span class="cb-prompt">$</span> <span class="cb-cmd">git status</span
+            ><br /><br />
+            <span class="cb-comment"># Stage the files you want in the next commit</span
+            ><br />
+            <span class="cb-prompt">$</span> <span class="cb-cmd">git add</span>
+            <span class="cb-str">index.html style.css</span><br /><br />
+            <span class="cb-comment"># Commit with a message describing the change</span
+            ><br />
+            <span class="cb-prompt">$</span> <span class="cb-cmd">git commit</span>
+            -m <span class="cb-str">"Add homepage heading"</span><br /><br />
+            <span class="cb-comment"># Push to GitHub so teammates can see it</span
+            ><br />
+            <span class="cb-prompt">$</span> <span class="cb-cmd">git push</span>
+          </div>
+        </div>
+        <div class="highlight-box hb-amber">
+          <div class="hb-label">Commit message tip</div>
+          <p>
+            Write commit messages in the imperative — "Add login page", "Fix
+            typo in header", "Update README". Short, specific, present tense.
+            Future-you (reading the history in six months) will thank
+            present-you.
+          </p>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════
+           GITHUB
+      ════════════════════════════ -->
+      <div class="section-hd">
+        <div class="section-pill pill-blue">Section 3</div>
+        <h2 class="section-title" id="github">GitHub — Where Code Lives</h2>
+        <p class="section-desc">
+          Git runs on your laptop. GitHub is the cloud service that hosts
+          remote copies of Git repositories, and adds a huge set of tools for
+          working with other people.
+        </p>
+      </div>
+
+      <div class="concept">
+        <div class="concept-label">Cloud Home for Code</div>
+        <h3>What GitHub Adds to Git</h3>
+        <p>
+          GitHub is owned by Microsoft and used by over 100 million developers.
+          Almost every open-source project in the world lives on GitHub —
+          along with most companies' private projects.
+        </p>
+        <ul>
+          <li>
+            <strong>Hosted repositories</strong> — your code is safely stored
+            in the cloud, not only on your laptop
+          </li>
+          <li>
+            <strong>Collaboration</strong> — teammates can clone, push, and
+            pull from the same repo no matter where they are
+          </li>
+          <li>
+            <strong>Pull requests</strong> — the standard way to propose and
+            review changes
+          </li>
+          <li>
+            <strong>Issues</strong> — a built-in bug &amp; task tracker
+          </li>
+          <li>
+            <strong>Projects</strong> — Kanban-style boards for planning work
+          </li>
+          <li>
+            <strong>Actions</strong> — automation that runs tests and deploys
+            code when things are pushed
+          </li>
+        </ul>
+      </div>
+
+      <div class="concept">
+        <div class="concept-label">The Standard Flow</div>
+        <h3>From Idea to Merged Code</h3>
+        <p>
+          This is the workflow every team at SELISE follows, and most
+          companies in the world as well. You'll do this dozens of times
+          during the programme.
+        </p>
+        <div class="flow">
+          <div class="flow-step indigo">📥 Clone</div>
+          <span class="flow-arr">→</span>
+          <div class="flow-step blue">🌱 Branch</div>
+          <span class="flow-arr">→</span>
+          <div class="flow-step blue">✏️ Commit</div>
+          <span class="flow-arr">→</span>
+          <div class="flow-step indigo">📤 Push</div>
+          <span class="flow-arr">→</span>
+          <div class="flow-step amber">👀 PR + Review</div>
+          <span class="flow-arr">→</span>
+          <div class="flow-step green">✅ Merge</div>
+        </div>
+        <ul style="margin-top: 1rem">
+          <li>
+            <strong>Clone</strong> — copy the repo from GitHub to your laptop
+            (once, the first time you work on a project)
+          </li>
+          <li>
+            <strong>Branch</strong> — create a branch for your task, e.g.
+            <code class="inline">add-login-button</code>
+          </li>
+          <li>
+            <strong>Commit</strong> — make changes in VS Code; save snapshots
+            as you go
+          </li>
+          <li>
+            <strong>Push</strong> — send your commits to GitHub
+          </li>
+          <li>
+            <strong>PR + Review</strong> — open a pull request; a teammate
+            reviews your changes, suggests improvements, and approves
+          </li>
+          <li>
+            <strong>Merge</strong> — your branch is merged into
+            <code class="inline">main</code>; the work is now part of the
+            shared project
+          </li>
+        </ul>
+      </div>
+
+      <div class="concept">
+        <div class="concept-label">Code Review</div>
+        <h3>Pull Requests — A Conversation About Code</h3>
+        <p>
+          A <strong>Pull Request (PR)</strong> is how you say to your team:
+          "I've made these changes. Please have a look before they go into
+          the main project." It's less about the code itself and more about
+          the conversation around it.
+        </p>
+        <div class="highlight-box hb-blue">
+          <div class="hb-label">A good PR has</div>
+          <p>
+            A clear title ("Add trainee search to dashboard"), a short
+            description of what changed and why, screenshots if it's a UI
+            change, and a link to the Issue it solves. Small PRs are easier
+            to review than big ones.
+          </p>
+        </div>
+        <ul>
+          <li>
+            Reviewers comment line-by-line, asking questions or requesting
+            changes
+          </li>
+          <li>
+            You address the feedback by pushing more commits — the PR
+            automatically updates
+          </li>
+          <li>
+            When the reviewer approves, the PR can be merged — often
+            automated tests must pass first
+          </li>
+          <li>
+            <strong>No code goes to production without a PR.</strong> This is
+            how SELISE maintains quality across Bhutan, Zurich, and
+            everywhere else the team works
+          </li>
+        </ul>
+      </div>
+
+      <!-- ════════════════════════════
+           GITHUB PROJECTS
+      ════════════════════════════ -->
+      <div class="section-hd">
+        <div class="section-pill pill-amber">Section 4</div>
+        <h2 class="section-title" id="projects">GitHub Projects</h2>
+        <p class="section-desc">
+          Code is only half the story. Teams also need to plan what to build,
+          track bugs, and know who's working on what. GitHub Projects
+          handles that — all in the same place where your code lives.
+        </p>
+      </div>
+
+      <div class="concept">
+        <div class="concept-label">Tasks as Issues</div>
+        <h3>Issues — Everything Starts Here</h3>
+        <p>
+          An <strong>Issue</strong> is any single unit of work — a bug to fix,
+          a feature to build, a question to answer, a piece of documentation
+          to write. Think of it like a digital sticky note that stays around
+          until the work is done.
+        </p>
+        <ul>
+          <li>
+            Every issue has a title, description, and optionally a
+            person assigned to it
+          </li>
+          <li>
+            Labels categorise issues (<code class="inline">bug</code>,
+            <code class="inline">feature</code>,
+            <code class="inline">docs</code>, etc.)
+          </li>
+          <li>
+            Discussion happens in the comments — anyone on the team can chime
+            in
+          </li>
+          <li>
+            When you link a PR to an Issue with words like
+            <code class="inline">Closes #42</code>, the Issue auto-closes when
+            the PR is merged
+          </li>
+        </ul>
+      </div>
+
+      <div class="concept">
+        <div class="concept-label">Kanban Boards</div>
+        <h3>Projects — Your Team's Board</h3>
+        <p>
+          A <strong>Project</strong> is a Kanban board showing every Issue in
+          your team, grouped by status. The most common columns are
+          <strong>To Do</strong>, <strong>In Progress</strong>, and
+          <strong>Done</strong>. Issues move from left to right as work
+          progresses.
+        </p>
+        <div class="highlight-box hb-amber">
+          <div class="hb-label">The full loop</div>
+          <p>
+            Create an Issue → assign it → it appears in <em>To Do</em> →
+            someone opens a branch + PR → Issue moves to
+            <em>In Progress</em> → PR is reviewed &amp; merged → Issue
+            auto-closes → card moves to <em>Done</em>.
+          </p>
+          <p>
+            You now have a clear, honest picture of what the team is doing,
+            what's blocked, and what's ready to ship.
+          </p>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════
+           SUMMARY
+      ════════════════════════════ -->
+      <div class="summary" id="summary">
+        <h4>Class 06a — Key Takeaways</h4>
+        <ul>
+          <li>
+            <strong>VS Code is a free editor from Microsoft</strong> with a
+            file explorer, built-in terminal, Git panel, and thousands of
+            extensions — including Claude Code and GitHub Copilot for AI
+            assistance.
+          </li>
+          <li>
+            <strong>Git is version control</strong> — it tracks every change
+            to your code, lets you go back in time, and lets multiple people
+            work in parallel without overwriting each other.
+          </li>
+          <li>
+            <strong>Commit, branch, merge</strong> are the three ideas you'll
+            use every day. A commit is a snapshot; a branch is a parallel
+            line of work; merging combines branches together.
+          </li>
+          <li>
+            <strong>Local vs remote</strong> — your laptop has one copy,
+            GitHub has the shared copy. <code class="inline">push</code> and
+            <code class="inline">pull</code> keep them in sync.
+          </li>
+          <li>
+            <strong>GitHub hosts your Git repos</strong> in the cloud and
+            adds collaboration tools: pull requests for review, issues for
+            tracking work, projects for planning.
+          </li>
+          <li>
+            <strong>A pull request is a conversation</strong> — no code goes
+            to production without one being reviewed and approved. This is
+            how teams anywhere in the world maintain quality together.
+          </li>
+          <li>
+            <strong>GitHub Projects is a Kanban board</strong> over your
+            Issues. Link PRs to Issues and cards move to Done automatically
+            when the PR is merged.
+          </li>
+        </ul>
+      </div>
+
+      <!-- ════════════════════════════
+           PRACTICE
+      ════════════════════════════ -->
+      <div class="practice" id="practice">
+        <h4>✍ Practice at Home</h4>
+        <ol>
+          <li>
+            If you haven't already — <strong>create a GitHub account</strong>
+            at <code>github.com</code> using your real name. Install VS Code
+            from <code>code.visualstudio.com</code> and sign in with GitHub.
+          </li>
+          <li>
+            In VS Code, open the <strong>Extensions</strong> panel (square
+            icon on the left sidebar) and install one each of: a language
+            extension (e.g. <code>Python</code> or <code>Live Server</code>),
+            a theme you like, and <code>Prettier</code>.
+          </li>
+          <li>
+            <strong>Clone the starter repo</strong> we used in class again at
+            home. Pull the latest changes with <code>git pull</code>. See if
+            your classmates' PRs have been merged in.
+          </li>
+          <li>
+            Make a small change to a new file (anything — a poem, a list of
+            your favourite songs, a paragraph about Gelephu). Stage it,
+            commit with a message, and push it on a new branch.
+          </li>
+          <li>
+            Open a <strong>Pull Request</strong> for your change, write a
+            short description, and wait for a review. When merged, refresh
+            GitHub and see your work in the main branch.
+          </li>
+          <li>
+            Explore the <strong>Issues</strong> tab of any public repo on
+            GitHub (e.g. <code>facebook/react</code> or
+            <code>microsoft/vscode</code>). See how real teams discuss bugs
+            and features. Notice the labels, the back-and-forth, the linked
+            PRs.
+          </li>
+        </ol>
+      </div>
+    </div>
+    <!-- /container -->
+
+    <div class="page-footer">
+      <img
+        src="../../../selise-brand/assets/SELISE_Logo_Primary.png"
+        alt="SELISE Digital Platforms"
+        style="height: 32px; margin-bottom: 0.5rem; display: block; margin-left: auto; margin-right: auto; opacity: 0.6;"
+      />
+      <p class="foot-brand">
+        <span class="b1">SELISE</span> <span class="x">×</span>
+        <span class="b2">Pelsung</span>
+      </p>
+      <p>Class 06a · Foundation Phase · Cohort 3</p>
+      <p>Dev Tools &amp; Version Control</p>
+    </div>
+  </body>
+</html>

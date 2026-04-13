@@ -1,0 +1,1456 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Class 06b — HTML &amp; CSS Basics · Pelsung Foundation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --blue: #0066B2;
+        --indigo: #001F35;
+        --amber: #247EC1;
+        --green: #7BC950;
+        --purple: #4796D1;
+        --red: #D80032;
+        --text: #1B2021;
+        --muted: #7B7C7F;
+        --faint: #9CA3AF;
+        --surf: #ffffff;
+        --bg: #F9F9F9;
+        --border: #EDEDED;
+        --border-l: #F5F5F5;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Open Sans", 'Aptos', sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+        line-height: 1.65;
+      }
+
+      /* HERO */
+      .hero {
+        background: var(--surf);
+        border-bottom: 1px solid var(--border);
+        padding: 4rem 2rem 3rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(135deg, #0067A3, #002D72);
+      }
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 100px;
+        padding: 0.35rem 1rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--muted);
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        margin-bottom: 1.5rem;
+      }
+      .hero-badge .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--amber);
+      }
+      .hero h1 {
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        line-height: 1.15;
+        margin-bottom: 0.75rem;
+      }
+      .c-blue {
+        color: var(--blue);
+      }
+      .c-indigo {
+        color: var(--indigo);
+      }
+      .amp {
+        color: var(--amber);
+        font-style: italic;
+      }
+      .hero-sub {
+        font-size: 1rem;
+        color: var(--muted);
+        margin-bottom: 2rem;
+        max-width: 640px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .hero-tags {
+        display: flex;
+        justify-content: center;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+      }
+      .hero-tag {
+        padding: 0.3rem 0.9rem;
+        border-radius: 8px;
+        font-size: 0.78rem;
+        font-weight: 600;
+      }
+      .tag-blue {
+        background: #E6F0F8;
+        color: var(--blue);
+      }
+      .tag-indigo {
+        background: #E6E9EC;
+        color: var(--indigo);
+      }
+
+      /* LAYOUT */
+      .container {
+        max-width: 880px;
+        margin: 0 auto;
+        padding: 0 2rem 6rem;
+      }
+
+      /* TOC */
+      .toc {
+        background: var(--surf);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.75rem 2rem;
+        margin: 2.5rem 0;
+      }
+      .toc h3 {
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--faint);
+        margin-bottom: 1.25rem;
+      }
+      .toc-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.4rem 2rem;
+      }
+      .toc-item {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-size: 0.875rem;
+        color: var(--muted);
+        text-decoration: none;
+        padding: 0.3rem 0;
+        border-bottom: 1px solid var(--border-l);
+        transition: color 0.15s;
+      }
+      .toc-item:hover {
+        color: var(--indigo);
+      }
+      .toc-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+
+      /* SECTION HEADERS */
+      .section-hd {
+        padding: 3.5rem 0 1.5rem;
+      }
+      .section-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.3rem 0.9rem;
+        border-radius: 100px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 0.6rem;
+      }
+      .pill-blue {
+        background: #E6F0F8;
+        color: var(--blue);
+      }
+      .pill-indigo {
+        background: #E6E9EC;
+        color: var(--indigo);
+      }
+      .pill-amber {
+        background: #EBF0F7;
+        color: #1C5B8C;
+      }
+      .pill-green {
+        background: #F0F7EC;
+        color: var(--green);
+      }
+      .section-title {
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
+        font-size: 2rem;
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        margin-bottom: 0.4rem;
+      }
+      .section-desc {
+        font-size: 1rem;
+        color: var(--muted);
+        margin-bottom: 1.75rem;
+      }
+
+      /* CONCEPT */
+      .concept {
+        background: var(--surf);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 1.75rem 2rem;
+        margin-bottom: 1.5rem;
+      }
+      .concept-label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: var(--faint);
+        margin-bottom: 0.5rem;
+      }
+      .concept h3 {
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
+        font-size: 1.4rem;
+        font-weight: 400;
+        margin-bottom: 0.75rem;
+      }
+      .concept p {
+        font-size: 0.95rem;
+        color: var(--muted);
+        line-height: 1.7;
+        margin-bottom: 0.75rem;
+      }
+      .concept ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin: 0.25rem 0;
+      }
+      .concept ul li {
+        font-size: 0.92rem;
+        color: var(--muted);
+        padding-left: 1.4rem;
+        position: relative;
+        line-height: 1.55;
+      }
+      .concept ul li::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: var(--faint);
+        font-size: 0.85em;
+        top: 0.1em;
+      }
+      .concept ul li strong {
+        color: var(--text);
+      }
+
+      /* HIGHLIGHT */
+      .highlight-box {
+        border-radius: 12px;
+        padding: 1.25rem 1.5rem;
+        margin: 1rem 0;
+      }
+      .hb-blue {
+        background: #E6F0F8;
+        border-left: 4px solid var(--blue);
+      }
+      .hb-indigo {
+        background: #E6E9EC;
+        border-left: 4px solid var(--indigo);
+      }
+      .hb-amber {
+        background: #EBF0F7;
+        border-left: 4px solid var(--amber);
+      }
+      .hb-green {
+        background: #F0F7EC;
+        border-left: 4px solid var(--green);
+      }
+      .hb-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: var(--faint);
+        margin-bottom: 0.4rem;
+      }
+      .highlight-box p {
+        font-size: 0.9rem;
+        color: var(--text);
+        line-height: 1.6;
+        margin: 0;
+      }
+      .highlight-box p + p {
+        margin-top: 0.6rem;
+      }
+      .highlight-box p strong {
+        font-weight: 700;
+      }
+
+      /* CODE BLOCK */
+      .code-block {
+        background: #001F35;
+        border-radius: 12px;
+        overflow: hidden;
+        margin: 1rem 0;
+      }
+      .cb-bar {
+        background: #0A2A45;
+        padding: 8px 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.72rem;
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .cb-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+      }
+      .cb-body {
+        padding: 1.1rem 1.4rem;
+        font-family: "Courier New", monospace;
+        font-size: 0.85rem;
+        line-height: 1.85;
+        color: rgba(255, 255, 255, 0.85);
+      }
+      .tag-lt {
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .tag-name {
+        color: #7dd3fc;
+      }
+      .tag-attr {
+        color: #c4b5fd;
+      }
+      .tag-val {
+        color: #86efac;
+      }
+      .tag-text {
+        color: rgba(255, 255, 255, 0.9);
+      }
+      .css-sel {
+        color: #fde68a;
+      }
+      .css-prop {
+        color: #7dd3fc;
+      }
+      .css-val {
+        color: #86efac;
+      }
+      .css-punc {
+        color: rgba(255, 255, 255, 0.35);
+      }
+      .css-comment {
+        color: rgba(255, 255, 255, 0.35);
+        font-style: italic;
+      }
+
+      /* INLINE */
+      code.inline {
+        background: #F5F5F5;
+        padding: 1px 6px;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+        font-size: 0.88em;
+        color: var(--indigo);
+      }
+
+      /* TAG TABLE */
+      .tag-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 6px;
+        margin: 1rem 0;
+      }
+      .tag-table th {
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: var(--faint);
+        text-align: left;
+        padding: 0.3rem 0.75rem 0.5rem;
+      }
+      .tag-table td {
+        font-size: 0.88rem;
+        padding: 0.6rem 0.85rem;
+        background: var(--bg);
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        color: var(--muted);
+      }
+      .tag-table tr td:first-child {
+        border-radius: 8px 0 0 8px;
+        border-left: 1px solid var(--border);
+      }
+      .tag-table tr td:last-child {
+        border-radius: 0 8px 8px 0;
+        border-right: 1px solid var(--border);
+      }
+      .tag-table td code {
+        font-family: "Courier New", monospace;
+        font-size: 0.84rem;
+        font-weight: 700;
+        padding: 0.2rem 0.5rem;
+        border-radius: 5px;
+        background: #E6F0F8;
+        color: var(--blue);
+        display: inline-block;
+      }
+
+      /* BOX MODEL */
+      .box-model-wrap {
+        display: flex;
+        justify-content: center;
+        margin: 1.25rem 0;
+      }
+      .box-model {
+        position: relative;
+        width: 100%;
+        max-width: 420px;
+        aspect-ratio: 3 / 2;
+      }
+      .bm-layer {
+        position: absolute;
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 0.3rem 0.6rem;
+        font-size: 0.72rem;
+      }
+      .bm-margin {
+        inset: 0;
+        background: #F2E8EA;
+        border: 2px dashed var(--red);
+        color: var(--red);
+      }
+      .bm-border {
+        inset: 14%;
+        background: #F7ECEF;
+        border: 3px solid #D6A4AD;
+        color: #8B001E;
+      }
+      .bm-padding {
+        inset: 28%;
+        background: #EBF0F7;
+        border: 2px dashed var(--amber);
+        color: #1C5B8C;
+      }
+      .bm-content {
+        inset: 42%;
+        background: var(--blue);
+        color: white;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* PREVIEW */
+      .preview-split {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.25rem;
+        margin: 1rem 0;
+      }
+      .preview-frame {
+        background: var(--surf);
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 3px 14px rgba(0, 0, 0, 0.06);
+      }
+      .pf-bar {
+        background: var(--bg);
+        padding: 6px 12px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        border-bottom: 1px solid var(--border);
+      }
+      .pf-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+      }
+      .pf-url {
+        margin-left: 8px;
+        font-size: 0.65rem;
+        color: var(--faint);
+        font-family: "Courier New", monospace;
+      }
+      .pf-body {
+        padding: 1.1rem 1.25rem;
+        text-align: left;
+      }
+      .pf-body h5 {
+        font-size: 1.1rem;
+        color: var(--indigo);
+        margin-bottom: 0.4rem;
+        font-family: "Bahnschrift", sans-serif;
+        font-weight: 400;
+      }
+      .pf-body p {
+        font-size: 0.82rem;
+        color: var(--text);
+        line-height: 1.5;
+        margin-bottom: 0.5rem;
+      }
+      .pf-body ul {
+        list-style: disc;
+        padding-left: 1.1rem;
+        color: var(--muted);
+        font-size: 0.8rem;
+      }
+      .pf-label {
+        text-align: center;
+        font-size: 0.68rem;
+        font-weight: 700;
+        color: var(--faint);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 0.5rem;
+      }
+      .pf-body.styled {
+        background: linear-gradient(135deg, #E6F0F8, #F9F9F9);
+      }
+      .pf-body.styled h5 {
+        color: var(--blue);
+        border-bottom: 3px solid var(--amber);
+        padding-bottom: 0.2rem;
+        display: inline-block;
+      }
+      .pf-body.styled p {
+        color: var(--indigo);
+      }
+      .pf-body.styled ul li {
+        color: var(--blue);
+      }
+
+      /* FLEX DEMO */
+      .flex-demo {
+        display: flex;
+        gap: 0.75rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        background: #E6F0F8;
+        border: 1.5px solid var(--blue);
+        border-radius: 10px;
+        padding: 0.9rem;
+        margin: 1rem 0;
+      }
+      .flex-item {
+        background: var(--blue);
+        color: white;
+        font-weight: 700;
+        padding: 0.7rem 1.2rem;
+        border-radius: 6px;
+        text-align: center;
+        min-width: 70px;
+      }
+
+      /* MINI GRID */
+      .mini-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        margin: 1rem 0;
+      }
+      .mini-card {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 1rem 1.15rem;
+      }
+      .mini-card h5 {
+        font-size: 0.88rem;
+        font-weight: 700;
+        margin-bottom: 0.35rem;
+      }
+      .mini-card h5.blue {
+        color: var(--blue);
+      }
+      .mini-card h5.indigo {
+        color: var(--indigo);
+      }
+      .mini-card h5.amber {
+        color: #1C5B8C;
+      }
+      .mini-card h5.green {
+        color: var(--green);
+      }
+      .mini-card p {
+        font-size: 0.85rem;
+        color: var(--muted);
+        line-height: 1.55;
+        margin: 0;
+      }
+
+      /* SUMMARY */
+      .summary {
+        background: var(--surf);
+        border: 1.5px solid var(--border);
+        border-radius: 14px;
+        padding: 1.5rem 1.75rem;
+        margin: 2rem 0;
+      }
+      .summary h4 {
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
+        font-size: 1.15rem;
+        font-weight: 400;
+        margin-bottom: 1rem;
+      }
+      .summary ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+      }
+      .summary ul li {
+        font-size: 0.9rem;
+        color: var(--muted);
+        padding-left: 1.75rem;
+        position: relative;
+        line-height: 1.5;
+      }
+      .summary ul li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: var(--green);
+        font-weight: 700;
+      }
+      .summary ul li strong {
+        color: var(--text);
+      }
+
+      /* PRACTICE */
+      .practice {
+        background: #F0F4FA;
+        border: 1.5px solid #A3C4E0;
+        border-radius: 14px;
+        padding: 1.5rem 1.75rem;
+        margin: 2rem 0;
+      }
+      .practice h4 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1C5B8C;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .practice ol {
+        padding-left: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+      }
+      .practice ol li {
+        font-size: 0.9rem;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+      .practice ol li strong {
+        color: var(--text);
+      }
+      .practice ol li code {
+        background: #F5F5F5;
+        padding: 1px 5px;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+        font-size: 0.85em;
+      }
+
+      /* FOOTER */
+      .page-footer {
+        text-align: center;
+        padding: 3rem 0 2rem;
+        border-top: 1px solid var(--border);
+        margin-top: 4rem;
+      }
+      .page-footer p {
+        font-size: 0.75rem;
+        color: var(--faint);
+        line-height: 1.8;
+      }
+      .foot-brand {
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
+        font-size: 1.1rem;
+        font-weight: 400;
+        margin-bottom: 0.5rem;
+      }
+      .foot-brand .b1 {
+        color: var(--blue);
+      }
+      .foot-brand .x {
+        color: var(--amber);
+        font-style: italic;
+      }
+      .foot-brand .b2 {
+        color: var(--indigo);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hero">
+      <img
+        src="../../../selise-brand/assets/SELISE_Logo_Primary.png"
+        alt="SELISE Digital Platforms"
+        style="height: 48px; margin-bottom: 1rem; display: block; margin-left: auto; margin-right: auto;"
+      />
+      <div class="hero-badge">
+        <span class="dot"></span>Class 06b · Foundation Phase
+      </div>
+      <h1>
+        <span class="c-blue">HTML</span>
+        <span class="amp">&amp;</span>
+        <span class="c-indigo">CSS Basics</span>
+      </h1>
+      <p class="hero-sub">
+        Your reference sheet for the two languages that build every web page.
+        Keep this handy — you'll come back to it often, especially when you
+        build your personal site in Class 10.
+      </p>
+      <div class="hero-tags">
+        <span class="hero-tag tag-blue">HTML</span>
+        <span class="hero-tag tag-indigo">CSS</span>
+        <span class="hero-tag tag-blue">Box Model</span>
+        <span class="hero-tag tag-indigo">Flexbox</span>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="toc">
+        <h3>Contents</h3>
+        <div class="toc-grid">
+          <a href="#html" class="toc-item"
+            ><span class="toc-dot" style="background: var(--blue)"></span>HTML —
+            the structure</a
+          >
+          <a href="#common-tags" class="toc-item"
+            ><span class="toc-dot" style="background: var(--blue)"></span>Common
+            HTML tags</a
+          >
+          <a href="#css" class="toc-item"
+            ><span class="toc-dot" style="background: var(--indigo)"></span>CSS —
+            the style</a
+          >
+          <a href="#box-model" class="toc-item"
+            ><span class="toc-dot" style="background: var(--indigo)"></span>Box
+            model</a
+          >
+          <a href="#together" class="toc-item"
+            ><span class="toc-dot" style="background: var(--amber)"></span>HTML +
+            CSS together</a
+          >
+          <a href="#practice" class="toc-item"
+            ><span class="toc-dot" style="background: var(--green)"></span>Practice
+            at Home</a
+          >
+        </div>
+      </div>
+
+      <!-- ════════════════════════════
+           HTML
+      ════════════════════════════ -->
+      <div class="section-hd">
+        <div class="section-pill pill-blue">Section 1</div>
+        <h2 class="section-title" id="html">HTML — The Structure of a Page</h2>
+        <p class="section-desc">
+          HTML stands for <strong>HyperText Markup Language</strong>. It's how
+          we tell the browser what's on the page: this is a heading, this is
+          a paragraph, this is a list, this is a link. Every website on the
+          internet uses HTML.
+        </p>
+      </div>
+
+      <div class="concept">
+        <div class="concept-label">Tags</div>
+        <h3>Anatomy of an HTML Tag</h3>
+        <p>
+          HTML works by wrapping your content in <strong>tags</strong>. Tags
+          come in pairs — an opening tag and a closing tag — and whatever
+          you put between them becomes that kind of element.
+        </p>
+        <div class="code-block">
+          <div class="cb-bar">
+            <span class="cb-dot" style="background: #ff5f56"></span>
+            <span class="cb-dot" style="background: #febc2e"></span>
+            <span class="cb-dot" style="background: #28c840"></span>
+            <span style="margin-left: 8px">example</span>
+          </div>
+          <div class="cb-body">
+            <span class="tag-lt">&lt;</span
+            ><span class="tag-name">h1</span
+            ><span class="tag-lt">&gt;</span
+            ><span class="tag-text">Hello, Gelephu!</span
+            ><span class="tag-lt">&lt;/</span
+            ><span class="tag-name">h1</span><span class="tag-lt">&gt;</span>
+          </div>
+        </div>
+        <ul>
+          <li>
+            <strong>Opening tag:</strong>
+            <code class="inline">&lt;h1&gt;</code> — where the element starts
+          </li>
+          <li>
+            <strong>Content:</strong> the text or other elements inside
+          </li>
+          <li>
+            <strong>Closing tag:</strong>
+            <code class="inline">&lt;/h1&gt;</code> — same tag name with a
+            forward slash, where it ends
+          </li>
+          <li>
+            Together this is called an <strong>element</strong>. The
+            <code class="inline">h1</code> element above is a big heading
+            that says "Hello, Gelephu!"
+          </li>
+        </ul>
+        <div class="highlight-box hb-blue">
+          <div class="hb-label">Attributes</div>
+          <p>
+            Tags can have extra info called <strong>attributes</strong> —
+            written inside the opening tag. Example:
+            <code class="inline">&lt;a href="https://google.com"&gt;</code> —
+            <code class="inline">href</code> is the attribute name,
+            <code class="inline">"https://google.com"</code> is its value.
+            This particular attribute tells the browser where the link goes.
+          </p>
+        </div>
+      </div>
+
+      <div class="concept">
+        <div class="concept-label">Skeleton</div>
+        <h3>Every HTML Page Has the Same Skeleton</h3>
+        <p>
+          No matter how big or small, every HTML file you write will start
+          with these few lines. Memorise this pattern — you'll type it a
+          hundred times.
+        </p>
+        <div class="code-block">
+          <div class="cb-bar">
+            <span class="cb-dot" style="background: #ff5f56"></span>
+            <span class="cb-dot" style="background: #febc2e"></span>
+            <span class="cb-dot" style="background: #28c840"></span>
+            <span style="margin-left: 8px">index.html</span>
+          </div>
+          <div class="cb-body">
+            <span class="tag-lt">&lt;!</span
+            ><span class="tag-name">DOCTYPE html</span
+            ><span class="tag-lt">&gt;</span><br />
+            <span class="tag-lt">&lt;</span><span class="tag-name">html</span
+            ><span class="tag-lt">&gt;</span><br />
+            &nbsp;&nbsp;<span class="tag-lt">&lt;</span
+            ><span class="tag-name">head</span><span class="tag-lt">&gt;</span
+            ><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="tag-lt">&lt;</span
+            ><span class="tag-name">title</span><span class="tag-lt">&gt;</span
+            ><span class="tag-text">My Page</span
+            ><span class="tag-lt">&lt;/</span
+            ><span class="tag-name">title</span><span class="tag-lt">&gt;</span
+            ><br />
+            &nbsp;&nbsp;<span class="tag-lt">&lt;/</span
+            ><span class="tag-name">head</span><span class="tag-lt">&gt;</span
+            ><br />
+            &nbsp;&nbsp;<span class="tag-lt">&lt;</span
+            ><span class="tag-name">body</span><span class="tag-lt">&gt;</span
+            ><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="tag-lt">&lt;</span
+            ><span class="tag-name">h1</span><span class="tag-lt">&gt;</span
+            ><span class="tag-text">Hello, Gelephu!</span
+            ><span class="tag-lt">&lt;/</span><span class="tag-name">h1</span
+            ><span class="tag-lt">&gt;</span><br />
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="tag-lt">&lt;</span
+            ><span class="tag-name">p</span><span class="tag-lt">&gt;</span
+            ><span class="tag-text">Welcome to my first web page.</span
+            ><span class="tag-lt">&lt;/</span><span class="tag-name">p</span
+            ><span class="tag-lt">&gt;</span><br />
+            &nbsp;&nbsp;<span class="tag-lt">&lt;/</span
+            ><span class="tag-name">body</span><span class="tag-lt">&gt;</span
+            ><br />
+            <span class="tag-lt">&lt;/</span><span class="tag-name">html</span
+            ><span class="tag-lt">&gt;</span>
+          </div>
+        </div>
+        <ul>
+          <li>
+            <strong>&lt;!DOCTYPE html&gt;</strong> — tells the browser "this is
+            modern HTML". Always the first line.
+          </li>
+          <li>
+            <strong>&lt;html&gt;</strong> — the root. Everything else lives
+            inside it.
+          </li>
+          <li>
+            <strong>&lt;head&gt;</strong> — info for the browser: the page
+            title, links to stylesheets, fonts to load. Nothing here is
+            shown on the page itself.
+          </li>
+          <li>
+            <strong>&lt;body&gt;</strong> — everything the visitor will
+            actually see.
+          </li>
+        </ul>
+      </div>
+
+      <div class="concept" id="common-tags">
+        <div class="concept-label">Vocabulary</div>
+        <h3>Common Tags You'll Use Every Day</h3>
+        <p>
+          There are over 100 HTML tags, but you can build most pages with
+          these ten. Learn these and you're well on your way.
+        </p>
+        <table class="tag-table">
+          <thead>
+            <tr>
+              <th>Tag</th>
+              <th>What it does</th>
+              <th>Example use</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>&lt;h1&gt; … &lt;h6&gt;</code></td>
+              <td>Headings. h1 is biggest.</td>
+              <td>Section titles</td>
+            </tr>
+            <tr>
+              <td><code>&lt;p&gt;</code></td>
+              <td>A paragraph of text.</td>
+              <td>Body copy</td>
+            </tr>
+            <tr>
+              <td><code>&lt;a href=""&gt;</code></td>
+              <td>A clickable link.</td>
+              <td>Navigate between pages</td>
+            </tr>
+            <tr>
+              <td><code>&lt;img src=""&gt;</code></td>
+              <td>An image.</td>
+              <td>Photos, logos, icons</td>
+            </tr>
+            <tr>
+              <td><code>&lt;ul&gt; + &lt;li&gt;</code></td>
+              <td>Bulleted list.</td>
+              <td>Skills, features</td>
+            </tr>
+            <tr>
+              <td><code>&lt;ol&gt; + &lt;li&gt;</code></td>
+              <td>Numbered list.</td>
+              <td>Step-by-step</td>
+            </tr>
+            <tr>
+              <td><code>&lt;div&gt;</code></td>
+              <td>A generic block-level box.</td>
+              <td>Group content for styling</td>
+            </tr>
+            <tr>
+              <td><code>&lt;span&gt;</code></td>
+              <td>A generic inline piece.</td>
+              <td>Highlight a word inside text</td>
+            </tr>
+            <tr>
+              <td><code>&lt;button&gt;</code></td>
+              <td>A clickable button.</td>
+              <td>Forms &amp; actions</td>
+            </tr>
+            <tr>
+              <td><code>&lt;input&gt;</code></td>
+              <td>A text/email/password field.</td>
+              <td>Forms</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ════════════════════════════
+           CSS
+      ════════════════════════════ -->
+      <div class="section-hd">
+        <div class="section-pill pill-indigo">Section 2</div>
+        <h2 class="section-title" id="css">CSS — Style &amp; Layout</h2>
+        <p class="section-desc">
+          <strong>CSS</strong> stands for <em>Cascading Style Sheets</em>.
+          While HTML says <em>what</em> is on the page, CSS says
+          <em>how it looks</em> — colours, fonts, spacing, layout, animation.
+        </p>
+      </div>
+
+      <div class="concept">
+        <div class="concept-label">A CSS Rule</div>
+        <h3>Selector · Property · Value</h3>
+        <p>
+          A CSS rule says "apply these styles to these elements." Every rule
+          has three parts: a <strong>selector</strong> (which elements), one
+          or more <strong>properties</strong> (what aspect), and the
+          <strong>value</strong> for each property.
+        </p>
+        <div class="code-block">
+          <div class="cb-bar">
+            <span class="cb-dot" style="background: #ff5f56"></span>
+            <span class="cb-dot" style="background: #febc2e"></span>
+            <span class="cb-dot" style="background: #28c840"></span>
+            <span style="margin-left: 8px">style.css</span>
+          </div>
+          <div class="cb-body">
+            <span class="css-comment">/* "all h1 elements" */</span><br />
+            <span class="css-sel">h1</span> <span class="css-punc">{</span
+            ><br />
+            &nbsp;&nbsp;<span class="css-prop">color</span
+            ><span class="css-punc">:</span>
+            <span class="css-val">#0066B2</span
+            ><span class="css-punc">;</span><br />
+            &nbsp;&nbsp;<span class="css-prop">font-size</span
+            ><span class="css-punc">:</span>
+            <span class="css-val">2.5rem</span
+            ><span class="css-punc">;</span><br />
+            &nbsp;&nbsp;<span class="css-prop">text-align</span
+            ><span class="css-punc">:</span>
+            <span class="css-val">center</span
+            ><span class="css-punc">;</span><br />
+            <span class="css-punc">}</span>
+          </div>
+        </div>
+        <div class="highlight-box hb-indigo">
+          <div class="hb-label">Three kinds of selector</div>
+          <p>
+            <strong>Element</strong> — <code class="inline">h1</code>,
+            <code class="inline">p</code>,
+            <code class="inline">button</code>: targets every tag of that
+            type.<br />
+            <strong>Class</strong> — <code class="inline">.card</code>: every
+            element with <code class="inline">class="card"</code>. Starts
+            with a dot.<br />
+            <strong>ID</strong> — <code class="inline">#hero</code>: the one
+            element with <code class="inline">id="hero"</code>. Starts with
+            a hash.
+          </p>
+        </div>
+      </div>
+
+      <div class="concept" id="box-model">
+        <div class="concept-label">The Most Important Concept in CSS</div>
+        <h3>The Box Model</h3>
+        <p>
+          CSS sees every element as a rectangular box. The box has four
+          layers, from inside out: <strong>content</strong>,
+          <strong>padding</strong>, <strong>border</strong>,
+          <strong>margin</strong>. Understanding these four is the key to
+          controlling any layout.
+        </p>
+        <div class="box-model-wrap">
+          <div class="box-model">
+            <div class="bm-layer bm-margin">margin</div>
+            <div class="bm-layer bm-border">border</div>
+            <div class="bm-layer bm-padding">padding</div>
+            <div class="bm-layer bm-content">content</div>
+          </div>
+        </div>
+        <ul>
+          <li>
+            <strong>Content</strong> — the actual text, image, or inner
+            elements
+          </li>
+          <li>
+            <strong>Padding</strong> — space <em>inside</em> the border.
+            Breathing room around the content.
+          </li>
+          <li>
+            <strong>Border</strong> — the edge of the box. Can be thick,
+            thin, visible, or invisible.
+          </li>
+          <li>
+            <strong>Margin</strong> — space <em>outside</em> the border.
+            Pushes neighbouring elements away.
+          </li>
+        </ul>
+        <div class="highlight-box hb-amber">
+          <div class="hb-label">Remember</div>
+          <p>
+            <strong>Padding = inside.</strong> Use padding when you want
+            more space <em>around the content</em> but still inside the
+            element's background/border.<br />
+            <strong>Margin = outside.</strong> Use margin to create space
+            <em>between</em> two elements.
+          </p>
+        </div>
+      </div>
+
+      <div class="concept">
+        <div class="concept-label">Colours &amp; Typography</div>
+        <h3>Colours, Fonts &amp; Text</h3>
+        <p>
+          These are the properties you'll reach for first when making a page
+          look decent. Even just changing the font and background colour
+          makes a page feel custom.
+        </p>
+        <div class="mini-grid">
+          <div class="mini-card">
+            <h5 class="blue">🎨 Colours — four ways to write them</h5>
+            <p>
+              <code class="inline">blue</code> (by name),
+              <code class="inline">#0066B2</code> (hex),
+              <code class="inline">rgb(0, 102, 178)</code> (RGB),
+              <code class="inline">hsl(205, 100%, 35%)</code> (HSL). Hex is
+              most common. SELISE blue is
+              <code class="inline">#0066B2</code>.
+            </p>
+          </div>
+          <div class="mini-card">
+            <h5 class="indigo">✏️ Fonts</h5>
+            <p>
+              <code class="inline">font-family</code> sets the typeface,
+              <code class="inline">font-size</code> the size,
+              <code class="inline">font-weight</code> boldness (400 =
+              normal, 700 = bold). Load free fonts from Google Fonts.
+            </p>
+          </div>
+          <div class="mini-card">
+            <h5 class="amber">📏 Spacing</h5>
+            <p>
+              <code class="inline">padding</code>,
+              <code class="inline">margin</code>, and
+              <code class="inline">gap</code> take lengths like
+              <code class="inline">16px</code>, <code class="inline">1rem</code
+              >, or percentages. <code class="inline">rem</code> scales with
+              the user's font size — more accessible.
+            </p>
+          </div>
+          <div class="mini-card">
+            <h5 class="green">🧭 Alignment</h5>
+            <p>
+              <code class="inline">text-align: center</code> centres text.
+              <code class="inline">justify-content</code> and
+              <code class="inline">align-items</code> (on a flex container)
+              centre items both horizontally and vertically.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept">
+        <div class="concept-label">Layout</div>
+        <h3>Flexbox — Line Things Up</h3>
+        <p>
+          <strong>Flexbox</strong> is the simplest way to arrange elements
+          in a row or column. Add
+          <code class="inline">display: flex</code> to any element and its
+          direct children become <em>flex items</em> — they line up, you
+          control the gaps, and it just works.
+        </p>
+        <div class="flex-demo">
+          <div class="flex-item">A</div>
+          <div class="flex-item">B</div>
+          <div class="flex-item">C</div>
+        </div>
+        <div class="code-block">
+          <div class="cb-bar">
+            <span class="cb-dot" style="background: #ff5f56"></span>
+            <span class="cb-dot" style="background: #febc2e"></span>
+            <span class="cb-dot" style="background: #28c840"></span>
+            <span style="margin-left: 8px">style.css</span>
+          </div>
+          <div class="cb-body">
+            <span class="css-sel">.container</span>
+            <span class="css-punc">{</span><br />
+            &nbsp;&nbsp;<span class="css-prop">display</span
+            ><span class="css-punc">:</span>
+            <span class="css-val">flex</span><span class="css-punc">;</span>
+            &nbsp;&nbsp;<span class="css-comment">/* turn on flexbox */</span
+            ><br />
+            &nbsp;&nbsp;<span class="css-prop">gap</span
+            ><span class="css-punc">:</span>
+            <span class="css-val">1rem</span><span class="css-punc">;</span>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="css-comment"
+              >/* space between items */</span
+            ><br />
+            &nbsp;&nbsp;<span class="css-prop">justify-content</span
+            ><span class="css-punc">:</span>
+            <span class="css-val">center</span
+            ><span class="css-punc">;</span>
+            <span class="css-comment">/* horizontal align */</span><br />
+            &nbsp;&nbsp;<span class="css-prop">align-items</span
+            ><span class="css-punc">:</span>
+            <span class="css-val">center</span
+            ><span class="css-punc">;</span>
+            <span class="css-comment">/* vertical align */</span><br />
+            <span class="css-punc">}</span>
+          </div>
+        </div>
+        <ul>
+          <li>
+            <code class="inline">justify-content</code> — horizontal
+            alignment. <code class="inline">flex-start</code>,
+            <code class="inline">center</code>,
+            <code class="inline">flex-end</code>,
+            <code class="inline">space-between</code>.
+          </li>
+          <li>
+            <code class="inline">align-items</code> — vertical alignment,
+            same values.
+          </li>
+          <li>
+            <code class="inline">flex-direction: column</code> — stack
+            vertically instead of a row.
+          </li>
+          <li>
+            <code class="inline">gap</code> — space between items. Cleaner
+            than using margins.
+          </li>
+        </ul>
+      </div>
+
+      <!-- ════════════════════════════
+           TOGETHER
+      ════════════════════════════ -->
+      <div class="section-hd" id="together">
+        <div class="section-pill pill-amber">Section 3</div>
+        <h2 class="section-title">Structure vs. Style</h2>
+        <p class="section-desc">
+          HTML and CSS are separate files that work together. Your HTML file
+          loads your CSS file with one line inside the
+          <code class="inline">&lt;head&gt;</code>. Here's the same content,
+          before and after a splash of CSS.
+        </p>
+      </div>
+
+      <div class="concept">
+        <div class="concept-label">Before / After</div>
+        <h3>Same HTML — Two Different Pages</h3>
+        <div class="preview-split">
+          <div>
+            <div class="pf-label">HTML only</div>
+            <div class="preview-frame">
+              <div class="pf-bar">
+                <span class="pf-dot" style="background: #ff5f56"></span>
+                <span class="pf-dot" style="background: #febc2e"></span>
+                <span class="pf-dot" style="background: #28c840"></span>
+                <span class="pf-url">about-me.html</span>
+              </div>
+              <div class="pf-body">
+                <h5>Karma Dorji</h5>
+                <p>I live in Gelephu and I'm part of Pelsung Cohort 3.</p>
+                <p>My interests:</p>
+                <ul>
+                  <li>Archery</li>
+                  <li>Reading</li>
+                  <li>Photography</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="pf-label">HTML + CSS</div>
+            <div class="preview-frame">
+              <div class="pf-bar">
+                <span class="pf-dot" style="background: #ff5f56"></span>
+                <span class="pf-dot" style="background: #febc2e"></span>
+                <span class="pf-dot" style="background: #28c840"></span>
+                <span class="pf-url">about-me.html</span>
+              </div>
+              <div class="pf-body styled">
+                <h5>Karma Dorji</h5>
+                <p>I live in Gelephu and I'm part of Pelsung Cohort 3.</p>
+                <p>My interests:</p>
+                <ul>
+                  <li>Archery</li>
+                  <li>Reading</li>
+                  <li>Photography</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p style="font-size: 0.88rem; color: var(--muted); margin-top: 1rem">
+          The HTML is identical. Only the CSS changed. This is the
+          superpower of separation — you can completely redesign a site
+          without touching any of the content.
+        </p>
+      </div>
+
+      <div class="concept">
+        <div class="concept-label">Linking the Files</div>
+        <h3>How HTML Finds Your CSS</h3>
+        <p>
+          One line inside <code class="inline">&lt;head&gt;</code> tells the
+          browser to load your stylesheet:
+        </p>
+        <div class="code-block">
+          <div class="cb-bar">
+            <span class="cb-dot" style="background: #ff5f56"></span>
+            <span class="cb-dot" style="background: #febc2e"></span>
+            <span class="cb-dot" style="background: #28c840"></span>
+            <span style="margin-left: 8px">index.html</span>
+          </div>
+          <div class="cb-body">
+            <span class="tag-lt">&lt;</span><span class="tag-name">head</span
+            ><span class="tag-lt">&gt;</span><br />
+            &nbsp;&nbsp;<span class="tag-lt">&lt;</span
+            ><span class="tag-name">title</span><span class="tag-lt">&gt;</span
+            ><span class="tag-text">My Page</span
+            ><span class="tag-lt">&lt;/</span
+            ><span class="tag-name">title</span><span class="tag-lt">&gt;</span
+            ><br />
+            &nbsp;&nbsp;<span class="tag-lt">&lt;</span
+            ><span class="tag-name">link</span>
+            <span class="tag-attr">rel</span>=<span class="tag-val"
+              >"stylesheet"</span
+            >
+            <span class="tag-attr">href</span>=<span class="tag-val"
+              >"style.css"</span
+            ><span class="tag-lt">&gt;</span><br />
+            <span class="tag-lt">&lt;/</span><span class="tag-name">head</span
+            ><span class="tag-lt">&gt;</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════
+           SUMMARY
+      ════════════════════════════ -->
+      <div class="summary">
+        <h4>Class 06b — Key Takeaways</h4>
+        <ul>
+          <li>
+            <strong>HTML is the structure of a page</strong> — tags wrap
+            content to say what each piece is. Every HTML page has the same
+            skeleton: <code class="inline">&lt;!DOCTYPE html&gt;</code>,
+            <code class="inline">&lt;html&gt;</code>,
+            <code class="inline">&lt;head&gt;</code>,
+            <code class="inline">&lt;body&gt;</code>.
+          </li>
+          <li>
+            <strong>Nine tags cover 80% of pages</strong>: headings
+            (h1–h6), p, a, img, ul/ol + li, div, span, button, input.
+          </li>
+          <li>
+            <strong>CSS is the style of a page</strong> — rules of the form
+            <em>selector { property: value; }</em> change how elements
+            look.
+          </li>
+          <li>
+            <strong>Three kinds of selector</strong>: element (e.g.
+            <code class="inline">p</code>), class (<code class="inline"
+              >.card</code
+            >), ID (<code class="inline">#hero</code>).
+          </li>
+          <li>
+            <strong>Every element is a box</strong> — content, padding,
+            border, margin. Padding is inside, margin is outside. This is
+            the foundation of every layout.
+          </li>
+          <li>
+            <strong>Flexbox is how you line things up</strong> — add
+            <code class="inline">display: flex</code> to a container, use
+            <code class="inline">gap</code>,
+            <code class="inline">justify-content</code>, and
+            <code class="inline">align-items</code> to control the layout.
+          </li>
+          <li>
+            <strong>One <code class="inline">&lt;link&gt;</code> tag</strong>
+            in the <code class="inline">&lt;head&gt;</code> connects your
+            HTML to your CSS. Structure and style stay in separate files,
+            but work together.
+          </li>
+        </ul>
+      </div>
+
+      <!-- ════════════════════════════
+           PRACTICE
+      ════════════════════════════ -->
+      <div class="practice" id="practice">
+        <h4>✍ Practice at Home</h4>
+        <ol>
+          <li>
+            <strong>Rebuild your "About Me" page from class</strong> on your
+            own laptop, from scratch (no looking at class notes). Two files:
+            <code>index.html</code> and <code>style.css</code>.
+          </li>
+          <li>
+            Open any website (e.g. <code>selisegroup.com</code>,
+            <code>wikipedia.org</code>). Right-click →
+            <strong>Inspect</strong> to open the browser's developer tools.
+            Hover over elements in the page — you'll see the HTML on one
+            side and the CSS on the other. Look at what tags and properties
+            real websites use.
+          </li>
+          <li>
+            <strong>Add a second page</strong> to your project:
+            <code>projects.html</code>. Use the same CSS file
+            (<code>style.css</code>) so both pages look consistent. Add a
+            link from About Me to Projects using an
+            <code>&lt;a href=""&gt;</code> tag.
+          </li>
+          <li>
+            <strong>Play with flexbox.</strong> Wrap three
+            <code>&lt;div&gt;</code> "cards" in a container and use
+            <code>display: flex</code> to lay them out side by side. Try
+            <code>justify-content: space-between</code>,
+            <code>gap: 2rem</code>, and resizing the window.
+          </li>
+          <li>
+            <strong>Explore free resources:</strong>
+            <code>developer.mozilla.org</code> (MDN) is the best HTML/CSS
+            reference. <code>flexboxfroggy.com</code> is a fun game that
+            teaches flexbox in 24 levels.
+          </li>
+          <li>
+            <strong>Looking ahead to Class 10:</strong> start thinking
+            about what your personal site will look like. What sections
+            will it have? What colours &amp; fonts feel like "you"? What
+            skills do you want to feature?
+          </li>
+        </ol>
+      </div>
+    </div>
+    <!-- /container -->
+
+    <div class="page-footer">
+      <img
+        src="../../../selise-brand/assets/SELISE_Logo_Primary.png"
+        alt="SELISE Digital Platforms"
+        style="height: 32px; margin-bottom: 0.5rem; display: block; margin-left: auto; margin-right: auto; opacity: 0.6;"
+      />
+      <p class="foot-brand">
+        <span class="b1">SELISE</span> <span class="x">×</span>
+        <span class="b2">Pelsung</span>
+      </p>
+      <p>Class 06b · Foundation Phase · Cohort 3</p>
+      <p>HTML &amp; CSS Basics</p>
+    </div>
+  </body>
+</html>
