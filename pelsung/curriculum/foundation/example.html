@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Karma Yangchen — Aspiring Developer</title>
+    <link id="styles" rel="stylesheet" href="example.css" disabled />
+  </head>
+  <body>
+    <button
+      id="toggle"
+      onclick="toggleCss()"
+      style="position:fixed;top:10px;right:10px;padding:8px 14px;background:#0066B2;color:white;border:none;border-radius:6px;cursor:pointer;font-family:sans-serif;z-index:9999;"
+    >
+      Enable CSS
+    </button>
+
+    <header class="site-header">
+      <div class="logo">KY.</div>
+      <nav>
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="hero-pill">Pelsung Cohort 3 · Software Development</div>
+      <h1>Hi, I'm Karma Yangchen.</h1>
+      <p class="lede">
+        A Guardian of Prosperity learning to build software for Gelephu
+        Mindfulness City — one line of code at a time.
+      </p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn btn-primary">See my work</a>
+        <a href="#contact" class="btn btn-ghost">Get in touch</a>
+      </div>
+    </section>
+
+    <section id="about" class="about">
+      <h2>About me</h2>
+      <p>
+        I grew up in Paro, studied computer applications in Bangalore, and came
+        home to join the Pelsung programme. My focus is frontend development — I
+        love turning a blank page into something a person can actually use.
+      </p>
+      <p>
+        Outside code, I hike, I sketch, and I'm slowly teaching myself to play
+        the dranyen.
+      </p>
+    </section>
+
+    <section id="skills" class="skills">
+      <h2>What I'm learning</h2>
+      <div class="skill-grid">
+        <div class="skill-card">
+          <div class="skill-icon">&lt;/&gt;</div>
+          <h3>HTML &amp; CSS</h3>
+          <p>Semantic markup, the box model, flexbox, responsive design.</p>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">JS</div>
+          <h3>JavaScript</h3>
+          <p>DOM manipulation, events, async/await, fetching APIs.</p>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">⚛</div>
+          <h3>React</h3>
+          <p>Components, hooks, state, building real single-page apps.</p>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">AI</div>
+          <h3>AI-assisted dev</h3>
+          <p>Claude Code, spec-driven development, reviewing AI output.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="projects">
+      <h2>Projects</h2>
+      <div class="project-grid">
+        <article class="project-card">
+          <div class="project-thumb gradient-1"></div>
+          <h3>Druk Weather</h3>
+          <p>A tiny weather app for all 20 dzongkhags. Built in class 09.</p>
+          <span class="tag">HTML · CSS · API</span>
+        </article>
+        <article class="project-card">
+          <div class="project-thumb gradient-2"></div>
+          <h3>Pelsung Buddy</h3>
+          <p>A study-buddy matcher for our cohort. My first React app.</p>
+          <span class="tag">React · Firebase</span>
+        </article>
+        <article class="project-card">
+          <div class="project-thumb gradient-3"></div>
+          <h3>GMC Bus Tracker</h3>
+          <p>Capstone concept — live bus locations around Gelephu.</p>
+          <span class="tag">Capstone</span>
+        </article>
+      </div>
+    </section>
+
+    <section id="contact" class="contact">
+      <h2>Let's talk</h2>
+      <p>Looking for a frontend intern for summer 2027? I'm your person.</p>
+      <a href="mailto:karma@example.com" class="btn btn-primary">
+        karma@example.com
+      </a>
+    </section>
+
+    <footer>
+      <p>Made with ❤ in Gelephu · Pelsung Cohort 3 · 2026</p>
+    </footer>
+
+    <script>
+      function toggleCss() {
+        const link = document.getElementById("styles");
+        const btn = document.getElementById("toggle");
+        if (link.disabled) {
+          link.disabled = false;
+          btn.textContent = "Disable CSS";
+          btn.className = "";
+        } else {
+          link.disabled = true;
+          btn.textContent = "Enable CSS";
+          btn.setAttribute(
+            "style",
+            "position:fixed;top:10px;right:10px;padding:8px 14px;background:#0066B2;color:white;border:none;border-radius:6px;cursor:pointer;font-family:sans-serif;z-index:9999;",
+          );
+        }
+      }
+    </script>
+  </body>
+</html>

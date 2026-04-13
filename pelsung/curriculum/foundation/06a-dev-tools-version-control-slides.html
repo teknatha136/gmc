@@ -188,50 +188,69 @@
       }
       .step-list {
         list-style: none;
-        display: flex;
-        flex-direction: column;
-        gap: clamp(0.6rem, 1vw, 0.9rem);
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: clamp(0.5rem, 0.9vw, 0.8rem);
         width: 100%;
-        max-width: 720px;
+        max-width: 1200px;
+        padding: 0;
+        margin: 0;
       }
       .step-item {
+        position: relative;
         display: flex;
-        align-items: flex-start;
-        gap: 0.9rem;
-        padding: clamp(0.7rem, 1.1vw, 1rem) clamp(0.9rem, 1.3vw, 1.2rem);
+        flex-direction: column;
+        gap: 0.45rem;
+        padding: clamp(0.6rem, 0.9vw, 0.85rem) clamp(0.7rem, 1vw, 0.95rem);
         background: var(--bg);
         border: 1px solid var(--border);
         border-radius: 12px;
-        border-left: 3px solid var(--amber);
+        border-top: 3px solid var(--amber);
+      }
+      .step-item::after {
+        content: "→";
+        position: absolute;
+        right: -0.85rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--amber);
+        font-weight: 700;
+        font-size: 1rem;
+        z-index: 1;
+      }
+      .step-item:nth-child(4)::after,
+      .step-item:last-child::after {
+        content: "";
       }
       .step-num {
-        width: clamp(26px, 3vw, 32px);
-        height: clamp(26px, 3vw, 32px);
-        min-width: clamp(26px, 3vw, 32px);
+        width: clamp(22px, 2.4vw, 26px);
+        height: clamp(22px, 2.4vw, 26px);
+        min-width: clamp(22px, 2.4vw, 26px);
         border-radius: 50%;
         background: var(--amber);
         color: white;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: clamp(0.78rem, 1vw, 0.9rem);
+        font-size: clamp(0.7rem, 0.9vw, 0.8rem);
         font-weight: 700;
       }
       .step-body {
-        font-size: clamp(0.82rem, 1.2vw, 1rem);
+        font-size: clamp(0.7rem, 0.95vw, 0.82rem);
         color: var(--text);
-        line-height: 1.5;
+        line-height: 1.4;
       }
       .step-body code {
         background: #E6E9EC;
-        padding: 1px 6px;
+        padding: 1px 4px;
         border-radius: 4px;
         font-family: "Courier New", monospace;
-        font-size: 0.9em;
+        font-size: 0.85em;
         color: var(--indigo);
+        word-break: break-all;
       }
       .step-body .sb-sub {
-        font-size: 0.88em;
+        font-size: 0.85em;
         color: var(--muted);
         display: block;
         margin-top: 0.25rem;
@@ -890,12 +909,12 @@
           <div class="pill pill-white" style="margin: 0 auto 1.5rem">
             ✍ Hands-On
           </div>
-          <h1 class="display" style="color: white">Your First<br />Commit &amp; PR</h1>
+          <h1 class="display" style="color: white">Your First<br />Repo &amp; Push</h1>
           <p
             class="body-lg"
             style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem"
           >
-            By the end of this exercise, your name will be in a shared GitHub repo
+            By the end of this exercise, you'll have your own GitHub repo with a README pushed from VS Code
           </p>
         </div>
         <div class="section-num" style="color: white">06a</div>
@@ -906,7 +925,7 @@
         <div class="slide-label"><span class="snum">19</span> Exercise</div>
         <div
           class="stack"
-          style="align-items: center; max-width: 920px; width: 100%"
+          style="align-items: center; max-width: 1240px; width: 100%"
         >
           <div class="center">
             <div class="pill pill-amber">Follow Along · Raise Hand If Stuck</div>
@@ -934,39 +953,40 @@
             <li class="step-item">
               <div class="step-num">3</div>
               <div class="step-body">
-                <strong>Clone the starter repo</strong>:
-                <code>pelsung-cohort-3/hello-trainees</code>
-                <span class="sb-sub">Use VS Code's <em>Clone Repository</em> button — no terminal needed for now.</span>
+                <strong>Create a new repo on GitHub</strong> — name it
+                <code>hello-&lt;yourname&gt;</code> (e.g. <code>hello-karma</code>), set it
+                <em>Public</em>, and leave it empty (no README yet).
               </div>
             </li>
             <li class="step-item">
               <div class="step-num">4</div>
               <div class="step-body">
-                <strong>Create a new branch</strong> named
-                <code>add-yourname</code> (e.g. <code>add-karma</code>).
+                <strong>Create a local folder</strong>, open it in VS Code, and initialize git.
+                <span class="sb-sub">Terminal: <code>mkdir hello-&lt;yourname&gt; &amp;&amp; cd hello-&lt;yourname&gt;</code> then <code>git init</code></span>
               </div>
             </li>
             <li class="step-item">
               <div class="step-num">5</div>
               <div class="step-body">
-                <strong>Edit <code>trainees.md</code></strong> — add a line with
-                your name, vertical guess, and one hobby.
+                <strong>Add a <code>README.md</code></strong> — write a few lines about
+                yourself: name, vertical guess, and one hobby.
               </div>
             </li>
             <li class="step-item">
               <div class="step-num">6</div>
               <div class="step-body">
-                <strong>Commit &amp; push</strong> — commit message:
-                <code>"Add &lt;your name&gt; to trainees"</code>. Use VS Code's Git panel.
+                <strong>Stage &amp; commit</strong> your README.
+                <span class="sb-sub">Terminal: <code>git add README.md</code> then <code>git commit -m "Initial commit"</code></span>
               </div>
             </li>
             <li class="step-item">
               <div class="step-num">7</div>
               <div class="step-body">
-                <strong>Open a Pull Request on GitHub</strong> — title:
-                <code>"Add &lt;your name&gt; to trainees"</code>, request the
-                trainer as reviewer.
-                <span class="sb-sub">When approved &amp; merged, your name becomes part of the shared file forever.</span>
+                <strong>Link the remote &amp; push</strong> to the repo you created in step 3, then verify on GitHub.
+                <span class="sb-sub">
+                  <code>git remote add origin https://github.com/&lt;user&gt;/hello-&lt;yourname&gt;.git</code><br>
+                  <code>git branch -M main</code> · <code>git push -u origin main</code> — then refresh the repo page. 🎉
+                </span>
               </div>
             </li>
           </ul>
