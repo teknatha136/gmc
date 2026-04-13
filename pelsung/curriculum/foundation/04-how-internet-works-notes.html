@@ -1,0 +1,1204 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Class 04 — How the Internet Works · Pelsung Foundation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --blue: #0066B2;
+        --indigo: #001F35;
+        --amber: #247EC1;
+        --green: #7BC950;
+        --purple: #4796D1;
+        --red: #D80032;
+        --text: #1B2021;
+        --muted: #7B7C7F;
+        --faint: #9CA3AF;
+        --surf: #ffffff;
+        --bg: #F9F9F9;
+        --border: #EDEDED;
+        --border-l: #F5F5F5;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Open Sans", 'Aptos', sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+        line-height: 1.65;
+      }
+
+      /* HERO */
+      .hero {
+        background: var(--surf);
+        border-bottom: 1px solid var(--border);
+        padding: 4rem 2rem 3rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(135deg, #0067A3, #002D72);
+      }
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 100px;
+        padding: 0.35rem 1rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--muted);
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        margin-bottom: 1.5rem;
+      }
+      .hero-badge .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--amber);
+      }
+      .hero h1 {
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        line-height: 1.15;
+        margin-bottom: 0.75rem;
+      }
+      .c-blue {
+        color: var(--blue);
+      }
+      .c-indigo {
+        color: var(--indigo);
+      }
+      .amp {
+        color: var(--amber);
+        font-style: italic;
+      }
+      .hero-sub {
+        font-size: 1rem;
+        color: var(--muted);
+        margin-bottom: 2rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .hero-tags {
+        display: flex;
+        justify-content: center;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+        margin-bottom: 2rem;
+      }
+      .hero-tag {
+        padding: 0.3rem 0.9rem;
+        border-radius: 8px;
+        font-size: 0.78rem;
+        font-weight: 600;
+      }
+      .tag-blue {
+        background: #E6F0F8;
+        color: var(--blue);
+      }
+      .tag-indigo {
+        background: #E6E9EC;
+        color: var(--indigo);
+      }
+      .hero-stats {
+        display: inline-flex;
+        gap: 2rem;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1rem 2rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .stat {
+        text-align: center;
+      }
+      .stat-val {
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
+        font-size: 1.6rem;
+        font-weight: 400;
+        line-height: 1;
+      }
+      .stat-val.blue {
+        color: var(--blue);
+      }
+      .stat-val.indigo {
+        color: var(--indigo);
+      }
+      .stat-val.amber {
+        color: var(--amber);
+      }
+      .stat-label {
+        font-size: 0.72rem;
+        color: var(--faint);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-top: 0.2rem;
+      }
+
+      /* LAYOUT */
+      .container {
+        max-width: 880px;
+        margin: 0 auto;
+        padding: 0 2rem 6rem;
+      }
+
+      /* TOC */
+      .toc {
+        background: var(--surf);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.75rem 2rem;
+        margin: 2.5rem 0;
+      }
+      .toc h3 {
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--faint);
+        margin-bottom: 1.25rem;
+      }
+      .toc-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.4rem 2rem;
+      }
+      .toc-item {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-size: 0.875rem;
+        color: var(--muted);
+        text-decoration: none;
+        padding: 0.3rem 0;
+        border-bottom: 1px solid var(--border-l);
+        transition: color 0.15s;
+      }
+      .toc-item:hover {
+        color: var(--indigo);
+      }
+      .toc-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .toc-time {
+        margin-left: auto;
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: var(--faint);
+      }
+
+      /* SECTION HEADERS */
+      .section-hd {
+        padding: 3.5rem 0 1.5rem;
+      }
+      .section-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.3rem 0.9rem;
+        border-radius: 100px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 0.6rem;
+      }
+      .pill-blue {
+        background: #E6F0F8;
+        color: var(--blue);
+      }
+      .pill-indigo {
+        background: #E6E9EC;
+        color: var(--indigo);
+      }
+      .pill-amber {
+        background: #EBF0F7;
+        color: #1C5B8C;
+      }
+      .pill-green {
+        background: #F0F7EC;
+        color: var(--green);
+      }
+      .section-title {
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
+        font-size: 2rem;
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        margin-bottom: 0.4rem;
+      }
+      .section-desc {
+        font-size: 1rem;
+        color: var(--muted);
+        margin-bottom: 1.75rem;
+      }
+
+      /* CONCEPT BLOCKS */
+      .concept {
+        background: var(--surf);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 1.75rem 2rem;
+        margin-bottom: 1.5rem;
+      }
+      .concept-label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: var(--faint);
+        margin-bottom: 0.5rem;
+      }
+      .concept h3 {
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
+        font-size: 1.4rem;
+        font-weight: 400;
+        margin-bottom: 0.75rem;
+      }
+      .concept p {
+        font-size: 0.95rem;
+        color: var(--muted);
+        line-height: 1.7;
+        margin-bottom: 0.75rem;
+      }
+      .concept ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin: 0.25rem 0;
+      }
+      .concept ul li {
+        font-size: 0.92rem;
+        color: var(--muted);
+        padding-left: 1.4rem;
+        position: relative;
+        line-height: 1.55;
+      }
+      .concept ul li::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: var(--faint);
+        font-size: 0.85em;
+        top: 0.1em;
+      }
+      .concept ul li strong {
+        color: var(--text);
+      }
+
+      /* HIGHLIGHT BOX (analogy / key idea) */
+      .highlight-box {
+        border-radius: 12px;
+        padding: 1.25rem 1.5rem;
+        margin: 1rem 0;
+      }
+      .hb-blue {
+        background: #E6F0F8;
+        border-left: 4px solid var(--blue);
+      }
+      .hb-indigo {
+        background: #E6E9EC;
+        border-left: 4px solid var(--indigo);
+      }
+      .hb-amber {
+        background: #EBF0F7;
+        border-left: 4px solid var(--amber);
+      }
+      .hb-green {
+        background: #F0F7EC;
+        border-left: 4px solid var(--green);
+      }
+      .hb-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: var(--faint);
+        margin-bottom: 0.4rem;
+      }
+      .highlight-box p {
+        font-size: 0.9rem;
+        color: var(--text);
+        line-height: 1.6;
+        margin: 0;
+      }
+      .highlight-box p strong {
+        font-weight: 700;
+      }
+
+      /* URL VISUAL */
+      .url-anatomy {
+        display: flex;
+        align-items: flex-end;
+        flex-wrap: wrap;
+        gap: 0;
+        font-family: "Courier New", monospace;
+        margin: 1rem 0;
+      }
+      .url-part {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .url-text {
+        font-size: clamp(0.9rem, 2vw, 1.1rem);
+        font-weight: 700;
+        padding: 0.3rem 0.5rem;
+        border-radius: 6px 6px 0 0;
+        border-bottom: 3px solid transparent;
+      }
+      .url-label {
+        font-family: "Open Sans", sans-serif;
+        font-size: 0.62rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-top: 0.3rem;
+        opacity: 0.8;
+        text-align: center;
+      }
+      .url-sep {
+        font-size: clamp(0.9rem, 2vw, 1.1rem);
+        font-weight: 700;
+        color: var(--faint);
+        padding-bottom: 0.3rem;
+        align-self: flex-end;
+        margin-bottom: 0.3rem;
+      }
+      .up-protocol .url-text {
+        background: #E6F0F8;
+        color: var(--blue);
+        border-color: var(--blue);
+      }
+      .up-protocol .url-label {
+        color: var(--blue);
+      }
+      .up-domain .url-text {
+        background: #E6E9EC;
+        color: var(--indigo);
+        border-color: var(--indigo);
+      }
+      .up-domain .url-label {
+        color: var(--indigo);
+      }
+      .up-tld .url-text {
+        background: #F0F7EC;
+        color: var(--green);
+        border-color: var(--green);
+      }
+      .up-tld .url-label {
+        color: var(--green);
+      }
+      .up-path .url-text {
+        background: #EBF0F7;
+        color: #1C5B8C;
+        border-color: var(--amber);
+      }
+      .up-path .url-label {
+        color: #1C5B8C;
+      }
+      .up-query .url-text {
+        background: #F2E8EA;
+        color: #8B001E;
+        border-color: #ec4899;
+      }
+      .up-query .url-label {
+        color: #8B001E;
+      }
+
+      /* JSON BLOCK */
+      .json-block {
+        background: #001F35;
+        border-radius: 12px;
+        overflow: hidden;
+        margin: 1rem 0;
+      }
+      .jb-bar {
+        background: #0A2A45;
+        padding: 8px 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.72rem;
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .jb-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+      }
+      .jb-body {
+        padding: 1.25rem 1.5rem;
+        font-family: "Courier New", monospace;
+        font-size: 0.88rem;
+        line-height: 1.9;
+      }
+      .jk {
+        color: #7dd3fc;
+      }
+      .jv-str {
+        color: #86efac;
+      }
+      .jv-num {
+        color: #fde68a;
+      }
+      .jv-bool {
+        color: #c4b5fd;
+      }
+      .jv-punc {
+        color: rgba(255, 255, 255, 0.3);
+      }
+      .jv-arr {
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      /* REST TABLE */
+      .rest-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 6px;
+        margin: 1rem 0;
+      }
+      .rest-table th {
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: var(--faint);
+        text-align: left;
+        padding: 0.3rem 0.75rem 0.5rem;
+      }
+      .rest-table td {
+        font-size: 0.88rem;
+        padding: 0.6rem 0.75rem;
+        background: var(--surf);
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        color: var(--muted);
+      }
+      .rest-table tr td:first-child {
+        border-radius: 8px 0 0 8px;
+        border-left: 1px solid var(--border);
+      }
+      .rest-table tr td:last-child {
+        border-radius: 0 8px 8px 0;
+        border-right: 1px solid var(--border);
+      }
+      .mb {
+        font-family: "Courier New", monospace;
+        font-size: 0.82rem;
+        font-weight: 700;
+        padding: 0.2rem 0.55rem;
+        border-radius: 5px;
+        display: inline-block;
+      }
+      .mb-get {
+        background: #E6F0F8;
+        color: var(--blue);
+      }
+      .mb-post {
+        background: #F0F7EC;
+        color: var(--green);
+      }
+      .mb-put {
+        background: #EBF0F7;
+        color: #1C5B8C;
+      }
+      .mb-delete {
+        background: #F2E8EA;
+        color: var(--red);
+      }
+      .td-code {
+        font-family: "Courier New", monospace;
+        font-size: 0.78rem;
+        color: var(--indigo);
+      }
+
+      /* DB TABLE */
+      .db-wrap {
+        background: var(--surf);
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+        margin: 1rem 0;
+      }
+      .db-title-bar {
+        background: var(--bg);
+        border-bottom: 1px solid var(--border);
+        padding: 0.65rem 1rem;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--indigo);
+      }
+      .db-tbl {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .db-tbl th {
+        background: #E6E9EC;
+        color: var(--indigo);
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        padding: 0.5rem 0.9rem;
+        text-align: left;
+        border-bottom: 1px solid #C0C8D0;
+      }
+      .db-tbl td {
+        padding: 0.45rem 0.9rem;
+        font-size: 0.84rem;
+        color: var(--muted);
+        border-bottom: 1px solid var(--border-l);
+        font-family: "Courier New", monospace;
+      }
+      .db-tbl tr:last-child td {
+        border-bottom: none;
+      }
+      .db-pk {
+        color: var(--amber);
+        font-weight: 700;
+      }
+      .db-fk {
+        color: var(--blue);
+        font-weight: 600;
+      }
+
+      /* SUMMARY BOX */
+      .summary {
+        background: var(--surf);
+        border: 1.5px solid var(--border);
+        border-radius: 14px;
+        padding: 1.5rem 1.75rem;
+        margin: 2rem 0;
+      }
+      .summary h4 {
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
+        font-size: 1.15rem;
+        font-weight: 400;
+        margin-bottom: 1rem;
+      }
+      .summary ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+      }
+      .summary ul li {
+        font-size: 0.9rem;
+        color: var(--muted);
+        padding-left: 1.75rem;
+        position: relative;
+        line-height: 1.5;
+      }
+      .summary ul li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: var(--green);
+        font-weight: 700;
+      }
+      .summary ul li strong {
+        color: var(--text);
+      }
+
+      /* PRACTICE */
+      .practice {
+        background: #F0F4FA;
+        border: 1.5px solid #A3C4E0;
+        border-radius: 14px;
+        padding: 1.5rem 1.75rem;
+        margin: 2rem 0;
+      }
+      .practice h4 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1C5B8C;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .practice ol {
+        padding-left: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+      }
+      .practice ol li {
+        font-size: 0.9rem;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+      .practice ol li strong {
+        color: var(--text);
+      }
+      .practice ol li code {
+        background: #F5F5F5;
+        padding: 1px 5px;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+        font-size: 0.85em;
+      }
+
+      /* FOOTER */
+      .page-footer {
+        text-align: center;
+        padding: 3rem 0 2rem;
+        border-top: 1px solid var(--border);
+        margin-top: 4rem;
+      }
+      .page-footer p {
+        font-size: 0.75rem;
+        color: var(--faint);
+        line-height: 1.8;
+      }
+      .foot-brand {
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
+        font-size: 1.1rem;
+        font-weight: 400;
+        margin-bottom: 0.5rem;
+      }
+      .foot-brand .b1 {
+        color: var(--blue);
+      }
+      .foot-brand .x {
+        color: var(--amber);
+        font-style: italic;
+      }
+      .foot-brand .b2 {
+        color: var(--indigo);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hero">
+      <img src="../../../selise-brand/assets/SELISE_Logo_Primary.png" alt="SELISE Digital Platforms" style="height: 48px; margin-bottom: 1rem; display: block;">
+      <div class="hero-badge">
+        <span class="dot"></span>Class 04 · Foundation Phase
+      </div>
+      <h1>
+        <span class="c-blue">How the Internet Works</span>
+      </h1>
+      <p class="hero-sub">
+        Your reference sheet for this session — keep this and read it again tonight. The concepts here are foundational to everything you'll build.
+      </p>
+      <div class="hero-tags">
+        <span class="hero-tag tag-blue">IP Addresses</span>
+        <span class="hero-tag tag-blue">DNS</span>
+        <span class="hero-tag tag-blue">HTTP / HTTPS</span>
+        <span class="hero-tag tag-blue">Status Codes</span>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="toc">
+        <h3>Contents</h3>
+        <div class="toc-grid">
+          <a href="#internet" class="toc-item"><span class="toc-dot" style="background: var(--blue)"></span>What is the Internet?</a>
+          <a href="#ip" class="toc-item"><span class="toc-dot" style="background: var(--blue)"></span>IP Addresses</a>
+          <a href="#dns" class="toc-item"><span class="toc-dot" style="background: var(--blue)"></span>DNS — The Phonebook</a>
+          <a href="#url" class="toc-item"><span class="toc-dot" style="background: var(--blue)"></span>Anatomy of a URL</a>
+          <a href="#http" class="toc-item"><span class="toc-dot" style="background: var(--blue)"></span>HTTP, HTTPS &amp; Status Codes</a>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════
+       SECTION 1: HOW THE INTERNET WORKS
+  ════════════════════════════ -->
+      <div class="section-hd">
+        <div class="section-pill pill-blue">Class 04</div>
+        <h2 class="section-title" id="internet">How the Internet Works</h2>
+        <p class="section-desc">
+          The internet is not magic — it's infrastructure. Once you understand
+          how it works, you can debug problems, read error messages, and build
+          things that work reliably.
+        </p>
+      </div>
+
+      <!-- THE INTERNET -->
+      <div class="concept" id="ip">
+        <div class="concept-label">Foundation</div>
+        <h3>The Internet &amp; IP Addresses</h3>
+        <p>
+          The internet is a global network of billions of computers that are all
+          connected together. Not wirelessly through the air — physically,
+          through underground and undersea cables, via satellites, and through
+          large data centres in cities around the world.
+        </p>
+        <p>
+          For two computers to communicate, they each need an address. That
+          address is called an <strong>IP address</strong> (Internet Protocol
+          address).
+        </p>
+        <div class="highlight-box hb-blue">
+          <div class="hb-label">Analogy</div>
+          <p>
+            Think of your house address. The postman can't deliver a letter to
+            you without knowing where you live. In the same way, the internet
+            can't deliver data to your device without knowing your IP address.
+          </p>
+        </div>
+        <p>
+          IPv4 addresses look like this:
+          <code
+            style="
+              background: #E6E9EC;
+              color: var(--indigo);
+              padding: 2px 6px;
+              border-radius: 4px;
+              font-family: &quot;Courier New&quot;, monospace;
+            "
+            >192.168.1.1</code
+          >
+          — four numbers, each between 0 and 255, separated by dots. There are
+          about 4 billion possible IPv4 addresses, which is no longer enough for
+          all the devices in the world. IPv6 was invented to solve this problem.
+        </p>
+        <ul>
+          <li>
+            Your laptop, phone, and the selisegroup.com server all have IP addresses
+          </li>
+          <li>
+            <strong>Public IP</strong>: visible to the whole internet (your
+            router's address)
+          </li>
+          <li>
+            <strong>Private IP</strong>: only visible on your local network
+            (e.g., 192.168.x.x)
+          </li>
+        </ul>
+      </div>
+
+      <!-- DNS -->
+      <div class="concept" id="dns">
+        <div class="concept-label">Domain Name System</div>
+        <h3>DNS — The Internet's Phonebook</h3>
+        <p>
+          You remember <strong>names</strong> — like selisegroup.com or google.com.
+          But computers connect using <strong>numbers</strong> — IP addresses.
+          DNS is the system that translates between the two.
+        </p>
+        <p>When you type a domain name in your browser:</p>
+        <ul>
+          <li>
+            Your browser first checks its local <strong>cache</strong> — has it
+            looked this up recently?
+          </li>
+          <li>
+            If not, it asks a <strong>DNS resolver</strong> (usually provided by
+            your ISP or Google/Cloudflare)
+          </li>
+          <li>
+            The resolver looks up the domain name and returns the matching IP
+            address
+          </li>
+          <li>Your browser then connects to that IP address</li>
+        </ul>
+        <div class="highlight-box hb-blue">
+          <div class="hb-label">Key fact</div>
+          <p>
+            A DNS lookup takes less than <strong>100 milliseconds</strong> —
+            faster than you can blink. And once your browser has looked it up,
+            it caches the result so it doesn't have to do it again for a while.
+          </p>
+        </div>
+        <p>
+          If DNS breaks (which happens occasionally), websites appear to be
+          offline even though the servers are perfectly fine — your browser just
+          can't find the address.
+        </p>
+      </div>
+
+      <!-- URL ANATOMY -->
+      <div class="concept" id="url">
+        <div class="concept-label">URLs</div>
+        <h3>Anatomy of a URL</h3>
+        <p>
+          Every URL (Uniform Resource Locator) is an address that points to a
+          specific resource on the internet. Each part tells the browser
+          something different.
+        </p>
+        <div class="url-anatomy">
+          <div class="url-part up-protocol">
+            <span class="url-text">https</span
+            ><span class="url-label">Protocol</span>
+          </div>
+          <span class="url-sep">://</span>
+          <div class="url-part up-domain">
+            <span class="url-text">selise</span
+            ><span class="url-label">Domain</span>
+          </div>
+          <div class="url-part up-tld">
+            <span class="url-text">.ch</span><span class="url-label">TLD</span>
+          </div>
+          <div class="url-part up-path">
+            <span class="url-text">/careers</span
+            ><span class="url-label">Path</span>
+          </div>
+          <div class="url-part up-query">
+            <span class="url-text">?lang=en</span
+            ><span class="url-label">Query</span>
+          </div>
+        </div>
+        <ul>
+          <li>
+            <strong style="color: var(--blue)">Protocol</strong> —
+            <code
+              style="
+                background: #E6F0F8;
+                color: var(--blue);
+                padding: 1px 4px;
+                border-radius: 3px;
+                font-size: 0.85em;
+              "
+              >https</code
+            >: Use encrypted HTTPS (never plain HTTP for sensitive data)
+          </li>
+          <li>
+            <strong style="color: var(--indigo)">Domain</strong> —
+            <code
+              style="
+                background: #E6E9EC;
+                color: var(--indigo);
+                padding: 1px 4px;
+                border-radius: 3px;
+                font-size: 0.85em;
+              "
+              >selise</code
+            >: The registered name of the organisation
+          </li>
+          <li>
+            <strong style="color: var(--green)">TLD</strong> —
+            <code
+              style="
+                background: #F0F7EC;
+                color: var(--green);
+                padding: 1px 4px;
+                border-radius: 3px;
+                font-size: 0.85em;
+              "
+              >.ch</code
+            >: Top-level domain. .ch = Switzerland, .bt = Bhutan, .com =
+            commercial
+          </li>
+          <li>
+            <strong style="color: #1C5B8C">Path</strong> —
+            <code
+              style="
+                background: #EBF0F7;
+                color: #1C5B8C;
+                padding: 1px 4px;
+                border-radius: 3px;
+                font-size: 0.85em;
+              "
+              >/careers</code
+            >: Which specific page or file on the server
+          </li>
+          <li>
+            <strong style="color: #8B001E">Query string</strong> —
+            <code
+              style="
+                background: #F2E8EA;
+                color: #8B001E;
+                padding: 1px 4px;
+                border-radius: 3px;
+                font-size: 0.85em;
+              "
+              >?lang=en</code
+            >: Extra parameters sent to the server (like a filter)
+          </li>
+        </ul>
+      </div>
+
+      <!-- HTTP & HTTPS -->
+      <div class="concept" id="http">
+        <div class="concept-label">Protocols &amp; Status Codes</div>
+        <h3>HTTP, HTTPS &amp; Status Codes</h3>
+        <p>
+          <strong>HTTP</strong> (HyperText Transfer Protocol) is the rulebook
+          for how browsers and servers communicate. It defines how requests are
+          formatted, how responses are structured, and what the different types
+          of requests mean.
+        </p>
+        <p>
+          <strong>HTTPS</strong> is HTTP with encryption added (using TLS —
+          Transport Layer Security). All data sent between your browser and the
+          server is scrambled so that nobody else on the network can read it.
+        </p>
+        <div class="highlight-box hb-green">
+          <div class="hb-label">Practical rule</div>
+          <p>
+            Always check for the <strong>padlock icon</strong> in the browser
+            address bar before typing a password or card number. No padlock = no
+            HTTPS = your data is travelling in plain text.
+          </p>
+        </div>
+        <p>
+          <strong>Status codes</strong> are 3-digit numbers the server sends
+          back with every response. They tell you instantly whether the request
+          succeeded or failed:
+        </p>
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 0.75rem;
+            margin: 1rem 0;
+          "
+        >
+          <div
+            style="
+              background: #F0F7EC;
+              border: 1.5px solid #B5DBA7;
+              border-radius: 10px;
+              padding: 1rem;
+              text-align: center;
+            "
+          >
+            <div
+              style="
+                font-family: &quot;Bahnschrift&quot;, 'Segoe UI', sans-serif;
+                font-size: 1.8rem;
+                color: var(--green);
+                line-height: 1;
+              "
+            >
+              200
+            </div>
+            <div
+              style="
+                font-size: 0.78rem;
+                font-weight: 700;
+                color: var(--green);
+                text-transform: uppercase;
+                margin: 0.2rem 0;
+              "
+            >
+              OK
+            </div>
+            <div style="font-size: 0.75rem; color: var(--muted)">
+              Request succeeded
+            </div>
+          </div>
+          <div
+            style="
+              background: #E6F0F8;
+              border: 1.5px solid #B0D4E9;
+              border-radius: 10px;
+              padding: 1rem;
+              text-align: center;
+            "
+          >
+            <div
+              style="
+                font-family: &quot;Bahnschrift&quot;, 'Segoe UI', sans-serif;
+                font-size: 1.8rem;
+                color: var(--blue);
+                line-height: 1;
+              "
+            >
+              301
+            </div>
+            <div
+              style="
+                font-size: 0.78rem;
+                font-weight: 700;
+                color: var(--blue);
+                text-transform: uppercase;
+                margin: 0.2rem 0;
+              "
+            >
+              Moved
+            </div>
+            <div style="font-size: 0.75rem; color: var(--muted)">
+              New permanent URL
+            </div>
+          </div>
+          <div
+            style="
+              background: #EBF0F7;
+              border: 1.5px solid #A3C4E0;
+              border-radius: 10px;
+              padding: 1rem;
+              text-align: center;
+            "
+          >
+            <div
+              style="
+                font-family: &quot;Bahnschrift&quot;, 'Segoe UI', sans-serif;
+                font-size: 1.8rem;
+                color: #1C5B8C;
+                line-height: 1;
+              "
+            >
+              404
+            </div>
+            <div
+              style="
+                font-size: 0.78rem;
+                font-weight: 700;
+                color: #1C5B8C;
+                text-transform: uppercase;
+                margin: 0.2rem 0;
+              "
+            >
+              Not Found
+            </div>
+            <div style="font-size: 0.75rem; color: var(--muted)">
+              Page doesn't exist
+            </div>
+          </div>
+          <div
+            style="
+              background: #ECF2F8;
+              border: 1.5px solid #A3C4E0;
+              border-radius: 10px;
+              padding: 1rem;
+              text-align: center;
+            "
+          >
+            <div
+              style="
+                font-family: &quot;Bahnschrift&quot;, 'Segoe UI', sans-serif;
+                font-size: 1.8rem;
+                color: var(--purple);
+                line-height: 1;
+              "
+            >
+              403
+            </div>
+            <div
+              style="
+                font-size: 0.78rem;
+                font-weight: 700;
+                color: var(--purple);
+                text-transform: uppercase;
+                margin: 0.2rem 0;
+              "
+            >
+              Forbidden
+            </div>
+            <div style="font-size: 0.75rem; color: var(--muted)">
+              No permission
+            </div>
+          </div>
+          <div
+            style="
+              background: #F2E8EA;
+              border: 1.5px solid #E0B5B9;
+              border-radius: 10px;
+              padding: 1rem;
+              text-align: center;
+            "
+          >
+            <div
+              style="
+                font-family: &quot;Bahnschrift&quot;, 'Segoe UI', sans-serif;
+                font-size: 1.8rem;
+                color: var(--red);
+                line-height: 1;
+              "
+            >
+              500
+            </div>
+            <div
+              style="
+                font-size: 0.78rem;
+                font-weight: 700;
+                color: var(--red);
+                text-transform: uppercase;
+                margin: 0.2rem 0;
+              "
+            >
+              Server Error
+            </div>
+            <div style="font-size: 0.75rem; color: var(--muted)">
+              Server-side problem
+            </div>
+          </div>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--faint); font-style: italic">
+          Memory shortcut: 4xx = your fault (bad request) · 5xx = server's fault
+          · 2xx = success
+        </p>
+      </div>
+
+      <!-- SUMMARY BOX 1 -->
+      <div class="summary">
+        <h4>Class 04 — Key Takeaways</h4>
+        <ul>
+          <li>
+            <strong>Every device has an IP address</strong> — the internet uses
+            these numbers to route data to the right place
+          </li>
+          <li>
+            <strong>DNS translates names to numbers</strong> — you type
+            selisegroup.com, DNS gives your browser the IP address to connect to
+          </li>
+          <li>
+            <strong>A URL has 5 parts</strong> — protocol, domain, TLD, path,
+            and optional query string. Each part tells the browser something
+            different
+          </li>
+          <li>
+            <strong>HTTPS is mandatory for sensitive data</strong> — look for
+            the padlock. HTTP sends data in plain text; HTTPS encrypts it
+          </li>
+          <li>
+            <strong>Status codes summarise every response</strong> — 200 =
+            success, 404 = not found, 500 = server broke
+          </li>
+          <li>
+            <strong
+              >Every web request travels: Browser → Internet → Server →
+              back</strong
+            >
+            — DNS, TCP connection, HTTP request, server processing, HTTP
+            response, browser rendering
+          </li>
+        </ul>
+      </div>
+
+    </div>
+    <!-- /container -->
+
+    <div class="page-footer">
+      <img src="../../../selise-brand/assets/SELISE_Logo_Primary.png" alt="SELISE Digital Platforms" style="height: 32px; margin-bottom: 0.5rem; display: block; margin-left: auto; margin-right: auto; opacity: 0.6;">
+      <p class="foot-brand">
+        <span class="b1">SELISE</span> <span class="x">×</span>
+        <span class="b2">Pelsung</span>
+      </p>
+      <p>Class 04 · Foundation Phase · Cohort 3</p>
+      <p>How the Internet Works</p>
+    </div>
+  </body>
+</html>

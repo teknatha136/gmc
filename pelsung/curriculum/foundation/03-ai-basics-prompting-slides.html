@@ -1,0 +1,880 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Basics &amp; Prompting — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../shared/slides.css" />
+  </head>
+  <body>
+    <div id="deck">
+      <!-- ══════════════════════════════════════════
+       SLIDE 1 — TITLE
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-gradient" data-slide="1">
+        <div class="slide-label">
+          <span class="snum">01</span> SELISE × Pelsung · Cohort 3
+        </div>
+        <div class="title-grid center">
+          <div>
+            <div class="date-badge">
+              <span class="db-dot"></span>
+              Foundation Phase
+            </div>
+          </div>
+          <h1 class="display" style="color: var(--text)">
+            <span style="color: var(--indigo)">AI Basics</span>
+            <span style="color: var(--amber); font-style: italic"> &amp; </span>
+            <span style="color: var(--indigo)">Prompting</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted)">
+            What AI is · ChatGPT vs Claude · Writing prompts that actually work
+          </p>
+          <div class="class-tags">
+            <span class="class-tag tag-indigo">AI Basics &amp; Prompting</span>
+          </div>
+        </div>
+        <div class="interact-hint">
+          Press → or click the right side to advance
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 2 — AGENDA
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 720px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              Session Journey
+            </h2>
+          </div>
+          <div class="agenda-row" onclick="goTo(3)">
+            <span class="ar-dot" style="background: var(--indigo)"></span>
+            <span class="ar-label">🤖 What is AI?</span>
+            <span class="ar-badge" style="background: #E6E9EC; color: var(--indigo)">25 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(6)">
+            <span class="ar-dot" style="background: var(--indigo)"></span>
+            <span class="ar-label">✏️ Prompting Techniques</span>
+            <span class="ar-badge" style="background: #E6E9EC; color: var(--indigo)">25 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(9)">
+            <span class="ar-dot" style="background: var(--amber)"></span>
+            <span class="ar-label">✍ Exercise — Prompt Battle</span>
+            <span class="ar-badge" style="background: #EBF0F7; color: #1C5B8C">30 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(10)">
+            <span class="ar-dot" style="background: var(--indigo)"></span>
+            <span class="ar-label">⚖️ AI Dos &amp; Don'ts</span>
+            <span class="ar-badge" style="background: #E6E9EC; color: var(--indigo)">15 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(12)">
+            <span class="ar-dot" style="background: var(--amber)"></span>
+            <span class="ar-label">✍ Exercise — AI + Professional Pledge</span>
+            <span class="ar-badge" style="background: #EBF0F7; color: #1C5B8C">15 min</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 3 — SECTION BREAK: AI
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-indigo" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span> AI Basics &amp; Prompting
+          </div>
+          <h1 class="display" style="color: white">
+            AI Basics<br />&amp; Prompting
+          </h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem">
+            What AI is · ChatGPT vs Claude · Writing prompts that actually work
+          </p>
+        </div>
+        <div class="section-num" style="color: white">03</div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 4 — WHAT IS AI?
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo" data-slide="4">
+        <div class="slide-label">
+          <span class="snum">04</span> What is AI?
+        </div>
+        <div class="stack" style="align-items: center; width: 100%">
+          <div class="center">
+            <div class="pill pill-indigo">Artificial Intelligence</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              What is AI, Really?
+            </h2>
+            <p class="body-md" style="color: var(--muted); max-width: 600px; margin: 0.5rem auto 1.5rem;">
+              Not robots. Not magic. Not a replacement for your brain.
+            </p>
+          </div>
+          <div class="ai-types">
+            <div class="ai-type-card atc-llm">
+              <div class="atc-icon">💬</div>
+              <h4 style="color: var(--indigo)">Language AI (LLM)</h4>
+              <p>Reads and writes text. ChatGPT, Claude, Gemini. Trained on billions of documents.</p>
+            </div>
+            <div class="ai-type-card atc-image">
+              <div class="atc-icon">🎨</div>
+              <h4 style="color: var(--purple)">Image AI</h4>
+              <p>Generates or edits images. Midjourney, DALL·E, Stable Diffusion.</p>
+            </div>
+            <div class="ai-type-card atc-audio">
+              <div class="atc-icon">🎵</div>
+              <h4 style="color: var(--green)">Audio / Video AI</h4>
+              <p>Transcribes, generates, or edits voice and video. Whisper, Suno, Runway.</p>
+            </div>
+          </div>
+          <div class="card" style="background: #EEF0F2; border: 2px dashed #C0C8D0; text-align: center; max-width: 700px;">
+            <p class="body-md" style="color: var(--indigo)">
+              🧠 An LLM is a <strong>very sophisticated autocomplete</strong> —<br />it predicts the most likely next word, over and over, at massive scale.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 5 — CHATGPT vs CLAUDE
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo bg-subtle" data-slide="5">
+        <div class="slide-label">
+          <span class="snum">05</span> ChatGPT vs Claude
+        </div>
+        <div class="stack" style="align-items: center; width: 100%; max-width: 860px">
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem); margin-bottom: clamp(1rem, 2vw, 1.75rem);">
+              The Two Tools You'll Use
+            </h2>
+          </div>
+          <div class="cols-2">
+            <div class="card" style="border: 2px solid #10a37f">
+              <h4 style="color: #10a37f; font-size: clamp(1rem, 1.6vw, 1.2rem)">💚 ChatGPT</h4>
+              <ul>
+                <li>Made by <strong>OpenAI</strong></li>
+                <li>Current flagship: <strong>GPT-4o</strong></li>
+                <li>Most widely known worldwide</li>
+                <li>Has web search (paid tier)</li>
+                <li>Great for: writing, coding, general tasks</li>
+                <li>Free tier available</li>
+              </ul>
+            </div>
+            <div class="card" style="border: 2px solid #c77e3e">
+              <h4 style="color: #c77e3e; font-size: clamp(1rem, 1.6vw, 1.2rem)">🟤 Claude</h4>
+              <ul>
+                <li>Made by <strong>Anthropic</strong></li>
+                <li>Current flagship: <strong>Claude Sonnet 4</strong></li>
+                <li>Designed to be safer &amp; more careful</li>
+                <li>Very long context window (large docs)</li>
+                <li>Great for: coding (Claude Code), long documents, nuanced reasoning</li>
+                <li>Free tier available</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card" style="background: var(--bg); border: 1.5px solid var(--border); text-align: center; max-width: 700px;">
+            <p class="body-md" style="color: var(--muted)">
+              💡 <strong style="color: var(--text)">Which to use?</strong> Both are excellent — in this program we'll lean on <strong>Claude</strong>, especially <strong>Claude Code</strong> for software development work.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 6 — LIVE DEMO PROMPT
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-dark" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> Live Demo</div>
+        <div class="center" style="max-width: 800px">
+          <div class="pill pill-white" style="margin: 0 auto 1rem">
+            🖥️ Live Demo on Projector
+          </div>
+          <h2 class="heading" style="color: white; margin-bottom: 1.5rem">
+            Watch how AI adapts to context
+          </h2>
+          <div style="display: flex; flex-direction: column; gap: 1rem; width: 100%;">
+            <div style="background: #001F35; border: 1.5px solid #7dd3fc; border-radius: 12px; padding: clamp(0.75rem, 1.5vw, 1.25rem);">
+              <p style="font-size: clamp(0.65rem, 0.9vw, 0.75rem); color: #7dd3fc; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 0.5rem;">
+                Prompt 1
+              </p>
+              <p style="font-family: &quot;Courier New&quot;, monospace; color: #e2e8f0; font-size: clamp(0.82rem, 1.2vw, 1rem); line-height: 1.6;">
+                "Explain what a software API is to a 10-year-old."
+              </p>
+            </div>
+            <div style="background: #001F35; border: 1.5px solid #86efac; border-radius: 12px; padding: clamp(0.75rem, 1.5vw, 1.25rem);">
+              <p style="font-size: clamp(0.65rem, 0.9vw, 0.75rem); color: #86efac; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 0.5rem;">
+                Prompt 2
+              </p>
+              <p style="font-family: &quot;Courier New&quot;, monospace; color: #e2e8f0; font-size: clamp(0.82rem, 1.2vw, 1rem); line-height: 1.6;">
+                "Now explain it to a senior software engineer."
+              </p>
+            </div>
+          </div>
+          <p style="color: rgba(255, 255, 255, 0.5); margin-top: 1.25rem; font-size: clamp(0.8rem, 1.1vw, 0.95rem);">
+            👀 Notice how the model shifts its vocabulary, examples, and depth — <strong style="color: white">same question, different context</strong>
+          </p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 7 — PROMPT ANATOMY
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo" data-slide="7">
+        <div class="slide-label">
+          <span class="snum">07</span> Prompting
+        </div>
+        <div class="stack" style="align-items: center; width: 100%; max-width: 880px">
+          <div class="center">
+            <div class="pill pill-indigo">The Art of Prompting</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              Anatomy of a Great Prompt
+            </h2>
+          </div>
+          <div class="prompt-terminal">
+            <div class="pt-titlebar">
+              <div class="pt-dot r"></div>
+              <div class="pt-dot y"></div>
+              <div class="pt-dot g"></div>
+              <span style="color: rgba(255, 255, 255, 0.4); font-size: 0.75rem; margin-left: 8px;">prompt.txt</span>
+            </div>
+            <div class="pt-body">
+              <div class="pt-line">
+                <span class="pt-tag ctx-tag">Context</span><span class="pt-text ctx">I am a software developer at a company building a digital ID system for Bhutan.</span>
+              </div>
+              <div class="pt-line">
+                <span class="pt-tag task-tag">Task</span><span class="pt-text task">Write a professional email to a client explaining a 2-week delay in the API delivery.</span>
+              </div>
+              <div class="pt-line">
+                <span class="pt-tag fmt-tag">Format</span><span class="pt-text fmt">Use a formal but empathetic tone. Keep it under 150 words. Include a subject line.</span>
+              </div>
+              <div class="pt-line">
+                <span class="pt-tag ex-tag">Example</span><span class="pt-text ex">Subject line style: "[Project name] Update — [topic]"</span>
+              </div>
+            </div>
+          </div>
+          <div class="pt-legend">
+            <span><span class="leg-dot" style="background: #7dd3fc"></span> Context — who/what/where you are</span>
+            <span><span class="leg-dot" style="background: #86efac"></span> Task — exactly what you want</span>
+            <span><span class="leg-dot" style="background: #fde68a"></span> Format — how you want it</span>
+            <span><span class="leg-dot" style="background: #c4b5fd"></span> Example — optional, very powerful</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 8 — 4 RULES OF PROMPTING
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-indigo" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> 4 Rules</div>
+        <div class="stack" style="align-items: center; width: 100%; max-width: 900px">
+          <div class="center" style="margin-bottom: 1rem">
+            <h2 class="heading" style="color: white; font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              4 Rules of Great Prompting
+            </h2>
+          </div>
+          <div class="rule-cards">
+            <div class="rule-card">
+              <div class="rc-num">1</div>
+              <div class="rc-body">
+                <h4>Give it a Role</h4>
+                <p>"You are a senior UX designer reviewing a mobile app..." Role-setting shifts the quality and perspective dramatically.</p>
+              </div>
+            </div>
+            <div class="rule-card">
+              <div class="rc-num">2</div>
+              <div class="rc-body">
+                <h4>Be Specific About Output</h4>
+                <p>Vague: "Write about APIs." Specific: "Write a 3-paragraph explanation of REST APIs for a non-coder using analogies."</p>
+              </div>
+            </div>
+            <div class="rule-card">
+              <div class="rc-num">3</div>
+              <div class="rc-body">
+                <h4>Iterate — Don't Settle</h4>
+                <p>AI is a conversation. If the first response isn't right: "Make it shorter and less formal." Keep refining in the same chat.</p>
+              </div>
+            </div>
+            <div class="rule-card">
+              <div class="rc-num">4</div>
+              <div class="rc-body">
+                <h4>Give Examples</h4>
+                <p>"Here's an example of the style I want: [paste]. Now write something similar about [topic]." This is few-shot prompting.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 9 — WEAK vs STRONG PROMPTS
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo bg-subtle" data-slide="9">
+        <div class="slide-label">
+          <span class="snum">09</span> Interactive · Weak vs Strong
+        </div>
+        <div class="stack" style="align-items: center; width: 100%; max-width: 920px">
+          <div class="center">
+            <div class="pill pill-indigo">Click to flip between examples</div>
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              Weak vs Strong Prompts
+            </h2>
+          </div>
+          <div id="vs-container" style="width: 100%">
+            <div class="vs-wrap" id="vs-pair-0">
+              <div class="vs-col weak-col">
+                <h4>✗ Weak</h4>
+                <div class="vs-prompt weak-bg">Write about time management.</div>
+              </div>
+              <div class="vs-col strong-col">
+                <h4>✓ Strong</h4>
+                <div class="vs-prompt strong-bg">
+                  You are a productivity coach speaking to 20-year-old tech trainees in Bhutan with no prior corporate experience. Write a 5-tip guide to time management that is practical and uses software team examples. Keep each tip under 50 words.
+                </div>
+              </div>
+            </div>
+            <div class="vs-wrap" id="vs-pair-1" style="display: none">
+              <div class="vs-col weak-col">
+                <h4>✗ Weak</h4>
+                <div class="vs-prompt weak-bg">Fix my code.</div>
+              </div>
+              <div class="vs-col strong-col">
+                <h4>✓ Strong</h4>
+                <div class="vs-prompt strong-bg">
+                  I have a JavaScript function that should filter an array of user objects by age. It's returning nothing. Here is the code: [code]. Identify the bug, explain why it's wrong, and give me the fixed version.
+                </div>
+              </div>
+            </div>
+            <div class="vs-wrap" id="vs-pair-2" style="display: none">
+              <div class="vs-col weak-col">
+                <h4>✗ Weak</h4>
+                <div class="vs-prompt weak-bg">Write an email.</div>
+              </div>
+              <div class="vs-col strong-col">
+                <h4>✓ Strong</h4>
+                <div class="vs-prompt strong-bg">
+                  Write a 5-line professional email to a client explaining that the project is delayed by 1 week due to a technical blocker. Use an empathetic but confident tone. Start with the most important fact: the new delivery date.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 0.75rem; margin-top: 0.5rem">
+            <button onclick="showVsPair(0)" id="vb0" style="padding: 0.4rem 1rem; border-radius: 100px; border: 1.5px solid var(--border); background: var(--indigo); color: white; cursor: pointer; font-size: clamp(0.75rem, 1vw, 0.85rem); font-weight: 600;">
+              Example 1
+            </button>
+            <button onclick="showVsPair(1)" id="vb1" style="padding: 0.4rem 1rem; border-radius: 100px; border: 1.5px solid var(--border); background: var(--bg); color: var(--muted); cursor: pointer; font-size: clamp(0.75rem, 1vw, 0.85rem); font-weight: 600;">
+              Example 2
+            </button>
+            <button onclick="showVsPair(2)" id="vb2" style="padding: 0.4rem 1rem; border-radius: 100px; border: 1.5px solid var(--border); background: var(--bg); color: var(--muted); cursor: pointer; font-size: clamp(0.75rem, 1vw, 0.85rem); font-weight: 600;">
+              Example 3
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 10 — EXERCISE TIMER
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-indigo" data-slide="10">
+        <div class="slide-label">
+          <span class="snum">10</span> Exercise · Prompt Battle
+        </div>
+        <div style="display: flex; gap: clamp(2rem, 5vw, 5rem); align-items: center; width: 100%; justify-content: center; flex-wrap: wrap;">
+          <div class="center">
+            <div class="pill pill-white" style="margin: 0 auto 1rem">
+              ✍ Exercise · Pairs
+            </div>
+            <h2 class="heading" style="color: white; margin-bottom: 0.5rem">
+              The Prompt Battle
+            </h2>
+            <div class="timer-ring">
+              <div class="timer-display" id="timer2">30:00</div>
+            </div>
+            <div class="timer-controls">
+              <button class="timer-btn tbtn-start" onclick="startTimer('timer2', 30)">▶ Start</button>
+              <button class="timer-btn tbtn-reset" onclick="resetTimer('timer2', 30)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="timer-tasks">
+            <p style="color: rgba(255, 255, 255, 0.6); font-size: clamp(0.72rem, 1vw, 0.82rem); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.5rem;">
+              Each pair gets a task (rotate)
+            </p>
+            <div class="tt-item">
+              <div class="tt-num">A</div>
+              <span>Email to a client requesting more info before proceeding</span>
+            </div>
+            <div class="tt-item">
+              <div class="tt-num">B</div>
+              <span>Explain what a database is to someone who's never used a computer</span>
+            </div>
+            <div class="tt-item">
+              <div class="tt-num">C</div>
+              <span>5-day study plan for learning HTML and CSS from scratch</span>
+            </div>
+            <div class="tt-item">
+              <div class="tt-num">D</div>
+              <span>Job posting for a junior software tester at a tech company in Bhutan</span>
+            </div>
+            <p style="color: rgba(255, 255, 255, 0.45); font-size: clamp(0.7rem, 0.9vw, 0.8rem); margin-top: 1rem;">
+              Round 1: Weak vs Strong (10 min) · Round 2: Refine in 3 messages (8 min) · Share (8 min) · Debrief (4 min)
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 11 — AI DOS & DON'TS
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo" data-slide="11">
+        <div class="slide-label">
+          <span class="snum">11</span> AI Ethics
+        </div>
+        <div class="stack" style="align-items: center; width: 100%; max-width: 900px">
+          <div class="center">
+            <div class="pill pill-indigo">⚖️ AI Ethics &amp; Responsible Use</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              AI Dos &amp; Don'ts
+            </h2>
+          </div>
+          <div class="do-dont">
+            <div class="do-col">
+              <h4>✅ Do</h4>
+              <ul>
+                <li>Use AI to draft, then <strong>edit it yourself</strong></li>
+                <li>Verify facts — especially <strong>numbers &amp; dates</strong></li>
+                <li>Use AI to learn — ask it to explain, not just answer</li>
+                <li>Treat it as a thinking partner, not a replacement for thinking</li>
+                <li>Tell your team when you've used AI to produce something</li>
+              </ul>
+            </div>
+            <div class="dont-col">
+              <h4>❌ Don't</h4>
+              <ul>
+                <li>Paste <strong>confidential client data</strong> into public AI tools</li>
+                <li>Submit AI output without reviewing it first</li>
+                <li>Blindly trust code AI writes — always read &amp; test it</li>
+                <li>Assume AI knows the latest news — it has a <strong>training cutoff</strong></li>
+                <li>Share passwords, personal IDs, or sensitive info in prompts</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card" style="background: #EEF0F2; border: 2px solid #C0C8D0; text-align: center; max-width: 720px;">
+            <p class="body-md" style="color: var(--indigo)">
+              🔨 <strong>AI is a power tool, not a cheat code.</strong><br />
+              A carpenter with a nail gun is 10× more productive — but they still need to know where to put the nails.<br />
+              <strong>Your job: know <em>what</em> to build. AI helps you build it faster.</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 12 — KNOWLEDGE CHECK QUIZ
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo bg-subtle" data-slide="12">
+        <div class="slide-label">
+          <span class="snum">12</span> Knowledge Check · Interactive
+        </div>
+        <div class="stack" style="align-items: center; width: 100%; max-width: 760px">
+          <div class="center">
+            <div class="pill pill-indigo">🧠 Quick Fire</div>
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)" id="kc-q-text">
+              Loading question...
+            </h2>
+            <p style="color: var(--muted); font-size: clamp(0.75rem, 1vw, 0.85rem); margin-bottom: 1rem;" id="kc-q-num">
+              Question 1 of 3
+            </p>
+          </div>
+          <div class="quiz-options" id="kc-opts"></div>
+          <div class="quiz-feedback" id="kc-feedback"></div>
+          <button onclick="nextKC()" id="kc-next" style="margin-top: 0.75rem; display: none; padding: 0.5rem 1.25rem; border-radius: 100px; border: 1.5px solid var(--border); background: var(--bg); cursor: pointer; font-size: clamp(0.8rem, 1.1vw, 0.9rem); font-weight: 600; color: var(--muted);">
+            Next Question →
+          </button>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 13 — EXERCISE PLEDGE
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-dark" data-slide="13">
+        <div class="slide-label">
+          <span class="snum">13</span> Exercise · My Pledge
+        </div>
+        <div style="display: flex; gap: clamp(2rem, 4vw, 4rem); align-items: center; width: 100%; justify-content: center; max-width: 1000px; flex-wrap: wrap;">
+          <div style="text-align: center">
+            <div class="pill pill-white" style="margin: 0 auto 1rem">
+              ✍ Individual · 8 min write · 5 min share
+            </div>
+            <h2 class="heading" style="color: white; margin-bottom: 0.5rem">
+              My Pledge
+            </h2>
+            <p style="color: rgba(255, 255, 255, 0.6); font-size: clamp(0.82rem, 1.2vw, 0.95rem); margin-bottom: 1.5rem;">
+              Write privately. Share one answer if you're comfortable.
+            </p>
+            <div class="timer-ring">
+              <div class="timer-display" id="timer3">08:00</div>
+            </div>
+            <div class="timer-controls">
+              <button class="timer-btn tbtn-start" onclick="startTimer('timer3', 8)">▶ Start Writing</button>
+              <button class="timer-btn tbtn-reset" onclick="resetTimer('timer3', 8)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="pledge-boxes">
+            <div class="pledge-box">
+              <div class="pb-icon">🏆</div>
+              <div class="pb-q">
+                One <strong>professional habit</strong> I want to build in the next 8 weeks — communication, email, or time management.
+              </div>
+            </div>
+            <div class="pledge-box">
+              <div class="pb-icon">🤖</div>
+              <div class="pb-q">
+                One <strong>AI task</strong> I'm excited to try using Claude or ChatGPT in this training program.
+              </div>
+            </div>
+            <div class="pledge-box">
+              <div class="pb-icon">🚫</div>
+              <div class="pb-q">
+                One <strong>AI boundary</strong> I will set for myself — something I'll always do myself, no matter what.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 14 — WRAP UP
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-indigo" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> Wrap Up</div>
+        <div class="stack" style="align-items: center; width: 100%; max-width: 980px">
+          <div class="center">
+            <h2 class="heading" style="color: white; font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              What You Covered
+            </h2>
+            <p style="color: rgba(255, 255, 255, 0.65); margin: 0.5rem 0 1.5rem; font-size: clamp(0.88rem, 1.3vw, 1.05rem);">
+              AI fundamentals · Prompting · Ethics
+            </p>
+          </div>
+          <div class="wu-grid">
+            <div class="wu-card">
+              <div class="wu-icon">🤖</div>
+              <h4>AI Basics</h4>
+              <p>How LLMs work, ChatGPT vs Claude, what AI is genuinely good and bad at.</p>
+            </div>
+            <div class="wu-card">
+              <div class="wu-icon">✏️</div>
+              <h4>Prompting</h4>
+              <p>Context → Task → Format → Example. Give roles. Be specific. Iterate.</p>
+            </div>
+            <div class="wu-card">
+              <div class="wu-icon">⚖️</div>
+              <h4>AI Ethics</h4>
+              <p>Don't paste confidential data. Verify outputs. Be transparent. Think first.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 15 — END
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-gradient" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span></div>
+        <div class="center" style="max-width: 700px">
+          <div style="font-size: clamp(3rem, 8vw, 5rem); margin-bottom: 1.5rem">🇧🇹</div>
+          <h1 class="display" style="font-size: clamp(2rem, 5vw, 4rem)">
+            <span style="color: var(--blue)">Great work,</span><br />
+            <span style="color: var(--indigo)">Pelsung</span>
+            <span style="color: var(--amber); font-style: italic"> Cohort 3</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted); margin: 1rem 0 0.5rem">
+            See you in the next class — bring your curiosity and your questions.
+          </p>
+          <p style="font-size: clamp(0.75rem, 1vw, 0.85rem); color: var(--faint)">
+            SELISE × Pelsung · Foundation Phase · AI Basics &amp; Prompting
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- /#deck -->
+
+    <!-- ===== CONTROLS ===== -->
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 15</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      /* ============================
+   SLIDE ENGINE
+============================ */
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      let current = 0;
+
+      function goTo(n) {
+        slides[current].classList.remove("active");
+        slides[current].classList.add("exit");
+        setTimeout(
+          () =>
+            slides[
+              current < n ? current : n + (n < current ? 0 : 0)
+            ].classList.remove("exit"),
+          380,
+        );
+        const old = current;
+        setTimeout(() => slides[old].classList.remove("exit"), 380);
+        current = Math.max(0, Math.min(n, total - 1));
+        slides[current].classList.add("active");
+        document.getElementById("slide-counter").textContent =
+          `${current + 1} / ${total}`;
+        document.getElementById("progress").style.width =
+          `${((current + 1) / total) * 100}%`;
+        initReveal(slides[current]);
+      }
+
+      function nextSlide() {
+        if (current < total - 1) goTo(current + 1);
+      }
+      function prevSlide() {
+        if (current > 0) goTo(current - 1);
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight" || e.key === " ") {
+          e.preventDefault();
+          handleForward();
+        }
+        if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          prevSlide();
+        }
+        if (e.key === "f" || e.key === "F") toggleFullscreen();
+      });
+
+      document.getElementById("deck").addEventListener("click", function (e) {
+        if (
+          e.target.closest(
+            "button, .quiz-opt, .sl-item, .mq, a, input, select, textarea, .agenda-row, [data-noclick]",
+          )
+        )
+          return;
+        const pct = e.clientX / window.innerWidth;
+        if (pct < 0.15) prevSlide();
+        else if (pct > 0.85) handleForward();
+      });
+
+      function handleForward() {
+        const active = slides[current];
+        const list = active.querySelector(".reveal-list");
+        if (list) {
+          const hidden = list.querySelectorAll("li:not(.shown)");
+          if (hidden.length > 0) {
+            hidden[0].classList.add("shown");
+            const hint = active.querySelector(".reveal-hint");
+            if (hint && hidden.length === 1) hint.style.opacity = "0";
+            return;
+          }
+        }
+        nextSlide();
+      }
+
+      function initReveal(slide) {
+        const list = slide.querySelector(".reveal-list");
+        if (!list) return;
+        list
+          .querySelectorAll("li")
+          .forEach((li) => li.classList.remove("shown"));
+        const hint = slide.querySelector(".reveal-hint");
+        if (hint) hint.style.opacity = "1";
+      }
+
+      slides[0].classList.add("active");
+      document.getElementById("progress").style.width = `${(1 / total) * 100}%`;
+
+      /* ============================
+   FULLSCREEN
+============================ */
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+          document.exitFullscreen().catch(() => {});
+        }
+      }
+
+      /* ============================
+   TIMERS
+============================ */
+      const timerState = {};
+
+      function startTimer(id, minutes) {
+        if (timerState[id]?.interval) return;
+        if (!timerState[id]) timerState[id] = { remaining: minutes * 60 };
+        timerState[id].interval = setInterval(() => {
+          timerState[id].remaining--;
+          const el = document.getElementById(id);
+          if (!el) return;
+          if (timerState[id].remaining <= 0) {
+            clearInterval(timerState[id].interval);
+            timerState[id].interval = null;
+            el.textContent = "00:00";
+            el.style.color = "#ff5f56";
+            el.closest(".slide").style.animation = "none";
+            return;
+          }
+          const m = Math.floor(timerState[id].remaining / 60)
+            .toString()
+            .padStart(2, "0");
+          const s = (timerState[id].remaining % 60).toString().padStart(2, "0");
+          el.textContent = `${m}:${s}`;
+          if (timerState[id].remaining <= 60) el.style.color = "#febc2e";
+        }, 1000);
+      }
+
+      function resetTimer(id, minutes) {
+        if (timerState[id]?.interval) {
+          clearInterval(timerState[id].interval);
+          timerState[id].interval = null;
+        }
+        timerState[id] = { remaining: minutes * 60 };
+        const el = document.getElementById(id);
+        if (el) {
+          const m = minutes.toString().padStart(2, "0");
+          el.textContent = `${m}:00`;
+          el.style.color = "";
+        }
+      }
+
+      /* ============================
+   WEAK vs STRONG SWITCHER
+============================ */
+      function showVsPair(n) {
+        document.querySelectorAll('[id^="vs-pair-"]').forEach((el, i) => {
+          el.style.display = i === n ? "grid" : "none";
+        });
+        document.querySelectorAll('[id^="vb"]').forEach((btn, i) => {
+          btn.style.background = i === n ? "var(--indigo)" : "var(--bg)";
+          btn.style.color = i === n ? "white" : "var(--muted)";
+          btn.style.borderColor = i === n ? "var(--indigo)" : "var(--border)";
+        });
+      }
+
+      /* ============================
+   KNOWLEDGE CHECK QUIZ
+============================ */
+      const kcQuestions = [
+        {
+          q: "Claude gives you code that looks correct. You should copy-paste it directly into production without reviewing it.",
+          opts: [
+            "True — AI-generated code is reliable",
+            "False — always read and test it first",
+            "It depends on how good the prompt was",
+            "Only if it passed a syntax check",
+          ],
+          correct: 1,
+          feedback:
+            "✓ Correct! AI code can look right and still have logic errors, security issues, or be missing context about your system. Always review before running.",
+        },
+        {
+          q: "Your manager asks you to summarize a 50-page NDA for a client. Is it okay to paste the full document into ChatGPT?",
+          opts: [
+            "Yes — AI keeps everything private",
+            "Yes — just delete it after",
+            "No — confidential documents must not go into public AI tools",
+            "Only if you use the paid tier",
+          ],
+          correct: 2,
+          feedback:
+            "✓ Correct! Public AI tools may use inputs to improve their models. Confidential or legal documents must never be pasted in without approved enterprise tools.",
+        },
+        {
+          q: "Claude tells you the population of Bhutan is 3.2 million as of 2025. You should:",
+          opts: [
+            "Accept it — AI is always accurate on facts",
+            "Use it only in casual conversation, not in reports",
+            "Verify it from an authoritative source like the World Bank or official census",
+            "Ask Claude to double-check itself",
+          ],
+          correct: 2,
+          feedback:
+            "✓ Correct! AI can hallucinate statistics. For anything factual in a professional context, always verify with a primary or authoritative source.",
+        },
+      ];
+      let kcIdx = 0;
+
+      function loadKC() {
+        const q = kcQuestions[kcIdx];
+        document.getElementById("kc-q-text").textContent = q.q;
+        document.getElementById("kc-q-num").textContent =
+          `Question ${kcIdx + 1} of ${kcQuestions.length}`;
+        const opts = document.getElementById("kc-opts");
+        opts.textContent = "";
+        q.opts.forEach((opt, i) => {
+          const letters = ["A", "B", "C", "D"];
+          const el = document.createElement("div");
+          el.className = "quiz-opt";
+          const letterDiv = document.createElement("div");
+          letterDiv.className = "qo-letter";
+          letterDiv.textContent = letters[i];
+          const span = document.createElement("span");
+          span.textContent = opt;
+          el.appendChild(letterDiv);
+          el.appendChild(span);
+          el.onclick = () => answerKC(i, el);
+          opts.appendChild(el);
+        });
+        document.getElementById("kc-feedback").className = "quiz-feedback";
+        document.getElementById("kc-feedback").textContent = "";
+        document.getElementById("kc-next").style.display = "none";
+      }
+
+      function answerKC(i, el) {
+        const q = kcQuestions[kcIdx];
+        const fb = document.getElementById("kc-feedback");
+        document.querySelectorAll("#kc-opts .quiz-opt").forEach((o) => {
+          o.classList.add("dim");
+          o.onclick = null;
+        });
+        el.classList.remove("dim");
+        if (i === q.correct) {
+          el.classList.add("correct");
+          fb.className = "quiz-feedback qf-correct show";
+        } else {
+          el.classList.add("wrong");
+          document
+            .querySelectorAll("#kc-opts .quiz-opt")
+            [q.correct].classList.add("correct");
+          document
+            .querySelectorAll("#kc-opts .quiz-opt")
+            [q.correct].classList.remove("dim");
+          fb.className = "quiz-feedback qf-wrong show";
+        }
+        fb.textContent = q.feedback;
+        if (kcIdx < kcQuestions.length - 1)
+          document.getElementById("kc-next").style.display = "inline-block";
+      }
+
+      function nextKC() {
+        kcIdx++;
+        if (kcIdx < kcQuestions.length) loadKC();
+      }
+
+      loadKC();
+    </script>
+  </body>
+</html>

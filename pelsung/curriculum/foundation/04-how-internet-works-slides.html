@@ -1,0 +1,1162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How the Internet Works — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../shared/slides.css" />
+  </head>
+  <body>
+    <div id="deck">
+      <!-- ══ S1 TITLE ══ -->
+      <div class="slide accent-gradient bg-dark" data-slide="1">
+        <div class="slide-label">
+          <span class="snum">01</span> SELISE × Pelsung · Cohort 3
+        </div>
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            text-align: center;
+            max-width: 900px;
+          "
+        >
+          <h1 class="display" style="color: white">
+            <span style="color: #7dd3fc">How the</span><br />
+            <span style="color: white">Internet</span>
+            <span style="color: var(--amber); font-style: italic"> </span>
+            <span style="color: #7dd3fc">Works</span>
+          </h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.65)">
+            Foundation Phase
+          </p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">How the Internet Works</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → or click right side to advance</div>
+      </div>
+
+      <!-- ══ S2 AGENDA ══ -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 720px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              What We'll Cover
+            </h2>
+          </div>
+          <div class="agenda-row">
+            <span class="ar-dot" style="background: var(--blue)"></span>
+            <span class="ar-label">🌐 The Internet, IP & DNS</span>
+          </div>
+          <div class="agenda-row">
+            <span class="ar-dot" style="background: var(--indigo)"></span>
+            <span class="ar-label">🔗 URLs, HTTP & HTTPS</span>
+          </div>
+          <div class="agenda-row">
+            <span class="ar-dot" style="background: var(--green)"></span>
+            <span class="ar-label">💻 Client-Server & Status Codes</span>
+          </div>
+          <div class="agenda-row">
+            <span class="ar-dot" style="background: var(--amber)"></span>
+            <span class="ar-label">✍ Hands-on URL Hunt & DevTools</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S3 SECTION ══ -->
+      <div class="slide bg-blue" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span>How the Internet Works
+          </div>
+          <h1 class="display" style="color: white">
+            How the<br />Internet Works
+          </h1>
+          <p
+            class="body-lg"
+            style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem"
+          >
+            IP Addresses · DNS · HTTP · Client-Server
+          </p>
+        </div>
+        <div class="section-num" style="color: white">04</div>
+      </div>
+
+      <!-- ══ S4 DISCUSSION ══ -->
+      <div class="slide bg-dark" data-slide="4">
+        <div class="slide-label">
+          <span class="snum">04</span> Opening Question
+        </div>
+        <div class="center" style="max-width: 780px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            🎤 Open Discussion
+          </div>
+          <p class="disc-prompt">
+            "You open WhatsApp and send a message to your friend in Thimphu.<br /><span
+              style="color: var(--amber)"
+              >What happens in those 0.3 seconds?</span
+            >"
+          </p>
+          <p
+            style="
+              color: rgba(255, 255, 255, 0.45);
+              font-size: clamp(0.82rem, 1.2vw, 1rem);
+              margin-top: 2rem;
+              line-height: 1.6;
+            "
+          >
+            Take 4–5 answers · no wrong answers · we'll revisit at the end of
+            this session
+          </p>
+          <div class="hand-icons">
+            <span class="pulse">🙋</span
+            ><span class="pulse" style="animation-delay: 0.5s">🙋‍♀️</span
+            ><span class="pulse" style="animation-delay: 1s">🙋‍♂️</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S5 THE INTERNET ══ -->
+      <div class="slide accent-blue" data-slide="5">
+        <div class="slide-label">
+          <span class="snum">05</span> The Internet
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">Foundation</div>
+            <h2 class="heading">What is the Internet?</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem">
+              A global network of billions of connected computers
+            </p>
+          </div>
+          <div class="cols-3">
+            <div
+              class="card"
+              style="border-top: 3px solid var(--blue); text-align: center"
+            >
+              <div
+                style="
+                  font-size: clamp(2rem, 3.5vw, 3rem);
+                  margin-bottom: 0.5rem;
+                "
+              >
+                🌍
+              </div>
+              <h4 style="color: var(--blue); justify-content: center">
+                Global Scale
+              </h4>
+              <p
+                style="
+                  font-size: clamp(0.78rem, 1.1vw, 0.92rem);
+                  color: var(--muted);
+                  line-height: 1.5;
+                "
+              >
+                5.4 billion internet users · 40+ billion connected devices
+              </p>
+            </div>
+            <div
+              class="card"
+              style="border-top: 3px solid var(--indigo); text-align: center"
+            >
+              <div
+                style="
+                  font-size: clamp(2rem, 3.5vw, 3rem);
+                  margin-bottom: 0.5rem;
+                "
+              >
+                🔗
+              </div>
+              <h4 style="color: var(--indigo); justify-content: center">
+                Every Device Connected
+              </h4>
+              <p
+                style="
+                  font-size: clamp(0.78rem, 1.1vw, 0.92rem);
+                  color: var(--muted);
+                  line-height: 1.5;
+                "
+              >
+                Your phone, laptop, even smart TVs — each has a unique address
+              </p>
+            </div>
+            <div
+              class="card"
+              style="border-top: 3px solid var(--green); text-align: center"
+            >
+              <div
+                style="
+                  font-size: clamp(2rem, 3.5vw, 3rem);
+                  margin-bottom: 0.5rem;
+                "
+              >
+                🏗️
+              </div>
+              <h4 style="color: var(--green); justify-content: center">
+                Physical Infrastructure
+              </h4>
+              <p
+                style="
+                  font-size: clamp(0.78rem, 1.1vw, 0.92rem);
+                  color: var(--muted);
+                  line-height: 1.5;
+                "
+              >
+                Undersea cables, satellites, routers, data centres in every
+                country
+              </p>
+            </div>
+          </div>
+          <div
+            class="card"
+            style="
+              background: var(--bg);
+              border: 2px dashed var(--border);
+              text-align: center;
+              padding: clamp(0.75rem, 1.5vw, 1.1rem);
+              max-width: 700px;
+            "
+          >
+            <p class="body-md" style="color: var(--muted)">
+              🇧🇹 The internet
+              <strong style="color: var(--text)">reaches Gelephu</strong>
+              through optical fibre from India and via Druknet's national
+              backbone — the same infrastructure your devices use every day
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S6 IP ADDRESSES ══ -->
+      <div class="slide accent-blue bg-subtle" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> IP Addresses</div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 880px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">IP Addresses</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              Every Device Has an Address
+            </h2>
+          </div>
+          <div class="cols-2">
+            <div class="card" style="border-top: 3px solid var(--blue)">
+              <h4 style="color: var(--blue)">🏠 Think of a Postal Address</h4>
+              <ul>
+                <li>Your house has an address so people can find it</li>
+                <li>
+                  Your device has an IP address so the internet can find it
+                </li>
+                <li>IP = Internet Protocol</li>
+                <li>Every device on the internet needs one</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--indigo)">
+              <h4 style="color: var(--indigo)">🔢 What an IP Looks Like</h4>
+              <div
+                style="
+                  display: flex;
+                  gap: 4px;
+                  align-items: center;
+                  margin: 0.8rem 0;
+                  flex-wrap: wrap;
+                "
+              >
+                <span
+                  style="
+                    background: #E6E9EC;
+                    border: 2px solid var(--indigo);
+                    border-radius: 8px;
+                    padding: 0.4rem 0.8rem;
+                    font-family: &quot;Courier New&quot;, monospace;
+                    font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+                    font-weight: 700;
+                    color: var(--indigo);
+                  "
+                  >192</span
+                >
+                <span style="color: var(--faint); font-weight: 700">.</span>
+                <span
+                  style="
+                    background: #E6E9EC;
+                    border: 2px solid var(--indigo);
+                    border-radius: 8px;
+                    padding: 0.4rem 0.8rem;
+                    font-family: &quot;Courier New&quot;, monospace;
+                    font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+                    font-weight: 700;
+                    color: var(--indigo);
+                  "
+                  >168</span
+                >
+                <span style="color: var(--faint); font-weight: 700">.</span>
+                <span
+                  style="
+                    background: #E6E9EC;
+                    border: 2px solid var(--indigo);
+                    border-radius: 8px;
+                    padding: 0.4rem 0.8rem;
+                    font-family: &quot;Courier New&quot;, monospace;
+                    font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+                    font-weight: 700;
+                    color: var(--indigo);
+                  "
+                  >1</span
+                >
+                <span style="color: var(--faint); font-weight: 700">.</span>
+                <span
+                  style="
+                    background: #E6E9EC;
+                    border: 2px solid var(--indigo);
+                    border-radius: 8px;
+                    padding: 0.4rem 0.8rem;
+                    font-family: &quot;Courier New&quot;, monospace;
+                    font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+                    font-weight: 700;
+                    color: var(--indigo);
+                  "
+                  >1</span
+                >
+              </div>
+              <ul>
+                <li>4 numbers, each 0–255</li>
+                <li>IPv4: ~4 billion addresses (running out!)</li>
+                <li>IPv6: new format, essentially unlimited</li>
+              </ul>
+            </div>
+          </div>
+          <div
+            class="card"
+            style="
+              background: var(--bg);
+              border: 2px dashed var(--border);
+              max-width: 720px;
+              padding: clamp(0.75rem, 1.5vw, 1rem);
+            "
+          >
+            <p class="body-md" style="color: var(--muted); text-align: center">
+              selisegroup.com has the IP address
+              <strong
+                style="
+                  color: var(--indigo);
+                  font-family: &quot;Courier New&quot;, monospace;
+                "
+                >185.34.33.33</strong
+              >
+              — that's how your browser really finds it
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S7 DNS ══ -->
+      <div class="slide accent-blue" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> DNS</div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">Domain Name System</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              DNS — The Phonebook of the Internet
+            </h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem">
+              You remember names. Computers need numbers. DNS translates.
+            </p>
+          </div>
+          <div class="dns-flow">
+            <div class="dns-node dns-you">
+              <span class="dns-icon">💻</span>
+              <span>You type<br /><strong>selisegroup.com</strong></span>
+            </div>
+            <span class="dns-arrow">→</span>
+            <div class="dns-node dns-resolver">
+              <span class="dns-icon">🔍</span>
+              <span>DNS<br />Resolver</span>
+            </div>
+            <span class="dns-arrow">→</span>
+            <div class="dns-node dns-root">
+              <span class="dns-icon">📋</span>
+              <span>DNS<br />Database</span>
+            </div>
+            <span class="dns-arrow">→</span>
+            <div class="dns-node dns-result">
+              <span class="dns-icon">✅</span>
+              <span>IP:<br /><strong>185.34.33.33</strong></span>
+            </div>
+            <span class="dns-arrow">→</span>
+            <div class="dns-node dns-you">
+              <span class="dns-icon">🚀</span>
+              <span>Browser<br />connects!</span>
+            </div>
+          </div>
+          <div
+            class="card"
+            style="
+              background: var(--bg);
+              border: 2px dashed var(--border);
+              max-width: 680px;
+              padding: clamp(0.75rem, 1.5vw, 1rem);
+              text-align: center;
+            "
+          >
+            <p class="body-md" style="color: var(--muted)">
+              ⚡ This entire lookup takes
+              <strong style="color: var(--text)">under 100 milliseconds</strong>
+              — faster than a blink. Results are cached so you don't wait every
+              time.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S8 URL ANATOMY ══ -->
+      <div class="slide accent-blue bg-subtle" data-slide="8">
+        <div class="slide-label">
+          <span class="snum">08</span> URL Anatomy
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">URLs</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              Anatomy of a URL
+            </h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem">
+              Every part of an address tells the browser something
+            </p>
+          </div>
+          <div class="url-anatomy">
+            <div class="url-part up-protocol">
+              <span class="url-text">https</span
+              ><span class="url-label">Protocol</span>
+            </div>
+            <span class="url-sep">://</span>
+            <div class="url-part up-domain">
+              <span class="url-text">selise</span
+              ><span class="url-label">Domain</span>
+            </div>
+            <div class="url-part up-tld">
+              <span class="url-text">.ch</span
+              ><span class="url-label">TLD</span>
+            </div>
+            <div class="url-part up-path">
+              <span class="url-text">/careers</span
+              ><span class="url-label">Path</span>
+            </div>
+            <div class="url-part up-query">
+              <span class="url-text">?lang=en</span
+              ><span class="url-label">Query</span>
+            </div>
+          </div>
+          <div class="cols-2" style="max-width: 800px; margin-top: 0.5rem">
+            <div class="card" style="padding: clamp(0.75rem, 1.2vw, 1rem)">
+              <ul>
+                <li>
+                  <strong style="color: var(--blue)">https</strong> — "use
+                  encryption, this is HTTPS"
+                </li>
+                <li>
+                  <strong style="color: var(--indigo)">selise</strong> — the
+                  company's domain name
+                </li>
+                <li>
+                  <strong style="color: var(--green)">.ch</strong> — top-level
+                  domain (Switzerland)
+                </li>
+              </ul>
+            </div>
+            <div class="card" style="padding: clamp(0.75rem, 1.2vw, 1rem)">
+              <ul>
+                <li>
+                  <strong style="color: #1C5B8C">/careers</strong> — the
+                  specific page on the server
+                </li>
+                <li>
+                  <strong style="color: #8B001E">?lang=en</strong> — extra
+                  instructions (show English)
+                </li>
+                <li>
+                  <strong style="color: var(--muted)">#section</strong> — scroll
+                  to anchor (not shown)
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S9 CLIENT-SERVER ══ -->
+      <div class="slide accent-blue" data-slide="9">
+        <div class="slide-label">
+          <span class="snum">09</span> Client &amp; Server
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">Client-Server Model</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              Client asks. Server answers.
+            </h2>
+          </div>
+          <div class="cs-flow">
+            <div class="cs-node cs-client">
+              <span class="cs-icon">💻</span>
+              <span class="cs-title">Client</span>
+              <span class="cs-sub">Your browser<br />in Gelephu</span>
+            </div>
+            <div class="cs-arrow-wrap">
+              <span class="cs-arr">→</span>
+              <span class="cs-arr-label">HTTP Request</span>
+              <span style="font-size: 0.6rem; color: var(--faint)"
+                >GET /careers</span
+              >
+            </div>
+            <div class="cs-node cs-internet">
+              <span class="cs-icon">🌐</span>
+              <span class="cs-title" style="color: var(--muted)">Internet</span>
+              <span class="cs-sub">Cables &amp;<br />routers</span>
+            </div>
+            <div class="cs-arrow-wrap">
+              <span
+                class="cs-arr"
+                style="transform: scaleX(-1); display: inline-block"
+                >→</span
+              >
+              <span class="cs-arr-label">HTTP Response</span>
+              <span style="font-size: 0.6rem; color: var(--faint)"
+                >200 OK + HTML</span
+              >
+            </div>
+            <div class="cs-node cs-server">
+              <span class="cs-icon">🖥️</span>
+              <span class="cs-title">Server</span>
+              <span class="cs-sub">selisegroup.com<br />in Zürich</span>
+            </div>
+          </div>
+          <div class="cols-2" style="max-width: 700px">
+            <div class="card" style="border-left: 4px solid var(--blue)">
+              <h4 style="color: var(--blue)">💻 Client</h4>
+              <ul>
+                <li>The one <strong>asking</strong> for data</li>
+                <li>Usually your browser</li>
+                <li>Also: mobile apps, Claude Code</li>
+              </ul>
+            </div>
+            <div class="card" style="border-left: 4px solid var(--indigo)">
+              <h4 style="color: var(--indigo)">🖥️ Server</h4>
+              <ul>
+                <li>The one <strong>answering</strong> with data</li>
+                <li>A computer running 24/7</li>
+                <li>Can serve thousands at once</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S10 HTTP & HTTPS ══ -->
+      <div class="slide accent-blue bg-subtle" data-slide="10">
+        <div class="slide-label">
+          <span class="snum">10</span> HTTP &amp; HTTPS
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">Protocols</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              HTTP — The Language of the Web
+            </h2>
+          </div>
+          <div class="cols-2">
+            <div class="card" style="border-top: 4px solid #185A8D">
+              <h4>🔓 HTTP</h4>
+              <ul>
+                <li>HyperText Transfer Protocol</li>
+                <li>The rules for how browsers and servers talk</li>
+                <li>Data travels in <strong>plain text</strong></li>
+                <li>Anyone on the network can read it</li>
+                <li>
+                  URL starts with
+                  <code
+                    style="
+                      background: #F5F5F5;
+                      padding: 1px 4px;
+                      border-radius: 3px;
+                    "
+                    >http://</code
+                  >
+                </li>
+              </ul>
+            </div>
+            <div class="card" style="border-top: 4px solid var(--green)">
+              <h4 style="color: var(--green)">🔒 HTTPS — HTTP + Security</h4>
+              <ul>
+                <li>S = Secure (uses TLS encryption)</li>
+                <li>Data is <strong>encrypted</strong> end-to-end</li>
+                <li>Padlock icon in the browser bar</li>
+                <li>Required for passwords, payments, forms</li>
+                <li>
+                  URL starts with
+                  <code
+                    style="
+                      background: #F5F5F5;
+                      padding: 1px 4px;
+                      border-radius: 3px;
+                    "
+                    >https://</code
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div
+            class="card"
+            style="
+              background: var(--bg);
+              border: 2px dashed var(--border);
+              text-align: center;
+              max-width: 700px;
+              padding: clamp(0.75rem, 1.5vw, 1rem);
+            "
+          >
+            <p class="body-md" style="color: var(--muted)">
+              🛡️
+              <strong style="color: var(--text)">Always check for HTTPS</strong>
+              before entering a password or card number. If the padlock is
+              missing — don't type it.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S11 STATUS CODES ══ -->
+      <div class="slide accent-blue" data-slide="11">
+        <div class="slide-label">
+          <span class="snum">11</span> Status Codes
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">HTTP Status Codes</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              The Server's Reply Code
+            </h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem">
+              Every HTTP response starts with a 3-digit number
+            </p>
+          </div>
+          <div class="status-grid">
+            <div class="sc-card sc-2xx">
+              <div class="sc-code">200</div>
+              <div class="sc-name">OK</div>
+              <div class="sc-desc">Request succeeded. Here's your data.</div>
+            </div>
+            <div class="sc-card sc-3xx">
+              <div class="sc-code">301</div>
+              <div class="sc-name">Moved</div>
+              <div class="sc-desc">Page has a new permanent address.</div>
+            </div>
+            <div class="sc-card sc-4xx">
+              <div class="sc-code">404</div>
+              <div class="sc-name">Not Found</div>
+              <div class="sc-desc">Page doesn't exist on this server.</div>
+            </div>
+            <div class="sc-card sc-403">
+              <div class="sc-code">403</div>
+              <div class="sc-name">Forbidden</div>
+              <div class="sc-desc">You don't have permission.</div>
+            </div>
+            <div class="sc-card sc-5xx">
+              <div class="sc-code">500</div>
+              <div class="sc-name">Server Error</div>
+              <div class="sc-desc">Something broke on the server.</div>
+            </div>
+          </div>
+          <p
+            style="
+              font-size: clamp(0.72rem, 1vw, 0.85rem);
+              color: var(--faint);
+              font-style: italic;
+            "
+          >
+            2xx = success · 3xx = redirect · 4xx = your fault · 5xx = server's
+            fault
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S12 URL JOURNEY ══ -->
+      <div class="slide accent-blue bg-subtle" data-slide="12">
+        <div class="slide-label">
+          <span class="snum">12</span> The Full Journey
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 800px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">Step by Step</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.6rem)">
+              You Type
+              <span
+                style="
+                  color: var(--indigo);
+                  font-family: &quot;Courier New&quot;, monospace;
+                "
+                >selisegroup.com</span
+              >
+            </h2>
+          </div>
+          <ul class="reveal-list">
+            <li>
+              ① Browser checks its <strong>cache</strong> — has it visited
+              selisegroup.com recently?
+            </li>
+            <li>
+              ② <strong>DNS lookup</strong> — asks DNS resolver: "what's the IP
+              for selisegroup.com?" → gets
+              <code
+                style="
+                  background: #E6E9EC;
+                  color: var(--indigo);
+                  padding: 1px 5px;
+                  border-radius: 3px;
+                "
+                >185.34.33.33</code
+              >
+            </li>
+            <li>
+              ③ Browser opens a <strong>TCP connection</strong> to that IP
+              address (port 443 for HTTPS)
+            </li>
+            <li>
+              ④ <strong>TLS handshake</strong> — browser and server agree on
+              encryption keys
+            </li>
+            <li>
+              ⑤ Browser sends:
+              <code
+                style="
+                  background: #E6F0F8;
+                  color: var(--blue);
+                  padding: 1px 5px;
+                  border-radius: 3px;
+                "
+                >GET / HTTP/1.1 Host: selisegroup.com</code
+              >
+            </li>
+            <li>⑥ Server processes the request, finds the homepage files</li>
+            <li>
+              ⑦ Server responds:
+              <code
+                style="
+                  background: #F0F7EC;
+                  color: var(--green);
+                  padding: 1px 5px;
+                  border-radius: 3px;
+                "
+                >200 OK</code
+              >
+              + sends back HTML
+            </li>
+            <li>
+              ⑧ Browser <strong>parses HTML</strong>, fetches CSS/JS/images,
+              renders the page ✅
+            </li>
+          </ul>
+          <p class="reveal-hint">Press → to reveal each step</p>
+        </div>
+      </div>
+
+      <!-- ══ S13 QUIZ ══ -->
+      <div class="slide accent-blue" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> Quick Check</div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 760px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">🧠 Quiz</div>
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              What does DNS do?
+            </h2>
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-opt" onclick="answerQ(this, false, 'q1')">
+              <span class="qo-letter">A</span>Encrypts your internet connection
+              so others can't read it
+            </div>
+            <div
+              class="quiz-opt"
+              data-correct="true"
+              onclick="answerQ(this, true, 'q1')"
+            >
+              <span class="qo-letter">B</span>Translates human-readable domain
+              names into IP addresses
+            </div>
+            <div class="quiz-opt" onclick="answerQ(this, false, 'q1')">
+              <span class="qo-letter">C</span>Speeds up your internet by caching
+              websites nearby
+            </div>
+            <div class="quiz-opt" onclick="answerQ(this, false, 'q1')">
+              <span class="qo-letter">D</span>Stores website files on a server
+              close to you
+            </div>
+          </div>
+          <div class="quiz-feedback qf-correct" id="q1-ok">
+            ✅ Correct! DNS = Domain Name System. It's like a phonebook — you
+            give it a name (selisegroup.com) and it gives back a number (IP address).
+          </div>
+          <div class="quiz-feedback qf-wrong" id="q1-no">
+            Not quite — that's what HTTPS/TLS does. DNS is the phonebook that
+            converts domain names to IP addresses. B is correct.
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S14 EXERCISE ══ -->
+      <div class="slide bg-amber" data-slide="14">
+        <div class="slide-label">
+          <span class="snum">14</span> Exercise
+        </div>
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            max-width: 820px;
+            width: 100%;
+          "
+        >
+          <div class="center">
+            <div class="pill pill-white" style="margin: 0 auto 1rem">
+              ✍ Hands-on · 15 min
+            </div>
+            <h2
+              class="heading"
+              style="color: white; font-size: clamp(1.8rem, 3.5vw, 2.8rem)"
+            >
+              URL Hunt &amp; DevTools
+            </h2>
+          </div>
+          <div id="timer1" class="timer-display">15:00</div>
+          <div class="timer-controls">
+            <button
+              class="timer-btn tbtn-start"
+              onclick="startTimer('timer1', 15)"
+            >
+              ▶ Start
+            </button>
+            <button
+              class="timer-btn tbtn-reset"
+              onclick="resetTimer('timer1', 15)"
+            >
+              ↺ Reset
+            </button>
+          </div>
+          <div class="timer-tasks">
+            <div class="tt-item">
+              <span class="tt-num">1</span
+              ><span
+                >Open your browser. Go to <strong>selisegroup.com</strong>. In your
+                notebook, write the full URL you land on.</span
+              >
+            </div>
+            <div class="tt-item">
+              <span class="tt-num">2</span
+              ><span
+                >Break the URL into parts:
+                <strong>protocol, domain, TLD, path</strong>. Label each
+                one.</span
+              >
+            </div>
+            <div class="tt-item">
+              <span class="tt-num">3</span
+              ><span
+                >Open DevTools: press <strong>F12</strong> (Windows) or
+                <strong>Cmd+Option+I</strong> (Mac). Click the
+                <strong>Network</strong> tab.</span
+              >
+            </div>
+            <div class="tt-item">
+              <span class="tt-num">4</span
+              ><span
+                >Refresh the page. Count:
+                <strong>How many requests did the browser make?</strong> What's
+                the status code of the first one?</span
+              >
+            </div>
+            <div class="tt-item">
+              <span class="tt-num">5</span
+              ><span
+                >Navigate to two more pages on selisegroup.com. Notice how the URL
+                changes for each one.</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S15 WRAP-UP ══ -->
+      <div class="slide bg-dark" data-slide="15">
+        <div class="slide-label">
+          <span class="snum">15</span> Wrap-up
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-white" style="margin: 0 auto 1rem">
+              ✅ What You Learned
+            </div>
+            <h2
+              class="heading"
+              style="color: white; font-size: clamp(1.8rem, 3.5vw, 2.6rem)"
+            >
+              Key Takeaways
+            </h2>
+          </div>
+          <div class="wu-grid">
+            <div class="wu-card">
+              <div class="wu-icon">🌐</div>
+              <h4>The Internet</h4>
+              <p>
+                A global network. Every device has an IP address. DNS translates
+                names → numbers.
+              </p>
+            </div>
+            <div class="wu-card">
+              <div class="wu-icon">🔗</div>
+              <h4>URLs</h4>
+              <p>
+                Protocol, domain, TLD, path, query — every part of an address
+                tells the browser something.
+              </p>
+            </div>
+            <div class="wu-card">
+              <div class="wu-icon">💻</div>
+              <h4>Client-Server</h4>
+              <p>
+                Client asks, server answers. Your browser is the client; the
+                website lives on a server.
+              </p>
+            </div>
+            <div class="wu-card">
+              <div class="wu-icon">🔒</div>
+              <h4>HTTP &amp; HTTPS</h4>
+              <p>
+                The language of the web. HTTPS adds encryption. Status codes
+                tell you what happened.
+              </p>
+            </div>
+          </div>
+          <div style="text-align: center; margin-top: 0.5rem">
+            <p
+              style="
+                color: rgba(255, 255, 255, 0.5);
+                font-size: clamp(0.75rem, 1vw, 0.88rem);
+              "
+            >
+              Next:
+              <strong style="color: rgba(255, 255, 255, 0.8)"
+                >APIs, Data &amp; Databases</strong
+              >
+              · JSON · REST · SQL vs NoSQL
+            </p>
+            <p
+              style="
+                color: rgba(255, 255, 255, 0.3);
+                font-size: clamp(0.65rem, 0.85vw, 0.75rem);
+                margin-top: 0.4rem;
+              "
+            >
+              SELISE × Pelsung · Foundation Phase
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /#deck -->
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 15</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">
+      ⛶
+    </button>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      let current = 0;
+
+      function goTo(n) {
+        slides[current].classList.remove("active");
+        slides[current].classList.add("exit");
+        const old = current;
+        setTimeout(() => slides[old].classList.remove("exit"), 380);
+        current = Math.max(0, Math.min(n, total - 1));
+        slides[current].classList.add("active");
+        document.getElementById("slide-counter").textContent =
+          `${current + 1} / ${total}`;
+        document.getElementById("progress").style.width =
+          `${((current + 1) / total) * 100}%`;
+        initReveal(slides[current]);
+      }
+
+      function nextSlide() {
+        if (current < total - 1) goTo(current + 1);
+      }
+      function prevSlide() {
+        if (current > 0) goTo(current - 1);
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight" || e.key === " ") {
+          e.preventDefault();
+          handleForward();
+        }
+        if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          prevSlide();
+        }
+        if (e.key === "f" || e.key === "F") toggleFullscreen();
+      });
+
+      document.getElementById("deck").addEventListener("click", function (e) {
+        if (
+          e.target.closest(
+            "button,.quiz-opt,a,input,select,textarea,.agenda-row,[data-noclick]",
+          )
+        )
+          return;
+        const pct = e.clientX / window.innerWidth;
+        if (pct < 0.15) prevSlide();
+        else if (pct > 0.85) handleForward();
+      });
+
+      function handleForward() {
+        const active = slides[current];
+        const list = active.querySelector(".reveal-list");
+        if (list) {
+          const hidden = list.querySelectorAll("li:not(.shown)");
+          if (hidden.length > 0) {
+            hidden[0].classList.add("shown");
+            const hint = active.querySelector(".reveal-hint");
+            if (hint && hidden.length === 1) hint.style.opacity = "0";
+            return;
+          }
+        }
+        nextSlide();
+      }
+
+      function initReveal(slide) {
+        const list = slide.querySelector(".reveal-list");
+        if (!list) return;
+        list
+          .querySelectorAll("li")
+          .forEach((li) => li.classList.remove("shown"));
+        const hint = slide.querySelector(".reveal-hint");
+        if (hint) hint.style.opacity = "1";
+      }
+
+      slides[0].classList.add("active");
+      document.getElementById("progress").style.width = `${(1 / total) * 100}%`;
+
+      function toggleFullscreen() {
+        if (!document.fullscreenElement)
+          document.documentElement.requestFullscreen().catch(() => {});
+        else document.exitFullscreen().catch(() => {});
+      }
+
+      const timerState = {};
+      function startTimer(id, minutes) {
+        if (timerState[id]?.interval) return;
+        if (!timerState[id]) timerState[id] = { remaining: minutes * 60 };
+        timerState[id].interval = setInterval(() => {
+          timerState[id].remaining--;
+          const el = document.getElementById(id);
+          if (!el) return;
+          if (timerState[id].remaining <= 0) {
+            clearInterval(timerState[id].interval);
+            timerState[id].interval = null;
+            el.textContent = "00:00";
+            el.style.color = "#ff5f56";
+            return;
+          }
+          const m = Math.floor(timerState[id].remaining / 60)
+            .toString()
+            .padStart(2, "0");
+          const s = (timerState[id].remaining % 60).toString().padStart(2, "0");
+          el.textContent = `${m}:${s}`;
+          if (timerState[id].remaining <= 60) el.style.color = "#febc2e";
+        }, 1000);
+      }
+      function resetTimer(id, minutes) {
+        if (timerState[id]?.interval) {
+          clearInterval(timerState[id].interval);
+          timerState[id].interval = null;
+        }
+        timerState[id] = { remaining: minutes * 60 };
+        const el = document.getElementById(id);
+        if (el) {
+          el.textContent = `${minutes.toString().padStart(2, "0")}:00`;
+          el.style.color = "";
+        }
+      }
+
+      function answerQ(el, isCorrect, qid) {
+        const opts = el.closest(".quiz-options").querySelectorAll(".quiz-opt");
+        opts.forEach((o) => {
+          o.style.pointerEvents = "none";
+          o.classList.add("dim");
+        });
+        el.classList.remove("dim");
+        if (isCorrect) {
+          el.classList.add("correct");
+        } else {
+          el.classList.add("wrong");
+          opts.forEach((o) => {
+            if (o.dataset.correct === "true") {
+              o.classList.remove("dim");
+              o.classList.add("correct");
+            }
+          });
+        }
+        const fb = document.getElementById(
+          isCorrect ? qid + "-ok" : qid + "-no",
+        );
+        if (fb) fb.classList.add("show");
+      }
+    </script>
+  </body>
+</html>

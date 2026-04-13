@@ -1,0 +1,1226 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>APIs, Data &amp; Databases — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../shared/slides.css" />
+  </head>
+  <body>
+    <div id="deck">
+      <!-- ══ S1 TITLE ══ -->
+      <div class="slide accent-gradient bg-dark" data-slide="1">
+        <div class="slide-label">
+          <span class="snum">01</span> SELISE × Pelsung · Cohort 3
+        </div>
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            text-align: center;
+            max-width: 900px;
+          "
+        >
+          <h1 class="display" style="color: white">
+            <span style="color: #a5b4fc">APIs, Data</span><br />
+            <span style="color: var(--amber); font-style: italic">&amp;</span>
+            <span style="color: white">Databases</span>
+          </h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.65)">
+            Foundation Phase
+          </p>
+          <div class="class-tags">
+            <span class="class-tag tag-indigo">APIs, Data &amp; Databases</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → or click right side to advance</div>
+      </div>
+
+      <!-- ══ S2 AGENDA ══ -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 720px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              What We'll Cover
+            </h2>
+          </div>
+          <div class="agenda-row">
+            <span class="ar-dot" style="background: var(--indigo)"></span>
+            <span class="ar-label">🔌 What is an API?</span>
+          </div>
+          <div class="agenda-row">
+            <span class="ar-dot" style="background: var(--blue)"></span>
+            <span class="ar-label">📄 JSON &amp; REST</span>
+          </div>
+          <div class="agenda-row">
+            <span class="ar-dot" style="background: var(--green)"></span>
+            <span class="ar-label">🗄️ Databases · SQL vs NoSQL</span>
+          </div>
+          <div class="agenda-row">
+            <span class="ar-dot" style="background: var(--amber)"></span>
+            <span class="ar-label">✍ Hands-on: Live API &amp; Schema Design</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S3 SECTION ══ -->
+      <div class="slide bg-indigo" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span>APIs, Data &amp; Databases
+          </div>
+          <h1 class="display" style="color: white">
+            APIs, Data<br />&amp; Databases
+          </h1>
+          <p
+            class="body-lg"
+            style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem"
+          >
+            APIs · JSON · REST · Databases · SQL vs NoSQL
+          </p>
+        </div>
+        <div class="section-num" style="color: white">05</div>
+      </div>
+
+      <!-- ══ S4 DISCUSSION ══ -->
+      <div class="slide bg-dark" data-slide="4">
+        <div class="slide-label">
+          <span class="snum">04</span> Opening Question
+        </div>
+        <div class="center" style="max-width: 780px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            🍽️ Think About This
+          </div>
+          <p class="disc-prompt">
+            "You order momo at a restaurant.<br />You don't go into the kitchen
+            yourself.<br /><span style="color: var(--amber)"
+              >Who does the talking for you?</span
+            >"
+          </p>
+          <p
+            style="
+              color: rgba(255, 255, 255, 0.45);
+              font-size: clamp(0.82rem, 1.2vw, 1rem);
+              margin-top: 2rem;
+              line-height: 1.6;
+            "
+          >
+            The waiter is the interface between you and the kitchen. APIs work
+            the same way.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S5 WHAT IS AN API ══ -->
+      <div class="slide accent-indigo" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span> APIs</div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-indigo">
+              Application Programming Interface
+            </div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              An API is the waiter
+            </h2>
+          </div>
+          <div class="api-analogy">
+            <div class="aa-node aa-you">
+              <span class="aa-icon">🧑‍💻</span><span class="aa-title">You</span
+              ><span class="aa-sub">Client / App<br />placing an order</span>
+            </div>
+            <div class="aa-arr-wrap">
+              <span class="aa-arr">→</span
+              ><span class="aa-arr-lbl">Request</span>
+            </div>
+            <div class="aa-node aa-api">
+              <span class="aa-icon">🧑‍🍳</span><span class="aa-title">API</span
+              ><span class="aa-sub">The waiter<br />takes your order</span>
+            </div>
+            <div class="aa-arr-wrap">
+              <span class="aa-arr">→</span
+              ><span class="aa-arr-lbl">Forwards</span>
+            </div>
+            <div class="aa-node aa-kitchen">
+              <span class="aa-icon">🖥️</span><span class="aa-title">Server</span
+              ><span class="aa-sub">The kitchen<br />processes it</span>
+            </div>
+            <div class="aa-arr-wrap">
+              <span class="aa-arr">→</span
+              ><span class="aa-arr-lbl">Accesses</span>
+            </div>
+            <div class="aa-node aa-db">
+              <span class="aa-icon">🗄️</span
+              ><span class="aa-title">Database</span
+              ><span class="aa-sub">The pantry<br />stores ingredients</span>
+            </div>
+          </div>
+          <div class="cols-2" style="max-width: 800px">
+            <div class="card" style="border-left: 4px solid var(--indigo)">
+              <h4 style="color: var(--indigo)">Why APIs exist</h4>
+              <ul>
+                <li>You never touch the database directly</li>
+                <li>The API enforces rules (who can get what)</li>
+                <li>Apps talk to each other via APIs</li>
+                <li>WhatsApp, Google Maps, weather apps — all use APIs</li>
+              </ul>
+            </div>
+            <div class="card" style="border-left: 4px solid var(--amber)">
+              <h4>Real examples</h4>
+              <ul>
+                <li>Weather app gets data from a weather API</li>
+                <li>You log in with Google — that's an API</li>
+                <li>Claude Code calls the Anthropic API</li>
+                <li>SELISE's products expose APIs for clients</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S6 JSON ══ -->
+      <div class="slide accent-indigo bg-subtle" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> JSON</div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-indigo">Data Format</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              JSON — How APIs Send Data
+            </h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem">
+              JavaScript Object Notation · human-readable · machine-parseable
+            </p>
+          </div>
+          <div
+            style="
+              display: flex;
+              gap: clamp(1rem, 2vw, 2rem);
+              width: 100%;
+              align-items: flex-start;
+              flex-wrap: wrap;
+              justify-content: center;
+            "
+          >
+            <div
+              class="json-view"
+              style="flex: 1; min-width: 280px; max-width: 500px"
+            >
+              <div class="jv-bar">
+                <span class="jv-dot" style="background: #ff5f56"></span
+                ><span class="jv-dot" style="background: #febc2e"></span
+                ><span class="jv-dot" style="background: #28c840"></span
+                ><span style="margin-left: 8px">trainee.json</span>
+              </div>
+              <div class="jv-body">
+                <span class="jv-punc">{</span><br />
+                &nbsp;&nbsp;<span class="jk">"name"</span
+                ><span class="jv-punc">:</span>
+                <span class="jv-str">"Karma Dorji"</span
+                ><span class="jv-punc">,</span><br />
+                &nbsp;&nbsp;<span class="jk">"city"</span
+                ><span class="jv-punc">:</span>
+                <span class="jv-str">"Gelephu"</span
+                ><span class="jv-punc">,</span><br />
+                &nbsp;&nbsp;<span class="jk">"age"</span
+                ><span class="jv-punc">:</span> <span class="jv-num">24</span
+                ><span class="jv-punc">,</span><br />
+                &nbsp;&nbsp;<span class="jk">"enrolled"</span
+                ><span class="jv-punc">:</span> <span class="jv-bool">true</span
+                ><span class="jv-punc">,</span><br />
+                &nbsp;&nbsp;<span class="jk">"skills"</span
+                ><span class="jv-punc">:</span> <span class="jv-arr">[</span
+                ><span class="jv-str">"Python"</span
+                ><span class="jv-punc">,</span> <span class="jv-str">"SQL"</span
+                ><span class="jv-arr">]</span><span class="jv-punc">,</span
+                ><br />
+                &nbsp;&nbsp;<span class="jk">"vertical"</span
+                ><span class="jv-punc">:</span>
+                <span class="jv-str">"Software Dev"</span><br />
+                <span class="jv-punc">}</span>
+              </div>
+            </div>
+            <div
+              class="stack"
+              style="flex: 1; min-width: 240px; max-width: 360px; gap: 0.75rem"
+            >
+              <div class="card" style="padding: clamp(0.75rem, 1.2vw, 1rem)">
+                <h4
+                  style="
+                    color: var(--blue);
+                    font-size: clamp(0.8rem, 1.1vw, 0.95rem);
+                  "
+                >
+                  🔵 Keys (blue)
+                </h4>
+                <p
+                  style="
+                    font-size: clamp(0.72rem, 1vw, 0.85rem);
+                    color: var(--muted);
+                  "
+                >
+                  Always strings in quotes. The label for each field.
+                </p>
+              </div>
+              <div class="card" style="padding: clamp(0.75rem, 1.2vw, 1rem)">
+                <h4
+                  style="
+                    color: var(--green);
+                    font-size: clamp(0.8rem, 1.1vw, 0.95rem);
+                  "
+                >
+                  🟢 String values (green)
+                </h4>
+                <p
+                  style="
+                    font-size: clamp(0.72rem, 1vw, 0.85rem);
+                    color: var(--muted);
+                  "
+                >
+                  Text, always in double quotes.
+                </p>
+              </div>
+              <div class="card" style="padding: clamp(0.75rem, 1.2vw, 1rem)">
+                <h4 style="font-size: clamp(0.8rem, 1.1vw, 0.95rem)">
+                  🟡 Numbers · 🟣 Booleans · 🔢 Arrays
+                </h4>
+                <p
+                  style="
+                    font-size: clamp(0.72rem, 1vw, 0.85rem);
+                    color: var(--muted);
+                  "
+                >
+                  Numbers without quotes · true/false · lists with [&nbsp;]
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S7 REST APIS ══ -->
+      <div class="slide accent-indigo" data-slide="7">
+        <div class="slide-label">
+          <span class="snum">07</span> REST APIs
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-indigo">REST</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              REST — A Common Language for APIs
+            </h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem">
+              Representational State Transfer · predictable, resource-based URLs
+            </p>
+          </div>
+          <div
+            class="card"
+            style="
+              border-top: 3px solid var(--indigo);
+              max-width: 780px;
+              width: 100%;
+            "
+          >
+            <p
+              style="
+                font-size: clamp(0.72rem, 1vw, 0.82rem);
+                color: var(--faint);
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+                margin-bottom: 0.75rem;
+              "
+            >
+              Base URL: https://api.pelsung.bt
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 0.6rem">
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 0.75rem;
+                  padding: 0.5rem 0.75rem;
+                  background: var(--bg);
+                  border-radius: 8px;
+                  border: 1px solid var(--border);
+                "
+              >
+                <span
+                  style="
+                    font-family: &quot;Courier New&quot;, monospace;
+                    font-size: clamp(0.78rem, 1.1vw, 0.9rem);
+                    color: var(--indigo);
+                    font-weight: 700;
+                    min-width: 180px;
+                  "
+                  >/trainees</span
+                >
+                <span
+                  style="
+                    font-size: clamp(0.75rem, 1.05vw, 0.88rem);
+                    color: var(--muted);
+                  "
+                  >All trainees in the system</span
+                >
+              </div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 0.75rem;
+                  padding: 0.5rem 0.75rem;
+                  background: var(--bg);
+                  border-radius: 8px;
+                  border: 1px solid var(--border);
+                "
+              >
+                <span
+                  style="
+                    font-family: &quot;Courier New&quot;, monospace;
+                    font-size: clamp(0.78rem, 1.1vw, 0.9rem);
+                    color: var(--indigo);
+                    font-weight: 700;
+                    min-width: 180px;
+                  "
+                  >/trainees/42</span
+                >
+                <span
+                  style="
+                    font-size: clamp(0.75rem, 1.05vw, 0.88rem);
+                    color: var(--muted);
+                  "
+                  >Trainee with ID 42 specifically</span
+                >
+              </div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 0.75rem;
+                  padding: 0.5rem 0.75rem;
+                  background: var(--bg);
+                  border-radius: 8px;
+                  border: 1px solid var(--border);
+                "
+              >
+                <span
+                  style="
+                    font-family: &quot;Courier New&quot;, monospace;
+                    font-size: clamp(0.78rem, 1.1vw, 0.9rem);
+                    color: var(--indigo);
+                    font-weight: 700;
+                    min-width: 180px;
+                  "
+                  >/trainees/42/classes</span
+                >
+                <span
+                  style="
+                    font-size: clamp(0.75rem, 1.05vw, 0.88rem);
+                    color: var(--muted);
+                  "
+                  >All classes attended by trainee 42</span
+                >
+              </div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 0.75rem;
+                  padding: 0.5rem 0.75rem;
+                  background: var(--bg);
+                  border-radius: 8px;
+                  border: 1px solid var(--border);
+                "
+              >
+                <span
+                  style="
+                    font-family: &quot;Courier New&quot;, monospace;
+                    font-size: clamp(0.78rem, 1.1vw, 0.9rem);
+                    color: var(--indigo);
+                    font-weight: 700;
+                    min-width: 180px;
+                  "
+                  >/classes?phase=foundation</span
+                >
+                <span
+                  style="
+                    font-size: clamp(0.75rem, 1.05vw, 0.88rem);
+                    color: var(--muted);
+                  "
+                  >Filter classes by phase</span
+                >
+              </div>
+            </div>
+          </div>
+          <p
+            style="
+              font-size: clamp(0.72rem, 1vw, 0.85rem);
+              color: var(--muted);
+              font-style: italic;
+              text-align: center;
+            "
+          >
+            The URL tells you what resource you're working with. The HTTP method
+            tells you what to do with it.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S8 HTTP METHODS ══ -->
+      <div class="slide accent-indigo bg-subtle" data-slide="8">
+        <div class="slide-label">
+          <span class="snum">08</span> HTTP Methods
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-indigo">HTTP Methods</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              What to Do With the Resource
+            </h2>
+          </div>
+          <table class="method-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Action</th>
+                <th>CRUD</th>
+                <th>Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="method-badge mb-get">GET</span></td>
+                <td class="td-muted">Read / fetch data</td>
+                <td class="td-muted">Read</td>
+                <td class="td-code">GET /trainees → get all trainees</td>
+              </tr>
+              <tr>
+                <td><span class="method-badge mb-post">POST</span></td>
+                <td class="td-muted">Create new record</td>
+                <td class="td-muted">Create</td>
+                <td class="td-code">POST /trainees → add new trainee</td>
+              </tr>
+              <tr>
+                <td><span class="method-badge mb-put">PUT</span></td>
+                <td class="td-muted">Update existing record</td>
+                <td class="td-muted">Update</td>
+                <td class="td-code">PUT /trainees/42 → edit trainee 42</td>
+              </tr>
+              <tr>
+                <td><span class="method-badge mb-delete">DELETE</span></td>
+                <td class="td-muted">Remove a record</td>
+                <td class="td-muted">Delete</td>
+                <td class="td-code">DELETE /trainees/42 → remove trainee</td>
+              </tr>
+            </tbody>
+          </table>
+          <div
+            class="card"
+            style="
+              background: var(--bg);
+              border: 2px dashed var(--border);
+              text-align: center;
+              max-width: 700px;
+              padding: clamp(0.75rem, 1.5vw, 1rem);
+            "
+          >
+            <p class="body-md" style="color: var(--muted)">
+              🗝️ <strong style="color: var(--text)">CRUD</strong> = Create,
+              Read, Update, Delete — every database app does these four things
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S9 QUIZ ══ -->
+      <div class="slide accent-indigo" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> Quick Check</div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 760px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-indigo">🧠 Quiz</div>
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              You want to read a user's profile from an API.<br />Which HTTP
+              method do you use?
+            </h2>
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-opt" onclick="answerQ(this, false, 'q2')">
+              <span class="qo-letter">A</span>POST — to submit the user's
+              profile to the server
+            </div>
+            <div class="quiz-opt" onclick="answerQ(this, false, 'q2')">
+              <span class="qo-letter">B</span>DELETE — to request the profile be
+              sent to you
+            </div>
+            <div
+              class="quiz-opt"
+              data-correct="true"
+              onclick="answerQ(this, true, 'q2')"
+            >
+              <span class="qo-letter">C</span>GET — to fetch / read data from
+              the server
+            </div>
+            <div class="quiz-opt" onclick="answerQ(this, false, 'q2')">
+              <span class="qo-letter">D</span>PUT — to retrieve data and update
+              it at the same time
+            </div>
+          </div>
+          <div class="quiz-feedback qf-correct" id="q2-ok">
+            ✅ Correct! GET = read. You're not changing anything — just asking
+            the server to send you the data.
+          </div>
+          <div class="quiz-feedback qf-wrong" id="q2-no">
+            Not quite. GET is the method for reading/fetching data. POST creates
+            new data, PUT updates, DELETE removes. C is correct.
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S10 EXERCISE ══ -->
+      <div class="slide bg-amber" data-slide="10">
+        <div class="slide-label">
+          <span class="snum">10</span> Exercise
+        </div>
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            max-width: 820px;
+            width: 100%;
+          "
+        >
+          <div class="center">
+            <div class="pill pill-white" style="margin: 0 auto 1rem">
+              ✍ Hands-on · 30 min
+            </div>
+            <h2
+              class="heading"
+              style="color: white; font-size: clamp(1.8rem, 3.5vw, 2.8rem)"
+            >
+              Try a Live API
+            </h2>
+          </div>
+          <div id="timer2" class="timer-display">30:00</div>
+          <div class="timer-controls">
+            <button
+              class="timer-btn tbtn-start"
+              onclick="startTimer('timer2', 30)"
+            >
+              ▶ Start
+            </button>
+            <button
+              class="timer-btn tbtn-reset"
+              onclick="resetTimer('timer2', 30)"
+            >
+              ↺ Reset
+            </button>
+          </div>
+          <div class="timer-tasks">
+            <div class="tt-item">
+              <span class="tt-num">1</span
+              ><span
+                >Open your browser and go to:
+                <strong>jsonplaceholder.typicode.com/users</strong> — this is a
+                real public API</span
+              >
+            </div>
+            <div class="tt-item">
+              <span class="tt-num">2</span
+              ><span
+                >Look at the JSON.
+                <strong>How many users are there?</strong> What fields does each
+                user have?</span
+              >
+            </div>
+            <div class="tt-item">
+              <span class="tt-num">3</span
+              ><span
+                >Change the URL to <strong>/users/1</strong> — what's the
+                difference? (one vs all)</span
+              >
+            </div>
+            <div class="tt-item">
+              <span class="tt-num">4</span
+              ><span
+                >Try <strong>/posts</strong> and
+                <strong>/users/1/posts</strong> — what different data
+                appears?</span
+              >
+            </div>
+            <div class="tt-item">
+              <span class="tt-num">5</span
+              ><span
+                >Bonus: try <strong>/users?username=Bret</strong> — filtering
+                with query parameters</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S11 DATABASES ══ -->
+      <div class="slide accent-indigo" data-slide="11">
+        <div class="slide-label">
+          <span class="snum">11</span> Databases
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-indigo">Databases</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              Organised Storage for Data
+            </h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem">
+              Think: Excel spreadsheet — but massive, fast, and reliable
+            </p>
+          </div>
+          <div class="db-wrap">
+            <div class="db-title">🗄️ trainees (table) — 45 rows</div>
+            <table class="db-table">
+              <thead>
+                <tr>
+                  <th>id</th>
+                  <th>name</th>
+                  <th>city</th>
+                  <th>vertical</th>
+                  <th>cohort</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="db-pk">1</td>
+                  <td>Karma Dorji</td>
+                  <td>Gelephu</td>
+                  <td>Software Dev</td>
+                  <td>3</td>
+                </tr>
+                <tr>
+                  <td class="db-pk">2</td>
+                  <td>Tenzin Wangmo</td>
+                  <td>Thimphu</td>
+                  <td>UI/UX Design</td>
+                  <td>3</td>
+                </tr>
+                <tr>
+                  <td class="db-pk">3</td>
+                  <td>Pema Choden</td>
+                  <td>Paro</td>
+                  <td>QA Testing</td>
+                  <td>3</td>
+                </tr>
+                <tr>
+                  <td class="db-pk">4</td>
+                  <td>Sonam Yeshi</td>
+                  <td>Gelephu</td>
+                  <td>Business Analysis</td>
+                  <td>3</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--faint)">…</td>
+                  <td style="color: var(--faint)">…</td>
+                  <td style="color: var(--faint)">…</td>
+                  <td style="color: var(--faint)">…</td>
+                  <td style="color: var(--faint)">…</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="cols-3" style="max-width: 800px">
+            <div
+              class="card"
+              style="padding: clamp(0.7rem, 1.2vw, 1rem); text-align: center"
+            >
+              <div style="font-size: 1.5rem; margin-bottom: 0.3rem">📋</div>
+              <h4
+                style="
+                  justify-content: center;
+                  font-size: clamp(0.78rem, 1.1vw, 0.92rem);
+                "
+              >
+                Table
+              </h4>
+              <p
+                style="
+                  font-size: clamp(0.65rem, 0.9vw, 0.78rem);
+                  color: var(--muted);
+                "
+              >
+                A spreadsheet-like structure for one type of data
+              </p>
+            </div>
+            <div
+              class="card"
+              style="padding: clamp(0.7rem, 1.2vw, 1rem); text-align: center"
+            >
+              <div style="font-size: 1.5rem; margin-bottom: 0.3rem">➡️</div>
+              <h4
+                style="
+                  justify-content: center;
+                  font-size: clamp(0.78rem, 1.1vw, 0.92rem);
+                "
+              >
+                Row
+              </h4>
+              <p
+                style="
+                  font-size: clamp(0.65rem, 0.9vw, 0.78rem);
+                  color: var(--muted);
+                "
+              >
+                One record — one trainee, one class, one transaction
+              </p>
+            </div>
+            <div
+              class="card"
+              style="padding: clamp(0.7rem, 1.2vw, 1rem); text-align: center"
+            >
+              <div style="font-size: 1.5rem; margin-bottom: 0.3rem">⬇️</div>
+              <h4
+                style="
+                  justify-content: center;
+                  font-size: clamp(0.78rem, 1.1vw, 0.92rem);
+                "
+              >
+                Column
+              </h4>
+              <p
+                style="
+                  font-size: clamp(0.65rem, 0.9vw, 0.78rem);
+                  color: var(--muted);
+                "
+              >
+                A field — name, city, vertical. Same type for every row.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S12 FULL APP FLOW ══ -->
+      <div class="slide accent-indigo bg-subtle" data-slide="12">
+        <div class="slide-label">
+          <span class="snum">12</span> How It All Connects
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-indigo">Full Picture</div>
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              How Data Flows in an App
+            </h2>
+          </div>
+          <div class="data-flow">
+            <div class="df-node df-browser">
+              <span class="df-icon">💻</span
+              ><span class="df-label" style="color: var(--blue)">Browser</span
+              ><span class="df-sub">You click a button</span>
+            </div>
+            <div class="df-arr-wrap">
+              <span class="df-arr">→</span
+              ><span class="df-arr-lbl">HTTP<br />Request</span>
+            </div>
+            <div class="df-node df-api">
+              <span class="df-icon">🔌</span
+              ><span class="df-label" style="color: #1C5B8C">API</span
+              ><span class="df-sub">Routes the request</span>
+            </div>
+            <div class="df-arr-wrap">
+              <span class="df-arr">→</span
+              ><span class="df-arr-lbl">Function<br />call</span>
+            </div>
+            <div class="df-node df-server">
+              <span class="df-icon">⚙️</span
+              ><span class="df-label" style="color: var(--indigo)"
+                >Server Logic</span
+              ><span class="df-sub">Processes rules</span>
+            </div>
+            <div class="df-arr-wrap">
+              <span class="df-arr">→</span
+              ><span class="df-arr-lbl">SQL<br />query</span>
+            </div>
+            <div class="df-node df-database">
+              <span class="df-icon">🗄️</span
+              ><span class="df-label" style="color: var(--green)">Database</span
+              ><span class="df-sub">Returns data</span>
+            </div>
+          </div>
+          <div
+            style="
+              text-align: center;
+              font-size: clamp(1rem, 1.8vw, 1.3rem);
+              color: var(--muted);
+            "
+          >
+            ↩ Response travels back the same path as JSON ↩
+          </div>
+          <div class="cols-2" style="max-width: 800px">
+            <div class="card" style="border-left: 4px solid var(--blue)">
+              <h4 style="color: var(--blue)">🗃️ SQL Databases</h4>
+              <ul>
+                <li>Tables with fixed columns</li>
+                <li>Great for structured, relational data</li>
+                <li>PostgreSQL, MySQL, SQLite</li>
+                <li>Used in most SELISE products</li>
+              </ul>
+            </div>
+            <div class="card" style="border-left: 4px solid var(--green)">
+              <h4 style="color: var(--green)">📄 NoSQL Databases</h4>
+              <ul>
+                <li>Stores JSON documents, not tables</li>
+                <li>Flexible schema — fields can vary</li>
+                <li>MongoDB, Firestore, DynamoDB</li>
+                <li>Great for fast-changing data structures</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S13 EXERCISE ══ -->
+      <div class="slide bg-amber" data-slide="13">
+        <div class="slide-label">
+          <span class="snum">13</span> Exercise
+        </div>
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            max-width: 820px;
+            width: 100%;
+          "
+        >
+          <div class="center">
+            <div class="pill pill-white" style="margin: 0 auto 1rem">
+              ✍ Design Challenge · 20 min
+            </div>
+            <h2
+              class="heading"
+              style="color: white; font-size: clamp(1.8rem, 3.5vw, 2.8rem)"
+            >
+              Design a Database Schema
+            </h2>
+          </div>
+          <div id="timer3" class="timer-display">20:00</div>
+          <div class="timer-controls">
+            <button
+              class="timer-btn tbtn-start"
+              onclick="startTimer('timer3', 20)"
+            >
+              ▶ Start
+            </button>
+            <button
+              class="timer-btn tbtn-reset"
+              onclick="resetTimer('timer3', 20)"
+            >
+              ↺ Reset
+            </button>
+          </div>
+          <div class="timer-tasks">
+            <div class="tt-item">
+              <span class="tt-num">📋</span
+              ><span
+                ><strong>Scenario:</strong> Design the database for the Pelsung
+                program itself</span
+              >
+            </div>
+            <div class="tt-item">
+              <span class="tt-num">1</span
+              ><span
+                >You need 3 tables:
+                <strong>Trainees, Classes, Attendance</strong></span
+              >
+            </div>
+            <div class="tt-item">
+              <span class="tt-num">2</span
+              ><span
+                >For each table:
+                <strong>What columns does it need?</strong> Which is the unique
+                ID (primary key)?</span
+              >
+            </div>
+            <div class="tt-item">
+              <span class="tt-num">3</span
+              ><span
+                >How does <strong>Attendance</strong> link Trainees and Classes
+                together?</span
+              >
+            </div>
+            <div class="tt-item">
+              <span class="tt-num">4</span
+              ><span
+                >Draw it on paper or your notes. Compare with the person next to
+                you — did you choose the same columns?</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S14 WRAP-UP ══ -->
+      <div class="slide bg-dark" data-slide="14">
+        <div class="slide-label">
+          <span class="snum">14</span> Wrap-up
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-white" style="margin: 0 auto 1rem">
+              ✅ What You Learned
+            </div>
+            <h2
+              class="heading"
+              style="color: white; font-size: clamp(1.8rem, 3.5vw, 2.6rem)"
+            >
+              Key Takeaways
+            </h2>
+          </div>
+          <div class="wu-grid">
+            <div class="wu-card">
+              <div class="wu-icon">🍽️</div>
+              <h4>APIs</h4>
+              <p>
+                The waiter between client and server. You never touch the
+                kitchen (database) directly.
+              </p>
+            </div>
+            <div class="wu-card">
+              <div class="wu-icon">📄</div>
+              <h4>JSON</h4>
+              <p>
+                How APIs send data. Key-value pairs. Human-readable. Universal
+                across all languages.
+              </p>
+            </div>
+            <div class="wu-card">
+              <div class="wu-icon">🔌</div>
+              <h4>REST + Methods</h4>
+              <p>
+                GET reads, POST creates, PUT updates, DELETE removes. CRUD
+                operations on resources.
+              </p>
+            </div>
+            <div class="wu-card">
+              <div class="wu-icon">🗄️</div>
+              <h4>Databases</h4>
+              <p>
+                Tables, rows, columns. SQL = structured. NoSQL = flexible. The
+                pantry behind every app.
+              </p>
+            </div>
+          </div>
+          <div style="text-align: center; margin-top: 0.5rem">
+            <p
+              style="
+                color: rgba(255, 255, 255, 0.5);
+                font-size: clamp(0.75rem, 1vw, 0.88rem);
+              "
+            >
+              Next:
+              <strong style="color: rgba(255, 255, 255, 0.8)"
+                >Dev Tools &amp; Version Control</strong
+              >
+              · VS Code · Git &amp; GitHub · Terminal basics
+            </p>
+            <p
+              style="
+                color: rgba(255, 255, 255, 0.3);
+                font-size: clamp(0.65rem, 0.85vw, 0.75rem);
+                margin-top: 0.4rem;
+              "
+            >
+              SELISE × Pelsung · Foundation Phase
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /#deck -->
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 14</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">
+      ⛶
+    </button>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      let current = 0;
+
+      function goTo(n) {
+        slides[current].classList.remove("active");
+        slides[current].classList.add("exit");
+        const old = current;
+        setTimeout(() => slides[old].classList.remove("exit"), 380);
+        current = Math.max(0, Math.min(n, total - 1));
+        slides[current].classList.add("active");
+        document.getElementById("slide-counter").textContent =
+          `${current + 1} / ${total}`;
+        document.getElementById("progress").style.width =
+          `${((current + 1) / total) * 100}%`;
+        initReveal(slides[current]);
+      }
+
+      function nextSlide() {
+        if (current < total - 1) goTo(current + 1);
+      }
+      function prevSlide() {
+        if (current > 0) goTo(current - 1);
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight" || e.key === " ") {
+          e.preventDefault();
+          handleForward();
+        }
+        if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          prevSlide();
+        }
+        if (e.key === "f" || e.key === "F") toggleFullscreen();
+      });
+
+      document.getElementById("deck").addEventListener("click", function (e) {
+        if (
+          e.target.closest(
+            "button,.quiz-opt,a,input,select,textarea,.agenda-row,[data-noclick]",
+          )
+        )
+          return;
+        const pct = e.clientX / window.innerWidth;
+        if (pct < 0.15) prevSlide();
+        else if (pct > 0.85) handleForward();
+      });
+
+      function handleForward() {
+        const active = slides[current];
+        const list = active.querySelector(".reveal-list");
+        if (list) {
+          const hidden = list.querySelectorAll("li:not(.shown)");
+          if (hidden.length > 0) {
+            hidden[0].classList.add("shown");
+            const hint = active.querySelector(".reveal-hint");
+            if (hint && hidden.length === 1) hint.style.opacity = "0";
+            return;
+          }
+        }
+        nextSlide();
+      }
+
+      function initReveal(slide) {
+        const list = slide.querySelector(".reveal-list");
+        if (!list) return;
+        list
+          .querySelectorAll("li")
+          .forEach((li) => li.classList.remove("shown"));
+        const hint = slide.querySelector(".reveal-hint");
+        if (hint) hint.style.opacity = "1";
+      }
+
+      slides[0].classList.add("active");
+      document.getElementById("progress").style.width = `${(1 / total) * 100}%`;
+
+      function toggleFullscreen() {
+        if (!document.fullscreenElement)
+          document.documentElement.requestFullscreen().catch(() => {});
+        else document.exitFullscreen().catch(() => {});
+      }
+
+      const timerState = {};
+      function startTimer(id, minutes) {
+        if (timerState[id]?.interval) return;
+        if (!timerState[id]) timerState[id] = { remaining: minutes * 60 };
+        timerState[id].interval = setInterval(() => {
+          timerState[id].remaining--;
+          const el = document.getElementById(id);
+          if (!el) return;
+          if (timerState[id].remaining <= 0) {
+            clearInterval(timerState[id].interval);
+            timerState[id].interval = null;
+            el.textContent = "00:00";
+            el.style.color = "#ff5f56";
+            return;
+          }
+          const m = Math.floor(timerState[id].remaining / 60)
+            .toString()
+            .padStart(2, "0");
+          const s = (timerState[id].remaining % 60).toString().padStart(2, "0");
+          el.textContent = `${m}:${s}`;
+          if (timerState[id].remaining <= 60) el.style.color = "#febc2e";
+        }, 1000);
+      }
+      function resetTimer(id, minutes) {
+        if (timerState[id]?.interval) {
+          clearInterval(timerState[id].interval);
+          timerState[id].interval = null;
+        }
+        timerState[id] = { remaining: minutes * 60 };
+        const el = document.getElementById(id);
+        if (el) {
+          el.textContent = `${minutes.toString().padStart(2, "0")}:00`;
+          el.style.color = "";
+        }
+      }
+
+      function answerQ(el, isCorrect, qid) {
+        const opts = el.closest(".quiz-options").querySelectorAll(".quiz-opt");
+        opts.forEach((o) => {
+          o.style.pointerEvents = "none";
+          o.classList.add("dim");
+        });
+        el.classList.remove("dim");
+        if (isCorrect) {
+          el.classList.add("correct");
+        } else {
+          el.classList.add("wrong");
+          opts.forEach((o) => {
+            if (o.dataset.correct === "true") {
+              o.classList.remove("dim");
+              o.classList.add("correct");
+            }
+          });
+        }
+        const fb = document.getElementById(
+          isCorrect ? qid + "-ok" : qid + "-no",
+        );
+        if (fb) fb.classList.add("show");
+      }
+    </script>
+  </body>
+</html>

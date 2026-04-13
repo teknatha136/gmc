@@ -1,0 +1,922 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trainer Guide — Class 04: How the Internet Works</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --blue: #0066B2;
+        --indigo: #001F35;
+        --amber: #247EC1;
+        --green: #7BC950;
+        --purple: #4796D1;
+        --red: #D80032;
+        --text: #1B2021;
+        --muted: #7B7C7F;
+        --faint: #9CA3AF;
+        --surf: #ffffff;
+        --bg: #F9F9F9;
+        --border: #EDEDED;
+        --border-l: #F5F5F5;
+        --c04: #0066B2;
+        --c05: #001F35;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Open Sans", 'Aptos', sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+        line-height: 1.6;
+      }
+
+      /* HERO */
+      .hero {
+        background: var(--surf);
+        padding: 4rem 2rem 3rem;
+        text-align: center;
+        border-bottom: 1px solid var(--border);
+        position: relative;
+        overflow: hidden;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(135deg, #0067A3, #002D72);
+      }
+      .hero-meta {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 100px;
+        padding: 0.35rem 1rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--muted);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        margin-bottom: 1.5rem;
+      }
+      .hero-meta .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--amber);
+      }
+      .hero h1 {
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
+        font-size: clamp(2.2rem, 5vw, 3.2rem);
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        line-height: 1.15;
+        margin-bottom: 0.75rem;
+      }
+      .c04 {
+        color: var(--c04);
+      }
+      .c05 {
+        color: var(--c05);
+      }
+      .amp {
+        color: var(--amber);
+        font-style: italic;
+      }
+      .hero-sub {
+        font-size: 1rem;
+        color: var(--muted);
+        margin-bottom: 2rem;
+      }
+      .hero-stats {
+        display: inline-flex;
+        gap: 2rem;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1rem 2rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .stat {
+        text-align: center;
+      }
+      .stat-val {
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
+        font-size: 1.6rem;
+        font-weight: 400;
+        line-height: 1;
+      }
+      .stat-val.blue {
+        color: var(--blue);
+      }
+      .stat-val.indigo {
+        color: var(--indigo);
+      }
+      .stat-val.amber {
+        color: var(--amber);
+      }
+      .stat-label {
+        font-size: 0.72rem;
+        color: var(--faint);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-top: 0.2rem;
+      }
+
+      /* LAYOUT */
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 2rem 6rem;
+      }
+
+      /* TIMELINE BAR */
+      .timeline-bar {
+        display: flex;
+        align-items: stretch;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        margin: 2.5rem 0;
+        background: var(--surf);
+      }
+      .tl-seg {
+        flex: 1;
+        padding: 0.9rem 0.75rem;
+        text-align: center;
+        font-size: 0.78rem;
+        border-right: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+      }
+      .tl-seg:last-child {
+        border-right: none;
+      }
+      .tl-time {
+        font-weight: 700;
+        font-size: 0.7rem;
+        color: var(--faint);
+      }
+      .tl-label {
+        font-weight: 600;
+        color: var(--text);
+        font-size: 0.8rem;
+        line-height: 1.3;
+      }
+      .tl-dur {
+        font-size: 0.68rem;
+        color: var(--muted);
+      }
+      .tl-04 {
+        background: linear-gradient(180deg, #E6F0F8, #EFF5FB);
+      }
+      .tl-break {
+        background: linear-gradient(180deg, #F0F7EC, #F5FAF2);
+      }
+      .tl-buf {
+        background: linear-gradient(180deg, #fafafa, #ffffff);
+      }
+      .tl-05 {
+        background: linear-gradient(180deg, #E6E9EC, #EEF0F2);
+      }
+
+      /* SECTION HEADER */
+      .section-hd {
+        padding: 3.5rem 0 0;
+      }
+      .section-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.3rem 0.9rem;
+        border-radius: 100px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 0.75rem;
+      }
+      .pill-04 {
+        background: #E6F0F8;
+        color: var(--c04);
+      }
+      .pill-05 {
+        background: #E6E9EC;
+        color: var(--c05);
+      }
+      .pill-ex {
+        background: #EBF0F7;
+        color: #1C5B8C;
+      }
+      .pill-break {
+        background: #F0F7EC;
+        color: var(--green);
+      }
+      .section-title {
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
+        font-size: 2.2rem;
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        margin-bottom: 0.4rem;
+      }
+      .section-desc {
+        font-size: 1rem;
+        color: var(--muted);
+        margin-bottom: 2rem;
+      }
+
+      /* OBJECTIVES */
+      .obj-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+      }
+      .obj-chip {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 100px;
+        padding: 0.3rem 0.85rem;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--muted);
+      }
+      .obj-chip.c04 {
+        border-color: #B0D4E9;
+        color: var(--c04);
+        background: #E6F0F8;
+      }
+      .obj-chip.c05 {
+        border-color: #C0C8D0;
+        color: var(--c05);
+        background: #E6E9EC;
+      }
+
+      /* BLOCKS */
+      .block {
+        background: var(--surf);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 2rem 2.25rem;
+        margin-bottom: 1.5rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .block::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 4px;
+        border-radius: 4px 0 0 4px;
+      }
+      .block-04::before {
+        background: var(--c04);
+      }
+      .block-05::before {
+        background: var(--c05);
+      }
+      .block-ex::before {
+        background: var(--amber);
+      }
+      .block-break::before {
+        background: var(--green);
+      }
+      .block-title {
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+      }
+      .block-time {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--faint);
+        margin-bottom: 1.25rem;
+      }
+      .block ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        margin: 0.75rem 0;
+      }
+      .block ul li {
+        font-size: 0.92rem;
+        color: var(--muted);
+        padding-left: 1.4rem;
+        position: relative;
+        line-height: 1.55;
+      }
+      .block ul li::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: var(--faint);
+        font-size: 0.85em;
+        top: 0.1em;
+      }
+      .block p {
+        font-size: 0.92rem;
+        color: var(--muted);
+        line-height: 1.65;
+        margin: 0.5rem 0;
+      }
+      .block h5 {
+        font-size: 0.82rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--faint);
+        margin: 1.25rem 0 0.5rem;
+      }
+
+      /* TIP CALLOUT */
+      .tip {
+        background: #F0F4FA;
+        border: 1px solid #A3C4E0;
+        border-radius: 10px;
+        padding: 1rem 1.25rem;
+        margin: 0.75rem 0;
+        display: flex;
+        gap: 0.75rem;
+        align-items: flex-start;
+      }
+      .tip-icon {
+        font-size: 1.1rem;
+        flex-shrink: 0;
+        margin-top: 0.05rem;
+      }
+      .tip p {
+        font-size: 0.88rem;
+        color: #1C5B8C;
+        line-height: 1.55;
+        font-style: italic;
+        margin: 0;
+      }
+      .tip strong {
+        font-style: normal;
+        color: #0D3A5E;
+      }
+
+      /* DISCUSSION PROMPT */
+      .discuss {
+        background: #EEF0F2;
+        border: 1px solid #C0C8D0;
+        border-radius: 10px;
+        padding: 1rem 1.25rem;
+        margin: 0.75rem 0;
+      }
+      .discuss-lbl {
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: var(--indigo);
+        margin-bottom: 0.4rem;
+      }
+      .discuss p {
+        font-size: 0.9rem;
+        color: var(--text);
+        line-height: 1.55;
+        margin: 0;
+        font-style: italic;
+      }
+
+      /* EXERCISE BLOCK */
+      .exercise {
+        background: #F0F4FA;
+        border: 1.5px solid #A3C4E0;
+        border-radius: 16px;
+        padding: 1.75rem 2rem;
+        margin: 1.5rem 0;
+      }
+      .ex-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+      }
+      .ex-badge {
+        background: var(--amber);
+        color: white;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        padding: 0.25rem 0.7rem;
+        border-radius: 100px;
+      }
+      .ex-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+      }
+      .ex-dur {
+        margin-left: auto;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #1C5B8C;
+        background: #EBF0F7;
+        padding: 0.2rem 0.65rem;
+        border-radius: 100px;
+        border: 1px solid #A3C4E0;
+      }
+      .ex-steps {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+        margin: 0.75rem 0;
+      }
+      .ex-steps li {
+        font-size: 0.9rem;
+        color: var(--muted);
+        padding-left: 2rem;
+        position: relative;
+        line-height: 1.5;
+      }
+      .ex-steps li::before {
+        content: attr(data-n);
+        position: absolute;
+        left: 0;
+        width: 1.4rem;
+        height: 1.4rem;
+        border-radius: 50%;
+        background: var(--amber);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        font-weight: 700;
+        top: 0.05rem;
+      }
+      .ex-watch {
+        background: #ECF2F8;
+        border: 1px solid #A3C4E0;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        margin: 0.75rem 0;
+        font-size: 0.85rem;
+        color: #0A3B6B;
+      }
+      .ex-watch strong {
+        color: #001F35;
+      }
+
+      /* CODE SNIPPET */
+      .code-snip {
+        background: #001F35;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        font-family: "Courier New", monospace;
+        font-size: 0.82rem;
+        color: #e2e8f0;
+        line-height: 1.7;
+        margin: 0.5rem 0;
+        overflow-x: auto;
+      }
+      .code-snip .ck {
+        color: #7dd3fc;
+      }
+      .code-snip .cv {
+        color: #86efac;
+      }
+      .code-snip .cn {
+        color: #fde68a;
+      }
+
+      /* CLOSING */
+      .closing {
+        background: var(--surf);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 2rem 2.25rem;
+        margin-top: 3rem;
+      }
+      .closing-title {
+        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
+        font-size: 1.5rem;
+        font-weight: 400;
+        margin-bottom: 1.25rem;
+      }
+      .check-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.6rem;
+        margin: 0.75rem 0;
+      }
+      .check-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.6rem;
+        font-size: 0.88rem;
+        color: var(--muted);
+        padding: 0.6rem 0.75rem;
+        background: var(--bg);
+        border-radius: 8px;
+        line-height: 1.4;
+      }
+      .check-icon {
+        font-size: 1rem;
+        flex-shrink: 0;
+      }
+
+      /* FOOTER */
+      footer {
+        text-align: center;
+        padding: 3rem 0 2rem;
+        font-size: 0.75rem;
+        color: var(--faint);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hero">
+      <img src="../../../selise-brand/assets/SELISE_Logo_Primary.png" alt="SELISE Digital Platforms" style="height: 48px; margin-bottom: 1rem; display: block;">
+      <div class="hero-meta">
+        <span class="dot"></span>Trainer Guide · Class 04 · Foundation Phase
+      </div>
+      <h1>
+        <span class="c04">How the Internet Works</span>
+      </h1>
+      <p class="hero-sub">
+        SELISE × Pelsung Cohort 3 · 45 trainees
+      </p>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-val blue">~2h</div>
+          <div class="stat-label">Session Time</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val amber">1</div>
+          <div class="stat-label">Exercise</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val blue">1</div>
+          <div class="stat-label">Quiz</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- ═══ CLASS 04 ═══ -->
+      <div class="section-hd">
+        <div class="section-pill pill-04">Class 04 · </div>
+        <h2 class="section-title">How the Internet Works</h2>
+        <p class="section-desc">
+          Cover IP addresses, DNS, URLs, the client-server model, HTTP/HTTPS,
+          and status codes. The goal is conceptual understanding — they don't
+          need to memorise anything, just be able to describe what happens when
+          they visit a website.
+        </p>
+      </div>
+
+      <div class="obj-chips">
+        <span class="obj-chip c04">Explain what the internet is</span>
+        <span class="obj-chip c04">Describe IP addresses &amp; DNS</span>
+        <span class="obj-chip c04">Read and break down a URL</span>
+        <span class="obj-chip c04">Distinguish HTTP from HTTPS</span>
+        <span class="obj-chip c04">Recognise common status codes</span>
+        <span class="obj-chip c04"
+          >Trace a full browser request end-to-end</span
+        >
+      </div>
+
+      <!-- OPENER -->
+      <div class="block block-04">
+        <div class="block-title">🎤 Opening Discussion</div>
+        <div class="block-time"> · 5 min</div>
+        <div class="discuss">
+          <div class="discuss-lbl">Ask the class</div>
+          <p>
+            "You open WhatsApp and send a message to your friend in Thimphu.
+            What happens in that 0.3 seconds?"
+          </p>
+        </div>
+        <p>
+          Take 4–5 answers. Don't correct them yet — write key words on the
+          board (if available). You'll revisit these at the end and confirm who
+          was right.
+        </p>
+        <div class="tip">
+          <span class="tip-icon">⚡</span>
+          <p>
+            <strong>Trainer tip:</strong> This sets up curiosity. Most trainees
+            will say "it goes through the internet" — which is fine. The goal is
+            to surface what they already know before filling in the gaps.
+          </p>
+        </div>
+      </div>
+
+      <!-- THE INTERNET -->
+      <div class="block block-04">
+        <div class="block-title">🌍 The Internet &amp; IP Addresses</div>
+        <div class="block-time"> · 15 min</div>
+        <h5>Key teaching points</h5>
+        <ul>
+          <li>
+            The internet is a global network of computers connected by physical
+            cables, fibre, satellites, and routers
+          </li>
+          <li>
+            Every device has an IP address — like a postal address but for
+            computers. Without it, packets of data don't know where to go
+          </li>
+          <li>
+            IPv4: four numbers 0–255 separated by dots (192.168.1.1). Only ~4
+            billion combinations → IPv6 exists to solve this
+          </li>
+          <li>
+            Bhutan angle: Gelephu connects via fibre from India; Druknet is the
+            national ISP. The same undersea cables that connect continents are
+            why your WhatsApp message reaches London in milliseconds
+          </li>
+        </ul>
+        <div class="tip">
+          <span class="tip-icon">⚡</span>
+          <p>
+            <strong>Analogy to use:</strong> "Your house has a physical address
+            so the postman can find you. Your laptop has an IP address so the
+            internet can find it. Same idea, different scale."
+          </p>
+        </div>
+        <div class="discuss">
+          <div class="discuss-lbl">Quick check</div>
+          <p>
+            "If every device needs an IP address, and there are 8 billion people
+            on Earth — do we have enough IPv4 addresses?" → No! That's why IPv6
+            was invented.
+          </p>
+        </div>
+      </div>
+
+      <!-- DNS -->
+      <div class="block block-04">
+        <div class="block-title">📋 DNS — Domain Name System</div>
+        <div class="block-time"> · 10 min</div>
+        <h5>Key teaching points</h5>
+        <ul>
+          <li>
+            Humans remember names (selisegroup.com). Computers need numbers
+            (185.34.33.33). DNS is the system that translates between them
+          </li>
+          <li>
+            When you type a domain: browser asks DNS resolver → resolver looks
+            up hierarchy → returns IP → browser connects
+          </li>
+          <li>
+            DNS lookup happens in under 100ms. Results are cached so you don't
+            pay the cost every time
+          </li>
+          <li>
+            If DNS is down → websites are unreachable even though the servers
+            are fine (DNS outage != internet down)
+          </li>
+        </ul>
+        <div class="tip">
+          <span class="tip-icon">⚡</span>
+          <p>
+            <strong>Analogy:</strong> "DNS is like the phonebook. You know your
+            friend's name, not their phone number. The phonebook looks it up for
+            you. DNS does the same — you know 'google.com', DNS finds
+            '142.250.x.x'."
+          </p>
+        </div>
+        <div class="tip">
+          <span class="tip-icon">⚡</span>
+          <p>
+            <strong>Common confusion:</strong> Trainees often think the domain
+            name IS the address. Clarify: it's just a human-friendly label. The
+            real address is always an IP number.
+          </p>
+        </div>
+      </div>
+
+      <!-- URL ANATOMY -->
+      <div class="block block-04">
+        <div class="block-title">🔗 URLs &amp; Client-Server</div>
+        <div class="block-time"> · 15 min</div>
+        <h5>URL anatomy (go through this slowly)</h5>
+        <div class="code-snip">
+          https://selisegroup.com/careers?lang=en<br />
+          <span class="ck">https</span> → protocol (use HTTPS, not HTTP)<br />
+          <span class="ck">selise</span> → domain name<br />
+          <span class="ck">.ch</span> → TLD — top-level domain (Switzerland)<br />
+          <span class="ck">/careers</span>→ path — which page on the server<br />
+          <span class="ck">?lang=en</span>→ query string — extra parameters
+        </div>
+        <h5>Client-Server model</h5>
+        <ul>
+          <li>
+            <strong>Client</strong> = the one asking (browser, mobile app,
+            Claude Code, Postman)
+          </li>
+          <li>
+            <strong>Server</strong> = the one answering, runs 24/7, can handle
+            thousands of requests simultaneously
+          </li>
+          <li>
+            Use the diagram on slide 9: You in Gelephu (client) → Internet →
+            selisegroup.com server in Zürich (server)
+          </li>
+        </ul>
+        <div class="tip">
+          <span class="tip-icon">⚡</span>
+          <p>
+            <strong>Make it tangible:</strong> Ask a trainee to open selisegroup.com
+            on their phone and navigate to a few pages. Point out how the URL
+            changes. Every different URL = different request to the same server.
+          </p>
+        </div>
+      </div>
+
+      <!-- HTTP -->
+      <div class="block block-04">
+        <div class="block-title">🔒 HTTP, HTTPS &amp; Status Codes</div>
+        <div class="block-time"> · 15 min</div>
+        <h5>HTTP</h5>
+        <ul>
+          <li>
+            HyperText Transfer Protocol — the rulebook for how browsers and
+            servers communicate
+          </li>
+          <li>
+            HTTP sends data in plain text — anyone watching the network can read
+            it (like a postcard)
+          </li>
+          <li>
+            HTTPS = HTTP + TLS encryption — data is scrambled, only client and
+            server can read it (like a sealed envelope)
+          </li>
+          <li>
+            Always check for the padlock before typing passwords or payment info
+          </li>
+        </ul>
+        <h5>Status codes — the server's reply code</h5>
+        <ul>
+          <li><strong>200 OK</strong> — success, here's your data</li>
+          <li>
+            <strong>301 Moved Permanently</strong> — page is at a new URL,
+            follow this redirect
+          </li>
+          <li>
+            <strong>404 Not Found</strong> — the path you requested doesn't
+            exist on this server
+          </li>
+          <li>
+            <strong>403 Forbidden</strong> — the resource exists, but you don't
+            have permission
+          </li>
+          <li>
+            <strong>500 Internal Server Error</strong> — something broke on the
+            server side
+          </li>
+        </ul>
+        <div class="tip">
+          <span class="tip-icon">⚡</span>
+          <p>
+            <strong>Memory trick:</strong> 4xx errors = client's fault (you
+            asked for something wrong or forbidden). 5xx errors = server's fault
+            (it broke). 2xx = success.
+          </p>
+        </div>
+        <div class="discuss">
+          <div class="discuss-lbl">Ask the class</div>
+          <p>
+            "If you see a 404 on a website you built — whose fault is it? What
+            would you check first?" → Check the path in the URL, check your
+            route definitions on the server.
+          </p>
+        </div>
+      </div>
+
+      <!-- URL JOURNEY -->
+      <div class="block block-04">
+        <div class="block-title">🚀 The Full URL Journey (Reveal)</div>
+        <div class="block-time"> · 4 min — use slide 12</div>
+        <p>
+          Walk through slide 12 step by step — each press of the arrow reveals
+          the next step. Pause after each step and ask "what's happening here?"
+          before revealing the next.
+        </p>
+        <ul>
+          <li>① Cache check — browser has a local copy? Use it, skip DNS</li>
+          <li>② DNS lookup → get IP address for selisegroup.com</li>
+          <li>③ TCP connection on port 443 (HTTPS)</li>
+          <li>④ TLS handshake — agree on encryption keys</li>
+          <li>⑤ Browser sends the actual HTTP GET request</li>
+          <li>⑥ Server finds the requested page files</li>
+          <li>⑦ Server sends 200 OK + HTML content</li>
+          <li>⑧ Browser parses HTML, loads linked CSS/JS/images, renders</li>
+        </ul>
+        <div class="tip">
+          <span class="tip-icon">⚡</span>
+          <p>
+            <strong>Come back to the opener:</strong> After this slide, return
+            to the WhatsApp question from the start. Ask: "Now does your
+            original answer make more sense? What would you add?" This closes
+            the loop and rewards the trainees who guessed correctly.
+          </p>
+        </div>
+      </div>
+
+      <!-- QUIZ 1 -->
+      <div class="block block-04">
+        <div class="block-title">🧠 Quick Quiz 1</div>
+        <div class="block-time"> · 3 min — slide 13</div>
+        <p>
+          Put slide 13 on screen. Don't call on anyone — let trainees click on
+          their own device if you mirror, or just ask for a show of hands. The
+          correct answer is <strong>B</strong> — DNS translates domain names to
+          IP addresses.
+        </p>
+        <div class="tip">
+          <span class="tip-icon">⚡</span>
+          <p>
+            If many choose A (encryption) — clarify that's HTTPS/TLS, not DNS.
+            Two separate systems.
+          </p>
+        </div>
+      </div>
+
+      <!-- EXERCISE 1 -->
+      <div class="exercise">
+        <div class="ex-header">
+          <span class="ex-badge">Exercise 1</span>
+          <span class="ex-title">URL Hunt &amp; DevTools</span>
+          <span class="ex-dur">15 min · </span>
+        </div>
+        <p
+          style="font-size: 0.9rem; color: var(--muted); margin-bottom: 0.75rem"
+        >
+          Trainees work individually. Use slide 14 timer.
+        </p>
+        <ol class="ex-steps">
+          <li data-n="1">
+            Open browser and go to
+            <code
+              style="
+                background: #F5F5F5;
+                padding: 1px 4px;
+                border-radius: 3px;
+                font-size: 0.85em;
+              "
+              >selisegroup.com</code
+            >. Write the full URL in the notebook.
+          </li>
+          <li data-n="2">
+            Break it into parts: protocol, domain, TLD, path. Label each one.
+          </li>
+          <li data-n="3">
+            Open DevTools (F12 Windows / Cmd+Option+I Mac). Go to the Network
+            tab.
+          </li>
+          <li data-n="4">
+            Refresh the page. Count requests. Find the status code of the first
+            request.
+          </li>
+          <li data-n="5">
+            Navigate to 2 more pages. Notice how the URL path changes each time.
+          </li>
+        </ol>
+        <div class="ex-watch">
+          <strong>Watch for:</strong> Trainees who can't find DevTools — help
+          them quickly. The DevTools experience will be useful for the entire
+          program. Common issue: DevTools opens undocked — show them how to dock
+          it to the side or bottom.
+        </div>
+        <p style="font-size: 0.88rem; color: var(--muted); margin-top: 0.75rem">
+          <strong>Debrief (2 min):</strong> Ask 2–3 trainees to share their
+          answers. Target: most pages return 200. Some resources may return 304
+          (Not Modified — cached). Point out how many sub-requests a single page
+          makes (images, fonts, CSS files).
+        </p>
+      </div>
+
+    </div>
+    <!-- /container -->
+    <footer>
+      SELISE × Pelsung · Trainer Guide · Class 04 · How the Internet Works · Cohort 3
+    </footer>
+  </body>
+</html>

@@ -43,6 +43,7 @@ pelsung/
 │   ├── course-plan.html                #   Visual overview (SELISE×Pelsung branded)
 │   ├── course-plan-detailed.html       #   Trainer edition — per-trainee notes
 │   ├── software-development.docx       #   Original dev curriculum (reference)
+│   ├── shared/                         #   Shared CSS/JS across lesson HTML (e.g. slides.css)
 │   ├── foundation/                     #   Phase 1 materials (all verticals together)
 │   ├── dev/                            #   Software Development — slides, exercises, handouts
 │   ├── design/                         #   Software Design materials

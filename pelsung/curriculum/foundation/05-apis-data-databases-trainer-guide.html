@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Trainer Guide — Classes 04 &amp; 05 · Apr 11</title>
+    <title>Trainer Guide — Class 05: APIs, Data & Databases</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap"
@@ -552,406 +552,36 @@
   </head>
   <body>
     <div class="hero">
-      <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE Digital Platforms" style="height: 48px; margin-bottom: 1rem; display: block;">
+      <img src="../../../selise-brand/assets/SELISE_Logo_Primary.png" alt="SELISE Digital Platforms" style="height: 48px; margin-bottom: 1rem; display: block;">
       <div class="hero-meta">
-        <span class="dot"></span>Trainer Guide · Classes 04 &amp; 05 ·
-        Foundation Phase
+        <span class="dot"></span>Trainer Guide · Class 05 · Foundation Phase
       </div>
       <h1>
-        <span class="c04">How the Internet Works</span><br /><span class="amp"
-          >&amp;</span
-        >
         <span class="c05">APIs, Data &amp; Databases</span>
       </h1>
       <p class="hero-sub">
-        April 11, 2026 · 9:30 – 13:30 · 45 trainees · SELISE × Pelsung Cohort 3
+        SELISE × Pelsung Cohort 3 · 45 trainees
       </p>
       <div class="hero-stats">
         <div class="stat">
-          <div class="stat-val blue">4h</div>
-          <div class="stat-label">Total Time</div>
+          <div class="stat-val indigo">~2h</div>
+          <div class="stat-label">Session Time</div>
         </div>
         <div class="stat">
-          <div class="stat-val indigo">2</div>
-          <div class="stat-label">Class Sessions</div>
-        </div>
-        <div class="stat">
-          <div class="stat-val amber">3</div>
+          <div class="stat-val amber">2</div>
           <div class="stat-label">Exercises</div>
         </div>
         <div class="stat">
-          <div class="stat-val blue">2</div>
-          <div class="stat-label">Quizzes</div>
+          <div class="stat-val blue">1</div>
+          <div class="stat-label">Quiz</div>
         </div>
       </div>
     </div>
 
     <div class="container">
-      <!-- TIMELINE -->
-      <div class="timeline-bar">
-        <div class="tl-seg tl-04">
-          <span class="tl-time">9:30</span
-          ><span class="tl-label">🌐 How the Internet Works</span
-          ><span class="tl-dur">75 min</span>
-        </div>
-        <div class="tl-seg tl-04" style="flex: 0.5">
-          <span class="tl-time">10:30</span
-          ><span class="tl-label">✍ Exercise 1</span
-          ><span class="tl-dur">15 min</span>
-        </div>
-        <div class="tl-seg tl-break" style="flex: 0.4">
-          <span class="tl-time">10:45</span
-          ><span class="tl-label">☕ Break</span
-          ><span class="tl-dur">15 min</span>
-        </div>
-        <div class="tl-seg tl-buf" style="flex: 0.3">
-          <span class="tl-time">11:00</span><span class="tl-label">Buffer</span
-          ><span class="tl-dur">15 min</span>
-        </div>
-        <div class="tl-seg tl-05">
-          <span class="tl-time">11:15</span
-          ><span class="tl-label">🔌 APIs, Data &amp; Databases</span
-          ><span class="tl-dur">135 min</span>
-        </div>
-      </div>
-
-      <!-- ═══ CLASS 04 ═══ -->
-      <div class="section-hd">
-        <div class="section-pill pill-04">Class 04 · 9:30 – 10:45</div>
-        <h2 class="section-title">How the Internet Works</h2>
-        <p class="section-desc">
-          Cover IP addresses, DNS, URLs, the client-server model, HTTP/HTTPS,
-          and status codes. The goal is conceptual understanding — they don't
-          need to memorise anything, just be able to describe what happens when
-          they visit a website.
-        </p>
-      </div>
-
-      <div class="obj-chips">
-        <span class="obj-chip c04">Explain what the internet is</span>
-        <span class="obj-chip c04">Describe IP addresses &amp; DNS</span>
-        <span class="obj-chip c04">Read and break down a URL</span>
-        <span class="obj-chip c04">Distinguish HTTP from HTTPS</span>
-        <span class="obj-chip c04">Recognise common status codes</span>
-        <span class="obj-chip c04"
-          >Trace a full browser request end-to-end</span
-        >
-      </div>
-
-      <!-- OPENER -->
-      <div class="block block-04">
-        <div class="block-title">🎤 Opening Discussion</div>
-        <div class="block-time">9:30 – 9:35 · 5 min</div>
-        <div class="discuss">
-          <div class="discuss-lbl">Ask the class</div>
-          <p>
-            "You open WhatsApp and send a message to your friend in Thimphu.
-            What happens in that 0.3 seconds?"
-          </p>
-        </div>
-        <p>
-          Take 4–5 answers. Don't correct them yet — write key words on the
-          board (if available). You'll revisit these at the end and confirm who
-          was right.
-        </p>
-        <div class="tip">
-          <span class="tip-icon">⚡</span>
-          <p>
-            <strong>Trainer tip:</strong> This sets up curiosity. Most trainees
-            will say "it goes through the internet" — which is fine. The goal is
-            to surface what they already know before filling in the gaps.
-          </p>
-        </div>
-      </div>
-
-      <!-- THE INTERNET -->
-      <div class="block block-04">
-        <div class="block-title">🌍 The Internet &amp; IP Addresses</div>
-        <div class="block-time">9:35 – 9:50 · 15 min</div>
-        <h5>Key teaching points</h5>
-        <ul>
-          <li>
-            The internet is a global network of computers connected by physical
-            cables, fibre, satellites, and routers
-          </li>
-          <li>
-            Every device has an IP address — like a postal address but for
-            computers. Without it, packets of data don't know where to go
-          </li>
-          <li>
-            IPv4: four numbers 0–255 separated by dots (192.168.1.1). Only ~4
-            billion combinations → IPv6 exists to solve this
-          </li>
-          <li>
-            Bhutan angle: Gelephu connects via fibre from India; Druknet is the
-            national ISP. The same undersea cables that connect continents are
-            why your WhatsApp message reaches London in milliseconds
-          </li>
-        </ul>
-        <div class="tip">
-          <span class="tip-icon">⚡</span>
-          <p>
-            <strong>Analogy to use:</strong> "Your house has a physical address
-            so the postman can find you. Your laptop has an IP address so the
-            internet can find it. Same idea, different scale."
-          </p>
-        </div>
-        <div class="discuss">
-          <div class="discuss-lbl">Quick check</div>
-          <p>
-            "If every device needs an IP address, and there are 8 billion people
-            on Earth — do we have enough IPv4 addresses?" → No! That's why IPv6
-            was invented.
-          </p>
-        </div>
-      </div>
-
-      <!-- DNS -->
-      <div class="block block-04">
-        <div class="block-title">📋 DNS — Domain Name System</div>
-        <div class="block-time">9:50 – 10:00 · 10 min</div>
-        <h5>Key teaching points</h5>
-        <ul>
-          <li>
-            Humans remember names (selisegroup.com). Computers need numbers
-            (185.34.33.33). DNS is the system that translates between them
-          </li>
-          <li>
-            When you type a domain: browser asks DNS resolver → resolver looks
-            up hierarchy → returns IP → browser connects
-          </li>
-          <li>
-            DNS lookup happens in under 100ms. Results are cached so you don't
-            pay the cost every time
-          </li>
-          <li>
-            If DNS is down → websites are unreachable even though the servers
-            are fine (DNS outage != internet down)
-          </li>
-        </ul>
-        <div class="tip">
-          <span class="tip-icon">⚡</span>
-          <p>
-            <strong>Analogy:</strong> "DNS is like the phonebook. You know your
-            friend's name, not their phone number. The phonebook looks it up for
-            you. DNS does the same — you know 'google.com', DNS finds
-            '142.250.x.x'."
-          </p>
-        </div>
-        <div class="tip">
-          <span class="tip-icon">⚡</span>
-          <p>
-            <strong>Common confusion:</strong> Trainees often think the domain
-            name IS the address. Clarify: it's just a human-friendly label. The
-            real address is always an IP number.
-          </p>
-        </div>
-      </div>
-
-      <!-- URL ANATOMY -->
-      <div class="block block-04">
-        <div class="block-title">🔗 URLs &amp; Client-Server</div>
-        <div class="block-time">10:00 – 10:15 · 15 min</div>
-        <h5>URL anatomy (go through this slowly)</h5>
-        <div class="code-snip">
-          https://selisegroup.com/careers?lang=en<br />
-          <span class="ck">https</span> → protocol (use HTTPS, not HTTP)<br />
-          <span class="ck">selise</span> → domain name<br />
-          <span class="ck">.ch</span> → TLD — top-level domain (Switzerland)<br />
-          <span class="ck">/careers</span>→ path — which page on the server<br />
-          <span class="ck">?lang=en</span>→ query string — extra parameters
-        </div>
-        <h5>Client-Server model</h5>
-        <ul>
-          <li>
-            <strong>Client</strong> = the one asking (browser, mobile app,
-            Claude Code, Postman)
-          </li>
-          <li>
-            <strong>Server</strong> = the one answering, runs 24/7, can handle
-            thousands of requests simultaneously
-          </li>
-          <li>
-            Use the diagram on slide 9: You in Gelephu (client) → Internet →
-            selisegroup.com server in Zürich (server)
-          </li>
-        </ul>
-        <div class="tip">
-          <span class="tip-icon">⚡</span>
-          <p>
-            <strong>Make it tangible:</strong> Ask a trainee to open selisegroup.com
-            on their phone and navigate to a few pages. Point out how the URL
-            changes. Every different URL = different request to the same server.
-          </p>
-        </div>
-      </div>
-
-      <!-- HTTP -->
-      <div class="block block-04">
-        <div class="block-title">🔒 HTTP, HTTPS &amp; Status Codes</div>
-        <div class="block-time">10:15 – 10:30 · 15 min</div>
-        <h5>HTTP</h5>
-        <ul>
-          <li>
-            HyperText Transfer Protocol — the rulebook for how browsers and
-            servers communicate
-          </li>
-          <li>
-            HTTP sends data in plain text — anyone watching the network can read
-            it (like a postcard)
-          </li>
-          <li>
-            HTTPS = HTTP + TLS encryption — data is scrambled, only client and
-            server can read it (like a sealed envelope)
-          </li>
-          <li>
-            Always check for the padlock before typing passwords or payment info
-          </li>
-        </ul>
-        <h5>Status codes — the server's reply code</h5>
-        <ul>
-          <li><strong>200 OK</strong> — success, here's your data</li>
-          <li>
-            <strong>301 Moved Permanently</strong> — page is at a new URL,
-            follow this redirect
-          </li>
-          <li>
-            <strong>404 Not Found</strong> — the path you requested doesn't
-            exist on this server
-          </li>
-          <li>
-            <strong>403 Forbidden</strong> — the resource exists, but you don't
-            have permission
-          </li>
-          <li>
-            <strong>500 Internal Server Error</strong> — something broke on the
-            server side
-          </li>
-        </ul>
-        <div class="tip">
-          <span class="tip-icon">⚡</span>
-          <p>
-            <strong>Memory trick:</strong> 4xx errors = client's fault (you
-            asked for something wrong or forbidden). 5xx errors = server's fault
-            (it broke). 2xx = success.
-          </p>
-        </div>
-        <div class="discuss">
-          <div class="discuss-lbl">Ask the class</div>
-          <p>
-            "If you see a 404 on a website you built — whose fault is it? What
-            would you check first?" → Check the path in the URL, check your
-            route definitions on the server.
-          </p>
-        </div>
-      </div>
-
-      <!-- URL JOURNEY -->
-      <div class="block block-04">
-        <div class="block-title">🚀 The Full URL Journey (Reveal)</div>
-        <div class="block-time">10:28 – 10:32 · 4 min — use slide 12</div>
-        <p>
-          Walk through slide 12 step by step — each press of the arrow reveals
-          the next step. Pause after each step and ask "what's happening here?"
-          before revealing the next.
-        </p>
-        <ul>
-          <li>① Cache check — browser has a local copy? Use it, skip DNS</li>
-          <li>② DNS lookup → get IP address for selisegroup.com</li>
-          <li>③ TCP connection on port 443 (HTTPS)</li>
-          <li>④ TLS handshake — agree on encryption keys</li>
-          <li>⑤ Browser sends the actual HTTP GET request</li>
-          <li>⑥ Server finds the requested page files</li>
-          <li>⑦ Server sends 200 OK + HTML content</li>
-          <li>⑧ Browser parses HTML, loads linked CSS/JS/images, renders</li>
-        </ul>
-        <div class="tip">
-          <span class="tip-icon">⚡</span>
-          <p>
-            <strong>Come back to the opener:</strong> After this slide, return
-            to the WhatsApp question from the start. Ask: "Now does your
-            original answer make more sense? What would you add?" This closes
-            the loop and rewards the trainees who guessed correctly.
-          </p>
-        </div>
-      </div>
-
-      <!-- QUIZ 1 -->
-      <div class="block block-04">
-        <div class="block-title">🧠 Quick Quiz 1</div>
-        <div class="block-time">10:32 – 10:35 · 3 min — slide 13</div>
-        <p>
-          Put slide 13 on screen. Don't call on anyone — let trainees click on
-          their own device if you mirror, or just ask for a show of hands. The
-          correct answer is <strong>B</strong> — DNS translates domain names to
-          IP addresses.
-        </p>
-        <div class="tip">
-          <span class="tip-icon">⚡</span>
-          <p>
-            If many choose A (encryption) — clarify that's HTTPS/TLS, not DNS.
-            Two separate systems.
-          </p>
-        </div>
-      </div>
-
-      <!-- EXERCISE 1 -->
-      <div class="exercise">
-        <div class="ex-header">
-          <span class="ex-badge">Exercise 1</span>
-          <span class="ex-title">URL Hunt &amp; DevTools</span>
-          <span class="ex-dur">15 min · 10:30 – 10:45</span>
-        </div>
-        <p
-          style="font-size: 0.9rem; color: var(--muted); margin-bottom: 0.75rem"
-        >
-          Trainees work individually. Use slide 14 timer.
-        </p>
-        <ol class="ex-steps">
-          <li data-n="1">
-            Open browser and go to
-            <code
-              style="
-                background: #F5F5F5;
-                padding: 1px 4px;
-                border-radius: 3px;
-                font-size: 0.85em;
-              "
-              >selisegroup.com</code
-            >. Write the full URL in the notebook.
-          </li>
-          <li data-n="2">
-            Break it into parts: protocol, domain, TLD, path. Label each one.
-          </li>
-          <li data-n="3">
-            Open DevTools (F12 Windows / Cmd+Option+I Mac). Go to the Network
-            tab.
-          </li>
-          <li data-n="4">
-            Refresh the page. Count requests. Find the status code of the first
-            request.
-          </li>
-          <li data-n="5">
-            Navigate to 2 more pages. Notice how the URL path changes each time.
-          </li>
-        </ol>
-        <div class="ex-watch">
-          <strong>Watch for:</strong> Trainees who can't find DevTools — help
-          them quickly. The DevTools experience will be useful for the entire
-          program. Common issue: DevTools opens undocked — show them how to dock
-          it to the side or bottom.
-        </div>
-        <p style="font-size: 0.88rem; color: var(--muted); margin-top: 0.75rem">
-          <strong>Debrief (2 min):</strong> Ask 2–3 trainees to share their
-          answers. Target: most pages return 200. Some resources may return 304
-          (Not Modified — cached). Point out how many sub-requests a single page
-          makes (images, fonts, CSS files).
-        </p>
-      </div>
-
       <!-- ═══ CLASS 05 ═══ -->
       <div class="section-hd" style="padding-top: 4rem">
-        <div class="section-pill pill-05">Class 05 · 11:15 – 13:30</div>
+        <div class="section-pill pill-05">Class 05 · </div>
         <h2 class="section-title">APIs, Data &amp; Databases</h2>
         <p class="section-desc">
           The focus is on understanding what APIs are conceptually, what JSON
@@ -980,7 +610,7 @@
       <!-- OPENER -->
       <div class="block block-05">
         <div class="block-title">🍽️ Opening Discussion</div>
-        <div class="block-time">11:15 – 11:18 · 3 min</div>
+        <div class="block-time"> · 3 min</div>
         <div class="discuss">
           <div class="discuss-lbl">Ask the class</div>
           <p>
@@ -998,7 +628,7 @@
       <!-- WHAT IS AN API -->
       <div class="block block-05">
         <div class="block-title">🔌 What is an API?</div>
-        <div class="block-time">11:18 – 11:30 · 12 min</div>
+        <div class="block-time"> · 12 min</div>
         <h5>Key teaching points</h5>
         <ul>
           <li>
@@ -1041,7 +671,7 @@
       <!-- JSON -->
       <div class="block block-05">
         <div class="block-title">📄 JSON — How APIs Send Data</div>
-        <div class="block-time">11:30 – 11:45 · 15 min</div>
+        <div class="block-time"> · 15 min</div>
         <h5>Key teaching points</h5>
         <ul>
           <li>
@@ -1096,7 +726,7 @@
       <!-- REST -->
       <div class="block block-05">
         <div class="block-title">🔗 REST APIs &amp; HTTP Methods</div>
-        <div class="block-time">11:45 – 12:10 · 25 min</div>
+        <div class="block-time"> · 25 min</div>
         <h5>REST — the most common API design style</h5>
         <ul>
           <li>
@@ -1170,7 +800,7 @@
       <!-- QUIZ 2 -->
       <div class="block block-05">
         <div class="block-title">🧠 Quick Quiz 2</div>
-        <div class="block-time">12:08 – 12:10 · 2 min — slide 22</div>
+        <div class="block-time"> · 2 min — slide 22</div>
         <p>
           Show slide 22. Correct answer is <strong>C — GET</strong>. If trainees
           choose POST: explain POST is for creating new data, not reading. GET
@@ -1183,7 +813,7 @@
         <div class="ex-header">
           <span class="ex-badge">Exercise 2</span>
           <span class="ex-title">Try a Live API</span>
-          <span class="ex-dur">30 min · 12:10 – 12:40</span>
+          <span class="ex-dur">30 min · </span>
         </div>
         <p
           style="font-size: 0.9rem; color: var(--muted); margin-bottom: 0.75rem"
@@ -1274,7 +904,7 @@
       <!-- DATABASES -->
       <div class="block block-05">
         <div class="block-title">🗄️ Databases</div>
-        <div class="block-time">12:45 – 13:05 · 20 min</div>
+        <div class="block-time"> · 20 min</div>
         <h5>Key teaching points</h5>
         <ul>
           <li>
@@ -1317,7 +947,7 @@
       <!-- DATA FLOW -->
       <div class="block block-05">
         <div class="block-title">🔄 Full App Data Flow</div>
-        <div class="block-time">13:05 – 13:10 · 5 min — slide 25</div>
+        <div class="block-time"> · 5 min — slide 25</div>
         <p>
           Walk through the data flow diagram. This is the "big picture" slide —
           how everything they learned today connects into one picture.
@@ -1344,7 +974,7 @@
         <div class="ex-header">
           <span class="ex-badge">Exercise 3</span>
           <span class="ex-title">Design a Database Schema</span>
-          <span class="ex-dur">20 min · 13:10 – 13:30</span>
+          <span class="ex-dur">20 min · </span>
         </div>
         <p
           style="font-size: 0.9rem; color: var(--muted); margin-bottom: 0.75rem"
@@ -1474,10 +1104,10 @@
       </div>
     </div>
 
+    </div>
+    <!-- /container -->
     <footer>
-      <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE Digital Platforms" style="height: 32px; margin-bottom: 0.5rem; display: block; margin-left: auto; margin-right: auto; opacity: 0.6;">
-      SELISE × Pelsung · Trainer Guide · Classes 04 &amp; 05 · April 11, 2026 ·
-      Foundation Phase · Cohort 3
+      SELISE × Pelsung · Trainer Guide · Class 05 · APIs, Data &amp; Databases · Cohort 3
     </footer>
   </body>
 </html>

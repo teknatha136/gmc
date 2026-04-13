@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Class Notes — Apr 11 · Internet &amp; APIs</title>
+    <title>Class 05 — APIs, Data & Databases · Pelsung Foundation</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap"
@@ -701,44 +701,21 @@
   </head>
   <body>
     <div class="hero">
-      <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE Digital Platforms" style="height: 48px; margin-bottom: 1rem; display: block;">
+      <img src="../../../selise-brand/assets/SELISE_Logo_Primary.png" alt="SELISE Digital Platforms" style="height: 48px; margin-bottom: 1rem; display: block;">
       <div class="hero-badge">
-        <span class="dot"></span>Classes 04 &amp; 05 · April 11, 2026
+        <span class="dot"></span>Class 05 · Foundation Phase
       </div>
       <h1>
-        <span class="c-blue">How the Internet Works</span><br /><span
-          class="amp"
-          >&amp;</span
-        >
         <span class="c-indigo">APIs, Data &amp; Databases</span>
       </h1>
       <p class="hero-sub">
-        Your reference sheet for today's sessions — keep this and read it again
-        tonight. The concepts here are foundational to everything you'll build.
+        Your reference sheet for this session — keep this and read it again tonight. The concepts here are foundational to everything you'll build.
       </p>
       <div class="hero-tags">
-        <span class="hero-tag tag-blue">IP Addresses</span>
-        <span class="hero-tag tag-blue">DNS</span>
-        <span class="hero-tag tag-blue">HTTP / HTTPS</span>
-        <span class="hero-tag tag-blue">Status Codes</span>
         <span class="hero-tag tag-indigo">APIs</span>
         <span class="hero-tag tag-indigo">JSON</span>
         <span class="hero-tag tag-indigo">REST</span>
         <span class="hero-tag tag-indigo">Databases</span>
-      </div>
-      <div class="hero-stats">
-        <div class="stat">
-          <div class="stat-val blue">4h</div>
-          <div class="stat-label">Today's Session</div>
-        </div>
-        <div class="stat">
-          <div class="stat-val indigo">2</div>
-          <div class="stat-label">Topics</div>
-        </div>
-        <div class="stat">
-          <div class="stat-val amber">3</div>
-          <div class="stat-label">Exercises</div>
-        </div>
       </div>
     </div>
 
@@ -746,511 +723,19 @@
       <div class="toc">
         <h3>Contents</h3>
         <div class="toc-grid">
-          <a href="#internet" class="toc-item"
-            ><span class="toc-dot" style="background: var(--blue)"></span>What
-            is the Internet?<span class="toc-time">9:35</span></a
-          >
-          <a href="#api" class="toc-item"
-            ><span class="toc-dot" style="background: var(--indigo)"></span>What
-            is an API?<span class="toc-time">11:15</span></a
-          >
-          <a href="#ip" class="toc-item"
-            ><span class="toc-dot" style="background: var(--blue)"></span>IP
-            Addresses<span class="toc-time">9:35</span></a
-          >
-          <a href="#json" class="toc-item"
-            ><span class="toc-dot" style="background: var(--indigo)"></span>JSON
-            Format<span class="toc-time">11:30</span></a
-          >
-          <a href="#dns" class="toc-item"
-            ><span class="toc-dot" style="background: var(--blue)"></span>DNS —
-            The Phonebook<span class="toc-time">9:50</span></a
-          >
-          <a href="#rest" class="toc-item"
-            ><span class="toc-dot" style="background: var(--indigo)"></span>REST
-            APIs &amp; HTTP Methods<span class="toc-time">11:45</span></a
-          >
-          <a href="#url" class="toc-item"
-            ><span class="toc-dot" style="background: var(--blue)"></span
-            >Anatomy of a URL<span class="toc-time">10:00</span></a
-          >
-          <a href="#databases" class="toc-item"
-            ><span class="toc-dot" style="background: var(--indigo)"></span
-            >Databases<span class="toc-time">12:45</span></a
-          >
-          <a href="#http" class="toc-item"
-            ><span class="toc-dot" style="background: var(--blue)"></span>HTTP,
-            HTTPS &amp; Status Codes<span class="toc-time">10:15</span></a
-          >
-          <a href="#practice" class="toc-item"
-            ><span class="toc-dot" style="background: var(--amber)"></span
-            >Practice at Home<span class="toc-time"></span
-          ></a>
+          <a href="#api" class="toc-item"><span class="toc-dot" style="background: var(--indigo)"></span>What is an API?</a>
+          <a href="#json" class="toc-item"><span class="toc-dot" style="background: var(--indigo)"></span>JSON Format</a>
+          <a href="#rest" class="toc-item"><span class="toc-dot" style="background: var(--indigo)"></span>REST APIs &amp; HTTP Methods</a>
+          <a href="#databases" class="toc-item"><span class="toc-dot" style="background: var(--indigo)"></span>Databases</a>
+          <a href="#practice" class="toc-item"><span class="toc-dot" style="background: var(--amber)"></span>Practice at Home</a>
         </div>
-      </div>
-
-      <!-- ════════════════════════════
-       SECTION 1: HOW THE INTERNET WORKS
-  ════════════════════════════ -->
-      <div class="section-hd">
-        <div class="section-pill pill-blue">Class 04 · 9:30 – 10:45</div>
-        <h2 class="section-title" id="internet">How the Internet Works</h2>
-        <p class="section-desc">
-          The internet is not magic — it's infrastructure. Once you understand
-          how it works, you can debug problems, read error messages, and build
-          things that work reliably.
-        </p>
-      </div>
-
-      <!-- THE INTERNET -->
-      <div class="concept" id="ip">
-        <div class="concept-label">Foundation</div>
-        <h3>The Internet &amp; IP Addresses</h3>
-        <p>
-          The internet is a global network of billions of computers that are all
-          connected together. Not wirelessly through the air — physically,
-          through underground and undersea cables, via satellites, and through
-          large data centres in cities around the world.
-        </p>
-        <p>
-          For two computers to communicate, they each need an address. That
-          address is called an <strong>IP address</strong> (Internet Protocol
-          address).
-        </p>
-        <div class="highlight-box hb-blue">
-          <div class="hb-label">Analogy</div>
-          <p>
-            Think of your house address. The postman can't deliver a letter to
-            you without knowing where you live. In the same way, the internet
-            can't deliver data to your device without knowing your IP address.
-          </p>
-        </div>
-        <p>
-          IPv4 addresses look like this:
-          <code
-            style="
-              background: #E6E9EC;
-              color: var(--indigo);
-              padding: 2px 6px;
-              border-radius: 4px;
-              font-family: &quot;Courier New&quot;, monospace;
-            "
-            >192.168.1.1</code
-          >
-          — four numbers, each between 0 and 255, separated by dots. There are
-          about 4 billion possible IPv4 addresses, which is no longer enough for
-          all the devices in the world. IPv6 was invented to solve this problem.
-        </p>
-        <ul>
-          <li>
-            Your laptop, phone, and the selisegroup.com server all have IP addresses
-          </li>
-          <li>
-            <strong>Public IP</strong>: visible to the whole internet (your
-            router's address)
-          </li>
-          <li>
-            <strong>Private IP</strong>: only visible on your local network
-            (e.g., 192.168.x.x)
-          </li>
-        </ul>
-      </div>
-
-      <!-- DNS -->
-      <div class="concept" id="dns">
-        <div class="concept-label">Domain Name System</div>
-        <h3>DNS — The Internet's Phonebook</h3>
-        <p>
-          You remember <strong>names</strong> — like selisegroup.com or google.com.
-          But computers connect using <strong>numbers</strong> — IP addresses.
-          DNS is the system that translates between the two.
-        </p>
-        <p>When you type a domain name in your browser:</p>
-        <ul>
-          <li>
-            Your browser first checks its local <strong>cache</strong> — has it
-            looked this up recently?
-          </li>
-          <li>
-            If not, it asks a <strong>DNS resolver</strong> (usually provided by
-            your ISP or Google/Cloudflare)
-          </li>
-          <li>
-            The resolver looks up the domain name and returns the matching IP
-            address
-          </li>
-          <li>Your browser then connects to that IP address</li>
-        </ul>
-        <div class="highlight-box hb-blue">
-          <div class="hb-label">Key fact</div>
-          <p>
-            A DNS lookup takes less than <strong>100 milliseconds</strong> —
-            faster than you can blink. And once your browser has looked it up,
-            it caches the result so it doesn't have to do it again for a while.
-          </p>
-        </div>
-        <p>
-          If DNS breaks (which happens occasionally), websites appear to be
-          offline even though the servers are perfectly fine — your browser just
-          can't find the address.
-        </p>
-      </div>
-
-      <!-- URL ANATOMY -->
-      <div class="concept" id="url">
-        <div class="concept-label">URLs</div>
-        <h3>Anatomy of a URL</h3>
-        <p>
-          Every URL (Uniform Resource Locator) is an address that points to a
-          specific resource on the internet. Each part tells the browser
-          something different.
-        </p>
-        <div class="url-anatomy">
-          <div class="url-part up-protocol">
-            <span class="url-text">https</span
-            ><span class="url-label">Protocol</span>
-          </div>
-          <span class="url-sep">://</span>
-          <div class="url-part up-domain">
-            <span class="url-text">selise</span
-            ><span class="url-label">Domain</span>
-          </div>
-          <div class="url-part up-tld">
-            <span class="url-text">.ch</span><span class="url-label">TLD</span>
-          </div>
-          <div class="url-part up-path">
-            <span class="url-text">/careers</span
-            ><span class="url-label">Path</span>
-          </div>
-          <div class="url-part up-query">
-            <span class="url-text">?lang=en</span
-            ><span class="url-label">Query</span>
-          </div>
-        </div>
-        <ul>
-          <li>
-            <strong style="color: var(--blue)">Protocol</strong> —
-            <code
-              style="
-                background: #E6F0F8;
-                color: var(--blue);
-                padding: 1px 4px;
-                border-radius: 3px;
-                font-size: 0.85em;
-              "
-              >https</code
-            >: Use encrypted HTTPS (never plain HTTP for sensitive data)
-          </li>
-          <li>
-            <strong style="color: var(--indigo)">Domain</strong> —
-            <code
-              style="
-                background: #E6E9EC;
-                color: var(--indigo);
-                padding: 1px 4px;
-                border-radius: 3px;
-                font-size: 0.85em;
-              "
-              >selise</code
-            >: The registered name of the organisation
-          </li>
-          <li>
-            <strong style="color: var(--green)">TLD</strong> —
-            <code
-              style="
-                background: #F0F7EC;
-                color: var(--green);
-                padding: 1px 4px;
-                border-radius: 3px;
-                font-size: 0.85em;
-              "
-              >.ch</code
-            >: Top-level domain. .ch = Switzerland, .bt = Bhutan, .com =
-            commercial
-          </li>
-          <li>
-            <strong style="color: #1C5B8C">Path</strong> —
-            <code
-              style="
-                background: #EBF0F7;
-                color: #1C5B8C;
-                padding: 1px 4px;
-                border-radius: 3px;
-                font-size: 0.85em;
-              "
-              >/careers</code
-            >: Which specific page or file on the server
-          </li>
-          <li>
-            <strong style="color: #8B001E">Query string</strong> —
-            <code
-              style="
-                background: #F2E8EA;
-                color: #8B001E;
-                padding: 1px 4px;
-                border-radius: 3px;
-                font-size: 0.85em;
-              "
-              >?lang=en</code
-            >: Extra parameters sent to the server (like a filter)
-          </li>
-        </ul>
-      </div>
-
-      <!-- HTTP & HTTPS -->
-      <div class="concept" id="http">
-        <div class="concept-label">Protocols &amp; Status Codes</div>
-        <h3>HTTP, HTTPS &amp; Status Codes</h3>
-        <p>
-          <strong>HTTP</strong> (HyperText Transfer Protocol) is the rulebook
-          for how browsers and servers communicate. It defines how requests are
-          formatted, how responses are structured, and what the different types
-          of requests mean.
-        </p>
-        <p>
-          <strong>HTTPS</strong> is HTTP with encryption added (using TLS —
-          Transport Layer Security). All data sent between your browser and the
-          server is scrambled so that nobody else on the network can read it.
-        </p>
-        <div class="highlight-box hb-green">
-          <div class="hb-label">Practical rule</div>
-          <p>
-            Always check for the <strong>padlock icon</strong> in the browser
-            address bar before typing a password or card number. No padlock = no
-            HTTPS = your data is travelling in plain text.
-          </p>
-        </div>
-        <p>
-          <strong>Status codes</strong> are 3-digit numbers the server sends
-          back with every response. They tell you instantly whether the request
-          succeeded or failed:
-        </p>
-        <div
-          style="
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 0.75rem;
-            margin: 1rem 0;
-          "
-        >
-          <div
-            style="
-              background: #F0F7EC;
-              border: 1.5px solid #B5DBA7;
-              border-radius: 10px;
-              padding: 1rem;
-              text-align: center;
-            "
-          >
-            <div
-              style="
-                font-family: &quot;Bahnschrift&quot;, 'Segoe UI', sans-serif;
-                font-size: 1.8rem;
-                color: var(--green);
-                line-height: 1;
-              "
-            >
-              200
-            </div>
-            <div
-              style="
-                font-size: 0.78rem;
-                font-weight: 700;
-                color: var(--green);
-                text-transform: uppercase;
-                margin: 0.2rem 0;
-              "
-            >
-              OK
-            </div>
-            <div style="font-size: 0.75rem; color: var(--muted)">
-              Request succeeded
-            </div>
-          </div>
-          <div
-            style="
-              background: #E6F0F8;
-              border: 1.5px solid #B0D4E9;
-              border-radius: 10px;
-              padding: 1rem;
-              text-align: center;
-            "
-          >
-            <div
-              style="
-                font-family: &quot;Bahnschrift&quot;, 'Segoe UI', sans-serif;
-                font-size: 1.8rem;
-                color: var(--blue);
-                line-height: 1;
-              "
-            >
-              301
-            </div>
-            <div
-              style="
-                font-size: 0.78rem;
-                font-weight: 700;
-                color: var(--blue);
-                text-transform: uppercase;
-                margin: 0.2rem 0;
-              "
-            >
-              Moved
-            </div>
-            <div style="font-size: 0.75rem; color: var(--muted)">
-              New permanent URL
-            </div>
-          </div>
-          <div
-            style="
-              background: #EBF0F7;
-              border: 1.5px solid #A3C4E0;
-              border-radius: 10px;
-              padding: 1rem;
-              text-align: center;
-            "
-          >
-            <div
-              style="
-                font-family: &quot;Bahnschrift&quot;, 'Segoe UI', sans-serif;
-                font-size: 1.8rem;
-                color: #1C5B8C;
-                line-height: 1;
-              "
-            >
-              404
-            </div>
-            <div
-              style="
-                font-size: 0.78rem;
-                font-weight: 700;
-                color: #1C5B8C;
-                text-transform: uppercase;
-                margin: 0.2rem 0;
-              "
-            >
-              Not Found
-            </div>
-            <div style="font-size: 0.75rem; color: var(--muted)">
-              Page doesn't exist
-            </div>
-          </div>
-          <div
-            style="
-              background: #ECF2F8;
-              border: 1.5px solid #A3C4E0;
-              border-radius: 10px;
-              padding: 1rem;
-              text-align: center;
-            "
-          >
-            <div
-              style="
-                font-family: &quot;Bahnschrift&quot;, 'Segoe UI', sans-serif;
-                font-size: 1.8rem;
-                color: var(--purple);
-                line-height: 1;
-              "
-            >
-              403
-            </div>
-            <div
-              style="
-                font-size: 0.78rem;
-                font-weight: 700;
-                color: var(--purple);
-                text-transform: uppercase;
-                margin: 0.2rem 0;
-              "
-            >
-              Forbidden
-            </div>
-            <div style="font-size: 0.75rem; color: var(--muted)">
-              No permission
-            </div>
-          </div>
-          <div
-            style="
-              background: #F2E8EA;
-              border: 1.5px solid #E0B5B9;
-              border-radius: 10px;
-              padding: 1rem;
-              text-align: center;
-            "
-          >
-            <div
-              style="
-                font-family: &quot;Bahnschrift&quot;, 'Segoe UI', sans-serif;
-                font-size: 1.8rem;
-                color: var(--red);
-                line-height: 1;
-              "
-            >
-              500
-            </div>
-            <div
-              style="
-                font-size: 0.78rem;
-                font-weight: 700;
-                color: var(--red);
-                text-transform: uppercase;
-                margin: 0.2rem 0;
-              "
-            >
-              Server Error
-            </div>
-            <div style="font-size: 0.75rem; color: var(--muted)">
-              Server-side problem
-            </div>
-          </div>
-        </div>
-        <p style="font-size: 0.85rem; color: var(--faint); font-style: italic">
-          Memory shortcut: 4xx = your fault (bad request) · 5xx = server's fault
-          · 2xx = success
-        </p>
-      </div>
-
-      <!-- SUMMARY BOX 1 -->
-      <div class="summary">
-        <h4>Class 04 — Key Takeaways</h4>
-        <ul>
-          <li>
-            <strong>Every device has an IP address</strong> — the internet uses
-            these numbers to route data to the right place
-          </li>
-          <li>
-            <strong>DNS translates names to numbers</strong> — you type
-            selisegroup.com, DNS gives your browser the IP address to connect to
-          </li>
-          <li>
-            <strong>A URL has 5 parts</strong> — protocol, domain, TLD, path,
-            and optional query string. Each part tells the browser something
-            different
-          </li>
-          <li>
-            <strong>HTTPS is mandatory for sensitive data</strong> — look for
-            the padlock. HTTP sends data in plain text; HTTPS encrypts it
-          </li>
-          <li>
-            <strong>Status codes summarise every response</strong> — 200 =
-            success, 404 = not found, 500 = server broke
-          </li>
-          <li>
-            <strong
-              >Every web request travels: Browser → Internet → Server →
-              back</strong
-            >
-            — DNS, TCP connection, HTTP request, server processing, HTTP
-            response, browser rendering
-          </li>
-        </ul>
       </div>
 
       <!-- ════════════════════════════
        SECTION 2: APIs, DATA & DATABASES
   ════════════════════════════ -->
       <div class="section-hd">
-        <div class="section-pill pill-indigo">Class 05 · 11:15 – 13:30</div>
+        <div class="section-pill pill-indigo">Class 05</div>
         <h2 class="section-title" id="api">APIs, Data &amp; Databases</h2>
         <p class="section-desc">
           APIs are how software systems talk to each other. Almost every app you
@@ -1793,16 +1278,17 @@
         </ol>
       </div>
     </div>
+    </div>
     <!-- /container -->
 
     <div class="page-footer">
-      <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE Digital Platforms" style="height: 32px; margin-bottom: 0.5rem; display: block; margin-left: auto; margin-right: auto; opacity: 0.6;">
+      <img src="../../../selise-brand/assets/SELISE_Logo_Primary.png" alt="SELISE Digital Platforms" style="height: 32px; margin-bottom: 0.5rem; display: block; margin-left: auto; margin-right: auto; opacity: 0.6;">
       <p class="foot-brand">
         <span class="b1">SELISE</span> <span class="x">×</span>
         <span class="b2">Pelsung</span>
       </p>
-      <p>Classes 04 &amp; 05 · April 11, 2026 · Foundation Phase · Cohort 3</p>
-      <p>How the Internet Works &amp; APIs, Data &amp; Databases</p>
+      <p>Class 05 · Foundation Phase · Cohort 3</p>
+      <p>APIs, Data &amp; Databases</p>
     </div>
   </body>
 </html>

@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Class Notes: AI Basics &amp; Prompting</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue:    #0066B2;
+      --indigo:  #001F35;
+      --amber:   #247EC1;
+      --green:   #7BC950;
+      --purple:  #4796D1;
+      --red:     #D80032;
+      --text:    #1B2021;
+      --muted:   #7B7C7F;
+      --faint:   #9CA3AF;
+      --surf:    #ffffff;
+      --bg:      #F9F9F9;
+      --border:  #EDEDED;
+      --border-l:#F5F5F5;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Open Sans', 'Aptos', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.65;
+    }
+
+    .hero {
+      background: var(--surf);
+      border-bottom: 1px solid var(--border);
+      padding: 4rem 2rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 5px;
+      background: linear-gradient(135deg, #0067A3, #002D72);
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 0.35rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); }
+    .hero h1 {
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero h1 .c-blue   { color: var(--blue); }
+    .hero h1 .c-indigo { color: var(--indigo); }
+    .hero h1 .amp      { color: var(--amber); font-style: italic; }
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 2rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero-tags {
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+    .hero-tag {
+      padding: 0.3rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .tag-blue   { background: #E6F0F8; color: var(--blue); }
+    .tag-indigo { background: #E6E9EC; color: var(--indigo); }
+    .hero-stats {
+      display: inline-flex;
+      gap: 2rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1rem 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .stat { text-align: center; }
+    .stat-val {
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 400;
+      line-height: 1;
+    }
+    .stat-val.blue   { color: var(--blue); }
+    .stat-val.indigo { color: var(--indigo); }
+    .stat-val.amber  { color: var(--amber); }
+    .stat-label {
+      font-size: 0.72rem;
+      color: var(--faint);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 0.2rem;
+    }
+
+    .container { max-width: 880px; margin: 0 auto; padding: 0 2rem 6rem; }
+
+    .toc {
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem 2rem;
+      margin: 2.5rem 0;
+    }
+    .toc h3 {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--faint);
+      margin-bottom: 1.25rem;
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.4rem 2rem;
+    }
+    .toc-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.875rem;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.3rem 0;
+      border-bottom: 1px solid var(--border-l);
+      transition: color 0.15s;
+    }
+    .toc-item:hover { color: var(--indigo); }
+    .toc-item .toc-dot {
+      width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+    }
+    .toc-item .toc-time {
+      margin-left: auto;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--faint);
+    }
+
+    .section-hd { padding: 3.5rem 0 1.5rem; }
+    .section-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0.9rem;
+      border-radius: 100px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+    .pill-blue   { background: #E6F0F8; color: var(--blue); }
+    .pill-indigo { background: #E6E9EC; color: var(--indigo); }
+    .pill-amber  { background: #EBF0F7; color: #1C5B8C; }
+    .pill-green  { background: #F0F7EC; color: var(--green); }
+    .section-title {
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+      font-size: 2rem;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 0.4rem;
+    }
+    .section-desc { font-size: 0.95rem; color: var(--muted); }
+
+    .topic {
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem 2.25rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .topic::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 4px;
+      border-radius: 4px 0 0 4px;
+    }
+    .topic-blue::before   { background: var(--blue); }
+    .topic-indigo::before { background: var(--indigo); }
+    .topic-amber::before  { background: var(--amber); }
+    .topic-green::before  { background: var(--green); }
+
+    .topic-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .topic-time {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--faint);
+    }
+    .topic-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .explain {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+    }
+    .explain strong { color: var(--text); }
+    .explain em { color: var(--muted); }
+
+    .concepts {
+      display: grid;
+      gap: 0.9rem;
+      margin-bottom: 1.25rem;
+    }
+    .concepts-2 { grid-template-columns: repeat(2, 1fr); }
+    .concepts-3 { grid-template-columns: repeat(3, 1fr); }
+
+    .concept {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.1rem 1.25rem;
+    }
+    .concept h4 {
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .concept ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .concept ul li {
+      font-size: 0.83rem;
+      color: var(--muted);
+      padding-left: 1rem;
+      position: relative;
+      line-height: 1.5;
+    }
+    .concept ul li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--faint);
+      font-size: 0.72rem;
+      top: 0.15em;
+    }
+
+    /* ===== PROMPT TERMINAL ===== */
+    .prompt-term {
+      background: #001F35;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+    }
+    .pt-bar {
+      background: #0A2A45;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .pt-dot { width: 9px; height: 9px; border-radius: 50%; }
+    .pt-dot.r { background: #ff5f56; }
+    .pt-dot.y { background: #febc2e; }
+    .pt-dot.g { background: #28c840; }
+    .pt-bar-label {
+      color: rgba(255,255,255,0.35);
+      font-size: 0.7rem;
+      margin-left: 6px;
+    }
+    .pt-body {
+      padding: 1.25rem 1.5rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.87rem;
+      line-height: 2;
+    }
+    .pt-line { display: flex; align-items: flex-start; gap: 0.6rem; }
+    .pt-tag {
+      display: inline-block;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-family: 'Open Sans', sans-serif;
+      flex-shrink: 0;
+      margin-top: 0.2em;
+      line-height: 1.6;
+    }
+    .ctx-tag  { background: #1e4f72; color: #7dd3fc; }
+    .task-tag { background: #14532d; color: #86efac; }
+    .fmt-tag  { background: #713f12; color: #fde68a; }
+    .ex-tag   { background: #001F35; color: #c4b5fd; }
+    .ctx  { color: #7dd3fc; }
+    .task { color: #86efac; }
+    .fmt  { color: #fde68a; }
+    .ex   { color: #c4b5fd; }
+    .pt-legend {
+      display: flex;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      margin-top: 0.75rem;
+      justify-content: center;
+    }
+    .pt-legend span {
+      font-size: 0.75rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .leg-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ===== WEAK VS STRONG ===== */
+    .vs-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.9rem;
+      margin-bottom: 1rem;
+    }
+    .vs-col h5 {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 0.5rem;
+    }
+    .weak-col h5  { color: var(--red); }
+    .strong-col h5 { color: var(--green); }
+    .vs-prompt {
+      background: #001F35;
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: #e2e8f0;
+    }
+    .vs-prompt.weak-bg   { border-left: 3px solid var(--red); }
+    .vs-prompt.strong-bg { border-left: 3px solid var(--green); }
+
+    /* ===== DO / DON'T ===== */
+    .do-dont {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.9rem;
+      margin-bottom: 1.25rem;
+    }
+    .do-card {
+      background: #F0F7EC;
+      border: 1px solid #B5DBA7;
+      border-radius: 12px;
+      padding: 1.25rem;
+    }
+    .dont-card {
+      background: #F2E8EA;
+      border: 1px solid #E0B5B9;
+      border-radius: 12px;
+      padding: 1.25rem;
+    }
+    .do-card h4   { color: var(--green); font-size: 0.9rem; margin-bottom: 0.75rem; }
+    .dont-card h4 { color: var(--red);   font-size: 0.9rem; margin-bottom: 0.75rem; }
+    .do-card ul, .dont-card ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .do-card ul li, .dont-card ul li {
+      font-size: 0.83rem;
+      color: var(--muted);
+      padding-left: 1.4rem;
+      position: relative;
+      line-height: 1.45;
+    }
+    .do-card ul li::before   { content: '✓'; position: absolute; left: 0; color: var(--green); font-weight: 700; }
+    .dont-card ul li::before { content: '✗'; position: absolute; left: 0; color: var(--red); font-weight: 700; }
+
+    /* ===== EXERCISE BLOCK ===== */
+    .exercise {
+      background: #F0F4FA;
+      border: 1.5px solid var(--amber);
+      border-radius: 14px;
+      padding: 1.75rem 2rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+    .exercise::after {
+      content: '✍';
+      position: absolute;
+      right: 1.5rem;
+      top: 1.25rem;
+      font-size: 1.75rem;
+      opacity: 0.12;
+    }
+    .ex-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--amber);
+      color: white;
+      padding: 0.2rem 0.7rem;
+      border-radius: 100px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 0.65rem;
+    }
+    .exercise h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+    .exercise .ex-meta {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 1.1rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .ex-steps { display: flex; flex-direction: column; gap: 0.7rem; }
+    .ex-step  { display: flex; gap: 0.85rem; align-items: flex-start; }
+    .ex-num {
+      width: 24px; height: 24px; min-width: 24px;
+      border-radius: 50%;
+      background: var(--amber);
+      color: white;
+      font-size: 0.72rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0.1rem;
+    }
+    .ex-body { font-size: 0.85rem; color: var(--muted); line-height: 1.55; }
+    .ex-body strong { color: var(--text); }
+    .ex-scenarios {
+      margin-top: 1.1rem;
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+    .ex-scenarios .sc-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--faint);
+      margin-bottom: 0.15rem;
+    }
+    .ex-scenarios .sc-item {
+      font-size: 0.83rem;
+      color: var(--muted);
+      display: flex;
+      gap: 0.5rem;
+      line-height: 1.5;
+    }
+    .ex-scenarios .sc-item strong { color: var(--text); }
+
+    .num-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      margin-bottom: 1.25rem;
+    }
+    .num-item {
+      display: flex;
+      gap: 0.9rem;
+      align-items: flex-start;
+    }
+    .num-badge {
+      width: 28px; height: 28px; min-width: 28px;
+      border-radius: 50%;
+      background: var(--indigo);
+      color: white;
+      font-size: 0.78rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0.1rem;
+    }
+    .num-badge.blue   { background: var(--blue); }
+    .num-badge.indigo { background: var(--indigo); }
+    .num-badge.amber  { background: var(--amber); }
+    .num-body h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .num-body p  { font-size: 0.87rem; color: var(--muted); line-height: 1.55; }
+    .num-body p strong { color: var(--text); }
+
+    .callout {
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      font-size: 0.85rem;
+      display: flex;
+      gap: 0.6rem;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      line-height: 1.55;
+    }
+    .callout .ci { font-size: 1rem; min-width: 1.2rem; flex-shrink: 0; }
+    .callout-blue   { background: #f0f7fc; border: 1px solid #B0D4E9; color: var(--muted); }
+    .callout-amber  { background: #F0F4FA; border: 1px solid #A3C4E0; color: var(--muted); }
+    .callout-indigo { background: #EEF0F2; border: 1px solid #C0C8D0; color: var(--muted); }
+    .callout strong { color: var(--text); }
+
+    .kc-box {
+      background: #EEF0F2;
+      border: 1.5px solid #C0C8D0;
+      border-radius: 12px;
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .kc-box h4 { font-size: 0.88rem; font-weight: 700; color: var(--indigo); margin-bottom: 0.9rem; }
+    .kc-questions { display: flex; flex-direction: column; gap: 0.7rem; }
+    .kc-q { display: flex; gap: 0.7rem; align-items: flex-start; }
+    .kc-q .kq-num {
+      width: 22px; height: 22px; min-width: 22px;
+      border-radius: 50%;
+      background: var(--indigo);
+      color: white;
+      font-size: 0.68rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0.1rem;
+    }
+    .kc-q p { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+    .kc-q p strong { color: var(--text); }
+
+    .pledge-boxes { display: flex; flex-direction: column; gap: 0.65rem; margin-bottom: 1.25rem; }
+    .pledge-box {
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      display: flex;
+      gap: 0.85rem;
+      align-items: flex-start;
+    }
+    .pb-icon { font-size: 1.35rem; flex-shrink: 0; }
+    .pb-text h4 { font-size: 0.88rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .pb-text p  { font-size: 0.83rem; color: var(--muted); line-height: 1.5; }
+
+    .summary {
+      background: linear-gradient(135deg, var(--indigo) 0%, #000D19 100%);
+      color: white;
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin: 3rem 0;
+      text-align: center;
+    }
+    .summary h2 {
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 400;
+      margin-bottom: 0.4rem;
+    }
+    .summary p { font-size: 0.9rem; opacity: 0.75; margin-bottom: 1.75rem; }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.9rem;
+    }
+    .su-card {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 12px;
+      padding: 1.1rem;
+      text-align: left;
+    }
+    .su-card h4 { font-size: 0.88rem; font-weight: 700; margin-bottom: 0.4rem; opacity: 0.9; }
+    .su-card p  { font-size: 0.78rem; opacity: 0.65; line-height: 1.5; }
+
+    .footer {
+      background: var(--surf);
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--faint);
+    }
+    .footer strong { color: var(--muted); }
+
+    @media (max-width: 680px) {
+      .concepts-2, .concepts-3, .do-dont, .vs-pair, .summary-grid { grid-template-columns: 1fr; }
+      .toc-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 1.9rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <img src="../../../selise-brand/assets/SELISE_Logo_Primary.png" alt="SELISE Digital Platforms" style="height: 48px; margin-bottom: 1rem; display: block;">
+  <div class="hero-badge">
+    <div class="dot"></div>
+    Pelsung Cohort 3 · Foundation Phase
+  </div>
+  <h1>
+    <span class="c-indigo">AI Basics &amp; Prompting</span>
+  </h1>
+  <p class="hero-sub">Class 03 · Complete notes with explanations, examples, and exercises — for trainers and trainees.</p>
+  <div class="hero-tags">
+    <span class="hero-tag tag-indigo">03 · AI Basics &amp; Prompting</span>
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-val blue">2</div>
+      <div class="stat-label">Hours</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val indigo">44</div>
+      <div class="stat-label">Trainees</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val amber">2</div>
+      <div class="stat-label">Exercises</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val blue">3</div>
+      <div class="stat-label">Topics</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MAIN CONTAINER ===== -->
+<div class="container">
+
+  <!-- ===== TABLE OF CONTENTS ===== -->
+  <div class="toc">
+    <h3>What's In These Notes</h3>
+    <div class="toc-grid">
+      <a class="toc-item" href="#whatisai">
+        <span class="toc-dot" style="background:var(--indigo)"></span>
+        🤖 What is AI?
+        <span class="toc-time">25 min</span>
+      </a>
+      <a class="toc-item" href="#prompting">
+        <span class="toc-dot" style="background:var(--indigo)"></span>
+        ✏️ Prompting Techniques
+        <span class="toc-time">25 min</span>
+      </a>
+      <a class="toc-item" href="#exercise2">
+        <span class="toc-dot" style="background:var(--amber)"></span>
+        ✍ Exercise — Prompt Battle
+        <span class="toc-time">30 min</span>
+      </a>
+      <a class="toc-item" href="#aidosdontss">
+        <span class="toc-dot" style="background:var(--indigo)"></span>
+        ⚖️ AI Dos &amp; Don'ts
+        <span class="toc-time">15 min</span>
+      </a>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       CLASS 03 — AI BASICS & PROMPTING
+       ══════════════════════════════════════════════════════ -->
+  <div class="section-hd">
+    <div class="section-pill pill-indigo">Class 03</div>
+    <h2 class="section-title">AI Basics &amp; Prompting</h2>
+    <p class="section-desc">What AI actually is, how tools like Claude and ChatGPT work, and how to write prompts that get you real results — not generic filler.</p>
+  </div>
+
+
+  <!-- ===== WHAT IS AI ===== -->
+  <div class="topic topic-indigo" id="whatisai">
+    <div class="topic-meta">
+      <span class="topic-time">25 min</span>
+    </div>
+    <div class="topic-title">🤖 What is AI? (And What Isn't It?)</div>
+
+    <p class="explain">
+      Artificial Intelligence is not a single technology. It's a broad category of software that can perform tasks that previously required human intelligence. The AI tools you'll use most in this program — ChatGPT and Claude — are a specific type called <strong>Large Language Models (LLMs)</strong>. Understanding how they actually work will help you use them better and avoid common mistakes.
+    </p>
+
+    <div class="concepts concepts-3">
+      <div class="concept">
+        <h4>💬 Language AI (LLM)</h4>
+        <p style="font-size:0.83rem; color:var(--muted); line-height:1.5;">ChatGPT, Claude, Gemini. Trained on billions of documents — books, websites, code, articles. Reads and writes text. This is what we'll use throughout training.</p>
+      </div>
+      <div class="concept">
+        <h4>🎨 Image AI</h4>
+        <p style="font-size:0.83rem; color:var(--muted); line-height:1.5;">Midjourney, DALL·E, Stable Diffusion. Generates or edits images from text descriptions. Useful for design work.</p>
+      </div>
+      <div class="concept">
+        <h4>🎵 Audio / Video AI</h4>
+        <p style="font-size:0.83rem; color:var(--muted); line-height:1.5;">Whisper (transcription), Suno (music generation), Runway (video editing). Rapidly improving category.</p>
+      </div>
+    </div>
+
+    <div class="callout callout-indigo">
+      <span class="ci">🧠</span>
+      <span><strong>The simplest way to understand an LLM:</strong> It's a very sophisticated autocomplete. Given everything you've written so far, it predicts the most likely next word — over and over — at massive scale. That's why it sounds so fluent, and also why it can <em>confidently say wrong things</em>.</span>
+    </div>
+
+    <div class="concepts concepts-3">
+      <div class="concept">
+        <h4>🟢 What AI Is Good At</h4>
+        <ul>
+          <li>Drafting and rewriting text</li>
+          <li>Summarizing long documents</li>
+          <li>Explaining complex topics simply</li>
+          <li>Generating ideas and brainstorming</li>
+          <li>Writing and debugging code</li>
+          <li>Translating between languages</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4>🔴 What AI Is Bad At</h4>
+        <ul>
+          <li>Knowing current events (it has a training cutoff)</li>
+          <li>Precise numbers and statistics — verify these</li>
+          <li>Tasks requiring lived experience or true judgment</li>
+          <li>Remembering past conversations (each session starts fresh)</li>
+          <li>Knowing what it doesn't know — it doesn't say "I'm not sure" often enough</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4>⚠️ What AI Is Not</h4>
+        <ul>
+          <li>Not a search engine — it doesn't look things up in real time</li>
+          <li>Not always right — it can hallucinate facts confidently</li>
+          <li>Not a person — it has no feelings, no memory across sessions</li>
+          <li>Not a replacement for your thinking — it's a thinking partner</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="explain" style="margin-bottom:1rem;">
+      The two AI tools you'll use most in this program:
+    </p>
+
+    <div class="concepts concepts-2">
+      <div class="concept" style="border: 2px solid #10a37f;">
+        <h4 style="color:#10a37f;">💚 ChatGPT (by OpenAI)</h4>
+        <ul>
+          <li>Made by OpenAI, founded 2015</li>
+          <li>Current flagship model: GPT-4o</li>
+          <li>Most widely known AI tool worldwide</li>
+          <li>Has web search capability (paid tier)</li>
+          <li>Strong at: general writing, coding, analysis, Q&amp;A</li>
+          <li>Free tier available at chat.openai.com</li>
+        </ul>
+      </div>
+      <div class="concept" style="border: 2px solid #c77e3e;">
+        <h4 style="color:#c77e3e;">🟤 Claude (by Anthropic)</h4>
+        <ul>
+          <li>Made by Anthropic, founded 2021</li>
+          <li>Current flagship: Claude Sonnet 4</li>
+          <li>Designed to be safer and more careful in responses</li>
+          <li>Very large context window — handles long documents</li>
+          <li>Excellent at nuanced writing, reasoning, and long-form tasks</li>
+          <li>Claude Code: specialized for software development — our primary tool in this program</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout callout-indigo">
+      <span class="ci">💡</span>
+      <span><strong>Live demo:</strong> Watch how the same question gets completely different responses when context changes. Ask Claude: "Explain what a software API is to a 10-year-old." Then: "Now explain it to a senior software engineer." Same question — different vocabulary, different depth, different examples. This is context-sensitivity in action.</span>
+    </div>
+  </div>
+
+
+  <!-- ===== PROMPTING TECHNIQUES ===== -->
+  <div class="topic topic-indigo" id="prompting">
+    <div class="topic-meta">
+      <span class="topic-time">25 min</span>
+    </div>
+    <div class="topic-title">✏️ The Art of Prompting</div>
+
+    <p class="explain">
+      A prompt is the instruction you give to an AI. The quality of the output you get is almost entirely determined by the quality of the prompt you give. <strong>Prompting is a learnable skill</strong> — not magic, not luck. The same task given to the same AI can produce wildly different results depending on how you frame it.
+    </p>
+
+    <p class="explain">
+      A well-structured prompt has up to four parts. You don't always need all four, but the more context you give, the better the output.
+    </p>
+
+    <div class="prompt-term">
+      <div class="pt-bar">
+        <div class="pt-dot r"></div>
+        <div class="pt-dot y"></div>
+        <div class="pt-dot g"></div>
+        <span class="pt-bar-label">Anatomy of a High-Quality Prompt</span>
+      </div>
+      <div class="pt-body">
+        <div class="pt-line"><span class="pt-tag ctx-tag">Context</span><span class="ctx">I am a software developer at a company building a digital ID system for Bhutan.</span></div>
+        <div class="pt-line"><span class="pt-tag task-tag">Task</span><span class="task">Write a professional email to a client explaining a 2-week delay in the API delivery.</span></div>
+        <div class="pt-line"><span class="pt-tag fmt-tag">Format</span><span class="fmt">Use a formal but empathetic tone. Keep it under 150 words. Include a subject line.</span></div>
+        <div class="pt-line"><span class="pt-tag ex-tag">Example</span><span class="ex">Subject line style: "[Project name] Update — [topic]"</span></div>
+      </div>
+    </div>
+    <div class="pt-legend">
+      <span><span class="leg-dot" style="background:#7dd3fc"></span> Context — who you are and what situation you're in</span>
+      <span><span class="leg-dot" style="background:#86efac"></span> Task — exactly what you want the AI to produce</span>
+      <span><span class="leg-dot" style="background:#fde68a"></span> Format — how you want it (length, tone, structure)</span>
+      <span><span class="leg-dot" style="background:#c4b5fd"></span> Example — optional but powerful; shows the style you want</span>
+    </div>
+
+    <div class="num-list" style="margin-top:1.5rem;">
+      <div class="num-item">
+        <div class="num-badge indigo">1</div>
+        <div class="num-body">
+          <h4>Give it a Role</h4>
+          <p>"You are a senior UX designer reviewing a mobile app..." <strong>Role-setting dramatically shifts the quality and perspective of the response.</strong> The AI will adopt the knowledge, vocabulary, and priorities of that role. Try: "You are a patient teacher explaining to someone with no coding background."</p>
+        </div>
+      </div>
+      <div class="num-item">
+        <div class="num-badge indigo">2</div>
+        <div class="num-body">
+          <h4>Be Specific About the Output</h4>
+          <p><strong>Vague:</strong> "Write something about APIs." → You get a generic response. <strong>Specific:</strong> "Write a 3-paragraph explanation of REST APIs for someone who has never coded before, using real-world analogies like ordering food at a restaurant." → You get something useful.</p>
+        </div>
+      </div>
+      <div class="num-item">
+        <div class="num-badge indigo">3</div>
+        <div class="num-body">
+          <h4>Iterate — Don't Settle for the First Response</h4>
+          <p>AI is a conversation, not a one-shot machine. If the first response isn't right, just say: <strong>"That's good, but make it shorter and less formal."</strong> Or: "Add a real-world example." Or: "Change the tone to be more encouraging." Keep refining in the same chat — the AI remembers the full conversation.</p>
+        </div>
+      </div>
+      <div class="num-item">
+        <div class="num-badge indigo">4</div>
+        <div class="num-body">
+          <h4>Give Examples When You Can (Few-Shot Prompting)</h4>
+          <p>"Here's an example of the writing style I want: [paste example]. Now write something similar about [topic]." <strong>Showing the AI what you want is often more powerful than describing it.</strong> This is called few-shot prompting and it's one of the most reliable techniques.</p>
+        </div>
+      </div>
+    </div>
+
+    <p style="font-size:0.8rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:0.75rem;">Weak vs. Strong — See the Difference</p>
+
+    <div class="vs-pair">
+      <div class="vs-col weak-col">
+        <h5>✗ Weak Prompt</h5>
+        <div class="vs-prompt weak-bg">Write about time management.</div>
+      </div>
+      <div class="vs-col strong-col">
+        <h5>✓ Strong Prompt</h5>
+        <div class="vs-prompt strong-bg">You are a productivity coach speaking to a group of 20-year-old tech trainees in Bhutan who have no prior corporate work experience. Write a 5-tip guide to time management that is practical, specific, and uses examples relevant to software teams. Keep each tip under 50 words.</div>
+      </div>
+    </div>
+
+    <div class="vs-pair">
+      <div class="vs-col weak-col">
+        <h5>✗ Weak Prompt</h5>
+        <div class="vs-prompt weak-bg">Fix my code.</div>
+      </div>
+      <div class="vs-col strong-col">
+        <h5>✓ Strong Prompt</h5>
+        <div class="vs-prompt strong-bg">I have a JavaScript function that should filter an array of user objects by age. It's returning nothing. Here is the code: [paste code]. Identify the bug, explain why it's wrong, and give me the fixed version with a comment explaining what changed.</div>
+      </div>
+    </div>
+
+    <div class="vs-pair">
+      <div class="vs-col weak-col">
+        <h5>✗ Weak Prompt</h5>
+        <div class="vs-prompt weak-bg">Write an email.</div>
+      </div>
+      <div class="vs-col strong-col">
+        <h5>✓ Strong Prompt</h5>
+        <div class="vs-prompt strong-bg">Write a 5-line professional email to a client explaining that the project is delayed by 1 week due to a technical blocker. Use an empathetic but confident tone. Start with the most important fact: the new delivery date.</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ===== EXERCISE 2 ===== -->
+  <div class="exercise" id="exercise2">
+    <div class="ex-pill">✍ Exercise · Pairs</div>
+    <h3>The Prompt Battle</h3>
+    <div class="ex-meta">
+      <span>⏱ 30 minutes</span>
+      <span>👥 Pairs (~22 pairs)</span>
+      <span>📱 Phone or laptop with Claude or ChatGPT</span>
+    </div>
+    <div class="ex-steps">
+      <div class="ex-step">
+        <div class="ex-num">1</div>
+        <div class="ex-body"><strong>Round 1 — Weak vs Strong (10 min):</strong> Each pair gets the same task. Person A writes a weak prompt. Person B writes a strong prompt using the Context → Task → Format → Example framework. Both submit to the AI. Compare the outputs side by side. Which one is actually useful?</div>
+      </div>
+      <div class="ex-step">
+        <div class="ex-num">2</div>
+        <div class="ex-body"><strong>Round 2 — Iterate (8 min):</strong> Take the weak prompt's output. Improve it using only follow-up messages — don't rewrite the original prompt. Use instructions like: "Make it shorter", "Use bullet points", "Give a real-world example", "Change the tone to be more formal". See how much you can improve it in 3 messages.</div>
+      </div>
+      <div class="ex-step">
+        <div class="ex-num">3</div>
+        <div class="ex-body"><strong>Share (8 min):</strong> 4 pairs share their best prompt + output on the projector. Class votes: which response was most useful and why?</div>
+      </div>
+      <div class="ex-step">
+        <div class="ex-num">4</div>
+        <div class="ex-body"><strong>Debrief (4 min):</strong> What made the strong prompts better? What surprised you about what the AI could do — or couldn't do?</div>
+      </div>
+    </div>
+    <div class="ex-scenarios">
+      <div class="sc-label">Tasks to use (rotate between pairs)</div>
+      <div class="sc-item"><strong>A.</strong> Write an email to a client explaining that you need more information before you can proceed with their request.</div>
+      <div class="sc-item"><strong>B.</strong> Explain what a database is to someone who has never used a computer.</div>
+      <div class="sc-item"><strong>C.</strong> Create a 5-day study plan for learning HTML and CSS from scratch.</div>
+      <div class="sc-item"><strong>D.</strong> Write a job posting for a junior software tester at a tech company in Bhutan.</div>
+    </div>
+  </div>
+
+
+  <!-- ===== AI DOS AND DONTS ===== -->
+  <div class="topic topic-indigo" id="aidosdontss">
+    <div class="topic-meta">
+      <span class="topic-time">15 min</span>
+    </div>
+    <div class="topic-title">⚖️ AI Dos &amp; Don'ts</div>
+
+    <p class="explain">
+      AI is powerful, but power without judgment leads to problems. As professionals, you need to understand not just how to use AI effectively, but <strong>when to trust it, when not to, and what it's never appropriate to hand over to a machine.</strong>
+    </p>
+
+    <div class="do-dont">
+      <div class="do-card">
+        <h4>✅ Do</h4>
+        <ul>
+          <li>Use AI to draft, then edit and own the output yourself</li>
+          <li>Verify facts AI gives you — especially numbers, dates, and statistics</li>
+          <li>Use AI to learn — ask it to explain, not just give you the answer</li>
+          <li>Treat it as a thinking partner, not a replacement for thinking</li>
+          <li>Tell your team when you've used AI to produce something</li>
+          <li>Use AI to explore options or approaches you wouldn't have thought of</li>
+          <li>Iterate and refine — a second or third prompt is often much better than the first</li>
+        </ul>
+      </div>
+      <div class="dont-card">
+        <h4>❌ Don't</h4>
+        <ul>
+          <li>Paste confidential client data, passwords, or personal IDs into public AI tools</li>
+          <li>Submit AI output as your own work without reading and reviewing it first</li>
+          <li>Blindly trust code AI writes — always read it and test it before deploying</li>
+          <li>Use AI for decisions that require human judgment (hiring, firing, medical, legal)</li>
+          <li>Assume AI knows current events — it has a training knowledge cutoff</li>
+          <li>Use AI to bypass learning something you actually need to understand</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="explain">
+      <strong>Hallucinations:</strong> AI tools can confidently state false information. This happens because LLMs predict what sounds right, not what is right. They don't have a truth-detection system. If AI tells you a fact you're going to use in a report, a proposal, or in conversation — verify it independently.
+    </p>
+
+    <p class="explain">
+      <strong>Privacy:</strong> Most public AI tools (free tiers of ChatGPT, Claude, etc.) can use your conversations to improve their models. Never paste: client contracts, internal company financials, personal identification numbers, passwords, health information, or anything marked "confidential" or "for internal use only."
+    </p>
+
+    <div class="kc-box">
+      <h4>🧠 Knowledge Check — Think About These</h4>
+      <div class="kc-questions">
+        <div class="kc-q">
+          <div class="kq-num">1</div>
+          <p>You ask Claude to write code. It gives you something that looks correct. Should you copy-paste it directly into a production system? <strong>Why or why not?</strong></p>
+        </div>
+        <div class="kc-q">
+          <div class="kq-num">2</div>
+          <p>Your manager asks you to summarize a 50-page NDA for a client. Is it okay to paste the full document into ChatGPT free tier? <strong>What's the risk?</strong></p>
+        </div>
+        <div class="kc-q">
+          <div class="kq-num">3</div>
+          <p>AI tells you the population of Bhutan is 3.2 million as of 2025. How would you verify this before using it in a presentation? <strong>What's the danger of trusting it directly?</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-indigo">
+      <span class="ci">🔨</span>
+      <span><strong>The key mental model:</strong> AI is a power tool, not a cheat code. A carpenter with a nail gun is 10× more productive — but they still need to know where to put the nails. <strong>Your job is to know what to build. AI helps you build it faster.</strong> A carpenter who doesn't know what they're building and just fires nails everywhere isn't productive — they're destructive.</span>
+    </div>
+  </div>
+
+
+  <!-- ===== EXERCISE 3 — PLEDGE ===== -->
+  <div class="exercise" id="exercise3">
+    <div class="ex-pill">✍ Reflection · Individual</div>
+    <h3>My AI Pledge</h3>
+    <div class="ex-meta">
+      <span>⏱ 15 minutes</span>
+      <span>👤 Individual</span>
+      <span>📝 Written on paper or phone notes</span>
+    </div>
+    <div class="ex-steps">
+      <div class="ex-step">
+        <div class="ex-num">1</div>
+        <div class="ex-body"><strong>Write privately (8 min):</strong> Answer the two questions below honestly in your notes. No one is grading this — it's for you.</div>
+      </div>
+      <div class="ex-step">
+        <div class="ex-num">2</div>
+        <div class="ex-body"><strong>Share (5 min):</strong> 5–6 volunteers share one answer each. Keep it encouraging — there are no wrong answers here.</div>
+      </div>
+      <div class="ex-step">
+        <div class="ex-num">3</div>
+        <div class="ex-body"><strong>Close (2 min):</strong> Wrap up — remember the nail gun analogy. Come back to these pledges halfway through the program and see how you've done.</div>
+      </div>
+    </div>
+    <div class="pledge-boxes" style="margin-top:1.1rem;">
+      <div class="pledge-box">
+        <div class="pb-icon">🤖</div>
+        <div class="pb-text">
+          <h4>One AI task you're excited to try using Claude or ChatGPT</h4>
+          <p>Something relevant to what you'll be doing in training — writing, debugging, researching, explaining a concept to yourself, generating ideas. Be specific about the task.</p>
+        </div>
+      </div>
+      <div class="pledge-box">
+        <div class="pb-icon">🚫</div>
+        <div class="pb-text">
+          <h4>One AI boundary you will always hold</h4>
+          <p>Something you will always do yourself, no matter how convenient AI makes it. Thinking through a problem yourself first. Reviewing all code before using it. Understanding something before using AI to explain it to others.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ===== SUMMARY ===== -->
+  <div class="summary">
+    <h2>What You Covered</h2>
+    <p>Practical AI skills you'll use every day in this program</p>
+    <div class="summary-grid">
+      <div class="su-card">
+        <h4>🤖 AI Basics</h4>
+        <p>How LLMs actually work (sophisticated autocomplete), the difference between ChatGPT and Claude, what AI genuinely excels at, and what it reliably gets wrong.</p>
+      </div>
+      <div class="su-card">
+        <h4>✏️ Prompting</h4>
+        <p>The four elements: Context → Task → Format → Example. Give it a role. Be specific. Iterate in the same conversation. Use few-shot examples for style.</p>
+      </div>
+      <div class="su-card">
+        <h4>⚖️ AI Ethics</h4>
+        <p>Never paste confidential data. Always verify facts. Review all AI output before using it. Be transparent with your team. Use AI to think, not instead of thinking.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div class="footer">
+  <img src="../../../selise-brand/assets/SELISE_Logo_Primary.png" alt="SELISE Digital Platforms" style="height: 28px; margin-bottom: 0.5rem; display: inline-block; opacity: 0.5;"><br>
+  <strong>SELISE × Pelsung</strong> · Cohort 3 · Foundation Phase · Class 03 · Trainers: Bhuwan Sharma &amp; Tek Nath Acharya
+</div>
+
+</body>
+</html>
