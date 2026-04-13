@@ -1,12 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(wc -l /Users/tek/work/gmc/pelsung/curriculum/foundation/*.html)",
+      "Bash(wc -l *.html)",
       "Bash(grep -l -i \"trainer\" /Users/tek/work/gmc/pelsung/curriculum/foundation/*.html)",
       "Bash(rm -rf 02-03-professional-skills-ai-basics 04-05-internet-apis)",
       "Bash(mkdir -p professional-skills ai-basics how-the-internet-works apis-and-data)",
       "Bash(npm install:*)",
-      "Bash(head -60 /Users/tek/work/gmc/pelsung/curriculum-v2/lessons/foundation/02-ai-basics/*.md)",
+      "Bash(head -60 *.md)",
       "Bash(ls -lh *.*)",
       "Bash(sed -n '13,1582p' internet-apis-slides.html)",
       "Bash(sed -n '13,1582p' professional-skills-ai-basics-slides.html)"

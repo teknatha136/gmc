@@ -11,11 +11,13 @@ For each class session, generate three files saved to `pelsung/curriculum/{phase
 
 | File | Purpose | Audience |
 |------|---------|----------|
-| `{mmm-dd}-slides.html` | Interactive keyboard-navigable presentation | Projected in class |
-| `{mmm-dd}-{topic-slug}.html` | Trainer guide — timing, content, exercises, tips | Trainer only |
-| `{mmm-dd}-notes.html` | Take-home reference sheet | Trainees |
+| `{NN}-{topic-slug}-slides.html` | Interactive keyboard-navigable presentation | Projected in class |
+| `{NN}-{topic-slug}-trainer-guide.html` | Trainer guide — timing, content, exercises, tips | Trainer only |
+| `{NN}-{topic-slug}-notes.html` | Take-home reference sheet | Trainees |
 
-`{phase}` is `foundation`, `dev`, `design`, `testing`, or `ba`. Default to `foundation` for classes 01–11.
+`{NN}` is the zero-padded class number (e.g., `04`). `{topic-slug}` is the kebab-case topic (e.g., `how-internet-works`). `{phase}` is `foundation`, `dev`, `design`, `testing`, or `ba`. Default to `foundation` for classes 01–11.
+
+Example for Class 04 "How the Internet Works": `04-how-internet-works-slides.html`, `04-how-internet-works-trainer-guide.html`, `04-how-internet-works-notes.html`.
 
 ---
 
@@ -118,9 +120,9 @@ Logo files are in `selise-brand/assets/`:
 **Ratio:** 60% primary / 30% secondary / 10% accent (6:3:1 rule).
 
 Reference existing files for design fidelity — read them if you need to check a specific component:
-- Slides: `pelsung/curriculum/foundation/apr10-slides.html`
-- Trainer guide: `pelsung/curriculum/foundation/apr10-professional-skills-ai-basics.html`
-- Notes: `pelsung/curriculum/foundation/apr-10-notes.html`
+- Slides: `pelsung/curriculum/foundation/02-professional-skills-slides.html`
+- Trainer guide: `pelsung/curriculum/foundation/02-professional-skills-trainer-guide.html`
+- Notes: `pelsung/curriculum/foundation/02-professional-skills-notes.html`
 
 ---
 
