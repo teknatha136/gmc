@@ -14,24 +14,24 @@
       .role { background: white; border: 1px solid var(--border); border-top: 4px solid var(--blue); border-radius: 10px; padding: 1rem 1.15rem; }
       .role h5 { color: var(--indigo); font-size: 1.15rem; margin-bottom: 0.35rem; }
       .role p { font-size: 0.95rem; color: var(--muted); line-height: 1.5; }
-      .matrix { width: 100%; border-collapse: collapse; background: white; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; font-size: 0.82rem; }
-      .matrix th, .matrix td { padding: 0.5rem 0.6rem; text-align: center; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); }
-      .matrix th { background: #F3F6FA; color: var(--indigo); font-family: 'Bahnschrift','Segoe UI',sans-serif; font-weight: 500; letter-spacing: 0.03em; }
-      .matrix td:first-child, .matrix th:first-child { text-align: left; background: #FAFBFC; font-weight: 600; color: var(--text); font-size: 0.78rem; }
+      .matrix { width: 100%; border-collapse: collapse; background: white; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; font-size: 1.15rem; }
+      .matrix th, .matrix td { padding: 0.85rem 0.9rem; text-align: center; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); }
+      .matrix th { background: #F3F6FA; color: var(--indigo); font-family: 'Bahnschrift','Segoe UI',sans-serif; font-weight: 600; letter-spacing: 0.03em; font-size: 1.05rem; }
+      .matrix td:first-child, .matrix th:first-child { text-align: left; background: #FAFBFC; font-weight: 600; color: var(--text); font-size: 1.1rem; }
       .m-R { background: #D8EAF6; color: var(--blue); font-weight: 700; }
       .m-A { background: #FFE8CC; color: #C56C00; font-weight: 700; }
       .m-C { background: #E8F0E8; color: #3D7A3D; font-weight: 700; }
       .m-I { background: #EEE8F4; color: #6A3E8E; font-weight: 700; }
       .team-split { display:grid; grid-template-columns: 1fr 1fr; gap: 1rem; max-width: 960px; }
       @media (max-width: 780px){ .team-split { grid-template-columns: 1fr; } }
-      .team-card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.1rem; }
-      .team-card h4 { color: var(--indigo); font-size: 1rem; margin-bottom: 0.1rem; }
-      .team-card .sub { font-size: 0.75rem; color: var(--muted); margin-bottom: 0.5rem; }
+      .team-card { background: white; border: 1px solid var(--border); border-radius: 14px; padding: 1.4rem 1.6rem; }
+      .team-card h4 { color: var(--indigo); font-size: 1.35rem; margin-bottom: 0.15rem; }
+      .team-card .sub { font-size: 0.95rem; color: var(--muted); margin-bottom: 0.85rem; }
       .team-card ul { list-style: none; margin: 0; padding: 0; }
-      .team-card li { padding: 0.25rem 0; border-bottom: 1px dashed var(--border); font-size: 0.82rem; display:flex; justify-content:space-between; gap: 0.5rem; }
+      .team-card li { padding: 0.5rem 0; border-bottom: 1px dashed var(--border); font-size: 1.05rem; display:flex; justify-content:space-between; gap: 1rem; align-items: center; }
       .team-card li:last-child { border-bottom: none; }
-      .team-card .u { color: var(--blue); font-family: monospace; font-size: 0.78rem; }
-      .team-card .r { color: var(--muted); font-size: 0.78rem; }
+      .team-card .u { color: var(--blue); font-family: monospace; font-size: 1.02rem; font-weight: 600; }
+      .team-card .r { color: var(--muted); font-size: 1rem; text-align: right; }
       .domain-chip { display:inline-block; background:#E6F0F8; color:var(--blue); padding:0.25rem 0.7rem; border-radius: 100px; font-size: 0.75rem; font-weight:600; margin: 0.15rem; }
     </style>
   </head>
@@ -238,8 +238,8 @@
       <div class="slide accent-blue" data-slide="9">
         <div class="slide-label"><span class="snum">09</span> Project 238 — Development PSP</div>
         <div class="stack" style="align-items:center; width:100%">
-          <div class="center"><div class="pill pill-blue">Active · Large Team</div><h2 class="heading">Development PSP — the full cast</h2><p class="body-md" style="color:var(--muted); max-width:760px">A large active project for <strong>Deutsche Telekom</strong>. Closely related to AMP (another SELISE Dhaka project). Auth &amp; heavy integration work.</p></div>
-          <div class="team-card" style="max-width: 780px; margin: 0 auto;">
+          <div class="center"><div class="pill pill-blue">Active · Large Team</div><h2 class="heading">Development PSP — the full cast</h2><p class="body-md" style="color:var(--muted); max-width:900px">A large active project for a <strong>major European telecom client</strong>. Closely related to AMP (another SELISE Dhaka project). Auth &amp; heavy integration work.</p></div>
+          <div class="team-card" style="max-width: 1050px; width: 100%; margin: 0 auto;">
             <h4>GitHub Project #238 — Development PSP</h4>
             <p class="sub">Roles below are approximate, based on board activity. Ask your seniors for the real story.</p>
             <ul>
@@ -253,12 +253,12 @@
               <li><span class="u">@bugloper</span><span class="r">Backend Dev + Project Lead</span></li>
               <li><span class="u">@Stark228</span><span class="r">Backend Dev</span></li>
               <li><span class="u">@ThuktenSingye</span><span class="r">Backend Dev</span></li>
-              <li><span class="u">@DedalusRoot</span><span class="r">Sales / Client-facing PM (DE)</span></li>
-              <li><span class="u">@imranmoinselise</span><span class="r">Client Support (DE)</span></li>
+              <li><span class="u">@DedalusRoot</span><span class="r">Sales / Client-facing PM</span></li>
+              <li><span class="u">@imranmoinselise</span><span class="r">Client Support</span></li>
             </ul>
           </div>
-          <p style="color: var(--muted); font-size: 0.8rem; text-align:center; max-width:720px;">
-            12+ people, many hats. Why so many? Active feature work + client conversations in German + cross-project coordination with AMP.
+          <p style="color: var(--muted); font-size: 1rem; text-align:center; max-width:900px;">
+            12+ people, many hats. Why so many? Active feature work + client conversations in the client's language + cross-project coordination with AMP.
           </p>
         </div>
       </div>
@@ -268,7 +268,7 @@
         <div class="slide-label"><span class="snum">10</span> Project 299 — Swiss-Ski Store</div>
         <div class="stack" style="align-items:center; width:100%">
           <div class="center"><div class="pill pill-blue">Maintenance · Small Team</div><h2 class="heading">Swiss-Ski Store — lean &amp; steady</h2><p class="body-md" style="color:var(--muted); max-width:760px">An e-commerce store in maintenance mode. Scope is largely done. One or two people can wear multiple hats.</p></div>
-          <div class="team-card" style="max-width: 780px; margin: 0 auto;">
+          <div class="team-card" style="max-width: 1050px; width: 100%; margin: 0 auto;">
             <h4>GitHub Project #299 — Swiss-Ski Store</h4>
             <p class="sub">Roles approximate.</p>
             <ul>
@@ -302,32 +302,68 @@
         <div class="slide-label"><span class="snum">12</span> RACI · Industry Standard</div>
         <div class="stack" style="align-items:center; width:100%">
           <div class="center"><h2 class="heading">What does RACI mean?</h2></div>
-          <div class="cols-2" style="max-width: 900px; gap: 0.8rem;">
-            <div class="card" style="border-top:3px solid var(--blue)"><h4 style="color:var(--blue)">R — Responsible</h4><p style="font-size:0.85rem; color:var(--muted)">The person <em>doing the work</em>. Can be multiple people.</p></div>
-            <div class="card" style="border-top:3px solid var(--amber)"><h4 style="color:var(--amber)">A — Accountable</h4><p style="font-size:0.85rem; color:var(--muted)">The person <em>who owns the outcome</em>. Always exactly one.</p></div>
-            <div class="card" style="border-top:3px solid var(--green)"><h4 style="color:var(--green)">C — Consulted</h4><p style="font-size:0.85rem; color:var(--muted)">Their input is needed <em>before</em> a decision. Two-way dialogue.</p></div>
-            <div class="card" style="border-top:3px solid var(--purple)"><h4 style="color:var(--purple)">I — Informed</h4><p style="font-size:0.85rem; color:var(--muted)">Kept in the loop <em>after</em> the decision. One-way.</p></div>
+          <div class="cols-2" style="max-width: 1300px; width: 100%; gap: 1.2rem;">
+            <div class="card" style="border-top:5px solid var(--blue); padding: 1.4rem 1.6rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.6rem;">
+                <h4 style="color:var(--blue); font-size: 1.7rem; margin:0;">R — Responsible</h4>
+                <span style="background: #E6F0F8; color: var(--blue); padding: 0.3rem 0.8rem; border-radius: 100px; font-size: 0.9rem; font-weight: 700;">👥 Many</span>
+              </div>
+              <p style="font-size:1.15rem; color:var(--muted); line-height: 1.5;">The person(s) <em>doing the work</em>. Can be one person or a whole team.</p>
+            </div>
+            <div class="card" style="border-top:5px solid var(--amber); padding: 1.4rem 1.6rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.6rem;">
+                <h4 style="color:var(--amber); font-size: 1.7rem; margin:0;">A — Accountable</h4>
+                <span style="background: #FFE8CC; color: #C56C00; padding: 0.3rem 0.8rem; border-radius: 100px; font-size: 0.9rem; font-weight: 700;">👤 Exactly 1</span>
+              </div>
+              <p style="font-size:1.15rem; color:var(--muted); line-height: 1.5;">The one person <em>who owns the outcome</em>. Never more than one.</p>
+            </div>
+            <div class="card" style="border-top:5px solid var(--green); padding: 1.4rem 1.6rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.6rem;">
+                <h4 style="color:var(--green); font-size: 1.7rem; margin:0;">C — Consulted</h4>
+                <span style="background: #E8F0E8; color: #3D7A3D; padding: 0.3rem 0.8rem; border-radius: 100px; font-size: 0.9rem; font-weight: 700;">👥 Many</span>
+              </div>
+              <p style="font-size:1.15rem; color:var(--muted); line-height: 1.5;">Their input is needed <em>before</em> a decision. Two-way dialogue.</p>
+            </div>
+            <div class="card" style="border-top:5px solid var(--purple); padding: 1.4rem 1.6rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.6rem;">
+                <h4 style="color:var(--purple); font-size: 1.7rem; margin:0;">I — Informed</h4>
+                <span style="background: #EEE8F4; color: #6A3E8E; padding: 0.3rem 0.8rem; border-radius: 100px; font-size: 0.9rem; font-weight: 700;">👥 Many</span>
+              </div>
+              <p style="font-size:1.15rem; color:var(--muted); line-height: 1.5;">Kept in the loop <em>after</em> the decision. One-way — just FYI.</p>
+            </div>
           </div>
-          <p class="body-md" style="color:var(--muted); margin-top: 0.5rem; text-align:center">RACI is the global industry standard — used in banks, hospitals, governments.</p>
+          <p class="body-md" style="color:var(--muted); margin-top: 0.5rem; text-align:center; font-size: 1.1rem;">RACI is the global industry standard — used in banks, hospitals, governments.</p>
         </div>
       </div>
 
-      <!-- 13 RACI MATRIX (real team) -->
-      <div class="slide accent-blue bg-subtle" data-slide="13">
+      <!-- 13a RACI INTRO -->
+      <div class="slide bg-blue" data-slide="13a">
+        <div class="slide-label"><span class="snum">13</span> Real Example</div>
+        <div class="center" style="max-width: 900px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">📋 RACI in Practice</div>
+          <h1 class="display" style="color: white;">Real Example</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top: 1rem;">"Release a new PSP feature"</p>
+          <p class="body-md" style="color: rgba(255,255,255,0.65); margin-top: 1.5rem;">Let's fill out a RACI matrix for a real SELISE team (Project #238) on a real task — from writing the requirement to talking to the client.</p>
+          <p style="color: rgba(255,255,255,0.5); font-size: 0.9rem; margin-top: 2rem;">→ full matrix on the next slide</p>
+        </div>
+      </div>
+
+      <!-- 13b RACI MATRIX (full) -->
+      <div class="slide accent-blue bg-subtle" data-slide="13b">
         <div class="slide-label"><span class="snum">13</span> RACI Matrix — Project 238</div>
         <div class="stack" style="align-items:center; width:100%">
-          <div class="center"><h2 class="heading">Real Example — "Release a new PSP feature"</h2></div>
-          <div style="max-width: 960px; width:100%; overflow-x:auto;">
+          <div class="center"><h2 class="heading" style="font-size: clamp(1.2rem, 1.8vw, 1.6rem);">"Release a new PSP feature" — RACI</h2></div>
+          <div style="max-width: 1500px; width:100%; overflow-x:auto;">
             <table class="matrix">
               <thead>
                 <tr>
                   <th>Task</th>
-                  <th>@khushwanth<br><span style="font-weight:400;font-size:0.7rem;">Mgr</span></th>
-                  <th>@CMRai92<br><span style="font-weight:400;font-size:0.7rem;">BA/PM</span></th>
-                  <th>@ngawang-zangphel<br><span style="font-weight:400;font-size:0.7rem;">FE</span></th>
-                  <th>@wangchuk99<br><span style="font-weight:400;font-size:0.7rem;">BE</span></th>
-                  <th>@pemawangyel<br><span style="font-weight:400;font-size:0.7rem;">QA</span></th>
-                  <th>@DedalusRoot<br><span style="font-weight:400;font-size:0.7rem;">Client PM</span></th>
+                  <th>@khushwanth<br><span style="font-weight:400;font-size:0.85rem; color:var(--muted);">Mgr</span></th>
+                  <th>@CMRai92<br><span style="font-weight:400;font-size:0.85rem; color:var(--muted);">BA/PM</span></th>
+                  <th>@ngawang-zangphel<br><span style="font-weight:400;font-size:0.85rem; color:var(--muted);">FE</span></th>
+                  <th>@wangchuk99<br><span style="font-weight:400;font-size:0.85rem; color:var(--muted);">BE</span></th>
+                  <th>@pemawangyel<br><span style="font-weight:400;font-size:0.85rem; color:var(--muted);">QA</span></th>
+                  <th>@DedalusRoot<br><span style="font-weight:400;font-size:0.85rem; color:var(--muted);">Client PM</span></th>
                 </tr>
               </thead>
               <tbody>
@@ -340,7 +376,7 @@
               </tbody>
             </table>
           </div>
-          <p style="color:var(--muted); font-size: 0.8rem; text-align:center">Each row: exactly one A. Multiple Rs are fine. C &amp; I can span many people.</p>
+          <p style="color:var(--muted); font-size: 1.05rem; text-align:center; margin-top: 0.3rem;">Each row: <strong style="color: var(--text)">exactly one A</strong>. Multiple Rs are fine. C &amp; I can span many people.</p>
         </div>
       </div>
 
@@ -348,7 +384,7 @@
       <div class="slide accent-blue" data-slide="14">
         <div class="slide-label"><span class="snum">14</span> RCI · SELISE's Adaptation</div>
         <div class="stack" style="align-items:center; width:100%">
-          <div class="center"><div class="pill pill-blue">SELISE way</div><h2 class="heading">We drop the "A"</h2><p class="body-md" style="color: var(--muted); max-width:720px">Julian (our CEO) observed: in German, there's no clean distinction between "Responsible" and "Accountable". And in practice, <strong>R is always exactly one person</strong>. So why have both?</p></div>
+          <div class="center"><div class="pill pill-blue">SELISE way</div><h2 class="heading">We drop the "A"</h2><p class="body-md" style="color: var(--muted); max-width:820px; font-size: 1.15rem; text-align:center; margin: 0.75rem auto 0;">At SELISE we use <strong>RCI</strong> instead of RACI. <strong>R is always exactly one person</strong> — the one who owns the outcome.</p></div>
           <div class="cols-3" style="max-width: 900px; gap: 0.8rem;">
             <div class="card" style="border-top:3px solid var(--blue)"><h4 style="color:var(--blue)">R — Responsible</h4><p style="font-size:0.85rem; color:var(--muted)">The <em>one person</em> who owns the outcome AND does the work (or coordinates it). Always exactly one.</p></div>
             <div class="card" style="border-top:3px solid var(--green)"><h4 style="color:var(--green)">C — Consulted</h4><p style="font-size:0.85rem; color:var(--muted)">Input needed before the decision.</p></div>
