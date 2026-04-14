@@ -9,11 +9,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../shared/slides.css" />
     <style>
-      .role-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap: 0.55rem; max-width: 980px; }
+      .role-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; width: 100%; max-width: 1500px; }
       @media (max-width: 820px){ .role-grid { grid-template-columns: repeat(2, 1fr); } }
-      .role { background: white; border: 1px solid var(--border); border-top: 3px solid var(--blue); border-radius: 8px; padding: 0.6rem 0.8rem; }
-      .role h5 { color: var(--indigo); font-size: 0.82rem; margin-bottom: 0.15rem; }
-      .role p { font-size: 0.72rem; color: var(--muted); line-height: 1.4; }
+      .role { background: white; border: 1px solid var(--border); border-top: 4px solid var(--blue); border-radius: 10px; padding: 1rem 1.15rem; }
+      .role h5 { color: var(--indigo); font-size: 1.15rem; margin-bottom: 0.35rem; }
+      .role p { font-size: 0.95rem; color: var(--muted); line-height: 1.5; }
       .matrix { width: 100%; border-collapse: collapse; background: white; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; font-size: 0.82rem; }
       .matrix th, .matrix td { padding: 0.5rem 0.6rem; text-align: center; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); }
       .matrix th { background: #F3F6FA; color: var(--indigo); font-family: 'Bahnschrift','Segoe UI',sans-serif; font-weight: 500; letter-spacing: 0.03em; }
@@ -76,11 +76,12 @@
       <div class="slide bg-dark" data-slide="3">
         <div class="slide-label"><span class="snum">03</span> Hook</div>
         <div class="center" style="max-width: 760px">
-          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎤 Quick Question</div>
-          <p class="disc-prompt">"Name all the people<br>who work on <span style="color: var(--amber)">one software product.</span>"</p>
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎤 Quick Guess</div>
+          <p class="disc-prompt">"Open <span style="color: var(--amber)">mBoB</span> on your phone.<br>How many <em>different jobs</em> do you think<br>it took to build that app?"</p>
           <p style="color: rgba(255,255,255,0.6); font-size: clamp(0.82rem,1.2vw,1rem); margin-top: 2rem; line-height: 1.6;">
-            Take 5 answers from the room. Write them on the board.<br>
-            Most classes get 3–4 roles. The real answer is 10+.
+            Show of hands:<br>
+            &nbsp;&nbsp;· 1–3 jobs? &nbsp;&nbsp;· 4–6? &nbsp;&nbsp;· 7–10? &nbsp;&nbsp;· more than 10?<br>
+            The real answer is <span style="color: var(--amber); font-weight:600;">more than 10</span>. Let's see who they all are.
           </p>
         </div>
       </div>
@@ -107,10 +108,7 @@
             <div class="role" style="border-top-color: var(--purple)"><h5 style="color:var(--purple)">⚙️ Backend Dev</h5><p>Builds the invisible engine — APIs, databases, logic.</p></div>
             <div class="role" style="border-top-color: var(--green)"><h5 style="color:var(--green)">🧪 QA / PAA</h5><p>Quality Assurance / Product Acceptance Analyst — tests that it works.</p></div>
             <div class="role" style="border-top-color: var(--red)"><h5 style="color:var(--red)">🏗️ Architect</h5><p>Designs the overall system shape &amp; big technical decisions.</p></div>
-            <div class="role"><h5>🔧 DevOps</h5><p>Automates build, test, deploy. CI/CD pipelines.</p></div>
-            <div class="role" style="border-top-color: var(--indigo)"><h5 style="color:var(--indigo)">🔒 DevSecOps</h5><p>DevOps + security baked in from day one.</p></div>
-            <div class="role" style="border-top-color: var(--amber)"><h5 style="color:var(--amber)">📊 SRE</h5><p>Site Reliability Engineer — keeps production running, on-call for outages.</p></div>
-            <div class="role" style="border-top-color: var(--purple)"><h5 style="color:var(--purple)">☁️ Platform Engineer</h5><p>Builds internal tools &amp; infra for other devs.</p></div>
+            <div class="role"><h5>🔧 DevOps / SRE / Platform</h5><p>One role with many names — automates build/deploy, keeps production running, handles security, builds internal dev tools. Often one person.</p></div>
             <div class="role" style="border-top-color: var(--green)"><h5 style="color:var(--green)">📞 Client/Support</h5><p>Talks to customers, handles issues, bridges dev and business.</p></div>
             <div class="role" style="border-top-color: var(--red)"><h5 style="color:var(--red)">📈 Data / Analyst</h5><p>Turns usage data into insight.</p></div>
           </div>
@@ -121,29 +119,91 @@
       <div class="slide accent-blue bg-subtle" data-slide="6">
         <div class="slide-label"><span class="snum">06</span> How They Hand Off</div>
         <div class="stack" style="align-items:center; width:100%">
-          <div class="center"><h2 class="heading">A Typical Flow</h2><p class="body-md" style="color: var(--muted)">The baton gets passed — but not in a straight line.</p></div>
-          <div style="max-width: 900px; width:100%">
-            <div class="cols-2">
-              <div class="card" style="border-top:3px solid var(--blue)">
-                <h4 style="color:var(--blue)">BA / PM → Designer</h4>
-                <p style="font-size:0.85rem; color:var(--muted)">Requirements, user stories, acceptance criteria. "Here's what users need to do."</p>
-              </div>
-              <div class="card" style="border-top:3px solid var(--indigo)">
-                <h4 style="color:var(--indigo)">Designer → Dev</h4>
-                <p style="font-size:0.85rem; color:var(--muted)">Mockups, design system, interaction specs. "Here's how it should look and behave."</p>
-              </div>
-              <div class="card" style="border-top:3px solid var(--amber)">
-                <h4 style="color:var(--amber)">Dev → QA</h4>
-                <p style="font-size:0.85rem; color:var(--muted)">A working build + what was changed. "Please verify these changes don't break anything."</p>
-              </div>
-              <div class="card" style="border-top:3px solid var(--green)">
-                <h4 style="color:var(--green)">QA → DevOps/SRE</h4>
-                <p style="font-size:0.85rem; color:var(--muted)">A passing build ready for release. "This is stable, please deploy."</p>
-              </div>
-            </div>
-          </div>
-          <div class="card" style="background:var(--bg); border:2px dashed var(--border); text-align:center; padding: 0.8rem; max-width: 720px;">
-            <p class="body-md" style="color: var(--text)"><strong>Bad handoffs = bugs.</strong> When the spec is unclear, when the design ignores technical limits, when the tester wasn't told what changed — that's where most software problems come from.</p>
+          <div class="center"><h2 class="heading">Who Talks to Whom</h2><p class="body-md" style="color: var(--muted)">Work flows left-to-right. Arrows show what gets handed over.</p></div>
+
+          <svg viewBox="0 0 1200 420" style="width:100%; max-width: 1400px; height:auto;" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 z" fill="#0066B2"/>
+              </marker>
+              <marker id="arrRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 z" fill="#D80032"/>
+              </marker>
+            </defs>
+
+            <!-- Client bubble -->
+            <g>
+              <ellipse cx="110" cy="210" rx="85" ry="55" fill="#FFF" stroke="#7B7C7F" stroke-width="2" stroke-dasharray="4 4"/>
+              <text x="110" y="200" text-anchor="middle" font-family="Bahnschrift, Segoe UI, sans-serif" font-size="20" fill="#1B2021" font-weight="600">Client</text>
+              <text x="110" y="225" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="13" fill="#7B7C7F">the customer</text>
+            </g>
+
+            <!-- BA/PM -->
+            <g>
+              <rect x="235" y="160" width="160" height="100" rx="12" fill="#0066B2"/>
+              <text x="315" y="200" text-anchor="middle" font-family="Bahnschrift, Segoe UI, sans-serif" font-size="22" fill="white" font-weight="600">BA / PM</text>
+              <text x="315" y="225" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="13" fill="white" opacity="0.85">what &amp; why</text>
+            </g>
+
+            <!-- Designer -->
+            <g>
+              <rect x="435" y="160" width="160" height="100" rx="12" fill="#001F35"/>
+              <text x="515" y="200" text-anchor="middle" font-family="Bahnschrift, Segoe UI, sans-serif" font-size="22" fill="white" font-weight="600">Designer</text>
+              <text x="515" y="225" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="13" fill="white" opacity="0.85">how it looks</text>
+            </g>
+
+            <!-- Dev (FE+BE) -->
+            <g>
+              <rect x="635" y="160" width="160" height="100" rx="12" fill="#247EC1"/>
+              <text x="715" y="200" text-anchor="middle" font-family="Bahnschrift, Segoe UI, sans-serif" font-size="22" fill="white" font-weight="600">Dev</text>
+              <text x="715" y="225" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="13" fill="white" opacity="0.85">FE + BE</text>
+            </g>
+
+            <!-- QA -->
+            <g>
+              <rect x="835" y="160" width="160" height="100" rx="12" fill="#7BC950"/>
+              <text x="915" y="200" text-anchor="middle" font-family="Bahnschrift, Segoe UI, sans-serif" font-size="22" fill="white" font-weight="600">QA</text>
+              <text x="915" y="225" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="13" fill="white" opacity="0.9">does it work?</text>
+            </g>
+
+            <!-- DevOps/SRE -->
+            <g>
+              <rect x="1035" y="160" width="155" height="100" rx="12" fill="#4796D1"/>
+              <text x="1112" y="198" text-anchor="middle" font-family="Bahnschrift, Segoe UI, sans-serif" font-size="19" fill="white" font-weight="600">DevOps</text>
+              <text x="1112" y="220" text-anchor="middle" font-family="Bahnschrift, Segoe UI, sans-serif" font-size="14" fill="white">/ SRE</text>
+              <text x="1112" y="240" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="12" fill="white" opacity="0.9">ship &amp; run</text>
+            </g>
+
+            <!-- Forward arrows -->
+            <line x1="196" y1="210" x2="232" y2="210" stroke="#0066B2" stroke-width="3" marker-end="url(#arr)"/>
+            <text x="214" y="195" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="12" fill="#7B7C7F">needs</text>
+
+            <line x1="395" y1="210" x2="432" y2="210" stroke="#0066B2" stroke-width="3" marker-end="url(#arr)"/>
+            <text x="413" y="195" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="12" fill="#7B7C7F">stories</text>
+
+            <line x1="595" y1="210" x2="632" y2="210" stroke="#0066B2" stroke-width="3" marker-end="url(#arr)"/>
+            <text x="613" y="195" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="12" fill="#7B7C7F">mockups</text>
+
+            <line x1="795" y1="210" x2="832" y2="210" stroke="#0066B2" stroke-width="3" marker-end="url(#arr)"/>
+            <text x="813" y="195" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="12" fill="#7B7C7F">build</text>
+
+            <line x1="995" y1="210" x2="1032" y2="210" stroke="#0066B2" stroke-width="3" marker-end="url(#arr)"/>
+            <text x="1013" y="195" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="12" fill="#7B7C7F">pass</text>
+
+            <!-- Feedback loops (red, curved back) -->
+            <path d="M 895 160 Q 805 90 715 160" stroke="#D80032" stroke-width="2.5" fill="none" stroke-dasharray="6 4" marker-end="url(#arrRed)"/>
+            <text x="805" y="80" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="12" fill="#D80032" font-style="italic">bugs — fix this</text>
+
+            <path d="M 1112 260 Q 900 340 315 260" stroke="#D80032" stroke-width="2.5" fill="none" stroke-dasharray="6 4" marker-end="url(#arrRed)"/>
+            <text x="720" y="355" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="12" fill="#D80032" font-style="italic">live issue / user feedback</text>
+
+            <!-- Client feedback loop -->
+            <path d="M 315 160 Q 210 90 110 155" stroke="#7B7C7F" stroke-width="2" fill="none" stroke-dasharray="4 4" marker-end="url(#arr)"/>
+            <text x="210" y="90" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="12" fill="#7B7C7F" font-style="italic">demos &amp; questions</text>
+          </svg>
+
+          <div class="card" style="background:var(--bg); border:2px dashed var(--border); text-align:center; padding: 0.9rem 1.2rem; max-width: 860px;">
+            <p class="body-md" style="color: var(--text); margin:0;"><strong>Bad handoffs = bugs.</strong> When the spec is unclear, the design ignores technical limits, or the tester wasn't told what changed — that's where most software problems come from.</p>
           </div>
         </div>
       </div>
@@ -355,16 +415,19 @@
     <script>
       const slides = document.querySelectorAll(".slide");
       const total = slides.length;
-      let current = 0;
-      function goTo(n){ slides[current].classList.remove("active"); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; initReveal(slides[current]); }
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
       function nextSlide(){ if(current < total-1) goTo(current+1); }
       function prevSlide(){ if(current > 0) goTo(current-1); }
       document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
       document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
       function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
       function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
-      slides[0].classList.add("active");
-      document.getElementById("progress").style.width = `${(1/total)*100}%`;
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
       function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
     </script>
   </body>
