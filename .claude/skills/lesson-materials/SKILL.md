@@ -1,32 +1,27 @@
 ---
 name: lesson-materials
-description: Create Pelsung training materials — slides, trainer guide, and trainee notes — in SELISE×Pelsung brand style. Use this skill whenever Bhuwan or Tek wants to prepare for a class, create lesson content, build slides, or make teaching materials for any Pelsung session (foundation, dev, design, testing, or BA phase). Trigger on phrases like "prepare class", "create materials for class", "build slides for", "lesson for [topic]", "notes for class", "trainer guide", or any mention of a specific class number or topic that needs teaching materials. Always use this skill even if the user just says "make the slides for class 5" or "prepare for tomorrow's session".
+description: Create Pelsung training materials — slides and trainee notes — in SELISE brand style. Use this skill whenever Bhuwan or Tek wants to prepare for a class, create lesson content, build slides, or make teaching materials for any Pelsung session (foundation, dev, design, testing, or BA phase). Trigger on phrases like "prepare class", "create materials for class", "build slides for", "lesson for [topic]", "notes for class", or any mention of a specific class number or topic that needs teaching materials. Always use this skill even if the user just says "make the slides for class 5" or "prepare for tomorrow's session".
 ---
 
-Create three branded HTML teaching-material files for a Pelsung class session by first interviewing the user, then generating all three files together.
+Create two branded HTML teaching-material files for a Pelsung class session by first interviewing the user, then generating both files together.
 
 ## What gets created
 
-For each class session, generate three files saved to `pelsung/curriculum/{phase}/`:
+For each class session, generate two files saved to `pelsung/curriculum/{phase}/`:
 
 | File | Purpose | Audience |
 |------|---------|----------|
 | `{NN}-{topic-slug}-slides.html` | Interactive keyboard-navigable presentation | Projected in class |
-| `{NN}-{topic-slug}-trainer-guide.html` | Trainer guide — timing, content, exercises, tips | Trainer only |
 | `{NN}-{topic-slug}-notes.html` | Take-home reference sheet | Trainees |
-
-`{NN}` is the zero-padded class number (e.g., `04`). `{topic-slug}` is the kebab-case topic (e.g., `how-internet-works`). `{phase}` is `foundation`, `dev`, `design`, `testing`, or `ba`. Default to `foundation` for classes 01–11.
-
-Example for Class 04 "How the Internet Works": `04-how-internet-works-slides.html`, `04-how-internet-works-trainer-guide.html`, `04-how-internet-works-notes.html`.
+Example for Class 04 "How the Internet Works": `04-how-internet-works-slides.html`, `04-how-internet-works-notes.html`.
 
 ---
 
 ## Step 1 — Understand the request
 
 Parse the user's message for:
-- **Class number(s)** — e.g., "Class 04" or "Classes 02 & 03"
+- **Class number(s)** — e.g., "Class 04" or "Classes 02 & 03"h
 - **Topic title** — e.g., "How the Internet Works"
-- **Date** — e.g., "Apr 14". If missing, ask.
 - **Phase** — infer from class number (01–11 = foundation) or ask.
 
 If the user didn't provide the class title, read `pelsung/curriculum/course-plan.html` to look up the class number's title and subtopics.
@@ -48,7 +43,6 @@ For each topic/section:
 - What are the 3–5 key points trainees should leave knowing?
 - Any specific examples, analogies, or Bhutan/GMC references you want to use?
 - Any hands-on activity or exercise planned? (describe it briefly)
-- Anything trainers should watch out for or extra notes?
 
 **Turn C — confirm outline:**
 Show a brief outline of the session structure (topics, timing, key points per section, exercises) and ask: *"Does this look right? Anything to add or change before I generate the files?"*
@@ -57,11 +51,11 @@ Only start generating after the user confirms.
 
 ---
 
-## Step 3 — Generate all three files
+## Step 3 — Generate both files
 
-Generate all three files in a single response. Write complete, working HTML — no placeholders. Save each to the correct path.
+Generate both files in a single response. Write complete, working HTML — no placeholders. Save each to the correct path.
 
-### Design system (use exactly — all three files share this)
+### Design system (use exactly — both files share this)
 
 ```css
 /* Fonts — per SELISE Brand Guidelines */
@@ -121,20 +115,19 @@ Logo files are in `selise-brand/assets/`:
 
 Reference existing files for design fidelity — read them if you need to check a specific component:
 - Slides: `pelsung/curriculum/foundation/02-professional-skills-slides.html`
-- Trainer guide: `pelsung/curriculum/foundation/02-professional-skills-trainer-guide.html`
 - Notes: `pelsung/curriculum/foundation/02-professional-skills-notes.html`
 
 ---
 
 ### File A: Slides (`{mmm-dd}-slides.html`)
 
-A full-screen keyboard-navigable HTML presentation. See `apr10-slides.html` for the full shell (CSS, navigation JS, progress bar). Replicate the shell exactly — just change the slide content.
+A full-screen keyboard-navigable HTML presentation. See `pelsung/curriculum/foundation/02-professional-skills-slides.html` for the full shell (CSS, navigation JS, progress bar). Replicate the shell exactly — just change the slide content.
 
 **Slide structure and types to use:**
 
 ```
 Slide 1  — Title slide (bg-dark or bg-blue)
-           Date badge, class number badge, topic title (DM Serif Display, large)
+           Topic title (Bahnschrift, large)
            Two topic-tag chips if covering multiple subjects
 
 Slide 2  — Agenda (light bg)
@@ -169,53 +162,15 @@ slide      "Key takeaways" or "What we covered today" + next class preview
 
 ---
 
-### File B: Trainer Guide (`{mmm-dd}-{slug}.html`)
+### File B: Trainee Notes (`{mmm-dd}-notes.html`)
 
-A scrollable HTML document the trainer uses during class. See `apr10-professional-skills-ai-basics.html` for reference.
-
-**Structure:**
-
-```
-Hero section
-  - Badge: "TRAINER GUIDE · CLASS {N}"
-  - Title: the class topic(s) with brand colors
-  - Subtitle: date, phase, duration
-  - Stats row: total time | number of sections | number of exercises
-
-Timeline bar
-  - Visual strip showing all session segments with times
-  - Color-coded by topic (blue = topic 1, indigo = topic 2, amber = exercise, green = break)
-
-Content sections (one per topic)
-  Section header: pill badge, section title, time allocation
-  Objectives: chips showing learning outcomes
-  Content blocks (.block with colored left border):
-    - Teaching points with explanations
-    - "Trainer tip" callouts (subtle background, italicized, ⚡ icon)
-    - Discussion prompts ("Ask the class: …")
-    - Common misconceptions to address
-  Exercise blocks (amber border, ✍ icon):
-    - Exercise title + duration
-    - Step-by-step instructions
-    - What to watch for / how to debrief
-
-Closing section
-  - Key messages to reinforce
-  - How to assess understanding (exit ticket, show of hands, etc.)
-  - What to tell trainees about next class
-```
-
----
-
-### File C: Trainee Notes (`{mmm-dd}-notes.html`)
-
-A clean take-home reference the trainee reads after class. See `apr-10-notes.html` for reference.
+A clean take-home reference the trainee reads after class. See `pelsung/curriculum/foundation/02-professional-skills-notes.html` for reference.
 
 **Structure:**
 
 ```
 Hero
-  - Badge: "CLASS {N} · {DATE}"
+  - Badge: "CLASS {N}"
   - Title: topic(s) in brand colors
   - Subtitle: 1-sentence description of what the class covered
   - Topic tags (colored chips for each subtopic)
@@ -231,17 +186,29 @@ Exercises / practice prompts (if any were done in class — for trainees to redo
 
 "Further reading" section (optional — only if there are genuinely useful links)
 
-Footer: SELISE × Pelsung branding, class date
+Footer: SELISE branding
 ```
 
 **Tone for notes:** Clear, conversational, accessible. These trainees may be reading in a second language — avoid jargon, use short sentences, explain terms when first used.
 
 ---
 
-## Step 4 — After generating
+## Step 4 — Wire the class into `index.html`
+
+After writing the two files, update `pelsung/curriculum/index.html` so the new materials are reachable from the landing page:
+
+- Find the matching entry in the `CLASSES` array (phase 1) or the relevant vertical's `classes` array.
+- Set `status` appropriately (`'done'`, `'today'`, or `'upcoming'`).
+- Add a `files: { slides: '…', notes: '…' }` object pointing at the two new files (paths relative to `curriculum/`, e.g. `foundation/04-how-internet-works-slides.html`).
+- If the class isn't in the array yet, add a new entry in the correct position.
+
+Do not add a `guide:` key — trainer guides are no longer part of this skill.
+
+## Step 5 — After generating
 
 Tell the user:
-- Where the three files are saved
+- Where the two files are saved
+- That `index.html` has been updated to link them
 - How to open them (just open in browser)
 - Offer to adjust anything specific ("want me to add more slides on X, or change the timing?")
 

@@ -2,941 +2,262 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Class 05 — APIs, Data & Databases · Pelsung Foundation</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      :root {
-        --blue: #0066B2;
-        --indigo: #001F35;
-        --amber: #247EC1;
-        --green: #7BC950;
-        --purple: #4796D1;
-        --red: #D80032;
-        --text: #1B2021;
-        --muted: #7B7C7F;
-        --faint: #9CA3AF;
-        --surf: #ffffff;
-        --bg: #F9F9F9;
-        --border: #EDEDED;
-        --border-l: #F5F5F5;
-      }
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      body {
-        font-family: "Open Sans", 'Aptos', sans-serif;
-        background: var(--bg);
-        color: var(--text);
-        -webkit-font-smoothing: antialiased;
-        line-height: 1.65;
-      }
-
-      /* HERO */
-      .hero {
-        background: var(--surf);
-        border-bottom: 1px solid var(--border);
-        padding: 4rem 2rem 3rem;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-      }
-      .hero::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 5px;
-        background: linear-gradient(135deg, #0067A3, #002D72);
-      }
-      .hero-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        background: var(--bg);
-        border: 1px solid var(--border);
-        border-radius: 100px;
-        padding: 0.35rem 1rem;
-        font-size: 0.75rem;
-        font-weight: 700;
-        color: var(--muted);
-        letter-spacing: 0.07em;
-        text-transform: uppercase;
-        margin-bottom: 1.5rem;
-      }
-      .hero-badge .dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: var(--amber);
-      }
-      .hero h1 {
-        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
-        font-size: clamp(2rem, 5vw, 3.5rem);
-        font-weight: 400;
-        letter-spacing: -0.02em;
-        line-height: 1.15;
-        margin-bottom: 0.75rem;
-      }
-      .c-blue {
-        color: var(--blue);
-      }
-      .c-indigo {
-        color: var(--indigo);
-      }
-      .amp {
-        color: var(--amber);
-        font-style: italic;
-      }
-      .hero-sub {
-        font-size: 1rem;
-        color: var(--muted);
-        margin-bottom: 2rem;
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-      .hero-tags {
-        display: flex;
-        justify-content: center;
-        gap: 0.6rem;
-        flex-wrap: wrap;
-        margin-bottom: 2rem;
-      }
-      .hero-tag {
-        padding: 0.3rem 0.9rem;
-        border-radius: 8px;
-        font-size: 0.78rem;
-        font-weight: 600;
-      }
-      .tag-blue {
-        background: #E6F0F8;
-        color: var(--blue);
-      }
-      .tag-indigo {
-        background: #E6E9EC;
-        color: var(--indigo);
-      }
-      .hero-stats {
-        display: inline-flex;
-        gap: 2rem;
-        background: var(--bg);
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 1rem 2rem;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-      .stat {
-        text-align: center;
-      }
-      .stat-val {
-        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
-        font-size: 1.6rem;
-        font-weight: 400;
-        line-height: 1;
-      }
-      .stat-val.blue {
-        color: var(--blue);
-      }
-      .stat-val.indigo {
-        color: var(--indigo);
-      }
-      .stat-val.amber {
-        color: var(--amber);
-      }
-      .stat-label {
-        font-size: 0.72rem;
-        color: var(--faint);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        margin-top: 0.2rem;
-      }
-
-      /* LAYOUT */
-      .container {
-        max-width: 880px;
-        margin: 0 auto;
-        padding: 0 2rem 6rem;
-      }
-
-      /* TOC */
-      .toc {
-        background: var(--surf);
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 1.75rem 2rem;
-        margin: 2.5rem 0;
-      }
-      .toc h3 {
-        font-size: 0.72rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        color: var(--faint);
-        margin-bottom: 1.25rem;
-      }
-      .toc-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0.4rem 2rem;
-      }
-      .toc-item {
-        display: flex;
-        align-items: center;
-        gap: 0.6rem;
-        font-size: 0.875rem;
-        color: var(--muted);
-        text-decoration: none;
-        padding: 0.3rem 0;
-        border-bottom: 1px solid var(--border-l);
-        transition: color 0.15s;
-      }
-      .toc-item:hover {
-        color: var(--indigo);
-      }
-      .toc-dot {
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        flex-shrink: 0;
-      }
-      .toc-time {
-        margin-left: auto;
-        font-size: 0.72rem;
-        font-weight: 600;
-        color: var(--faint);
-      }
-
-      /* SECTION HEADERS */
-      .section-hd {
-        padding: 3.5rem 0 1.5rem;
-      }
-      .section-pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        padding: 0.3rem 0.9rem;
-        border-radius: 100px;
-        font-size: 0.72rem;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        margin-bottom: 0.6rem;
-      }
-      .pill-blue {
-        background: #E6F0F8;
-        color: var(--blue);
-      }
-      .pill-indigo {
-        background: #E6E9EC;
-        color: var(--indigo);
-      }
-      .pill-amber {
-        background: #EBF0F7;
-        color: #1C5B8C;
-      }
-      .pill-green {
-        background: #F0F7EC;
-        color: var(--green);
-      }
-      .section-title {
-        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
-        font-size: 2rem;
-        font-weight: 400;
-        letter-spacing: -0.02em;
-        margin-bottom: 0.4rem;
-      }
-      .section-desc {
-        font-size: 1rem;
-        color: var(--muted);
-        margin-bottom: 1.75rem;
-      }
-
-      /* CONCEPT BLOCKS */
-      .concept {
-        background: var(--surf);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        padding: 1.75rem 2rem;
-        margin-bottom: 1.5rem;
-      }
-      .concept-label {
-        font-size: 0.7rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.07em;
-        color: var(--faint);
-        margin-bottom: 0.5rem;
-      }
-      .concept h3 {
-        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
-        font-size: 1.4rem;
-        font-weight: 400;
-        margin-bottom: 0.75rem;
-      }
-      .concept p {
-        font-size: 0.95rem;
-        color: var(--muted);
-        line-height: 1.7;
-        margin-bottom: 0.75rem;
-      }
-      .concept ul {
-        list-style: none;
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        margin: 0.25rem 0;
-      }
-      .concept ul li {
-        font-size: 0.92rem;
-        color: var(--muted);
-        padding-left: 1.4rem;
-        position: relative;
-        line-height: 1.55;
-      }
-      .concept ul li::before {
-        content: "→";
-        position: absolute;
-        left: 0;
-        color: var(--faint);
-        font-size: 0.85em;
-        top: 0.1em;
-      }
-      .concept ul li strong {
-        color: var(--text);
-      }
-
-      /* HIGHLIGHT BOX (analogy / key idea) */
-      .highlight-box {
-        border-radius: 12px;
-        padding: 1.25rem 1.5rem;
-        margin: 1rem 0;
-      }
-      .hb-blue {
-        background: #E6F0F8;
-        border-left: 4px solid var(--blue);
-      }
-      .hb-indigo {
-        background: #E6E9EC;
-        border-left: 4px solid var(--indigo);
-      }
-      .hb-amber {
-        background: #EBF0F7;
-        border-left: 4px solid var(--amber);
-      }
-      .hb-green {
-        background: #F0F7EC;
-        border-left: 4px solid var(--green);
-      }
-      .hb-label {
-        font-size: 0.68rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.07em;
-        color: var(--faint);
-        margin-bottom: 0.4rem;
-      }
-      .highlight-box p {
-        font-size: 0.9rem;
-        color: var(--text);
-        line-height: 1.6;
-        margin: 0;
-      }
-      .highlight-box p strong {
-        font-weight: 700;
-      }
-
-      /* URL VISUAL */
-      .url-anatomy {
-        display: flex;
-        align-items: flex-end;
-        flex-wrap: wrap;
-        gap: 0;
-        font-family: "Courier New", monospace;
-        margin: 1rem 0;
-      }
-      .url-part {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-      .url-text {
-        font-size: clamp(0.9rem, 2vw, 1.1rem);
-        font-weight: 700;
-        padding: 0.3rem 0.5rem;
-        border-radius: 6px 6px 0 0;
-        border-bottom: 3px solid transparent;
-      }
-      .url-label {
-        font-family: "Open Sans", sans-serif;
-        font-size: 0.62rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        margin-top: 0.3rem;
-        opacity: 0.8;
-        text-align: center;
-      }
-      .url-sep {
-        font-size: clamp(0.9rem, 2vw, 1.1rem);
-        font-weight: 700;
-        color: var(--faint);
-        padding-bottom: 0.3rem;
-        align-self: flex-end;
-        margin-bottom: 0.3rem;
-      }
-      .up-protocol .url-text {
-        background: #E6F0F8;
-        color: var(--blue);
-        border-color: var(--blue);
-      }
-      .up-protocol .url-label {
-        color: var(--blue);
-      }
-      .up-domain .url-text {
-        background: #E6E9EC;
-        color: var(--indigo);
-        border-color: var(--indigo);
-      }
-      .up-domain .url-label {
-        color: var(--indigo);
-      }
-      .up-tld .url-text {
-        background: #F0F7EC;
-        color: var(--green);
-        border-color: var(--green);
-      }
-      .up-tld .url-label {
-        color: var(--green);
-      }
-      .up-path .url-text {
-        background: #EBF0F7;
-        color: #1C5B8C;
-        border-color: var(--amber);
-      }
-      .up-path .url-label {
-        color: #1C5B8C;
-      }
-      .up-query .url-text {
-        background: #F2E8EA;
-        color: #8B001E;
-        border-color: #ec4899;
-      }
-      .up-query .url-label {
-        color: #8B001E;
-      }
-
-      /* JSON BLOCK */
-      .json-block {
-        background: #001F35;
-        border-radius: 12px;
-        overflow: hidden;
-        margin: 1rem 0;
-      }
-      .jb-bar {
-        background: #0A2A45;
-        padding: 8px 14px;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 0.72rem;
-        color: rgba(255, 255, 255, 0.4);
-      }
-      .jb-dot {
-        width: 9px;
-        height: 9px;
-        border-radius: 50%;
-      }
-      .jb-body {
-        padding: 1.25rem 1.5rem;
-        font-family: "Courier New", monospace;
-        font-size: 0.88rem;
-        line-height: 1.9;
-      }
-      .jk {
-        color: #7dd3fc;
-      }
-      .jv-str {
-        color: #86efac;
-      }
-      .jv-num {
-        color: #fde68a;
-      }
-      .jv-bool {
-        color: #c4b5fd;
-      }
-      .jv-punc {
-        color: rgba(255, 255, 255, 0.3);
-      }
-      .jv-arr {
-        color: rgba(255, 255, 255, 0.4);
-      }
-
-      /* REST TABLE */
-      .rest-table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0 6px;
-        margin: 1rem 0;
-      }
-      .rest-table th {
-        font-size: 0.68rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.07em;
-        color: var(--faint);
-        text-align: left;
-        padding: 0.3rem 0.75rem 0.5rem;
-      }
-      .rest-table td {
-        font-size: 0.88rem;
-        padding: 0.6rem 0.75rem;
-        background: var(--surf);
-        border-top: 1px solid var(--border);
-        border-bottom: 1px solid var(--border);
-        color: var(--muted);
-      }
-      .rest-table tr td:first-child {
-        border-radius: 8px 0 0 8px;
-        border-left: 1px solid var(--border);
-      }
-      .rest-table tr td:last-child {
-        border-radius: 0 8px 8px 0;
-        border-right: 1px solid var(--border);
-      }
-      .mb {
-        font-family: "Courier New", monospace;
-        font-size: 0.82rem;
-        font-weight: 700;
-        padding: 0.2rem 0.55rem;
-        border-radius: 5px;
-        display: inline-block;
-      }
-      .mb-get {
-        background: #E6F0F8;
-        color: var(--blue);
-      }
-      .mb-post {
-        background: #F0F7EC;
-        color: var(--green);
-      }
-      .mb-put {
-        background: #EBF0F7;
-        color: #1C5B8C;
-      }
-      .mb-delete {
-        background: #F2E8EA;
-        color: var(--red);
-      }
-      .td-code {
-        font-family: "Courier New", monospace;
-        font-size: 0.78rem;
-        color: var(--indigo);
-      }
-
-      /* DB TABLE */
-      .db-wrap {
-        background: var(--surf);
-        border: 1.5px solid var(--border);
-        border-radius: 12px;
-        overflow: hidden;
-        margin: 1rem 0;
-      }
-      .db-title-bar {
-        background: var(--bg);
-        border-bottom: 1px solid var(--border);
-        padding: 0.65rem 1rem;
-        font-size: 0.82rem;
-        font-weight: 700;
-        color: var(--indigo);
-      }
-      .db-tbl {
-        width: 100%;
-        border-collapse: collapse;
-      }
-      .db-tbl th {
-        background: #E6E9EC;
-        color: var(--indigo);
-        font-size: 0.68rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        padding: 0.5rem 0.9rem;
-        text-align: left;
-        border-bottom: 1px solid #C0C8D0;
-      }
-      .db-tbl td {
-        padding: 0.45rem 0.9rem;
-        font-size: 0.84rem;
-        color: var(--muted);
-        border-bottom: 1px solid var(--border-l);
-        font-family: "Courier New", monospace;
-      }
-      .db-tbl tr:last-child td {
-        border-bottom: none;
-      }
-      .db-pk {
-        color: var(--amber);
-        font-weight: 700;
-      }
-      .db-fk {
-        color: var(--blue);
-        font-weight: 600;
-      }
-
-      /* SUMMARY BOX */
-      .summary {
-        background: var(--surf);
-        border: 1.5px solid var(--border);
-        border-radius: 14px;
-        padding: 1.5rem 1.75rem;
-        margin: 2rem 0;
-      }
-      .summary h4 {
-        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
-        font-size: 1.15rem;
-        font-weight: 400;
-        margin-bottom: 1rem;
-      }
-      .summary ul {
-        list-style: none;
-        display: flex;
-        flex-direction: column;
-        gap: 0.55rem;
-      }
-      .summary ul li {
-        font-size: 0.9rem;
-        color: var(--muted);
-        padding-left: 1.75rem;
-        position: relative;
-        line-height: 1.5;
-      }
-      .summary ul li::before {
-        content: "✓";
-        position: absolute;
-        left: 0;
-        color: var(--green);
-        font-weight: 700;
-      }
-      .summary ul li strong {
-        color: var(--text);
-      }
-
-      /* PRACTICE */
-      .practice {
-        background: #F0F4FA;
-        border: 1.5px solid #A3C4E0;
-        border-radius: 14px;
-        padding: 1.5rem 1.75rem;
-        margin: 2rem 0;
-      }
-      .practice h4 {
-        font-size: 1rem;
-        font-weight: 700;
-        color: #1C5B8C;
-        margin-bottom: 1rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-      .practice ol {
-        padding-left: 1.5rem;
-        display: flex;
-        flex-direction: column;
-        gap: 0.6rem;
-      }
-      .practice ol li {
-        font-size: 0.9rem;
-        color: var(--muted);
-        line-height: 1.55;
-      }
-      .practice ol li strong {
-        color: var(--text);
-      }
-      .practice ol li code {
-        background: #F5F5F5;
-        padding: 1px 5px;
-        border-radius: 4px;
-        font-family: "Courier New", monospace;
-        font-size: 0.85em;
-      }
-
-      /* FOOTER */
-      .page-footer {
-        text-align: center;
-        padding: 3rem 0 2rem;
-        border-top: 1px solid var(--border);
-        margin-top: 4rem;
-      }
-      .page-footer p {
-        font-size: 0.75rem;
-        color: var(--faint);
-        line-height: 1.8;
-      }
-      .foot-brand {
-        font-family: "Bahnschrift", 'Segoe UI', sans-serif;
-        font-size: 1.1rem;
-        font-weight: 400;
-        margin-bottom: 0.5rem;
-      }
-      .foot-brand .b1 {
-        color: var(--blue);
-      }
-      .foot-brand .x {
-        color: var(--amber);
-        font-style: italic;
-      }
-      .foot-brand .b2 {
-        color: var(--indigo);
-      }
-    </style>
+    <title>Class 05 — APIs, Data &amp; Databases · Pelsung Foundation</title>
+    <link rel="stylesheet" href="../shared/notes.css" />
   </head>
   <body>
+    <!-- ============ HERO ============ -->
     <div class="hero">
-      <img src="../../../selise-brand/assets/SELISE_Logo_Primary.png" alt="SELISE Digital Platforms" style="height: 48px; margin-bottom: 1rem; display: block;">
-      <div class="hero-badge">
-        <span class="dot"></span>Class 05 · Foundation Phase
-      </div>
-      <h1>
-        <span class="c-indigo">APIs, Data &amp; Databases</span>
-      </h1>
+      <img src="../assets/SELISE_Logo_Primary.png" alt="SELISE" class="hero-logo" />
+      <div class="hero-badge"><span class="dot"></span>Class 05 · Foundation Phase</div>
+      <h1><span class="c-indigo">How Apps Talk,</span> <span class="c-blue">Remember &amp; Share</span></h1>
       <p class="hero-sub">
-        Your reference sheet for this session — keep this and read it again tonight. The concepts here are foundational to everything you'll build.
+        Every app on your phone is doing three things all day: talking to other
+        computers, remembering information, and passing it around. Today's notes
+        explain those three ideas in plain language.
       </p>
       <div class="hero-tags">
-        <span class="hero-tag tag-indigo">APIs</span>
-        <span class="hero-tag tag-indigo">JSON</span>
-        <span class="hero-tag tag-indigo">REST</span>
-        <span class="hero-tag tag-indigo">Databases</span>
+        <span class="hero-tag indigo">APIs</span>
+        <span class="hero-tag indigo">JSON</span>
+        <span class="hero-tag indigo">REST</span>
+        <span class="hero-tag">Databases</span>
       </div>
     </div>
 
     <div class="container">
-      <div class="toc">
-        <h3>Contents</h3>
-        <div class="toc-grid">
-          <a href="#api" class="toc-item"><span class="toc-dot" style="background: var(--indigo)"></span>What is an API?</a>
-          <a href="#json" class="toc-item"><span class="toc-dot" style="background: var(--indigo)"></span>JSON Format</a>
-          <a href="#rest" class="toc-item"><span class="toc-dot" style="background: var(--indigo)"></span>REST APIs &amp; HTTP Methods</a>
-          <a href="#databases" class="toc-item"><span class="toc-dot" style="background: var(--indigo)"></span>Databases</a>
-          <a href="#practice" class="toc-item"><span class="toc-dot" style="background: var(--amber)"></span>Practice at Home</a>
+
+      <!-- ============ READING NOTE ============ -->
+      <div class="reading-note">
+        <span>📖</span>
+        <div>
+          <strong>How to use this document.</strong>
+          Don't try to memorise it. Read it once tonight, slowly. Tomorrow
+          before class, skim the headings. If a word feels strange, check the
+          "In plain words" box under it — that's the simple version.
         </div>
       </div>
 
-      <!-- ════════════════════════════
-       SECTION 2: APIs, DATA & DATABASES
-  ════════════════════════════ -->
-      <div class="section-hd">
-        <div class="section-pill pill-indigo">Class 05</div>
-        <h2 class="section-title" id="api">APIs, Data &amp; Databases</h2>
+      <!-- ============ TOC ============ -->
+      <div class="toc">
+        <h3>What's inside</h3>
+        <div class="toc-grid">
+          <a href="#api" class="toc-item"><span class="n">1</span>Apps that talk — APIs</a>
+          <a href="#json" class="toc-item"><span class="n">2</span>The neat little box — JSON</a>
+          <a href="#rest" class="toc-item"><span class="n">3</span>The four things apps do — REST</a>
+          <a href="#databases" class="toc-item"><span class="n">4</span>The long-term memory — Databases</a>
+          <a href="#practice" class="toc-item"><span class="n">5</span>Practice at home</a>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════
+           SECTION 1 — APIs
+           ═══════════════════════════════════════ -->
+      <div class="section-hd" id="api">
+        <div class="section-pill pill-indigo">Part 1</div>
+        <h2 class="section-title">Apps that talk to each other</h2>
         <p class="section-desc">
-          APIs are how software systems talk to each other. Almost every app you
-          use — from weather to maps to banking — works by calling APIs.
-          Understanding them is foundational to every role in this programme.
+          When you open an app, most of what you see doesn't actually live on
+          your phone. Your phone is just asking other computers for it. The way
+          it asks is called an <strong>API</strong>.
         </p>
       </div>
 
-      <!-- API -->
       <div class="concept">
-        <div class="concept-label">Application Programming Interface</div>
-        <h3>What is an API?</h3>
+        <div class="concept-label">The idea</div>
+        <h3>An API is how one app asks another app for something</h3>
         <p>
-          An API (Application Programming Interface) is a way for two pieces of
-          software to communicate with each other. It defines what requests you
-          can make, what format to use, and what responses you'll get back.
+          Open <strong>mBoB</strong> and tap "Check Balance." Your phone
+          doesn't know your balance. Bank of Bhutan's computer does. Your phone
+          sends a polite message: <em>"Hi, this is Karma. What's my balance?"</em>
+          The bank's computer checks, and sends a message back: <em>"Nu. 4,250."</em>
         </p>
-        <div class="highlight-box hb-indigo">
-          <div class="hb-label">The Restaurant Analogy</div>
+        <p>
+          That polite-messages system is an API. Your phone and the bank never
+          touch each other directly — they only pass messages through this
+          agreed-upon channel.
+        </p>
+
+        <div class="plain-words">
+          <div class="pw-label">💡 In plain words</div>
           <p>
-            You're the <strong>client</strong>. The waiter is the
-            <strong>API</strong>. The kitchen is the <strong>server</strong>.
-            The pantry is the <strong>database</strong>.<br /><br />
-            You tell the waiter what you want (your request). The waiter goes to
-            the kitchen (without you). The kitchen prepares it using ingredients
-            from the pantry. The waiter brings it back (the response). You never
-            enter the kitchen — the waiter is the only interface.
+            An API is the invisible messenger between two apps. One app says
+            "please give me this," the other app says "here you go" — or "no,
+            you're not allowed."
           </p>
         </div>
-        <ul>
-          <li>
-            APIs let apps share data without exposing their internal systems
-          </li>
-          <li>
-            When you "Log in with Google", your app calls Google's OAuth API
-          </li>
-          <li>
-            When you check the weather, your app calls a weather service API
-          </li>
-          <li>
-            Claude Code calls Anthropic's API every time you ask it something
-          </li>
-          <li>
-            SELISE's products all expose APIs that client systems connect to
-          </li>
-        </ul>
+
+        <div class="analogy">
+          <div class="an-label">🍽️ The restaurant picture</div>
+          <p>
+            Think of a restaurant. <strong>You</strong> are the app on your
+            phone. The <strong>waiter</strong> is the API. The
+            <strong>kitchen</strong> is the other company's computer. You never
+            walk into the kitchen. You just tell the waiter what you want, the
+            waiter brings it back. If you ask for something the kitchen doesn't
+            serve, the waiter says no. That's exactly how APIs work.
+          </p>
+        </div>
       </div>
 
-      <!-- JSON -->
-      <div class="concept" id="json">
-        <div class="concept-label">Data Format</div>
-        <h3>JSON — How APIs Send Data</h3>
+      <div class="concept">
+        <div class="concept-label">Where you already use APIs</div>
+        <h3>You've been using APIs every day — without knowing</h3>
+        <p>Every time any of these happen, an API call is happening quietly behind the scenes:</p>
+        <ul>
+          <li>You tap <strong>"Log in with Google"</strong> on a website — the site is calling Google's API to check who you are.</li>
+          <li>You open <strong>Google Maps</strong> to find Gelephu — Maps is calling a location API for map tiles and directions.</li>
+          <li>You check the <strong>weather</strong> — the weather app is calling a weather service's API.</li>
+          <li>You pay through <strong>eSewa or mBoB</strong> — the shop's app is calling the payment provider's API.</li>
+          <li>You ask <strong>Claude Code</strong> a question — it's calling Anthropic's API.</li>
+        </ul>
         <p>
-          JSON (JavaScript Object Notation) is the most common format for
-          sending data between an API and a client. It's human-readable and
-          works in every programming language.
+          Apps don't build everything themselves. They borrow from each other
+          through APIs. That's why an app can be built in weeks instead of years.
         </p>
+      </div>
+
+      <div class="concept">
+        <div class="concept-label">Why you should care</div>
+        <h3>Every role in this programme touches APIs</h3>
+        <ul>
+          <li><strong>Developers</strong> write code that calls APIs, and also build APIs that other apps will call.</li>
+          <li><strong>Designers</strong> design screens that show what an API sends back (loading, empty, error).</li>
+          <li><strong>Testers</strong> check that the API returns the right thing, every time.</li>
+          <li><strong>Business Analysts</strong> decide <em>which</em> APIs the product needs and <em>what</em> they should return.</li>
+        </ul>
+        <p>
+          SELISE products are mostly APIs. When a bank or government office uses
+          SELISE software, they're talking to our APIs.
+        </p>
+      </div>
+
+      <!-- ═══════════════════════════════════════
+           SECTION 2 — JSON
+           ═══════════════════════════════════════ -->
+      <div class="section-hd" id="json">
+        <div class="section-pill pill-indigo">Part 2</div>
+        <h2 class="section-title">The neat little box — JSON</h2>
+        <p class="section-desc">
+          When two apps pass information through an API, they need to agree on
+          the shape of the message. Almost every API uses the same shape, called
+          <strong>JSON</strong>.
+        </p>
+      </div>
+
+      <div class="concept">
+        <div class="concept-label">The idea</div>
+        <h3>JSON is a clean way to write down information</h3>
+        <p>
+          JSON stands for <em>JavaScript Object Notation</em> — but forget the
+          name. What matters is: JSON is how an app <strong>writes down facts
+          about a thing</strong> so another app can read them.
+        </p>
+
+        <div class="plain-words">
+          <div class="pw-label">💡 In plain words</div>
+          <p>
+            JSON is like a small form with labels on the left and values on the
+            right. "Name: Karma. City: Gelephu. Age: 24." Neat, labeled, easy
+            for any computer anywhere to read.
+          </p>
+        </div>
+
         <div class="json-block">
           <div class="jb-bar">
-            <span class="jb-dot" style="background: #ff5f56"></span
-            ><span class="jb-dot" style="background: #febc2e"></span
-            ><span class="jb-dot" style="background: #28c840"></span
-            ><span style="margin-left: 8px">trainee.json</span>
+            <span class="jb-dot" style="background: #ff5f56"></span>
+            <span class="jb-dot" style="background: #febc2e"></span>
+            <span class="jb-dot" style="background: #28c840"></span>
+            <span style="margin-left: 8px">trainee.json</span>
           </div>
           <div class="jb-body">
-            <span class="jv-punc">{</span><br />
-            &nbsp;&nbsp;<span class="jk">"name"</span
-            ><span class="jv-punc">: </span
-            ><span class="jv-str">"Karma Dorji"</span
-            ><span class="jv-punc">,</span><br />
-            &nbsp;&nbsp;<span class="jk">"city"</span
-            ><span class="jv-punc">: </span><span class="jv-str">"Gelephu"</span
-            ><span class="jv-punc">,</span><br />
-            &nbsp;&nbsp;<span class="jk">"age"</span
-            ><span class="jv-punc">: </span><span class="jv-num">24</span
-            ><span class="jv-punc">,</span><br />
-            &nbsp;&nbsp;<span class="jk">"enrolled"</span
-            ><span class="jv-punc">: </span><span class="jv-bool">true</span
-            ><span class="jv-punc">,</span><br />
-            &nbsp;&nbsp;<span class="jk">"skills"</span
-            ><span class="jv-punc">: </span><span class="jv-arr">[</span
-            ><span class="jv-str">"Python"</span><span class="jv-punc">, </span
-            ><span class="jv-str">"SQL"</span><span class="jv-arr">]</span
-            ><span class="jv-punc">,</span><br />
-            &nbsp;&nbsp;<span class="jk">"vertical"</span
-            ><span class="jv-punc">: </span
-            ><span class="jv-str">"Software Dev"</span><br />
-            <span class="jv-punc">}</span>
+<span class="jv-punc">{</span><br />
+&nbsp;&nbsp;<span class="jk">"name"</span><span class="jv-punc">:</span> <span class="jv-str">"Karma Dorji"</span><span class="jv-punc">,</span><br />
+&nbsp;&nbsp;<span class="jk">"city"</span><span class="jv-punc">:</span> <span class="jv-str">"Gelephu"</span><span class="jv-punc">,</span><br />
+&nbsp;&nbsp;<span class="jk">"age"</span><span class="jv-punc">:</span> <span class="jv-num">24</span><span class="jv-punc">,</span><br />
+&nbsp;&nbsp;<span class="jk">"enrolled"</span><span class="jv-punc">:</span> <span class="jv-bool">true</span><span class="jv-punc">,</span><br />
+&nbsp;&nbsp;<span class="jk">"skills"</span><span class="jv-punc">:</span> <span class="jv-arr">[</span><span class="jv-str">"Python"</span><span class="jv-punc">,</span> <span class="jv-str">"SQL"</span><span class="jv-arr">]</span><span class="jv-punc">,</span><br />
+&nbsp;&nbsp;<span class="jk">"vertical"</span><span class="jv-punc">:</span> <span class="jv-str">"Software Dev"</span><br />
+<span class="jv-punc">}</span>
           </div>
         </div>
-        <ul>
-          <li>
-            <strong>Keys</strong> — always a string in double quotes. The label
-            for the field.
-          </li>
-          <li>
-            <strong>String values</strong> — text, always in double quotes:
-            <code
-              style="
-                background: #F5F5F5;
-                padding: 1px 4px;
-                border-radius: 3px;
-                font-family: &quot;Courier New&quot;, monospace;
-                font-size: 0.85em;
-              "
-              >"Gelephu"</code
-            >
-          </li>
-          <li>
-            <strong>Number values</strong> — no quotes needed:
-            <code
-              style="
-                background: #F5F5F5;
-                padding: 1px 4px;
-                border-radius: 3px;
-                font-family: &quot;Courier New&quot;, monospace;
-                font-size: 0.85em;
-              "
-              >24</code
-            >
-          </li>
-          <li>
-            <strong>Boolean values</strong> —
-            <code
-              style="
-                background: #F5F5F5;
-                padding: 1px 4px;
-                border-radius: 3px;
-                font-family: &quot;Courier New&quot;, monospace;
-                font-size: 0.85em;
-              "
-              >true</code
-            >
-            or
-            <code
-              style="
-                background: #F5F5F5;
-                padding: 1px 4px;
-                border-radius: 3px;
-                font-family: &quot;Courier New&quot;, monospace;
-                font-size: 0.85em;
-              "
-              >false</code
-            >, no quotes
-          </li>
-          <li>
-            <strong>Arrays</strong> — a list of values inside square brackets:
-            <code
-              style="
-                background: #F5F5F5;
-                padding: 1px 4px;
-                border-radius: 3px;
-                font-family: &quot;Courier New&quot;, monospace;
-                font-size: 0.85em;
-              "
-              >["Python", "SQL"]</code
-            >
-          </li>
-          <li>
-            <strong>Nested objects</strong> — an object inside an object, using
-            curly braces inside curly braces
-          </li>
-        </ul>
       </div>
 
-      <!-- REST -->
-      <div class="concept" id="rest">
-        <div class="concept-label">REST &amp; HTTP Methods</div>
-        <h3>REST APIs &amp; HTTP Methods</h3>
-        <p>
-          <strong>REST</strong> (Representational State Transfer) is the most
-          popular way to design APIs. REST APIs use URLs to represent
-          <em>resources</em> (things like users, posts, products) and HTTP
-          methods to describe <em>what to do with them</em>.
-        </p>
-        <div class="highlight-box hb-indigo">
-          <div class="hb-label">REST URL pattern</div>
+      <div class="concept">
+        <div class="concept-label">The rules</div>
+        <h3>Reading JSON, piece by piece</h3>
+        <p>JSON looks scary because of the punctuation. It's actually simple once you know the six pieces:</p>
+        <ul>
+          <li><strong>Curly braces <code>{ }</code></strong> — wrap one "thing" (like one trainee).</li>
+          <li><strong>Label in quotes</strong> — the name of a field, e.g. <code>"name"</code>. Always in double quotes.</li>
+          <li><strong>Colon <code>:</code></strong> — separates the label from its value.</li>
+          <li><strong>Text values</strong> — go in double quotes: <code>"Gelephu"</code>.</li>
+          <li><strong>Number values</strong> — no quotes: <code>24</code>.</li>
+          <li><strong>True/false</strong> — no quotes: <code>true</code> or <code>false</code>.</li>
+          <li><strong>Square brackets <code>[ ]</code></strong> — wrap a list of things: <code>["Python", "SQL"]</code>.</li>
+          <li><strong>Comma <code>,</code></strong> — separates one field from the next.</li>
+        </ul>
+
+        <div class="watch-out">
+          <div class="wo-label">⚠️ Three common mistakes</div>
           <p>
-            <code style="font-family: &quot;Courier New&quot;, monospace"
-              >/trainees</code
-            >
-            → all trainees<br />
-            <code style="font-family: &quot;Courier New&quot;, monospace"
-              >/trainees/42</code
-            >
-            → trainee with ID 42<br />
-            <code style="font-family: &quot;Courier New&quot;, monospace"
-              >/trainees/42/classes</code
-            >
-            → all classes that trainee 42 attended
+            1. Forgetting a comma between fields. 2. Using 'single quotes' — JSON
+            only accepts "double quotes". 3. A stray comma after the last field,
+            before the closing <code>}</code>. If your JSON breaks, check these three
+            first.
           </p>
         </div>
-        <p>
-          The <strong>HTTP method</strong> in the request tells the server what
-          action to perform:
+      </div>
+
+      <!-- ═══════════════════════════════════════
+           SECTION 3 — REST
+           ═══════════════════════════════════════ -->
+      <div class="section-hd" id="rest">
+        <div class="section-pill pill-indigo">Part 3</div>
+        <h2 class="section-title">The four things every app does</h2>
+        <p class="section-desc">
+          Think of any app you use. Behind the scenes, it only ever does four
+          things to information: show it, add it, change it, remove it. This
+          idea has a name: <strong>CRUD</strong>. And the way APIs implement
+          CRUD is called <strong>REST</strong>.
         </p>
+      </div>
+
+      <div class="concept">
+        <div class="concept-label">CRUD</div>
+        <h3>Four actions. That's it.</h3>
+        <p>Open WeChat. Everything you can do falls into one of four buckets:</p>
+        <ul>
+          <li><strong>Create</strong> — send a new message, post a status.</li>
+          <li><strong>Read</strong> — see your chats, read someone's profile.</li>
+          <li><strong>Update</strong> — edit your name, change your photo.</li>
+          <li><strong>Delete</strong> — remove a message, leave a group.</li>
+        </ul>
+
+        <div class="plain-words">
+          <div class="pw-label">💡 In plain words</div>
+          <p>
+            Every app you've ever used — mBoB, Gmail, Facebook, Druk Air
+            booking, eSewa — is just CRUD on different kinds of information.
+            Once you see this, apps stop feeling magical.
+          </p>
+        </div>
+      </div>
+
+      <div class="concept">
+        <div class="concept-label">REST + HTTP methods</div>
+        <h3>How an API names these four actions</h3>
+        <p>
+          When your app sends a request to an API, it uses one of four
+          <strong>HTTP methods</strong>. Each one maps to one CRUD action:
+        </p>
+
         <table class="rest-table">
           <thead>
             <tr>
               <th>Method</th>
-              <th>Action</th>
+              <th>What it does</th>
               <th>CRUD</th>
               <th>Example</th>
             </tr>
@@ -944,19 +265,19 @@
           <tbody>
             <tr>
               <td><span class="mb mb-get">GET</span></td>
-              <td>Read / fetch data</td>
+              <td>Read / fetch information</td>
               <td>Read</td>
               <td class="td-code">GET /trainees</td>
             </tr>
             <tr>
               <td><span class="mb mb-post">POST</span></td>
-              <td>Create new record</td>
+              <td>Add a new record</td>
               <td>Create</td>
               <td class="td-code">POST /trainees</td>
             </tr>
             <tr>
               <td><span class="mb mb-put">PUT</span></td>
-              <td>Update existing record</td>
+              <td>Change an existing record</td>
               <td>Update</td>
               <td class="td-code">PUT /trainees/42</td>
             </tr>
@@ -968,327 +289,224 @@
             </tr>
           </tbody>
         </table>
-        <div class="highlight-box hb-amber">
-          <div class="hb-label">Remember: CRUD</div>
+
+        <p>
+          <strong>REST</strong> is the most common style of API. It says: use a
+          URL to name the thing (<code>/trainees</code>), and use an HTTP method
+          to say what you want to do with it.
+        </p>
+
+        <div class="analogy">
+          <div class="an-label">📬 Another picture</div>
           <p>
-            Every application ever built does four things:
-            <strong>Create, Read, Update, Delete</strong> — called CRUD. REST
-            maps these directly to POST, GET, PUT, DELETE. Learn these four and
-            you understand the foundation of every API you'll ever work with.
+            Think of the URL as the <strong>address on an envelope</strong>
+            (which trainee?), and the HTTP method as the
+            <strong>instruction written on the envelope</strong>
+            ("read this," "replace this with what's inside," "throw this away").
+            The API reads both and acts.
           </p>
         </div>
       </div>
 
-      <!-- DATABASES -->
-      <div class="concept" id="databases">
-        <div class="concept-label">Data Storage</div>
-        <h3>Databases — Organised Storage for Data</h3>
+      <div class="concept">
+        <div class="concept-label">URLs that mean something</div>
+        <h3>REST URLs read like sentences</h3>
+        <p>A well-designed REST URL tells you exactly what it's about:</p>
+        <ul>
+          <li><code>/trainees</code> — all trainees.</li>
+          <li><code>/trainees/42</code> — the one trainee whose id is 42.</li>
+          <li><code>/trainees/42/classes</code> — the classes that trainee 42 attended.</li>
+          <li><code>/trainees/42/classes/05</code> — trainee 42's record for class 05.</li>
+        </ul>
         <p>
-          A <strong>database</strong> is an organised system for storing data
-          persistently (meaning it survives when you turn off the server). Think
-          of it like a collection of very powerful, interconnected spreadsheets.
+          Notice the pattern: <em>bigger group → one item → something about that item</em>.
+          Once you know this pattern, you can guess what an API does just by
+          looking at its URLs.
         </p>
+      </div>
+
+      <!-- ═══════════════════════════════════════
+           SECTION 4 — DATABASES
+           ═══════════════════════════════════════ -->
+      <div class="section-hd" id="databases">
+        <div class="section-pill pill-blue">Part 4</div>
+        <h2 class="section-title">Where apps keep their memory</h2>
+        <p class="section-desc">
+          APIs handle conversation. JSON handles the shape of the message. But
+          where does the information actually <em>live</em> when no one is
+          asking? In a <strong>database</strong>.
+        </p>
+      </div>
+
+      <div class="concept">
+        <div class="concept-label">The idea</div>
+        <h3>A database is an app's long-term memory</h3>
+        <p>
+          Turn off your phone, come back tomorrow, open Facebook — all your
+          photos are still there. Your phone didn't store them. Facebook's
+          database did. A database is a place where information is kept safely,
+          organised neatly, and can be found again fast.
+        </p>
+
+        <div class="plain-words">
+          <div class="pw-label">💡 In plain words</div>
+          <p>
+            A database is like a very large, very organised set of spreadsheets
+            that a computer can search in a fraction of a second. When an API
+            needs information, it goes to the database.
+          </p>
+        </div>
+      </div>
+
+      <div class="concept">
+        <div class="concept-label">SQL databases</div>
+        <h3>The spreadsheet style — SQL</h3>
+        <p>
+          Most databases look like spreadsheets: <strong>rows and columns, in
+          tables</strong>. Each row is one record (one trainee, one payment,
+          one booking). Each column is one fact about that record (name, age,
+          city).
+        </p>
+
         <div class="db-wrap">
-          <div class="db-title-bar">🗄️ trainees — example SQL table</div>
+          <div class="db-title-bar">🗄️ trainees — one SQL table</div>
           <table class="db-tbl">
             <thead>
-              <tr>
-                <th>id</th>
-                <th>name</th>
-                <th>city</th>
-                <th>vertical</th>
-                <th>cohort</th>
-              </tr>
+              <tr><th>id</th><th>name</th><th>city</th><th>vertical</th><th>cohort</th></tr>
             </thead>
             <tbody>
-              <tr>
-                <td class="db-pk">1</td>
-                <td>Karma Dorji</td>
-                <td>Gelephu</td>
-                <td>Software Dev</td>
-                <td>3</td>
-              </tr>
-              <tr>
-                <td class="db-pk">2</td>
-                <td>Tenzin Wangmo</td>
-                <td>Thimphu</td>
-                <td>UI/UX Design</td>
-                <td>3</td>
-              </tr>
-              <tr>
-                <td class="db-pk">3</td>
-                <td>Pema Choden</td>
-                <td>Paro</td>
-                <td>QA Testing</td>
-                <td>3</td>
-              </tr>
-              <tr>
-                <td style="color: var(--faint)">…</td>
-                <td style="color: var(--faint)">…</td>
-                <td style="color: var(--faint)">…</td>
-                <td style="color: var(--faint)">…</td>
-                <td style="color: var(--faint)">…</td>
-              </tr>
+              <tr><td class="db-pk">1</td><td>Karma Dorji</td><td>Gelephu</td><td>Software Dev</td><td>3</td></tr>
+              <tr><td class="db-pk">2</td><td>Sonam Choki</td><td>Thimphu</td><td>Testing</td><td>3</td></tr>
+              <tr><td class="db-pk">3</td><td>Jamyang Sherab</td><td>Paro</td><td>Design</td><td>3</td></tr>
             </tbody>
           </table>
         </div>
+
+        <p>
+          The language you use to ask questions of a SQL database is also
+          called <strong>SQL</strong> (say it "sequel"). It reads almost like
+          English:
+        </p>
         <ul>
-          <li>
-            <strong>Table</strong> — one type of data (like one spreadsheet). A
-            database has many tables.
-          </li>
-          <li>
-            <strong>Row</strong> — one record. In the table above, one row = one
-            trainee.
-          </li>
-          <li>
-            <strong>Column</strong> — one field. Every row has the same columns
-            (name, city, etc.).
-          </li>
-          <li>
-            <strong>Primary key</strong> — a unique ID for each row. The
-            <span style="color: var(--amber); font-weight: 700">id</span> column
-            — no two rows share the same value.
-          </li>
-          <li>
-            <strong>Foreign key</strong> — a column that points to a row in
-            another table (e.g.,
-            <span style="color: var(--blue); font-weight: 600">trainee_id</span>
-            in an Attendance table).
-          </li>
+          <li><code>SELECT name FROM trainees WHERE cohort = 3;</code> — give me the names of all cohort-3 trainees.</li>
+          <li><code>SELECT * FROM trainees WHERE city = 'Gelephu';</code> — give me everything about trainees in Gelephu.</li>
         </ul>
-        <div
-          style="
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-top: 1rem;
-          "
-        >
-          <div
-            style="
-              background: #E6F0F8;
-              border: 1.5px solid #B0D4E9;
-              border-radius: 10px;
-              padding: 1.1rem;
-            "
-          >
-            <p
-              style="
-                font-size: 0.8rem;
-                font-weight: 700;
-                color: var(--blue);
-                text-transform: uppercase;
-                letter-spacing: 0.06em;
-                margin-bottom: 0.6rem;
-              "
-            >
-              🗃️ SQL (Relational)
+        <p>
+          Examples of SQL databases: <strong>PostgreSQL, MySQL, SQL Server,
+          SQLite</strong>. SELISE mostly uses PostgreSQL.
+        </p>
+      </div>
+
+      <div class="concept">
+        <div class="concept-label">NoSQL databases</div>
+        <h3>The JSON style — NoSQL</h3>
+        <p>
+          Some information doesn't fit neatly into rows and columns. A chat
+          message might have 1 reply or 50 replies. A product might have 3 photos
+          or 20. For this, there's <strong>NoSQL</strong> — databases that store
+          information as <em>JSON-like documents</em> instead of tables.
+        </p>
+        <p>
+          Examples: <strong>MongoDB, Firestore, DynamoDB</strong>. You don't
+          need to pick a side today — just know both styles exist, and each
+          has its place.
+        </p>
+
+        <div class="from-life">
+          <div class="fl-label">📍 From your life</div>
+          <p>
+            WhatsApp's chat history is NoSQL-shaped (every message is a little
+            document with varying fields). mBoB's account ledger is
+            SQL-shaped (every transaction is a neat row: date, amount,
+            balance). Same app can use both.
+          </p>
+        </div>
+      </div>
+
+      <div class="concept">
+        <div class="concept-label">Putting it all together</div>
+        <h3>The full journey of one tap</h3>
+        <p>
+          You tap "Check Balance" in mBoB. Here's what actually happens in
+          about 200 milliseconds:
+        </p>
+        <ol>
+          <li>Your phone sends a <strong>GET</strong> request to an API URL like <code>/accounts/12345/balance</code>.</li>
+          <li>The API asks the bank's <strong>database</strong>: <code>SELECT balance FROM accounts WHERE id = 12345;</code></li>
+          <li>The database finds one row, returns the balance.</li>
+          <li>The API wraps it in <strong>JSON</strong>: <code>{ "balance": 4250 }</code>.</li>
+          <li>Your phone receives the JSON and shows "Nu. 4,250" on screen.</li>
+        </ol>
+        <p>
+          That's the whole story. Every app you use is doing some version of
+          this, millions of times a day. You now understand the machinery.
+        </p>
+      </div>
+
+      <!-- ═══════════════════════════════════════
+           PRACTICE
+           ═══════════════════════════════════════ -->
+      <div class="section-hd" id="practice">
+        <div class="section-pill pill-amber">Part 5</div>
+        <h2 class="section-title">Practice at home</h2>
+        <p class="section-desc">
+          These are optional, but doing even one will make tomorrow's class
+          much easier. None require coding.
+        </p>
+      </div>
+
+      <div class="practice-list">
+        <div class="practice-item">
+          <div class="practice-num">1</div>
+          <div class="practice-body">
+            <h4>Pick any app on your phone. Write its CRUD list.</h4>
+            <p>
+              Pick WeChat, mBoB, Instagram, or anything else. On a piece of
+              paper, write one example each for Create, Read, Update, Delete.
+              This trains your eye to see CRUD everywhere.
             </p>
-            <ul
-              style="
-                list-style: none;
-                display: flex;
-                flex-direction: column;
-                gap: 0.4rem;
-              "
-            >
-              <li
-                style="
-                  font-size: 0.85rem;
-                  color: var(--muted);
-                  padding-left: 1rem;
-                  position: relative;
-                "
-              >
-                <span style="position: absolute; left: 0">→</span>Tables with
-                fixed columns
-              </li>
-              <li
-                style="
-                  font-size: 0.85rem;
-                  color: var(--muted);
-                  padding-left: 1rem;
-                  position: relative;
-                "
-              >
-                <span style="position: absolute; left: 0">→</span>Great for
-                structured data
-              </li>
-              <li
-                style="
-                  font-size: 0.85rem;
-                  color: var(--muted);
-                  padding-left: 1rem;
-                  position: relative;
-                "
-              >
-                <span style="position: absolute; left: 0">→</span>PostgreSQL,
-                MySQL, SQLite
-              </li>
-              <li
-                style="
-                  font-size: 0.85rem;
-                  color: var(--muted);
-                  padding-left: 1rem;
-                  position: relative;
-                "
-              >
-                <span style="position: absolute; left: 0">→</span>Used in most
-                SELISE products
-              </li>
-            </ul>
           </div>
-          <div
-            style="
-              background: #F0F7EC;
-              border: 1.5px solid #B5DBA7;
-              border-radius: 10px;
-              padding: 1.1rem;
-            "
-          >
-            <p
-              style="
-                font-size: 0.8rem;
-                font-weight: 700;
-                color: var(--green);
-                text-transform: uppercase;
-                letter-spacing: 0.06em;
-                margin-bottom: 0.6rem;
-              "
-            >
-              📄 NoSQL (Document)
+        </div>
+        <div class="practice-item">
+          <div class="practice-num">2</div>
+          <div class="practice-body">
+            <h4>Write yourself as JSON.</h4>
+            <p>
+              On paper: open brace, "name" colon your name in quotes comma,
+              "age" colon your age comma, "skills" colon a list in square
+              brackets, close brace. Ask a friend to spot your mistakes.
             </p>
-            <ul
-              style="
-                list-style: none;
-                display: flex;
-                flex-direction: column;
-                gap: 0.4rem;
-              "
-            >
-              <li
-                style="
-                  font-size: 0.85rem;
-                  color: var(--muted);
-                  padding-left: 1rem;
-                  position: relative;
-                "
-              >
-                <span style="position: absolute; left: 0">→</span>Stores JSON
-                documents
-              </li>
-              <li
-                style="
-                  font-size: 0.85rem;
-                  color: var(--muted);
-                  padding-left: 1rem;
-                  position: relative;
-                "
-              >
-                <span style="position: absolute; left: 0">→</span>Flexible —
-                fields can vary
-              </li>
-              <li
-                style="
-                  font-size: 0.85rem;
-                  color: var(--muted);
-                  padding-left: 1rem;
-                  position: relative;
-                "
-              >
-                <span style="position: absolute; left: 0">→</span>MongoDB,
-                Firestore
-              </li>
-              <li
-                style="
-                  font-size: 0.85rem;
-                  color: var(--muted);
-                  padding-left: 1rem;
-                  position: relative;
-                "
-              >
-                <span style="position: absolute; left: 0">→</span>Good for
-                fast-changing data
-              </li>
-            </ul>
+          </div>
+        </div>
+        <div class="practice-item">
+          <div class="practice-num">3</div>
+          <div class="practice-body">
+            <h4>Draw one SQL table.</h4>
+            <p>
+              Pretend you're building a bookings app for Druk Air. Draw a
+              table called <code>bookings</code>. What columns would it have?
+              (Hint: at least 5.) This is exactly how BAs start requirements.
+            </p>
+          </div>
+        </div>
+        <div class="practice-item">
+          <div class="practice-num">4</div>
+          <div class="practice-body">
+            <h4>Re-read this note tomorrow morning.</h4>
+            <p>
+              Five minutes, with coffee. The second pass is when things
+              actually stick. This is the single most useful thing you can do.
+            </p>
           </div>
         </div>
       </div>
 
-      <!-- SUMMARY BOX 2 -->
-      <div class="summary">
-        <h4>Class 05 — Key Takeaways</h4>
-        <ul>
-          <li>
-            <strong>An API is the interface between client and server</strong> —
-            you never access a database directly. The API controls what you can
-            ask for and what you get back.
-          </li>
-          <li>
-            <strong>JSON is the language of APIs</strong> — key-value pairs,
-            strings in quotes, numbers without quotes, true/false for booleans,
-            [ ] for arrays
-          </li>
-          <li>
-            <strong>REST uses URLs + methods</strong> — the URL describes the
-            resource (/trainees/42), the method describes the action (GET, POST,
-            PUT, DELETE)
-          </li>
-          <li>
-            <strong>CRUD = the four operations of every app</strong> — Create
-            (POST), Read (GET), Update (PUT), Delete (DELETE)
-          </li>
-          <li>
-            <strong>A database table = rows and columns</strong> — each row is
-            one record, each column is one field, the primary key uniquely
-            identifies each row
-          </li>
-          <li>
-            <strong>SQL vs NoSQL</strong> — SQL for structured relational data,
-            NoSQL for flexible document-style data. Most real apps use both.
-          </li>
-        </ul>
+      <!-- ============ FOOTER ============ -->
+      <div class="note-footer">
+        <p>
+          <strong>SELISE × Pelsung</strong> · Foundation Phase · Class 05
+        </p>
       </div>
-
-      <!-- PRACTICE -->
-      <div class="practice" id="practice">
-        <h4>✍ Practice at Home</h4>
-        <ol>
-          <li>
-            Open your browser and go to
-            <code>jsonplaceholder.typicode.com/users</code>. Read the JSON. Try
-            changing the URL to <code>/users/3</code> and
-            <code>/posts?userId=1</code>. What pattern do you notice?
-          </li>
-          <li>
-            Visit any 3 websites. For each one, write down the full URL and
-            label each part: protocol, domain, TLD, path, query string (if any).
-          </li>
-          <li>
-            Open DevTools on any website (F12 or Cmd+Option+I). Go to the
-            Network tab and refresh. Look at the list of requests — what status
-            codes do you see? Click on one and look at its Headers tab.
-          </li>
-          <li>
-            <strong>Schema design challenge:</strong> Design a database for a
-            small library. What tables do you need? What columns? How do they
-            connect? Draw it on paper.
-          </li>
-        </ol>
-      </div>
-    </div>
-    </div>
-    <!-- /container -->
-
-    <div class="page-footer">
-      <img src="../../../selise-brand/assets/SELISE_Logo_Primary.png" alt="SELISE Digital Platforms" style="height: 32px; margin-bottom: 0.5rem; display: block; margin-left: auto; margin-right: auto; opacity: 0.6;">
-      <p class="foot-brand">
-        <span class="b1">SELISE</span> <span class="x">×</span>
-        <span class="b2">Pelsung</span>
-      </p>
-      <p>Class 05 · Foundation Phase · Cohort 3</p>
-      <p>APIs, Data &amp; Databases</p>
     </div>
   </body>
 </html>

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Class Notes: AI Basics &amp; Prompting</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -126,7 +127,9 @@
       margin-top: 0.2rem;
     }
 
-    .container { max-width: 880px; margin: 0 auto; padding: 0 2rem 6rem; }
+    .container { max-width: 1040px; margin: 0 auto; padding: 0 2rem 6rem; }
+    body { font-size: 17px; line-height: 1.75; }
+    @media (max-width: 640px) { body { font-size: 16px; } }
 
     .toc {
       background: var(--surf);
@@ -641,16 +644,34 @@
       .toc-grid { grid-template-columns: 1fr; }
       .hero h1 { font-size: 1.9rem; }
     }
-  </style>
+  @media (max-width: 720px) {
+  .hero { padding: 2.5rem 1rem 1.75rem !important; }
+  .hero h1 { font-size: clamp(1.7rem, 7vw, 2.2rem) !important; }
+  .hero-sub { font-size: 0.97rem !important; padding: 0 0.25rem; }
+  .hero-badge { font-size: 0.65rem !important; padding: 0.25rem 0.75rem !important; }
+  .container { padding: 0 1rem 4rem !important; }
+  .toc { padding: 1.2rem 1rem !important; }
+  .toc-grid { grid-template-columns: 1fr !important; gap: 0 !important; }
+  .section-title { font-size: 1.5rem !important; }
+  .concept { padding: 1.25rem 1.1rem !important; }
+  .concept h3 { font-size: 1.15rem !important; }
+  .highlight-box { padding: 0.9rem 1rem !important; }
+  table { display: block; overflow-x: auto; white-space: nowrap; }
+  pre, code { word-break: break-word; }
+  img { max-width: 100%; height: auto; }
+  .concepts-2, .concepts-3, .do-dont, .vs-pair, .summary-grid,
+  .grid-2, .grid-3, .two-col, .three-col { grid-template-columns: 1fr !important; }
+}
+</style>
 </head>
 <body>
 
 <!-- ===== HERO ===== -->
 <div class="hero">
-  <img src="../../../selise-brand/assets/SELISE_Logo_Primary.png" alt="SELISE Digital Platforms" style="height: 48px; margin-bottom: 1rem; display: block;">
+  <img src="../assets/SELISE_Logo_Primary.png" alt="SELISE Digital Platforms" style="height: 48px; margin-bottom: 1rem; display: block;">
   <div class="hero-badge">
     <div class="dot"></div>
-    Pelsung Cohort 3 · Foundation Phase
+    Pelsung · Foundation Phase
   </div>
   <h1>
     <span class="c-indigo">AI Basics &amp; Prompting</span>
@@ -658,24 +679,6 @@
   <p class="hero-sub">Class 03 · Complete notes with explanations, examples, and exercises — for trainers and trainees.</p>
   <div class="hero-tags">
     <span class="hero-tag tag-indigo">03 · AI Basics &amp; Prompting</span>
-  </div>
-  <div class="hero-stats">
-    <div class="stat">
-      <div class="stat-val blue">2</div>
-      <div class="stat-label">Hours</div>
-    </div>
-    <div class="stat">
-      <div class="stat-val indigo">44</div>
-      <div class="stat-label">Trainees</div>
-    </div>
-    <div class="stat">
-      <div class="stat-val amber">2</div>
-      <div class="stat-label">Exercises</div>
-    </div>
-    <div class="stat">
-      <div class="stat-val blue">3</div>
-      <div class="stat-label">Topics</div>
-    </div>
   </div>
 </div>
 
@@ -1097,8 +1100,7 @@
 
 <!-- ===== FOOTER ===== -->
 <div class="footer">
-  <img src="../../../selise-brand/assets/SELISE_Logo_Primary.png" alt="SELISE Digital Platforms" style="height: 28px; margin-bottom: 0.5rem; display: inline-block; opacity: 0.5;"><br>
-  <strong>SELISE × Pelsung</strong> · Cohort 3 · Foundation Phase · Class 03 · Trainers: Bhuwan Sharma &amp; Tek Nath Acharya
+  <strong>SELISE × Pelsung</strong> · Foundation Phase · Class 03
 </div>
 
 </body>
