@@ -78,12 +78,12 @@
         right: 42px;
         width: 170px;
         height: 68px;
-        background: url('../../../selise-brand/assets/SELISE_Logo_Primary.png') no-repeat center/contain;
+        background: url('../assets/SELISE_Logo_Primary.png') no-repeat center/contain;
         opacity: 1;
         z-index: 2;
       }
       .slide.bg-blue::after, .slide.bg-indigo::after, .slide.bg-dark::after {
-        background-image: url('../../../selise-brand/assets/SELISE_Logo_Reversed.png');
+        background-image: url('../assets/SELISE_Logo_Reversed.png');
         opacity: 1;
       }
       .accent-gradient::before {
@@ -1391,7 +1391,7 @@
             max-width: 900px;
           "
         >
-          <img src="../../../selise-brand/assets/SELISE_Logo_Reversed.png" alt="SELISE Digital Platforms" style="height: 56px; margin-bottom: 1.5rem;">
+          <img src="../assets/SELISE_Logo_Reversed.png" alt="SELISE Digital Platforms" style="height: 56px; margin-bottom: 1.5rem;">
           <div class="date-badge">
             <span class="db-dot"></span>April 11, 2026 · Foundation Phase · 9:30
             – 13:30
