@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Class 08 Notes — Teams: Traditional vs AI-Era</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#0066B2; --indigo:#001F35; --amber:#247EC1; --green:#7BC950; --purple:#4796D1; --red:#D80032; --text:#1B2021; --muted:#7B7C7F; --faint:#9CA3AF; --surf:#fff; --bg:#F9F9F9; --border:#EDEDED; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Open Sans','Aptos',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; font-size:17px; -webkit-font-smoothing:antialiased; }
+    h1,h2,h3,h4 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:400; letter-spacing:-0.01em; }
+    a { color: var(--blue); }
+
+    .hero { background:var(--surf); border-bottom:1px solid var(--border); padding:4rem 2rem 3rem; text-align:center; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background: linear-gradient(135deg, #0067A3, #002D72); }
+    .logo-corner { position:absolute; top: 1.25rem; left: 1.5rem; opacity:0.85; }
+    .logo-corner img { height: 34px; }
+    .hero-badge { display:inline-flex; align-items:center; gap:0.5rem; background:var(--bg); border:1px solid var(--border); border-radius:100px; padding:0.35rem 1rem; font-size:0.75rem; font-weight:700; color:var(--muted); letter-spacing:0.07em; text-transform:uppercase; margin-bottom:1.5rem; }
+    .hero-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--amber); }
+    .hero h1 { font-size:clamp(2rem,5vw,3.5rem); line-height:1.15; margin-bottom:0.75rem; }
+    .c-blue{color:var(--blue);} .c-indigo{color:var(--indigo);}
+    .hero-sub { font-size:1rem; color:var(--muted); margin-bottom:2rem; max-width:640px; margin-left:auto; margin-right:auto; }
+    .hero-tags { display:flex; justify-content:center; gap:0.6rem; flex-wrap:wrap; }
+    .hero-tag { padding:0.3rem 0.9rem; border-radius:8px; font-size:0.78rem; font-weight:600; background:#E6F0F8; color:var(--blue); }
+
+    .container { max-width:1040px; margin:0 auto; padding:0 2rem 6rem; }
+
+    .toc { background:var(--surf); border:1px solid var(--border); border-radius:16px; padding:1.75rem 2rem; margin:2.5rem 0; }
+    .toc h3 { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); margin-bottom:1.25rem; }
+    .toc ol { list-style: none; counter-reset: step; }
+    .toc li { counter-increment: step; padding:0.45rem 0; border-bottom:1px solid var(--border); }
+    .toc li:last-child { border-bottom:none; }
+    .toc li::before { content: counter(step, decimal-leading-zero); color:var(--faint); font-family:'Bahnschrift','Segoe UI',sans-serif; margin-right:0.8rem; font-size:0.9rem; }
+    .toc a { text-decoration:none; color:var(--text); font-weight:500; }
+    .toc a:hover { color: var(--blue); }
+
+    section.chapter { margin: 3.5rem 0; }
+    .chapter-head { margin-bottom:1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
+    .chapter-eyebrow { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--blue); margin-bottom:0.3rem; }
+    .chapter-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--indigo); }
+
+    p { margin: 0.7rem 0; }
+    ul, ol { margin: 0.6rem 0 0.6rem 1.3rem; }
+    li { margin: 0.25rem 0; }
+    strong { color: var(--indigo); }
+
+    .callout { background:var(--surf); border:1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 10px; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+    .callout.amber { border-left-color: var(--amber); }
+    .callout.green { border-left-color: var(--green); }
+    .callout h4 { font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--indigo); }
+
+    .role-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin: 1rem 0; }
+    @media (max-width: 720px){ .role-list { grid-template-columns: 1fr; } }
+    .role-card { background: var(--surf); border: 1px solid var(--border); border-left: 3px solid var(--blue); border-radius: 10px; padding: 0.8rem 1rem; }
+    .role-card h5 { color: var(--indigo); font-size: 0.98rem; margin-bottom: 0.25rem; }
+    .role-card p { font-size: 0.88rem; color: var(--muted); margin: 0; line-height: 1.5; }
+
+    .matrix-wrap { overflow-x:auto; margin: 1rem 0; }
+    .matrix { width: 100%; border-collapse: collapse; background: var(--surf); border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; }
+    .matrix th, .matrix td { padding: 0.55rem 0.7rem; text-align: center; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); }
+    .matrix th { background: #F3F6FA; color: var(--indigo); font-family: 'Bahnschrift','Segoe UI',sans-serif; font-weight: 500; }
+    .matrix td:first-child, .matrix th:first-child { text-align: left; background: #FAFBFC; font-weight: 600; color: var(--text); font-size: 0.85rem; }
+    .m-R { background: #D8EAF6; color: var(--blue); font-weight: 700; }
+    .m-A { background: #FFE8CC; color: #C56C00; font-weight: 700; }
+    .m-C { background: #E8F0E8; color: #3D7A3D; font-weight: 700; }
+    .m-I { background: #EEE8F4; color: #6A3E8E; font-weight: 700; }
+
+    .team-card { background: var(--surf); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin: 1rem 0; }
+    .team-card h4 { color: var(--indigo); margin-bottom: 0.25rem; }
+    .team-card .sub { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.6rem; font-style: italic; }
+    .team-card ul { list-style: none; margin: 0; padding: 0; }
+    .team-card li { padding: 0.35rem 0; border-bottom: 1px dashed var(--border); font-size: 0.88rem; display:flex; justify-content:space-between; gap: 0.5rem; flex-wrap:wrap; }
+    .team-card li:last-child { border-bottom: none; }
+    .team-card .u { color: var(--blue); font-family: monospace; font-size: 0.85rem; }
+
+    .summary { background: linear-gradient(135deg, #F9F9F9, #EDEDED); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+    .summary h4 { color: var(--indigo); margin-bottom: 0.5rem; font-size: 0.95rem; }
+    .summary ul { margin-left: 1.1rem; }
+    .summary li { font-size: 0.93rem; margin: 0.25rem 0; }
+
+    footer { text-align:center; padding: 2rem 1rem 3rem; color: var(--faint); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+    footer img { height: 28px; opacity:0.7; margin-bottom: 0.5rem; display: block; margin-left:auto; margin-right:auto; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="logo-corner"><img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE"></div>
+    <div class="hero-badge"><span class="dot"></span> Class 08 · Foundation</div>
+    <h1><span class="c-blue">Teams:</span><br><span class="c-indigo">Traditional vs AI-Era</span></h1>
+    <p class="hero-sub">Your take-home reference. The cast of characters in a software team, how domain shapes the roster, and how SELISE uses RACI &amp; RCI to make ownership crystal clear.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">Roles &amp; Handoffs</span>
+      <span class="hero-tag">RACI &amp; RCI</span>
+      <span class="hero-tag">Real SELISE Teams</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="toc">
+      <h3>In this note</h3>
+      <ol>
+        <li><a href="#cast">The cast — every role you'll hear about</a></li>
+        <li><a href="#handoffs">Handoffs — how work moves through the team</a></li>
+        <li><a href="#domains">Domain flavours — finance, health, crypto</a></li>
+        <li><a href="#real">Real SELISE teams — #238 vs #299</a></li>
+        <li><a href="#raci">RACI — the industry standard</a></li>
+        <li><a href="#rci">RCI — the SELISE adaptation</a></li>
+        <li><a href="#ai">The AI-era team</a></li>
+        <li><a href="#practice">Practice exercise</a></li>
+      </ol>
+    </div>
+
+    <section class="chapter" id="cast">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 1</div>
+        <h2>The Cast of Characters</h2>
+      </div>
+      <p>When most people think "software team", they think "developers". In reality, a real product team has many more roles. Some are obvious (Designer, Tester). Some hide in the background (DevOps, SRE). Here's the full list you'll encounter at SELISE and in the industry.</p>
+
+      <div class="role-list">
+        <div class="role-card"><h5>🧭 BA / PM (Business Analyst / Product Manager)</h5><p>Defines <em>what</em> to build and <em>why</em>. Writes requirements and user stories. Talks to customers. Prioritises the backlog.</p></div>
+        <div class="role-card" style="border-left-color: var(--indigo)"><h5>🎨 UX / Designer</h5><p>Designs how the product looks and feels. Mockups, user flows, design system. Works closely with PM &amp; devs.</p></div>
+        <div class="role-card" style="border-left-color: var(--amber)"><h5>💻 Frontend Dev (FE)</h5><p>Builds what the user sees — web pages, mobile screens. React, Angular, React Native, Flutter.</p></div>
+        <div class="role-card" style="border-left-color: var(--purple)"><h5>⚙️ Backend Dev (BE)</h5><p>Builds the invisible engine — APIs, databases, business logic. Node.js, .NET, Java, Python.</p></div>
+        <div class="role-card" style="border-left-color: var(--green)"><h5>🧪 QA / PAA (Quality Assurance / Product Acceptance Analyst)</h5><p>Tests that the product works. Catches bugs before users do. Writes test plans. Some QAs write automated tests (SDET).</p></div>
+        <div class="role-card" style="border-left-color: var(--red)"><h5>🏗️ Architect</h5><p>Designs the overall shape of the system — how big pieces talk to each other, what tech to pick, what scales and what doesn't.</p></div>
+        <div class="role-card"><h5>🔧 DevOps</h5><p>Automates build, test, and deploy. Owns CI/CD pipelines, cloud infrastructure, monitoring.</p></div>
+        <div class="role-card" style="border-left-color: var(--indigo)"><h5>🔒 DevSecOps</h5><p>DevOps with security baked in from day one — automated security scans, secrets management, compliance checks.</p></div>
+        <div class="role-card" style="border-left-color: var(--amber)"><h5>📊 SRE (Site Reliability Engineer)</h5><p>Keeps production running. On-call for outages. Writes runbooks. Measures uptime &amp; performance.</p></div>
+        <div class="role-card" style="border-left-color: var(--purple)"><h5>☁️ Platform Engineer</h5><p>Builds internal tools for other developers — developer portals, shared libraries, deployment systems.</p></div>
+        <div class="role-card" style="border-left-color: var(--green)"><h5>📞 Client-facing PM / Support</h5><p>Bridges dev team and customer. Handles client questions. Manages expectations. At SELISE, often speaks the client's language (German, English).</p></div>
+        <div class="role-card" style="border-left-color: var(--red)"><h5>📈 Data Analyst / Data Engineer</h5><p>Turns product usage data into insight. Builds dashboards, runs experiments, sets up data pipelines.</p></div>
+      </div>
+
+      <div class="callout">
+        <h4>Why so many roles?</h4>
+        <p>Not every team has every role. Small teams combine them — one person might be "FE + BE + Designer". Large teams split them — "Backend" alone might be 10 people divided into services. The list above is the full vocabulary, not a required roster.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="handoffs">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 2</div>
+        <h2>Handoffs — How Work Moves</h2>
+      </div>
+      <p>A typical flow looks like this:</p>
+      <ol>
+        <li><strong>BA/PM → Designer:</strong> "Here are the requirements and user stories."</li>
+        <li><strong>Designer → Dev:</strong> "Here are the mockups and interaction specs."</li>
+        <li><strong>FE ↔ BE:</strong> "We agreed on this API contract — you build it, I'll call it."</li>
+        <li><strong>Dev → QA:</strong> "Here's the build. These are the changes. Please verify."</li>
+        <li><strong>QA → DevOps/SRE:</strong> "All tests pass. Ready to deploy."</li>
+        <li><strong>SRE → All:</strong> "Deployed at 14:23. Monitoring for issues."</li>
+      </ol>
+      <div class="callout amber">
+        <h4>Most bugs come from bad handoffs</h4>
+        <p>When the spec is unclear, the designer guesses. When the design ignores technical limits, the dev improvises. When the tester wasn't told what changed, they miss regressions. Clear handoffs = fewer bugs = faster delivery.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="domains">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 3</div>
+        <h2>Domain Flavours — Industry Shapes the Team</h2>
+      </div>
+      <p>The core roles stay the same, but each domain adds its own specialists on top.</p>
+
+      <div class="role-list">
+        <div class="role-card"><h5>🏦 Finance &amp; Banking</h5><p>Add: Compliance Officer, Risk Analyst, External Auditor. Expect heavy documentation, formal approvals, slow release cadence. Every change has to pass audit.</p></div>
+        <div class="role-card" style="border-left-color: var(--green)"><h5>🏥 Health &amp; Medical</h5><p>Add: Clinical Informatics Lead, Privacy Officer (HIPAA/GDPR), Regulatory Affairs, Patient Safety Reviewer. Patient data is highly protected; mistakes can harm people.</p></div>
+        <div class="role-card" style="border-left-color: var(--purple)"><h5>⛓️ Blockchain / Crypto</h5><p>Add: Smart Contract Auditor, Protocol Engineer, Tokenomics Lead. Heavy emphasis on security review — a single bug in a smart contract can lose millions.</p></div>
+        <div class="role-card" style="border-left-color: var(--amber)"><h5>🛍️ E-commerce</h5><p>Typically smaller teams. Add: Merchandiser, Content Manager. Fast release cadence, lots of A/B testing. (SELISE's Swiss-Ski Store is this kind of project.)</p></div>
+      </div>
+
+      <p>When you join a project, one of the first things to learn is: <strong>what domain is this?</strong> The domain tells you who your "hidden stakeholders" are — the compliance officer who must sign off, the auditor who'll review next quarter, the regulator who demanded this feature.</p>
+    </section>
+
+    <section class="chapter" id="real">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 4</div>
+        <h2>Real SELISE Teams — Two Snapshots</h2>
+      </div>
+      <p>Let's compare two actual SELISE GitHub projects. Same company, same conventions, very different shapes — because they're at different stages of life.</p>
+
+      <div class="team-card">
+        <h4>GitHub Project #238 — Development PSP</h4>
+        <p class="sub">Large, active. Client is Deutsche Telekom. Closely linked to another project (AMP) run by SELISE Dhaka. Roles approximate — confirm with seniors.</p>
+        <ul>
+          <li><span class="u">@khushwanth</span><span>Overall Manager (oversees both PSP and AMP)</span></li>
+          <li><span class="u">@pemawangyel</span><span>QA / PAA</span></li>
+          <li><span class="u">@CMRai92</span><span>BA / PM</span></li>
+          <li><span class="u">@lhatshoks</span><span>BA / PM</span></li>
+          <li><span class="u">@ngawang-zangphel</span><span>Frontend Dev</span></li>
+          <li><span class="u">@aspee12</span><span>Frontend Dev</span></li>
+          <li><span class="u">@wangchuk99</span><span>Backend Dev</span></li>
+          <li><span class="u">@bugloper</span><span>Backend Dev + Project Lead</span></li>
+          <li><span class="u">@Stark228</span><span>Backend Dev</span></li>
+          <li><span class="u">@ThuktenSingye</span><span>Backend Dev</span></li>
+          <li><span class="u">@DedalusRoot</span><span>Sales / Client-facing PM (speaks German)</span></li>
+          <li><span class="u">@imranmoinselise</span><span>Client Support (speaks German)</span></li>
+        </ul>
+      </div>
+
+      <div class="team-card">
+        <h4>GitHub Project #299 — Swiss-Ski Store</h4>
+        <p class="sub">Small, maintenance. Main features already built; small stream of tweaks and fixes. People wear multiple hats.</p>
+        <ul>
+          <li><span class="u">@khushwanth</span><span>Backend Dev + Client-facing PM</span></li>
+          <li><span class="u">@karmatenzi</span><span>Frontend Dev — does the bulk of the work</span></li>
+          <li><span class="u">@ThuktenSingye</span><span>Backend Dev</span></li>
+          <li><span class="u">@thinley-choden</span><span>QA / PAA</span></li>
+          <li><span class="u">@sreena-rizal</span><span>BA / PM</span></li>
+        </ul>
+      </div>
+
+      <div class="callout green">
+        <h4>What this teaches you</h4>
+        <p>Team size is <em>not</em> a status symbol. A 12-person team just means the project is active with lots of new features and cross-team coordination. A 5-person maintenance team can be just as valuable — it's making a real product work for real customers every day. As you join projects, look at the board and ask: <em>what stage is this at?</em></p>
+      </div>
+    </section>
+
+    <section class="chapter" id="raci">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 5</div>
+        <h2>RACI — The Industry Standard</h2>
+      </div>
+      <p>When a team gets bigger than 3 people, "who does what" starts getting fuzzy. RACI is a matrix that makes ownership explicit.</p>
+      <ul>
+        <li><strong>R — Responsible:</strong> The person (or people) doing the work.</li>
+        <li><strong>A — Accountable:</strong> The one person who owns the outcome. Exactly one per task.</li>
+        <li><strong>C — Consulted:</strong> People whose input is needed <em>before</em> a decision. Two-way dialogue.</li>
+        <li><strong>I — Informed:</strong> People kept in the loop <em>after</em> the decision. One-way notification.</li>
+      </ul>
+
+      <p>Here's what it looks like for a "Release a new PSP feature" flow using real Project #238 team members:</p>
+
+      <div class="matrix-wrap">
+        <table class="matrix">
+          <thead>
+            <tr>
+              <th>Task</th>
+              <th>@khushwanth</th>
+              <th>@CMRai92</th>
+              <th>@ngawang-zangphel</th>
+              <th>@wangchuk99</th>
+              <th>@pemawangyel</th>
+              <th>@DedalusRoot</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Write requirement</td><td class="m-I">I</td><td class="m-R m-A">R/A</td><td class="m-C">C</td><td class="m-C">C</td><td class="m-I">I</td><td class="m-C">C</td></tr>
+            <tr><td>Design mockup</td><td class="m-I">I</td><td class="m-C">C</td><td class="m-R m-A">R/A</td><td class="m-I">I</td><td class="m-I">I</td><td class="m-C">C</td></tr>
+            <tr><td>Build API</td><td class="m-I">I</td><td class="m-C">C</td><td class="m-C">C</td><td class="m-R m-A">R/A</td><td class="m-I">I</td><td class="m-I">I</td></tr>
+            <tr><td>QA sign-off</td><td class="m-I">I</td><td class="m-C">C</td><td class="m-I">I</td><td class="m-I">I</td><td class="m-R m-A">R/A</td><td class="m-I">I</td></tr>
+            <tr><td>Release decision</td><td class="m-A">A</td><td class="m-C">C</td><td class="m-R">R</td><td class="m-R">R</td><td class="m-R">R</td><td class="m-C">C</td></tr>
+            <tr><td>Client communication</td><td class="m-C">C</td><td class="m-I">I</td><td class="m-I">I</td><td class="m-I">I</td><td class="m-I">I</td><td class="m-R m-A">R/A</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Rules for a good RACI:</p>
+      <ul>
+        <li>Every row must have <strong>exactly one A</strong>.</li>
+        <li>Every row should have at least one R (often the A is also the R).</li>
+        <li>Don't over-consult — if everyone is C on everything, nothing moves.</li>
+        <li>Don't over-inform — respect people's attention.</li>
+      </ul>
+    </section>
+
+    <section class="chapter" id="rci">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 6</div>
+        <h2>RCI — The SELISE Adaptation</h2>
+      </div>
+      <p>SELISE uses a simpler version: <strong>RCI</strong>. Our CEO Julian's insight was:</p>
+      <ol>
+        <li>In German, there is no clean word that distinguishes "Responsible" from "Accountable". The two English words collapse into one in practice.</li>
+        <li>In a well-run team, <strong>R is always exactly one person</strong> — otherwise no one truly owns it.</li>
+        <li>If R is one person, and A is one person, and they're almost always the same person… why have both?</li>
+      </ol>
+
+      <p>So at SELISE:</p>
+      <ul>
+        <li><strong>R — Responsible:</strong> The <em>one person</em> who owns the outcome AND makes sure the work gets done. Exactly one.</li>
+        <li><strong>C — Consulted:</strong> Input needed before the decision.</li>
+        <li><strong>I — Informed:</strong> Told after the decision.</li>
+      </ul>
+
+      <div class="callout amber">
+        <h4>Why this matters for you</h4>
+        <p>When you join a SELISE team and something is unclear about who owns a task, the first question to ask is: <em>"Whose R is this?"</em>. If two people answer "mine", there's a problem in the matrix. If nobody answers, also a problem. Fix the matrix before the conflict becomes a missed deadline.</p>
+      </div>
+
+      <p>You should still learn RACI — it's what the rest of the world uses, and you'll see it in every enterprise and government setting. But RCI is what you'll use at SELISE day-to-day.</p>
+    </section>
+
+    <section class="chapter" id="ai">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 7</div>
+        <h2>The AI-Era Team</h2>
+      </div>
+      <p>Does AI mean teams get smaller? Yes — but not in the way people fear.</p>
+      <ul>
+        <li><strong>Fewer junior devs doing boilerplate.</strong> AI writes most of the repetitive code.</li>
+        <li><strong>More senior judgement.</strong> Someone has to read what the AI produced and say "yes, this is right" or "no, try again, this misses X".</li>
+        <li><strong>More "T-shaped" people.</strong> One person now covers more of the stack — an FE dev who also writes API code, a QA who also writes automated tests.</li>
+        <li><strong>Spec-writing becomes a first-class skill.</strong> Whoever writes the clearest spec gets the best output from AI.</li>
+      </ul>
+
+      <div class="callout">
+        <h4>Implication for you</h4>
+        <p>Don't aim to be the person who just "writes code fast". AI will do that. Aim to be the person who understands the problem deeply, writes clear specs, and reviews output critically. Those skills multiply your output 10x when you hand the typing to AI.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="practice">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 8</div>
+        <h2>Practice Exercise (Redo at Home)</h2>
+      </div>
+      <p>Scenario: SELISE is building a small <em>GMC Tourist Feedback App</em>. Tourists leaving GMC tap a link and rate their experience. The team has: PM, Designer, FE Dev, BE Dev, QA, DevOps.</p>
+      <p>For each task below, fill out <em>both</em> a RACI and an RCI row. Notice how RCI forces you to pick exactly one person as R.</p>
+      <ol>
+        <li>Design the feedback form mockup</li>
+        <li>Build the survey API</li>
+        <li>QA sign-off before release</li>
+        <li>Deploy to production</li>
+        <li>Respond to tourist bug reports</li>
+      </ol>
+      <p>After you fill them out, answer: Which tasks were harder to assign in RCI? What did the exercise force you to be clearer about?</p>
+    </section>
+
+    <div class="summary">
+      <h4>🎯 Key takeaways from Class 08</h4>
+      <ul>
+        <li>A real software team has 10+ roles — not just "developer".</li>
+        <li>Domain (finance, health, crypto) adds specialists on top of the base roles.</li>
+        <li>Team <em>size</em> follows the project stage — active = big, maintenance = small.</li>
+        <li><strong>RACI</strong> (R, A, C, I) is the global industry standard.</li>
+        <li><strong>RCI</strong> is SELISE's simpler version — one person per R, no "A".</li>
+        <li>In the AI era, team shape shifts toward fewer but more senior, more T-shaped people with sharper spec-writing skills.</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <footer>
+    <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE">
+    SELISE × Pelsung · Foundation Phase · Class 08<br>
+    Part of the SELISE GMC Pelsung digital training program
+  </footer>
+
+</body>
+</html>

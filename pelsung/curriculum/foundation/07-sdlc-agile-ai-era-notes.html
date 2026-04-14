@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Class 07 Notes — SDLC, Agile & the AI Era</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#0066B2; --indigo:#001F35; --amber:#247EC1; --green:#7BC950; --purple:#4796D1; --red:#D80032; --text:#1B2021; --muted:#7B7C7F; --faint:#9CA3AF; --surf:#ffffff; --bg:#F9F9F9; --border:#EDEDED; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Open Sans','Aptos',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; font-size:17px; -webkit-font-smoothing:antialiased; }
+    h1,h2,h3,h4 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:400; letter-spacing:-0.01em; }
+    a { color: var(--blue); }
+
+    .hero { background:var(--surf); border-bottom:1px solid var(--border); padding:4rem 2rem 3rem; text-align:center; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background: linear-gradient(135deg, #0067A3, #002D72); }
+    .hero-badge { display:inline-flex; align-items:center; gap:0.5rem; background:var(--bg); border:1px solid var(--border); border-radius:100px; padding:0.35rem 1rem; font-size:0.75rem; font-weight:700; color:var(--muted); letter-spacing:0.07em; text-transform:uppercase; margin-bottom:1.5rem; }
+    .hero-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--amber); }
+    .hero h1 { font-size:clamp(2rem,5vw,3.5rem); line-height:1.15; margin-bottom:0.75rem; }
+    .c-blue{color:var(--blue);} .c-indigo{color:var(--indigo);} .c-amber{color:var(--amber);}
+    .hero-sub { font-size:1rem; color:var(--muted); margin-bottom:2rem; max-width:640px; margin-left:auto; margin-right:auto; }
+    .hero-tags { display:flex; justify-content:center; gap:0.6rem; flex-wrap:wrap; }
+    .hero-tag { padding:0.3rem 0.9rem; border-radius:8px; font-size:0.78rem; font-weight:600; background:#E6F0F8; color:var(--blue); }
+    .logo-corner { position:absolute; top: 1.25rem; left: 1.5rem; opacity:0.85; }
+    .logo-corner img { height: 34px; }
+
+    .container { max-width:1040px; margin:0 auto; padding:0 2rem 6rem; }
+
+    .toc { background:var(--surf); border:1px solid var(--border); border-radius:16px; padding:1.75rem 2rem; margin:2.5rem 0; }
+    .toc h3 { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); margin-bottom:1.25rem; }
+    .toc ol { list-style: none; counter-reset: step; }
+    .toc li { counter-increment: step; padding:0.45rem 0; border-bottom:1px solid var(--border); }
+    .toc li:last-child { border-bottom:none; }
+    .toc li::before { content: counter(step, decimal-leading-zero); color:var(--faint); font-family:'Bahnschrift','Segoe UI',sans-serif; margin-right:0.8rem; font-size:0.9rem; }
+    .toc a { text-decoration:none; color:var(--text); font-weight:500; }
+    .toc a:hover { color: var(--blue); }
+
+    section.chapter { margin: 3.5rem 0; }
+    .chapter-head { margin-bottom:1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
+    .chapter-eyebrow { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--blue); margin-bottom:0.3rem; }
+    .chapter-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--indigo); }
+
+    p { margin: 0.7rem 0; }
+    ul, ol { margin: 0.6rem 0 0.6rem 1.3rem; }
+    li { margin: 0.25rem 0; }
+    strong { color: var(--indigo); }
+
+    .callout { background:var(--surf); border:1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 10px; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+    .callout.amber { border-left-color: var(--amber); }
+    .callout.green { border-left-color: var(--green); }
+    .callout.red { border-left-color: var(--red); }
+    .callout h4 { font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--indigo); }
+
+    .stages { display:grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin: 1.25rem 0; }
+    @media (max-width: 720px){ .stages { grid-template-columns: 1fr; } }
+    .stage { background: var(--surf); border: 1px solid var(--border); border-top: 3px solid var(--blue); border-radius: 10px; padding: 0.9rem 1rem; }
+    .stage h5 { font-size: 0.95rem; color: var(--blue); margin-bottom: 0.3rem; }
+    .stage p { font-size: 0.9rem; color: var(--muted); margin: 0; line-height: 1.55; }
+
+    .method-card { background: var(--surf); border:1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin: 0.6rem 0; }
+    .method-card h4 { color: var(--indigo); margin-bottom: 0.3rem; }
+    .method-card .uc { font-size: 0.82rem; color: var(--blue); margin-top: 0.4rem; font-weight: 600; }
+
+    .summary { background: linear-gradient(135deg, #F9F9F9, #EDEDED); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+    .summary h4 { color: var(--indigo); margin-bottom: 0.5rem; font-size: 0.95rem; }
+    .summary ul { margin-left: 1.1rem; }
+    .summary li { font-size: 0.93rem; margin: 0.25rem 0; }
+
+    footer { text-align:center; padding: 2rem 1rem 3rem; color: var(--faint); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+    footer img { height: 28px; opacity:0.7; margin-bottom: 0.5rem; display: block; margin-left:auto; margin-right:auto; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="logo-corner"><img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE"></div>
+    <div class="hero-badge"><span class="dot"></span> Class 07 · Foundation</div>
+    <h1><span class="c-blue">SDLC, Agile</span><br><span class="c-indigo">&amp; the AI Era</span></h1>
+    <p class="hero-sub">Your take-home reference. How software actually gets built, the methodologies teams use, and what changes when AI becomes part of the team.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">SDLC</span>
+      <span class="hero-tag">Agile &amp; Scrum</span>
+      <span class="hero-tag">Hourglass Model</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="toc">
+      <h3>In this note</h3>
+      <ol>
+        <li><a href="#sdlc">The SDLC — 6 stages every product goes through</a></li>
+        <li><a href="#example">Walkthrough: GMC Visitor Pass App</a></li>
+        <li><a href="#big3">Waterfall vs Agile vs Scrum</a></li>
+        <li><a href="#others">Other methodologies you'll hear about</a></li>
+        <li><a href="#selise">How SELISE actually works</a></li>
+        <li><a href="#hourglass">The Hourglass Model — software in the AI era</a></li>
+        <li><a href="#practice">Practice exercise</a></li>
+      </ol>
+    </div>
+
+    <section class="chapter" id="sdlc">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 1</div>
+        <h2>The Software Development Life Cycle (SDLC)</h2>
+      </div>
+      <p>Every software product you've ever used — mBoB, Druk Ride, WhatsApp, Facebook, Instagram — went through the same seven stages. Teams do them differently, but the stages are the same.</p>
+
+      <div class="stages">
+        <div class="stage"><h5>1. Plan</h5><p>Who is this for? What problem are we solving? What's in scope, what's not? Is it worth doing at all?</p></div>
+        <div class="stage" style="border-top-color: var(--amber)"><h5 style="color:var(--amber)">2. Analysis</h5><p>Detailed requirements gathering. User stories, acceptance criteria, data models. Turning the plan into something concrete.</p></div>
+        <div class="stage" style="border-top-color: var(--indigo)"><h5 style="color:var(--indigo)">3. Design</h5><p>Mockups, user flows, database shape, architecture. How will it look and how will it work?</p></div>
+        <div class="stage" style="border-top-color: var(--amber)"><h5 style="color:var(--amber)">4. Build</h5><p>Write the code. Integrate parts. Commit to Git.</p></div>
+        <div class="stage" style="border-top-color: var(--purple)"><h5 style="color:var(--purple)">5. Test</h5><p>Does it work? Does it break in weird ways? Is it fast enough? Secure enough?</p></div>
+        <div class="stage" style="border-top-color: var(--green)"><h5 style="color:var(--green)">6. Deploy</h5><p>Release to real users. App Store, website goes live, customers can sign up.</p></div>
+        <div class="stage" style="border-top-color: var(--red)"><h5 style="color:var(--red)">7. Maintain</h5><p>Fix bugs users find. Add features. Update dependencies. Keep the servers running.</p></div>
+      </div>
+
+      <div class="callout">
+        <h4>Why learn this?</h4>
+        <p>Whatever vertical you end up in — Dev, Design, QA, or BA — you will work on <em>some</em> stage of this cycle. Knowing the whole picture helps you understand why your work matters and what the next person needs from you.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="example">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 2</div>
+        <h2>Running Example: GMC Visitor Pass App</h2>
+      </div>
+      <p>Imagine the GMC authority asks us to build an app so tourists can request a visitor pass before arriving at the entry gate. Here's how it moves through the SDLC:</p>
+
+      <ul>
+        <li><strong>Plan:</strong> Users = international tourists. Problem = long queues at the gate. Goal = issue a pre-approved QR pass within 24 hours.</li>
+        <li><strong>Analysis:</strong> User stories — "As a tourist, I can apply with my passport details"; "As GMC security, I can approve/reject applications". Acceptance criteria per story. Required data fields: passport number, travel dates, photo.</li>
+        <li><strong>Design:</strong> Four screens — Home, Form, QR Code, Status. Flow = Submit → Review → Approved → Show QR at gate. Architecture = mobile app + backend API + database + email service.</li>
+        <li><strong>Build:</strong> Frontend in React Native. Backend in Node.js or .NET. Integrate passport scanning, email notifications.</li>
+        <li><strong>Test:</strong> Happy path (valid tourist). Edge cases (expired passport, typo in name). Load test (500 requests during tourist season).</li>
+        <li><strong>Deploy:</strong> Soft-launch with Bhutanese residents. Then open to international tourists. Publish on App Store and Play Store.</li>
+        <li><strong>Maintain:</strong> Keep servers up, patch security holes, add new features (e.g., family group passes), respond to user bug reports.</li>
+      </ul>
+    </section>
+
+    <section class="chapter" id="big3">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 3</div>
+        <h2>Waterfall vs Agile vs Scrum</h2>
+      </div>
+      <p>These are the three most common methodologies. They're all ways of <em>moving through</em> the SDLC stages — but with very different rhythms.</p>
+
+      <div class="method-card">
+        <h4>💧 Waterfall</h4>
+        <p>Finish each stage completely before moving to the next. Plan everything up front. Classical engineering style.</p>
+        <p><strong>Good for:</strong> Fixed-scope projects, regulated industries (aviation, defence), projects where change is expensive.</p>
+        <p><strong>Weakness:</strong> If you discover halfway through that you built the wrong thing — too late, too expensive to change.</p>
+        <div class="uc">Use when requirements are crystal clear and won't change.</div>
+      </div>
+
+      <div class="method-card">
+        <h4>⚡ Agile</h4>
+        <p>A <em>philosophy</em>, not a recipe. Build in small chunks, show them to users, learn, adjust, repeat.</p>
+        <p><strong>Good for:</strong> Most modern products. Software is soft — it should be easy to change.</p>
+        <p><strong>Weakness:</strong> Requires active involvement from customers. Hard for teams that want a detailed plan up front.</p>
+        <div class="uc">Use when you expect to learn as you go.</div>
+      </div>
+
+      <div class="method-card">
+        <h4>🏃 Scrum</h4>
+        <p>A specific flavour of Agile. Work in 2-week "sprints". Daily 15-minute stand-ups. Sprint planning at the start. Review &amp; retro at the end. Clear roles: Product Owner, Scrum Master, Developers.</p>
+        <p><strong>Good for:</strong> Stable teams with a clear backlog and regular cadence.</p>
+        <p><strong>Weakness:</strong> Ceremony overhead. Easy to do the rituals without the agile spirit.</p>
+        <div class="uc">Use when you need predictability and a stable rhythm.</div>
+      </div>
+
+      <div class="callout amber">
+        <h4>Scrum ≠ Agile</h4>
+        <p>A lot of people treat Scrum and Agile as the same thing. They're not. Agile is the mindset (value change, deliver often, talk to users). Scrum is one way to practice it — with specific roles and meetings. You can be agile without Scrum, and you can do Scrum without being agile.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="others">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 4</div>
+        <h2>Other Methodologies — Know They Exist</h2>
+      </div>
+      <p>You'll hear these terms thrown around. Don't memorise the details — just know what they are and when they fit.</p>
+
+      <div class="method-card"><h4>Kanban</h4><p>A visual board with columns: "To Do → Doing → Done". The rule: limit how many things are in "Doing" at once. Work flows continuously — no sprints.</p><div class="uc">Use for: support teams, IT help-desks, continuous ticket flow.</div></div>
+      <div class="method-card"><h4>Extreme Programming (XP)</h4><p>Very disciplined engineering: pair programming, test-first development, frequent small releases, continuous integration.</p><div class="uc">Use for: critical systems where quality cannot slip.</div></div>
+      <div class="method-card"><h4>Lean</h4><p>Borrowed from Toyota. Eliminate waste. Build only what the user actually needs. Measure everything and learn fast.</p><div class="uc">Use for: startups validating a new idea with minimum effort.</div></div>
+      <div class="method-card"><h4>Spiral</h4><p>Repeat Plan → Build → Evaluate in widening spirals. Each spiral is bigger than the last. Focus on reducing the biggest risk first.</p><div class="uc">Use for: large, high-risk systems — aerospace, medical devices, big government programs.</div></div>
+      <div class="method-card"><h4>RAD (Rapid Application Development)</h4><p>Build working prototypes with the user in the room. Show, get feedback, refine, repeat. Very fast, very informal.</p><div class="uc">Use for: internal tools, demos, MVPs where you need to see it to know what you want.</div></div>
+      <div class="method-card"><h4>DevOps</h4><p>Not just a methodology — a culture. Developers and Operations as one team. Heavy automation of build, test, deploy. Releases can happen every day (or every hour).</p><div class="uc">Use for: products with frequent releases and high uptime needs.</div></div>
+      <div class="method-card"><h4>Scrumban</h4><p>Scrum's structure + Kanban's flow. Use sprints as timeboxes but don't strictly commit the backlog. Popular with teams transitioning from Scrum to continuous delivery.</p><div class="uc">Use for: teams moving away from rigid Scrum but still wanting some rhythm.</div></div>
+      <div class="method-card"><h4>SAFe (Scaled Agile Framework)</h4><p>Scrum for large organisations — hundreds of developers coordinating on one product. Adds layers of planning above team-level Scrum.</p><div class="uc">Use for: enterprises, telecoms, big banks.</div></div>
+    </section>
+
+    <section class="chapter" id="selise">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 5</div>
+        <h2>How SELISE Actually Works</h2>
+      </div>
+      <p>SELISE doesn't follow any methodology 100% strictly. It's a <strong>mix of Scrum and Kanban</strong>:</p>
+      <ul>
+        <li>We use <strong>sprints as timeboxes</strong> (typically 2 weeks) to plan rough chunks of work.</li>
+        <li>No rigid daily stand-ups. No forced retrospectives every sprint.</li>
+        <li>GitHub Projects is our board — issues move from <em>Backlog → In Progress → Review → Done</em>.</li>
+        <li>Communication happens async on GitHub and Teams; sync only when needed.</li>
+        <li>PRs link back to issues so you can trace any line of code to the requirement it fulfilled.</li>
+      </ul>
+      <div class="callout">
+        <h4>What this means for you</h4>
+        <p>When you join a SELISE team, don't expect a textbook Scrum setup. Read the team's GitHub board — that's where the truth lives. Ask your tech lead what rituals this specific project follows. Every project is slightly different.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="hourglass">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 6</div>
+        <h2>The Hourglass Model — Software in the AI Era</h2>
+      </div>
+      <p>Before AI coding tools, the <strong>Build</strong> stage consumed most of the time. Developers typed every line of code by hand. Specs were often thin — it was faster to just "figure it out in code".</p>
+      <p>AI changes the shape. Tools like Claude Code can generate working code from a clear description in seconds. What used to take an afternoon takes ten minutes.</p>
+      <p>But AI is <strong>bad at deciding what to build</strong>. It takes your spec literally. A vague spec gives you vague software. A wrong spec gives you polished wrong software — the most dangerous kind.</p>
+
+      <div class="callout amber">
+        <h4>The shape shift</h4>
+        <ul>
+          <li><strong>Spec &amp; Plan</strong> → get bigger. Much more time clarifying what to build and why.</li>
+          <li><strong>Design</strong> → gets bigger. Clearer handoffs to AI via prompts and examples.</li>
+          <li><strong>Build</strong> → shrinks. AI drafts, humans steer and review.</li>
+          <li><strong>Test &amp; Review</strong> → grows. You can't trust AI output without reading it carefully.</li>
+          <li><strong>Deploy</strong> → automated. CI/CD pipelines handle it.</li>
+        </ul>
+      </div>
+
+      <div class="summary">
+        <h4>Think of the shape like an hourglass</h4>
+        <ul>
+          <li>Wide at the top: lots of time on specs, design, architecture.</li>
+          <li>Narrow in the middle: AI does the typing.</li>
+          <li>Wide at the bottom: lots of time on review, testing, making sure the AI didn't do something weird.</li>
+        </ul>
+      </div>
+
+      <p>This is why we say: <strong>your taste and judgement become more valuable, not less</strong>. AI is a power tool. It amplifies good engineers and amplifies bad engineers equally — which is to say, bad engineers produce bad software faster. Good engineers produce great software faster.</p>
+    </section>
+
+    <section class="chapter" id="practice">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 7</div>
+        <h2>Practice Exercise (Redo at Home)</h2>
+      </div>
+      <p>Pick a small app idea that serves Bhutan — examples: <em>Inter-dzongkhag bus ticket app, local farmer-to-market app, Dzongkha language-learning app.</em></p>
+      <p>Then write down:</p>
+      <ol>
+        <li><strong>3 specs</strong> — what the app must do. Be specific. "User can see available seats" is better than "users can see things".</li>
+        <li><strong>3 test ideas</strong> — what could go wrong. "Two users book the same seat at the same time" — what happens?</li>
+        <li><strong>2 things AI can help with</strong> &amp; <strong>2 things only a human should decide</strong>. Why?</li>
+      </ol>
+      <p>Bring your answers to the next session if you want feedback.</p>
+    </section>
+
+    <div class="summary">
+      <h4>🎯 Key takeaways from Class 07</h4>
+      <ul>
+        <li>Every product moves through the same 7 SDLC stages — the methodology just changes the rhythm.</li>
+        <li>Agile is a <em>philosophy</em>; Scrum is one flavour of it. They're not interchangeable.</li>
+        <li>SELISE uses a mix of Scrum and Kanban — read each project's GitHub board to see how <em>that</em> team works.</li>
+        <li>In the AI era, the SDLC takes on an <strong>hourglass</strong> shape: specs &amp; review expand, typing shrinks.</li>
+        <li>AI amplifies your taste. It does not replace it.</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <footer>
+    <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE">
+    SELISE × Pelsung · Foundation Phase · Class 07<br>
+    Part of the SELISE GMC Pelsung digital training program
+  </footer>
+
+</body>
+</html>

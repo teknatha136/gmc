@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teams: Traditional vs AI-Era — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      .role-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap: 0.55rem; max-width: 980px; }
+      @media (max-width: 820px){ .role-grid { grid-template-columns: repeat(2, 1fr); } }
+      .role { background: white; border: 1px solid var(--border); border-top: 3px solid var(--blue); border-radius: 8px; padding: 0.6rem 0.8rem; }
+      .role h5 { color: var(--indigo); font-size: 0.82rem; margin-bottom: 0.15rem; }
+      .role p { font-size: 0.72rem; color: var(--muted); line-height: 1.4; }
+      .matrix { width: 100%; border-collapse: collapse; background: white; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; font-size: 0.82rem; }
+      .matrix th, .matrix td { padding: 0.5rem 0.6rem; text-align: center; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); }
+      .matrix th { background: #F3F6FA; color: var(--indigo); font-family: 'Bahnschrift','Segoe UI',sans-serif; font-weight: 500; letter-spacing: 0.03em; }
+      .matrix td:first-child, .matrix th:first-child { text-align: left; background: #FAFBFC; font-weight: 600; color: var(--text); font-size: 0.78rem; }
+      .m-R { background: #D8EAF6; color: var(--blue); font-weight: 700; }
+      .m-A { background: #FFE8CC; color: #C56C00; font-weight: 700; }
+      .m-C { background: #E8F0E8; color: #3D7A3D; font-weight: 700; }
+      .m-I { background: #EEE8F4; color: #6A3E8E; font-weight: 700; }
+      .team-split { display:grid; grid-template-columns: 1fr 1fr; gap: 1rem; max-width: 960px; }
+      @media (max-width: 780px){ .team-split { grid-template-columns: 1fr; } }
+      .team-card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.1rem; }
+      .team-card h4 { color: var(--indigo); font-size: 1rem; margin-bottom: 0.1rem; }
+      .team-card .sub { font-size: 0.75rem; color: var(--muted); margin-bottom: 0.5rem; }
+      .team-card ul { list-style: none; margin: 0; padding: 0; }
+      .team-card li { padding: 0.25rem 0; border-bottom: 1px dashed var(--border); font-size: 0.82rem; display:flex; justify-content:space-between; gap: 0.5rem; }
+      .team-card li:last-child { border-bottom: none; }
+      .team-card .u { color: var(--blue); font-family: monospace; font-size: 0.78rem; }
+      .team-card .r { color: var(--muted); font-size: 0.78rem; }
+      .domain-chip { display:inline-block; background:#E6F0F8; color:var(--blue); padding:0.25rem 0.7rem; border-radius: 100px; font-size: 0.75rem; font-weight:600; margin: 0.15rem; }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>Foundation · Class 08</div></div>
+          <h1 class="display" style="color: var(--text)">
+            <span style="color: var(--blue)">Teams:</span><br />
+            <span style="color: var(--indigo)">Traditional vs AI-Era</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted)">Who builds software — and how the team is changing</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">Roles</span>
+            <span class="class-tag tag-blue">RACI / RCI</span>
+            <span class="class-tag tag-blue">Team Shape</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 AGENDA -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 720px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem"><h2 class="heading">Session Journey · 1h 40m</h2></div>
+          <div class="agenda-row" onclick="goTo(2)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">👋 Hook — Who builds software?</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(4)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">👥 The cast of characters — all the roles</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">25 min</span></div>
+          <div class="agenda-row" onclick="goTo(7)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🏛️ Domain flavours — finance, health, crypto</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(8)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🆚 Real teams — Project 238 vs Project 299</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">20 min</span></div>
+          <div class="agenda-row" onclick="goTo(11)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">📋 RACI — industry standard</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">15 min</span></div>
+          <div class="agenda-row" onclick="goTo(13)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🎯 RCI — SELISE's adaptation</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(15)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">✍️ Exercise — Tourist feedback app</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">10 min</span></div>
+        </div>
+      </div>
+
+      <!-- 3 HOOK -->
+      <div class="slide bg-dark" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> Hook</div>
+        <div class="center" style="max-width: 760px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎤 Quick Question</div>
+          <p class="disc-prompt">"Name all the people<br>who work on <span style="color: var(--amber)">one software product.</span>"</p>
+          <p style="color: rgba(255,255,255,0.6); font-size: clamp(0.82rem,1.2vw,1rem); margin-top: 2rem; line-height: 1.6;">
+            Take 5 answers from the room. Write them on the board.<br>
+            Most classes get 3–4 roles. The real answer is 10+.
+          </p>
+        </div>
+      </div>
+
+      <!-- 4 SECTION: ROLES -->
+      <div class="slide bg-blue" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> The Cast</div>
+          <h1 class="display" style="color: white">Who's On<br>the Team?</h1>
+        </div>
+        <div class="section-num" style="color: white">01</div>
+      </div>
+
+      <!-- 5 ROLES -->
+      <div class="slide accent-blue" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span> Software Roles</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Every Role You'll Hear About</h2></div>
+          <div class="role-grid">
+            <div class="role"><h5>🧭 BA / PM</h5><p>Business Analyst / Product Manager — defines <em>what</em> to build &amp; <em>why</em>.</p></div>
+            <div class="role" style="border-top-color: var(--indigo)"><h5 style="color:var(--indigo)">🎨 UX / Designer</h5><p>Designs how it looks &amp; feels. Mockups, flows, design system.</p></div>
+            <div class="role" style="border-top-color: var(--amber)"><h5 style="color:var(--amber)">💻 Frontend Dev</h5><p>Builds what the user sees — web or mobile UI.</p></div>
+            <div class="role" style="border-top-color: var(--purple)"><h5 style="color:var(--purple)">⚙️ Backend Dev</h5><p>Builds the invisible engine — APIs, databases, logic.</p></div>
+            <div class="role" style="border-top-color: var(--green)"><h5 style="color:var(--green)">🧪 QA / PAA</h5><p>Quality Assurance / Product Acceptance Analyst — tests that it works.</p></div>
+            <div class="role" style="border-top-color: var(--red)"><h5 style="color:var(--red)">🏗️ Architect</h5><p>Designs the overall system shape &amp; big technical decisions.</p></div>
+            <div class="role"><h5>🔧 DevOps</h5><p>Automates build, test, deploy. CI/CD pipelines.</p></div>
+            <div class="role" style="border-top-color: var(--indigo)"><h5 style="color:var(--indigo)">🔒 DevSecOps</h5><p>DevOps + security baked in from day one.</p></div>
+            <div class="role" style="border-top-color: var(--amber)"><h5 style="color:var(--amber)">📊 SRE</h5><p>Site Reliability Engineer — keeps production running, on-call for outages.</p></div>
+            <div class="role" style="border-top-color: var(--purple)"><h5 style="color:var(--purple)">☁️ Platform Engineer</h5><p>Builds internal tools &amp; infra for other devs.</p></div>
+            <div class="role" style="border-top-color: var(--green)"><h5 style="color:var(--green)">📞 Client/Support</h5><p>Talks to customers, handles issues, bridges dev and business.</p></div>
+            <div class="role" style="border-top-color: var(--red)"><h5 style="color:var(--red)">📈 Data / Analyst</h5><p>Turns usage data into insight.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 HANDOFFS -->
+      <div class="slide accent-blue bg-subtle" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> How They Hand Off</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">A Typical Flow</h2><p class="body-md" style="color: var(--muted)">The baton gets passed — but not in a straight line.</p></div>
+          <div style="max-width: 900px; width:100%">
+            <div class="cols-2">
+              <div class="card" style="border-top:3px solid var(--blue)">
+                <h4 style="color:var(--blue)">BA / PM → Designer</h4>
+                <p style="font-size:0.85rem; color:var(--muted)">Requirements, user stories, acceptance criteria. "Here's what users need to do."</p>
+              </div>
+              <div class="card" style="border-top:3px solid var(--indigo)">
+                <h4 style="color:var(--indigo)">Designer → Dev</h4>
+                <p style="font-size:0.85rem; color:var(--muted)">Mockups, design system, interaction specs. "Here's how it should look and behave."</p>
+              </div>
+              <div class="card" style="border-top:3px solid var(--amber)">
+                <h4 style="color:var(--amber)">Dev → QA</h4>
+                <p style="font-size:0.85rem; color:var(--muted)">A working build + what was changed. "Please verify these changes don't break anything."</p>
+              </div>
+              <div class="card" style="border-top:3px solid var(--green)">
+                <h4 style="color:var(--green)">QA → DevOps/SRE</h4>
+                <p style="font-size:0.85rem; color:var(--muted)">A passing build ready for release. "This is stable, please deploy."</p>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="background:var(--bg); border:2px dashed var(--border); text-align:center; padding: 0.8rem; max-width: 720px;">
+            <p class="body-md" style="color: var(--text)"><strong>Bad handoffs = bugs.</strong> When the spec is unclear, when the design ignores technical limits, when the tester wasn't told what changed — that's where most software problems come from.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7 DOMAINS -->
+      <div class="slide accent-blue" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> Domain Flavours</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Teams Shift Shape by Industry</h2><p class="body-md" style="color: var(--muted)">Same base roles — but each domain adds its own specialists.</p></div>
+          <div class="cols-3" style="max-width: 1000px">
+            <div class="card" style="border-top:3px solid var(--blue)"><h4 style="color:var(--blue)">🏦 Finance / Banking</h4><ul><li>Compliance Officer</li><li>Risk Analyst</li><li>External Auditor</li><li>Heavy on docs &amp; approvals</li></ul></div>
+            <div class="card" style="border-top:3px solid var(--green)"><h4 style="color:var(--green)">🏥 Health / Medical</h4><ul><li>Clinical Informatics Lead</li><li>Privacy Officer (HIPAA/GDPR)</li><li>Regulatory Affairs</li><li>Patient Safety Reviewer</li></ul></div>
+            <div class="card" style="border-top:3px solid var(--purple)"><h4 style="color:var(--purple)">⛓️ Blockchain / Crypto</h4><ul><li>Smart Contract Auditor</li><li>Protocol Engineer</li><li>Tokenomics Lead</li><li>Very heavy on security reviews</li></ul></div>
+          </div>
+          <p class="body-md" style="color: var(--muted); max-width: 760px; text-align:center">
+            <strong>Example:</strong> SELISE's <em>Swiss-Ski Store</em> is e-commerce — small, lean team. A project for a Bhutan bank would need extra compliance and audit roles. Same skills, different supporting cast.
+          </p>
+        </div>
+      </div>
+
+      <!-- 8 SECTION: REAL TEAMS -->
+      <div class="slide bg-indigo" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Real SELISE Teams</div>
+          <h1 class="display" style="color: white">Big &amp; Active<br>vs<br>Small &amp; Steady</h1>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- 9 PROJECT 238 -->
+      <div class="slide accent-blue" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> Project 238 — Development PSP</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><div class="pill pill-blue">Active · Large Team</div><h2 class="heading">Development PSP — the full cast</h2><p class="body-md" style="color:var(--muted); max-width:760px">A large active project for <strong>Deutsche Telekom</strong>. Closely related to AMP (another SELISE Dhaka project). Auth &amp; heavy integration work.</p></div>
+          <div class="team-card" style="max-width: 780px; margin: 0 auto;">
+            <h4>GitHub Project #238 — Development PSP</h4>
+            <p class="sub">Roles below are approximate, based on board activity. Ask your seniors for the real story.</p>
+            <ul>
+              <li><span class="u">@khushwanth</span><span class="r">Overall Manager (PSP + AMP)</span></li>
+              <li><span class="u">@pemawangyel</span><span class="r">QA / PAA</span></li>
+              <li><span class="u">@CMRai92</span><span class="r">BA / PM</span></li>
+              <li><span class="u">@lhatshoks</span><span class="r">BA / PM</span></li>
+              <li><span class="u">@ngawang-zangphel</span><span class="r">Frontend Dev</span></li>
+              <li><span class="u">@aspee12</span><span class="r">Frontend Dev</span></li>
+              <li><span class="u">@wangchuk99</span><span class="r">Backend Dev</span></li>
+              <li><span class="u">@bugloper</span><span class="r">Backend Dev + Project Lead</span></li>
+              <li><span class="u">@Stark228</span><span class="r">Backend Dev</span></li>
+              <li><span class="u">@ThuktenSingye</span><span class="r">Backend Dev</span></li>
+              <li><span class="u">@DedalusRoot</span><span class="r">Sales / Client-facing PM (DE)</span></li>
+              <li><span class="u">@imranmoinselise</span><span class="r">Client Support (DE)</span></li>
+            </ul>
+          </div>
+          <p style="color: var(--muted); font-size: 0.8rem; text-align:center; max-width:720px;">
+            12+ people, many hats. Why so many? Active feature work + client conversations in German + cross-project coordination with AMP.
+          </p>
+        </div>
+      </div>
+
+      <!-- 10 PROJECT 299 -->
+      <div class="slide accent-blue bg-subtle" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> Project 299 — Swiss-Ski Store</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><div class="pill pill-blue">Maintenance · Small Team</div><h2 class="heading">Swiss-Ski Store — lean &amp; steady</h2><p class="body-md" style="color:var(--muted); max-width:760px">An e-commerce store in maintenance mode. Scope is largely done. One or two people can wear multiple hats.</p></div>
+          <div class="team-card" style="max-width: 780px; margin: 0 auto;">
+            <h4>GitHub Project #299 — Swiss-Ski Store</h4>
+            <p class="sub">Roles approximate.</p>
+            <ul>
+              <li><span class="u">@khushwanth</span><span class="r">Backend Dev + Client-facing PM</span></li>
+              <li><span class="u">@karmatenzi</span><span class="r">Frontend Dev (does most of the work)</span></li>
+              <li><span class="u">@ThuktenSingye</span><span class="r">Backend Dev</span></li>
+              <li><span class="u">@thinley-choden</span><span class="r">QA / PAA</span></li>
+              <li><span class="u">@sreena-rizal</span><span class="r">BA / PM</span></li>
+            </ul>
+          </div>
+          <div class="cols-2" style="max-width: 780px;">
+            <div class="card" style="border-top:3px solid var(--blue)"><h4 style="color: var(--blue)">Why it's small</h4><ul><li>Main features already built</li><li>Stable customer, few new requests</li><li>Low bug rate</li></ul></div>
+            <div class="card" style="border-top:3px solid var(--amber)"><h4 style="color: var(--amber)">What you'd notice</h4><ul><li>People wear multiple hats</li><li>Less ceremony, fewer meetings</li><li>Direct customer contact for devs</li></ul></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11 SECTION: RACI -->
+      <div class="slide bg-amber" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Responsibility Matrices</div>
+          <h1 class="display" style="color: white">RACI → RCI</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.8); margin-top: 1rem">Who does what. Who decides. Who weighs in. Who just needs to know.</p>
+        </div>
+        <div class="section-num" style="color: white">03</div>
+      </div>
+
+      <!-- 12 RACI -->
+      <div class="slide accent-blue" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> RACI · Industry Standard</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">What does RACI mean?</h2></div>
+          <div class="cols-2" style="max-width: 900px; gap: 0.8rem;">
+            <div class="card" style="border-top:3px solid var(--blue)"><h4 style="color:var(--blue)">R — Responsible</h4><p style="font-size:0.85rem; color:var(--muted)">The person <em>doing the work</em>. Can be multiple people.</p></div>
+            <div class="card" style="border-top:3px solid var(--amber)"><h4 style="color:var(--amber)">A — Accountable</h4><p style="font-size:0.85rem; color:var(--muted)">The person <em>who owns the outcome</em>. Always exactly one.</p></div>
+            <div class="card" style="border-top:3px solid var(--green)"><h4 style="color:var(--green)">C — Consulted</h4><p style="font-size:0.85rem; color:var(--muted)">Their input is needed <em>before</em> a decision. Two-way dialogue.</p></div>
+            <div class="card" style="border-top:3px solid var(--purple)"><h4 style="color:var(--purple)">I — Informed</h4><p style="font-size:0.85rem; color:var(--muted)">Kept in the loop <em>after</em> the decision. One-way.</p></div>
+          </div>
+          <p class="body-md" style="color:var(--muted); margin-top: 0.5rem; text-align:center">RACI is the global industry standard — used in banks, hospitals, governments.</p>
+        </div>
+      </div>
+
+      <!-- 13 RACI MATRIX (real team) -->
+      <div class="slide accent-blue bg-subtle" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> RACI Matrix — Project 238</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Real Example — "Release a new PSP feature"</h2></div>
+          <div style="max-width: 960px; width:100%; overflow-x:auto;">
+            <table class="matrix">
+              <thead>
+                <tr>
+                  <th>Task</th>
+                  <th>@khushwanth<br><span style="font-weight:400;font-size:0.7rem;">Mgr</span></th>
+                  <th>@CMRai92<br><span style="font-weight:400;font-size:0.7rem;">BA/PM</span></th>
+                  <th>@ngawang-zangphel<br><span style="font-weight:400;font-size:0.7rem;">FE</span></th>
+                  <th>@wangchuk99<br><span style="font-weight:400;font-size:0.7rem;">BE</span></th>
+                  <th>@pemawangyel<br><span style="font-weight:400;font-size:0.7rem;">QA</span></th>
+                  <th>@DedalusRoot<br><span style="font-weight:400;font-size:0.7rem;">Client PM</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Write requirement</td><td class="m-I">I</td><td class="m-R m-A">R/A</td><td class="m-C">C</td><td class="m-C">C</td><td class="m-I">I</td><td class="m-C">C</td></tr>
+                <tr><td>Design mockup</td><td class="m-I">I</td><td class="m-C">C</td><td class="m-R m-A">R/A</td><td class="m-I">I</td><td class="m-I">I</td><td class="m-C">C</td></tr>
+                <tr><td>Build API</td><td class="m-I">I</td><td class="m-C">C</td><td class="m-C">C</td><td class="m-R m-A">R/A</td><td class="m-I">I</td><td class="m-I">I</td></tr>
+                <tr><td>QA sign-off</td><td class="m-I">I</td><td class="m-C">C</td><td class="m-I">I</td><td class="m-I">I</td><td class="m-R m-A">R/A</td><td class="m-I">I</td></tr>
+                <tr><td>Release decision</td><td class="m-A">A</td><td class="m-C">C</td><td class="m-R">R</td><td class="m-R">R</td><td class="m-R">R</td><td class="m-C">C</td></tr>
+                <tr><td>Client communication</td><td class="m-C">C</td><td class="m-I">I</td><td class="m-I">I</td><td class="m-I">I</td><td class="m-I">I</td><td class="m-R m-A">R/A</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="color:var(--muted); font-size: 0.8rem; text-align:center">Each row: exactly one A. Multiple Rs are fine. C &amp; I can span many people.</p>
+        </div>
+      </div>
+
+      <!-- 14 RCI -->
+      <div class="slide accent-blue" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> RCI · SELISE's Adaptation</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><div class="pill pill-blue">SELISE way</div><h2 class="heading">We drop the "A"</h2><p class="body-md" style="color: var(--muted); max-width:720px">Julian (our CEO) observed: in German, there's no clean distinction between "Responsible" and "Accountable". And in practice, <strong>R is always exactly one person</strong>. So why have both?</p></div>
+          <div class="cols-3" style="max-width: 900px; gap: 0.8rem;">
+            <div class="card" style="border-top:3px solid var(--blue)"><h4 style="color:var(--blue)">R — Responsible</h4><p style="font-size:0.85rem; color:var(--muted)">The <em>one person</em> who owns the outcome AND does the work (or coordinates it). Always exactly one.</p></div>
+            <div class="card" style="border-top:3px solid var(--green)"><h4 style="color:var(--green)">C — Consulted</h4><p style="font-size:0.85rem; color:var(--muted)">Input needed before the decision.</p></div>
+            <div class="card" style="border-top:3px solid var(--purple)"><h4 style="color:var(--purple)">I — Informed</h4><p style="font-size:0.85rem; color:var(--muted)">Told after the decision.</p></div>
+          </div>
+          <div class="card" style="background: var(--bg); border: 2px dashed var(--border); max-width: 720px; text-align:center; padding: 0.75rem;">
+            <p class="body-md" style="color: var(--text)">Simpler. Clearer. <strong>Every task has exactly one person's name next to R.</strong> No finger-pointing about who owns what.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 15 EXERCISE -->
+      <div class="slide bg-amber" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span> Exercise · 10 min</div>
+        <div class="center" style="max-width: 820px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">✍️ Pair Activity</div>
+          <h2 class="heading" style="color: white;">GMC Tourist Feedback App</h2>
+          <p class="body-lg" style="color: rgba(255,255,255,0.9); margin-top: 1rem">
+            SELISE is launching a small app where tourists leaving GMC can rate their experience.<br>Team: PM, Designer, FE Dev, BE Dev, QA, DevOps.
+          </p>
+          <div class="card-dark" style="text-align:left; max-width: 640px; margin: 1.5rem auto; padding: 1rem 1.5rem">
+            <p style="color: white; font-weight: 600; margin-bottom: 0.5rem;">In pairs — fill a RACI <em>then</em> an RCI matrix for:</p>
+            <ol style="color: rgba(255,255,255,0.85); font-size: 0.92rem; line-height: 1.8; padding-left: 1.3rem;">
+              <li>Design the mockup</li>
+              <li>Build the survey API</li>
+              <li>QA sign-off before release</li>
+              <li>Deploy to production</li>
+            </ol>
+            <p style="color: rgba(255,255,255,0.75); font-size:0.8rem; margin-top: 0.5rem;">Then compare: what was <em>easier</em> to decide in RCI vs RACI? Share with the class.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 16 WRAP -->
+      <div class="slide bg-dark" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span> Wrap-up</div>
+        <div class="center" style="max-width: 760px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key Takeaways</div>
+          <h2 class="heading" style="color: white;">What we covered today</h2>
+          <ul class="reveal-list" style="color: rgba(255,255,255,0.9); text-align:left; max-width: 620px; margin: 1.5rem auto; font-size: 1rem; line-height: 2;">
+            <li>✅ Software is built by many roles — BA, PM, QA, Designer, FE, BE, Architect, DevOps, SRE…</li>
+            <li>✅ Domain (finance, health, crypto) adds specialists on top of the base roles</li>
+            <li>✅ Team size follows project stage — active = big, maintenance = small</li>
+            <li>✅ <strong>RACI</strong> (R, A, C, I) is the global standard</li>
+            <li>✅ <strong>RCI</strong> is SELISE's simpler version — one person per R, no "A"</li>
+            <li>✅ In the AI era, the team doesn't disappear — it gets smaller, more senior, more T-shaped</li>
+          </ul>
+          <p class="body-md" style="color: rgba(255,255,255,0.6); margin-top: 1rem">Next class: <strong style="color: var(--amber)">Spec-Driven Product Thinking</strong></p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 16</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      let current = 0;
+      function goTo(n){ slides[current].classList.remove("active"); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[0].classList.add("active");
+      document.getElementById("progress").style.width = `${(1/total)*100}%`;
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>
