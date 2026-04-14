@@ -14,9 +14,7 @@
     :root {
       --blue: #0066B2;
       --blue-deep: #001F35;
-      --blue-ink: #003863;
       --blue-mist: #E8F1F9;
-      --accent: #247EC1;
       --dev: #0066B2;
       --design: #4796D1;
       --testing: #7BC950;
@@ -28,7 +26,6 @@
       --surface: #ffffff;
       --bg: #FAFAFB;
       --grid: rgba(0, 102, 178, 0.045);
-      --today: #E8503A;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -49,14 +46,14 @@
     /* ===== SHELL ===== */
     .shell {
       display: grid;
-      grid-template-rows: auto 1fr auto;
+      grid-template-rows: auto 1fr;
       min-height: 100vh;
     }
 
     /* ===== TOPBAR ===== */
     .topbar {
       display: grid;
-      grid-template-columns: 260px 1fr auto;
+      grid-template-columns: 260px 1fr;
       align-items: center;
       padding: 1.1rem 2rem;
       border-bottom: 1px solid var(--hair);
@@ -84,23 +81,11 @@
     .crumbs .sep { color: var(--faint); }
     .crumbs .here { color: var(--blue); font-weight: 600; }
 
-    .topstats { display: flex; gap: 1.5rem; align-items: center; }
-    .topstats .stat { display: flex; flex-direction: column; align-items: flex-end; }
-    .topstats .stat-v {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 1.05rem; font-weight: 600; color: var(--blue-deep); line-height: 1;
-    }
-    .topstats .stat-l {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.58rem; letter-spacing: 0.14em;
-      color: var(--muted); text-transform: uppercase; margin-top: 3px;
-    }
-
     /* ===== MAIN GRID ===== */
     .main {
       display: grid;
       grid-template-columns: 320px 1fr;
-      min-height: calc(100vh - 65px - 56px);
+      min-height: calc(100vh - 65px);
     }
 
     /* ===== RAIL (phases) ===== */
@@ -189,25 +174,6 @@
       font-weight: 500;
     }
 
-    .rail-footer {
-      margin-top: 3rem;
-      padding: 1.2rem 2rem 0 0;
-      border-top: 1px solid var(--hair);
-    }
-    .rail-footer a {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 0.55rem 0; color: var(--muted);
-      text-decoration: none; font-size: 0.82rem;
-      transition: color 0.15s; border-bottom: 1px dashed transparent;
-    }
-    .rail-footer a:hover { color: var(--blue); border-bottom-color: var(--blue-mist); }
-    .rail-footer a .arrow {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem; color: var(--faint);
-      transition: transform 0.2s, color 0.15s;
-    }
-    .rail-footer a:hover .arrow { color: var(--blue); transform: translateX(2px); }
-
     /* ===== STAGE ===== */
     .stage {
       position: relative;
@@ -221,8 +187,6 @@
     .stage-head {
       margin-bottom: 2.2rem; padding-bottom: 1.4rem;
       border-bottom: 1px solid var(--hair);
-      display: grid; grid-template-columns: 1fr auto;
-      gap: 2rem; align-items: end;
     }
 
     .stage-eyebrow {
@@ -247,20 +211,6 @@
       line-height: 1.55;
     }
 
-    .stage-meta {
-      display: flex; gap: 1.5rem;
-    }
-    .stage-meta > div { text-align: right; }
-    .stage-meta .m-v {
-      font-family: 'JetBrains Mono', monospace;
-      color: var(--blue-deep); font-weight: 600; font-size: 1rem; line-height: 1;
-    }
-    .stage-meta .m-l {
-      font-family: 'JetBrains Mono', monospace;
-      color: var(--muted); font-size: 0.6rem;
-      letter-spacing: 0.14em; text-transform: uppercase; margin-top: 4px;
-    }
-
     /* ==== LADDER ==== */
     .ladder {
       position: relative;
@@ -281,35 +231,10 @@
       );
     }
 
-    .group-label {
-      position: relative;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.64rem; letter-spacing: 0.18em;
-      color: var(--muted); text-transform: uppercase;
-      margin: 1.8rem 0 0.9rem 0;
-      display: flex; align-items: center; gap: 0.7rem;
-    }
-    .group-label::before {
-      content: '';
-      position: absolute;
-      left: -1.45rem;
-      top: 50%;
-      width: 10px; height: 10px;
-      border-radius: 2px;
-      background: var(--surface);
-      border: 1px solid var(--faint);
-      transform: translateY(-50%);
-    }
-    .group-label .swatch { width: 16px; height: 2px; background: var(--faint); }
-    .group-label.dev .swatch { background: var(--dev); }
-    .group-label.design .swatch { background: var(--design); }
-    .group-label.testing .swatch { background: var(--testing); }
-    .group-label.ba .swatch { background: var(--ba); }
-
     .row {
       position: relative;
       display: grid;
-      grid-template-columns: 64px 1fr auto auto;
+      grid-template-columns: 64px 1fr auto;
       gap: 1.25rem;
       align-items: center;
       padding: 0.9rem 1rem 0.9rem 0;
@@ -332,27 +257,13 @@
       transition: all 0.25s;
     }
     .row.done::before { background: var(--blue); border-color: var(--blue); }
-    .row.today::before {
-      background: var(--today); border-color: var(--today);
-      box-shadow: 0 0 0 4px rgba(232, 80, 58, 0.18);
-      animation: pulse 1.8s ease-in-out infinite;
-    }
-    .row.draft::before {
-      background: repeating-linear-gradient(45deg, var(--faint) 0 2px, var(--surface) 2px 4px);
-      border-color: var(--faint);
-    }
-
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 0 4px rgba(232, 80, 58, 0.18); }
-      50%      { box-shadow: 0 0 0 8px rgba(232, 80, 58, 0.08); }
-    }
 
     .r-num {
       font-family: 'JetBrains Mono', monospace;
       font-size: 1.6rem; font-weight: 400;
       color: #6B7178; letter-spacing: -0.02em; line-height: 1;
     }
-    .row.done .r-num, .row.today .r-num { color: var(--blue-deep); font-weight: 500; }
+    .row.done .r-num { color: var(--blue-deep); font-weight: 500; }
 
     .r-body { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
     .r-title {
@@ -365,14 +276,6 @@
       overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
       max-width: 52ch;
     }
-
-    .r-date {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem; color: var(--muted);
-      letter-spacing: 0.04em; text-align: right; min-width: 74px;
-      font-weight: 500;
-    }
-    .row.today .r-date { color: var(--today); font-weight: 600; }
 
     .chips { display: flex; gap: 4px; }
     .chip {
@@ -394,20 +297,14 @@
     }
     .chip.off { color: var(--faint); border-style: dashed; background: transparent; cursor: not-allowed; }
 
-    .vrow { grid-template-columns: 64px 1fr auto; text-decoration: none; color: inherit; cursor: pointer; }
-    a.vrow:hover .r-title { color: var(--blue); }
-    a.vrow:hover .r-status { background: var(--blue); color: #fff; border-color: var(--blue); }
-    .vrow .r-status {
+    .r-status {
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.64rem; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--blue);
-      padding: 4px 10px; border: 1px solid var(--blue-mist); background: var(--blue-mist);
-      border-radius: 3px; transition: all 0.15s;
-    }
-    .vrow.muted { opacity: 0.55; cursor: default; }
-    .vrow.muted .r-status {
-      color: var(--muted); background: transparent;
-      border: 1px dashed var(--faint);
+      text-transform: uppercase; color: var(--muted);
+      padding: 4px 10px; border: 1px dashed var(--faint);
+      background: transparent;
+      border-radius: 3px;
+      white-space: nowrap;
     }
 
     .stage-head, .ladder {
@@ -416,35 +313,6 @@
     @keyframes fadeSlide {
       from { opacity: 0; transform: translateY(8px); }
       to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ===== BOTTOM BAR ===== */
-    .bottombar {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: center;
-      padding: 0.9rem 2rem;
-      background: var(--blue-deep);
-      color: #fff;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem; letter-spacing: 0.06em;
-    }
-    .bottombar .legend { display: flex; gap: 1.5rem; align-items: center; }
-    .bottombar .lg {
-      display: flex; align-items: center; gap: 0.45rem;
-      color: rgba(255,255,255,0.72);
-      text-transform: uppercase;
-      font-size: 0.6rem; letter-spacing: 0.14em;
-    }
-    .bottombar .lg .d {
-      width: 9px; height: 9px; border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.7);
-    }
-    .bottombar .lg.done .d { background: #fff; border-color: #fff; }
-    .bottombar .lg.today .d { background: var(--today); border-color: var(--today); }
-    .bottombar .updated {
-      color: rgba(255,255,255,0.55);
-      font-size: 0.64rem; letter-spacing: 0.12em; text-transform: uppercase;
     }
 
     /* ===== SUB-NAV under a phase ===== */
@@ -564,13 +432,12 @@
       .phase-list::before { display: none; }
       .phase-item { padding: 0.8rem; border: 1px solid var(--hair); border-radius: 6px; }
       .phase-dot { display: none; }
-      .rail-footer { display: none; }
-      .topbar { grid-template-columns: 1fr auto; padding: 0.9rem 1rem; }
+      .topbar { grid-template-columns: 1fr; padding: 0.9rem 1rem; }
       .topbar .crumbs { display: none; }
       .stage { padding: 1.5rem 1.2rem; }
-      .stage-head { grid-template-columns: 1fr; }
       .row { grid-template-columns: 44px 1fr; gap: 0.8rem; }
-      .r-date, .chips { grid-column: 2; justify-self: start; }
+      .chips { grid-column: 2; justify-self: start; }
+      .r-status { grid-column: 2; justify-self: start; }
       .r-topics { white-space: normal; max-width: none; }
     }
   </style>
@@ -590,7 +457,6 @@
         <span class="sep">/</span>
         <span class="here">atlas</span>
       </div>
-      <div></div>
     </header>
 
     <div class="main">
@@ -606,15 +472,6 @@
 
       <section class="stage" id="stage"></section>
     </div>
-
-    <footer class="bottombar">
-      <div class="legend">
-        <span class="lg done"><span class="d"></span>Delivered</span>
-        <span class="lg today"><span class="d"></span>Today</span>
-        <span class="lg"><span class="d"></span>Upcoming</span>
-      </div>
-      <div class="updated">Last updated · 2026-04-13</div>
-    </footer>
 
   </div>
 
@@ -643,64 +500,60 @@
       // PHASE 1
       { phase: 1, num: '01', title: 'Welcome & Orientation',
         topics: 'SELISE culture · program overview · expectations',
-        date: 'Apr 9', status: 'done', files: {} },
+        status: 'done', files: {} },
       { phase: 1, num: '02', title: 'Professional Skills',
         topics: 'Communication · email etiquette · time management',
-        date: 'Apr 10', status: 'done',
+        status: 'done',
         files: { slides: 'foundation/02-professional-skills-slides.html',
-                 notes:  'foundation/02-professional-skills-notes.html',
-                 guide:  'foundation/02-professional-skills-trainer-guide.html' } },
+                 notes:  'foundation/02-professional-skills-notes.html' } },
       { phase: 1, num: '03', title: 'AI Basics & Prompting',
         topics: 'Using AI chatbots · ChatGPT / Claude · prompt patterns',
-        date: 'Apr 10', status: 'done',
+        status: 'done',
         files: { slides: 'foundation/03-ai-basics-prompting-slides.html',
-                 notes:  'foundation/03-ai-basics-prompting-notes.html',
-                 guide:  'foundation/03-ai-basics-prompting-trainer-guide.html' } },
+                 notes:  'foundation/03-ai-basics-prompting-notes.html' } },
       { phase: 1, num: '04', title: 'How the Internet Works',
         topics: 'DNS · HTTP/HTTPS · browsers · client–server',
-        date: 'Apr 11', status: 'done',
+        status: 'done',
         files: { slides: 'foundation/04-how-internet-works-slides.html',
-                 notes:  'foundation/04-how-internet-works-notes.html',
-                 guide:  'foundation/04-how-internet-works-trainer-guide.html' } },
+                 notes:  'foundation/04-how-internet-works-notes.html' } },
       { phase: 1, num: '05', title: 'APIs, Data & Databases',
         topics: 'What is an API · JSON · how data are stored',
-        date: 'Apr 12', status: 'done',
+        status: 'done',
         files: { slides: 'foundation/05-apis-data-databases-slides.html',
-                 notes:  'foundation/05-apis-data-databases-notes.html',
-                 guide:  'foundation/05-apis-data-databases-trainer-guide.html' } },
+                 notes:  'foundation/05-apis-data-databases-notes.html' } },
       { phase: 1, num: '06a', title: 'Dev Tools & Version Control',
         topics: 'VS Code · terminal · Git & GitHub · Claude Code',
-        date: 'Apr 13', status: 'today',
+        status: 'done',
         files: { slides: 'foundation/06a-dev-tools-version-control-slides.html',
                  notes:  'foundation/06a-dev-tools-version-control-notes.html' } },
       { phase: 1, num: '06b', title: 'HTML & CSS Basics',
         topics: 'Markup · selectors · the box model · layout',
-        date: 'Apr 13', status: 'today',
+        status: 'done',
         files: { slides: 'foundation/06b-html-css-basics-slides.html',
                  notes:  'foundation/06b-html-css-basics-notes.html' } },
       { phase: 1, num: '07', title: 'SDLC, Agile & the AI Era',
         topics: 'SDLC stages · Agile & Scrum · the hourglass model',
-        date: 'Apr 14', status: 'upcoming', files: {} },
+        status: 'upcoming', files: {} },
       { phase: 1, num: '08', title: 'Spec-Driven Product Thinking',
         topics: 'Writing clear specs · user stories as AI prompts',
-        date: 'Apr 15', status: 'upcoming', files: {} },
+        status: 'upcoming', files: {} },
       { phase: 1, num: '09', title: 'Teams: Traditional vs AI-Era',
         topics: 'PM · Design · Dev · QA · BA · handoffs · RACI vs RCI',
-        date: 'Apr 16', status: 'upcoming', files: {} },
+        status: 'upcoming', files: {} },
       { phase: 1, num: '10', title: 'Build Personal Site & Present',
         topics: 'Personal site with AI · 4-min presentation · aptitude signal',
-        date: 'Apr 17', status: 'upcoming', files: {} },
+        status: 'upcoming', files: {} },
       { phase: 1, num: '11', title: 'Vertical Assignment',
         topics: 'Results & feedback · preferences · placement',
-        date: 'Apr 18', status: 'upcoming', files: {} },
+        status: 'upcoming', files: {} },
 
       // PHASE 3
       { phase: 3, num: '—', title: 'Capstone · Cross-Vertical Build',
         topics: 'Mixed teams build a real GMC-relevant product over ~10 classes',
-        date: 'TBD', status: 'upcoming', files: {} },
+        status: 'upcoming', files: {} },
       { phase: 3, num: '—', title: 'Exhibition / Demo Day',
         topics: 'Public showcase · may coincide with Pelsung graduation',
-        date: 'TBD', status: 'upcoming', files: {} },
+        status: 'upcoming', files: {} },
     ];
 
     /* Verticals — Core Specialization (Phase 2). Design is planned for future cohorts. */
@@ -800,7 +653,7 @@
       },
     ];
 
-    const CHIP_LABELS = { slides: 'slides', notes: 'notes', guide: 'guide' };
+    const CHIP_LABELS = { slides: 'slides', notes: 'notes' };
 
     /* ========== DOM helpers (safe — no innerHTML with interpolated strings) ========== */
     function el(tag, attrs, children) {
@@ -898,11 +751,9 @@
           el('div', { class: 'r-title' }, r.title),
           el('div', { class: 'r-topics' }, r.topics)
         ]),
-        el('div', { class: 'r-date' }, r.date || ''),
         el('div', { class: 'chips' }, [
           chipEl('slides', r.files && r.files.slides),
           chipEl('notes',  r.files && r.files.notes),
-          chipEl('guide',  r.files && r.files.guide),
         ])
       ]);
     }
