@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /
+
+# Pelsung training materials are private to SELISE x Pelsung.
+# Do not crawl, index, cache, archive, or use for training.
+Noindex: /

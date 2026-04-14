@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SELISE × Pelsung — Curriculum Atlas</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -440,6 +441,28 @@
       .r-status { grid-column: 2; justify-self: start; }
       .r-topics { white-space: normal; max-width: none; }
     }
+
+    @media (max-width: 640px) {
+      body { font-size: 15px; }
+      .brand img { height: 32px; }
+      .brand-mark { font-size: 0.9rem; }
+      .topbar { padding: 0.75rem 0.9rem; }
+      .rail { padding: 1.1rem 1rem; }
+      .phase-list { grid-template-columns: 1fr 1fr !important; gap: 0.4rem; }
+      .stage { padding: 1.1rem 0.9rem !important; }
+      .stage h2 { font-size: 1.3rem; }
+      .kpi-val, .kpi-val strong { font-size: 1.6rem !important; }
+      .kpis { grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+      .row { grid-template-columns: 36px 1fr !important; gap: 0.65rem !important; padding: 0.75rem 0.85rem; }
+      .r-num { font-size: 0.9rem; }
+      .r-title { font-size: 0.95rem; }
+      .r-topics, .r-meta { font-size: 0.78rem; }
+      .chips { flex-wrap: wrap; }
+      .v-grid { grid-template-columns: 1fr !important; gap: 0.75rem; }
+      .v-card { padding: 1rem; }
+      table { display: block; overflow-x: auto; }
+      img { max-width: 100%; height: auto; }
+    }
   </style>
 </head>
 
@@ -483,11 +506,11 @@
        ============================================================= */
     const PHASES = [
       { id: 1, num: '01', name: 'Foundation',
-        tag: '11 classes · All 45 trainees together',
+        tag: '11 classes · All trainees together',
         sub: 'Shared knowledge base before verticals split — professional skills, AI literacy, web basics, tools, product thinking.',
         kind: 'classes' },
       { id: 2, num: '02', name: 'Core Specialization',
-        tag: '62 classes across 3 verticals (Cohort 3)',
+        tag: '~60 classes across verticals',
         sub: 'Trainees split by aptitude and preference. Each vertical trains independently for ~6 weeks. Design is planned for future cohorts.',
         kind: 'verticals' },
       { id: 3, num: '03', name: 'Capstone',
@@ -647,7 +670,7 @@
       {
         id: 'design', name: 'Software Design', short: 'UX/UI',
         tag: 'future cohort', active: false,
-        sub: 'UX research, wireframing, visual design, and design-to-dev handoff. Not running in Cohort 3 — planned for a future cohort.',
+        sub: 'UX research, wireframing, visual design, and design-to-dev handoff. Planned for a future cohort.',
         topics: 'Research · wireframes · Figma · handoff to Dev',
         classes: []
       },
@@ -773,7 +796,7 @@
           ]),
           el('div', { class: 'v-title' }, v.name),
           el('div', { class: 'v-topics' }, v.sub),
-          el('div', { class: 'v-cta' }, v.active ? 'Open curriculum →' : 'Not in Cohort 3')
+          el('div', { class: 'v-cta' }, v.active ? 'Open curriculum →' : 'Not in this cohort')
         ]
       );
       if (v.active) {
