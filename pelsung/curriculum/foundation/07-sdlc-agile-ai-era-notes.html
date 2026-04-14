@@ -92,7 +92,7 @@
       <h3>In this note</h3>
       <ol>
         <li><a href="#sdlc">The SDLC — 6 stages every product goes through</a></li>
-        <li><a href="#example">Walkthrough: GMC Visitor Pass App</a></li>
+        <li><a href="#example">Walkthrough: mBoB (Mobile Banking)</a></li>
         <li><a href="#big3">Waterfall vs Agile vs Scrum</a></li>
         <li><a href="#others">Other methodologies you'll hear about</a></li>
         <li><a href="#selise">How SELISE actually works</a></li>
@@ -127,18 +127,18 @@
     <section class="chapter" id="example">
       <div class="chapter-head">
         <div class="chapter-eyebrow">Part 2</div>
-        <h2>Running Example: GMC Visitor Pass App</h2>
+        <h2>Running Example: mBoB (Mobile Banking)</h2>
       </div>
-      <p>Imagine the GMC authority asks us to build an app so tourists can request a visitor pass before arriving at the entry gate. Here's how it moves through the SDLC:</p>
+      <p>Think of <strong>mBoB</strong> — the Bank of Bhutan mobile app you probably have on your phone. Log in, transfer money, pay the electricity bill, recharge a TashiCell number. How did BoB actually build it? Here's how it moved through the SDLC:</p>
 
       <ul>
-        <li><strong>Plan:</strong> Users = international tourists. Problem = long queues at the gate. Goal = issue a pre-approved QR pass within 24 hours.</li>
-        <li><strong>Analysis:</strong> User stories — "As a tourist, I can apply with my passport details"; "As GMC security, I can approve/reject applications". Acceptance criteria per story. Required data fields: passport number, travel dates, photo.</li>
-        <li><strong>Design:</strong> Four screens — Home, Form, QR Code, Status. Flow = Submit → Review → Approved → Show QR at gate. Architecture = mobile app + backend API + database + email service.</li>
-        <li><strong>Build:</strong> Frontend in React Native. Backend in Node.js or .NET. Integrate passport scanning, email notifications.</li>
-        <li><strong>Test:</strong> Happy path (valid tourist). Edge cases (expired passport, typo in name). Load test (500 requests during tourist season).</li>
-        <li><strong>Deploy:</strong> Soft-launch with Bhutanese residents. Then open to international tourists. Publish on App Store and Play Store.</li>
-        <li><strong>Maintain:</strong> Keep servers up, patch security holes, add new features (e.g., family group passes), respond to user bug reports.</li>
+        <li><strong>Plan:</strong> Users = BoB customers with smartphones. Problem = long queues at branches for basic transactions (transfers, bill payments, balance checks). Goal = let customers do 80% of their banking from their phone.</li>
+        <li><strong>Analysis:</strong> User stories — "As a customer, I can log in with my PIN"; "I can transfer money to another account"; "I can pay my electricity bill"; "I can see my balance". Acceptance criteria per story. Required data: accounts, transactions, saved beneficiaries, bill payees.</li>
+        <li><strong>Design:</strong> Screens — Login, Home, Transfer, Bills, Statement, Profile. Flow = Login → PIN → Action → Confirm → Receipt. Architecture = mobile app + secure API + core banking system.</li>
+        <li><strong>Build:</strong> Native Android + iOS apps. Secure backend API. Integrations with SMS OTP, biometric login, RMA/BFS clearing.</li>
+        <li><strong>Test:</strong> Happy path (login, transfer Nu. 100, receive SMS confirmation). Edge cases (wrong PIN 3 times → lockout, network drops mid-transfer → does money vanish?). Security testing (can an attacker steal the PIN? Is SSL configured correctly?).</li>
+        <li><strong>Deploy:</strong> Soft-launch with BoB staff. Then selected branches, then all customers. Published on Play Store and App Store.</li>
+        <li><strong>Maintain:</strong> 24/7 uptime, fraud monitoring, security patches. New features (QR pay, scheduled transfers, international remittance). Bug fixes and customer support tickets.</li>
       </ul>
     </section>
 
@@ -168,7 +168,7 @@
       <div class="method-card">
         <h4>🏃 Scrum</h4>
         <p>A specific flavour of Agile. Work in 2-week "sprints". Daily 15-minute stand-ups. Sprint planning at the start. Review &amp; retro at the end. Clear roles: Product Owner, Scrum Master, Developers.</p>
-        <p><strong>Good for:</strong> Stable teams with a clear backlog and regular cadence.</p>
+        <p><strong>Good for:</strong> Stable teams with a clear backlog and a steady weekly rhythm.</p>
         <p><strong>Weakness:</strong> Ceremony overhead. Easy to do the rituals without the agile spirit.</p>
         <div class="uc">Use when you need predictability and a stable rhythm.</div>
       </div>

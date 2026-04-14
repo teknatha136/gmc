@@ -117,16 +117,30 @@
       <div class="slide accent-blue bg-subtle" data-slide="6">
         <div class="slide-label"><span class="snum">06</span> Walkthrough Example</div>
         <div class="stack" style="align-items:center; width:100%; max-width: 900px">
-          <div class="center"><h2 class="heading">Running Example: <span style="color: var(--blue)">GMC Visitor Pass App</span></h2><p class="body-md" style="color: var(--muted)">Imagine GMC asks us to build an app so tourists can request a visitor pass before arrival.</p></div>
+          <div class="center"><h2 class="heading">Running Example: <span style="color: var(--blue)">mBoB (Mobile Banking)</span></h2><p class="body-md" style="color: var(--muted)">The app you use to send money, pay bills, recharge your phone — how did Bank of Bhutan build it?</p></div>
           <div class="cols-2" style="max-width: 900px">
-            <div class="card" style="border-top: 3px solid var(--blue)"><h4 style="color: var(--blue)">1. Plan</h4><ul><li>Who: International tourists + GMC security</li><li>Problem: Long queues at entry gate</li><li>Goal: Pre-approve passes in &lt; 24h</li></ul></div>
-            <div class="card" style="border-top: 3px solid var(--amber)"><h4 style="color: var(--amber)">2. Analysis</h4><ul><li>User stories (apply, track, approve)</li><li>Acceptance criteria per story</li><li>Data fields: passport #, dates, photo</li></ul></div>
-            <div class="card" style="border-top: 3px solid var(--indigo)"><h4 style="color: var(--indigo)">3. Design</h4><ul><li>Screens: Home, Form, QR code, Status</li><li>Flow: Submit → Review → Approved</li><li>Architecture: Mobile + Backend + DB</li></ul></div>
-            <div class="card" style="border-top: 3px solid var(--amber)"><h4 style="color: var(--amber)">4. Build</h4><ul><li>Frontend: React / React Native</li><li>Backend: API + database</li><li>Integrations: Passport scan, email</li></ul></div>
-            <div class="card" style="border-top: 3px solid var(--purple)"><h4 style="color: var(--purple)">5. Test</h4><ul><li>Happy path: valid passport, real email</li><li>Edge cases: expired passport, typo in name</li><li>Load: 500 requests/hour during peak</li></ul></div>
-            <div class="card" style="border-top: 3px solid var(--green)"><h4 style="color: var(--green)">6. Deploy</h4><ul><li>Soft launch: Bhutanese residents first</li><li>Full launch: International tourists</li><li>App Store / Play Store listings</li></ul></div>
-            <div class="card" style="border-top: 3px solid var(--red)"><h4 style="color: var(--red)">7. Maintain</h4><ul><li>Server uptime, security patches</li><li>New features: family group passes</li><li>Bug fixes based on user reports</li></ul></div>
+            <div class="card" style="border-top: 3px solid var(--blue)"><h4 style="color: var(--blue)">1. Plan</h4><ul><li>Who: BoB customers with smartphones</li><li>Problem: Long queues at branches for basic transactions</li><li>Goal: Let users send money &amp; pay bills from phone</li></ul></div>
+            <div class="card" style="border-top: 3px solid var(--amber)"><h4 style="color: var(--amber)">2. Analysis</h4><ul><li>User stories: login, transfer, pay bills, check balance</li><li>Acceptance criteria per story</li><li>Data: accounts, transactions, beneficiaries</li></ul></div>
+            <div class="card" style="border-top: 3px solid var(--indigo)"><h4 style="color: var(--indigo)">3. Design</h4><ul><li>Screens: Login, Home, Transfer, Bills, Profile</li><li>Flow: Login → PIN → Action → Confirm → Receipt</li><li>Architecture: Mobile + Secure API + Core Banking</li></ul></div>
+            <div class="card" style="border-top: 3px solid var(--amber)"><h4 style="color: var(--amber)">4. Build</h4><ul><li>Frontend: Android + iOS native apps</li><li>Backend: Secure API + core banking integration</li><li>Integrations: SMS OTP, biometric login, BFS/RMA</li></ul></div>
           </div>
+          <p class="body-md" style="color: var(--muted); margin-top: 0.5rem; text-align:center">Part 1 of 2 — continues on the next slide →</p>
+        </div>
+      </div>
+
+      <!-- SLIDE 6b — WALKTHROUGH PART 2 -->
+      <div class="slide accent-blue bg-subtle" data-slide="6b">
+        <div class="slide-label"><span class="snum">06</span> Walkthrough (cont.)</div>
+        <div class="stack" style="align-items:center; width:100%; max-width: 900px">
+          <div class="center"><h2 class="heading"><span style="color: var(--blue)">mBoB</span> · Stages 5–7</h2></div>
+          <div class="cols-3" style="max-width: 950px">
+            <div class="card" style="border-top: 3px solid var(--purple)"><h4 style="color: var(--purple)">5. Test</h4><ul><li>Happy path: login, transfer Nu. 100, get receipt</li><li>Edge cases: wrong PIN 3x, network drop mid-transfer</li><li>Security: can someone steal your PIN? SSL valid?</li></ul></div>
+            <div class="card" style="border-top: 3px solid var(--green)"><h4 style="color: var(--green)">6. Deploy</h4><ul><li>Soft launch: BoB staff first</li><li>Roll-out: selected branches, then all customers</li><li>Published on Play Store &amp; App Store</li></ul></div>
+            <div class="card" style="border-top: 3px solid var(--red)"><h4 style="color: var(--red)">7. Maintain</h4><ul><li>24/7 uptime, fraud monitoring, patches</li><li>New features: QR pay, scheduled transfers</li><li>Bug fixes, customer support tickets</li></ul></div>
+          </div>
+          <p class="body-md" style="color: var(--muted); max-width: 720px; text-align:center; margin-top: 0.5rem">
+            Maintenance often takes <strong>more time than everything else combined</strong> — a product's real life begins after launch.
+          </p>
         </div>
       </div>
 
@@ -159,7 +173,7 @@
             <div class="card" style="border-top: 3px solid var(--amber)">
               <h4 style="color: var(--amber)">🏃 Scrum</h4>
               <p style="color:var(--muted); font-size:0.85rem">A <em>flavor</em> of Agile: 2-week sprints, standups, retros, clear roles.</p>
-              <ul><li>Predictable cadence</li><li>Overhead of ceremonies</li><li>Use for: stable teams, clear backlog</li></ul>
+              <ul><li>Steady rhythm — you know what happens each week</li><li>Lots of meetings (the "ceremonies")</li><li>Use for: stable teams, clear backlog</li></ul>
             </div>
           </div>
           <p class="body-md" style="color: var(--muted); margin-top: 1rem; max-width: 720px; text-align:center">
