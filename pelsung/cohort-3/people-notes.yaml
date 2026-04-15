@@ -86,6 +86,9 @@ trainees:
       - date: 2026-04-09
         text: Has a tech degree (Diploma in IT, Athang Training Academy); professional frontend development experience
         tags: [skill, observation]
+      - date: 2026-04-15
+        text: Used Claude and DeepSeek to build personal site; site looked nice
+        tags: [strength, observation, skill]
 
   - name: Yeshey Wangchuk
     cid: ""
@@ -142,6 +145,14 @@ trainees:
       - date: 2026-04-09
         text: Comes from a tech background (BE Mechatronics); can be trained — good growth potential
         tags: [skill, observation, strength]
+
+  - name: Nima Yoezer
+    cid: ""
+    vertical: unassigned
+    notes:
+      - date: 2026-04-15
+        text: Did well in prompting and built a simple self-site; also speaks well
+        tags: [strength, skill, observation]
 
   - name: Neten Dema
     cid: ""
