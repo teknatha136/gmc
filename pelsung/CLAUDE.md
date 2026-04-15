@@ -14,10 +14,11 @@ This directory will grow over multiple cohorts and years (minimum 2-year engagem
 - **Verticals:** Software Development (FE-focused), Software Design (UX/UI), Software Testing (QA), Business Analysis
 - **Exhibition/Demo Day:** TBD (may coincide with Pelsung graduation; His Majesty may attend)
 
-### Training Structure (3 phases)
+### Training Structure (3 phases + Extra)
 1. **Foundation (11 classes):** All 45 together — professional skills, AI basics, internet/APIs, dev tools, SDLC (hourglass/spec-driven model), product thinking, team roles, personal site build, aptitude assessment, vertical assignment
 2. **Core Specialization (20–22 classes per vertical):** Verticals train independently — Dev (22), Design (20), Testing (20), BA (20)
 3. **Capstone (10 classes):** Cross-vertical teams build a real GMC-relevant product together
+4. **Extra / Supplementary (self-paced):** Optional deep-dives that every role benefits from but don't fit neatly into foundation or vertical tracks (e.g. `E1 — UX & HCI Basics`). Stored under `curriculum/extra/`. Accessible from the curriculum landing page as Phase 04.
 
 ### Training Approach
 - **AI-first:** Claude Code is the primary AI tool across all verticals, with pre-configured opinionated CLAUDE.md files per project to guide trainees and enforce conventions

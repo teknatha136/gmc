@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UX & HCI Basics — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      .heur-grid { display:grid; grid-template-columns: repeat(2,1fr); gap:0.6rem; width:100%; max-width:1200px; }
+      @media (max-width: 820px){ .heur-grid { grid-template-columns: 1fr; } }
+      .heur { background:white; border:1px solid var(--border); border-left:4px solid var(--blue); border-radius:10px; padding:0.7rem 1rem; }
+      .heur h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.15rem; }
+      .heur p { font-size:0.85rem; color:var(--muted); line-height:1.5; margin:0; }
+      .heur .eg { font-size:0.8rem; color:var(--blue); font-style:italic; margin-top:0.3rem; display:block; }
+
+      .law-card { background:white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.2rem; }
+      .law-card h4 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; margin-bottom:0.3rem; }
+      .law-card .formula { background:#F3F6FA; padding:0.5rem 0.8rem; border-radius:6px; font-family:'Courier New',monospace; font-size:0.9rem; display:inline-block; margin:0.3rem 0; color:var(--indigo); }
+
+      .thumb-zone { display:flex; gap:2rem; align-items:center; justify-content:center; flex-wrap:wrap; }
+      .phone-frame { width:180px; height:340px; border:3px solid #2C2C2C; border-radius:26px; position:relative; background:#F4F6F8; overflow:hidden; }
+      .zone-green { position:absolute; left:0; right:0; bottom:0; height:45%; background:rgba(123,201,80,0.35); display:flex; align-items:flex-end; justify-content:center; padding-bottom:0.4rem; font-size:0.7rem; color:#2d5a1d; font-weight:600; }
+      .zone-amber { position:absolute; left:0; right:0; top:30%; height:25%; background:rgba(255,180,0,0.3); display:flex; align-items:center; justify-content:center; font-size:0.7rem; color:#8a6000; font-weight:600; }
+      .zone-red { position:absolute; left:0; right:0; top:0; height:30%; background:rgba(216,0,50,0.2); display:flex; align-items:flex-start; justify-content:center; padding-top:0.4rem; font-size:0.7rem; color:#8a0014; font-weight:600; }
+
+      .compare-ui { display:grid; grid-template-columns:1fr 1fr; gap:1rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px){ .compare-ui { grid-template-columns: 1fr; } }
+      .ui-card { background:white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.2rem; }
+      .ui-card.bad { border-top:4px solid var(--red); }
+      .ui-card.good { border-top:4px solid var(--green); }
+      .ui-card h5 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; margin-bottom:0.4rem; }
+      .ui-card.bad h5 { color:var(--red); }
+      .ui-card.good h5 { color:#3D7A3D; }
+      .ui-card ul { font-size:0.9rem; color:var(--text); padding-left:1.1rem; line-height:1.65; }
+
+      .a11y-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:0.8rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px){ .a11y-grid { grid-template-columns: 1fr; } }
+      .a11y { background:white; border:1px solid var(--border); border-top:3px solid var(--green); border-radius:10px; padding:0.85rem 1.1rem; }
+      .a11y h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.25rem; }
+      .a11y p { font-size:0.88rem; color:var(--muted); line-height:1.55; margin:0; }
+
+      .process-steps { display:flex; gap:0.6rem; align-items:stretch; max-width:1100px; flex-wrap:wrap; justify-content:center; }
+      .pstep { background:white; border:1px solid var(--border); border-top:3px solid var(--blue); border-radius:10px; padding:0.7rem 0.9rem; min-width:130px; text-align:center; }
+      .pstep h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.15rem; }
+      .pstep p { font-size:0.78rem; color:var(--muted); margin:0; }
+      .pstep-arrow { color:var(--blue); font-weight:700; align-self:center; font-size:1.2rem; }
+
+      .contrast-demo { display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; }
+      .contrast-box { padding:1rem 1.4rem; border-radius:10px; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; min-width:180px; text-align:center; }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>Extra · Self-paced</div></div>
+          <h1 class="display" style="color: var(--text)">
+            <span style="color: var(--blue)">UX &amp; HCI</span><br />
+            <span style="color: var(--indigo)">Basics</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted)">The universal rules every software role needs — designer, dev, QA, or BA.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">Heuristics</span>
+            <span class="class-tag tag-blue">Laws of UX</span>
+            <span class="class-tag tag-blue">Accessibility</span>
+            <span class="class-tag tag-blue">mBoB teardown</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 WHY -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Why this matters</div>
+        <div class="stack" style="max-width:860px; width:100%">
+          <div class="center"><h2 class="heading">This isn't just for designers</h2></div>
+          <div class="cols-2" style="max-width:900px">
+            <div class="card" style="border-left:4px solid var(--blue)">
+              <h4 style="color:var(--blue)">If you're a BA / PM</h4>
+              <p style="font-size:0.95rem">Your wireframes and specs describe UI. UX vocabulary lets you explain <em>why</em> — not just <em>what</em>.</p>
+            </div>
+            <div class="card" style="border-left:4px solid var(--amber)">
+              <h4 style="color:var(--amber)">If you're a Dev</h4>
+              <p style="font-size:0.95rem">You make micro-UX decisions every hour (button size, error message, loading state). AI won't always get them right.</p>
+            </div>
+            <div class="card" style="border-left:4px solid var(--green)">
+              <h4 style="color:var(--green)">If you're a QA</h4>
+              <p style="font-size:0.95rem">Most "bugs" filed by users are UX bugs. Knowing the rules helps you spot them earlier and write clearer reports.</p>
+            </div>
+            <div class="card" style="border-left:4px solid var(--indigo)">
+              <h4 style="color:var(--indigo)">If you're a Designer</h4>
+              <p style="font-size:0.95rem">This is your foundation. Your vertical will go much deeper — but everyone needs this baseline.</p>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:800px"><strong>AI can generate a UI in seconds. Only a human who knows UX can tell if it's actually good.</strong></p>
+        </div>
+      </div>
+
+      <!-- 3 DEFINITIONS -->
+      <div class="slide accent-blue" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> What is UX? What is HCI?</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Two related ideas, often confused</h2></div>
+          <div class="cols-2" style="max-width:1000px; gap:1rem">
+            <div class="card" style="border-top:4px solid var(--blue); padding:1.2rem 1.5rem">
+              <h4 style="color:var(--blue)">UX · User Experience</h4>
+              <p style="font-size:0.95rem; line-height:1.7">How it <strong>feels</strong> to use a product — easy, frustrating, delightful, confusing. UX is an outcome. Design, copy, speed, reliability all contribute.</p>
+            </div>
+            <div class="card" style="border-top:4px solid var(--indigo); padding:1.2rem 1.5rem">
+              <h4 style="color:var(--indigo)">HCI · Human–Computer Interaction</h4>
+              <p style="font-size:0.95rem; line-height:1.7">The <strong>academic field</strong> that studies how humans and machines communicate. HCI gives us the <em>principles</em>. UX applies them.</p>
+            </div>
+          </div>
+          <div class="card" style="max-width:820px; background:var(--bg); border:2px dashed var(--border); text-align:center; padding:1rem 1.2rem">
+            <p style="font-size:0.95rem; color:var(--text)"><strong>UI (User Interface)</strong> is the visible surface — buttons, colours, layout. <strong>UX</strong> is the full experience. Great UI can still have bad UX if the flow is broken.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 SECTION: HEURISTICS -->
+      <div class="slide bg-blue" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part One</div>
+          <h1 class="display" style="color: white">Nielsen's<br>10 Heuristics</h1>
+          <p class="body-lg" style="color:rgba(255,255,255,0.85); margin-top:1rem">The 30-year-old rules that still explain 80% of UX problems.</p>
+        </div>
+        <div class="section-num" style="color: white">01</div>
+      </div>
+
+      <!-- 5 HEURISTICS 1-5 -->
+      <div class="slide accent-blue" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span> Heuristics 1–5</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">The first five</h2></div>
+          <div class="heur-grid">
+            <div class="heur">
+              <h5>1. Visibility of system status</h5>
+              <p>Keep users informed. Show progress, confirmations, what's happening.</p>
+              <span class="eg">mBoB: spinner + "Processing payment…" toast after tap.</span>
+            </div>
+            <div class="heur">
+              <h5>2. Match the real world</h5>
+              <p>Use words and concepts users know — not developer jargon.</p>
+              <span class="eg">"Send money" beats "Initiate transfer request".</span>
+            </div>
+            <div class="heur">
+              <h5>3. User control &amp; freedom</h5>
+              <p>Let people undo, cancel, go back. Everyone makes mistakes.</p>
+              <span class="eg">Clear "Cancel" button on payment confirm screen.</span>
+            </div>
+            <div class="heur">
+              <h5>4. Consistency &amp; standards</h5>
+              <p>Same thing, same word, same place — across the whole app.</p>
+              <span class="eg">Back arrow always top-left. Primary action always blue.</span>
+            </div>
+            <div class="heur">
+              <h5>5. Error prevention</h5>
+              <p>Better than error messages: stop the error from being possible.</p>
+              <span class="eg">Disable "Pay" until amount is valid. Don't let user tap an expired biller.</span>
+            </div>
+            <div class="heur" style="border-left-color:var(--amber); background:#FAFBFC">
+              <h5 style="color:var(--amber)">→ 5 more on the next slide</h5>
+              <p style="color:var(--faint)">Press → to continue.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 HEURISTICS 6-10 -->
+      <div class="slide accent-blue bg-subtle" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> Heuristics 6–10</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">The second five</h2></div>
+          <div class="heur-grid">
+            <div class="heur" style="border-left-color:var(--indigo)">
+              <h5>6. Recognition over recall</h5>
+              <p>Show options. Don't make users remember things from elsewhere.</p>
+              <span class="eg">mBoB "Favourites" lets users recognise billers, not recall account numbers.</span>
+            </div>
+            <div class="heur" style="border-left-color:var(--indigo)">
+              <h5>7. Flexibility &amp; efficiency</h5>
+              <p>Shortcuts for power users; simple paths for beginners. Both matter.</p>
+              <span class="eg">Aum Pema uses the menu. Tashi uses Quick Scan &amp; Pay.</span>
+            </div>
+            <div class="heur" style="border-left-color:var(--indigo)">
+              <h5>8. Aesthetic &amp; minimalist design</h5>
+              <p>Every extra element competes for attention. Cut what isn't essential.</p>
+              <span class="eg">Don't show 20 options on home. Show 9 tiles + "Others".</span>
+            </div>
+            <div class="heur" style="border-left-color:var(--red)">
+              <h5>9. Help users recover from errors</h5>
+              <p>Error messages: plain language, explain the problem, suggest a fix.</p>
+              <span class="eg">❌ "Error 401" · ✅ "MPIN incorrect. 2 tries left before lockout."</span>
+            </div>
+            <div class="heur" style="border-left-color:var(--red)">
+              <h5>10. Help &amp; documentation</h5>
+              <p>Users shouldn't need help — but when they do, it should be findable and searchable.</p>
+              <span class="eg">FAQ, call 1095, in-app help bubbles on new features.</span>
+            </div>
+            <div class="heur" style="border-left-color:var(--amber); background:#FAFBFC">
+              <h5 style="color:var(--amber)">💡 Use these as a checklist</h5>
+              <p>Every screen review: run through all 10. You'll spot the problems in 60 seconds.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7 SECTION: LAWS -->
+      <div class="slide bg-indigo" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Two</div>
+          <h1 class="display" style="color: white">Laws of UX</h1>
+          <p class="body-lg" style="color:rgba(255,255,255,0.85); margin-top:1rem">Principles from psychology that predict how humans will behave.</p>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- 8 FITTS -->
+      <div class="slide accent-blue" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> Fitts's Law</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Bigger &amp; closer = faster to tap</h2></div>
+          <div class="law-card" style="max-width:920px">
+            <h4>Fitts's Law (1954)</h4>
+            <p style="font-size:0.95rem">The time to reach a target depends on its <strong>size</strong> and <strong>distance</strong>. The bigger and closer it is, the faster users hit it.</p>
+            <span class="formula">time ∝ log(distance / size)</span>
+          </div>
+          <div class="cols-2" style="max-width:1000px; gap:1rem">
+            <div class="card" style="border-top:3px solid var(--red)">
+              <h4 style="color:var(--red)">❌ Breaking Fitts</h4>
+              <ul style="font-size:0.9rem; padding-left:1.1rem">
+                <li>Tiny 24px buttons on mobile</li>
+                <li>Primary action in a corner far from the thumb</li>
+                <li>Critical "Confirm" right next to "Cancel" — easy mis-tap</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--green)">
+              <h4 style="color:var(--green)">✅ Applying Fitts</h4>
+              <ul style="font-size:0.9rem; padding-left:1.1rem">
+                <li>44×44px minimum tap target (Apple/Google both say so)</li>
+                <li>Primary action big, centred or bottom — easy to reach</li>
+                <li>Destructive actions small, separated, require confirm</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center">mBoB's 9-tile services grid? Fitts's Law in action.</p>
+        </div>
+      </div>
+
+      <!-- 9 HICK -->
+      <div class="slide accent-blue bg-subtle" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> Hick's Law</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">More choices = slower decision</h2></div>
+          <div class="law-card" style="max-width:920px">
+            <h4>Hick's Law (1952)</h4>
+            <p style="font-size:0.95rem">The time to make a decision grows with the number of choices. Add more buttons — users get slower AND less confident.</p>
+            <span class="formula">time = a + b · log₂(n + 1)</span>
+          </div>
+          <div class="cols-2" style="max-width:1000px; gap:1rem">
+            <div class="card" style="border-top:3px solid var(--red)">
+              <h4 style="color:var(--red)">❌ Choice overload</h4>
+              <p style="font-size:0.92rem">30 services tiles on the home screen. User stands there reading each one. Many give up.</p>
+            </div>
+            <div class="card" style="border-top:3px solid var(--green)">
+              <h4 style="color:var(--green)">✅ Chunked &amp; grouped</h4>
+              <p style="font-size:0.92rem">9 tiles + "Others". Most-used on top. Rare ones one tap away. Fast for power users, scannable for beginners.</p>
+            </div>
+          </div>
+          <div class="card" style="max-width:860px; background:#EAF3FA; border-left:4px solid var(--blue); padding:1rem 1.3rem">
+            <p style="font-size:0.95rem"><strong>Rule of thumb:</strong> if a screen has more than 7 primary actions, group them. Users don't read — they scan.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10 JAKOB -->
+      <div class="slide accent-blue" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> Jakob's Law</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Users spend most of their time on <em>other</em> apps</h2></div>
+          <div class="law-card" style="max-width:920px">
+            <h4>Jakob's Law (2000)</h4>
+            <p style="font-size:0.95rem">Users expect your app to behave like all the other apps they already know. <strong>Don't invent new patterns</strong> unless you have a very good reason.</p>
+          </div>
+          <ul class="reveal-list" style="max-width:780px; font-size:1rem; line-height:1.9">
+            <li>📱 Back arrow on top-left — because every other app does</li>
+            <li>🔔 Notifications bell on top-right — because every other app does</li>
+            <li>🍔 Hamburger menu for secondary nav — because every other app does</li>
+            <li>🔍 Pull down to refresh, swipe to delete — because users already know these</li>
+            <li>⚠️ Inventing a new gesture for "pay" = your users will be confused</li>
+          </ul>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:780px"><strong>Originality is for branding, not for core interactions.</strong></p>
+        </div>
+      </div>
+
+      <!-- 11 LAWS CONT -->
+      <div class="slide accent-blue bg-subtle" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> More laws worth knowing</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Four more, quick</h2></div>
+          <div class="cols-2" style="max-width:1100px; gap:0.9rem">
+            <div class="card" style="border-left:4px solid var(--blue)">
+              <h4 style="color:var(--blue)">Miller's Law — 7 ± 2</h4>
+              <p style="font-size:0.9rem">Short-term memory holds ~7 items. Don't make users hold more than that in their head between screens.</p>
+            </div>
+            <div class="card" style="border-left:4px solid var(--blue)">
+              <h4 style="color:var(--blue)">Proximity principle</h4>
+              <p style="font-size:0.9rem">Things that are close together look related. Things far apart look unrelated. Use whitespace to group meaning.</p>
+            </div>
+            <div class="card" style="border-left:4px solid var(--amber)">
+              <h4 style="color:var(--amber)">Doherty Threshold — 400 ms</h4>
+              <p style="font-size:0.9rem">If a system responds within 400 ms, users stay engaged. Past that, show a spinner. Past 3 seconds, show progress.</p>
+            </div>
+            <div class="card" style="border-left:4px solid var(--amber)">
+              <h4 style="color:var(--amber)">Peak–End Rule</h4>
+              <p style="font-size:0.9rem">People judge an experience by its peak moment and its end — not the average. Make the last step of a flow delightful.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12 SECTION: MOBILE -->
+      <div class="slide bg-blue" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Three</div>
+          <h1 class="display" style="color: white">Mobile-First<br>Thinking</h1>
+          <p class="body-lg" style="color:rgba(255,255,255,0.85); margin-top:1rem">Most Bhutanese users are on a phone. One-handed. On the move.</p>
+        </div>
+        <div class="section-num" style="color: white">03</div>
+      </div>
+
+      <!-- 13 THUMB ZONES -->
+      <div class="slide accent-blue" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> Thumb Zones</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Where the thumb can comfortably reach</h2><p class="body-md" style="color:var(--muted); max-width:760px">One-handed phone use is the default. Design for the thumb, not the pointer.</p></div>
+          <div class="thumb-zone">
+            <div class="phone-frame">
+              <div class="zone-red">⚠ HARD</div>
+              <div class="zone-amber">OK</div>
+              <div class="zone-green">✓ EASY</div>
+            </div>
+            <ul style="font-size:0.95rem; line-height:1.9; max-width:500px">
+              <li><strong style="color:#2d5a1d">Easy (bottom 45%):</strong> primary actions — Pay, Send, Continue</li>
+              <li><strong style="color:#8a6000">OK (middle):</strong> content, lists, secondary actions</li>
+              <li><strong style="color:#8a0014">Hard (top):</strong> infrequent actions — back, close, status</li>
+            </ul>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:780px">Look at mBoB: notification bell &amp; logout are top-right (rarely tapped). Primary tiles are in the middle-bottom. <strong>This is deliberate.</strong></p>
+        </div>
+      </div>
+
+      <!-- 14 MOBILE DO/DONT -->
+      <div class="slide accent-blue bg-subtle" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> Mobile Do's &amp; Don'ts</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Hard-won rules for small screens</h2></div>
+          <div class="compare-ui">
+            <div class="ui-card bad">
+              <h5>❌ Don't</h5>
+              <ul>
+                <li>Tap targets under 44px</li>
+                <li>Hover-only interactions (no hover on touch)</li>
+                <li>Tiny close buttons in the corner</li>
+                <li>Full-screen popups with no escape</li>
+                <li>Keyboards covering the submit button</li>
+                <li>Text under 14px body / 16px preferred</li>
+                <li>Requiring two hands for primary flow</li>
+              </ul>
+            </div>
+            <div class="ui-card good">
+              <h5>✅ Do</h5>
+              <ul>
+                <li>Big touch targets, spaced apart</li>
+                <li>Tap and long-press as discoverable patterns</li>
+                <li>Swipe gestures for secondary actions</li>
+                <li>Bottom sheets instead of centred modals</li>
+                <li>Keep primary CTA above the keyboard</li>
+                <li>System fonts, readable sizes</li>
+                <li>One-handed default, two-handed for power</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 15 SECTION: ACCESSIBILITY -->
+      <div class="slide bg-indigo" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Four</div>
+          <h1 class="display" style="color: white">Accessibility</h1>
+          <p class="body-lg" style="color:rgba(255,255,255,0.85); margin-top:1rem">Designing so everyone can use what you build — not just the young, sighted, English-speaking few.</p>
+        </div>
+        <div class="section-num" style="color: white">04</div>
+      </div>
+
+      <!-- 16 A11Y BASICS -->
+      <div class="slide accent-blue" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span> The Core Four</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">WCAG's four principles · POUR</h2></div>
+          <div class="cols-2" style="max-width:1000px; gap:1rem">
+            <div class="card" style="border-top:4px solid var(--blue)"><h4 style="color:var(--blue)">P · Perceivable</h4><p style="font-size:0.9rem">Users can see/hear the content. Alt text on images. Captions on video. Sufficient colour contrast.</p></div>
+            <div class="card" style="border-top:4px solid var(--amber)"><h4 style="color:var(--amber)">O · Operable</h4><p style="font-size:0.9rem">Users can navigate with keyboard, screen reader, or finger. No mouse-only traps.</p></div>
+            <div class="card" style="border-top:4px solid var(--green)"><h4 style="color:var(--green)">U · Understandable</h4><p style="font-size:0.9rem">Language is clear. Errors explain themselves. Behaviour is predictable.</p></div>
+            <div class="card" style="border-top:4px solid var(--indigo)"><h4 style="color:var(--indigo)">R · Robust</h4><p style="font-size:0.9rem">Works with assistive tech today and in 5 years. Use standard HTML; don't invent weird markup.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 17 CONTRAST -->
+      <div class="slide accent-blue bg-subtle" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span> Colour Contrast</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Contrast ratio — the one rule you cannot skip</h2><p class="body-md" style="color:var(--muted); max-width:760px">WCAG AA: <strong>4.5:1</strong> for normal text · <strong>3:1</strong> for large text &amp; UI components.</p></div>
+          <div class="contrast-demo">
+            <div class="contrast-box" style="background:#0066B2; color:white">8.6:1 ✓<br><span style="font-size:0.8rem; opacity:0.85; font-family:'Open Sans'">SELISE Blue on white</span></div>
+            <div class="contrast-box" style="background:#F9F9F9; color:#1B2021">15.2:1 ✓<br><span style="font-size:0.8rem; color:var(--muted); font-family:'Open Sans'">Body text on bg</span></div>
+            <div class="contrast-box" style="background:#FFFF00; color:white">1.1:1 ❌<br><span style="font-size:0.8rem; font-family:'Open Sans'">white on yellow</span></div>
+            <div class="contrast-box" style="background:#9CA3AF; color:#EDEDED">1.6:1 ❌<br><span style="font-size:0.8rem; font-family:'Open Sans'">faint on border</span></div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:800px">Check with <strong>WebAIM Contrast Checker</strong> or Chrome DevTools. Your elderly users, your outdoor users, your tired users — all benefit.</p>
+        </div>
+      </div>
+
+      <!-- 18 BHUTAN -->
+      <div class="slide accent-blue" data-slide="18">
+        <div class="slide-label"><span class="snum">18</span> Bhutan-specific considerations</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Designing for our users</h2></div>
+          <div class="a11y-grid">
+            <div class="a11y"><h5>🔤 Dzongkha rendering</h5><p>Test your UI with long Dzongkha strings. Characters are taller than Latin — buttons overflow.</p></div>
+            <div class="a11y" style="border-top-color:var(--blue)"><h5>📶 Variable connectivity</h5><p>Rural 3G, urban 4G, unstable Wi-Fi. Design for offline-first where possible. Show cached state clearly.</p></div>
+            <div class="a11y" style="border-top-color:var(--amber)"><h5>👴 Age range</h5><p>Users span 15 to 75. Default font size should work for 60+. Let users increase it if they want.</p></div>
+            <div class="a11y" style="border-top-color:var(--indigo)"><h5>☀️ Sunlight use</h5><p>Shopkeepers use apps outdoors. High contrast &amp; bold colours beat subtle greys.</p></div>
+            <div class="a11y" style="border-top-color:var(--green)"><h5>🗣️ Second-language English</h5><p>Many users think in Dzongkha/Nepali/Sharchop, read in English. Use short sentences, common words.</p></div>
+            <div class="a11y" style="border-top-color:var(--red)"><h5>💰 Low-end phones</h5><p>Not everyone has an iPhone. Test on a ₹10,000 Android. If it works there, it works everywhere.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 19 SECTION: PROCESS -->
+      <div class="slide bg-blue" data-slide="19">
+        <div class="slide-label"><span class="snum">19</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Five</div>
+          <h1 class="display" style="color: white">The UX<br>Process</h1>
+          <p class="body-lg" style="color:rgba(255,255,255,0.85); margin-top:1rem">How designers actually go from problem to polished screen.</p>
+        </div>
+        <div class="section-num" style="color: white">05</div>
+      </div>
+
+      <!-- 20 DOUBLE DIAMOND -->
+      <div class="slide accent-blue" data-slide="20">
+        <div class="slide-label"><span class="snum">20</span> Double Diamond</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Diverge, converge, diverge, converge</h2></div>
+          <svg viewBox="0 0 800 220" style="width:100%; max-width:900px; height:auto" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="20,110 200,40 380,110 200,180" fill="#0066B2" opacity="0.9"/>
+            <polygon points="420,110 600,40 780,110 600,180" fill="#247EC1" opacity="0.9"/>
+            <text x="200" y="115" text-anchor="middle" font-family="Bahnschrift,Segoe UI,sans-serif" font-size="22" fill="white" font-weight="600">Discover · Define</text>
+            <text x="200" y="140" text-anchor="middle" font-family="Open Sans,sans-serif" font-size="13" fill="white" opacity="0.9">right problem</text>
+            <text x="600" y="115" text-anchor="middle" font-family="Bahnschrift,Segoe UI,sans-serif" font-size="22" fill="white" font-weight="600">Develop · Deliver</text>
+            <text x="600" y="140" text-anchor="middle" font-family="Open Sans,sans-serif" font-size="13" fill="white" opacity="0.9">right solution</text>
+            <text x="400" y="210" text-anchor="middle" font-family="Open Sans,sans-serif" font-size="13" fill="#7B7C7F">research → insight → ideas → ship</text>
+          </svg>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px">First diamond: explore many problems, pick the real one. Second diamond: explore many solutions, pick the one that fits.</p>
+        </div>
+      </div>
+
+      <!-- 21 FIDELITY LADDER -->
+      <div class="slide accent-blue bg-subtle" data-slide="21">
+        <div class="slide-label"><span class="snum">21</span> Fidelity Ladder</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Don't start in Figma</h2><p class="body-md" style="color:var(--muted); max-width:800px">Each step costs more than the one before. Explore cheap; commit expensive.</p></div>
+          <div class="process-steps">
+            <div class="pstep"><h6>✏️ Sketch</h6><p>Paper · seconds</p></div>
+            <div class="pstep-arrow">→</div>
+            <div class="pstep" style="border-top-color:var(--amber)"><h6>🔲 Wireframe</h6><p>Grey boxes · minutes</p></div>
+            <div class="pstep-arrow">→</div>
+            <div class="pstep" style="border-top-color:var(--indigo)"><h6>🎨 Hi-fi mockup</h6><p>Figma · hours</p></div>
+            <div class="pstep-arrow">→</div>
+            <div class="pstep" style="border-top-color:var(--green)"><h6>🖱️ Prototype</h6><p>Clickable · hours-days</p></div>
+            <div class="pstep-arrow">→</div>
+            <div class="pstep" style="border-top-color:var(--red)"><h6>💻 Real code</h6><p>Days-weeks</p></div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:800px"><strong>Test the idea at the cheapest level that answers your question.</strong> Don't pixel-push a flow that might be wrong.</p>
+        </div>
+      </div>
+
+      <!-- 22 SECTION: TEARDOWN -->
+      <div class="slide bg-indigo" data-slide="22">
+        <div class="slide-label"><span class="snum">22</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Six · Applied</div>
+          <h1 class="display" style="color: white">mBoB<br>Teardown</h1>
+          <p class="body-lg" style="color:rgba(255,255,255,0.85); margin-top:1rem">Let's apply everything we just learned to an app you already use.</p>
+        </div>
+        <div class="section-num" style="color: white">06</div>
+      </div>
+
+      <!-- 23 TEARDOWN GOOD -->
+      <div class="slide accent-blue bg-subtle" data-slide="23">
+        <div class="slide-label"><span class="snum">23</span> What mBoB gets right</h5></div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">The wins</h2></div>
+          <ul class="reveal-list" style="max-width:860px; font-size:1rem; line-height:1.9">
+            <li>✅ <strong>Big tiles</strong> on home — Fitts's Law. Easy tap targets.</li>
+            <li>✅ <strong>9 + Others</strong> pattern — Hick's Law. Not 30 options flat.</li>
+            <li>✅ <strong>Hamburger top-left, notifications top-right</strong> — Jakob's Law. Standard.</li>
+            <li>✅ <strong>Balance hidden by default</strong> with eye-toggle — privacy in public.</li>
+            <li>✅ <strong>Quick Send chips</strong> with faces — recognition over recall. Heuristic #6.</li>
+            <li>✅ <strong>Dzongkha/English toggle</strong> on pre-login — inclusive.</li>
+            <li>✅ <strong>1095 call icon</strong> on login screen — help is findable. Heuristic #10.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 24 TEARDOWN ISSUES -->
+      <div class="slide accent-blue" data-slide="24">
+        <div class="slide-label"><span class="snum">24</span> What could be better</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">The opportunities</h2></div>
+          <ul class="reveal-list" style="max-width:860px; font-size:1rem; line-height:1.9">
+            <li>⚠️ <strong>Service tile text</strong> — "Cardless Withdrawal" wraps awkwardly. Fitts is about target size, but labels matter too.</li>
+            <li>⚠️ <strong>Favourites on Quick Send only</strong> — what about bill payments? Same problem, better solution missing.</li>
+            <li>⚠️ <strong>Side nav mixes frequent + rare</strong> — "Biometric" sits next to "Loan Interest Rate". Different use frequencies.</li>
+            <li>⚠️ <strong>No system status on slow operations</strong> — is my payment still processing? Heuristic #1.</li>
+            <li>⚠️ <strong>Error messages use codes</strong> in some flows. "Error 401" breaks heuristic #9.</li>
+            <li>⚠️ <strong>Contrast on secondary text</strong> — some greys are borderline on bright outdoor light.</li>
+          </ul>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:780px; font-style:italic">This is the kind of review any UX-literate PM, dev or QA can do in 15 minutes.</p>
+        </div>
+      </div>
+
+      <!-- 25 TOOLKIT -->
+      <div class="slide accent-blue bg-subtle" data-slide="25">
+        <div class="slide-label"><span class="snum">25</span> Your personal toolkit</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">The 5 questions to ask every screen</h2></div>
+          <div class="card" style="max-width:820px; padding:1.5rem 2rem">
+            <ol style="font-size:1.05rem; line-height:2; color:var(--text); padding-left:1.2rem">
+              <li>Is the <strong>primary action</strong> obvious and big enough to tap?</li>
+              <li>If something went wrong, <strong>can I tell what &amp; undo it?</strong></li>
+              <li>Does this screen follow the <strong>same patterns</strong> as the rest of the app?</li>
+              <li>Can someone with <strong>poor eyesight or slow network</strong> still use it?</li>
+              <li>Would <strong>Aum Pema, Tashi, and Karma</strong> all succeed here?</li>
+            </ol>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:780px">If any answer is "no" or "I'm not sure" — you've found UX work to do.</p>
+        </div>
+      </div>
+
+      <!-- 26 FURTHER -->
+      <div class="slide accent-blue" data-slide="26">
+        <div class="slide-label"><span class="snum">26</span> Going Deeper</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">If this sparked interest…</h2></div>
+          <div class="cols-2" style="max-width:1000px; gap:1rem">
+            <div class="card" style="border-left:4px solid var(--blue)">
+              <h4 style="color:var(--blue)">📚 Books</h4>
+              <ul style="font-size:0.92rem; padding-left:1.1rem">
+                <li><em>Don't Make Me Think</em> — Steve Krug</li>
+                <li><em>The Design of Everyday Things</em> — Don Norman</li>
+                <li><em>Refactoring UI</em> — Adam Wathan &amp; Steve Schoger</li>
+              </ul>
+            </div>
+            <div class="card" style="border-left:4px solid var(--amber)">
+              <h4 style="color:var(--amber)">🌐 Online</h4>
+              <ul style="font-size:0.92rem; padding-left:1.1rem">
+                <li><strong>lawsofux.com</strong> — all the laws, illustrated</li>
+                <li><strong>nngroup.com</strong> — Nielsen Norman, deep articles</li>
+                <li><strong>growth.design</strong> — UX case studies as comic strips</li>
+                <li><strong>material.io</strong> / <strong>developer.apple.com/design</strong> — Google &amp; Apple's own guidelines</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 27 WRAP -->
+      <div class="slide bg-dark" data-slide="27">
+        <div class="slide-label"><span class="snum">27</span> Wrap-up</div>
+        <div class="center" style="max-width: 860px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key Takeaways</div>
+          <h2 class="heading" style="color: white;">What you now have vocabulary for</h2>
+          <ul class="reveal-list" style="color: rgba(255,255,255,0.9); text-align:left; max-width: 700px; margin: 1.5rem auto; font-size: 1rem; line-height: 2;">
+            <li>✅ <strong>Nielsen's 10 heuristics</strong> — the universal checklist</li>
+            <li>✅ <strong>Fitts · Hick · Jakob · Miller · Doherty · Peak-End</strong> — laws that predict behaviour</li>
+            <li>✅ <strong>Mobile thumb zones</strong> &amp; one-handed design</li>
+            <li>✅ <strong>POUR</strong> — accessibility's four principles</li>
+            <li>✅ <strong>Double Diamond + fidelity ladder</strong> — how designers actually work</li>
+            <li>✅ The <strong>5 questions</strong> you can ask every screen</li>
+          </ul>
+          <p class="body-md" style="color: var(--amber); margin-top: 1.5rem; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.15rem">A well-designed screen is one where the user never notices the design.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 27</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Extra E1 Notes — UX & HCI Basics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#0066B2; --indigo:#001F35; --amber:#247EC1; --green:#7BC950; --purple:#4796D1; --red:#D80032; --text:#1B2021; --muted:#7B7C7F; --faint:#9CA3AF; --surf:#fff; --bg:#F9F9F9; --border:#EDEDED; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Open Sans','Aptos',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; font-size:17px; -webkit-font-smoothing:antialiased; }
+    h1,h2,h3,h4,h5 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:400; letter-spacing:-0.01em; }
+    a { color: var(--blue); }
+
+    .hero { background:var(--surf); border-bottom:1px solid var(--border); padding:4rem 2rem 3rem; text-align:center; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background: linear-gradient(135deg, #0067A3, #002D72); }
+    .logo-corner { position:absolute; top: 1.25rem; left: 1.5rem; opacity:0.85; }
+    .logo-corner img { height: 34px; }
+    .hero-badge { display:inline-flex; align-items:center; gap:0.5rem; background:var(--bg); border:1px solid var(--border); border-radius:100px; padding:0.35rem 1rem; font-size:0.75rem; font-weight:700; color:var(--muted); letter-spacing:0.07em; text-transform:uppercase; margin-bottom:1.5rem; }
+    .hero-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--amber); }
+    .hero h1 { font-size:clamp(2rem,5vw,3.5rem); line-height:1.15; margin-bottom:0.75rem; }
+    .c-blue{color:var(--blue);} .c-indigo{color:var(--indigo);}
+    .hero-sub { font-size:1rem; color:var(--muted); margin-bottom:2rem; max-width:720px; margin-left:auto; margin-right:auto; }
+    .hero-tags { display:flex; justify-content:center; gap:0.6rem; flex-wrap:wrap; }
+    .hero-tag { padding:0.3rem 0.9rem; border-radius:8px; font-size:0.78rem; font-weight:600; background:#E6F0F8; color:var(--blue); }
+
+    .container { max-width:1040px; margin:0 auto; padding:0 2rem 6rem; }
+
+    .toc { background:var(--surf); border:1px solid var(--border); border-radius:16px; padding:1.75rem 2rem; margin:2.5rem 0; }
+    .toc h3 { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); margin-bottom:1.25rem; }
+    .toc ol { list-style: none; counter-reset: step; }
+    .toc li { counter-increment: step; padding:0.45rem 0; border-bottom:1px solid var(--border); }
+    .toc li:last-child { border-bottom:none; }
+    .toc li::before { content: counter(step, decimal-leading-zero); color:var(--faint); font-family:'Bahnschrift','Segoe UI',sans-serif; margin-right:0.8rem; font-size:0.9rem; }
+    .toc a { text-decoration:none; color:var(--text); font-weight:500; }
+    .toc a:hover { color: var(--blue); }
+
+    section.chapter { margin: 3.5rem 0; }
+    .chapter-head { margin-bottom:1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
+    .chapter-eyebrow { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--blue); margin-bottom:0.3rem; }
+    .chapter-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--indigo); }
+
+    p { margin: 0.7rem 0; }
+    ul, ol { margin: 0.6rem 0 0.6rem 1.3rem; }
+    li { margin: 0.3rem 0; }
+    strong { color: var(--indigo); }
+
+    .callout { background:var(--surf); border:1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 10px; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+    .callout.amber { border-left-color: var(--amber); }
+    .callout.green { border-left-color: var(--green); }
+    .callout.red { border-left-color: var(--red); }
+    .callout h4 { font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--indigo); }
+
+    .heur-list { margin: 1rem 0; }
+    .heur-item { background:var(--surf); border:1px solid var(--border); border-left:4px solid var(--blue); border-radius:10px; padding:0.9rem 1.2rem; margin-bottom:0.55rem; }
+    .heur-item h4 { color:var(--indigo); font-size:1.05rem; margin-bottom:0.2rem; }
+    .heur-item p { font-size:0.95rem; color:var(--text); margin:0.25rem 0; line-height:1.65; }
+    .heur-item .eg { font-size:0.88rem; color:var(--blue); font-style:italic; background:#EAF3FA; padding:0.4rem 0.7rem; border-radius:6px; display:block; margin-top:0.4rem; }
+
+    .law-row { display:grid; grid-template-columns: 1fr 1fr; gap:0.8rem; margin: 1rem 0; }
+    @media (max-width: 720px){ .law-row { grid-template-columns: 1fr; } }
+    .law-item { background:var(--surf); border:1px solid var(--border); border-top:3px solid var(--blue); border-radius:10px; padding:1rem 1.2rem; }
+    .law-item h4 { color:var(--indigo); font-size:1.05rem; margin-bottom:0.3rem; }
+    .law-item .formula { display:inline-block; background:#F3F6FA; padding:0.3rem 0.7rem; border-radius:6px; font-family:'Courier New',monospace; font-size:0.85rem; color:var(--indigo); margin:0.3rem 0; }
+    .law-item p { font-size:0.93rem; line-height:1.65; margin:0.3rem 0; }
+
+    .compare { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin:1.2rem 0; }
+    @media (max-width: 720px){ .compare { grid-template-columns: 1fr; } }
+    .compare .col { background:var(--surf); border:1px solid var(--border); border-radius:10px; padding:1rem 1.2rem; font-size:0.92rem; }
+    .compare .col.bad { border-top:4px solid var(--red); }
+    .compare .col.good { border-top:4px solid var(--green); }
+    .compare .col h5 { margin-bottom:0.5rem; font-size:1rem; }
+    .compare .col.bad h5 { color:var(--red); }
+    .compare .col.good h5 { color:#3D7A3D; }
+    .compare .col ul { padding-left:1.1rem; }
+
+    .pour { display:grid; grid-template-columns:repeat(2,1fr); gap:0.7rem; margin:1rem 0; }
+    @media (max-width: 720px){ .pour { grid-template-columns:1fr; } }
+    .pour .p { background:var(--surf); border:1px solid var(--border); border-top:3px solid var(--blue); border-radius:10px; padding:0.9rem 1.1rem; }
+    .pour .p h5 { color:var(--indigo); font-size:1rem; margin-bottom:0.2rem; }
+    .pour .p p { font-size:0.88rem; color:var(--text); margin:0; line-height:1.6; }
+
+    .contrast-row { display:flex; gap:0.6rem; flex-wrap:wrap; margin:1rem 0; }
+    .cbox { padding:0.9rem 1.2rem; border-radius:8px; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; min-width:160px; text-align:center; }
+
+    .bhutan-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:0.7rem; margin:1rem 0; }
+    @media (max-width: 720px){ .bhutan-grid { grid-template-columns:1fr; } }
+    .bh { background:var(--surf); border:1px solid var(--border); border-left:3px solid var(--amber); border-radius:8px; padding:0.8rem 1rem; }
+    .bh h5 { color:var(--indigo); font-size:0.98rem; margin-bottom:0.2rem; }
+    .bh p { font-size:0.88rem; color:var(--text); margin:0; line-height:1.6; }
+
+    .toolkit { background:linear-gradient(135deg,#0067A3,#002D72); color:white; border-radius:14px; padding:1.5rem 1.8rem; margin:1.5rem 0; }
+    .toolkit h3 { color:white; margin-bottom:0.6rem; }
+    .toolkit ol { color:rgba(255,255,255,0.95); padding-left:1.3rem; font-size:1rem; line-height:2; }
+    .toolkit strong { color:white; }
+
+    .summary { background: linear-gradient(135deg, #F9F9F9, #EDEDED); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+    .summary h4 { color: var(--indigo); margin-bottom: 0.5rem; font-size: 0.95rem; }
+    .summary ul { margin-left: 1.1rem; }
+    .summary li { font-size: 0.93rem; margin: 0.25rem 0; }
+
+    footer { text-align:center; padding: 2rem 1rem 3rem; color: var(--faint); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+    footer img { height: 28px; opacity:0.7; margin-bottom: 0.5rem; display: block; margin-left:auto; margin-right:auto; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="logo-corner"><img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE"></div>
+    <div class="hero-badge"><span class="dot"></span> Extra E1 · Supplementary</div>
+    <h1><span class="c-blue">UX &amp; HCI</span><br><span class="c-indigo">Basics</span></h1>
+    <p class="hero-sub">A self-paced reference for every Pelsung trainee — regardless of vertical. The universal rules, laws, and habits that make the difference between a product people tolerate and one they love.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">Heuristics</span>
+      <span class="hero-tag">Laws of UX</span>
+      <span class="hero-tag">Mobile</span>
+      <span class="hero-tag">Accessibility</span>
+      <span class="hero-tag">Process</span>
+      <span class="hero-tag">mBoB Teardown</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="toc">
+      <h3>In this note</h3>
+      <ol>
+        <li><a href="#why">Why this matters for every role</a></li>
+        <li><a href="#defs">UX · UI · HCI — what's the difference?</a></li>
+        <li><a href="#heuristics">Nielsen's 10 heuristics</a></li>
+        <li><a href="#laws">Laws of UX</a></li>
+        <li><a href="#mobile">Mobile-first thinking &amp; thumb zones</a></li>
+        <li><a href="#a11y">Accessibility — POUR</a></li>
+        <li><a href="#contrast">Colour contrast</a></li>
+        <li><a href="#bhutan">Bhutan-specific considerations</a></li>
+        <li><a href="#process">The UX process — Double Diamond</a></li>
+        <li><a href="#fidelity">Fidelity ladder</a></li>
+        <li><a href="#teardown">mBoB teardown</a></li>
+        <li><a href="#toolkit">Your 5-question toolkit</a></li>
+        <li><a href="#further">Further reading</a></li>
+      </ol>
+    </div>
+
+    <section class="chapter" id="why">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 1</div>
+        <h2>Why this matters for every role</h2>
+      </div>
+      <p>UX is often seen as "the designer's job". It isn't. Every person shipping software makes UX decisions — often without realising it:</p>
+      <ul>
+        <li><strong>BAs</strong> who write specs choose what belongs on a screen and what doesn't.</li>
+        <li><strong>Developers</strong> pick button sizes, error messages, loading states, keyboard behaviour — dozens of micro-decisions per feature.</li>
+        <li><strong>QA</strong> testers spot bad UX long before they find functional bugs — but only if they have the vocabulary to name what's wrong.</li>
+        <li><strong>Designers</strong> obviously — but their work is easier when the rest of the team speaks the same language.</li>
+      </ul>
+      <div class="callout amber">
+        <h4>AI changes this too</h4>
+        <p>Claude Code and similar tools can generate a working UI in seconds. They follow patterns from their training data. Sometimes those patterns are good. Often they're generic. <strong>Only a human who knows UX can tell the difference</strong> — and push the AI towards the right answer.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="defs">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 2</div>
+        <h2>UX · UI · HCI — what's the difference?</h2>
+      </div>
+      <ul>
+        <li><strong>UX (User Experience)</strong> is how it <em>feels</em> to use a product. Easy? Frustrating? Trustworthy? UX is the outcome. Every decision contributes: design, copy, speed, reliability, how errors are handled.</li>
+        <li><strong>UI (User Interface)</strong> is the visible surface — buttons, colours, layout, typography. UI is a subset of UX. Great UI can still deliver bad UX if the flow is broken, the app is slow, or the error messages are useless.</li>
+        <li><strong>HCI (Human–Computer Interaction)</strong> is the academic field studying how humans and computers communicate. HCI gives us principles (for example, Fitts's Law). UX practitioners apply them.</li>
+      </ul>
+      <div class="callout">
+        <h4>A useful test</h4>
+        <p>If someone says "the UI is beautiful but I can't find the button", that's a <strong>UX problem</strong> (findability) hiding behind good UI. If someone says "the button is ugly but I know exactly what it does", that's <strong>bad UI, acceptable UX</strong>.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="heuristics">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 3</div>
+        <h2>Nielsen's 10 heuristics</h2>
+      </div>
+      <p>Published in 1994 by Jakob Nielsen. Thirty years later, they still explain most of the UX problems you'll find. Treat them as a checklist you run against every screen.</p>
+
+      <div class="heur-list">
+        <div class="heur-item">
+          <h4>1. Visibility of system status</h4>
+          <p>Always keep the user informed about what's happening. Loading? Show it. Saved? Confirm it. Processing? Tell them for how long.</p>
+          <span class="eg">mBoB: spinner + "Processing payment…" after tapping Pay, then a green ✓ confirmation with transaction ID.</span>
+        </div>
+        <div class="heur-item">
+          <h4>2. Match between system and real world</h4>
+          <p>Use words and concepts your users know — not internal jargon or developer terms.</p>
+          <span class="eg">"Send money" beats "Initiate transfer request". "Biller" beats "Merchant ID 4814".</span>
+        </div>
+        <div class="heur-item">
+          <h4>3. User control &amp; freedom</h4>
+          <p>Everyone makes mistakes. Let them undo, cancel, or go back. Every dead-end flow is a UX failure.</p>
+          <span class="eg">A clear "Cancel" on the payment confirm screen. An "Undo" toast after deleting a favourite.</span>
+        </div>
+        <div class="heur-item">
+          <h4>4. Consistency &amp; standards</h4>
+          <p>Same thing, same word, same place — across the whole app. If the back arrow is top-left on one screen, it should be top-left on every screen.</p>
+          <span class="eg">Primary action always blue. Destructive action always red. Nav always in the same spot.</span>
+        </div>
+        <div class="heur-item">
+          <h4>5. Error prevention</h4>
+          <p>Better than a good error message: an error that can't happen in the first place. Design the impossible to be impossible.</p>
+          <span class="eg">Disable the "Pay" button until the amount is valid. Don't allow selecting a deactivated biller.</span>
+        </div>
+        <div class="heur-item" style="border-left-color:var(--indigo)">
+          <h4>6. Recognition over recall</h4>
+          <p>Show users their options. Don't make them remember things from earlier screens or elsewhere.</p>
+          <span class="eg">mBoB Favourites let users <em>recognise</em> the biller they want; they don't have to recall a 12-digit account number.</span>
+        </div>
+        <div class="heur-item" style="border-left-color:var(--indigo)">
+          <h4>7. Flexibility &amp; efficiency of use</h4>
+          <p>Provide shortcuts for experts; keep simple paths for beginners. Both kinds of users exist in the same app.</p>
+          <span class="eg">Aum Pema navigates via the menu. Tashi uses Quick Scan &amp; Pay. Both get what they need.</span>
+        </div>
+        <div class="heur-item" style="border-left-color:var(--indigo)">
+          <h4>8. Aesthetic &amp; minimalist design</h4>
+          <p>Every extra element competes for attention and slows comprehension. Cut what isn't essential.</p>
+          <span class="eg">The 9-tile home screen + "Others" — not 30 tiles flat with everything always visible.</span>
+        </div>
+        <div class="heur-item" style="border-left-color:var(--red)">
+          <h4>9. Help users recognise, diagnose, and recover from errors</h4>
+          <p>Error messages in plain language. Explain the problem. Suggest a fix.</p>
+          <span class="eg">❌ "Error 401" → ✅ "MPIN incorrect. You have 2 tries left before your account is locked. Forgot MPIN? →"</span>
+        </div>
+        <div class="heur-item" style="border-left-color:var(--red)">
+          <h4>10. Help &amp; documentation</h4>
+          <p>Ideally users shouldn't need help — but when they do, it should be easy to find, searchable, and focused on their task.</p>
+          <span class="eg">FAQ in side menu, 1095 call icon on login screen, contextual tooltips for new features.</span>
+        </div>
+      </div>
+
+      <div class="callout green">
+        <h4>Using the heuristics in practice</h4>
+        <p>Run through all 10 against any screen. It takes 60 seconds once you know them. You'll catch 80% of UX issues before they reach a user.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="laws">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 4</div>
+        <h2>Laws of UX</h2>
+      </div>
+      <p>These are psychology-grounded principles that predict how humans will behave. If you design against them, you'll fight your users. If you design with them, everything feels easy.</p>
+
+      <div class="law-row">
+        <div class="law-item">
+          <h4>Fitts's Law (1954)</h4>
+          <span class="formula">time ∝ log(distance / size)</span>
+          <p>The time to reach a target depends on how big it is and how far away. Bigger and closer = faster.</p>
+          <p><strong>Apply:</strong> 44×44px minimum tap target. Primary action big, centred or bottom. Destructive actions small, separated.</p>
+        </div>
+        <div class="law-item">
+          <h4>Hick's Law (1952)</h4>
+          <span class="formula">time = a + b · log₂(n + 1)</span>
+          <p>Decision time grows with the number of choices. Every extra option makes the user slower AND less confident.</p>
+          <p><strong>Apply:</strong> If a screen has more than 7 primary actions, group them. Use "Others" as an overflow.</p>
+        </div>
+        <div class="law-item" style="border-top-color:var(--amber)">
+          <h4>Jakob's Law (2000)</h4>
+          <p>Users spend most of their time on <em>other</em> apps. They expect yours to behave like the ones they already know. Don't invent new patterns without a very strong reason.</p>
+          <p><strong>Apply:</strong> Standard hamburger menus, back arrows, notification icons, pull-to-refresh, swipe-to-delete. Save originality for branding.</p>
+        </div>
+        <div class="law-item" style="border-top-color:var(--amber)">
+          <h4>Miller's Law (1956) — 7 ± 2</h4>
+          <p>Short-term memory holds around 7 items. Don't ask users to carry more than that between screens.</p>
+          <p><strong>Apply:</strong> Chunk content into small groups. Summarise on confirmation screens so users don't have to remember.</p>
+        </div>
+        <div class="law-item" style="border-top-color:var(--indigo)">
+          <h4>Proximity Principle (Gestalt)</h4>
+          <p>Things that are close together look related. Things far apart look unrelated. Whitespace is how you communicate structure.</p>
+          <p><strong>Apply:</strong> Label next to its input. Group related fields. Separate unrelated groups with whitespace, not borders.</p>
+        </div>
+        <div class="law-item" style="border-top-color:var(--indigo)">
+          <h4>Doherty Threshold — 400 ms</h4>
+          <p>If a system responds within 400 ms, users stay engaged. Past that, attention drifts. Past 3 seconds, most people give up.</p>
+          <p><strong>Apply:</strong> &lt;400 ms = feels instant. &lt;1 s = show spinner. &gt;3 s = show progress bar + "this might take a while".</p>
+        </div>
+        <div class="law-item" style="border-top-color:var(--green)">
+          <h4>Peak–End Rule</h4>
+          <p>People judge an experience by its most intense moment and its final moment — not by the average. A rough middle is forgiven if the end feels good.</p>
+          <p><strong>Apply:</strong> Make the confirmation screen satisfying. Celebrate completed flows. Nail the last mile.</p>
+        </div>
+        <div class="law-item" style="border-top-color:var(--green)">
+          <h4>Tesler's Law (of conservation of complexity)</h4>
+          <p>Every system has inherent complexity. The question is who absorbs it — the user, or the designer/developer. Good products absorb the complexity so the user doesn't have to.</p>
+          <p><strong>Apply:</strong> If something feels awkward for a user, there's probably a smarter default you could implement behind the scenes.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="mobile">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 5</div>
+        <h2>Mobile-first thinking &amp; thumb zones</h2>
+      </div>
+      <p>Most Bhutanese users live on their phone. Many hold the phone in one hand while doing something else. Design for that reality, not for a desktop developer pointing a mouse.</p>
+
+      <h3 style="color:var(--indigo); font-size:1.15rem; margin-top:1.2rem">Thumb zones — where the thumb reaches</h3>
+      <ul>
+        <li><strong>Easy zone (bottom 45% of screen)</strong> — the thumb reaches here without stretching. Put primary actions (Pay, Send, Continue) here.</li>
+        <li><strong>OK zone (middle)</strong> — reachable with a small stretch. Good for content, lists, secondary actions.</li>
+        <li><strong>Hard zone (top 30%)</strong> — requires repositioning the phone or using two hands. Use only for infrequent actions — back button, close, status indicators.</li>
+      </ul>
+
+      <h3 style="color:var(--indigo); font-size:1.15rem; margin-top:1.2rem">Mobile do's &amp; don'ts</h3>
+      <div class="compare">
+        <div class="col bad">
+          <h5>❌ Don't</h5>
+          <ul>
+            <li>Make tap targets smaller than 44×44px</li>
+            <li>Rely on hover (there is no hover on touch)</li>
+            <li>Put the close button in a tiny corner</li>
+            <li>Use full-screen modals with no visible escape</li>
+            <li>Let the keyboard cover the submit button</li>
+            <li>Use body text smaller than 14px (prefer 16px)</li>
+            <li>Require two hands for the primary flow</li>
+          </ul>
+        </div>
+        <div class="col good">
+          <h5>✅ Do</h5>
+          <ul>
+            <li>Big, spaced tap targets</li>
+            <li>Discoverable tap, long-press, swipe gestures</li>
+            <li>Bottom sheets instead of centred modals</li>
+            <li>Keep the primary CTA above the keyboard</li>
+            <li>Use system fonts and readable sizes</li>
+            <li>One-handed as default; two-handed as power option</li>
+            <li>Test on a budget Android as well as iPhone</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="a11y">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 6</div>
+        <h2>Accessibility — POUR</h2>
+      </div>
+      <p>The Web Content Accessibility Guidelines (WCAG) are built around four principles. Every product you ever ship — SELISE or otherwise — will be measured against them.</p>
+      <div class="pour">
+        <div class="p" style="border-top-color:var(--blue)"><h5>P · Perceivable</h5><p>Users can see or hear the content. Alt text on images. Captions on video. Don't hide information behind colour alone.</p></div>
+        <div class="p" style="border-top-color:var(--amber)"><h5>O · Operable</h5><p>Users can navigate with keyboard, screen reader, finger, or voice. No mouse-only traps. Focus indicators visible.</p></div>
+        <div class="p" style="border-top-color:var(--green)"><h5>U · Understandable</h5><p>Plain language. Predictable behaviour. Errors explain themselves. Forms clearly label what's required and why.</p></div>
+        <div class="p" style="border-top-color:var(--indigo)"><h5>R · Robust</h5><p>Works with assistive tech today and in 5 years. Use standard HTML elements — not custom div soup.</p></div>
+      </div>
+      <div class="callout">
+        <h4>The quiet truth</h4>
+        <p>Accessibility isn't about rare edge cases. It's about the tired user on a bright bus, the grandmother with reading glasses, the outdoor shopkeeper squinting in sun. Designing for accessibility makes the product better for everyone.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="contrast">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 7</div>
+        <h2>Colour contrast</h2>
+      </div>
+      <p>Of all accessibility rules, this is the one you cannot skip. <strong>WCAG AA requires a contrast ratio of at least 4.5:1 for normal text</strong>, 3:1 for large text and UI components.</p>
+      <div class="contrast-row">
+        <div class="cbox" style="background:#0066B2; color:white">8.6:1 ✓<br><span style="font-size:0.75rem; opacity:0.85; font-family:'Open Sans'">SELISE blue on white</span></div>
+        <div class="cbox" style="background:#F9F9F9; color:#1B2021">15.2:1 ✓<br><span style="font-size:0.75rem; color:var(--muted); font-family:'Open Sans'">Body text on bg</span></div>
+        <div class="cbox" style="background:#FFFF00; color:white; border:1px solid #ccc">1.1:1 ❌<br><span style="font-size:0.75rem; font-family:'Open Sans'">white on yellow</span></div>
+        <div class="cbox" style="background:#9CA3AF; color:#EDEDED">1.6:1 ❌<br><span style="font-size:0.75rem; font-family:'Open Sans'">faint on border</span></div>
+      </div>
+      <p><strong>Tools:</strong> <a href="https://webaim.org/resources/contrastchecker/" target="_blank" rel="noopener">WebAIM Contrast Checker</a>, Chrome DevTools (right-click any element → Inspect → colour picker shows contrast ratio), Figma plugins like "Stark" or "Contrast".</p>
+    </section>
+
+    <section class="chapter" id="bhutan">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 8</div>
+        <h2>Bhutan-specific considerations</h2>
+      </div>
+      <p>Global UX guidelines are written mostly by people in California and Europe. Our users are different. Here's what matters for Bhutanese products:</p>
+      <div class="bhutan-grid">
+        <div class="bh"><h5>🔤 Dzongkha rendering</h5><p>Dzongkha characters are taller than Latin. Always test with real Dzongkha text — not just Lorem Ipsum — or buttons overflow and labels wrap awkwardly.</p></div>
+        <div class="bh"><h5>📶 Variable connectivity</h5><p>3G in rural areas. 4G in Thimphu. Unstable Wi-Fi everywhere. Design offline-first where possible. Show cached state clearly ("last updated 2 hours ago").</p></div>
+        <div class="bh"><h5>👴 Wide age range</h5><p>Users span 15 to 75. The default font size should work for someone over 60. Provide a way to increase font size in settings.</p></div>
+        <div class="bh"><h5>☀️ Outdoor use</h5><p>Shopkeepers, drivers, workers use apps in direct sunlight. High contrast and bold colours beat subtle greys. Avoid low-contrast dark modes as a default.</p></div>
+        <div class="bh"><h5>🗣️ Second-language English</h5><p>Many users think in Dzongkha / Nepali / Sharchop but read in English. Use short sentences, common words, avoid idioms and bank jargon.</p></div>
+        <div class="bh"><h5>💰 Lower-end devices</h5><p>Not everyone has a flagship phone. Test on a ₹10,000 Android. If it works there, it works everywhere. Don't assume 60fps animations.</p></div>
+      </div>
+    </section>
+
+    <section class="chapter" id="process">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 9</div>
+        <h2>The UX process — Double Diamond</h2>
+      </div>
+      <p>The British Design Council's <strong>Double Diamond</strong> describes how designers actually work. Four phases across two diamonds:</p>
+      <ol>
+        <li><strong>Discover</strong> (diverge) — explore the problem space. Interview users. Observe behaviour. Gather evidence.</li>
+        <li><strong>Define</strong> (converge) — narrow down to the real problem worth solving. Write a clear problem statement.</li>
+        <li><strong>Develop</strong> (diverge) — explore many possible solutions. Sketch, wireframe, prototype.</li>
+        <li><strong>Deliver</strong> (converge) — pick one, refine, test, build, ship.</li>
+      </ol>
+      <div class="callout amber">
+        <h4>The most common mistake</h4>
+        <p>Skipping the first diamond and jumping straight into solutions. You end up with an elegantly-designed answer to the wrong question.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="fidelity">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 10</div>
+        <h2>Fidelity ladder — don't start in Figma</h2>
+      </div>
+      <p>Each step up the fidelity ladder costs more than the one before. Explore cheap; commit expensive.</p>
+      <ol>
+        <li><strong>Sketch</strong> — pen on paper. Seconds per idea. Explore 20 ideas in 20 minutes.</li>
+        <li><strong>Wireframe</strong> — grey boxes, no colour. Minutes per screen. Test structure without worrying about style.</li>
+        <li><strong>Hi-fi mockup</strong> — real colours, real type, real content. Hours per screen. Only for the ideas that survived the wireframe stage.</li>
+        <li><strong>Prototype</strong> — clickable, navigable, in Figma or similar. Hours to days. Lets you test flows, not just screens.</li>
+        <li><strong>Real code</strong> — days to weeks. The most expensive fidelity. Commit here only after the prototype has survived user testing.</li>
+      </ol>
+      <div class="callout green">
+        <h4>The principle</h4>
+        <p>Test the idea at the <strong>cheapest level that answers your question</strong>. If the question is "is the flow right?", a paper sketch can answer that. Don't pixel-push a flow that might be wrong.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="teardown">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 11 · Applied</div>
+        <h2>mBoB teardown</h2>
+      </div>
+      <p>Let's apply everything to an app you already use.</p>
+
+      <h3 style="color:var(--indigo); font-size:1.15rem; margin-top:1.2rem">What mBoB gets right</h3>
+      <ul>
+        <li>✅ <strong>Big service tiles on home</strong> — Fitts's Law in action. Easy tap targets, even with wet fingers.</li>
+        <li>✅ <strong>9 tiles + "Others" pattern</strong> — Hick's Law. Not 30 options flat.</li>
+        <li>✅ <strong>Hamburger top-left, notifications top-right</strong> — Jakob's Law. Matches every other app.</li>
+        <li>✅ <strong>Balance hidden by default with eye-toggle</strong> — respects privacy in public (shopkeeper in a shared space).</li>
+        <li>✅ <strong>Quick Send chips with avatars</strong> — recognition over recall. Heuristic #6.</li>
+        <li>✅ <strong>Dzongkha / English toggle on pre-login</strong> — inclusive at the very first screen.</li>
+        <li>✅ <strong>1095 call icon on login screen</strong> — help is findable, heuristic #10.</li>
+      </ul>
+
+      <h3 style="color:var(--indigo); font-size:1.15rem; margin-top:1.2rem">What could be better</h3>
+      <ul>
+        <li>⚠️ <strong>Service tile labels wrap</strong> — "Cardless Withdrawal" on two lines looks untidy. Either rephrase or grow the tile.</li>
+        <li>⚠️ <strong>Favourites exist for Quick Send, not Bill Payments</strong> — same problem, better solution not extended.</li>
+        <li>⚠️ <strong>Side nav mixes frequent and rare</strong> — "Biometric" sits next to "Loan Interest Rate". Group by use-frequency.</li>
+        <li>⚠️ <strong>No clear system status on slow operations</strong> — did my payment go through? Still processing? Heuristic #1 gap.</li>
+        <li>⚠️ <strong>Error messages sometimes use codes</strong> — "Error 401" breaks heuristic #9. Should say "MPIN incorrect".</li>
+        <li>⚠️ <strong>Secondary text contrast</strong> — some greys are borderline for outdoor use.</li>
+      </ul>
+      <p style="color:var(--muted); font-style:italic">This is the kind of review <strong>any</strong> UX-literate PM, developer, or tester can do in 15 minutes. You now have that skill.</p>
+    </section>
+
+    <section class="chapter" id="toolkit">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 12</div>
+        <h2>Your 5-question toolkit</h2>
+      </div>
+      <div class="toolkit">
+        <h3>Ask every screen you build or review</h3>
+        <ol>
+          <li>Is the <strong>primary action</strong> obvious and big enough to tap?</li>
+          <li>If something went wrong, <strong>can I tell what happened and undo it?</strong></li>
+          <li>Does this screen follow the <strong>same patterns</strong> as the rest of the app?</li>
+          <li>Can someone with <strong>poor eyesight or a slow network</strong> still use it?</li>
+          <li>Would <strong>Aum Pema, Tashi, and Karma</strong> (from Class 09) all succeed here?</li>
+        </ol>
+      </div>
+      <p>If any answer is "no" or "I'm not sure" — you've found UX work to do.</p>
+
+      <div class="summary">
+        <h4>Key takeaways</h4>
+        <ul>
+          <li>UX isn't just a designer's job — every role makes UX decisions.</li>
+          <li>Nielsen's <strong>10 heuristics</strong> explain 80% of UX problems.</li>
+          <li>Laws of UX — <strong>Fitts, Hick, Jakob, Miller, Proximity, Doherty, Peak-End, Tesler</strong> — predict user behaviour.</li>
+          <li>Design for the <strong>thumb</strong>, not the pointer. One-handed is the default.</li>
+          <li>Accessibility = <strong>POUR</strong>. Start with colour contrast.</li>
+          <li>Bhutan specifics: Dzongkha rendering, variable connectivity, outdoor use, wide age range.</li>
+          <li>Work the <strong>Double Diamond</strong>; test at the cheapest fidelity that answers your question.</li>
+          <li><strong>A well-designed screen is one where the user never notices the design.</strong></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="chapter" id="further">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Appendix</div>
+        <h2>Further reading</h2>
+      </div>
+      <h3 style="color:var(--indigo); font-size:1.1rem">📚 Books worth owning</h3>
+      <ul>
+        <li><em>Don't Make Me Think</em> — Steve Krug. The best 2-hour read on web usability.</li>
+        <li><em>The Design of Everyday Things</em> — Don Norman. The classic. Talks about doors as much as software.</li>
+        <li><em>Refactoring UI</em> — Adam Wathan &amp; Steve Schoger. For devs who want to design better.</li>
+        <li><em>Designing Interfaces</em> — Jenifer Tidwell. Pattern catalogue — dense but useful.</li>
+      </ul>
+      <h3 style="color:var(--indigo); font-size:1.1rem; margin-top:1.5rem">🌐 Online resources</h3>
+      <ul>
+        <li><a href="https://lawsofux.com" target="_blank" rel="noopener">lawsofux.com</a> — all the laws, illustrated</li>
+        <li><a href="https://www.nngroup.com/articles/" target="_blank" rel="noopener">nngroup.com</a> — Nielsen Norman Group, deep research articles</li>
+        <li><a href="https://growth.design/case-studies" target="_blank" rel="noopener">growth.design</a> — UX case studies as annotated comic strips</li>
+        <li><a href="https://m3.material.io" target="_blank" rel="noopener">material.io</a> — Google's full design system</li>
+        <li><a href="https://developer.apple.com/design/human-interface-guidelines/" target="_blank" rel="noopener">Apple Human Interface Guidelines</a></li>
+        <li><a href="https://www.w3.org/WAI/WCAG22/quickref/" target="_blank" rel="noopener">WCAG 2.2 Quick Reference</a> — the accessibility checklist</li>
+      </ul>
+      <h3 style="color:var(--indigo); font-size:1.1rem; margin-top:1.5rem">🎯 Practice</h3>
+      <ul>
+        <li>Pick any app on your phone. Run the 10 heuristics against it. Write down 3 wins and 3 misses.</li>
+        <li>Screenshot a screen you find frustrating. Identify which heuristic or law it's breaking.</li>
+        <li>Redesign one mBoB screen on paper using the fidelity ladder. Share it with a classmate.</li>
+      </ul>
+    </section>
+
+  </div>
+
+  <footer>
+    <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE">
+    SELISE × Pelsung · Extra · E1<br>
+    UX &amp; HCI Basics
+  </footer>
+
+</body>
+</html>
