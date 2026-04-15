@@ -516,6 +516,10 @@
         tag: '10 classes · Cross-vertical teams',
         sub: 'Mixed teams of Dev, Design, Testing and BA build a real GMC-relevant product, ending in an exhibition.',
         kind: 'capstone' },
+      { id: 4, num: '04', name: 'Extra',
+        tag: 'Supplementary · self-paced',
+        sub: 'Optional deep-dives that every role benefits from but don\'t fit neatly into foundation or vertical tracks. Read at your own pace.',
+        kind: 'classes' },
     ];
 
     const CLASSES = [
@@ -565,7 +569,9 @@
                  notes:  'foundation/08-teams-traditional-vs-ai-era-notes.html' } },
       { phase: 1, num: '09', title: 'Spec-Driven Product Thinking',
         topics: 'Writing clear specs · user stories as AI prompts',
-        status: 'upcoming', files: {} },
+        status: 'upcoming',
+        files: { slides: 'foundation/09-spec-driven-product-thinking-slides.html',
+                 notes:  'foundation/09-spec-driven-product-thinking-notes.html' } },
       { phase: 1, num: '10', title: 'Build Personal Site & Present',
         topics: 'Personal site with AI · 4-min presentation · aptitude signal',
         status: 'upcoming', files: {} },
@@ -580,6 +586,13 @@
       { phase: 3, num: '—', title: 'Exhibition / Demo Day',
         topics: 'Public showcase · may coincide with Pelsung graduation',
         status: 'upcoming', files: {} },
+
+      // PHASE 4 — EXTRA / SUPPLEMENTARY
+      { phase: 4, num: 'E1', title: 'UX & HCI Basics',
+        topics: 'Heuristics · Fitts & Hick · mobile thumb zones · accessibility · mBoB teardown',
+        status: 'done',
+        files: { slides: 'extra/e1-ux-hci-basics-slides.html',
+                 notes:  'extra/e1-ux-hci-basics-notes.html' } },
     ];
 
     /* Verticals — Core Specialization (Phase 2). Design is planned for future cohorts. */

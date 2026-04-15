@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Class 09 Notes — Spec-Driven Product Thinking</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#0066B2; --indigo:#001F35; --amber:#247EC1; --green:#7BC950; --purple:#4796D1; --red:#D80032; --text:#1B2021; --muted:#7B7C7F; --faint:#9CA3AF; --surf:#fff; --bg:#F9F9F9; --border:#EDEDED; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Open Sans','Aptos',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; font-size:17px; -webkit-font-smoothing:antialiased; }
+    h1,h2,h3,h4,h5 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:400; letter-spacing:-0.01em; }
+    a { color: var(--blue); }
+
+    .hero { background:var(--surf); border-bottom:1px solid var(--border); padding:4rem 2rem 3rem; text-align:center; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background: linear-gradient(135deg, #0067A3, #002D72); }
+    .logo-corner { position:absolute; top: 1.25rem; left: 1.5rem; opacity:0.85; }
+    .logo-corner img { height: 34px; }
+    .hero-badge { display:inline-flex; align-items:center; gap:0.5rem; background:var(--bg); border:1px solid var(--border); border-radius:100px; padding:0.35rem 1rem; font-size:0.75rem; font-weight:700; color:var(--muted); letter-spacing:0.07em; text-transform:uppercase; margin-bottom:1.5rem; }
+    .hero-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--amber); }
+    .hero h1 { font-size:clamp(2rem,5vw,3.5rem); line-height:1.15; margin-bottom:0.75rem; }
+    .c-blue{color:var(--blue);} .c-indigo{color:var(--indigo);}
+    .hero-sub { font-size:1rem; color:var(--muted); margin-bottom:2rem; max-width:680px; margin-left:auto; margin-right:auto; }
+    .hero-tags { display:flex; justify-content:center; gap:0.6rem; flex-wrap:wrap; }
+    .hero-tag { padding:0.3rem 0.9rem; border-radius:8px; font-size:0.78rem; font-weight:600; background:#E6F0F8; color:var(--blue); }
+
+    .container { max-width:1040px; margin:0 auto; padding:0 2rem 6rem; }
+
+    .toc { background:var(--surf); border:1px solid var(--border); border-radius:16px; padding:1.75rem 2rem; margin:2.5rem 0; }
+    .toc h3 { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); margin-bottom:1.25rem; }
+    .toc ol { list-style: none; counter-reset: step; }
+    .toc li { counter-increment: step; padding:0.45rem 0; border-bottom:1px solid var(--border); }
+    .toc li:last-child { border-bottom:none; }
+    .toc li::before { content: counter(step, decimal-leading-zero); color:var(--faint); font-family:'Bahnschrift','Segoe UI',sans-serif; margin-right:0.8rem; font-size:0.9rem; }
+    .toc a { text-decoration:none; color:var(--text); font-weight:500; }
+    .toc a:hover { color: var(--blue); }
+
+    section.chapter { margin: 3.5rem 0; }
+    .chapter-head { margin-bottom:1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
+    .chapter-eyebrow { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--blue); margin-bottom:0.3rem; }
+    .chapter-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--indigo); }
+
+    p { margin: 0.7rem 0; }
+    ul, ol { margin: 0.6rem 0 0.6rem 1.3rem; }
+    li { margin: 0.3rem 0; }
+    strong { color: var(--indigo); }
+
+    .callout { background:var(--surf); border:1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 10px; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+    .callout.amber { border-left-color: var(--amber); }
+    .callout.green { border-left-color: var(--green); }
+    .callout.red { border-left-color: var(--red); }
+    .callout h4 { font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--indigo); }
+
+    .funnel { display:flex; flex-direction:column; gap:0.5rem; margin:1.25rem 0; }
+    .funnel-step { background:var(--surf); border:1px solid var(--border); border-left:4px solid var(--blue); border-radius:10px; padding:0.8rem 1.1rem; }
+    .funnel-step h5 { color:var(--indigo); font-size:1rem; margin-bottom:0.2rem; }
+    .funnel-step p { font-size:0.9rem; color:var(--muted); margin:0; }
+    .funnel-step.accent { border-left-color:var(--amber); background:#EAF3FA; }
+
+    .persona-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin: 1rem 0; }
+    @media (max-width: 720px){ .persona-grid { grid-template-columns: 1fr; } }
+    .persona { background:var(--surf); border:1px solid var(--border); border-top:3px solid var(--blue); border-radius:10px; padding:0.9rem 1.1rem; }
+    .persona h5 { color:var(--indigo); font-size:1rem; margin-bottom:0.1rem; }
+    .persona .where { font-size:0.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.5rem; }
+    .persona p { font-size:0.87rem; color:var(--text); margin:0; line-height:1.55; }
+
+    .compare { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin:1.2rem 0; }
+    @media (max-width: 720px){ .compare { grid-template-columns: 1fr; } }
+    .compare .col { background:var(--surf); border:1px solid var(--border); border-radius:10px; padding:1rem 1.2rem; font-size:0.9rem; }
+    .compare .col.bad { border-top:4px solid var(--red); }
+    .compare .col.good { border-top:4px solid var(--green); }
+    .compare .col h5 { margin-bottom:0.5rem; }
+    .compare .col.bad h5 { color:var(--red); }
+    .compare .col.good h5 { color:#3D7A3D; }
+    pre.spec { background:#FAFBFC; border:1px solid var(--border); border-radius:6px; padding:0.8rem 1rem; font-family:'Courier New',monospace; font-size:0.8rem; line-height:1.55; color:var(--text); white-space:pre-wrap; overflow-x:auto; }
+
+    .seven { display:grid; grid-template-columns: repeat(2, 1fr); gap:0.7rem; margin:1rem 0; }
+    @media (max-width: 720px){ .seven { grid-template-columns: 1fr; } }
+    .seven .part { background:var(--surf); border:1px solid var(--border); border-left:3px solid var(--blue); border-radius:8px; padding:0.7rem 1rem; font-size:0.9rem; }
+    .seven .part h6 { color:var(--indigo); font-size:0.95rem; margin-bottom:0.2rem; font-family:'Bahnschrift','Segoe UI',sans-serif; }
+    .seven .part p { font-size:0.85rem; color:var(--muted); margin:0; }
+
+    .hg-note { background:linear-gradient(135deg,#0067A3,#002D72); color:white; border-radius:12px; padding:1.3rem 1.5rem; margin:1.2rem 0; }
+    .hg-note h4 { color:white; margin-bottom:0.4rem; }
+    .hg-note p { color:rgba(255,255,255,0.9); font-size:0.95rem; }
+    .hg-note strong { color:white; }
+
+    .loop-list { display:grid; grid-template-columns: repeat(4,1fr); gap:0.6rem; margin:1rem 0; }
+    @media (max-width: 720px){ .loop-list { grid-template-columns: repeat(2,1fr); } }
+    .loop-list .step { background:var(--surf); border:1px solid var(--border); border-top:3px solid var(--blue); border-radius:8px; padding:0.7rem 0.9rem; text-align:center; font-size:0.85rem; }
+    .loop-list .step h6 { color:var(--indigo); font-size:0.95rem; margin-bottom:0.15rem; }
+
+    .exercise-list { display:grid; grid-template-columns: repeat(3,1fr); gap:0.5rem; margin:1rem 0; }
+    @media (max-width: 720px){ .exercise-list { grid-template-columns: 1fr; } }
+    .exercise-list li { background:var(--surf); border:1px solid var(--border); border-left:3px solid var(--amber); padding:0.5rem 0.8rem; border-radius:6px; list-style:none; font-size:0.9rem; margin:0; }
+
+    .summary { background: linear-gradient(135deg, #F9F9F9, #EDEDED); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+    .summary h4 { color: var(--indigo); margin-bottom: 0.5rem; font-size: 0.95rem; }
+    .summary ul { margin-left: 1.1rem; }
+    .summary li { font-size: 0.93rem; margin: 0.25rem 0; }
+
+    .template-box { background:var(--surf); border:2px solid var(--blue); border-radius:12px; padding:1.2rem 1.5rem; margin:1rem 0; text-align:center; font-family:'Bahnschrift','Segoe UI',sans-serif; }
+    .template-box p { font-size:1.15rem; line-height:2; margin:0; color:var(--text); }
+    .template-box .blank { color:var(--blue); border-bottom:2px dashed var(--blue); padding:0 0.6rem; }
+
+    footer { text-align:center; padding: 2rem 1rem 3rem; color: var(--faint); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+    footer img { height: 28px; opacity:0.7; margin-bottom: 0.5rem; display: block; margin-left:auto; margin-right:auto; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="logo-corner"><img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE"></div>
+    <div class="hero-badge"><span class="dot"></span> Class 09 · Foundation</div>
+    <h1><span class="c-blue">Spec-Driven</span><br><span class="c-indigo">Product Thinking</span></h1>
+    <p class="hero-sub">Your take-home reference. How great products get made, why specs just became the most important skill in software, and how to write one that an engineer — or an AI — can build from.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">Product Thinking</span>
+      <span class="hero-tag">AI Hourglass</span>
+      <span class="hero-tag">Spec Anatomy</span>
+      <span class="hero-tag">mBoB Exercise</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="toc">
+      <h3>In this note</h3>
+      <ol>
+        <li><a href="#why">Why this class matters</a></li>
+        <li><a href="#funnel">The product thinking funnel</a></li>
+        <li><a href="#personas">Users &amp; personas</a></li>
+        <li><a href="#mvp">Solution &amp; MVP thinking</a></li>
+        <li><a href="#hourglass">The AI-era hourglass</a></li>
+        <li><a href="#spec">Anatomy of a dev-ready spec</a></li>
+        <li><a href="#story">User stories &amp; acceptance criteria</a></li>
+        <li><a href="#loop">Spec → AI → Code loop</a></li>
+        <li><a href="#exercise">Take-home exercise</a></li>
+        <li><a href="#further">Further reading</a></li>
+      </ol>
+    </div>
+
+    <section class="chapter" id="why">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 1</div>
+        <h2>Why this class matters</h2>
+      </div>
+      <p>Imagine two different Monday mornings for a developer working on mBoB.</p>
+      <div class="compare">
+        <div class="col bad">
+          <h5>❌ Request A</h5>
+          <p>"Users are complaining about bill payments. Make it better. Also add some favourites thing. Make it nice. Thanks."</p>
+        </div>
+        <div class="col good">
+          <h5>✅ Request B</h5>
+          <p>"62% of users pay the same 3 billers each month, re-typing 12-digit account numbers. Let them save billers as favourites — show on home, pre-fill on tap, MPIN still required, max 10."</p>
+        </div>
+      </div>
+      <p>Both ask for the same feature. Only one lets the developer start coding — or lets an AI build a useful first draft.</p>
+      <div class="callout amber">
+        <h4>The big idea today</h4>
+        <p>A great product starts with a <strong>sharp problem</strong>, not a feature. A <strong>dev-ready spec</strong> is the bridge between your thinking and AI's speed. Learn to write one, and you can ship 10× faster than someone who can't.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="funnel">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 2</div>
+        <h2>The product thinking funnel</h2>
+      </div>
+      <p>Every great product passes through five stages — in this order. Teams that skip the first three end up building features nobody uses.</p>
+      <div class="funnel">
+        <div class="funnel-step"><h5>1. Problem</h5><p>What hurts? Whose day gets worse without this?</p></div>
+        <div class="funnel-step"><h5>2. Users</h5><p>Who exactly has this problem? Name real people — not "everyone".</p></div>
+        <div class="funnel-step"><h5>3. Solution</h5><p>What approach fits their reality? What's the simplest version?</p></div>
+        <div class="funnel-step"><h5>4. Features</h5><p>Which concrete pieces (screens, buttons, behaviours) deliver the solution?</p></div>
+        <div class="funnel-step accent"><h5>5. Spec</h5><p>A dev-ready document. The bridge to AI and engineers.</p></div>
+      </div>
+
+      <h3 style="color:var(--indigo); margin-top:1.5rem; font-size:1.15rem">Worked example: mBoB favourites</h3>
+      <ol>
+        <li><strong>Problem:</strong> Tashi pays the same 3 billers every month and re-types their 12-digit account numbers each time. 36 re-entries a year.</li>
+        <li><strong>Users:</strong> Repeat-biller payers — shopkeepers, parents paying school fees, people on standing utility accounts.</li>
+        <li><strong>Solution:</strong> Let users save billers they've paid before, show them on the Bill Payments home, pre-fill on tap.</li>
+        <li><strong>Features:</strong> (a) "Save to favourites" action, (b) Favourites section on home, (c) Tap-to-prefill, (d) Edit/remove.</li>
+        <li><strong>Spec:</strong> A written document with problem, user story, acceptance criteria, UI notes, data sketch, edges, out-of-scope. (See Part 6.)</li>
+      </ol>
+    </section>
+
+    <section class="chapter" id="personas">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 3</div>
+        <h2>Users &amp; personas</h2>
+      </div>
+      <p>"Everyone" is not a user. Good products are designed for <strong>specific people</strong>. If it works for them, it works for millions. If you think about "users" as a blob, you end up with a grey, average feature that fits nobody.</p>
+      <div class="persona-grid">
+        <div class="persona" style="border-top-color:var(--indigo)">
+          <h5>Aum Pema</h5>
+          <div class="where">Trashigang · 58</div>
+          <p>Big buttons. Dzongkha. Hates typing numbers. Her son showed her mBoB once. She uses it for exactly two things.</p>
+        </div>
+        <div class="persona" style="border-top-color:var(--blue)">
+          <h5>Tashi</h5>
+          <div class="where">Thimphu · 34 · shopkeeper</div>
+          <p>Power user. Pays 30+ bills a month. Wants speed. Will learn shortcuts. Annoyed by extra taps.</p>
+        </div>
+        <div class="persona" style="border-top-color:var(--amber)">
+          <h5>Karma</h5>
+          <div class="where">Student abroad · 22</div>
+          <p>On Wi-Fi. Wants to send money to family fast. Forex and limits matter. Might not have a Bhutan SIM.</p>
+        </div>
+      </div>
+      <div class="callout">
+        <h4>Rule of thumb</h4>
+        <p>A feature that works for <strong>Aum Pema, Tashi, and Karma</strong> is a feature worth building. If it only works for one of them, either narrow your audience (fine) or go back and rethink (more often).</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="mvp">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 4</div>
+        <h2>Solution &amp; MVP thinking</h2>
+      </div>
+      <p>An <strong>MVP (Minimum Viable Product)</strong> is not a half-done product. It's the smallest <em>complete</em> thing that proves your idea works.</p>
+      <div class="compare">
+        <div class="col bad">
+          <h5>❌ Too big</h5>
+          <p>"Save favourites, categorise them, share with family, auto-pay, schedule, get reminders, export to Excel…"</p>
+          <p style="margin-top:0.4rem; color:var(--muted); font-size:0.82rem">Takes 6 months. Most of it won't get used.</p>
+        </div>
+        <div class="col good">
+          <h5>✅ Right-sized MVP</h5>
+          <p>"Save a biller as a favourite. See it on the Bill Payments home. Tap it to pay. That's it."</p>
+          <p style="margin-top:0.4rem; color:var(--muted); font-size:0.82rem">Ships in 2 weeks. If people use it, add more. If not, you saved 5 months.</p>
+        </div>
+      </div>
+      <div class="callout green">
+        <h4>Test</h4>
+        <p>If you can't describe your MVP in <strong>one sentence</strong>, it's not an MVP — it's a wish list. Cut until it fits in a sentence.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="hourglass">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 5</div>
+        <h2>The AI-era hourglass</h2>
+      </div>
+      <p>Traditional software development was a straight line: requirements → design → code → test → ship. AI bends that line into an <strong>hourglass</strong>.</p>
+      <ul>
+        <li><strong>Top (wide):</strong> humans doing product thinking — problem framing, user research, writing specs. This part <em>grows</em> in the AI era.</li>
+        <li><strong>Middle (narrow):</strong> AI writes code in minutes, not weeks. The typing-speed part of software collapsed.</li>
+        <li><strong>Bottom (wide):</strong> humans reviewing, testing, validating. This part <em>also grows</em> — because AI is fast but not always right.</li>
+      </ul>
+      <div class="hg-note">
+        <h4>The punchline</h4>
+        <p><strong>AI didn't kill the engineer. It killed the vague requirement.</strong> The person who can write a sharp spec is now the most valuable person in the room. The person who can review AI output is the second most valuable. Typing speed matters less. Thinking quality matters more.</p>
+      </div>
+      <p>This is why this class sits where it does in the Pelsung foundation. Before you touch code, you need to be able to think like a product person — because that's where your leverage is.</p>
+    </section>
+
+    <section class="chapter" id="spec">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 6</div>
+        <h2>Anatomy of a dev-ready spec</h2>
+      </div>
+      <p>A dev-ready spec is one where a <strong>mid-level frontend or backend engineer</strong> can read it and start coding — with no follow-up meeting. Every such spec has these <strong>7 parts</strong>:</p>
+      <div class="seven">
+        <div class="part"><h6>1. Problem / Why</h6><p>One paragraph. Whose pain? How big is it?</p></div>
+        <div class="part"><h6>2. User story</h6><p>"As a ___, I want ___ so that ___"</p></div>
+        <div class="part"><h6>3. Acceptance criteria</h6><p>Given / When / Then. Testable. No ambiguity.</p></div>
+        <div class="part"><h6>4. UI notes / sketch</h6><p>Where it lives. A rough wireframe is fine.</p></div>
+        <div class="part" style="border-left-color:var(--amber)"><h6>5. Data sketch</h6><p>What fields? What gets stored? Where?</p></div>
+        <div class="part" style="border-left-color:var(--amber)"><h6>6. Edge cases</h6><p>Offline? Max reached? Duplicate? Deleted item?</p></div>
+        <div class="part" style="border-left-color:var(--red)"><h6>7. Out of scope</h6><p>What this spec does NOT cover. Prevents scope creep.</p></div>
+      </div>
+
+      <h3 style="color:var(--indigo); margin-top:2rem; font-size:1.15rem">Bad spec vs good spec — same feature</h3>
+      <div class="compare">
+        <div class="col bad">
+          <h5>❌ The spec that kills projects</h5>
+          <pre class="spec">Title: Add favourites
+
+Make users able to save favourites.
+Put them somewhere in the app.
+Should be easy to use.
+Make it fast.</pre>
+        </div>
+        <div class="col good">
+          <h5>✅ The spec that ships</h5>
+          <pre class="spec">Title: Biller favourites · mBoB · v1
+
+Problem:
+  62% of users pay same 3+ billers/month,
+  re-typing 12-digit account numbers.
+
+User story:
+  As a repeat-biller payer,
+  I want to save billers as favourites
+  so I can pay in 2 taps.
+
+Acceptance criteria:
+  • Given I've just paid a biller,
+    When I tap "⭐ Save",
+    Then it appears in Favourites.
+  • Given I'm on Bill Payments home,
+    When I tap a favourite,
+    Then amount + account pre-filled;
+    MPIN still required to confirm.
+  • Max 10 favourites; sorted by last-used.
+
+UI: Favourites row under "Quick Send Money"
+    on Bill Payments home. ⭐ button on
+    receipt screen after payment.
+
+Data: favourites[] per user in DB —
+    {billerId, alias, lastUsedAt, amount?}
+
+Edge cases:
+  • Already 10 saved → prompt to remove one
+  • Offline at save → queue &amp; sync later
+  • Biller deactivated → grey out, show toast
+  • Duplicate tap → idempotent (no dupes)
+
+Out of scope (v1):
+  - Sharing favourites between users
+  - Categories / custom icons
+  - Auto-pay from favourite</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="story">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 7</div>
+        <h2>User stories &amp; acceptance criteria</h2>
+      </div>
+
+      <h3 style="color:var(--indigo); font-size:1.15rem">The universal user story template</h3>
+      <div class="template-box">
+        <p>As a <span class="blank">who</span>,</p>
+        <p>I want <span class="blank">what</span></p>
+        <p>so that <span class="blank">why</span>.</p>
+      </div>
+      <p>Example: <em>"As a shopkeeper who pays repeat billers, I want to save billers as favourites so I don't re-type account numbers each month."</em></p>
+      <div class="callout">
+        <h4>The "so that" is the most important part</h4>
+        <p>It tells the engineer — and the AI — the <strong>real goal</strong>. That's what lets them make smart tradeoffs when the "what" meets reality. A user story without a "so that" is a feature request, not a story.</p>
+      </div>
+
+      <h3 style="color:var(--indigo); font-size:1.15rem; margin-top:2rem">Acceptance criteria · Given / When / Then</h3>
+      <p>Acceptance criteria are <strong>testable statements</strong>. Each one becomes a QA test case later. The format:</p>
+      <pre class="spec">Given  [the starting situation]
+When   [the user does a specific action]
+Then   [a specific thing happens]</pre>
+      <p>Example:</p>
+      <pre class="spec">Given the user has just completed a bill payment,
+When they tap the "⭐ Save as favourite" button,
+Then the biller appears in their Favourites list within 1 second.</pre>
+      <div class="callout green">
+        <h4>Good acceptance criteria are</h4>
+        <ul>
+          <li><strong>Specific</strong> — anyone reading gets the same picture</li>
+          <li><strong>Testable</strong> — QA can verify yes/no</li>
+          <li><strong>Independent</strong> — each one stands alone</li>
+          <li><strong>About behaviour, not implementation</strong> — "appears in list" not "adds a row to favourites_table"</li>
+        </ul>
+      </div>
+
+      <h3 style="color:var(--indigo); font-size:1.15rem; margin-top:2rem">Edge cases — junior vs senior thinking</h3>
+      <p>Juniors spec the happy path. Seniors spec what happens when things go wrong. For every feature, ask yourself:</p>
+      <ul>
+        <li>What if the user is offline?</li>
+        <li>What if a limit is hit (max items, rate limit, daily cap)?</li>
+        <li>What if the user taps twice quickly?</li>
+        <li>What if the underlying data changes (biller deactivated, card expired)?</li>
+        <li>What if the user logs out and back in?</li>
+        <li>What about Dzongkha input / long names / unusual characters?</li>
+      </ul>
+      <p>Every edge case you list in the spec = one less bug in production.</p>
+    </section>
+
+    <section class="chapter" id="loop">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 8</div>
+        <h2>The Spec → AI → Code loop</h2>
+      </div>
+      <p>This is how real teams work in 2026:</p>
+      <div class="loop-list">
+        <div class="step"><h6>✍️ Write spec</h6><p>In Markdown, with the 7 parts.</p></div>
+        <div class="step"><h6>🤖 Feed to AI</h6><p>Claude Code reads it.</p></div>
+        <div class="step" style="border-top-color:var(--amber)"><h6>💻 AI writes code</h6><p>Minutes, not weeks.</p></div>
+        <div class="step" style="border-top-color:var(--green)"><h6>🔍 You review</h6><p>Does it match the spec?</p></div>
+      </div>
+      <div class="callout red">
+        <h4>When output is weird, fix the spec — not the code</h4>
+        <p>Ambiguity in the spec → weird code. The temptation is to patch the code. Resist it. Fix the <strong>spec</strong>, regenerate, and you end up with a source of truth that's still correct next month when you need to change it.</p>
+      </div>
+      <p>Treat the spec as the source of truth. The code is just one of its outputs.</p>
+    </section>
+
+    <section class="chapter" id="exercise">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 9 · Hands-on</div>
+        <h2>Take-home exercise</h2>
+      </div>
+      <p>In class, each group of 5 picked one mBoB feature and produced a partial spec (problem + persona + user story + acceptance criteria + UI sketch). <strong>At home, complete the remaining parts:</strong></p>
+      <ol>
+        <li>✅ Problem (done in class)</li>
+        <li>✅ Persona (done in class)</li>
+        <li>✅ User story (done in class)</li>
+        <li>✅ 3+ acceptance criteria (done in class)</li>
+        <li>✅ UI sketch (done in class)</li>
+        <li>📝 <strong>Data sketch</strong> — what fields? what gets stored? where?</li>
+        <li>📝 <strong>Edge cases</strong> — at least 4</li>
+        <li>📝 <strong>Out of scope</strong> — what this spec does NOT cover</li>
+      </ol>
+
+      <h3 style="color:var(--indigo); font-size:1.15rem; margin-top:1.5rem">If you want extra practice</h3>
+      <p>Pick any feature from the list below and write a full 7-part spec solo. It's the single best way to practise.</p>
+      <ul class="exercise-list" style="padding:0">
+        <li>💸 Split bill at restaurant</li>
+        <li>📅 Scheduled transfers</li>
+        <li>🎯 Savings goal tracker</li>
+        <li>👨‍👩‍👧 Family sub-account</li>
+        <li>📴 Offline QR receipts</li>
+        <li>🔁 Recurring bill auto-pay</li>
+        <li>🔔 Smart notifications</li>
+        <li>🧊 Emergency card freeze</li>
+        <li>🏷️ Expense categorization</li>
+      </ul>
+
+      <div class="summary">
+        <h4>Key takeaways</h4>
+        <ul>
+          <li>Great products come from <strong>problems</strong>, not feature wish-lists.</li>
+          <li>The funnel: <strong>Problem → Users → Solution → Features → Spec</strong>.</li>
+          <li>The AI-era hourglass: specs up top, AI in the middle, review at the bottom.</li>
+          <li>A dev-ready spec has <strong>7 parts</strong> — learn them, use them, reuse them.</li>
+          <li>User story + Given/When/Then acceptance criteria = testable behaviour.</li>
+          <li><strong>If you can spec it, you can ship it — 10× faster.</strong></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="chapter" id="further">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Appendix</div>
+        <h2>Further reading (optional)</h2>
+      </div>
+      <ul>
+        <li><strong>Shape Up</strong> by Ryan Singer (Basecamp) — free online. How to scope work before committing to build.</li>
+        <li><strong>Inspired</strong> by Marty Cagan — classic on product thinking and empowered product teams.</li>
+        <li><strong>Jobs to be Done</strong> framework — another lens on understanding the "why" behind user behaviour.</li>
+        <li>Look inside your future SELISE projects — each has a <code>CLAUDE.md</code> and often feature specs in Markdown. Read them.</li>
+      </ul>
+    </section>
+
+  </div>
+
+  <footer>
+    <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE">
+    SELISE × Pelsung · Foundation · Class 09<br>
+    Spec-Driven Product Thinking
+  </footer>
+
+</body>
+</html>

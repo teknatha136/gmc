@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spec-Driven Product Thinking — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      .funnel { display:flex; flex-direction:column; align-items:center; gap:0.55rem; width:100%; max-width: 760px; }
+      .funnel-row { display:flex; align-items:center; gap:1rem; width:100%; }
+      .funnel-bar { background: white; border: 1px solid var(--border); border-left: 5px solid var(--blue); border-radius: 10px; padding: 0.85rem 1.2rem; flex:1; display:flex; align-items:center; justify-content:space-between; }
+      .funnel-bar h5 { color: var(--indigo); font-size: 1.15rem; font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; }
+      .funnel-bar .sub { color: var(--muted); font-size: 0.9rem; }
+      .funnel-bar.w1 { width:100%; }
+      .funnel-bar.w2 { width:85%; }
+      .funnel-bar.w3 { width:70%; }
+      .funnel-bar.w4 { width:55%; }
+      .funnel-bar.w5 { width:42%; border-left-color: var(--amber); background:#EAF3FA; }
+      .arrow-down { color: var(--faint); font-size: 1.2rem; }
+
+      .spec-compare { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; width:100%; max-width:1200px; }
+      @media (max-width: 820px){ .spec-compare { grid-template-columns: 1fr; } }
+      .spec-card { background:white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.2rem; font-size:0.95rem; line-height:1.55; }
+      .spec-card.bad { border-top:4px solid var(--red); }
+      .spec-card.good { border-top:4px solid var(--green); }
+      .spec-card h5 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.5rem; }
+      .spec-card.bad h5 { color: var(--red); }
+      .spec-card.good h5 { color: #3D7A3D; }
+      .spec-card pre { background: #FAFBFC; border:1px solid var(--border); border-radius:6px; padding:0.7rem 0.9rem; font-family:'Courier New',monospace; font-size:0.82rem; white-space:pre-wrap; color:var(--text); line-height:1.5; }
+      .spec-card .tag { display:inline-block; font-size:0.7rem; padding:0.15rem 0.5rem; border-radius:4px; background:#EEE; color:var(--muted); margin-right:0.3rem; }
+
+      .hourglass-wrap { display:flex; justify-content:center; width:100%; }
+      .hourglass-wrap svg { max-width: 760px; width:100%; height:auto; }
+
+      .mbob-screen { background: #F4F6F8; border-radius: 20px; border: 3px solid #2C2C2C; padding: 1rem; width: 220px; min-height:360px; font-size:0.75rem; }
+      .mbob-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.7rem; color:#333; }
+      .mbob-card { background: linear-gradient(135deg,#0067A3,#002D72); color:white; padding:0.7rem; border-radius:10px; margin-bottom:0.6rem; font-size:0.7rem; }
+      .mbob-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:0.4rem; }
+      .mbob-tile { background:white; border-radius:8px; padding:0.5rem 0.3rem; text-align:center; font-size:0.65rem; color:#333; border:1px solid #E4E4E4; }
+
+      .persona-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:1rem; width:100%; max-width:1100px; }
+      @media (max-width: 820px){ .persona-grid { grid-template-columns: 1fr; } }
+      .persona { background:white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.1rem; border-top:4px solid var(--blue); }
+      .persona .who { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-size:1.05rem; font-weight:600; margin-bottom:0.2rem; }
+      .persona .where { font-size:0.78rem; color:var(--muted); margin-bottom:0.5rem; text-transform:uppercase; letter-spacing:0.05em; }
+      .persona .needs { font-size:0.92rem; color:var(--text); line-height:1.55; }
+
+      .loop-diagram { display:flex; align-items:center; gap:0.9rem; max-width:1100px; width:100%; flex-wrap:wrap; justify-content:center; }
+      .loop-step { background:white; border:1px solid var(--border); border-radius:12px; padding:0.85rem 1rem; min-width:160px; text-align:center; border-top:4px solid var(--blue); }
+      .loop-step h5 { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-size:1rem; margin-bottom:0.2rem; }
+      .loop-step p { font-size:0.8rem; color:var(--muted); }
+      .loop-arrow { color: var(--blue); font-size:1.4rem; font-weight:700; }
+
+      .exercise-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:0.7rem; width:100%; max-width:1100px; }
+      @media (max-width: 820px){ .exercise-grid { grid-template-columns: repeat(2,1fr); } }
+      .ex-card { background:white; border:1px solid var(--border); border-left:4px solid var(--amber); border-radius:8px; padding:0.7rem 0.9rem; }
+      .ex-card h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.98rem; margin-bottom:0.15rem; }
+      .ex-card p { font-size:0.82rem; color:var(--muted); }
+
+      .checklist { background:white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.2rem; max-width: 680px; }
+      .checklist li { list-style:none; padding:0.4rem 0; border-bottom:1px dashed var(--border); font-size:1rem; }
+      .checklist li:last-child { border-bottom:none; }
+      .checklist li::before { content:'☐'; margin-right:0.6rem; color:var(--blue); font-weight:700; }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>Foundation · Class 09</div></div>
+          <h1 class="display" style="color: var(--text)">
+            <span style="color: var(--blue)">Spec-Driven</span><br />
+            <span style="color: var(--indigo)">Product Thinking</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted)">How to turn an idea into something an engineer — or an AI — can actually build.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">Product Thinking</span>
+            <span class="class-tag tag-blue">Specs</span>
+            <span class="class-tag tag-blue">AI Hourglass</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 AGENDA -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 780px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem"><h2 class="heading">Session Journey · 4 hours</h2></div>
+          <div class="agenda-row" onclick="goTo(2)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🎯 Hook — Two requests, one engineer</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">20 min</span></div>
+          <div class="agenda-row" onclick="goTo(5)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🔭 Product thinking — the funnel</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">40 min</span></div>
+          <div class="agenda-row" onclick="goTo(11)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">⏳ The AI-era hourglass</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">30 min</span></div>
+          <div class="agenda-row" onclick="goTo(14)"><span class="ar-dot" style="background: var(--faint)"></span><span class="ar-label">☕ Break</span><span class="ar-badge" style="background:#F3F4F6;color:var(--muted)">20 min</span></div>
+          <div class="agenda-row" onclick="goTo(15)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">📝 Anatomy of a dev-ready spec</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">40 min</span></div>
+          <div class="agenda-row" onclick="goTo(21)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🔁 Spec → AI → Code loop</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">20 min</span></div>
+          <div class="agenda-row" onclick="goTo(23)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">👥 Group exercise — your mBoB feature</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">60 min</span></div>
+          <div class="agenda-row" onclick="goTo(26)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🎯 Wrap-up &amp; takeaways</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">10 min</span></div>
+        </div>
+      </div>
+
+      <!-- 3 HOOK INTRO -->
+      <div class="slide bg-dark" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> Hook</div>
+        <div class="center" style="max-width: 820px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎤 Imagine you're the developer</div>
+          <p class="disc-prompt">You show up Monday.<br>Your manager sends you <span style="color: var(--amber)">two requests</span>.<br>Both are for <strong>mBoB</strong>.</p>
+          <p style="color: rgba(255,255,255,0.6); font-size: 1rem; margin-top: 1.5rem;">Which one can you start building? Which one makes you want to quit?</p>
+        </div>
+      </div>
+
+      <!-- 4 TWO REQUESTS -->
+      <div class="slide accent-blue bg-subtle" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> Two mBoB Requests</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Same feature. Two requests. One engineer.</h2></div>
+          <div class="spec-compare">
+            <div class="spec-card bad">
+              <h5>❌ Request A — "Make mBoB better"</h5>
+              <pre>Hey, users are complaining about bill payments.
+Can you make it better?
+Also add some favourites thing like
+other apps have. Make it nice.
+Thanks.</pre>
+              <p style="font-size:0.85rem; color:var(--muted); margin-top:0.6rem;">Better how? Which users? What's "nice"? Where does favourites live? What data?</p>
+            </div>
+            <div class="spec-card good">
+              <h5>✅ Request B — "Add Biller Favourites"</h5>
+              <pre>Problem: 62% of users pay the same 3 billers
+  each month but re-enter details every time.
+
+User story: As a user who pays the same biller
+  monthly, I want to save billers as favourites
+  so I can pay in 2 taps.
+
+Acceptance criteria:
+  - Long-press a paid biller → "Save to favourites"
+  - Favourites show on Bill Payments home
+  - Tapping one pre-fills amount + account
+  - Max 10 favourites; sorted by last-used
+  - Requires MPIN to confirm payment</pre>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; margin-top:0.5rem"><strong>Today you learn how to write Request B</strong> — and why that skill matters more than ever.</p>
+        </div>
+      </div>
+
+      <!-- 5 SECTION: PRODUCT THINKING -->
+      <div class="slide bg-blue" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part One</div>
+          <h1 class="display" style="color: white">Product<br>Thinking</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">How great products actually get made.</p>
+        </div>
+        <div class="section-num" style="color: white">01</div>
+      </div>
+
+      <!-- 6 FUNNEL -->
+      <div class="slide accent-blue" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> The Product Funnel</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">From a fuzzy idea to a buildable feature</h2><p class="body-md" style="color:var(--muted)">Every great product passes through these five stages — in this order.</p></div>
+          <div class="funnel">
+            <div class="funnel-row"><div class="funnel-bar w1"><div><h5>1. Problem</h5><span class="sub">What hurts? Whose day gets worse without this?</span></div><span style="color:var(--blue); font-size:1.4rem">🩹</span></div></div>
+            <div class="arrow-down">▼</div>
+            <div class="funnel-row"><div class="funnel-bar w2"><div><h5>2. Users</h5><span class="sub">Who exactly has this problem? Real people, not "everyone".</span></div><span style="color:var(--blue); font-size:1.4rem">👥</span></div></div>
+            <div class="arrow-down">▼</div>
+            <div class="funnel-row"><div class="funnel-bar w3"><div><h5>3. Solution</h5><span class="sub">What approach fits their reality? What's the simplest version?</span></div><span style="color:var(--blue); font-size:1.4rem">💡</span></div></div>
+            <div class="arrow-down">▼</div>
+            <div class="funnel-row"><div class="funnel-bar w4"><div><h5>4. Features</h5><span class="sub">Which concrete pieces deliver that solution?</span></div><span style="color:var(--blue); font-size:1.4rem">🧩</span></div></div>
+            <div class="arrow-down">▼</div>
+            <div class="funnel-row"><div class="funnel-bar w5"><div><h5>5. Spec</h5><span class="sub">A dev-ready document. The bridge to AI &amp; engineers.</span></div><span style="color:var(--amber); font-size:1.4rem">📄</span></div></div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:800px"><strong>Most teams skip stages 1–3 and start at 4.</strong> That's why you get mBoB features nobody uses.</p>
+        </div>
+      </div>
+
+      <!-- 7 mBoB PROBLEM -->
+      <div class="slide accent-blue bg-subtle" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> Stage 1 — Problem</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Favourites didn't start as a feature</h2><p class="body-md" style="color:var(--muted); max-width:800px">It started as a <strong>problem</strong>.</p></div>
+          <div class="card" style="max-width:820px; background:white; border-left:5px solid var(--red); padding:1.2rem 1.5rem;">
+            <p class="body-md" style="color:var(--text); font-style:italic; line-height:1.7">"I pay my BPC electricity bill, my B-Mobile bill, and my school fees every month. Every time I open mBoB I have to type in the 12-digit account number again. I know it by heart by now. Why does the app make me do it?"</p>
+            <p style="font-size:0.85rem; color:var(--muted); margin-top:0.6rem">— Tashi, shopkeeper, Thimphu. 34 years old. Pays same 3 billers × 12 months = <strong style="color:var(--red)">36 re-entries a year</strong>.</p>
+          </div>
+          <ul class="reveal-list" style="max-width:700px; font-size:1rem; line-height:1.9; margin-top:0.8rem;">
+            <li>🎯 A problem is <strong>pain in someone's day</strong> — not "we should build X"</li>
+            <li>🎯 If you can't describe the pain in one sentence, you don't understand it yet</li>
+            <li>🎯 The sharper the problem, the sharper everything downstream</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 8 PERSONAS -->
+      <div class="slide accent-blue" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> Stage 2 — Users</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">"Everyone" is not a user</h2><p class="body-md" style="color:var(--muted); max-width:760px">Design for <strong>specific people</strong>. If it works for them, it works for millions.</p></div>
+          <div class="persona-grid">
+            <div class="persona" style="border-top-color:var(--indigo)">
+              <div class="who">Aum Pema</div>
+              <div class="where">Trashigang · 58</div>
+              <div class="needs">Big buttons. Dzongkha. Hates typing numbers. Her son showed her mBoB once. She uses it for exactly 2 things.</div>
+            </div>
+            <div class="persona" style="border-top-color:var(--blue)">
+              <div class="who">Tashi</div>
+              <div class="where">Thimphu · 34 · shopkeeper</div>
+              <div class="needs">Power user. Pays 30+ bills a month. Wants speed. Will learn shortcuts. Annoyed by extra taps.</div>
+            </div>
+            <div class="persona" style="border-top-color:var(--amber)">
+              <div class="who">Karma</div>
+              <div class="where">Student abroad · 22</div>
+              <div class="needs">On Wi-Fi. Wants to send money to family fast. Forex &amp; limits matter. Might not have Bhutan SIM.</div>
+            </div>
+          </div>
+          <div class="card" style="background:var(--bg); border:2px dashed var(--border); max-width:820px; text-align:center; padding:0.9rem 1.2rem;">
+            <p class="body-md" style="color:var(--text); margin:0"><strong>A feature that works for Aum Pema, Tashi, <em>and</em> Karma</strong> is a feature worth building.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9 SOLUTION + MVP -->
+      <div class="slide accent-blue bg-subtle" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> Stage 3 — Solution &amp; MVP</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">The smallest thing that solves it</h2><p class="body-md" style="color:var(--muted); max-width:780px">An <strong>MVP</strong> (Minimum Viable Product) is not a half-done product. It's the <em>smallest complete thing</em> that proves the idea works.</p></div>
+          <div class="cols-2" style="max-width:1000px">
+            <div class="card" style="border-top:3px solid var(--red)">
+              <h4 style="color:var(--red)">❌ Too big</h4>
+              <p style="font-size:0.95rem">"Save favourites, categorise them, share with family, auto-pay, schedule, get reminders, export to Excel…"</p>
+              <p style="font-size:0.85rem; color:var(--muted); margin-top:0.5rem">Will take 6 months. Most of it won't get used.</p>
+            </div>
+            <div class="card" style="border-top:3px solid var(--green)">
+              <h4 style="color:var(--green)">✅ MVP</h4>
+              <p style="font-size:0.95rem">"Save a biller as a favourite. See it on Bill Payments home. Tap it to pay. That's it."</p>
+              <p style="font-size:0.85rem; color:var(--muted); margin-top:0.5rem">Ships in 2 weeks. If it's used, add more. If not, you saved 5 months.</p>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:780px"><strong>Rule of thumb:</strong> if you can't describe your MVP in one sentence, it's not an MVP — it's a wish list.</p>
+        </div>
+      </div>
+
+      <!-- 10 FEATURES -->
+      <div class="slide accent-blue" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> Stage 4 — Features</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">From solution to concrete pieces</h2><p class="body-md" style="color:var(--muted); max-width:780px">A <strong>feature</strong> is a specific, nameable piece of the app. It has a screen, a button, a behaviour.</p></div>
+          <div class="cols-2" style="max-width:1000px; gap:1.2rem">
+            <div>
+              <h4 style="color:var(--indigo); margin-bottom:0.6rem">Solution:</h4>
+              <p style="font-size:1rem; color:var(--text); padding:0.8rem 1rem; background:#EAF3FA; border-radius:8px; border-left:4px solid var(--blue)">Let users save repeat billers so they don't re-type.</p>
+            </div>
+            <div>
+              <h4 style="color:var(--indigo); margin-bottom:0.6rem">Features that deliver it:</h4>
+              <ul style="font-size:0.95rem; line-height:1.8; color:var(--text); padding-left:1.2rem;">
+                <li>"Save to favourites" action on a paid biller</li>
+                <li>Favourites section on Bill Payments home</li>
+                <li>Tap-to-prefill from a favourite</li>
+                <li>Edit / remove favourite</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:760px; font-style:italic">One solution → several features. Each feature → one spec.</p>
+        </div>
+      </div>
+
+      <!-- 11 SECTION: HOURGLASS -->
+      <div class="slide bg-indigo" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Two</div>
+          <h1 class="display" style="color: white">The AI-Era<br>Hourglass</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Why specs just became the most important skill in software.</p>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- 12 HOURGLASS DIAGRAM -->
+      <div class="slide accent-blue bg-subtle" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> The Hourglass</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Traditional SDLC was a straight line. AI bends it.</h2></div>
+          <div class="hourglass-wrap">
+            <svg viewBox="0 0 760 480" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="hgTop" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0" stop-color="#0066B2"/>
+                  <stop offset="1" stop-color="#247EC1"/>
+                </linearGradient>
+                <linearGradient id="hgBot" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0" stop-color="#247EC1"/>
+                  <stop offset="1" stop-color="#7BC950"/>
+                </linearGradient>
+              </defs>
+              <!-- Top trapezoid (wide top) -->
+              <polygon points="50,20 710,20 470,220 290,220" fill="url(#hgTop)" opacity="0.92"/>
+              <text x="380" y="90" text-anchor="middle" font-family="Bahnschrift, Segoe UI, sans-serif" font-size="26" fill="white" font-weight="600">HUMANS · Product Thinking</text>
+              <text x="380" y="125" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="16" fill="white" opacity="0.9">problem · users · solution · specs</text>
+              <text x="380" y="160" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="14" fill="white" opacity="0.8">↑ GROWS in the AI era ↑</text>
+              <text x="380" y="195" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="13" fill="white" opacity="0.7">(more time spent thinking, not typing)</text>
+
+              <!-- Neck (narrow middle) -->
+              <rect x="290" y="220" width="180" height="40" fill="#001F35"/>
+              <text x="380" y="246" text-anchor="middle" font-family="Bahnschrift, Segoe UI, sans-serif" font-size="16" fill="white" font-weight="600">AI writes code</text>
+
+              <!-- Bottom trapezoid (wide bottom) -->
+              <polygon points="290,260 470,260 710,460 50,460" fill="url(#hgBot)" opacity="0.92"/>
+              <text x="380" y="340" text-anchor="middle" font-family="Bahnschrift, Segoe UI, sans-serif" font-size="26" fill="white" font-weight="600">HUMANS · Review &amp; Validate</text>
+              <text x="380" y="375" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="16" fill="white" opacity="0.95">testing · QA · acceptance · feedback</text>
+              <text x="380" y="410" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="14" fill="white" opacity="0.85">↓ GROWS in the AI era ↓</text>
+              <text x="380" y="440" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="13" fill="white" opacity="0.75">(more checking, because AI is fast but not always right)</text>
+            </svg>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px"><strong>AI compressed the middle.</strong> Your leverage is at the top (specs) and the bottom (review).</p>
+        </div>
+      </div>
+
+      <!-- 13 PUNCHLINE -->
+      <div class="slide bg-dark" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> The Punchline</div>
+        <div class="center" style="max-width: 860px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">⚡ The shift</div>
+          <h2 class="heading" style="color:white; font-size:clamp(1.8rem,3.5vw,2.8rem); line-height:1.3">AI didn't kill the engineer.<br><span style="color:var(--amber)">It killed the vague requirement.</span></h2>
+          <ul class="reveal-list" style="color: rgba(255,255,255,0.9); text-align:left; max-width: 720px; margin: 2rem auto; font-size: 1.05rem; line-height: 2;">
+            <li>📝 The person who can <strong>write a sharp spec</strong> is now the most valuable person in the room</li>
+            <li>🤖 AI turns that spec into working code in minutes</li>
+            <li>🔍 The person who can <strong>review the output</strong> is the second most valuable</li>
+            <li>💬 Typing speed matters less. <strong>Thinking quality</strong> matters more</li>
+          </ul>
+          <p style="color:var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.3rem; margin-top:1.5rem">If you can spec it, you can ship it — 10× faster than before.</p>
+        </div>
+      </div>
+
+      <!-- 14 BREAK -->
+      <div class="slide bg-blue" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span></div>
+        <div class="center" style="max-width:680px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">☕ Break</div>
+          <h1 class="display" style="color:white">20 minutes</h1>
+          <p class="body-lg" style="color:rgba(255,255,255,0.85); margin-top:1rem">Stretch. Water. Chat. Back at it.</p>
+          <p class="body-md" style="color:rgba(255,255,255,0.7); margin-top:2rem">When we come back: <strong style="color:var(--amber)">what a real spec actually looks like.</strong></p>
+        </div>
+      </div>
+
+      <!-- 15 SECTION: ANATOMY -->
+      <div class="slide bg-blue" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Three</div>
+          <h1 class="display" style="color: white">Anatomy of a<br>Dev-Ready Spec</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">The artefact that lets anyone — human or AI — build the right thing.</p>
+        </div>
+        <div class="section-num" style="color: white">03</div>
+      </div>
+
+      <!-- 16 BAD VS GOOD -->
+      <div class="slide accent-blue bg-subtle" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span> Bad vs Good Spec</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Same feature. Two specs. Very different outcomes.</h2><p class="body-md" style="color:var(--muted)">Feature: <strong>"Add biller favourites to mBoB"</strong></p></div>
+          <div class="spec-compare">
+            <div class="spec-card bad">
+              <h5>❌ The spec that kills projects</h5>
+              <pre>Title: Add favourites
+
+Make users able to save favourites.
+Put them somewhere in the app.
+Should be easy to use.
+Make it fast.</pre>
+              <p style="font-size:0.85rem; color:var(--muted); margin-top:0.5rem">Every reviewer will ask the SAME 20 questions. Answers change every meeting. Built feature ≠ what anyone wanted.</p>
+            </div>
+            <div class="spec-card good">
+              <h5>✅ The spec that ships</h5>
+              <pre>Title: Biller favourites · mBoB · v1
+
+Problem:
+  62% of users pay same 3+ billers/month,
+  re-typing 12-digit account numbers.
+
+User story:
+  As a repeat-biller payer,
+  I want to save billers as favourites
+  so I can pay in 2 taps.
+
+Acceptance criteria (Given/When/Then):
+  • Given I've just paid a biller, When I tap
+    "⭐ Save", Then it appears in Favourites.
+  • Given I'm on Bill Payments home, When I
+    tap a favourite, Then amount + account
+    are pre-filled, MPIN still required.
+  • Max 10 favourites; sorted by last-used.
+
+Out of scope (v1):
+  - Sharing favourites, categories, icons.</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 17 COMPONENTS -->
+      <div class="slide accent-blue" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span> The 7 Parts of a Spec</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Every dev-ready spec has these 7 parts</h2></div>
+          <div class="cols-2" style="max-width: 1100px; gap:1rem;">
+            <div>
+              <div class="card" style="border-left:4px solid var(--blue); margin-bottom:0.7rem"><h5 style="color:var(--indigo)">1. Problem / Why</h5><p style="font-size:0.9rem; color:var(--muted)">One paragraph. Whose pain? How big?</p></div>
+              <div class="card" style="border-left:4px solid var(--blue); margin-bottom:0.7rem"><h5 style="color:var(--indigo)">2. User story</h5><p style="font-size:0.9rem; color:var(--muted)">"As a ___, I want ___ so that ___"</p></div>
+              <div class="card" style="border-left:4px solid var(--blue); margin-bottom:0.7rem"><h5 style="color:var(--indigo)">3. Acceptance criteria</h5><p style="font-size:0.9rem; color:var(--muted)">Given / When / Then. Testable. No ambiguity.</p></div>
+              <div class="card" style="border-left:4px solid var(--blue)"><h5 style="color:var(--indigo)">4. UI notes / sketch</h5><p style="font-size:0.9rem; color:var(--muted)">Where does it live? Rough wireframe works.</p></div>
+            </div>
+            <div>
+              <div class="card" style="border-left:4px solid var(--amber); margin-bottom:0.7rem"><h5 style="color:var(--indigo)">5. Data sketch</h5><p style="font-size:0.9rem; color:var(--muted)">What fields? What gets stored? Where?</p></div>
+              <div class="card" style="border-left:4px solid var(--amber); margin-bottom:0.7rem"><h5 style="color:var(--indigo)">6. Edge cases</h5><p style="font-size:0.9rem; color:var(--muted)">Offline? Max reached? Duplicate? Deleted biller?</p></div>
+              <div class="card" style="border-left:4px solid var(--red)"><h5 style="color:var(--indigo)">7. Out of scope</h5><p style="font-size:0.9rem; color:var(--muted)">What this spec does NOT cover. Prevents scope creep.</p></div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:780px"><strong>A mid-level FE or BE engineer</strong> should read this and start coding — with no follow-up meeting.</p>
+        </div>
+      </div>
+
+      <!-- 18 USER STORY DEEP DIVE -->
+      <div class="slide accent-blue bg-subtle" data-slide="18">
+        <div class="slide-label"><span class="snum">18</span> User Stories</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">The universal user story template</h2></div>
+          <div class="card" style="max-width:820px; background:white; border:2px solid var(--blue); padding:1.5rem 2rem; font-family:'Bahnschrift','Segoe UI',sans-serif; text-align:center;">
+            <p style="font-size:1.5rem; line-height:1.8; color:var(--text)">As a <span style="color:var(--blue); border-bottom:2px dashed var(--blue)">&nbsp;&nbsp;who&nbsp;&nbsp;</span>,</p>
+            <p style="font-size:1.5rem; line-height:1.8; color:var(--text)">I want <span style="color:var(--blue); border-bottom:2px dashed var(--blue)">&nbsp;&nbsp;what&nbsp;&nbsp;</span></p>
+            <p style="font-size:1.5rem; line-height:1.8; color:var(--text)">so that <span style="color:var(--blue); border-bottom:2px dashed var(--blue)">&nbsp;&nbsp;why&nbsp;&nbsp;</span>.</p>
+          </div>
+          <div class="card" style="max-width:820px; background:var(--bg); border:2px dashed var(--border); padding:1.2rem 1.5rem;">
+            <p style="font-size:1rem; color:var(--text); line-height:1.8">
+              ✅ <em>"As a <strong>shopkeeper who pays repeat billers</strong>, I want to <strong>save billers as favourites</strong> so that <strong>I don't re-type account numbers each month</strong>."</em>
+            </p>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:780px; font-style:italic">The "so that" is the most important part. <strong>It tells the developer — and AI — the real goal</strong>, so they can make smart tradeoffs.</p>
+        </div>
+      </div>
+
+      <!-- 19 ACCEPTANCE CRITERIA -->
+      <div class="slide accent-blue" data-slide="19">
+        <div class="slide-label"><span class="snum">19</span> Acceptance Criteria</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Given / When / Then</h2><p class="body-md" style="color:var(--muted); max-width:780px">Acceptance criteria are <strong>testable statements</strong>. Each one becomes a test case later.</p></div>
+          <div class="card" style="max-width:860px; background:white; padding:1.3rem 1.6rem; border-left:5px solid var(--green)">
+            <p style="font-size:1.05rem; line-height:2; color:var(--text)">
+              <span style="color:var(--blue); font-weight:600">Given</span> the user has just completed a bill payment,<br>
+              <span style="color:var(--blue); font-weight:600">When</span> they tap the "⭐ Save as favourite" button,<br>
+              <span style="color:var(--blue); font-weight:600">Then</span> the biller appears in their Favourites list within 1 second.
+            </p>
+          </div>
+          <div class="card" style="max-width:860px; background:var(--bg); border:2px dashed var(--border); padding:1rem 1.3rem">
+            <p style="font-size:0.95rem; color:var(--text); line-height:1.7">
+              <strong>Good acceptance criteria are:</strong><br>
+              ✅ Specific — anyone reading gets the same picture<br>
+              ✅ Testable — QA can verify yes/no<br>
+              ✅ Independent — each one stands alone<br>
+              ✅ About behaviour, not implementation ("appears in list" — not "adds a row to favourites_table")
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 20 EDGE CASES -->
+      <div class="slide accent-blue bg-subtle" data-slide="20">
+        <div class="slide-label"><span class="snum">20</span> Edge Cases</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">The difference between junior and senior thinking</h2><p class="body-md" style="color:var(--muted); max-width:780px">Juniors spec the happy path. Seniors spec what happens when things go wrong.</p></div>
+          <div class="cols-2" style="max-width:1000px">
+            <div class="card" style="border-top:3px solid var(--blue)">
+              <h4 style="color:var(--blue)">Happy path</h4>
+              <p style="font-size:0.95rem; color:var(--text)">User taps ⭐ → biller saved → appears on home.</p>
+            </div>
+            <div class="card" style="border-top:3px solid var(--red)">
+              <h4 style="color:var(--red)">Edge cases to list</h4>
+              <ul style="font-size:0.9rem; color:var(--text); line-height:1.7; padding-left:1.2rem">
+                <li>User already has 10 favourites (max)</li>
+                <li>User is offline when tapping save</li>
+                <li>Biller is deactivated by the bank later</li>
+                <li>User taps save twice quickly (duplicates?)</li>
+                <li>User logs out and back in — still there?</li>
+                <li>Dzongkha biller name — rendering?</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:780px"><strong>Every edge case you list in the spec = one less bug in production.</strong></p>
+        </div>
+      </div>
+
+      <!-- 21 SECTION: LOOP -->
+      <div class="slide bg-indigo" data-slide="21">
+        <div class="slide-label"><span class="snum">21</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Four</div>
+          <h1 class="display" style="color: white">Spec → AI → Code</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">The loop that's changing how we build.</p>
+        </div>
+        <div class="section-num" style="color: white">04</div>
+      </div>
+
+      <!-- 22 LOOP DIAGRAM -->
+      <div class="slide accent-blue" data-slide="22">
+        <div class="slide-label"><span class="snum">22</span> The Loop</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">How real teams work in 2026</h2></div>
+          <div class="loop-diagram">
+            <div class="loop-step" style="border-top-color:var(--blue)"><h5>✍️ Write spec</h5><p>You, in Markdown</p></div>
+            <div class="loop-arrow">→</div>
+            <div class="loop-step" style="border-top-color:var(--indigo)"><h5>🤖 Feed to AI</h5><p>Claude Code reads it</p></div>
+            <div class="loop-arrow">→</div>
+            <div class="loop-step" style="border-top-color:var(--amber)"><h5>💻 AI writes code</h5><p>In minutes, not weeks</p></div>
+            <div class="loop-arrow">→</div>
+            <div class="loop-step" style="border-top-color:var(--green)"><h5>🔍 You review</h5><p>Does it match spec?</p></div>
+          </div>
+          <div class="loop-diagram" style="margin-top:0.8rem">
+            <div class="loop-step" style="border-top-color:var(--red); min-width:320px">
+              <h5>🔄 Refine the spec — and loop</h5>
+              <p>Ambiguity in the spec → weird code. Fix the <em>spec</em>, not the code.</p>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px; margin-top:0.5rem"><strong>The spec is the source of truth.</strong> The code is just one of its outputs.</p>
+        </div>
+      </div>
+
+      <!-- 23 SECTION: EXERCISE -->
+      <div class="slide bg-blue" data-slide="23">
+        <div class="slide-label"><span class="snum">23</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Five · Hands-on</div>
+          <h1 class="display" style="color: white">Your mBoB<br>Feature Spec</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Groups of 5 · 60 minutes · 9 teams</p>
+        </div>
+        <div class="section-num" style="color: white">05</div>
+      </div>
+
+      <!-- 24 EXERCISE BRIEF -->
+      <div class="slide accent-blue bg-subtle" data-slide="24">
+        <div class="slide-label"><span class="snum">24</span> Exercise Brief</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Pick one. Spec it. Present it.</h2><p class="body-md" style="color:var(--muted); max-width:820px">Each group of 5 picks <strong>one mBoB feature</strong> to add or redesign.</p></div>
+          <div class="exercise-grid">
+            <div class="ex-card"><h6>💸 Split bill at restaurant</h6><p>Among friends, with QR</p></div>
+            <div class="ex-card"><h6>📅 Scheduled transfers</h6><p>Rent, salary, fees auto-sent</p></div>
+            <div class="ex-card"><h6>🎯 Savings goal tracker</h6><p>Set a target, track progress</p></div>
+            <div class="ex-card"><h6>👨‍👩‍👧 Family sub-account</h6><p>Parent sets allowance for child</p></div>
+            <div class="ex-card"><h6>📴 Offline QR receipts</h6><p>Pay even in poor network</p></div>
+            <div class="ex-card"><h6>🔁 Recurring bill auto-pay</h6><p>Set once, forget</p></div>
+            <div class="ex-card"><h6>🔔 Smart notifications</h6><p>Only what matters, not spam</p></div>
+            <div class="ex-card"><h6>🧊 Emergency card freeze</h6><p>One-tap lock if card lost</p></div>
+            <div class="ex-card"><h6>🏷️ Expense categorization</h6><p>Where did my money go?</p></div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px">Or <strong>propose your own</strong> — as long as it's an mBoB feature a shopkeeper, grandma, or student would use.</p>
+        </div>
+      </div>
+
+      <!-- 25 EXERCISE DELIVERABLE -->
+      <div class="slide accent-blue" data-slide="25">
+        <div class="slide-label"><span class="snum">25</span> Deliverable</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">What each group produces</h2><p class="body-md" style="color:var(--muted)">In class: deliver the first 5. At home: finish all 7.</p></div>
+          <ul class="checklist">
+            <li><strong>Problem</strong> — whose pain? one paragraph.</li>
+            <li><strong>Persona</strong> — who exactly? give them a name.</li>
+            <li><strong>User story</strong> — As a ___, I want ___, so that ___.</li>
+            <li><strong>3+ acceptance criteria</strong> — Given / When / Then.</li>
+            <li><strong>UI sketch</strong> — paper is fine. Where does it live in mBoB?</li>
+            <li style="color:var(--muted)">Data sketch — at home</li>
+            <li style="color:var(--muted)">Edge cases &amp; out-of-scope — at home</li>
+          </ul>
+          <div class="card" style="max-width:820px; background:white; border-left:5px solid var(--amber); padding:1rem 1.3rem;">
+            <p style="font-size:0.95rem; color:var(--text)"><strong>Timing:</strong> 30 min work in groups → 20 min <strong>volunteer groups</strong> present (pick 2–3) → 10 min feedback.<br>
+            <strong>Take-home:</strong> complete the full spec and submit tomorrow.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 26 WRAP -->
+      <div class="slide bg-dark" data-slide="26">
+        <div class="slide-label"><span class="snum">26</span> Wrap-up</div>
+        <div class="center" style="max-width: 820px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key Takeaways</div>
+          <h2 class="heading" style="color: white;">What we covered today</h2>
+          <ul class="reveal-list" style="color: rgba(255,255,255,0.9); text-align:left; max-width: 680px; margin: 1.5rem auto; font-size: 1rem; line-height: 2;">
+            <li>✅ Great products come from <strong>problems</strong>, not feature wish-lists</li>
+            <li>✅ The funnel: <strong>Problem → Users → Solution → Features → Spec</strong></li>
+            <li>✅ The AI-era <strong>hourglass</strong>: specs up top, AI in the middle, review at the bottom</li>
+            <li>✅ A dev-ready spec has 7 parts — learn them, use them</li>
+            <li>✅ User stories + Given/When/Then acceptance criteria = testable behaviour</li>
+            <li>✅ <strong>If you can spec it, you can ship it — 10× faster</strong></li>
+          </ul>
+          <p class="body-md" style="color: rgba(255,255,255,0.6); margin-top: 1rem">Next class: <strong style="color: var(--amber)">Build your personal site — and spec it yourself.</strong></p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 26</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>
