@@ -22,6 +22,12 @@ trainees:
       - date: 2026-04-09
         text: Appears to have no experience in class, but CV shows she is the only actual Software Developer in the cohort (EMIS production work). May be quiet or not presenting herself — worth engaging directly to surface her background.
         tags: [flag, observation, action-item]
+      - date: 2026-04-16
+        text: "Product thinking presentation — mBoB Schedule Payments. Very nervous but can present."
+        tags: [observation]
+      - date: 2026-04-16
+        text: "Check in next talk what her plans are. Check if she can do QA or Dev — definitely not for BA."
+        tags: [action-item, role-suggestion]
 
   - name: Sonam Choki
     cid: ""
@@ -105,6 +111,12 @@ trainees:
       - date: 2026-04-08
         text: "Listed as 'Ugyen Tshering' in roster but CV says 'Yugel Tshering'. Spotted incorrect day-of-week (Wednesday vs Thursday) in Tek's welcome message to the cohort group. Attentive to detail."
         tags: [observation, strength]
+      - date: 2026-04-16
+        text: "Product thinking presentation — mBoB Fragmented family financial management with recurring payment. Speaks well and explains well."
+        tags: [observation, strength]
+      - date: 2026-04-16
+        text: "Looks like he is already self-employed — need to talk to him about this. Check what his expectations are."
+        tags: [action-item, flag]
 
   - name: Deki Pelden
     cid: ""
@@ -129,6 +141,12 @@ trainees:
       - date: 2026-04-09
         text: BBA (Marketing) graduate; interested in Business Analysis
         tags: [observation, strength]
+      - date: 2026-04-16
+        text: "Product thinking presentation — mBoB Savings Goal. Speaks in Dzongkha, self-reported weak English. Can present reasonably well but not outstanding."
+        tags: [observation]
+      - date: 2026-04-16
+        text: "Check English speaking ability during next interview or vertical selection — he said he is weak in English"
+        tags: [action-item]
 
   - name: Lhakpa Tshering Nesor
     cid: ""
@@ -196,6 +214,14 @@ trainees:
       - date: 2026-04-09
         text: Expressed interest in doing Business Analysis
         tags: [observation, strength]
+
+  - name: Ugyen Jamtsho
+    cid: ""
+    vertical: testing
+    notes:
+      - date: 2026-04-16
+        text: "Product thinking presentation — mBoB Expense Categorization. Can speak but not too well. Laughs in the middle — but ok-ish."
+        tags: [observation]
 
   - name: Dawa Zangmo
     cid: "11702001098"
