@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reading Requirements Critically — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      .sin-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; width:100%; max-width:1150px; }
+      @media (max-width: 900px){ .sin-grid { grid-template-columns: 1fr 1fr; } }
+      @media (max-width: 600px){ .sin-grid { grid-template-columns: 1fr; } }
+      .sin { background:white; border:1px solid var(--border); border-top:4px solid var(--red); border-radius:10px; padding:0.85rem 1rem; }
+      .sin .nn { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--red); font-size:0.78rem; font-weight:700; letter-spacing:0.07em; text-transform:uppercase; margin-bottom:0.2rem; }
+      .sin h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; margin-bottom:0.25rem; }
+      .sin p { font-size:0.85rem; color:var(--text); line-height:1.55; }
+
+      .spec-block { background:white; border:1px solid var(--border); border-radius:10px; padding:1rem 1.2rem; font-family:'Courier New',monospace; font-size:0.82rem; line-height:1.65; white-space:pre-wrap; color:var(--text); max-width:900px; }
+      .spec-block.bad { border-left:5px solid var(--red); }
+      .spec-block.good { border-left:5px solid var(--green); }
+      .spec-block .anno { background:#FEE9EC; color:var(--red); padding:0 0.2rem; border-radius:3px; font-weight:600; }
+      .spec-block .anno.b { background:#FFF3CD; color:#8A6D00; }
+      .spec-block .anno.c { background:#E8F4FF; color:var(--blue); }
+
+      .example-card { background:white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.3rem; max-width:1000px; }
+      .example-card .head { display:flex; align-items:center; gap:0.5rem; margin-bottom:0.4rem; }
+      .example-card .head .tag { background:#FEE9EC; color:var(--red); font-size:0.7rem; font-weight:700; padding:0.15rem 0.5rem; border-radius:4px; text-transform:uppercase; letter-spacing:0.05em; }
+      .example-card .q { background:var(--bg); border:2px dashed var(--border); padding:0.7rem 0.9rem; border-radius:8px; font-family:'Courier New',monospace; font-size:0.88rem; color:var(--text); margin:0.5rem 0; }
+      .example-card .why { font-size:0.88rem; color:var(--text); line-height:1.65; }
+      .example-card .why strong { color:var(--indigo); }
+
+      .cost-chart { display:flex; align-items:flex-end; gap:0.8rem; width:100%; max-width:900px; justify-content:center; padding:1rem 0; }
+      .cost-bar { display:flex; flex-direction:column; align-items:center; flex:1; max-width:140px; }
+      .cost-bar .bar { width:100%; background: linear-gradient(180deg, var(--red), #8B0020); border-radius:8px 8px 0 0; position:relative; min-height:40px; }
+      .cost-bar .bar .v { position:absolute; top:0.3rem; left:50%; transform:translateX(-50%); color:white; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; font-weight:700; }
+      .cost-bar .lbl { text-align:center; font-size:0.82rem; color:var(--text); margin-top:0.4rem; line-height:1.4; padding:0 0.3rem; }
+      .cost-bar .lbl strong { color:var(--indigo); display:block; font-size:0.9rem; }
+      .cost-bar.req .bar { background: linear-gradient(180deg, #7BC950, #4D8A30); }
+      .cost-bar.design .bar { background: linear-gradient(180deg, var(--amber), #1A5A8F); }
+      .cost-bar.dev .bar { background: linear-gradient(180deg, #D88029, #8A5015); }
+      .cost-bar.qa .bar { background: linear-gradient(180deg, var(--red), #8B0020); }
+      .cost-bar.prod .bar { background: linear-gradient(180deg, #6B0020, #3A000F); }
+
+      .annotate-legend { display:flex; gap:0.8rem; flex-wrap:wrap; justify-content:center; margin-top:0.8rem; }
+      .annotate-legend span { font-size:0.8rem; color:var(--muted); display:flex; align-items:center; gap:0.3rem; }
+      .annotate-legend .dot { width:14px; height:14px; border-radius:3px; display:inline-block; }
+
+      .questions-list { background:white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.3rem; max-width:900px; }
+      .questions-list ol { padding-left:1.5rem; }
+      .questions-list li { font-size:0.92rem; line-height:1.7; color:var(--text); margin:0.3rem 0; padding-left:0.3rem; }
+      .questions-list li strong { color:var(--indigo); }
+
+      .ba-qa-lens { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px){ .ba-qa-lens { grid-template-columns: 1fr; } }
+      .lens { background:white; border:1px solid var(--border); border-top:4px solid var(--indigo); border-radius:12px; padding:1rem 1.2rem; }
+      .lens.qa { border-top-color:var(--amber); }
+      .lens h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-bottom:0.4rem; }
+      .lens .sub { font-size:0.8rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.5rem; }
+      .lens ul { padding-left:1.2rem; }
+      .lens li { font-size:0.88rem; line-height:1.65; color:var(--text); margin:0.25rem 0; }
+
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>BA + QA Combined · Class 02</div></div>
+          <h1 class="display" style="color: var(--text)">
+            <span style="color: var(--blue)">Reading Requirements</span><br />
+            <span style="color: var(--indigo)">Critically</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted)">The skill every BA and every QA uses every single day.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">Spec Reading</span>
+            <span class="class-tag tag-blue">Ambiguity</span>
+            <span class="class-tag tag-blue">Assumptions</span>
+            <span class="class-tag tag-blue">Testability</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 AGENDA -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 780px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem"><h2 class="heading">Session Journey · ~75 min</h2></div>
+          <div class="agenda-row" onclick="goTo(2)"><span class="ar-dot" style="background: var(--red)"></span><span class="ar-label">🎯 20-second spec challenge</span><span class="ar-badge" style="background:#FEE9EC;color:var(--red)">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(4)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">💰 Why bad requirements are so expensive</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">7 min</span></div>
+          <div class="agenda-row" onclick="goTo(6)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🔎 The 7 sins of written requirements</span><span class="ar-badge" style="background:#E6F0F8;color:var(--indigo)">25 min</span></div>
+          <div class="agenda-row" onclick="goTo(14)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">✏️ How BAs and QAs annotate a spec</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(17)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🧪 Exercise · the leave-request spec</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">20 min</span></div>
+          <div class="agenda-row" onclick="goTo(21)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🎯 Wrap-up</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">5 min</span></div>
+        </div>
+      </div>
+
+      <!-- 3 HOOK -->
+      <div class="slide bg-dark" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> Hook</div>
+        <div class="center" style="max-width: 860px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎤 Quick challenge</div>
+          <p class="disc-prompt" style="font-size:1.4rem">Read this requirement for <strong>10 seconds</strong>.<br>How many questions would you ask before coding it?</p>
+          <div style="background:rgba(255,255,255,0.08); border-left:4px solid var(--amber); border-radius:8px; padding:1.2rem 1.4rem; max-width:720px; margin:1.5rem auto; text-align:left; font-family:'Courier New',monospace; color:white; font-size:1.05rem; line-height:1.7">
+"The system should allow users to upload documents.<br>
+ The upload should be fast and secure.<br>
+ Users should be notified once it's done."
+          </div>
+          <p style="color: rgba(255,255,255,0.6); font-size: 0.95rem;">If your honest answer is "ten or more," you already have the instinct we're going to sharpen today.</p>
+        </div>
+      </div>
+
+      <!-- 4 COST -->
+      <div class="slide accent-blue bg-subtle" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> Why this matters</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">A bug caught early is 100× cheaper than one caught late</h2><p class="body-md" style="color:var(--muted); max-width:820px">This is the <strong>Boehm curve</strong>, named after the researcher who first measured it. The cost of fixing a requirements-level mistake grows by roughly 10× at each stage it goes undetected.</p></div>
+          <div class="cost-chart">
+            <div class="cost-bar req"><div class="bar" style="height:50px"><span class="v">1×</span></div><div class="lbl"><strong>Requirements</strong>Fixed during spec review</div></div>
+            <div class="cost-bar design"><div class="bar" style="height:100px"><span class="v">5×</span></div><div class="lbl"><strong>Design</strong>Found during design review</div></div>
+            <div class="cost-bar dev"><div class="bar" style="height:150px"><span class="v">10×</span></div><div class="lbl"><strong>Development</strong>Found during coding</div></div>
+            <div class="cost-bar qa"><div class="bar" style="height:220px"><span class="v">50×</span></div><div class="lbl"><strong>Testing</strong>Found during QA</div></div>
+            <div class="cost-bar prod"><div class="bar" style="height:300px"><span class="v">100×+</span></div><div class="lbl"><strong>Production</strong>Reported by a user</div></div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:800px"><strong>A question asked at the spec stage costs 1 minute.</strong> The same issue discovered in production may cost a release, a customer, and a weekend of firefighting.</p>
+        </div>
+      </div>
+
+      <!-- 5 WHO DOES THIS -->
+      <div class="slide accent-blue" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span> Who reads requirements critically?</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:900px"><h2 class="heading">Reading specs critically is <span style="color:var(--blue)">the</span> shared skill</h2></div>
+          <div class="ba-qa-lens">
+            <div class="lens">
+              <h5>📋 BA lens</h5>
+              <div class="sub">Reads to improve</div>
+              <ul>
+                <li>Is the <strong>problem</strong> clearly stated? Is it worth solving?</li>
+                <li>Are the <strong>users</strong> named? Do we know them?</li>
+                <li>Are <strong>assumptions</strong> written down or hiding?</li>
+                <li>Is the <strong>scope</strong> explicit — including what's out?</li>
+                <li>Does it <strong>contradict</strong> another spec in the same product?</li>
+                <li>Are there <strong>gaps</strong> stakeholders didn't think to mention?</li>
+              </ul>
+            </div>
+            <div class="lens qa">
+              <h5>🔍 QA lens</h5>
+              <div class="sub">Reads to test</div>
+              <ul>
+                <li>Can I write a <strong>pass/fail test</strong> for each statement?</li>
+                <li>Are <strong>edge cases</strong> defined — or only the happy path?</li>
+                <li>Are <strong>non-functional</strong> expectations named (performance, security…)?</li>
+                <li>What happens when <strong>inputs are invalid</strong>?</li>
+                <li>Is the <strong>error behaviour</strong> specified?</li>
+                <li>Can <strong>two testers</strong> reading this arrive at the same verdict?</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">Same artefact, two lenses. BAs read to improve the spec; QAs read to test against it. Both find the same problems — often first.</p>
+        </div>
+      </div>
+
+      <!-- 6 SECTION: 7 SINS -->
+      <div class="slide bg-indigo" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Two</div>
+          <h1 class="display" style="color: white">The Seven Sins<br>of Requirements</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">How written specs fail. And what to ask when they do.</p>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- 7 SINS OVERVIEW -->
+      <div class="slide accent-blue bg-subtle" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> The 7 Sins</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Every bad spec commits one or more of these</h2></div>
+          <div class="sin-grid">
+            <div class="sin"><div class="nn">Sin 01</div><h6>🫥 Ambiguity</h6><p>Words that sound specific but aren't: "fast", "user-friendly", "as needed", "several".</p></div>
+            <div class="sin"><div class="nn">Sin 02</div><h6>🧊 Unstated assumptions</h6><p>Things the writer thinks are obvious. They aren't obvious to anyone else.</p></div>
+            <div class="sin"><div class="nn">Sin 03</div><h6>♊ Contradictions</h6><p>Section 2.1 says X, Section 4.3 says not-X. Both somehow survived review.</p></div>
+            <div class="sin"><div class="nn">Sin 04</div><h6>👤 Missing actors</h6><p>"The system notifies the user." Which system? Which user? Via what channel?</p></div>
+            <div class="sin"><div class="nn">Sin 05</div><h6>⚖️ Untestable statements</h6><p>"Should be intuitive." No QA can verify this yes/no.</p></div>
+            <div class="sin"><div class="nn">Sin 06</div><h6>🛡️ Missing NFRs</h6><p>No mention of performance, security, accessibility, reliability, scalability.</p></div>
+            <div class="sin"><div class="nn">Sin 07</div><h6>♾️ No out-of-scope</h6><p>The spec only lists what to do. Nothing says what <em>not</em> to do. Scope creep lives here.</p></div>
+            <div class="sin" style="background:var(--bg); border:2px dashed var(--border); border-top:none"><div class="nn" style="color:var(--indigo)">Your job</div><h6>🔎 Hunt all seven</h6><p>A clean spec commits none. A shippable spec commits at most one — and names it as a known risk.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8 SIN 1 AMBIGUITY -->
+      <div class="slide accent-blue" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> Sin 01 · Ambiguity</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:820px"><h2 class="heading">Words that sound specific — but aren't</h2></div>
+          <div class="example-card">
+            <div class="head"><span class="tag">❌ Sin spotted</span></div>
+            <div class="q">"The search should return results <strong>quickly</strong> and show <strong>relevant</strong> matches."</div>
+            <div class="why">
+              <strong>Questions to ask:</strong>
+              <ul style="margin:0.3rem 0 0 1.2rem; line-height:1.7">
+                <li>"Quickly" — under 200ms? 2 seconds? 10 seconds on a slow connection?</li>
+                <li>"Relevant" — by whose judgment? Exact match, fuzzy, or semantic?</li>
+                <li>What does the user see while waiting? Empty screen? Loader? Skeleton?</li>
+                <li>What if there are 0 matches — is that still "working"?</li>
+              </ul>
+            </div>
+          </div>
+          <div class="example-card" style="border-left:5px solid var(--green)">
+            <div class="head"><span class="tag" style="background:#E7F5DC; color:#3D7A3D">✅ Fixed version</span></div>
+            <div class="q">"The search returns results within <strong>500ms on 4G</strong>. Matches include product name (exact or fuzzy, one-character typo tolerated) and SKU (exact only). Below 500ms a skeleton loader is shown; above 5s an error with retry."</div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:780px; font-style:italic">Ambiguity is comfortable for the writer and expensive for everyone else.</p>
+        </div>
+      </div>
+
+      <!-- 9 SIN 2 ASSUMPTIONS -->
+      <div class="slide accent-blue bg-subtle" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> Sin 02 · Unstated assumptions</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:820px"><h2 class="heading">What the writer thinks is obvious — but isn't</h2></div>
+          <div class="example-card">
+            <div class="head"><span class="tag">❌ Sin spotted</span></div>
+            <div class="q">"When the user logs in, they see their dashboard."</div>
+            <div class="why">
+              <strong>Hidden assumptions:</strong>
+              <ul style="margin:0.3rem 0 0 1.2rem; line-height:1.7">
+                <li>That there <em>is</em> a dashboard. (Which one? Customized or generic?)</li>
+                <li>That "user" means a single type. (What about admin? Deactivated accounts? First login?)</li>
+                <li>That login always succeeds. (What if it's wrong password? Locked account? 2FA?)</li>
+                <li>That "see" means a full page load. (Mobile? Dark mode? Empty state if no data?)</li>
+              </ul>
+            </div>
+          </div>
+          <div class="callout amber" style="max-width:900px; margin:1rem auto 0; background:white; border-left:4px solid var(--amber); padding:1rem 1.3rem; border-radius:10px; border-top:1px solid var(--border); border-right:1px solid var(--border); border-bottom:1px solid var(--border)">
+            <h4 style="color:var(--indigo); margin-bottom:0.3rem">Technique: read it out loud</h4>
+            <p style="color:var(--text); font-size:0.92rem; line-height:1.6">Reading a sentence <em>out loud</em> exposes assumptions. If you have to add words in your head to make it make sense — those added words are the assumptions. Write them down and ask the author whether they're correct.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10 SIN 3 CONTRADICTIONS -->
+      <div class="slide accent-blue" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> Sin 03 · Contradictions</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:820px"><h2 class="heading">Two sections of the same spec disagreeing</h2></div>
+          <div class="spec-compare" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; max-width:1100px; width:100%">
+            <div class="spec-block bad"><strong>Section 2.1 — Registration</strong>
+Users must register with a valid email
+address. Phone number is optional.</div>
+            <div class="spec-block bad"><strong>Section 4.3 — Login</strong>
+Users log in with their phone number
+and OTP. Email login is not supported.</div>
+          </div>
+          <div class="example-card">
+            <div class="head"><span class="tag">💡 Your job</span></div>
+            <div class="why">
+              <ul style="margin:0 0 0 1.2rem; line-height:1.7">
+                <li><strong>Spot it.</strong> Most contradictions survive because nobody reads the whole spec in one sitting.</li>
+                <li><strong>Flag it.</strong> Ask which is correct — not "fix it" — because often both sections have a partial story.</li>
+                <li><strong>Don't assume.</strong> Both could be wrong. The real answer might be "phone for login, email for password reset."</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:800px; font-style:italic">Long specs hide contradictions like driftwood hides rocks. A BA's re-read and a QA's coverage map are the two things that find them.</p>
+        </div>
+      </div>
+
+      <!-- 11 SIN 4 ACTORS -->
+      <div class="slide accent-blue bg-subtle" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> Sin 04 · Missing actors</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:820px"><h2 class="heading">Passive voice hides the "who"</h2></div>
+          <div class="example-card">
+            <div class="head"><span class="tag">❌ Sin spotted</span></div>
+            <div class="q">"The approval is sent for review. When approved, the document becomes active."</div>
+            <div class="why">
+              <strong>Questions to ask:</strong>
+              <ul style="margin:0.3rem 0 0 1.2rem; line-height:1.7">
+                <li>Sent <em>by whom</em>? Automatically? Or does a human trigger it?</li>
+                <li>Sent <em>to whom</em>? A specific role? A queue? A distribution list?</li>
+                <li>Who has the power to approve? One reviewer, or quorum of N?</li>
+                <li>"Becomes active" — does it do so instantly, or on next login, or after a cron job?</li>
+              </ul>
+            </div>
+          </div>
+          <div class="example-card" style="border-left:5px solid var(--green)">
+            <div class="head"><span class="tag" style="background:#E7F5DC; color:#3D7A3D">✅ Fixed — active voice</span></div>
+            <div class="q">"When the author clicks <strong>Submit</strong>, the system notifies all users with role <code>Reviewer</code> in the same department by email. Once <strong>any one</strong> Reviewer clicks Approve, the system marks the document active within 5 seconds."</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12 SIN 5 UNTESTABLE -->
+      <div class="slide accent-blue" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> Sin 05 · Untestable statements</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:820px"><h2 class="heading">If a QA can't verify yes/no — it's not a requirement</h2></div>
+          <div class="example-card">
+            <div class="head"><span class="tag">❌ Sin spotted</span></div>
+            <div class="q">
+"The app must be <strong>intuitive</strong>.
+ Navigation should feel <strong>natural</strong>.
+ The experience must be <strong>delightful</strong>."
+            </div>
+            <div class="why" style="margin-top:0.5rem">
+              <strong>The test that exposes it:</strong> imagine two QAs testing this feature independently. Do they arrive at the same verdict? If the answer is "maybe, depending on taste," you don't have a requirement — you have a mood.
+            </div>
+          </div>
+          <div class="example-card" style="border-left:5px solid var(--green)">
+            <div class="head"><span class="tag" style="background:#E7F5DC; color:#3D7A3D">✅ Fixed — measurable</span></div>
+            <div class="q">
+"80% of first-time users complete the sign-up flow without abandoning.
+ The average user can reach the dashboard in 3 taps or fewer from app launch.
+ Core actions (send money, pay bill, view balance) are reachable within 2 taps from the home screen."
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:800px"><strong>Numbers, thresholds, counts — these turn opinions into requirements.</strong></p>
+        </div>
+      </div>
+
+      <!-- 13 SIN 6 NFRs -->
+      <div class="slide accent-blue bg-subtle" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> Sin 06 · Missing NFRs</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:820px"><h2 class="heading">The spec says what to build — but says nothing about <em>how well</em></h2></div>
+          <div class="example-card">
+            <div class="head"><span class="tag">❌ Sin spotted</span></div>
+            <div class="q">"Users can upload their government ID to verify their account."</div>
+            <div class="why">
+              <strong>What's missing:</strong>
+              <ul style="margin:0.3rem 0 0 1.2rem; line-height:1.7">
+                <li>🏎️ <strong>Performance</strong> — max file size? upload timeout on 2G?</li>
+                <li>🔒 <strong>Security</strong> — encrypted at rest? who can view it? retention period?</li>
+                <li>♿ <strong>Accessibility</strong> — screen reader flow? keyboard-only upload?</li>
+                <li>🔁 <strong>Reliability</strong> — what happens if upload fails halfway?</li>
+                <li>📈 <strong>Scalability</strong> — supports 10,000 uploads/hour during a KYC campaign?</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px">Tomorrow's class (<strong>Class 03 — Functional vs Non-Functional</strong>) is dedicated to this whole category. For today — just notice when NFRs aren't mentioned at all. Silence is the sin.</p>
+        </div>
+      </div>
+
+      <!-- 14 SIN 7 OUT OF SCOPE -->
+      <div class="slide accent-blue" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> Sin 07 · No out-of-scope</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:820px"><h2 class="heading">Every spec needs a "what we're NOT doing" section</h2><p class="body-md" style="color:var(--muted); max-width:820px">Because if you don't say it, someone will assume it's in. Especially stakeholders.</p></div>
+          <div class="example-card">
+            <div class="head"><span class="tag">❌ Sin spotted</span></div>
+            <div class="q">Spec covers: "Users can save billers as favourites. Favourites show on home. Tap to pre-fill."</div>
+            <div class="why">
+              <strong>What's not said — but will be assumed by somebody:</strong>
+              <ul style="margin:0.3rem 0 0 1.2rem; line-height:1.7">
+                <li>Can I share favourites with family? (Someone's grandma will ask.)</li>
+                <li>Can I categorise them (utilities, school, rent)?</li>
+                <li>Can I set auto-pay from a favourite?</li>
+                <li>Does this work on the old mobile app version?</li>
+              </ul>
+            </div>
+          </div>
+          <div class="example-card" style="border-left:5px solid var(--green)">
+            <div class="head"><span class="tag" style="background:#E7F5DC; color:#3D7A3D">✅ Fixed — explicit out-of-scope</span></div>
+            <div class="q">
+<strong>Out of scope (v1):</strong>
+ • Sharing favourites between users
+ • Categorisation / custom tags
+ • Auto-pay from a favourite
+ • Support in the legacy mBoB v4 app
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:800px; font-style:italic">A good out-of-scope list is a deadline-saving device.</p>
+        </div>
+      </div>
+
+      <!-- 15 SECTION: ANNOTATION -->
+      <div class="slide bg-blue" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Three</div>
+          <h1 class="display" style="color: white">How to Annotate<br>a Spec</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">A repeatable technique BAs and QAs use.</p>
+        </div>
+        <div class="section-num" style="color: white">03</div>
+      </div>
+
+      <!-- 16 ANNOTATION TECHNIQUE -->
+      <div class="slide accent-blue bg-subtle" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span> The 3-pass annotation</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Read the spec three times — for different things each time</h2></div>
+          <div class="cols-2" style="max-width:1100px; gap:1rem">
+            <div class="card" style="border-top:3px solid var(--blue)">
+              <h4 style="color:var(--blue)">Pass 1 · Comprehension</h4>
+              <ul style="font-size:0.93rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li>Read it end-to-end without stopping</li>
+                <li>Goal: understand the shape of the feature</li>
+                <li>No annotations yet — just absorbing</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--amber)">
+              <h4 style="color:var(--amber)">Pass 2 · Hunt the 7 sins</h4>
+              <ul style="font-size:0.93rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li><span style="background:#FEE9EC; color:var(--red); padding:0 0.3rem; border-radius:3px">Red</span> — ambiguity, untestable, contradictions</li>
+                <li><span style="background:#FFF3CD; color:#8A6D00; padding:0 0.3rem; border-radius:3px">Yellow</span> — assumptions, missing actors, missing NFRs</li>
+                <li><span style="background:#E8F4FF; color:var(--blue); padding:0 0.3rem; border-radius:3px">Blue</span> — questions for the author</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card" style="max-width:820px; border-top:3px solid var(--green); background:white">
+            <h4 style="color:#3D7A3D">Pass 3 · Testability</h4>
+            <p style="font-size:0.93rem; color:var(--text); line-height:1.7">Go through every statement and ask: <em>could I write a pass/fail test for this?</em> If the answer is no, it's not a requirement yet — add it to your question list.</p>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">The output of the three passes: a clean <strong>question list</strong> you send back to the author, not just scribbled margins.</p>
+        </div>
+      </div>
+
+      <!-- 17 SECTION: EXERCISE -->
+      <div class="slide bg-blue" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Four · Hands-on</div>
+          <h1 class="display" style="color: white">The Leave-Request<br>Spec</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Find as many sins as you can. Pair up. 15 minutes.</p>
+        </div>
+        <div class="section-num" style="color: white">04</div>
+      </div>
+
+      <!-- 18 EXERCISE SPEC -->
+      <div class="slide accent-blue bg-subtle" data-slide="18">
+        <div class="slide-label"><span class="snum">18</span> The spec</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Annotate this leave-request requirement</h2></div>
+          <div class="spec-block bad" style="max-width:1080px; width:100%">
+<strong>Feature: Online Leave Request</strong>
+
+1. Purpose
+   Employees should be able to submit leave requests online. The system will handle the
+   approval process. The solution should be simple and easy to use.
+
+2. Requirements
+   2.1  Employees can submit a leave request at any time.
+   2.2  The manager is notified when a leave is submitted.
+   2.3  The manager approves or rejects the request quickly.
+   2.4  Once approved, the leave is added to the employee's record.
+   2.5  The system should be secure.
+   2.6  Leave balance should be checked automatically.
+   2.7  Employees can cancel their leave request. If already approved, the manager handles it.
+   2.8  The system supports all types of leave.
+   2.9  Performance should be good even when many users are online.
+   2.10 Employees will see their leave history on the dashboard.
+
+3. Notifications
+   All relevant parties will be notified as appropriate.
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:900px"><strong>Your task:</strong> find at least <strong>10 problems</strong> — sins, gaps, contradictions, missing NFRs. Write a numbered question list you'd send back to the author.</p>
+        </div>
+      </div>
+
+      <!-- 19 EXERCISE LOGISTICS -->
+      <div class="slide accent-blue" data-slide="19">
+        <div class="slide-label"><span class="snum">19</span> How to work</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Pair work · 15 min · then we debrief</h2></div>
+          <div class="cols-2" style="max-width:1050px">
+            <div class="card" style="border-top:3px solid var(--blue)">
+              <h4 style="color:var(--blue)">Minutes 0–10 · Work in pairs</h4>
+              <ul style="font-size:0.93rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li>Pair up: one BA-track + one QA-track if possible</li>
+                <li>Read through once together (Pass 1)</li>
+                <li>Hunt the 7 sins (Pass 2)</li>
+                <li>Check testability (Pass 3)</li>
+                <li>Write a numbered question list on paper or laptop</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--amber)">
+              <h4 style="color:var(--amber)">Minutes 10–15 · Compare</h4>
+              <ul style="font-size:0.93rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li>Swap lists with a nearby pair</li>
+                <li>What did they find that you missed? And vice versa?</li>
+                <li>Combine into a single stronger list</li>
+                <li>Volunteer pairs will share their top 3 findings in debrief</li>
+              </ul>
+            </div>
+          </div>
+          <div class="callout amber" style="background:white; border-left:4px solid var(--amber); padding:1rem 1.3rem; border-radius:10px; max-width:900px; border-top:1px solid var(--border); border-right:1px solid var(--border); border-bottom:1px solid var(--border)">
+            <h4 style="color:var(--indigo); margin-bottom:0.3rem">Tip for pairs</h4>
+            <p style="font-size:0.92rem; color:var(--text); line-height:1.6">If one of you reads the spec to the other out loud, the hidden assumptions and ambiguities tend to fall out within the first pass. Try it.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 20 EXERCISE DEBRIEF -->
+      <div class="slide accent-blue bg-subtle" data-slide="20">
+        <div class="slide-label"><span class="snum">20</span> Debrief · the minimum you should have found</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">A strong question list looks something like this</h2></div>
+          <div class="questions-list">
+            <ol>
+              <li><strong>"Simple and easy to use" (§1)</strong> — untestable. What's the target time to submit a leave? How many taps?</li>
+              <li><strong>"At any time" (§2.1)</strong> — literally 24/7 including during a server deploy? Or weekdays 9–5?</li>
+              <li><strong>"The manager" (§2.2, §2.3)</strong> — which manager? Direct line? Skip-level? What if manager is on leave too?</li>
+              <li><strong>"Approves quickly" (§2.3)</strong> — ambiguous. Is there an SLA — 24 hours? Auto-approve after 3 days?</li>
+              <li><strong>"The system should be secure" (§2.5)</strong> — NFR with no detail. Encryption at rest? RBAC? Audit log?</li>
+              <li><strong>"Leave balance checked automatically" (§2.6)</strong> — what if balance is insufficient? Blocked? Warning? Convert to unpaid?</li>
+              <li><strong>"Manager handles it" (§2.7)</strong> — missing actor and flow. What does "handles it" mean — does the employee know?</li>
+              <li><strong>"All types of leave" (§2.8)</strong> — which types exist? Sick, annual, casual, bereavement, maternity, unpaid?</li>
+              <li><strong>"Performance should be good" (§2.9)</strong> — untestable NFR. How many concurrent users? What response time?</li>
+              <li><strong>"Leave history on the dashboard" (§2.10)</strong> — conflicts with no mention of dashboard elsewhere. Does it exist?</li>
+              <li><strong>"All relevant parties notified as appropriate" (§3)</strong> — missing actors, missing channels, missing triggers.</li>
+              <li><strong>Missing entirely:</strong> accessibility, mobile support, Dzongkha text, error handling, edge case of half-day leave, holidays clashing with leave, what happens to the request when an employee resigns.</li>
+            </ol>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">If you found 10 of these 12 — excellent. If you found 6, you're on the way. If you found 3, today's class paid for itself.</p>
+        </div>
+      </div>
+
+      <!-- 21 WRAP -->
+      <div class="slide bg-dark" data-slide="21">
+        <div class="slide-label"><span class="snum">21</span> Wrap-up</div>
+        <div class="center" style="max-width: 820px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key Takeaways</div>
+          <h2 class="heading" style="color: white;">What we covered today</h2>
+          <ul class="reveal-list" style="color: rgba(255,255,255,0.9); text-align:left; max-width: 720px; margin: 1.5rem auto; font-size: 1rem; line-height: 2;">
+            <li>✅ Bad requirements get <strong>100× more expensive</strong> the later they're caught</li>
+            <li>✅ BAs read to <strong>improve</strong> the spec; QAs read to <strong>test against</strong> it — same skill, two lenses</li>
+            <li>✅ The <strong>7 sins</strong>: ambiguity, unstated assumptions, contradictions, missing actors, untestable statements, missing NFRs, no out-of-scope</li>
+            <li>✅ The <strong>3-pass annotation</strong>: comprehension → hunt the sins → test testability</li>
+            <li>✅ The output is a <strong>question list</strong>, not scribbled margins</li>
+            <li>✅ Next class: <strong>Functional vs Non-Functional Requirements</strong> — the sins we couldn't finish today</li>
+          </ul>
+          <p style="color: var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.2rem; margin-top:1.5rem">A spec question costs a minute. A production bug costs a weekend.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 21</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>

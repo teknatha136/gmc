@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BA+QA Class 05 Notes — Estimation &amp; Prioritization</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#0066B2; --indigo:#001F35; --amber:#247EC1; --green:#7BC950; --purple:#4796D1; --red:#D80032; --text:#1B2021; --muted:#7B7C7F; --faint:#9CA3AF; --surf:#fff; --bg:#F9F9F9; --border:#EDEDED; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Open Sans','Aptos',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; font-size:17px; -webkit-font-smoothing:antialiased; }
+    h1,h2,h3,h4,h5,h6 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:400; letter-spacing:-0.01em; }
+    a { color: var(--blue); }
+
+    .hero { background:var(--surf); border-bottom:1px solid var(--border); padding:4rem 2rem 3rem; text-align:center; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background: linear-gradient(135deg, #0067A3, #002D72); }
+    .logo-corner { position:absolute; top: 1.25rem; left: 1.5rem; opacity:0.85; }
+    .logo-corner img { height: 34px; }
+    .hero-badge { display:inline-flex; align-items:center; gap:0.5rem; background:var(--bg); border:1px solid var(--border); border-radius:100px; padding:0.35rem 1rem; font-size:0.75rem; font-weight:700; color:var(--muted); letter-spacing:0.07em; text-transform:uppercase; margin-bottom:1.5rem; }
+    .hero-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--amber); }
+    .hero h1 { font-size:clamp(2rem,5vw,3.5rem); line-height:1.15; margin-bottom:0.75rem; }
+    .c-blue{color:var(--blue);} .c-indigo{color:var(--indigo);}
+    .hero-sub { font-size:1rem; color:var(--muted); margin-bottom:2rem; max-width:680px; margin-left:auto; margin-right:auto; }
+    .hero-tags { display:flex; justify-content:center; gap:0.6rem; flex-wrap:wrap; }
+    .hero-tag { padding:0.3rem 0.9rem; border-radius:8px; font-size:0.78rem; font-weight:600; background:#E6F0F8; color:var(--blue); }
+
+    .container { max-width:1040px; margin:0 auto; padding:0 2rem 6rem; }
+
+    .toc { background:var(--surf); border:1px solid var(--border); border-radius:16px; padding:1.75rem 2rem; margin:2.5rem 0; }
+    .toc h3 { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); margin-bottom:1.25rem; }
+    .toc ol { list-style: none; counter-reset: step; }
+    .toc li { counter-increment: step; padding:0.45rem 0; border-bottom:1px solid var(--border); }
+    .toc li:last-child { border-bottom:none; }
+    .toc li::before { content: counter(step, decimal-leading-zero); color:var(--faint); font-family:'Bahnschrift','Segoe UI',sans-serif; margin-right:0.8rem; font-size:0.9rem; }
+    .toc a { text-decoration:none; color:var(--text); font-weight:500; }
+    .toc a:hover { color: var(--blue); }
+
+    section.chapter { margin: 3.5rem 0; }
+    .chapter-head { margin-bottom:1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
+    .chapter-eyebrow { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--blue); margin-bottom:0.3rem; }
+    .chapter-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--indigo); }
+
+    p { margin: 0.7rem 0; }
+    ul, ol { margin: 0.6rem 0 0.6rem 1.3rem; }
+    li { margin: 0.3rem 0; }
+    strong { color: var(--indigo); }
+
+    .callout { background:var(--surf); border:1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 10px; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+    .callout.amber { border-left-color: var(--amber); }
+    .callout.green { border-left-color: var(--green); }
+    .callout.red { border-left-color: var(--red); }
+    .callout.indigo { border-left-color: var(--indigo); }
+    .callout h4 { font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--indigo); }
+
+    .moscow { display:grid; grid-template-columns: repeat(4, 1fr); gap:0.7rem; margin:1rem 0; }
+    @media (max-width: 720px){ .moscow { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 480px){ .moscow { grid-template-columns: 1fr; } }
+    .moscow .c { background:var(--surf); border:1px solid var(--border); border-top:4px solid var(--blue); border-radius:10px; padding:0.8rem 1rem; }
+    .moscow .c .letter { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:2rem; color:var(--blue); font-weight:700; line-height:1; }
+    .moscow .c h5 { color:var(--indigo); font-size:0.95rem; margin-top:0.2rem; }
+    .moscow .c p { font-size:0.82rem; color:var(--text); line-height:1.55; margin:0.3rem 0 0; }
+    .moscow .c.s { border-top-color:#247EC1; } .moscow .c.s .letter { color:#247EC1; }
+    .moscow .c.c { border-top-color:#4796D1; } .moscow .c.c .letter { color:#4796D1; }
+    .moscow .c.w { border-top-color:var(--muted); } .moscow .c.w .letter { color:var(--muted); }
+
+    .rice-tbl { background:var(--surf); border:1px solid var(--border); border-radius:10px; overflow:hidden; margin:1rem 0; }
+    .rice-tbl table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+    .rice-tbl th { background:var(--bg); padding:0.55rem 0.8rem; text-align:left; color:var(--muted); font-size:0.76rem; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; border-bottom:1px solid var(--border); }
+    .rice-tbl th:not(:first-child) { text-align:center; }
+    .rice-tbl td { padding:0.5rem 0.8rem; border-bottom:1px solid var(--border); color:var(--text); }
+    .rice-tbl td:not(:first-child) { text-align:center; font-family:'Courier New',monospace; }
+    .rice-tbl tr:last-child td { border-bottom:none; }
+    .rice-tbl .top td { background:#EAF3FA; font-weight:700; color:var(--indigo); }
+    .rice-tbl .sc { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; font-size:1rem; }
+
+    .sizes-row { display:flex; gap:0.4rem; flex-wrap:wrap; margin:0.8rem 0; }
+    .sizes-row .s { background:var(--surf); border:1px solid var(--border); border-top:3px solid var(--blue); border-radius:50%; width:56px; height:56px; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+    .sizes-row .s .v { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.15rem; color:var(--indigo); font-weight:700; line-height:1; }
+    .sizes-row .s .l { font-size:0.68rem; color:var(--muted); margin-top:0.1rem; }
+
+    .trap { background:var(--surf); border:1px solid var(--border); border-left:4px solid var(--red); border-radius:10px; padding:0.8rem 1.1rem; margin:0.6rem 0; }
+    .trap h5 { color:var(--red); font-size:1rem; margin-bottom:0.3rem; }
+    .trap p { font-size:0.9rem; color:var(--text); line-height:1.6; margin:0.2rem 0; }
+    .trap .fix { color:var(--muted); font-size:0.88rem; padding-top:0.3rem; border-top:1px dashed var(--border); margin-top:0.4rem; }
+    .trap .fix strong { color:#3D7A3D; }
+
+    .summary { background: linear-gradient(135deg, #F9F9F9, #EDEDED); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+    .summary h4 { color: var(--indigo); margin-bottom: 0.5rem; font-size: 0.95rem; }
+    .summary ul { margin-left: 1.1rem; }
+    .summary li { font-size: 0.93rem; margin: 0.25rem 0; }
+
+    pre.formula { background:var(--surf); border:1px solid var(--border); border-left:4px solid var(--blue); border-radius:8px; padding:0.9rem 1.2rem; font-family:'Courier New',monospace; font-size:1rem; color:var(--text); margin:0.6rem 0; text-align:center; letter-spacing:0.02em; }
+
+    footer { text-align:center; padding: 2rem 1rem 3rem; color: var(--faint); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+    footer img { height: 28px; opacity:0.7; margin-bottom: 0.5rem; display: block; margin-left:auto; margin-right:auto; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="logo-corner"><img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE"></div>
+    <div class="hero-badge"><span class="dot"></span> BA + QA Combined · Class 05</div>
+    <h1><span class="c-indigo">Estimation &amp;</span><br><span class="c-blue">Prioritization</span></h1>
+    <p class="hero-sub">Your take-home reference. There's always more to build than time. This note covers MoSCoW, RICE, MVP thinking, relative sizing, and the estimation traps that catch most teams.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">MoSCoW</span>
+      <span class="hero-tag">RICE</span>
+      <span class="hero-tag">MVP</span>
+      <span class="hero-tag">Story Points</span>
+      <span class="hero-tag">Estimation Traps</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="toc">
+      <h3>In this note</h3>
+      <ol>
+        <li><a href="#why">Why this matters</a></li>
+        <li><a href="#moscow">MoSCoW · the simplest method</a></li>
+        <li><a href="#rice">RICE · when you need numbers</a></li>
+        <li><a href="#mvp">MVP thinking</a></li>
+        <li><a href="#est">Estimation · relative sizing</a></li>
+        <li><a href="#traps">Six common estimation traps</a></li>
+        <li><a href="#exercise">Exercise · 6 features, 1 sprint</a></li>
+        <li><a href="#take">Key takeaways</a></li>
+      </ol>
+    </div>
+
+    <section class="chapter" id="why">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 1</div>
+        <h2>Why this matters</h2>
+      </div>
+      <p>There is always more to build than you have time for. Always. Every project, every sprint, every company. The interesting question isn't "can we do it all?" — the answer is always no. It's <strong>"what should we do first, and how long will it take?"</strong></p>
+      <p>That is prioritization and estimation. They aren't the same skill — one tells you <em>which</em> features win, the other tells you <em>how big</em> each one is — but they're always paired, because one without the other is useless.</p>
+      <div class="callout amber">
+        <h4>BA + QA angle</h4>
+        <p>BAs run the prioritization conversation with stakeholders. QAs contribute effort estimates for testing, and push back when a feature's scope grows without its quality bar growing too. Both need to speak these languages fluently.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="moscow">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 2</div>
+        <h2>MoSCoW · the simplest prioritization method</h2>
+      </div>
+      <p>Every feature goes into one of four buckets. The capital letters spell it: <strong>M</strong>ust, <strong>S</strong>hould, <strong>C</strong>ould, <strong>W</strong>on't. The little <em>o</em>'s are padding to make the word pronounceable.</p>
+      <div class="moscow">
+        <div class="c">
+          <div class="letter">M</div>
+          <h5>Must-have</h5>
+          <p>Without it, the release <strong>fails</strong>. Unshippable without this.</p>
+        </div>
+        <div class="c s">
+          <div class="letter">S</div>
+          <h5>Should-have</h5>
+          <p>Important but release <em>can</em> ship without it. Pain but not fatal.</p>
+        </div>
+        <div class="c c">
+          <div class="letter">C</div>
+          <h5>Could-have</h5>
+          <p>Nice if there's budget. Nobody will complain if it's missing.</p>
+        </div>
+        <div class="c w">
+          <div class="letter">W</div>
+          <h5>Won't-have</h5>
+          <p>Explicitly not in this release. Say it out loud — prevents scope creep.</p>
+        </div>
+      </div>
+
+      <h3 style="color:var(--indigo); font-size:1.1rem; margin-top:1.5rem">Why Won't-have matters</h3>
+      <p>Most MoSCoW lists have M, S, C. The "W" column is the one teams skip — and then spend the next three sprints arguing about whether those features were "supposed to be in there." Write them down. Get stakeholder agreement. Put a date on when they'll be reconsidered.</p>
+
+      <div class="callout amber">
+        <h4>The honesty test</h4>
+        <p>A real MoSCoW list has <strong>at most ~60%</strong> of features marked Must-have. If everything is a Must, you haven't prioritized — you've just <em>labelled</em>. Go back and force yourself to pick.</p>
+      </div>
+
+      <h3 style="color:var(--indigo); font-size:1.1rem; margin-top:1.5rem">When to use MoSCoW</h3>
+      <ul>
+        <li>Stakeholder conversations — easy to say out loud.</li>
+        <li>Quick kickoff workshops — sticky notes on a whiteboard.</li>
+        <li>Release planning — slotting work into a fixed window.</li>
+        <li><strong>Not</strong> for comparing two similar features head-to-head — both might be "Should", and you need a tie-breaker.</li>
+      </ul>
+    </section>
+
+    <section class="chapter" id="rice">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 3</div>
+        <h2>RICE · when you need numbers</h2>
+      </div>
+      <p>RICE is what you reach for when MoSCoW runs out of resolution. It's a score, not a label — so you can rank features that are all "Must" or all "Should".</p>
+
+      <pre class="formula">RICE Score  =  (Reach × Impact × Confidence) ÷ Effort</pre>
+
+      <h3 style="color:var(--indigo); font-size:1.1rem; margin-top:1.2rem">What each letter means</h3>
+      <ul>
+        <li><strong>Reach</strong> — how many people are affected per time window. "12,000 users per month."</li>
+        <li><strong>Impact</strong> — how big the effect is per person. A common scale: 0.25 (tiny) · 0.5 (small) · 1 (medium) · 2 (high) · 3 (massive).</li>
+        <li><strong>Confidence</strong> — how sure you are of the first three numbers. A common scale: 50% (gut feel) · 80% (some data) · 100% (hard data).</li>
+        <li><strong>Effort</strong> — how many person-months of work. "0.5" = two weeks of one engineer.</li>
+      </ul>
+
+      <h3 style="color:var(--indigo); font-size:1.1rem; margin-top:1.5rem">Example · four features competing for one sprint</h3>
+      <div class="rice-tbl">
+        <table>
+          <thead>
+            <tr><th>Feature</th><th>Reach</th><th>Impact</th><th>Confidence</th><th>Effort</th><th>Score</th></tr>
+          </thead>
+          <tbody>
+            <tr class="top"><td>Biller favourites</td><td>8,000</td><td>2</td><td>100%</td><td>1</td><td class="sc">16,000</td></tr>
+            <tr><td>Bank statement PDF export</td><td>3,000</td><td>1</td><td>100%</td><td>1.5</td><td class="sc">2,000</td></tr>
+            <tr><td>Dark mode</td><td>12,000</td><td>0.5</td><td>80%</td><td>2</td><td class="sc">2,400</td></tr>
+            <tr><td>Split bill with friends</td><td>2,000</td><td>3</td><td>50%</td><td>3</td><td class="sc">1,000</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><strong>Biller favourites wins</strong> — high reach, proven impact, well-known solution (high confidence), low effort. Notice how "split bill" sounded flashy but scored last: reach was narrow, and the low confidence penalised the optimistic impact score.</p>
+
+      <div class="callout indigo">
+        <h4>The virtue of RICE</h4>
+        <p>It doesn't tell you the truth. It forces a <strong>transparent conversation</strong>. Everyone can see why a feature ranked where it did — reach, impact, confidence, effort. When people disagree, they disagree on specific numbers, not on gut preference. That's always a productive argument.</p>
+      </div>
+
+      <h3 style="color:var(--indigo); font-size:1.1rem; margin-top:1.5rem">When RICE breaks down</h3>
+      <ul>
+        <li><strong>Strategic/foundational work</strong> — "replatform the payments service" scores badly on RICE because reach feels abstract. Use judgment, not the formula.</li>
+        <li><strong>Compliance / legal</strong> — must-do regardless of score. RICE doesn't apply to "we must encrypt all PII by law."</li>
+        <li><strong>Small teams with small decision surfaces</strong> — RICE is overkill for a 5-feature sprint. Use MoSCoW.</li>
+      </ul>
+    </section>
+
+    <section class="chapter" id="mvp">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 4</div>
+        <h2>MVP thinking</h2>
+      </div>
+      <p>MVP stands for <strong>Minimum Viable Product</strong>. Both words matter equally:</p>
+      <ul>
+        <li><strong>Minimum</strong> — the smallest scope you can build.</li>
+        <li><strong>Viable</strong> — it actually works for the core use case. People can use it and you can learn from it.</li>
+      </ul>
+      <p>Most teams accidentally drop one of the two words. Dropping "Minimum" gives you a bloated first release. Dropping "Viable" gives you a broken, half-baked thing that teaches you nothing because no one could use it.</p>
+
+      <div class="callout green">
+        <h4>The one-sentence test</h4>
+        <p>If you can't describe your MVP in <strong>one sentence</strong>, it's not an MVP — it's a wish list. Cut scope until it fits in a sentence.</p>
+      </div>
+
+      <h3 style="color:var(--indigo); font-size:1.1rem; margin-top:1.5rem">Example · three sizings of the same feature</h3>
+      <ul>
+        <li>❌ <strong>Too minimum:</strong> "Users can 'save' — but favourites never actually show up yet." (Ships. Teaches nothing. Annoys users.)</li>
+        <li>✅ <strong>Right-sized MVP:</strong> "Save a biller. See it on home. Tap to pre-fill. That's it." (Ships in 2 weeks. You learn if users want it.)</li>
+        <li>😬 <strong>Too maximum:</strong> "Save, categorise, share, auto-pay, export, notify family…" (Six months of work. Most of it unused.)</li>
+      </ul>
+
+      <p>MVP isn't about being cheap or lazy. It's about <strong>being honest</strong> — shipping the smallest thing that lets real users give you real signal, so you can invest the next round of effort where it actually matters.</p>
+    </section>
+
+    <section class="chapter" id="est">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 5</div>
+        <h2>Estimation · relative sizing</h2>
+      </div>
+      <p>Humans are famously bad at absolute estimates. "How many hours will this take?" is the wrong question — our answers are off by 2× to 4× more often than they aren't. But humans are <strong>good at comparisons</strong>: "is this bigger or smaller than that other task?" is much easier to answer accurately.</p>
+      <p>That's why modern teams estimate in <strong>relative sizes</strong>, not hours.</p>
+
+      <h3 style="color:var(--indigo); font-size:1.1rem; margin-top:1.5rem">Story points — a Fibonacci-like scale</h3>
+      <div class="sizes-row">
+        <div class="s"><div class="v">1</div><div class="l">tiny</div></div>
+        <div class="s"><div class="v">2</div><div class="l">small</div></div>
+        <div class="s"><div class="v">3</div><div class="l">sm-med</div></div>
+        <div class="s"><div class="v">5</div><div class="l">medium</div></div>
+        <div class="s"><div class="v">8</div><div class="l">large</div></div>
+        <div class="s"><div class="v">13</div><div class="l">very large</div></div>
+        <div class="s" style="border-top-color:var(--red)"><div class="v" style="color:var(--red)">20+</div><div class="l">break up</div></div>
+      </div>
+      <p>The gaps widen as size grows, reflecting the reality that big tasks are always more uncertain than small ones. A task that feels like "20 points" should almost always be broken into smaller pieces before being committed to.</p>
+
+      <h3 style="color:var(--indigo); font-size:1.1rem; margin-top:1.5rem">T-shirt sizing — for stakeholders</h3>
+      <p>Story points are great in a dev standup, but stakeholders tune out the moment you say "13 points." T-shirt sizes (XS · S · M · L · XL · XXL) are a warmer language for outside-the-team conversations. Roughly:</p>
+      <ul>
+        <li><strong>XS</strong> — a few hours</li>
+        <li><strong>S</strong> — a day or two</li>
+        <li><strong>M</strong> — about a week</li>
+        <li><strong>L</strong> — two to three weeks</li>
+        <li><strong>XL</strong> — a month or more</li>
+        <li><strong>XXL</strong> — unknown; needs a <em>spike</em> (short investigation) before it can even be estimated</li>
+      </ul>
+
+      <div class="callout amber">
+        <h4>Planning poker</h4>
+        <p>When a team estimates together, avoid anchor bias: have everyone write their estimate privately, reveal simultaneously, and discuss the outliers. Whoever said "3" and whoever said "13" both know something interesting about the task — and the conversation between them is where the real estimate emerges.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="traps">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 6</div>
+        <h2>Six common estimation traps</h2>
+      </div>
+      <p>If you've ever been off by 2× or more on an estimate, it was almost certainly one of these:</p>
+
+      <div class="trap">
+        <h5>🎯 Anchor bias</h5>
+        <p>The first person to say a number sets everyone else's expectation. "I think two days" — now nobody will say seven, because they'll feel like an outlier.</p>
+        <div class="fix"><strong>Fix:</strong> write estimates privately first, reveal simultaneously. Planning poker does this by construction.</div>
+      </div>
+
+      <div class="trap">
+        <h5>😎 Happy-path blindness</h5>
+        <p>You estimated the main flow and forgot: error handling, edge cases, code review, QA, bug fixes, deployment, documentation.</p>
+        <div class="fix"><strong>Fix:</strong> when estimating, explicitly ask "does this number include testing, review, and documentation?" If not, add 30–50%.</div>
+      </div>
+
+      <div class="trap">
+        <h5>🌫️ Dependency blindness</h5>
+        <p>"It's 3 days" — yes, but it depends on an API that doesn't exist yet, a design that hasn't been reviewed, and a decision nobody has made.</p>
+        <div class="fix"><strong>Fix:</strong> list dependencies before estimating. If a dependency isn't ready, the task is unestimable until it is.</div>
+      </div>
+
+      <div class="trap">
+        <h5>🧠 Optimism bias</h5>
+        <p>You estimated assuming everything goes right. Nothing ever goes 100% right.</p>
+        <div class="fix"><strong>Fix:</strong> compare to your last 5 similar tasks. Use your actual velocity, not your hope.</div>
+      </div>
+
+      <div class="trap">
+        <h5>💢 Pressure to please</h5>
+        <p>Stakeholder says "we need this by Friday." Team says "sure, Friday." It arrives three Fridays later.</p>
+        <div class="fix"><strong>Fix:</strong> separate <em>estimate</em> from <em>commitment</em>. Estimates are honest; commitments are negotiated. If the business needs Friday, something else has to give.</div>
+      </div>
+
+      <div class="trap">
+        <h5>📦 Single-number fallacy</h5>
+        <p>"It'll take 5 days." Treated as truth. Reality is a range, not a point.</p>
+        <div class="fix"><strong>Fix:</strong> estimate ranges ("3 to 7 days, most likely 5") or confidence intervals. Ranges keep the honesty about uncertainty.</div>
+      </div>
+    </section>
+
+    <section class="chapter" id="exercise">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 7 · Hands-on</div>
+        <h2>Exercise · 6 features, 1 sprint</h2>
+      </div>
+      <p>You have 10 story points of dev capacity for this sprint. Prioritize (MoSCoW) + estimate (story points) and pick the features that fit.</p>
+
+      <ol>
+        <li><strong>Login with phone + MPIN</strong> — required to use the app at all. Well-understood pattern.</li>
+        <li><strong>Biller favourites</strong> — high user demand. Uses existing biller data model. Small UI addition.</li>
+        <li><strong>PDF export of bank statement</strong> — enterprise users ask for it. Needs a new PDF library. Moderate new code.</li>
+        <li><strong>Dark mode</strong> — widespread user request. Requires rethinking every colour in the app.</li>
+        <li><strong>Support for Dzongkha in notes field</strong> — currently broken — Dzongkha characters corrupt on save. Legal/compliance concern.</li>
+        <li><strong>In-app chat with customer support</strong> — support team would love it. No integration exists with current helpdesk. Large effort.</li>
+      </ol>
+
+      <h3 style="color:var(--indigo); font-size:1.1rem; margin-top:1.5rem">A reasonable answer</h3>
+      <p>Nobody's answer is "the" right answer here — but a defensible one looks roughly like this:</p>
+      <ul>
+        <li><strong>Login</strong> — Must, 3 pts. Foundational.</li>
+        <li><strong>Dzongkha fix</strong> — Must, 2 pts. Compliance; currently broken.</li>
+        <li><strong>Biller favourites</strong> — Should, 3 pts. Highest bang-for-buck per RICE.</li>
+        <li><strong>PDF export</strong> — Could, 5 pts. Useful but can wait.</li>
+        <li><strong>Dark mode</strong> — Could, 8 pts. Popular but expensive; not essential.</li>
+        <li><strong>In-app chat</strong> — Won't (this sprint), 13+ pts. Too big; needs its own sprint or platform work first.</li>
+      </ul>
+      <p>Sprint fit: Login (3) + Dzongkha (2) + Favourites (3) = <strong>8 of 10 points</strong>. Leaves buffer — which is wise, because (see traps above) single-number estimates are always optimistic.</p>
+    </section>
+
+    <section class="chapter" id="take">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Takeaways</div>
+        <h2>Key points to carry forward</h2>
+      </div>
+      <div class="summary">
+        <h4>What we covered today</h4>
+        <ul>
+          <li>There is <strong>always</strong> more to build than time. Prioritization is a permanent activity.</li>
+          <li><strong>MoSCoW</strong> — simplest method, great for stakeholder conversations. Four buckets: Must, Should, Could, Won't.</li>
+          <li><strong>RICE</strong> — numerical scoring for head-to-head feature comparisons. <em>(Reach × Impact × Confidence) ÷ Effort</em>.</li>
+          <li><strong>MVP</strong> — the smallest <em>viable</em> thing. One sentence or it's a wish list.</li>
+          <li>Estimate in <strong>relative sizes</strong> — story points with devs, t-shirts with stakeholders.</li>
+          <li>Watch for traps: <strong>anchoring, happy-path, dependencies, optimism, pressure, single-number</strong>.</li>
+          <li>Separate <strong>estimate</strong> from <strong>commitment</strong> — they're not the same conversation.</li>
+        </ul>
+      </div>
+      <p style="margin-top:1.5rem; font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-size:1.1rem">If everything is a Must, you haven't prioritized — you've labelled.</p>
+    </section>
+
+  </div>
+
+  <footer>
+    <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE">
+    SELISE × Pelsung · BA + QA Combined · Class 05<br>
+    Estimation &amp; Prioritization
+  </footer>
+
+</body>
+</html>

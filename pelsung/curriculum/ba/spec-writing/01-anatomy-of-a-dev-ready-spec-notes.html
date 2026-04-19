@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spec Writing Class 01 Notes — Anatomy of a Dev-Ready Spec</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#0066B2; --indigo:#001F35; --amber:#247EC1; --green:#7BC950; --purple:#4796D1; --red:#D80032; --text:#1B2021; --muted:#7B7C7F; --faint:#9CA3AF; --surf:#fff; --bg:#F9F9F9; --border:#EDEDED; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Open Sans','Aptos',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; font-size:17px; -webkit-font-smoothing:antialiased; }
+    h1,h2,h3,h4,h5,h6 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:400; letter-spacing:-0.01em; }
+    a { color: var(--blue); }
+
+    .hero { background:var(--surf); border-bottom:1px solid var(--border); padding:4rem 2rem 3rem; text-align:center; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background: linear-gradient(135deg, #0067A3, #002D72); }
+    .logo-corner { position:absolute; top: 1.25rem; left: 1.5rem; opacity:0.85; }
+    .logo-corner img { height: 34px; }
+    .hero-badge { display:inline-flex; align-items:center; gap:0.5rem; background:var(--bg); border:1px solid var(--border); border-radius:100px; padding:0.35rem 1rem; font-size:0.75rem; font-weight:700; color:var(--muted); letter-spacing:0.07em; text-transform:uppercase; margin-bottom:1.5rem; }
+    .hero-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--amber); }
+    .hero h1 { font-size:clamp(2rem,5vw,3.5rem); line-height:1.15; margin-bottom:0.75rem; }
+    .c-blue{color:var(--blue);} .c-indigo{color:var(--indigo);}
+    .hero-sub { font-size:1rem; color:var(--muted); margin-bottom:2rem; max-width:680px; margin-left:auto; margin-right:auto; }
+    .hero-tags { display:flex; justify-content:center; gap:0.6rem; flex-wrap:wrap; }
+    .hero-tag { padding:0.3rem 0.9rem; border-radius:8px; font-size:0.78rem; font-weight:600; background:#E6F0F8; color:var(--blue); }
+
+    .container { max-width:1040px; margin:0 auto; padding:0 2rem 6rem; }
+
+    .toc { background:var(--surf); border:1px solid var(--border); border-radius:16px; padding:1.75rem 2rem; margin:2.5rem 0; }
+    .toc h3 { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); margin-bottom:1.25rem; }
+    .toc ol { list-style: none; counter-reset: step; }
+    .toc li { counter-increment: step; padding:0.45rem 0; border-bottom:1px solid var(--border); }
+    .toc li:last-child { border-bottom:none; }
+    .toc li::before { content: counter(step, decimal-leading-zero); color:var(--faint); font-family:'Bahnschrift','Segoe UI',sans-serif; margin-right:0.8rem; font-size:0.9rem; }
+    .toc a { text-decoration:none; color:var(--text); font-weight:500; }
+    .toc a:hover { color: var(--blue); }
+
+    section.chapter { margin: 3.5rem 0; }
+    .chapter-head { margin-bottom:1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
+    .chapter-eyebrow { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--blue); margin-bottom:0.3rem; }
+    .chapter-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--indigo); }
+
+    p { margin: 0.7rem 0; }
+    ul, ol { margin: 0.6rem 0 0.6rem 1.3rem; }
+    li { margin: 0.3rem 0; }
+    strong { color: var(--indigo); }
+
+    .callout { background:var(--surf); border:1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 10px; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+    .callout.amber { border-left-color: var(--amber); }
+    .callout.green { border-left-color: var(--green); }
+    .callout.red { border-left-color: var(--red); }
+    .callout.indigo { border-left-color: var(--indigo); }
+    .callout h4 { font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--indigo); }
+
+    .naming-tbl { background:var(--surf); border:1px solid var(--border); border-radius:10px; overflow:hidden; margin:1rem 0; }
+    .naming-tbl table { width:100%; border-collapse:collapse; font-size:0.9rem; }
+    .naming-tbl th { background:var(--bg); padding:0.6rem 0.9rem; text-align:left; color:var(--muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; border-bottom:1px solid var(--border); }
+    .naming-tbl td { padding:0.6rem 0.9rem; border-bottom:1px solid var(--border); color:var(--text); vertical-align:top; line-height:1.55; }
+    .naming-tbl tr:last-child td { border-bottom:none; }
+    .naming-tbl td:first-child { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; width:22%; }
+
+    .standards-grid { display:grid; grid-template-columns: 1fr; gap:1rem; margin:1rem 0; }
+    .std { background:var(--surf); border:1px solid var(--border); border-left:4px solid var(--blue); border-radius:10px; padding:0.9rem 1.2rem; }
+    .std.mid { border-left-color:var(--amber); }
+    .std.new { border-left-color:#3D7A3D; }
+    .std .tag { color:var(--muted); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.07em; font-weight:700; margin-bottom:0.25rem; }
+    .std h5 { color:var(--indigo); font-size:1.05rem; margin-bottom:0.3rem; }
+    .std p { font-size:0.9rem; color:var(--text); margin:0.3rem 0; line-height:1.65; }
+
+    .sections-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:0.6rem; margin:1rem 0; }
+    @media (max-width: 720px){ .sections-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 480px){ .sections-grid { grid-template-columns: 1fr; } }
+    .s-card { background:var(--surf); border:1px solid var(--border); border-left:3px solid var(--blue); border-radius:8px; padding:0.6rem 0.8rem; }
+    .s-card .n { color:var(--muted); font-family:'Courier New',monospace; font-size:0.75rem; }
+    .s-card h6 { color:var(--indigo); font-size:0.9rem; margin:0.1rem 0 0.2rem; }
+    .s-card p { font-size:0.82rem; color:var(--text); line-height:1.5; margin:0; }
+    .s-card.meta { border-left-color:var(--muted); }
+    .s-card.head { border-left-color:var(--indigo); }
+    .s-card.req { border-left-color:var(--blue); }
+    .s-card.supp { border-left-color:var(--amber); }
+    .s-card.scope { border-left-color:var(--red); }
+
+    .section-deep { background:var(--surf); border:1px solid var(--border); border-radius:10px; padding:1rem 1.3rem; margin:1.2rem 0; }
+    .section-deep .tag { color:var(--muted); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.07em; font-weight:700; margin-bottom:0.25rem; }
+    .section-deep h4 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.15rem; margin-bottom:0.4rem; }
+    .section-deep .eg { background:#FAFBFC; border:1px solid var(--border); border-radius:6px; padding:0.7rem 1rem; font-family:'Courier New',monospace; font-size:0.85rem; line-height:1.65; color:var(--text); margin:0.5rem 0; white-space:pre-wrap; }
+
+    .lifecycle-row { background:var(--surf); border:1px solid var(--border); border-radius:10px; padding:1rem 1.3rem; margin:1rem 0; }
+    .lifecycle-row h5 { color:var(--indigo); font-size:1rem; margin-bottom:0.4rem; }
+
+    .checklist { background:var(--surf); border:1px solid var(--border); border-radius:12px; padding:1rem 1.3rem; margin:1rem 0; }
+    .checklist h4 { color:var(--indigo); margin-bottom:0.5rem; font-size:1rem; }
+    .checklist li { list-style:none; padding:0.3rem 0; border-bottom:1px dashed var(--border); font-size:0.92rem; line-height:1.6; }
+    .checklist li:last-child { border-bottom:none; }
+    .checklist li::before { content:'☐'; margin-right:0.6rem; color:var(--blue); font-weight:700; }
+
+    .full-example { background:var(--surf); border:2px solid var(--border); border-radius:10px; padding:1.2rem 1.5rem; margin:1rem 0; font-size:0.9rem; line-height:1.7; }
+    .full-example h5 { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin:1rem 0 0.4rem; padding-bottom:0.2rem; border-bottom:1px solid var(--border); }
+    .full-example h5:first-child { margin-top:0; }
+    .full-example .meta-line { color:var(--muted); font-family:'Courier New',monospace; font-size:0.85rem; margin:0.15rem 0; }
+    .full-example .meta-line b { color:var(--indigo); font-weight:600; }
+    .full-example ul { margin-left:1.2rem; }
+    .full-example li { font-size:0.88rem; line-height:1.65; margin:0.15rem 0; }
+    .full-example pre { background:var(--bg); border:1px solid var(--border); border-radius:5px; padding:0.6rem 0.9rem; font-family:'Courier New',monospace; font-size:0.82rem; line-height:1.6; margin:0.4rem 0; white-space:pre-wrap; color:var(--text); overflow-x:auto; }
+    .full-example .ac { background:#F3FAE9; border:1px solid #D4E8BD; border-left:4px solid #3D7A3D; border-radius:5px; padding:0.5rem 0.8rem; margin:0.3rem 0; font-size:0.87rem; line-height:1.65; }
+    .full-example .ac .gwt-k { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; }
+    .full-example .change { background:#F5F5F5; border-left:3px solid var(--muted); padding:0.5rem 0.8rem; font-family:'Courier New',monospace; font-size:0.82rem; color:var(--muted); border-radius:4px; margin:0.2rem 0; }
+
+    .summary { background: linear-gradient(135deg, #F9F9F9, #EDEDED); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+    .summary h4 { color: var(--indigo); margin-bottom: 0.5rem; font-size: 0.95rem; }
+    .summary ul { margin-left: 1.1rem; }
+    .summary li { font-size: 0.93rem; margin: 0.25rem 0; }
+
+    footer { text-align:center; padding: 2rem 1rem 3rem; color: var(--faint); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+    footer img { height: 28px; opacity:0.7; margin-bottom: 0.5rem; display: block; margin-left:auto; margin-right:auto; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="logo-corner"><img src="../../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE"></div>
+    <div class="hero-badge"><span class="dot"></span> Spec Writing · Class 01</div>
+    <h1><span class="c-blue">Anatomy of a</span><br><span class="c-indigo">Dev-Ready Spec</span></h1>
+    <p class="hero-sub">Your take-home reference. The industry-standard 12-section structure every dev-ready spec uses — with a full worked example, a checklist, and the versioning conventions that keep specs usable in real teams.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">SRS</span>
+      <span class="hero-tag">PRD</span>
+      <span class="hero-tag">IEEE 29148</span>
+      <span class="hero-tag">Feature Spec</span>
+      <span class="hero-tag">12 Sections</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="toc">
+      <h3>In this note</h3>
+      <ol>
+        <li><a href="#why">Why specs matter — the dev-ready test</a></li>
+        <li><a href="#names">Spec · Story · PRD · SRS — what's the difference?</a></li>
+        <li><a href="#standards">Industry standards · three traditions</a></li>
+        <li><a href="#overview">The 12-section anatomy · overview</a></li>
+        <li><a href="#header">Header zone · metadata to personas</a></li>
+        <li><a href="#req">Requirements zone · FR · AC · NFR</a></li>
+        <li><a href="#supp">Supporting zone · UX · data · dependencies</a></li>
+        <li><a href="#scope">Scope · out-of-scope</a></li>
+        <li><a href="#lifecycle">Status lifecycle &amp; versioning</a></li>
+        <li><a href="#length">Length discipline · the 20-minute rule</a></li>
+        <li><a href="#example">A complete annotated example</a></li>
+        <li><a href="#checklist">Spec author's checklist</a></li>
+        <li><a href="#take">Key takeaways</a></li>
+      </ol>
+    </div>
+
+    <section class="chapter" id="why">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 1</div>
+        <h2>Why specs matter — the dev-ready test</h2>
+      </div>
+      <p>Here's the simplest test for a spec.</p>
+      <div class="callout indigo">
+        <p>Hand the spec to a mid-level engineer. Watch what they do next.</p>
+        <ul>
+          <li>If they open their editor and start coding — the spec is <strong>dev-ready</strong>.</li>
+          <li>If they schedule a meeting — the spec is not.</li>
+        </ul>
+      </div>
+      <p>Most specs fail this test. Not because the author was lazy, but because the structure wasn't there. This class is about that structure — the 12 sections that show up in every solid spec across the industry, whether it's a formal IEEE-style SRS or a lightweight feature ticket in Linear.</p>
+      <p>Learn the 12 sections and the three traditions underneath, and you'll be able to write specs that engineers — and AI — can actually build from.</p>
+    </section>
+
+    <section class="chapter" id="names">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 2</div>
+        <h2>Spec · Story · PRD · SRS — what's the difference?</h2>
+      </div>
+      <p>The words sound confusingly similar. They're actually differences of <strong>scope and depth</strong>, not structure. Under the hood, they share the same 12 sections.</p>
+      <div class="naming-tbl">
+        <table>
+          <thead>
+            <tr><th>Name</th><th>Scope</th><th>Length</th><th>When used</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>User Story</td>
+              <td>One user-visible feature</td>
+              <td>&lt; 1 page</td>
+              <td>Sprint-level planning; lives in Jira / Linear</td>
+            </tr>
+            <tr>
+              <td>Feature Spec</td>
+              <td>One feature, fully specified (story + UX + data + edges + NFRs)</td>
+              <td>2–5 pages</td>
+              <td>Day-to-day dev work; our main teaching focus</td>
+            </tr>
+            <tr>
+              <td>PRD</td>
+              <td>A product area or major release — multiple features + rationale + metrics</td>
+              <td>10–30 pages</td>
+              <td>Quarterly planning, new product launches</td>
+            </tr>
+            <tr>
+              <td>SRS</td>
+              <td>A whole system, exhaustive</td>
+              <td>30–100+ pages</td>
+              <td>Formal / regulated environments (banking, medical, aviation, defence)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Throughout this class, when we say "spec" we mean the <strong>feature spec</strong> — the level you'll use in daily sprint work. But everything we teach scales up to PRD and SRS; you just add more depth per section.</p>
+    </section>
+
+    <section class="chapter" id="standards">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 3</div>
+        <h2>Industry standards · three traditions</h2>
+      </div>
+      <p>Every shop draws from one of three traditions. They look different on the surface — the underlying skeleton is the same.</p>
+      <div class="standards-grid">
+        <div class="std">
+          <div class="tag">Formal · since 1984</div>
+          <h5>IEEE 830 / ISO/IEC/IEEE 29148</h5>
+          <p>The formal SRS (Software Requirements Specification) standard. Heavy structure: introduction → overall description → specific requirements → appendices. The current version is <strong>ISO/IEC/IEEE 29148:2018</strong>, which supersedes IEEE 830.</p>
+          <p><strong>You'll see it in:</strong> banks, medical device makers, aviation, defence contractors, government tenders. Often mandated by regulation.</p>
+        </div>
+        <div class="std mid">
+          <div class="tag">Modern tech · since ~2005</div>
+          <h5>PRD (Product Requirements Document)</h5>
+          <p>The tech-industry convention. Lighter than IEEE, more user-focused. Popularised by Google, Atlassian, Intercom, Shape Up (Basecamp), and templates circulating in product-management circles. Same core sections, friendlier tone, more emphasis on users and metrics.</p>
+          <p><strong>You'll see it in:</strong> SELISE, startups, most product-led companies. The default outside regulated industries.</p>
+        </div>
+        <div class="std new">
+          <div class="tag">Agile · since ~2010</div>
+          <h5>Feature Spec / BDD</h5>
+          <p>Per-feature, story-sized. Given/When/Then acceptance criteria at the core (borrowed from Behaviour-Driven Development). Often lives inside a Jira or Linear ticket, a Markdown file in the repo, or a Notion page.</p>
+          <p><strong>You'll see it in:</strong> daily sprint work, anywhere the team writes many small specs a week rather than a few big ones.</p>
+        </div>
+      </div>
+      <div class="callout amber">
+        <h4>The same skeleton underneath</h4>
+        <p>Strip any of these down and you find the same 12 sections — they just differ in tone, depth, and length. Learn the 12 sections and you can write fluently in all three traditions.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="overview">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 4</div>
+        <h2>The 12-section anatomy · overview</h2>
+      </div>
+      <p>Every dev-ready spec has the same 12 sections, in the same order. Think of them as four zones:</p>
+      <ul>
+        <li><strong>Header (1–5)</strong> — who/what/why: metadata, TL;DR, problem, goals, users</li>
+        <li><strong>Requirements (6–8)</strong> — the contract: functional, acceptance, non-functional</li>
+        <li><strong>Supporting (9–11)</strong> — the how-to-build: UX, data, dependencies and risks</li>
+        <li><strong>Scope (12)</strong> — the "we're not doing this" list</li>
+      </ul>
+      <div class="sections-grid">
+        <div class="s-card meta"><div class="n">§ 01</div><h6>📝 Metadata</h6><p>Title, version, author, status, reviewers, date.</p></div>
+        <div class="s-card meta"><div class="n">§ 02</div><h6>📌 TL;DR</h6><p>Two or three sentences — the whole spec in an elevator pitch.</p></div>
+        <div class="s-card head"><div class="n">§ 03</div><h6>🎯 Problem</h6><p>Whose pain, how big, with evidence.</p></div>
+        <div class="s-card head"><div class="n">§ 04</div><h6>🚦 Goals &amp; Non-goals</h6><p>Success criteria + the explicit what-we're-not-doing list.</p></div>
+        <div class="s-card head"><div class="n">§ 05</div><h6>👥 Users &amp; Personas</h6><p>Who this is for, specifically.</p></div>
+        <div class="s-card req"><div class="n">§ 06</div><h6>🧩 Functional Requirements</h6><p>User stories and flows.</p></div>
+        <div class="s-card req"><div class="n">§ 07</div><h6>✅ Acceptance Criteria</h6><p>Given/When/Then per story.</p></div>
+        <div class="s-card req"><div class="n">§ 08</div><h6>🛡️ Non-Functional Requirements</h6><p>Performance · security · reliability · a11y.</p></div>
+        <div class="s-card supp"><div class="n">§ 09</div><h6>🎨 UX &amp; UI</h6><p>Wireframes, flows, mockups.</p></div>
+        <div class="s-card supp"><div class="n">§ 10</div><h6>🗂️ Data Model</h6><p>Entities · fields · relationships · volumes.</p></div>
+        <div class="s-card supp"><div class="n">§ 11</div><h6>⚠️ Dependencies, Risks, Open Questions</h6><p>What could block or bite.</p></div>
+        <div class="s-card scope"><div class="n">§ 12</div><h6>♾️ Out of Scope</h6><p>The explicit not-doing list.</p></div>
+      </div>
+    </section>
+
+    <section class="chapter" id="header">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 5</div>
+        <h2>Header zone · metadata to personas</h2>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§ 01 · Metadata</div>
+        <h4>The spec's "ID card"</h4>
+        <p>A short key-value block at the very top. Any reader should know in five seconds what they're looking at and whether it's current. Skimping on metadata is the cause of at least half of all "oh, I was reading an old version" conversations.</p>
+        <p><strong>Include:</strong></p>
+        <ul>
+          <li><strong>Title</strong> — feature name, product, version. "Biller Favourites · mBoB · v1"</li>
+          <li><strong>Status</strong> — Draft / Review / Approved / Implemented / Archived</li>
+          <li><strong>Version</strong> — semantic (0.1, 0.3, 0.7, 1.0). Bump on every meaningful change.</li>
+          <li><strong>Author(s)</strong> — who owns this document</li>
+          <li><strong>Reviewers</strong> — dev lead, QA lead, design lead, stakeholder</li>
+          <li><strong>Last updated</strong> — single date that changes on every edit</li>
+          <li><strong>Ticket / epic link</strong> — Jira, Linear, or GitHub issue</li>
+        </ul>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§ 02 · TL;DR</div>
+        <h4>Two or three sentences. That's it.</h4>
+        <p>A senior leader should be able to read only the TL;DR and know what's being built, for whom, and why. If someone skips the whole spec and reads only the TL;DR, they should still be able to have a correct hallway conversation about it.</p>
+        <div class="eg">TL;DR — We let mBoB users save up to 10 repeat billers as favourites on
+the Bill Payments home. One-tap pre-fill, MPIN still required. Solves the
+36-per-year re-entry problem for the 62% of users who pay the same
+billers every month. Ships v1 end of May.</div>
+        <p style="font-style:italic; color:var(--muted); font-size:0.9rem">Three sentences. Names the feature, the user, the mechanism, the problem, the evidence, and the timing. A good TL;DR is dense.</p>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§ 03 · Problem Statement</div>
+        <h4>Whose pain, how big, with evidence</h4>
+        <p>One tight paragraph. Name the user segment, describe the pain concretely, quantify it if possible, cite evidence (analytics, support tickets, research). Then say why this is worth solving <em>now</em>.</p>
+        <div class="eg">62% of mBoB users pay the same 3+ billers every month (Q1 2026 analytics).
+Each payment requires re-typing a 12-digit account number. Support
+volume: 8% of all tickets reference "can I save billers". Pain compounds:
+~36 re-entries per active user per year.</div>
+        <div class="callout red">
+          <h4>The most common problem-statement sin</h4>
+          <p>Describing the <em>solution</em> ("users need favourites") instead of the <em>pain</em> ("users re-type account numbers 36× a year"). If your problem statement names a solution, you've already narrowed the design space — probably accidentally.</p>
+        </div>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§ 04 · Goals &amp; Non-goals</div>
+        <h4>What success looks like — and what it doesn't</h4>
+        <p><strong>Goals</strong> are the measurable outcomes that will tell you the feature worked. <strong>Non-goals</strong> are the features adjacent stakeholders might expect to be included but aren't. Non-goals are as important as goals — without them, scope quietly balloons.</p>
+        <ul>
+          <li><strong>Goals:</strong> Reduce re-entry time for repeat billers by ≥80%. Hit 40% weekly active use within 2 months. Support volume on "save billers" drops to &lt;1%.</li>
+          <li><strong>Non-goals:</strong> Sharing favourites between users. Auto-pay from a favourite. Moving money between bank accounts. Support for legacy app versions.</li>
+        </ul>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§ 05 · Users &amp; Personas</div>
+        <h4>Design for specific humans</h4>
+        <p>Name 2–4 concrete personas. Give them names, details, context, constraints. If a feature works for your three named personas, it works for millions. If you can only name "the user", your spec is wearing a blindfold.</p>
+        <div class="eg">Primary — Tashi (power user)
+  Thimphu · 34 · shopkeeper · pays 30+ bills/month
+  Wants speed. Will learn shortcuts. Annoyed by extra taps.
+
+Secondary — Aum Pema (conservative user)
+  Trashigang · 58 · retired civil servant
+  Dzongkha. Big buttons. Uses mBoB for exactly 2 things.
+  Must not be surprised by new UI.
+
+Edge — Karma (student abroad)
+  Australia · 22 · may not have Bhutan SIM
+  Logs in over Wi-Fi; performance on slow networks matters.</div>
+        <p>Once named, these personas should appear in acceptance criteria, UX reviews, and trade-off decisions. "Would Aum Pema get confused by this?" is the kind of question a persona section makes possible.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="req">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 6</div>
+        <h2>Requirements zone · FR · AC · NFR</h2>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§ 06 · Functional Requirements</div>
+        <h4>User stories, flows, behaviour</h4>
+        <p>A numbered list of user stories the feature delivers. Each is "As a … I want … so that …", with the <em>so that</em> explaining the real goal so dev and AI can make smart trade-offs. One feature = multiple FRs; if a single FR takes more than a sentence, split it.</p>
+        <ul>
+          <li>FR-01 · Save a paid biller as a favourite (from receipt screen)</li>
+          <li>FR-02 · View favourites on Bill Payments home</li>
+          <li>FR-03 · Tap a favourite to pre-fill a payment</li>
+          <li>FR-04 · Remove a favourite</li>
+          <li>FR-05 · Edit alias / nickname on a favourite</li>
+        </ul>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§ 07 · Acceptance Criteria</div>
+        <h4>Given / When / Then · pass or fail</h4>
+        <p>Every FR gets 1–3 AC, written in <strong>Given/When/Then</strong> form. Each AC must be specific, observable, testable. AC is covered in depth in <a href="../ba-qa-combined/04-acceptance-criteria-notes.html">Combined Class 04 — Acceptance Criteria</a>. In the spec itself, AC lives here.</p>
+        <div class="eg">AC-01 · Given user completed a payment,
+          When they tap ⭐ Save,
+          Then biller appears in Favourites within 1 second.
+
+AC-02 · Given user has 10 favourites already,
+          When they tap ⭐ Save,
+          Then system shows "Limit reached" and adds nothing.
+
+AC-03 · Given user is offline,
+          When they tap ⭐ Save,
+          Then save is queued locally and shows "Will sync" toast;
+               syncs when connection returns.</div>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§ 08 · Non-Functional Requirements</div>
+        <h4>How well the system must do it</h4>
+        <p>Covered in depth in <a href="../ba-qa-combined/03-functional-vs-non-functional-notes.html">Combined Class 03 — Functional vs Non-Functional Requirements</a>. In the spec, list the NFRs relevant to <em>this feature</em> — not the whole system. Use numbers, not adjectives.</p>
+        <ul>
+          <li><strong>Performance</strong> — Favourites list renders &lt;1s on 4G, p95.</li>
+          <li><strong>Security</strong> — Favourites scoped to logged-in user; no cross-account leakage in audit logs.</li>
+          <li><strong>Reliability</strong> — Offline save queues locally; syncs when online; never silently drops.</li>
+          <li><strong>Accessibility</strong> — ⭐ button labelled for screen readers; colour-independent cue (star shape).</li>
+          <li><strong>Scalability</strong> — Supports 10k concurrent users on pay-day without degraded UX.</li>
+        </ul>
+        <div class="callout red">
+          <h4>The sin here is silence</h4>
+          <p>The common NFR failure isn't bad NFRs — it's <em>silent</em> NFRs. If an attribute (performance, security, a11y) isn't named in the spec, it doesn't exist as a requirement. Silent NFRs get discovered by users, at the worst possible time.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="supp">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 7</div>
+        <h2>Supporting zone · UX · data · dependencies</h2>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§ 09 · UX &amp; UI</div>
+        <h4>Where it lives and how it flows</h4>
+        <p>Wireframes or a link to Figma. Low-fi is fine — the job is alignment on placement and flow, not final visual design. List <strong>every state</strong> explicitly (empty, populated, loading, error, offline) — each missing state becomes a bug later.</p>
+        <ul>
+          <li><strong>Entry point:</strong> Receipt screen after a successful payment</li>
+          <li><strong>Primary screen:</strong> Bill Payments home, new "Favourites" row above "Recent"</li>
+          <li><strong>States to cover:</strong> empty · populated · loading · error · offline</li>
+          <li><strong>Figma:</strong> <code>mbob-favs-v1</code></li>
+        </ul>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§ 10 · Data Model</div>
+        <h4>Entities · fields · relationships · volumes</h4>
+        <p>Sketch the new or changed data structures. Field names, types, relationships, constraints. Not a full ERD — just enough for dev to match on existing schema and catch naming collisions.</p>
+        <div class="eg">Favourite {
+  id:          uuid
+  userId:      fk → users.id
+  billerId:    fk → billers.id
+  alias:       string (optional, max 30)
+  lastUsedAt:  timestamp
+  lastAmount:  decimal (optional)
+  createdAt:   timestamp
+}
+
+Volume: avg 4 favourites per active user
+Max: 10 per user (enforced at app layer)</div>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§ 11 · Dependencies, Risks, Open Questions</div>
+        <h4>What could block, bite, or surprise</h4>
+        <p>Three short lists. Keeping them visible is how teams avoid the "oh, we forgot about that" moment a week before ship.</p>
+        <ul>
+          <li><strong>Dependencies:</strong> biller-list API needs a new <code>lastUsedAt</code> sort field; depends on Design finalising the star icon.</li>
+          <li><strong>Risks:</strong> some users may exceed 10 favourites before launch if we're not careful with data migration; plan a backfill cleanup script.</li>
+          <li><strong>Open questions:</strong> does a favourite persist across device reinstall? (Answer: yes, server-side — confirm with Support before launch.)</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="chapter" id="scope">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 8</div>
+        <h2>Scope · § 12 · Out of Scope</h2>
+      </div>
+      <div class="section-deep" style="border-left:5px solid var(--red)">
+        <div class="tag" style="color:var(--red)">§ 12 · Out of Scope</div>
+        <h4>The deadline-saving section</h4>
+        <p>Every spec needs an explicit "we are <em>not</em> doing this" section. Without it, stakeholders quietly assume their favourite idea is included — and discover it isn't the week before ship, when it's too late to fix.</p>
+        <ul>
+          <li>Sharing favourites between users</li>
+          <li>Categories / custom tags / icons</li>
+          <li>Auto-pay from a favourite</li>
+          <li>Support for legacy mBoB v4</li>
+          <li>Bulk import / export</li>
+        </ul>
+        <p style="font-style:italic; color:var(--muted)">A good out-of-scope list is a deadline-saving device. Each line potentially prevents a week of rework.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="lifecycle">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 9</div>
+        <h2>Status lifecycle &amp; versioning</h2>
+      </div>
+      <p>A spec is a living document. It moves through five statuses, each with its own bar for what's allowed.</p>
+      <div class="lifecycle-row">
+        <h5>📝 Draft (versions 0.1–0.3)</h5>
+        <p>Being written. Sections missing. Nobody should build from a Draft. Review comments welcome but not expected.</p>
+      </div>
+      <div class="lifecycle-row">
+        <h5>👀 Review (versions 0.4–0.9)</h5>
+        <p>All sections present. Reviewers (dev lead, QA lead, design lead, stakeholder) are actively reading. Questions fly. Multiple minor version bumps.</p>
+      </div>
+      <div class="lifecycle-row">
+        <h5>✅ Approved (version 1.0)</h5>
+        <p>Reviewers signed off. Dev can start. Any change now requires a version bump and at minimum a notification to reviewers. Substantive changes need re-review.</p>
+      </div>
+      <div class="lifecycle-row">
+        <h5>🔨 Implemented (versions 1.x)</h5>
+        <p>Feature is built, tested, shipped. Spec gets "as-built" updates if reality diverged during implementation. The spec now serves as reference documentation.</p>
+      </div>
+      <div class="lifecycle-row">
+        <h5>📦 Archived</h5>
+        <p>Feature has been superseded, retired, or replaced by a newer spec. Kept for historical context; marked clearly so nobody mistakes it for current.</p>
+      </div>
+
+      <h3 style="color:var(--indigo); font-size:1.15rem; margin-top:1.5rem">Versioning convention</h3>
+      <p>Use <strong>major.minor</strong>:</p>
+      <ul>
+        <li><strong>Minor bumps</strong> (0.4, 0.5, 0.6) during drafting and review — for each meaningful content change.</li>
+        <li><strong>Major bumps</strong> (1.0, 2.0) when the status changes or the scope materially expands.</li>
+        <li><strong>Changelog</strong> at the bottom — one line per bump, dated, with the key change. This is how a reviewer who hasn't looked at the spec for a week knows what's moved.</li>
+      </ul>
+    </section>
+
+    <section class="chapter" id="length">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 10</div>
+        <h2>Length discipline · the 20-minute rule</h2>
+      </div>
+      <div class="callout amber">
+        <h4>The 20-minute rule</h4>
+        <p>A dev-ready feature spec should take a mid-level engineer <strong>20 minutes or less</strong> to read end-to-end. If yours takes longer, either it's the wrong type (probably should be a PRD) or it's got fat to trim.</p>
+      </div>
+      <h3 style="color:var(--indigo); font-size:1.1rem; margin-top:1.2rem">Common bloat</h3>
+      <ul>
+        <li>Paragraphs where a bullet list would do</li>
+        <li>Repeating the TL;DR three times in slightly different words</li>
+        <li>Embedding whole meeting transcripts</li>
+        <li>Speculating about future versions ("and later we might…")</li>
+        <li>Re-explaining company or product context everyone already knows</li>
+      </ul>
+      <h3 style="color:var(--indigo); font-size:1.1rem; margin-top:1.2rem">Discipline moves</h3>
+      <ul>
+        <li>Bullets over prose whenever possible</li>
+        <li>Diagrams where 200 words would be needed</li>
+        <li>Link out to background documents — don't quote them inline</li>
+        <li>One sentence per sentence — no nested subordinate clauses</li>
+        <li>Cut every "it should be noted that" and "as mentioned above"</li>
+      </ul>
+      <p style="margin-top:1rem"><strong>Targets:</strong> feature spec 2–5 pages · PRD 10–30 pages · SRS larger, but never longer than necessary. Length is a cost, not a signal of quality.</p>
+    </section>
+
+    <section class="chapter" id="example">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 11</div>
+        <h2>A complete annotated example</h2>
+      </div>
+      <p>Here's a full feature spec for <strong>Biller Favourites · mBoB · v1</strong> — all 12 sections at production quality.</p>
+
+      <div class="full-example">
+        <h5>§ 01 · Metadata</h5>
+        <p class="meta-line"><b>Title:</b> Biller Favourites · mBoB · v1</p>
+        <p class="meta-line"><b>Status:</b> Approved · <b>Version:</b> 1.0 · <b>Last updated:</b> 2026-05-02</p>
+        <p class="meta-line"><b>Author:</b> Tek N. Acharya · <b>Reviewers:</b> Bhuwan S. (Dev), QA Lead, Design Lead, PO</p>
+        <p class="meta-line"><b>Ticket:</b> MBOB-1042</p>
+
+        <h5>§ 02 · TL;DR</h5>
+        <p>Let mBoB users save up to 10 repeat billers as favourites on the Bill Payments home. One-tap pre-fill, MPIN still required. Solves the 36-per-year re-entry problem for the 62% of users who pay the same billers every month. Ships end of May.</p>
+
+        <h5>§ 03 · Problem</h5>
+        <p>62% of mBoB users pay the same 3+ billers every month (Q1 2026 analytics). Each payment requires re-typing a 12-digit account number — ≈36 re-entries per active user per year. 8% of all support tickets ask "can I save billers".</p>
+
+        <h5>§ 04 · Goals &amp; Non-goals</h5>
+        <ul>
+          <li><strong>Goals:</strong> reduce re-entry time ≥80%; 40% weekly active use of favourites within 2 months; support tickets on "save billers" drop to &lt;1%.</li>
+          <li><strong>Non-goals:</strong> sharing favourites · auto-pay · custom categorisation · bulk import/export.</li>
+        </ul>
+
+        <h5>§ 05 · Users &amp; Personas</h5>
+        <ul>
+          <li><strong>Primary — Tashi:</strong> Thimphu · 34 · shopkeeper · 30+ bills/month · wants speed.</li>
+          <li><strong>Secondary — Aum Pema:</strong> Trashigang · 58 · Dzongkha · uses mBoB for exactly 2 things.</li>
+          <li><strong>Edge — Karma:</strong> student abroad · 22 · may not have a Bhutan SIM; uses Wi-Fi.</li>
+        </ul>
+
+        <h5>§ 06 · Functional Requirements</h5>
+        <ul>
+          <li>FR-01 · Save a paid biller as a favourite (from receipt screen)</li>
+          <li>FR-02 · View favourites on the Bill Payments home</li>
+          <li>FR-03 · Tap a favourite to pre-fill a payment</li>
+          <li>FR-04 · Remove a favourite</li>
+          <li>FR-05 · Edit alias / nickname on a favourite</li>
+        </ul>
+
+        <h5>§ 07 · Acceptance Criteria</h5>
+        <div class="ac"><strong>AC-01 · Save</strong><br><span class="gwt-k">Given</span> user completed a bill payment, <span class="gwt-k">when</span> they tap ⭐ Save on the receipt, <span class="gwt-k">then</span> biller appears in Favourites within 1 second.</div>
+        <div class="ac"><strong>AC-02 · Use</strong><br><span class="gwt-k">Given</span> user has a saved favourite, <span class="gwt-k">when</span> they tap it, <span class="gwt-k">then</span> amount + account pre-fill; MPIN still required to confirm.</div>
+        <div class="ac"><strong>AC-03 · Edge · limit</strong><br><span class="gwt-k">Given</span> user has 10 favourites, <span class="gwt-k">when</span> they tap ⭐ Save, <span class="gwt-k">then</span> system shows "Limit reached" and adds nothing.</div>
+        <div class="ac"><strong>AC-04 · Edge · offline</strong><br><span class="gwt-k">Given</span> user is offline, <span class="gwt-k">when</span> they tap ⭐ Save, <span class="gwt-k">then</span> save is queued; syncs when online; shows "Will sync" toast.</div>
+
+        <h5>§ 08 · Non-Functional Requirements</h5>
+        <ul>
+          <li><strong>Performance:</strong> favourites list renders &lt;1s on 4G, p95.</li>
+          <li><strong>Security:</strong> favourites scoped to user; no cross-account leakage in audit logs.</li>
+          <li><strong>Reliability:</strong> offline save must never silently drop; queue + sync.</li>
+          <li><strong>Accessibility:</strong> ⭐ labelled for screen readers; colour-independent cue (star shape).</li>
+          <li><strong>Scalability:</strong> supports 10k concurrent users at pay-day peak without UX degradation.</li>
+        </ul>
+
+        <h5>§ 09 · UX &amp; UI</h5>
+        <ul>
+          <li><strong>Entry:</strong> ⭐ button on post-payment receipt screen.</li>
+          <li><strong>Primary:</strong> Favourites row on Bill Payments home, above "Recent".</li>
+          <li><strong>States:</strong> empty · populated · loading · error · offline (all in Figma: <code>mbob-favs-v1</code>).</li>
+        </ul>
+
+        <h5>§ 10 · Data Model</h5>
+        <pre>Favourite {
+  id:          uuid
+  userId:      fk → users.id
+  billerId:    fk → billers.id
+  alias:       string (optional, max 30)
+  lastUsedAt:  timestamp
+  lastAmount:  decimal (optional)
+  createdAt:   timestamp
+}
+Volume: avg 4 favs / active user · max 10 enforced at app layer</pre>
+
+        <h5>§ 11 · Dependencies, Risks, Open Questions</h5>
+        <ul>
+          <li><strong>Dep:</strong> biller-list API needs a new <code>lastUsedAt</code> sort field.</li>
+          <li><strong>Risk:</strong> users may exceed 10 before launch; plan a migration cleanup script.</li>
+          <li><strong>Open:</strong> does a favourite survive an app reinstall? Server-side yes — confirm with Support before launch.</li>
+        </ul>
+
+        <h5>§ 12 · Out of Scope (v1)</h5>
+        <ul>
+          <li>Sharing favourites between users</li>
+          <li>Categories / custom tags / icons</li>
+          <li>Auto-pay from a favourite</li>
+          <li>Support for legacy mBoB v4</li>
+          <li>Bulk import / export</li>
+        </ul>
+
+        <h5 style="color:var(--muted)">Changelog</h5>
+        <div class="change">v0.1 · initial draft · Tek · 2026-04-22</div>
+        <div class="change">v0.5 · added NFRs, refined AC · Tek · 2026-04-28</div>
+        <div class="change">v1.0 · approved; review comments folded in · 2026-05-02</div>
+      </div>
+
+      <p style="margin-top:1rem">This spec is ~2 pages printed. A mid-level engineer can read it in 10 minutes and open their editor. That's the bar.</p>
+    </section>
+
+    <section class="chapter" id="checklist">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 12</div>
+        <h2>Spec author's checklist</h2>
+      </div>
+      <p>Before you mark a spec as <strong>Ready for Review</strong>, walk this list. Each unchecked item is a future bug or rework cycle.</p>
+      <div class="checklist">
+        <h4>All 12 sections present</h4>
+        <li>Metadata block complete — title, status, version, author, reviewers, date, ticket link</li>
+        <li>TL;DR is 2–3 sentences and stands alone</li>
+        <li>Problem names whose pain, how big, with evidence</li>
+        <li>Goals measurable; non-goals explicit</li>
+        <li>2–4 named personas with concrete details</li>
+        <li>Functional requirements listed (FR-01, FR-02…)</li>
+        <li>Acceptance criteria in Given/When/Then; at least one edge per FR</li>
+        <li>NFRs named in numbers, not adjectives</li>
+        <li>UX/UI section names every state (including error, loading, offline)</li>
+        <li>Data model sketched — entities, fields, volumes, constraints</li>
+        <li>Dependencies, risks, open questions each listed separately</li>
+        <li>Out of scope is explicit and specific</li>
+      </div>
+      <div class="checklist">
+        <h4>Quality gates</h4>
+        <li>A mid-level engineer could start coding after reading this</li>
+        <li>Reads end-to-end in &lt;20 minutes</li>
+        <li>No adjectives ("fast", "intuitive", "user-friendly") that a QA can't test</li>
+        <li>No implementation leaks in AC ("inserts a row" — describe behaviour instead)</li>
+        <li>Every "and" in an AC Then has been split</li>
+        <li>Changelog present at the bottom</li>
+      </div>
+    </section>
+
+    <section class="chapter" id="take">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Takeaways</div>
+        <h2>Key points to carry forward</h2>
+      </div>
+      <div class="summary">
+        <h4>What we covered today</h4>
+        <ul>
+          <li><strong>Spec / Story / PRD / SRS</strong> — same DNA, different scope and tone.</li>
+          <li>Three industry traditions: <strong>IEEE 29148</strong> (formal), <strong>PRD</strong> (modern tech), <strong>Feature Spec</strong> (agile).</li>
+          <li>The <strong>12-section anatomy</strong>: Header (01–05) · Requirements (06–08) · Supporting (09–11) · Scope (12).</li>
+          <li>Status <strong>lifecycle</strong>: Draft → Review → Approved → Implemented → Archived — with <strong>semantic versioning</strong> and a changelog.</li>
+          <li>The <strong>20-minute rule</strong>: a feature spec should read end-to-end in under 20 minutes.</li>
+          <li>The sin of <strong>silence</strong> — if an attribute (NFR, edge case, scope boundary) isn't named, it doesn't exist.</li>
+          <li>Use the <strong>spec author's checklist</strong> before every "Ready for Review".</li>
+        </ul>
+      </div>
+      <p style="margin-top:1.5rem; font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-size:1.1rem">If a mid-level engineer reads your spec and opens their editor — you're done.</p>
+      <p style="margin-top:0.5rem">Next class: <strong>Writing Mechanics for Specs</strong> — active voice, precise verbs, consistent terminology, lists over prose, and diagrams that carry weight.</p>
+    </section>
+
+  </div>
+
+  <footer>
+    <img src="../../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE">
+    SELISE × Pelsung · Spec Writing · Class 01<br>
+    Anatomy of a Dev-Ready Spec
+  </footer>
+
+</body>
+</html>

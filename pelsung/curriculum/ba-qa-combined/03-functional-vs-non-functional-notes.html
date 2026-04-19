@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BA+QA Class 03 Notes — Functional vs Non-Functional Requirements</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#0066B2; --indigo:#001F35; --amber:#247EC1; --green:#7BC950; --purple:#4796D1; --red:#D80032; --text:#1B2021; --muted:#7B7C7F; --faint:#9CA3AF; --surf:#fff; --bg:#F9F9F9; --border:#EDEDED; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Open Sans','Aptos',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; font-size:17px; -webkit-font-smoothing:antialiased; }
+    h1,h2,h3,h4,h5,h6 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:400; letter-spacing:-0.01em; }
+    a { color: var(--blue); }
+
+    .hero { background:var(--surf); border-bottom:1px solid var(--border); padding:4rem 2rem 3rem; text-align:center; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background: linear-gradient(135deg, #0067A3, #002D72); }
+    .logo-corner { position:absolute; top: 1.25rem; left: 1.5rem; opacity:0.85; }
+    .logo-corner img { height: 34px; }
+    .hero-badge { display:inline-flex; align-items:center; gap:0.5rem; background:var(--bg); border:1px solid var(--border); border-radius:100px; padding:0.35rem 1rem; font-size:0.75rem; font-weight:700; color:var(--muted); letter-spacing:0.07em; text-transform:uppercase; margin-bottom:1.5rem; }
+    .hero-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--amber); }
+    .hero h1 { font-size:clamp(2rem,5vw,3.5rem); line-height:1.15; margin-bottom:0.75rem; }
+    .c-blue{color:var(--blue);} .c-indigo{color:var(--indigo);}
+    .hero-sub { font-size:1rem; color:var(--muted); margin-bottom:2rem; max-width:680px; margin-left:auto; margin-right:auto; }
+    .hero-tags { display:flex; justify-content:center; gap:0.6rem; flex-wrap:wrap; }
+    .hero-tag { padding:0.3rem 0.9rem; border-radius:8px; font-size:0.78rem; font-weight:600; background:#E6F0F8; color:var(--blue); }
+
+    .container { max-width:1040px; margin:0 auto; padding:0 2rem 6rem; }
+
+    .toc { background:var(--surf); border:1px solid var(--border); border-radius:16px; padding:1.75rem 2rem; margin:2.5rem 0; }
+    .toc h3 { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); margin-bottom:1.25rem; }
+    .toc ol { list-style: none; counter-reset: step; }
+    .toc li { counter-increment: step; padding:0.45rem 0; border-bottom:1px solid var(--border); }
+    .toc li:last-child { border-bottom:none; }
+    .toc li::before { content: counter(step, decimal-leading-zero); color:var(--faint); font-family:'Bahnschrift','Segoe UI',sans-serif; margin-right:0.8rem; font-size:0.9rem; }
+    .toc a { text-decoration:none; color:var(--text); font-weight:500; }
+    .toc a:hover { color: var(--blue); }
+
+    section.chapter { margin: 3.5rem 0; }
+    .chapter-head { margin-bottom:1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
+    .chapter-eyebrow { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--blue); margin-bottom:0.3rem; }
+    .chapter-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--indigo); }
+
+    p { margin: 0.7rem 0; }
+    ul, ol { margin: 0.6rem 0 0.6rem 1.3rem; }
+    li { margin: 0.3rem 0; }
+    strong { color: var(--indigo); }
+
+    .callout { background:var(--surf); border:1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 10px; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+    .callout.amber { border-left-color: var(--amber); }
+    .callout.green { border-left-color: var(--green); }
+    .callout.red { border-left-color: var(--red); }
+    .callout.indigo { border-left-color: var(--indigo); }
+    .callout h4 { font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--indigo); }
+
+    .pair { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin:1.2rem 0; }
+    @media (max-width: 720px){ .pair { grid-template-columns: 1fr; } }
+    .pair .col { background:var(--surf); border:1px solid var(--border); border-top:4px solid var(--blue); border-radius:10px; padding:0.9rem 1.1rem; }
+    .pair .col.nfr { border-top-color:var(--amber); }
+    .pair h5 { color:var(--indigo); font-size:1.05rem; margin-bottom:0.3rem; }
+    .pair .sub { color:var(--muted); font-size:0.73rem; text-transform:uppercase; letter-spacing:0.07em; margin-bottom:0.5rem; font-weight:700; }
+    .pair p { font-size:0.92rem; color:var(--text); line-height:1.65; }
+    .pair .q { background:var(--bg); border-left:3px solid var(--faint); padding:0.5rem 0.8rem; border-radius:6px; font-size:0.85rem; color:var(--muted); margin-top:0.6rem; font-style:italic; }
+
+    .nfr-card { background:var(--surf); border:1px solid var(--border); border-radius:12px; padding:1.1rem 1.4rem; margin:1.2rem 0; }
+    .nfr-card .hd { display:flex; align-items:center; gap:0.7rem; margin-bottom:0.6rem; }
+    .nfr-card .ic { font-size:1.7rem; }
+    .nfr-card h3 { color:var(--indigo); font-size:1.25rem; }
+    .nfr-card .lead { font-size:0.95rem; color:var(--text); margin:0.5rem 0 1rem; line-height:1.7; }
+    .nfr-card .grid { display:grid; grid-template-columns: 1fr 1fr; gap:0.8rem; }
+    @media (max-width: 720px){ .nfr-card .grid { grid-template-columns: 1fr; } }
+    .nfr-card .sub-col { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:0.7rem 1rem; }
+    .nfr-card .sub-col h5 { color:var(--indigo); font-size:0.92rem; margin-bottom:0.3rem; }
+    .nfr-card .sub-col ul { margin-left:1.1rem; }
+    .nfr-card .sub-col li { font-size:0.86rem; line-height:1.6; margin:0.2rem 0; }
+    .nfr-card .sub-col.eg { border-left:3px solid var(--amber); }
+    .nfr-card .sub-col.eg code { background:white; border:1px solid var(--border); padding:0.1rem 0.35rem; border-radius:4px; font-size:0.82rem; color:var(--indigo); }
+
+    .bad, .good { background:var(--surf); border:1px solid var(--border); border-radius:8px; padding:0.7rem 1rem; font-family:'Courier New',monospace; font-size:0.88rem; color:var(--text); margin:0.3rem 0; line-height:1.65; white-space:pre-wrap; }
+    .bad { border-left:4px solid var(--red); }
+    .good { border-left:4px solid var(--green); }
+
+    .furps-grid { display:grid; grid-template-columns: repeat(5, 1fr); gap:0.5rem; margin:1rem 0; }
+    @media (max-width: 720px){ .furps-grid { grid-template-columns: repeat(2, 1fr); } }
+    .furps-grid .l { background:var(--surf); border:1px solid var(--border); border-radius:10px; padding:0.7rem 0.8rem; text-align:center; }
+    .furps-grid .l .lt { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:2rem; font-weight:700; }
+    .furps-grid .l .mn { color:var(--indigo); font-size:0.88rem; font-family:'Bahnschrift','Segoe UI',sans-serif; margin-top:0.2rem; }
+
+    .template { background:var(--surf); border:2px solid var(--blue); border-radius:12px; padding:1.2rem 1.5rem; margin:1rem 0; text-align:center; font-family:'Bahnschrift','Segoe UI',sans-serif; }
+    .template p { font-size:1.05rem; line-height:1.9; margin:0.3rem 0; color:var(--text); }
+    .template .b { color:var(--blue); border-bottom:2px dashed var(--blue); padding:0 0.4rem; }
+
+    .roles { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin:1.2rem 0; }
+    @media (max-width: 720px){ .roles { grid-template-columns: 1fr; } }
+    .roles .col { background:var(--surf); border:1px solid var(--border); border-top:3px solid var(--indigo); border-radius:10px; padding:0.9rem 1.1rem; }
+    .roles .col.qa { border-top-color:var(--amber); }
+    .roles h5 { color:var(--indigo); font-size:1rem; margin-bottom:0.4rem; }
+    .roles ul { margin-left:1.1rem; }
+    .roles li { font-size:0.9rem; line-height:1.65; margin:0.2rem 0; }
+
+    .summary { background: linear-gradient(135deg, #F9F9F9, #EDEDED); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+    .summary h4 { color: var(--indigo); margin-bottom: 0.5rem; font-size: 0.95rem; }
+    .summary ul { margin-left: 1.1rem; }
+    .summary li { font-size: 0.93rem; margin: 0.25rem 0; }
+
+    footer { text-align:center; padding: 2rem 1rem 3rem; color: var(--faint); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+    footer img { height: 28px; opacity:0.7; margin-bottom: 0.5rem; display: block; margin-left:auto; margin-right:auto; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="logo-corner"><img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE"></div>
+    <div class="hero-badge"><span class="dot"></span> BA + QA Combined · Class 03</div>
+    <h1><span class="c-blue">Functional vs</span><br><span class="c-indigo">Non-Functional Requirements</span></h1>
+    <p class="hero-sub">Your take-home reference. What the software does, and how well it has to do it. The six non-functional categories every BA and QA must cover, how to write them testably, and who owns what.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">FR</span>
+      <span class="hero-tag">NFR</span>
+      <span class="hero-tag">FURPS+</span>
+      <span class="hero-tag">Performance</span>
+      <span class="hero-tag">Security</span>
+      <span class="hero-tag">Accessibility</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="toc">
+      <h3>In this note</h3>
+      <ol>
+        <li><a href="#why">Why this distinction matters</a></li>
+        <li><a href="#def">FR vs NFR · definitions</a></li>
+        <li><a href="#sidebyside">Side-by-side examples</a></li>
+        <li><a href="#perf">NFR · Performance</a></li>
+        <li><a href="#sec">NFR · Security</a></li>
+        <li><a href="#rel">NFR · Reliability</a></li>
+        <li><a href="#usab">NFR · Usability</a></li>
+        <li><a href="#a11y">NFR · Accessibility</a></li>
+        <li><a href="#scale">NFR · Scalability</a></li>
+        <li><a href="#furps">FURPS+ · the wider landscape</a></li>
+        <li><a href="#write">Writing NFRs that are testable</a></li>
+        <li><a href="#roles">BA and QA collaboration on NFRs</a></li>
+        <li><a href="#take">Key takeaways</a></li>
+      </ol>
+    </div>
+
+    <section class="chapter" id="why">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 1</div>
+        <h2>Why this distinction matters</h2>
+      </div>
+      <p>Imagine you ship a payment app. Every feature in the spec works. You demo it to stakeholders and they sign off. A month after release, users are <em>furious</em>:</p>
+      <ul>
+        <li>Login takes 12 seconds on a 3G connection.</li>
+        <li>A bug lets anyone view anyone else's balance.</li>
+        <li>Visually impaired users can't navigate the home screen.</li>
+        <li>The app crashes when more than 500 users try to pay bills at the same time.</li>
+        <li>It doesn't support Dzongkha characters in notes.</li>
+      </ul>
+      <p>None of those are "feature bugs." Every function <em>works</em>. What failed are the <strong>non-functional requirements</strong> — the ones that describe not what the system does, but how well it has to do it.</p>
+      <div class="callout amber">
+        <h4>The big idea</h4>
+        <p>Requirements are an iceberg. <strong>FRs are the visible peak</strong> — features, buttons, flows. <strong>NFRs are the 80% under the water</strong> — invisible when they work, devastating when they don't. Every BA and QA has to develop an instinct for both.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="def">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 2</div>
+        <h2>FR vs NFR · definitions</h2>
+      </div>
+      <div class="pair">
+        <div class="col">
+          <div class="sub">FR</div>
+          <h5>Functional Requirement</h5>
+          <p>Describes <strong>what the system does</strong> — features, behaviours, actions, outputs. Observable from outside: you can click a button, see the result, say "yes, that happened."</p>
+          <div class="q">"When the user clicks Submit, the system creates a leave request in status <em>Pending</em>."</div>
+        </div>
+        <div class="col nfr">
+          <div class="sub">NFR</div>
+          <h5>Non-Functional Requirement</h5>
+          <p>Describes <strong>how well the system must do it</strong> — quality attributes. Often measured in numbers, thresholds, or rules. You verify them with tools or measurements, not just by looking.</p>
+          <div class="q">"The leave request appears in the manager's inbox within 2 seconds of submission, 99% of the time."</div>
+        </div>
+      </div>
+      <p>One way to remember the distinction:</p>
+      <div class="callout">
+        <h4>FR = the verb. NFR = the adverb.</h4>
+        <p>A verb is what the system does. An adverb is <em>how</em> it does it. "Login" is the verb. "Quickly, securely, reliably, accessibly" are adverbs — each one is a whole category of NFR.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="sidebyside">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 3</div>
+        <h2>Side-by-side examples</h2>
+      </div>
+      <p>The easiest way to internalise the difference is to write both for the same feature:</p>
+      <div class="pair">
+        <div class="col"><h5>FR · Login</h5><p>The system allows users to log in using a registered phone number and MPIN.</p></div>
+        <div class="col nfr"><h5>NFR · Login</h5><p>99% of login attempts complete within 2 seconds on a 4G connection.</p></div>
+      </div>
+      <div class="pair">
+        <div class="col"><h5>FR · Bill payment</h5><p>Users can pay registered billers by selecting a biller and entering an amount.</p></div>
+        <div class="col nfr"><h5>NFR · Bill payment</h5><p>The system supports 10,000 concurrent bill-payment transactions during peak hours.</p></div>
+      </div>
+      <div class="pair">
+        <div class="col"><h5>FR · Document upload</h5><p>Users can upload their government ID (PDF or JPG) as part of KYC.</p></div>
+        <div class="col nfr"><h5>NFR · Document upload</h5><p>Uploaded IDs are encrypted at rest (AES-256) and deleted after 7 years per regulatory policy.</p></div>
+      </div>
+      <p>Notice how each pair covers the <em>same</em> feature — but from two directions. If your spec only has left-column text, the right-column issues will eat you later.</p>
+    </section>
+
+    <section class="chapter" id="perf">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 4 · NFR</div>
+        <h2>Performance</h2>
+      </div>
+      <div class="nfr-card">
+        <div class="hd"><span class="ic">🏎️</span><h3>Speed &amp; responsiveness under realistic conditions</h3></div>
+        <p class="lead">Performance is how the software feels to real users on their real devices over their real network. It's the NFR users notice first and forgive the least.</p>
+        <div class="grid">
+          <div class="sub-col">
+            <h5>What to ask</h5>
+            <ul>
+              <li>Target response time for key actions</li>
+              <li>Slow networks (3G, 2G, roaming)</li>
+              <li>p95 and p99 percentiles — not just averages</li>
+              <li>Time-boxed operations (reports, uploads)</li>
+              <li>How performance degrades under load</li>
+            </ul>
+          </div>
+          <div class="sub-col eg">
+            <h5>Concrete examples</h5>
+            <ul>
+              <li>Home screen: <code>&lt; 2s on 4G</code>, p95</li>
+              <li>Send-money confirmation: <code>&lt; 3s end-to-end</code>, p95</li>
+              <li>Biller list after home: <code>&lt; 1s</code>, p99</li>
+              <li>PDF receipt: <code>&lt; 5s</code>, max 10s</li>
+              <li>Search keystroke lag: <code>&lt; 150ms</code></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <p style="font-style:italic; color:var(--muted); font-size:0.95rem">"Fast" is a feeling. "500ms p95" is a requirement. Always pick the second one.</p>
+    </section>
+
+    <section class="chapter" id="sec">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 5 · NFR</div>
+        <h2>Security</h2>
+      </div>
+      <div class="nfr-card">
+        <div class="hd"><span class="ic">🔒</span><h3>Who can do what · is the data safe</h3></div>
+        <p class="lead">Security NFRs cover authentication, authorization, and data protection (at rest and in transit). Weak security is invisible until the breach — at which point it's the only topic anyone talks about.</p>
+        <div class="grid">
+          <div class="sub-col">
+            <h5>Questions to ask</h5>
+            <ul>
+              <li><strong>Authentication</strong> — how do users prove identity?</li>
+              <li><strong>Authorization</strong> — what can each role see/do?</li>
+              <li><strong>Data at rest</strong> — what's stored encrypted?</li>
+              <li><strong>Data in transit</strong> — TLS? cert pinning?</li>
+              <li><strong>Audit</strong> — who viewed or changed what?</li>
+              <li><strong>Session</strong> — timeout, logout, token rotation?</li>
+            </ul>
+          </div>
+          <div class="sub-col eg">
+            <h5>Concrete examples</h5>
+            <ul>
+              <li>Passwords <code>bcrypt</code>-hashed, cost ≥ 12; never plaintext</li>
+              <li>All traffic TLS 1.3; no downgrade</li>
+              <li>Government IDs encrypted at rest (AES-256)</li>
+              <li>Admin actions logged to append-only audit</li>
+              <li>Session expires 15 min idle; re-auth for transactions &gt; Nu. 50,000</li>
+              <li>Role-based access: Teller ≠ Branch Manager ≠ Auditor</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="rel">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 6 · NFR</div>
+        <h2>Reliability</h2>
+      </div>
+      <div class="nfr-card">
+        <div class="hd"><span class="ic">🔁</span><h3>How often it works · how it fails</h3></div>
+        <p class="lead">Reliability has two halves. <strong>Availability</strong> is what percentage of the time the service is up. <strong>Fault tolerance</strong> is whether failure is graceful or catastrophic when the service (or its dependencies) goes wrong.</p>
+        <div class="grid">
+          <div class="sub-col">
+            <h5>Questions to ask</h5>
+            <ul>
+              <li>What happens on network loss mid-transaction?</li>
+              <li>What's shown during planned maintenance?</li>
+              <li>How do we retry a failed operation safely?</li>
+              <li>Where is offline support required vs nice-to-have?</li>
+              <li>What does "degraded mode" look like?</li>
+            </ul>
+          </div>
+          <div class="sub-col eg">
+            <h5>Concrete examples</h5>
+            <ul>
+              <li>Service availability: <code>99.9% monthly</code> (~43 min downtime)</li>
+              <li>On network loss mid-transfer — clear "not confirmed" state, never ambiguous</li>
+              <li>Retry automatically up to 3× with exponential backoff</li>
+              <li>Offline: view balance + past transactions OK; new payments disabled</li>
+              <li>Planned maintenance: in-app banner 24h in advance</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="usab">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 7 · NFR</div>
+        <h2>Usability</h2>
+      </div>
+      <div class="nfr-card">
+        <div class="hd"><span class="ic">🎨</span><h3>How easy is it for real users to succeed</h3></div>
+        <p class="lead">Usability NFRs anchor the "user experience" conversation in numbers. "Intuitive" is untestable. "80% of first-timers complete sign-up without help" is a requirement.</p>
+        <div class="grid">
+          <div class="sub-col">
+            <h5>Questions to ask</h5>
+            <ul>
+              <li>Success rate for first-time users?</li>
+              <li>Number of taps/clicks to complete core actions?</li>
+              <li>Are errors clear, recoverable, in user language?</li>
+              <li>Is the learning curve acceptable for the target user?</li>
+              <li>Does it work for low-literacy users where relevant?</li>
+            </ul>
+          </div>
+          <div class="sub-col eg">
+            <h5>Concrete examples</h5>
+            <ul>
+              <li><code>80%</code> of first-time users complete account setup without help</li>
+              <li>Send Money reachable in <code>≤2 taps</code> from home</li>
+              <li>Error messages in plain language with a clear next action</li>
+              <li>Primary actions on the right side of the screen (thumb-zone)</li>
+              <li>Destructive actions require confirmation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="a11y">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 8 · NFR</div>
+        <h2>Accessibility</h2>
+      </div>
+      <div class="nfr-card">
+        <div class="hd"><span class="ic">♿</span><h3>Can people with disabilities use your software</h3></div>
+        <p class="lead">WCAG 2.1 is the widely-used standard. It's organised around four dimensions — the POUR principles. Meeting WCAG 2.1 Level AA is a common target; in many jurisdictions, it's a legal requirement for public-facing services.</p>
+        <div class="grid">
+          <div class="sub-col">
+            <h5>The four POUR dimensions</h5>
+            <ul>
+              <li><strong>Perceivable</strong> — alt text, captions, contrast</li>
+              <li><strong>Operable</strong> — keyboard, no time-trap, readable fonts</li>
+              <li><strong>Understandable</strong> — plain language, consistent nav</li>
+              <li><strong>Robust</strong> — works with screen readers, voice control</li>
+            </ul>
+          </div>
+          <div class="sub-col eg">
+            <h5>Concrete examples</h5>
+            <ul>
+              <li>All interactive elements keyboard-reachable and focus-visible</li>
+              <li>Text contrast ≥ <code>4.5:1</code> body / <code>3:1</code> large</li>
+              <li>All meaningful images have alt text; decorative images empty-alt</li>
+              <li>Form errors linked to their field, not just a top summary</li>
+              <li>Target: <strong>WCAG 2.1 Level AA</strong> across the product</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <p style="font-style:italic; color:var(--muted); font-size:0.95rem">Accessibility is good for everyone, not just people with disabilities. Keyboard navigation helps power users. High-contrast text helps tired eyes on a phone screen in sunlight. Captions help people in noisy environments.</p>
+    </section>
+
+    <section class="chapter" id="scale">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 9 · NFR</div>
+        <h2>Scalability</h2>
+      </div>
+      <div class="nfr-card">
+        <div class="hd"><span class="ic">📈</span><h3>What happens at 10× today's usage</h3></div>
+        <p class="lead">Scalability is about growth — both expected (more users over time) and bursty (month-end, pay-day, KYC campaigns). It shapes architecture more than almost any other NFR.</p>
+        <div class="grid">
+          <div class="sub-col">
+            <h5>Questions to ask</h5>
+            <ul>
+              <li>What's normal load? What's peak?</li>
+              <li>What's the growth assumption over 12 months?</li>
+              <li>Which operations are bursty (pay day, month end)?</li>
+              <li>How does database growth affect cost?</li>
+              <li>Where will the bottlenecks appear first?</li>
+            </ul>
+          </div>
+          <div class="sub-col eg">
+            <h5>Concrete examples</h5>
+            <ul>
+              <li>Support <code>10,000 concurrent users</code> during pay-day peak</li>
+              <li>Database handles <code>5M transactions/month</code>, growing to 25M in year 2</li>
+              <li>No single request exceeds <code>500ms p95</code> under peak load</li>
+              <li>Horizontal scaling plan documented; auto-scaling on 70% CPU</li>
+              <li>Reports older than 2 years archived to cheaper storage</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="furps">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 10</div>
+        <h2>FURPS+ · the wider landscape</h2>
+      </div>
+      <p>The six categories above cover most of what matters in user-facing software. But the full industry checklist is <strong>FURPS+</strong>, developed at HP in the 1980s and still in use:</p>
+      <div class="furps-grid">
+        <div class="l"><div class="lt">F</div><div class="mn">Functionality</div></div>
+        <div class="l"><div class="lt">U</div><div class="mn">Usability</div></div>
+        <div class="l"><div class="lt">R</div><div class="mn">Reliability</div></div>
+        <div class="l"><div class="lt">P</div><div class="mn">Performance</div></div>
+        <div class="l"><div class="lt">S</div><div class="mn">Supportability</div></div>
+      </div>
+      <div class="callout indigo">
+        <h4>The "+" covers the rest</h4>
+        <p><strong>Design constraints</strong> (mandated tech stack), <strong>Implementation</strong> (language, coding standards), <strong>Interface</strong> (external APIs to integrate with), <strong>Physical</strong> (hardware / deployment target), <strong>Compliance</strong> (GDPR, PCI-DSS, local banking regulations), <strong>Localization</strong> (languages, currency, date formats).</p>
+      </div>
+      <p>Accessibility is sometimes classed under Usability, sometimes under the "+". In modern practice it increasingly has its own column — including in SELISE's own work.</p>
+    </section>
+
+    <section class="chapter" id="write">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 11</div>
+        <h2>Writing NFRs that are testable</h2>
+      </div>
+      <p>An NFR is only useful if someone outside the team can <em>measure</em> whether it's been met. The single biggest mistake is writing NFRs as <strong>adjectives</strong> ("fast", "secure", "scalable") instead of measurable statements.</p>
+
+      <h3 style="color:var(--indigo); font-size:1.1rem; margin-top:1.5rem">Bad vs good</h3>
+      <div class="bad">❌ "The app should be fast."</div>
+      <div class="good">✅ "Home screen loads within 2 seconds on a 4G connection, at p95 (95 out of 100 users)."</div>
+      <div class="bad">❌ "The app must be secure."</div>
+      <div class="good">✅ "All API traffic uses TLS 1.3. Passwords stored bcrypt-hashed with cost factor ≥ 12. Government IDs encrypted at rest with AES-256. Pen test passes with zero Critical findings."</div>
+      <div class="bad">❌ "The system must handle many users."</div>
+      <div class="good">✅ "System supports 10,000 concurrent active users with &lt;3s p95 response time for login, balance, and send-money."</div>
+
+      <h3 style="color:var(--indigo); font-size:1.1rem; margin-top:1.5rem">The four-part template</h3>
+      <div class="template">
+        <p><span class="b">What</span> must be true</p>
+        <p><span class="b">measured by</span> which metric</p>
+        <p><span class="b">under what conditions</span></p>
+        <p><span class="b">with what tolerance</span></p>
+      </div>
+      <p>Example filled in: <em>"<strong>[what]</strong> Home screen loads — <strong>[measured by]</strong> time from tap to interactive — <strong>[conditions]</strong> on a 4G connection in Gelephu, cold app start — <strong>[tolerance]</strong> within 2 seconds at p95."</em></p>
+
+      <div class="callout amber">
+        <h4>Percentiles, not maxima</h4>
+        <p>Write NFRs with <strong>p95 / p99</strong> percentiles rather than absolute maxima. "Must be under 2 seconds" is rigid and brittle — the one outlier fails everything. "2s at p95, 4s at p99" tells the team what the typical user experience must be while leaving room for real-world noise.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="roles">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 12</div>
+        <h2>BA and QA collaboration on NFRs</h2>
+      </div>
+      <p>NFRs are a two-person job. A BA elicits and writes them; a QA challenges and verifies them. Both are necessary for NFRs to actually hold the line on release.</p>
+      <div class="roles">
+        <div class="col">
+          <h5>📋 BA · elicit and write</h5>
+          <ul>
+            <li>Ask stakeholders about implicit NFRs ("we can't be slower than the competitor app")</li>
+            <li>Surface compliance and regulatory constraints early</li>
+            <li>Write NFRs in a testable form with numbers</li>
+            <li>Balance NFRs against scope — not every app needs 99.99% uptime</li>
+            <li>Document assumptions so the team knows what was agreed</li>
+          </ul>
+        </div>
+        <div class="col qa">
+          <h5>🔍 QA · challenge and verify</h5>
+          <ul>
+            <li>Challenge vague NFRs ("what exactly does 'secure' mean here?")</li>
+            <li>Design tests that measure each NFR objectively</li>
+            <li>Catch silent NFRs missing from the spec</li>
+            <li>Automate NFR checks where possible (perf, a11y, security scans)</li>
+            <li>Report NFR regressions clearly, not just functional bugs</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout red">
+        <h4>The most common NFR failure</h4>
+        <p>Specs describe features in loving detail and skip quality attributes entirely. The sin is not bad NFRs — it's <strong>silent</strong> ones. When in doubt, write it down. A vague NFR you can revise is infinitely better than an invisible NFR you discover in production.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="take">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Takeaways</div>
+        <h2>Key points to carry forward</h2>
+      </div>
+      <div class="summary">
+        <h4>What we covered today</h4>
+        <ul>
+          <li><strong>FR</strong> = what the system does. <strong>NFR</strong> = how well it does it.</li>
+          <li>Requirements are an <strong>iceberg</strong> — NFRs are the 80% below the water.</li>
+          <li>The <strong>six core NFRs</strong>: Performance · Security · Reliability · Usability · Accessibility · Scalability.</li>
+          <li><strong>FURPS+</strong> is the industry checklist for the full landscape — use it as a mental coverage audit.</li>
+          <li>Testable NFRs have four parts: <strong>what · measured by · under what conditions · with what tolerance</strong>.</li>
+          <li>Use <strong>percentiles (p95, p99)</strong> rather than absolute maxima.</li>
+          <li>The most common NFR bug is <em>silence</em> — BAs and QAs must break that silence early.</li>
+        </ul>
+      </div>
+      <p style="margin-top:1.5rem"><strong>FRs get a product built. NFRs decide whether users keep using it.</strong></p>
+    </section>
+
+  </div>
+
+  <footer>
+    <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE">
+    SELISE × Pelsung · BA + QA Combined · Class 03<br>
+    Functional vs Non-Functional Requirements
+  </footer>
+
+</body>
+</html>

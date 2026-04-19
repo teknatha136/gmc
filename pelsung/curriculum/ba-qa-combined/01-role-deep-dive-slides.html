@@ -1,0 +1,709 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Role Deep-Dive · BA and QA in Software — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      .myth-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap: 0.9rem; width:100%; max-width:1100px; }
+      @media (max-width: 820px){ .myth-grid { grid-template-columns: 1fr; } }
+      .myth-card { background:white; border:1px solid var(--border); border-left:4px solid var(--red); border-radius:10px; padding:0.9rem 1.1rem; }
+      .myth-card h5 { color:var(--red); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.25rem; }
+      .myth-card p { font-size:0.9rem; color:var(--text); line-height:1.55; }
+      .myth-card .truth { display:block; margin-top:0.4rem; padding-top:0.4rem; border-top:1px dashed var(--border); color:var(--muted); font-size:0.85rem; }
+      .myth-card .truth strong { color:var(--indigo); }
+
+      .day-grid { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; width:100%; max-width:1100px; }
+      @media (max-width: 820px){ .day-grid { grid-template-columns: 1fr; } }
+      .day-col { background:white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.2rem; }
+      .day-col h4 { color:var(--indigo); font-size:1.05rem; margin-bottom:0.6rem; font-family:'Bahnschrift','Segoe UI',sans-serif; display:flex; align-items:center; gap:0.5rem; }
+      .day-col ul { list-style:none; padding:0; }
+      .day-col li { padding:0.4rem 0; border-bottom:1px dashed var(--border); font-size:0.9rem; display:flex; align-items:flex-start; gap:0.5rem; color:var(--text); line-height:1.5; }
+      .day-col li:last-child { border-bottom:none; }
+      .day-col .time { color:var(--blue); font-family:'Courier New',monospace; font-weight:600; font-size:0.8rem; min-width:52px; }
+
+      .artifact-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:0.8rem; width:100%; max-width:1100px; }
+      @media (max-width: 820px){ .artifact-grid { grid-template-columns: 1fr 1fr; } }
+      @media (max-width: 560px){ .artifact-grid { grid-template-columns: 1fr; } }
+      .artifact { background:white; border:1px solid var(--border); border-top:4px solid var(--blue); border-radius:10px; padding:0.9rem 1rem; }
+      .artifact .name { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.2rem; font-weight:600; }
+      .artifact .sub { color:var(--muted); font-size:0.8rem; margin-bottom:0.4rem; text-transform:uppercase; letter-spacing:0.05em; }
+      .artifact .desc { font-size:0.85rem; color:var(--text); line-height:1.55; }
+      .artifact.qa { border-top-color:var(--amber); }
+
+      .handoff-chain { display:flex; align-items:stretch; gap:0.6rem; width:100%; max-width:1150px; flex-wrap:wrap; justify-content:center; }
+      .hc-role { background:white; border:1px solid var(--border); border-top:4px solid var(--blue); border-radius:10px; padding:0.7rem 0.9rem; flex:1 1 130px; min-width:130px; text-align:center; }
+      .hc-role .r { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; font-weight:600; }
+      .hc-role .o { color:var(--muted); font-size:0.72rem; margin-top:0.2rem; line-height:1.4; }
+      .hc-role.ba { border-top-color:var(--indigo); }
+      .hc-role.qa { border-top-color:var(--amber); }
+      .hc-arrow { display:flex; align-items:center; color:var(--faint); font-size:1.2rem; font-weight:700; }
+
+      .task-table { background:white; border:1px solid var(--border); border-radius:12px; overflow:hidden; max-width:1100px; width:100%; }
+      .task-table .th { display:grid; grid-template-columns: 1fr repeat(5, 72px); background:var(--bg); padding:0.7rem 1rem; font-size:0.78rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; font-weight:700; border-bottom:1px solid var(--border); }
+      .task-table .th div:first-child { text-align:left; }
+      .task-table .th div { text-align:center; }
+      .task-table .tr { display:grid; grid-template-columns: 1fr repeat(5, 72px); padding:0.55rem 1rem; font-size:0.88rem; border-bottom:1px solid var(--border); align-items:center; }
+      .task-table .tr:last-child { border-bottom:none; }
+      .task-table .tr div:first-child { text-align:left; color:var(--text); }
+      .task-table .tr div { text-align:center; color:var(--faint); }
+      .task-table .chip { display:inline-block; width:22px; height:22px; line-height:22px; border-radius:50%; font-size:0.72rem; font-weight:700; color:white; }
+      .chip-ba { background:var(--indigo); }
+      .chip-qa { background:var(--amber); }
+      .chip-dev { background:var(--blue); }
+      .chip-pm { background:var(--purple); }
+      .chip-ux { background:#3D7A3D; }
+
+      .venn-wrap { display:flex; justify-content:center; width:100%; }
+      .venn { position:relative; width:100%; max-width:820px; height:360px; }
+      .venn-circle { position:absolute; top:30px; width:420px; height:300px; border-radius:50%; display:flex; align-items:center; justify-content:flex-start; padding:2.2rem; color:white; font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; font-size:1.15rem; }
+      .venn-ba { left:20px; background: rgba(0,31,53,0.78); }
+      .venn-qa { right:20px; background: rgba(36,126,193,0.78); justify-content:flex-end; }
+      .venn-overlap { position:absolute; top:140px; left:50%; transform:translateX(-50%); color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.9rem; font-weight:600; text-align:center; width:180px; line-height:1.35; background:white; border-radius:10px; padding:0.7rem 0.8rem; border:2px solid var(--border); z-index:2; }
+
+      .ai-shift { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; width:100%; max-width:1100px; }
+      @media (max-width: 820px){ .ai-shift { grid-template-columns: 1fr; } }
+      .ai-shift .col { background:white; border:1px solid var(--border); border-top:4px solid var(--blue); border-radius:12px; padding:1rem 1.2rem; }
+      .ai-shift .col.qa { border-top-color:var(--amber); }
+      .ai-shift h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-bottom:0.6rem; }
+      .ai-shift .label { font-size:0.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.07em; margin-top:0.5rem; margin-bottom:0.2rem; font-weight:700; }
+      .ai-shift ul { padding-left:1.1rem; margin:0; }
+      .ai-shift li { font-size:0.87rem; line-height:1.6; color:var(--text); margin:0.2rem 0; }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>BA + QA Combined · Class 01</div></div>
+          <h1 class="display" style="color: var(--text)">
+            <span style="color: var(--indigo)">What a BA Does.</span><br />
+            <span style="color: var(--blue)">What a QA Does.</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted)">Two roles. Same software team. Different crafts. Today we make them concrete.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">BA</span>
+            <span class="class-tag tag-blue">QA</span>
+            <span class="class-tag tag-blue">Role Clarity</span>
+            <span class="class-tag tag-blue">Day in the Life</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 AGENDA -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 780px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem"><h2 class="heading">Session Journey · ~75 min</h2></div>
+          <div class="agenda-row" onclick="goTo(2)"><span class="ar-dot" style="background: var(--red)"></span><span class="ar-label">🎭 Misconceptions we picked up</span><span class="ar-badge" style="background:#FEE9EC;color:var(--red)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(6)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">📋 What a BA actually does</span><span class="ar-badge" style="background:#E6F0F8;color:var(--indigo)">18 min</span></div>
+          <div class="agenda-row" onclick="goTo(12)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🔍 What a QA actually does</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">18 min</span></div>
+          <div class="agenda-row" onclick="goTo(18)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🤝 Where BA and QA meet</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(21)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🤖 How AI changes each role</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">7 min</span></div>
+          <div class="agenda-row" onclick="goTo(23)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🧩 Exercise · Who does what?</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(26)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🎯 Wrap-up</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">2 min</span></div>
+        </div>
+      </div>
+
+      <!-- 3 HOOK INTRO -->
+      <div class="slide bg-dark" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> Hook</div>
+        <div class="center" style="max-width: 820px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎤 Honest question</div>
+          <p class="disc-prompt">When you chose your vertical,<br>what did you <span style="color: var(--amber)">think</span> BA or QA meant?</p>
+          <p style="color: rgba(255,255,255,0.6); font-size: 1rem; margin-top: 1.5rem;">Don't worry — almost everyone was a little off. That's normal. The words don't carry their meaning.</p>
+        </div>
+      </div>
+
+      <!-- 4 BA MYTHS -->
+      <div class="slide accent-blue bg-subtle" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> BA — Common Misconceptions</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">"Business Analyst" sounds like many things</h2><p class="body-md" style="color:var(--muted); max-width:820px">And most of them are <strong>not</strong> what a software BA does.</p></div>
+          <div class="myth-grid">
+            <div class="myth-card">
+              <h5>❌ "BA = Finance / Business Intelligence analyst"</h5>
+              <p>Someone who reads financial reports, builds dashboards, analyses revenue trends.</p>
+              <span class="truth"><strong>Reality:</strong> A software BA rarely touches money numbers. They analyse <em>what a product should do</em>, not how the business is performing.</span>
+            </div>
+            <div class="myth-card">
+              <h5>❌ "BA = Project Manager"</h5>
+              <p>Tracks deadlines, runs standups, updates the Gantt chart, chases people.</p>
+              <span class="truth"><strong>Reality:</strong> BA worries about <em>what</em> we build. PM worries about <em>when</em> we ship it. Different crafts, often different people.</span>
+            </div>
+            <div class="myth-card">
+              <h5>❌ "BA = Data Analyst / Data Scientist"</h5>
+              <p>Writes SQL, trains models, finds patterns in data.</p>
+              <span class="truth"><strong>Reality:</strong> BA may <em>read</em> data schemas and look at analytics, but their output is specs — not insights or models.</span>
+            </div>
+            <div class="myth-card">
+              <h5>❌ "BA = Excellent English speaker who translates meetings"</h5>
+              <p>Sits in meetings, writes minutes, forwards emails.</p>
+              <span class="truth"><strong>Reality:</strong> Writing is tooling, not the job. The job is <em>understanding and defining the software</em>.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 QA MYTHS -->
+      <div class="slide accent-blue" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span> QA — Common Misconceptions</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">"Quality Assurance" gets caricatured a lot</h2><p class="body-md" style="color:var(--muted); max-width:820px">Let's dismantle the stereotypes before they stick.</p></div>
+          <div class="myth-grid">
+            <div class="myth-card">
+              <h5>❌ "QA is the person who just clicks buttons"</h5>
+              <p>Logs into the app, clicks around, files a bug when something looks off.</p>
+              <span class="truth"><strong>Reality:</strong> QAs <em>design</em> tests — figuring out what to check and why. Clicking is the last 10% of the job, and even that is often automated now.</span>
+            </div>
+            <div class="myth-card">
+              <h5>❌ "QA is the last line of defence before release"</h5>
+              <p>Everything is fine until QA catches it.</p>
+              <span class="truth"><strong>Reality:</strong> Quality is built in, not tested in. QAs start working the day a requirement is written — not the day code lands.</span>
+            </div>
+            <div class="myth-card">
+              <h5>❌ "QA is the enemy of developers"</h5>
+              <p>Trying to find bugs and make devs look bad.</p>
+              <span class="truth"><strong>Reality:</strong> Good QAs and good devs are allies. They share one goal: a product users don't complain about.</span>
+            </div>
+            <div class="myth-card">
+              <h5>❌ "QA is a junior role you grow out of"</h5>
+              <p>A starter position on the way to becoming a developer.</p>
+              <span class="truth"><strong>Reality:</strong> QA is its own career, with its own senior and principal tracks — especially automation, performance, security QA.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 SECTION: BA -->
+      <div class="slide bg-indigo" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part One</div>
+          <h1 class="display" style="color: white">The Business<br>Analyst</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">The person who makes sure the team builds the <em>right</em> thing.</p>
+        </div>
+        <div class="section-num" style="color: white">01</div>
+      </div>
+
+      <!-- 7 BA ONE-LINER -->
+      <div class="slide accent-blue bg-subtle" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> BA · The 10-second definition</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width: 920px">
+            <h2 class="heading" style="font-size:clamp(1.6rem, 3.2vw, 2.4rem)">A BA <span style="color:var(--blue)">discovers</span> what users need, <span style="color:var(--blue)">negotiates</span> what the team will build, and <span style="color:var(--blue)">writes it down</span> clearly enough that developers — and AI — can build it.</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:1.5rem; max-width:800px">They live between two worlds: the world of <strong>users and stakeholders</strong> (messy, uncertain, political) and the world of <strong>engineering</strong> (precise, logical, deadline-driven). Their job is translation.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8 BA DAY IN LIFE -->
+      <div class="slide accent-blue" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> BA · A typical day</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">What a BA actually does, hour by hour</h2></div>
+          <div class="day-grid">
+            <div class="day-col">
+              <h4>☀️ Morning</h4>
+              <ul>
+                <li><span class="time">09:00</span><span>Stand-up with the dev + QA team. Clarify questions raised yesterday.</span></li>
+                <li><span class="time">09:30</span><span>Meet a stakeholder (product owner, customer, support lead). Ask: "what problem are we trying to solve this quarter?"</span></li>
+                <li><span class="time">10:30</span><span>Pull recent support tickets + usage analytics. Look for patterns.</span></li>
+                <li><span class="time">11:00</span><span>Write a draft user story for a new feature. Send to dev for feasibility check.</span></li>
+              </ul>
+            </div>
+            <div class="day-col">
+              <h4>🌙 Afternoon</h4>
+              <ul>
+                <li><span class="time">13:00</span><span>Workshop with Design: walk through wireframes, flag edge cases and missing states.</span></li>
+                <li><span class="time">14:30</span><span>Update the spec document. Add acceptance criteria. Ping QA for a review.</span></li>
+                <li><span class="time">15:30</span><span>Attend a UAT (User Acceptance Testing) session with a customer. Take notes.</span></li>
+                <li><span class="time">16:30</span><span>File backlog items for the next sprint. Write a short release note for the feature going live tomorrow.</span></li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:800px"><strong>Notice:</strong> they talk to people, write documents, and review drafts. They don't write code, but they <em>understand</em> the product deeply enough to spec it.</p>
+        </div>
+      </div>
+
+      <!-- 9 BA ARTIFACTS -->
+      <div class="slide accent-blue bg-subtle" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> BA · Artifacts they produce</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">A BA is measured by the quality of these documents</h2></div>
+          <div class="artifact-grid">
+            <div class="artifact">
+              <div class="name">User Story</div>
+              <div class="sub">Short · Sprint-level</div>
+              <div class="desc">"As a shopkeeper, I want to save billers as favourites so I don't re-type account numbers." One feature, one story.</div>
+            </div>
+            <div class="artifact">
+              <div class="name">Acceptance Criteria</div>
+              <div class="sub">Testable · Given/When/Then</div>
+              <div class="desc">The pass/fail rules for a story. "Given I've paid a biller, when I tap ⭐, then it appears in Favourites."</div>
+            </div>
+            <div class="artifact">
+              <div class="name">SRS / Scope Document</div>
+              <div class="sub">Long-form · Project-level</div>
+              <div class="desc">A Software Requirements Specification. Describes the whole product or module. Often 20–60 pages.</div>
+            </div>
+            <div class="artifact">
+              <div class="name">Process Flow (BPMN)</div>
+              <div class="sub">Diagram · Visual</div>
+              <div class="desc">Boxes + arrows showing how work moves through the system, with swim lanes per actor.</div>
+            </div>
+            <div class="artifact">
+              <div class="name">Wireframe</div>
+              <div class="sub">Low-fi sketch · Communication</div>
+              <div class="desc">A rough picture of the UI so everyone agrees where buttons go. Not a design — a conversation.</div>
+            </div>
+            <div class="artifact">
+              <div class="name">Backlog Item</div>
+              <div class="sub">Jira / Linear ticket</div>
+              <div class="desc">A single card with everything a developer needs to pick it up: description, AC, priority, links.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10 BA SKILLS -->
+      <div class="slide accent-blue" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> BA · Skills that matter</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">What makes a BA good — and what makes one great</h2></div>
+          <div class="cols-2" style="max-width:1100px">
+            <div class="card" style="border-top:3px solid var(--blue)">
+              <h4 style="color:var(--blue)">The craft</h4>
+              <ul style="font-size:0.93rem; line-height:1.8; padding-left:1.2rem; color:var(--text)">
+                <li><strong>Listening</strong> — hearing what stakeholders mean, not just what they say</li>
+                <li><strong>Asking why</strong> — 5 times if needed</li>
+                <li><strong>Writing clearly</strong> — short sentences, precise verbs</li>
+                <li><strong>Reading critically</strong> — spotting gaps in specs before they hit dev</li>
+                <li><strong>Drawing to think</strong> — wireframes, flows, not art</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--amber)">
+              <h4 style="color:var(--amber)">The edge (great BAs)</h4>
+              <ul style="font-size:0.93rem; line-height:1.8; padding-left:1.2rem; color:var(--text)">
+                <li><strong>Systems thinking</strong> — seeing how one change affects three things</li>
+                <li><strong>Saying no</strong> — protecting scope against stakeholder wishes</li>
+                <li><strong>Data literacy</strong> — reading funnels, ERDs, API contracts</li>
+                <li><strong>Negotiation</strong> — trading off time, scope, quality openly</li>
+                <li><strong>Empathy for devs &amp; QAs</strong> — respecting their time and constraints</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11 BA CAREER -->
+      <div class="slide accent-blue bg-subtle" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> BA · Career shape</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Where BAs come from — and where they go</h2></div>
+          <div class="cols-2" style="max-width:1100px">
+            <div>
+              <h4 style="color:var(--indigo); margin-bottom:0.6rem">Common paths in</h4>
+              <ul style="font-size:0.93rem; line-height:1.75; padding-left:1.2rem; color:var(--text)">
+                <li>From <strong>customer support</strong> — knows users' pain viscerally</li>
+                <li>From <strong>domain work</strong> (banking, healthcare, telecom)</li>
+                <li>From <strong>QA</strong> — already reads specs, tightly trained on edge cases</li>
+                <li>From <strong>Dev</strong> — tired of coding, loves product</li>
+                <li>Fresh graduates with strong writing + analytical skills</li>
+              </ul>
+            </div>
+            <div>
+              <h4 style="color:var(--indigo); margin-bottom:0.6rem">Senior paths</h4>
+              <ul style="font-size:0.93rem; line-height:1.75; padding-left:1.2rem; color:var(--text)">
+                <li><strong>Senior / Lead BA</strong> — owns a product area</li>
+                <li><strong>Product Owner / Product Manager</strong> — owns the "why" too</li>
+                <li><strong>Solution Architect</strong> — pairs with engineering leads</li>
+                <li><strong>Consultant</strong> — parachutes into client projects to spec them out</li>
+                <li><strong>Head of Product / CPO</strong> — some BAs rise to the top of product orgs</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12 SECTION: QA -->
+      <div class="slide bg-blue" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Two</div>
+          <h1 class="display" style="color: white">Quality<br>Assurance</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">The person who makes sure the team builds the thing <em>right</em>.</p>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- 13 QA ONE-LINER -->
+      <div class="slide accent-blue bg-subtle" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> QA · The 10-second definition</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width: 920px">
+            <h2 class="heading" style="font-size:clamp(1.6rem, 3.2vw, 2.4rem)">A QA <span style="color:var(--amber)">designs tests</span> from a spec, <span style="color:var(--amber)">runs them</span> manually or automated, <span style="color:var(--amber)">reports what fails</span> clearly, and <span style="color:var(--amber)">argues for quality</span> when schedule pressure grows.</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:1.5rem; max-width:800px">Their superpower is <strong>distrust</strong> — the productive kind. A good QA assumes everything is broken until proven otherwise, and their tools prove it one scenario at a time.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 14 QA DAY IN LIFE -->
+      <div class="slide accent-blue" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> QA · A typical day</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">What a QA actually does, hour by hour</h2></div>
+          <div class="day-grid">
+            <div class="day-col">
+              <h4>☀️ Morning</h4>
+              <ul>
+                <li><span class="time">09:00</span><span>Stand-up with dev + BA. Check overnight automated test results — flag any new failures.</span></li>
+                <li><span class="time">09:30</span><span>Read a new user story the BA just drafted. Write acceptance-criteria questions back ("what happens if the user has 10 already?").</span></li>
+                <li><span class="time">10:30</span><span>Design test cases for a story entering dev tomorrow — happy path, 3 edge cases, negative flows.</span></li>
+                <li><span class="time">11:30</span><span>Pull a build from a feature branch. Run exploratory tests — no script, just poke around.</span></li>
+              </ul>
+            </div>
+            <div class="day-col">
+              <h4>🌙 Afternoon</h4>
+              <ul>
+                <li><span class="time">13:00</span><span>File a bug report from the morning's exploratory session. Attach screenshots, steps, severity.</span></li>
+                <li><span class="time">14:00</span><span>Write a Playwright automation test for a regression found last week — so it never escapes again.</span></li>
+                <li><span class="time">15:00</span><span>Pair with dev to reproduce a tricky bug from production.</span></li>
+                <li><span class="time">16:00</span><span>Run the regression suite before the release. Give thumbs-up or file blocker.</span></li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:800px"><strong>Notice:</strong> reading specs happens <em>before</em> any clicking. The clicking itself is half manual, half automation code.</p>
+        </div>
+      </div>
+
+      <!-- 15 QA ARTIFACTS -->
+      <div class="slide accent-blue bg-subtle" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span> QA · Artifacts they produce</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">A QA is measured by the quality of these</h2></div>
+          <div class="artifact-grid">
+            <div class="artifact qa">
+              <div class="name">Test Case</div>
+              <div class="sub">Structured · Repeatable</div>
+              <div class="desc">Precondition → Steps → Expected result. One per scenario. Written once, run many times.</div>
+            </div>
+            <div class="artifact qa">
+              <div class="name">Bug Report</div>
+              <div class="sub">Actionable · Unambiguous</div>
+              <div class="desc">Title, steps, expected vs actual, environment, severity, priority, attachment. A dev should reproduce it on the first read.</div>
+            </div>
+            <div class="artifact qa">
+              <div class="name">Test Plan</div>
+              <div class="sub">Strategy · Release-level</div>
+              <div class="desc">"For this release, what do we test, how, with what coverage, and when do we stop?"</div>
+            </div>
+            <div class="artifact qa">
+              <div class="name">Automation Script</div>
+              <div class="sub">Code · Checked into git</div>
+              <div class="desc">Playwright / Cypress / Selenium code. Runs on every commit. Catches regressions without human time.</div>
+            </div>
+            <div class="artifact qa">
+              <div class="name">Traceability Matrix</div>
+              <div class="sub">Coverage proof</div>
+              <div class="desc">A mapping from every requirement → the tests that cover it. Proves no AC was forgotten.</div>
+            </div>
+            <div class="artifact qa">
+              <div class="name">Release Sign-off</div>
+              <div class="sub">Go / no-go call</div>
+              <div class="desc">A short, honest report: what's tested, what's flaky, what's broken. Basis for release decisions.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 16 QA SKILLS -->
+      <div class="slide accent-blue" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span> QA · Skills that matter</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">What separates a solid QA from a great one</h2></div>
+          <div class="cols-2" style="max-width:1100px">
+            <div class="card" style="border-top:3px solid var(--amber)">
+              <h4 style="color:var(--amber)">The craft</h4>
+              <ul style="font-size:0.93rem; line-height:1.8; padding-left:1.2rem; color:var(--text)">
+                <li><strong>Destructive curiosity</strong> — "what if I do the wrong thing?"</li>
+                <li><strong>Reading specs</strong> — same skill as BA, opposite direction</li>
+                <li><strong>Test design techniques</strong> — boundary, equivalence, decision tables</li>
+                <li><strong>Clear writing</strong> — a bug report that lands first time</li>
+                <li><strong>Patience</strong> — regression, retest, retest again</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--blue)">
+              <h4 style="color:var(--blue)">The edge (great QAs)</h4>
+              <ul style="font-size:0.93rem; line-height:1.8; padding-left:1.2rem; color:var(--text)">
+                <li><strong>Coding</strong> — at minimum, JavaScript/TypeScript for Playwright</li>
+                <li><strong>API &amp; DB fluency</strong> — test the back-end, not just the UI</li>
+                <li><strong>Automation architecture</strong> — tests that don't flake or rot</li>
+                <li><strong>Security &amp; performance instincts</strong> — NFRs covered routinely</li>
+                <li><strong>Courage to push back</strong> — "this shouldn't ship yet" and explain why</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 17 QA CAREER -->
+      <div class="slide accent-blue bg-subtle" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span> QA · Career shape</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Where QAs come from — and where they go</h2></div>
+          <div class="cols-2" style="max-width:1100px">
+            <div>
+              <h4 style="color:var(--indigo); margin-bottom:0.6rem">Common paths in</h4>
+              <ul style="font-size:0.93rem; line-height:1.75; padding-left:1.2rem; color:var(--text)">
+                <li>From <strong>support / user-ops</strong> — already sees what breaks</li>
+                <li>From <strong>dev</strong> — some engineers love the quality craft</li>
+                <li>From <strong>BA</strong> — strong spec-reading, now learning testing</li>
+                <li>Fresh grads with strong attention to detail + basic scripting</li>
+              </ul>
+            </div>
+            <div>
+              <h4 style="color:var(--indigo); margin-bottom:0.6rem">Senior paths</h4>
+              <ul style="font-size:0.93rem; line-height:1.75; padding-left:1.2rem; color:var(--text)">
+                <li><strong>SDET</strong> — Software Dev Engineer in Test (strong coder)</li>
+                <li><strong>Automation Lead</strong> — owns the test pyramid + CI</li>
+                <li><strong>Performance / Security QA</strong> — deep specialists</li>
+                <li><strong>QA Manager / Head of Quality</strong> — culture + strategy</li>
+                <li><strong>DevOps / SRE</strong> — quality concerns → reliability engineering</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 18 SECTION: WHERE THEY MEET -->
+      <div class="slide bg-indigo" data-slide="18">
+        <div class="slide-label"><span class="snum">18</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Three</div>
+          <h1 class="display" style="color: white">Where BA and<br>QA Meet</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Two different crafts. One continuous chain of trust.</p>
+        </div>
+        <div class="section-num" style="color: white">03</div>
+      </div>
+
+      <!-- 19 HANDOFF CHAIN -->
+      <div class="slide accent-blue bg-subtle" data-slide="19">
+        <div class="slide-label"><span class="snum">19</span> The Handoff Chain</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">How a feature travels through the team</h2><p class="body-md" style="color:var(--muted); max-width:820px">Every handoff is a translation. Break the chain anywhere, and the feature ships broken.</p></div>
+          <div class="handoff-chain">
+            <div class="hc-role"><div class="r">👤 Stakeholder</div><div class="o">"We need a thing."</div></div>
+            <div class="hc-arrow">→</div>
+            <div class="hc-role"><div class="r">🧭 PM</div><div class="o">"Do we, and why now?"</div></div>
+            <div class="hc-arrow">→</div>
+            <div class="hc-role ba"><div class="r">📋 BA</div><div class="o">Spec · AC · wireframes</div></div>
+            <div class="hc-arrow">→</div>
+            <div class="hc-role"><div class="r">🎨 Designer</div><div class="o">Visual &amp; flow</div></div>
+            <div class="hc-arrow">→</div>
+            <div class="hc-role"><div class="r">💻 Developer</div><div class="o">Builds from spec</div></div>
+            <div class="hc-arrow">→</div>
+            <div class="hc-role qa"><div class="r">🔍 QA</div><div class="o">Verifies against AC</div></div>
+            <div class="hc-arrow">→</div>
+            <div class="hc-role"><div class="r">🚀 Release</div><div class="o">Users</div></div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:800px; margin-top:0.5rem"><strong>BA is early in the chain; QA is late.</strong> But they're both gatekeepers — one prevents building the wrong thing, one prevents shipping it broken.</p>
+        </div>
+      </div>
+
+      <!-- 20 VENN -->
+      <div class="slide accent-blue" data-slide="20">
+        <div class="slide-label"><span class="snum">20</span> Shared ground</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">BA and QA share more than they look like they do</h2></div>
+          <div class="venn-wrap">
+            <div class="venn">
+              <div class="venn-circle venn-ba">Business<br>Analyst</div>
+              <div class="venn-circle venn-qa" style="text-align:right">Quality<br>Assurance</div>
+              <div class="venn-overlap">Both read specs critically<br>Both write testable AC<br>Both protect the user<br>Both say "not yet"</div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:800px; font-style:italic">That's why these three combined classes exist — the overlap is real, and learning it together is efficient.</p>
+        </div>
+      </div>
+
+      <!-- 21 SECTION: AI SHIFT -->
+      <div class="slide bg-blue" data-slide="21">
+        <div class="slide-label"><span class="snum">21</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Four</div>
+          <h1 class="display" style="color: white">AI Changes<br>Both Roles</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Neither is replaced. Both are leveraged.</p>
+        </div>
+        <div class="section-num" style="color: white">04</div>
+      </div>
+
+      <!-- 22 AI SHIFT CONTENT -->
+      <div class="slide accent-blue bg-subtle" data-slide="22">
+        <div class="slide-label"><span class="snum">22</span> What AI changes</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">A BA writes fewer words. A QA runs fewer clicks.</h2><p class="body-md" style="color:var(--muted); max-width:820px">In both cases, AI amplifies the craft. It doesn't do the craft.</p></div>
+          <div class="ai-shift">
+            <div class="col">
+              <h5>📋 BA in the AI era</h5>
+              <div class="label">What gets easier</div>
+              <ul>
+                <li>Drafting user stories from a rough description</li>
+                <li>Generating acceptance criteria variations</li>
+                <li>Turning a meeting transcript into a spec draft</li>
+                <li>Cross-checking a spec against itself for contradictions</li>
+              </ul>
+              <div class="label">What gets harder (higher bar)</div>
+              <ul>
+                <li>Spec <strong>clarity</strong> — AI now writes code from it, so ambiguity is immediately expensive</li>
+                <li><strong>Review</strong> — catching what AI got wrong in generated drafts</li>
+                <li><strong>Judgment</strong> — knowing which stories matter and which are noise</li>
+              </ul>
+            </div>
+            <div class="col qa">
+              <h5>🔍 QA in the AI era</h5>
+              <div class="label">What gets easier</div>
+              <ul>
+                <li>Generating baseline test cases from a spec</li>
+                <li>Writing Playwright automation scripts faster</li>
+                <li>Summarising bug logs and error traces</li>
+                <li>Suggesting edge cases you might have missed</li>
+              </ul>
+              <div class="label">What gets harder (higher bar)</div>
+              <ul>
+                <li><strong>Test design intuition</strong> — what to test, not how to type it</li>
+                <li><strong>Exploratory testing</strong> — the creative part AI is worst at</li>
+                <li><strong>Reviewing AI-generated tests</strong> — many will be wrong or trivial</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 23 SECTION: EXERCISE -->
+      <div class="slide bg-blue" data-slide="23">
+        <div class="slide-label"><span class="snum">23</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Five · Hands-on</div>
+          <h1 class="display" style="color: white">Who Does<br>What?</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">10 tasks · 5 roles · one answer sheet</p>
+        </div>
+        <div class="section-num" style="color: white">05</div>
+      </div>
+
+      <!-- 24 EXERCISE BRIEF -->
+      <div class="slide accent-blue bg-subtle" data-slide="24">
+        <div class="slide-label"><span class="snum">24</span> Exercise Brief</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">For each task — which role owns it?</h2><p class="body-md" style="color:var(--muted); max-width:820px">Write PM / BA / Designer / Dev / QA next to each. It's OK if more than one applies — pick the primary owner.</p></div>
+          <div class="task-table">
+            <div class="th">
+              <div>Task</div>
+              <div>PM</div>
+              <div>BA</div>
+              <div>Designer</div>
+              <div>Dev</div>
+              <div>QA</div>
+            </div>
+            <div class="tr"><div>1. Interview a customer about why they stopped using the app.</div><div>·</div><div>·</div><div>·</div><div>·</div><div>·</div></div>
+            <div class="tr"><div>2. Decide whether the feature ships in April or June.</div><div>·</div><div>·</div><div>·</div><div>·</div><div>·</div></div>
+            <div class="tr"><div>3. Write acceptance criteria for a "forgot password" flow.</div><div>·</div><div>·</div><div>·</div><div>·</div><div>·</div></div>
+            <div class="tr"><div>4. Reproduce a bug that only happens on iPhone 12 in Dzongkha.</div><div>·</div><div>·</div><div>·</div><div>·</div><div>·</div></div>
+            <div class="tr"><div>5. Draw the screen where users will save their favourites.</div><div>·</div><div>·</div><div>·</div><div>·</div><div>·</div></div>
+            <div class="tr"><div>6. Write the React component for the favourites list.</div><div>·</div><div>·</div><div>·</div><div>·</div><div>·</div></div>
+            <div class="tr"><div>7. Run regression tests before release.</div><div>·</div><div>·</div><div>·</div><div>·</div><div>·</div></div>
+            <div class="tr"><div>8. Decide what "out of scope" for v1 means.</div><div>·</div><div>·</div><div>·</div><div>·</div><div>·</div></div>
+            <div class="tr"><div>9. Draw a BPMN diagram of the leave-approval process.</div><div>·</div><div>·</div><div>·</div><div>·</div><div>·</div></div>
+            <div class="tr"><div>10. Write a Playwright script that logs in and makes a payment.</div><div>·</div><div>·</div><div>·</div><div>·</div><div>·</div></div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:780px; margin-top:0.3rem">5 minutes individually → 3 minutes pair check → 2 minutes class debrief.</p>
+        </div>
+      </div>
+
+      <!-- 25 EXERCISE ANSWERS -->
+      <div class="slide accent-blue" data-slide="25">
+        <div class="slide-label"><span class="snum">25</span> Exercise Debrief</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">The primary owners (discussion, not gospel)</h2></div>
+          <div class="task-table">
+            <div class="th">
+              <div>Task</div>
+              <div>PM</div>
+              <div>BA</div>
+              <div>UX</div>
+              <div>Dev</div>
+              <div>QA</div>
+            </div>
+            <div class="tr"><div>1. Customer interview</div><div><span class="chip chip-pm">·</span></div><div><span class="chip chip-ba">✓</span></div><div><span class="chip chip-ux">·</span></div><div></div><div></div></div>
+            <div class="tr"><div>2. Ship April vs June</div><div><span class="chip chip-pm">✓</span></div><div><span class="chip chip-ba">·</span></div><div></div><div></div><div></div></div>
+            <div class="tr"><div>3. AC for forgot password</div><div></div><div><span class="chip chip-ba">✓</span></div><div></div><div></div><div><span class="chip chip-qa">·</span></div></div>
+            <div class="tr"><div>4. Reproduce iPhone/Dzongkha bug</div><div></div><div></div><div></div><div><span class="chip chip-dev">·</span></div><div><span class="chip chip-qa">✓</span></div></div>
+            <div class="tr"><div>5. Draw favourites screen</div><div></div><div><span class="chip chip-ba">·</span></div><div><span class="chip chip-ux">✓</span></div><div></div><div></div></div>
+            <div class="tr"><div>6. Build React component</div><div></div><div></div><div></div><div><span class="chip chip-dev">✓</span></div><div></div></div>
+            <div class="tr"><div>7. Regression before release</div><div></div><div></div><div></div><div></div><div><span class="chip chip-qa">✓</span></div></div>
+            <div class="tr"><div>8. Out-of-scope for v1</div><div><span class="chip chip-pm">·</span></div><div><span class="chip chip-ba">✓</span></div><div></div><div></div><div></div></div>
+            <div class="tr"><div>9. BPMN of leave approval</div><div></div><div><span class="chip chip-ba">✓</span></div><div></div><div></div><div></div></div>
+            <div class="tr"><div>10. Playwright login + payment</div><div></div><div></div><div></div><div><span class="chip chip-dev">·</span></div><div><span class="chip chip-qa">✓</span></div></div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:800px; font-style:italic">✓ = primary owner · · = commonly contributes. Real teams vary — sometimes BA writes AC alone, sometimes BA + QA together. The job titles are a guide, not a wall.</p>
+        </div>
+      </div>
+
+      <!-- 26 WRAP -->
+      <div class="slide bg-dark" data-slide="26">
+        <div class="slide-label"><span class="snum">26</span> Wrap-up</div>
+        <div class="center" style="max-width: 820px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key Takeaways</div>
+          <h2 class="heading" style="color: white;">What we covered today</h2>
+          <ul class="reveal-list" style="color: rgba(255,255,255,0.9); text-align:left; max-width: 720px; margin: 1.5rem auto; font-size: 1rem; line-height: 2;">
+            <li>✅ <strong>BA</strong> makes sure we build <em>the right thing</em> — discovers needs, writes specs</li>
+            <li>✅ <strong>QA</strong> makes sure we build the thing <em>right</em> — designs and runs tests, protects release quality</li>
+            <li>✅ Both read specs critically; both write testable AC; both protect users</li>
+            <li>✅ Both roles are <em>earlier</em> in the life of a feature than most people think</li>
+            <li>✅ AI amplifies both — the craft is judgment, not typing</li>
+            <li>✅ Next: reading requirements critically — the core skill both roles share</li>
+          </ul>
+          <p style="color: var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.2rem; margin-top:1.5rem">BA is not finance. QA is not clicking. Both are thinking jobs.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 26</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>

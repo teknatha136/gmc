@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Functional vs Non-Functional Requirements — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      .def-grid { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; width:100%; max-width:1100px; }
+      @media (max-width: 820px){ .def-grid { grid-template-columns: 1fr; } }
+      .def-col { background:white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.3rem; border-top:4px solid var(--blue); }
+      .def-col.nfr { border-top-color:var(--amber); }
+      .def-col h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.15rem; margin-bottom:0.4rem; }
+      .def-col .sub { font-size:0.78rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:0.6rem; font-weight:700; }
+      .def-col p { font-size:0.95rem; color:var(--text); line-height:1.65; }
+      .def-col .q { background:var(--bg); border-left:3px solid var(--faint); padding:0.5rem 0.8rem; border-radius:6px; font-size:0.88rem; color:var(--muted); margin-top:0.7rem; font-style:italic; }
+
+      .examples { display:grid; grid-template-columns: 1fr 1fr; gap:0.9rem; width:100%; max-width:1100px; }
+      @media (max-width: 820px){ .examples { grid-template-columns: 1fr; } }
+      .ex { background:white; border:1px solid var(--border); border-left:4px solid var(--blue); border-radius:10px; padding:0.8rem 1rem; }
+      .ex.nfr { border-left-color:var(--amber); }
+      .ex h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.25rem; }
+      .ex p { font-size:0.87rem; color:var(--text); line-height:1.55; }
+
+      .iceberg { position:relative; max-width:760px; width:100%; height:440px; margin:0 auto; }
+      .iceberg-top { position:absolute; top:0; left:50%; transform:translateX(-50%); width:40%; background:linear-gradient(180deg, var(--blue), #0080D4); color:white; padding:1.2rem 1rem; text-align:center; clip-path:polygon(50% 0, 0 100%, 100% 100%); height:140px; display:flex; align-items:center; justify-content:center; }
+      .iceberg-top span { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; font-weight:600; }
+      .iceberg-water { position:absolute; top:140px; left:0; right:0; height:6px; background:rgba(0,102,178,0.2); border-top:2px solid var(--blue); }
+      .iceberg-bot { position:absolute; top:146px; left:0; width:100%; height:290px; background:linear-gradient(180deg, rgba(36,126,193,0.85), rgba(0,31,53,0.9)); border-radius:0 0 12px 12px; color:white; padding:1rem; }
+      .iceberg-bot .row { display:grid; grid-template-columns: repeat(3,1fr); gap:0.6rem; margin-top:0.6rem; }
+      .iceberg-bot .bx { background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.25); padding:0.55rem 0.7rem; border-radius:8px; font-size:0.8rem; text-align:center; line-height:1.4; }
+      .iceberg-bot .lbl { text-align:center; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.3rem; }
+
+      .nfr-tile-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:0.85rem; width:100%; max-width:1150px; }
+      @media (max-width: 900px){ .nfr-tile-grid { grid-template-columns: 1fr 1fr; } }
+      @media (max-width: 560px){ .nfr-tile-grid { grid-template-columns: 1fr; } }
+      .nfr-tile { background:white; border:1px solid var(--border); border-radius:12px; padding:0.9rem 1.1rem; display:flex; flex-direction:column; gap:0.3rem; }
+      .nfr-tile .ic { font-size:1.8rem; margin-bottom:0.2rem; }
+      .nfr-tile h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; }
+      .nfr-tile .what { font-size:0.9rem; color:var(--text); line-height:1.55; }
+      .nfr-tile .ex-line { background:var(--bg); border-radius:6px; padding:0.4rem 0.6rem; font-size:0.8rem; color:var(--muted); margin-top:0.4rem; font-family:'Courier New',monospace; line-height:1.5; }
+
+      .bad-nfr { background:white; border:1px solid var(--border); border-left:4px solid var(--red); border-radius:10px; padding:0.8rem 1rem; margin:0.3rem 0; }
+      .good-nfr { background:white; border:1px solid var(--border); border-left:4px solid var(--green); border-radius:10px; padding:0.8rem 1rem; margin:0.3rem 0; }
+      .bad-nfr pre, .good-nfr pre { font-family:'Courier New',monospace; font-size:0.88rem; color:var(--text); white-space:pre-wrap; line-height:1.6; }
+
+      .furps { display:grid; grid-template-columns: repeat(5, 1fr); gap:0.6rem; width:100%; max-width:1050px; }
+      @media (max-width: 820px){ .furps { grid-template-columns: repeat(2, 1fr); } }
+      .furps .ltr { background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:0.8rem 0.9rem; text-align:center; }
+      .furps .ltr .lt { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--blue); font-size:2.2rem; font-weight:700; line-height:1; }
+      .furps .ltr .meaning { color:var(--indigo); font-size:0.92rem; font-family:'Bahnschrift','Segoe UI',sans-serif; margin-top:0.3rem; }
+      .furps .ltr .note { color:var(--muted); font-size:0.75rem; margin-top:0.3rem; line-height:1.4; }
+
+      .trap-row { background:white; border:1px solid var(--border); border-left:4px solid var(--amber); border-radius:10px; padding:0.8rem 1.1rem; margin:0.4rem 0; max-width:900px; }
+      .trap-row strong { color:var(--indigo); }
+      .trap-row p { font-size:0.9rem; color:var(--text); margin:0.2rem 0; line-height:1.6; }
+
+      .split { display:grid; grid-template-columns: 1fr 1fr; gap:0.9rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px){ .split { grid-template-columns: 1fr; } }
+      .split .half { background:white; border:1px solid var(--border); border-radius:10px; padding:0.9rem 1.1rem; }
+      .split .half.ba { border-top:3px solid var(--indigo); }
+      .split .half.qa { border-top:3px solid var(--amber); }
+      .split .half h5 { color:var(--indigo); font-size:1rem; font-family:'Bahnschrift','Segoe UI',sans-serif; margin-bottom:0.4rem; }
+      .split .half ul { margin-left:1.1rem; }
+      .split .half li { font-size:0.88rem; line-height:1.6; margin:0.2rem 0; color:var(--text); }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>BA + QA Combined · Class 03</div></div>
+          <h1 class="display" style="color: var(--text)">
+            <span style="color: var(--blue)">Functional vs</span><br />
+            <span style="color: var(--indigo)">Non-Functional</span><br />
+            <span style="color: var(--blue)">Requirements</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted)">What the software does — and how well it has to do it.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">FR</span>
+            <span class="class-tag tag-blue">NFR</span>
+            <span class="class-tag tag-blue">Performance</span>
+            <span class="class-tag tag-blue">Security</span>
+            <span class="class-tag tag-blue">Accessibility</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 AGENDA -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 780px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem"><h2 class="heading">Session Journey · ~75 min</h2></div>
+          <div class="agenda-row" onclick="goTo(2)"><span class="ar-dot" style="background: var(--red)"></span><span class="ar-label">🤔 "It works. Why is everyone angry?"</span><span class="ar-badge" style="background:#FEE9EC;color:var(--red)">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(5)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">📐 FR vs NFR definitions</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">12 min</span></div>
+          <div class="agenda-row" onclick="goTo(9)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🔍 The six NFR categories</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">30 min</span></div>
+          <div class="agenda-row" onclick="goTo(17)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🧭 FURPS+ · the full landscape</span><span class="ar-badge" style="background:#E6F0F8;color:var(--indigo)">5 min</span></div>
+          <div class="agenda-row" onclick="goTo(19)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🎯 Writing NFRs that are testable</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(22)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🤝 BA + QA collaboration on NFRs</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">5 min</span></div>
+          <div class="agenda-row" onclick="goTo(24)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🎯 Wrap-up</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">5 min</span></div>
+        </div>
+      </div>
+
+      <!-- 3 HOOK -->
+      <div class="slide bg-dark" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> Hook</div>
+        <div class="center" style="max-width: 860px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎤 A familiar story</div>
+          <p class="disc-prompt" style="font-size:1.4rem">You ship a payment app.<br>Every feature works.<br>Users <span style="color:var(--amber)">hate it</span>.</p>
+          <ul class="reveal-list" style="color: rgba(255,255,255,0.9); text-align:left; max-width: 720px; margin: 2rem auto; font-size: 1.02rem; line-height: 2;">
+            <li>🐢 Login takes 12 seconds on a 3G connection</li>
+            <li>🔒 A bug lets anyone see anyone else's balance</li>
+            <li>♿ Visually-impaired users can't navigate the home screen</li>
+            <li>💥 The app crashes when more than 500 people use it at once</li>
+            <li>🌍 It doesn't support Dzongkha characters in notes</li>
+          </ul>
+          <p style="color: var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.2rem; margin-top:1.5rem">The <em>functional</em> requirements shipped. Everything else didn't.</p>
+        </div>
+      </div>
+
+      <!-- 4 ICEBERG -->
+      <div class="slide accent-blue bg-subtle" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> The iceberg</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Requirements are an iceberg</h2><p class="body-md" style="color:var(--muted); max-width:820px">FRs are what users see. NFRs are the 80% beneath the surface — invisible when they work, devastating when they don't.</p></div>
+          <div class="iceberg">
+            <div class="iceberg-top"><span>FRs<br>(visible)</span></div>
+            <div class="iceberg-water"></div>
+            <div class="iceberg-bot">
+              <div class="lbl">NFRs · invisible until broken</div>
+              <div class="row">
+                <div class="bx">🏎️ Performance</div>
+                <div class="bx">🔒 Security</div>
+                <div class="bx">🔁 Reliability</div>
+                <div class="bx">♿ Accessibility</div>
+                <div class="bx">📈 Scalability</div>
+                <div class="bx">🎨 Usability</div>
+                <div class="bx">🌐 Localization</div>
+                <div class="bx">🛠️ Maintainability</div>
+                <div class="bx">📜 Compliance</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 SECTION: FR vs NFR -->
+      <div class="slide bg-blue" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part One</div>
+          <h1 class="display" style="color: white">FR vs NFR</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">What vs how well.</p>
+        </div>
+        <div class="section-num" style="color: white">01</div>
+      </div>
+
+      <!-- 6 DEFINITIONS -->
+      <div class="slide accent-blue bg-subtle" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> Definitions</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Two kinds of requirements. Both must be written.</h2></div>
+          <div class="def-grid">
+            <div class="def-col">
+              <div class="sub">FR</div>
+              <h5>Functional Requirement</h5>
+              <p>Describes <strong>what the system does</strong> — features, behaviours, actions, outputs. Observable from outside.</p>
+              <div class="q">"When the user clicks Submit, the system creates a leave request in status <em>Pending</em>."</div>
+            </div>
+            <div class="def-col nfr">
+              <div class="sub">NFR</div>
+              <h5>Non-Functional Requirement</h5>
+              <p>Describes <strong>how well the system must do it</strong> — quality attributes. Often measured in numbers, thresholds, or rules.</p>
+              <div class="q">"The leave request must appear in the manager's inbox within 2 seconds of submission, 99% of the time."</div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px"><strong>One way to remember:</strong> FR = the verb. NFR = the adverb.</p>
+        </div>
+      </div>
+
+      <!-- 7 SIDE BY SIDE -->
+      <div class="slide accent-blue" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> Side by side</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Same feature — FR and NFR voices</h2></div>
+          <div class="examples">
+            <div class="ex"><h6>FR · Login</h6><p>The system allows users to log in using a registered phone number and MPIN.</p></div>
+            <div class="ex nfr"><h6>NFR · Login</h6><p>99% of login attempts complete within 2 seconds on a 4G connection.</p></div>
+
+            <div class="ex"><h6>FR · Bill payment</h6><p>Users can pay registered billers by selecting a biller and entering an amount.</p></div>
+            <div class="ex nfr"><h6>NFR · Bill payment</h6><p>The system supports 10,000 concurrent bill-payment transactions during peak hours.</p></div>
+
+            <div class="ex"><h6>FR · Document upload</h6><p>Users can upload their government ID (PDF or JPG) as part of KYC.</p></div>
+            <div class="ex nfr"><h6>NFR · Document upload</h6><p>Uploaded IDs are encrypted at rest (AES-256) and deleted after 7 years per regulatory policy.</p></div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">Notice how each pair covers the same feature — but from two directions.</p>
+        </div>
+      </div>
+
+      <!-- 8 WHY BOTH -->
+      <div class="slide accent-blue bg-subtle" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> Why both matter</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:900px"><h2 class="heading">FRs get a product built. NFRs decide whether users keep using it.</h2></div>
+          <div class="cols-2" style="max-width:1100px; gap:1rem">
+            <div class="card" style="border-top:3px solid var(--red)">
+              <h4 style="color:var(--red)">Without NFRs</h4>
+              <ul style="font-size:0.95rem; line-height:1.8; padding-left:1.2rem; color:var(--text)">
+                <li>Everything "works" in a demo on good hardware</li>
+                <li>Real users on slow networks or old phones hate it</li>
+                <li>Security review fails at the 11th hour</li>
+                <li>Accessibility audits add weeks of rework</li>
+                <li>App crashes under real load</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--green)">
+              <h4 style="color:#3D7A3D">With NFRs</h4>
+              <ul style="font-size:0.95rem; line-height:1.8; padding-left:1.2rem; color:var(--text)">
+                <li>Performance targets shape architecture from day one</li>
+                <li>Security is designed in — not bolted on</li>
+                <li>Accessibility is a gate, not an afterthought</li>
+                <li>Load testing has concrete targets</li>
+                <li>QA has something measurable to sign off on</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">FRs answer "did we build the thing?" NFRs answer "is the thing any good?"</p>
+        </div>
+      </div>
+
+      <!-- 9 SECTION: 6 NFRs -->
+      <div class="slide bg-indigo" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Two</div>
+          <h1 class="display" style="color: white">The Six NFR<br>Categories</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Performance · Security · Reliability · Usability · Accessibility · Scalability</p>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- 10 NFR OVERVIEW -->
+      <div class="slide accent-blue bg-subtle" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> The Six</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">The NFR categories every BA and QA must cover</h2><p class="body-md" style="color:var(--muted); max-width:820px">There are more (maintainability, compliance, portability…) — but these six catch ~90% of what matters in user-facing software.</p></div>
+          <div class="nfr-tile-grid">
+            <div class="nfr-tile"><span class="ic">🏎️</span><h5>Performance</h5><p class="what">How fast? How responsive under normal load?</p><div class="ex-line">login &lt; 2s on 4G, p95</div></div>
+            <div class="nfr-tile"><span class="ic">🔒</span><h5>Security</h5><p class="what">Who can do what? Is data protected in transit and at rest?</p><div class="ex-line">TLS 1.3, AES-256 at rest, RBAC</div></div>
+            <div class="nfr-tile"><span class="ic">🔁</span><h5>Reliability</h5><p class="what">How often does it work when asked? What happens when it fails?</p><div class="ex-line">99.9% uptime, graceful retry</div></div>
+            <div class="nfr-tile"><span class="ic">🎨</span><h5>Usability</h5><p class="what">How easy is it for real users to succeed at the main tasks?</p><div class="ex-line">80% of first-timers complete sign-up</div></div>
+            <div class="nfr-tile"><span class="ic">♿</span><h5>Accessibility</h5><p class="what">Can people with disabilities use it? Does it meet legal bars?</p><div class="ex-line">WCAG 2.1 AA, keyboard + screen reader</div></div>
+            <div class="nfr-tile"><span class="ic">📈</span><h5>Scalability</h5><p class="what">What happens at 10× today's usage? Can the system grow?</p><div class="ex-line">supports 10k concurrent users at peak</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11 PERFORMANCE -->
+      <div class="slide accent-blue" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> NFR 01 · Performance</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:820px"><h2 class="heading">🏎️ Speed and responsiveness under realistic conditions</h2></div>
+          <div class="cols-2" style="max-width:1100px; gap:1rem">
+            <div class="card" style="border-top:3px solid var(--blue)">
+              <h4 style="color:var(--blue)">What BAs and QAs ask</h4>
+              <ul style="font-size:0.92rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li>What's the target <strong>response time</strong> for key actions?</li>
+                <li>What about <strong>slow networks</strong> (3G, 2G, roaming)?</li>
+                <li>What's the <strong>p95</strong> — i.e. 95 out of 100 users' experience?</li>
+                <li>Are there <strong>time-boxed operations</strong> (report generation, file upload)?</li>
+                <li>How does performance degrade <strong>under load</strong>?</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--amber)">
+              <h4 style="color:var(--amber)">Concrete examples</h4>
+              <ul style="font-size:0.9rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li>Home screen load: <strong>&lt; 2s on 4G, &lt; 4s on 3G</strong>, p95.</li>
+                <li>Send-money confirmation: <strong>&lt; 3s end-to-end</strong>, p95.</li>
+                <li>Biller list: <strong>&lt; 1s</strong> after home screen loads, p99.</li>
+                <li>PDF receipt generation: <strong>&lt; 5s</strong>, never more than 10s.</li>
+                <li>Search typing lag: <strong>&lt; 150ms</strong> per keystroke.</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">"Fast" is a feeling. "500ms p95" is a requirement.</p>
+        </div>
+      </div>
+
+      <!-- 12 SECURITY -->
+      <div class="slide accent-blue bg-subtle" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> NFR 02 · Security</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:820px"><h2 class="heading">🔒 Who's allowed to do what — and is the data safe?</h2></div>
+          <div class="cols-2" style="max-width:1100px; gap:1rem">
+            <div class="card" style="border-top:3px solid var(--blue)">
+              <h4 style="color:var(--blue)">Questions to ask</h4>
+              <ul style="font-size:0.92rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li><strong>Authentication</strong> — how do users prove who they are?</li>
+                <li><strong>Authorization</strong> — what's each role allowed to see/do?</li>
+                <li><strong>Data at rest</strong> — what's stored encrypted?</li>
+                <li><strong>Data in transit</strong> — TLS? certificate pinning?</li>
+                <li><strong>Audit</strong> — who viewed or changed what?</li>
+                <li><strong>Session</strong> — timeout, logout, token rotation?</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--amber)">
+              <h4 style="color:var(--amber)">Concrete examples</h4>
+              <ul style="font-size:0.9rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li>Passwords hashed with bcrypt (cost factor ≥ 12); never stored plain.</li>
+                <li>All network traffic over TLS 1.3; no downgrade.</li>
+                <li>Government IDs encrypted with AES-256 at rest; keys in HSM.</li>
+                <li>Admin actions logged to an append-only audit table.</li>
+                <li>Session expires after 15 min idle; re-auth required for transactions &gt; Nu. 50,000.</li>
+                <li>Role-based access: Teller ≠ Branch Manager ≠ Auditor.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 13 RELIABILITY -->
+      <div class="slide accent-blue" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> NFR 03 · Reliability</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:820px"><h2 class="heading">🔁 How often does it work, and how does it fail?</h2></div>
+          <div class="cols-2" style="max-width:1100px; gap:1rem">
+            <div class="card" style="border-top:3px solid var(--blue)">
+              <h4 style="color:var(--blue)">The two halves</h4>
+              <p style="font-size:0.95rem; color:var(--text); line-height:1.7">
+                <strong>Availability</strong> — what % of the time is the service up?<br>
+                <strong>Fault tolerance</strong> — when things do break, do they fail gracefully or catastrophically?
+              </p>
+              <ul style="font-size:0.9rem; line-height:1.7; padding-left:1.2rem; color:var(--text); margin-top:0.5rem">
+                <li>What happens on <strong>network loss mid-transaction</strong>?</li>
+                <li>What's shown during <strong>planned maintenance</strong>?</li>
+                <li>How do we <strong>retry</strong> a failed operation safely?</li>
+                <li>Where is <strong>offline support</strong> required vs nice-to-have?</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--amber)">
+              <h4 style="color:var(--amber)">Concrete examples</h4>
+              <ul style="font-size:0.9rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li>Service availability: <strong>99.9% monthly</strong> (~43 min downtime/month).</li>
+                <li>On network loss during transfer, show clear "not confirmed" state — never ambiguous.</li>
+                <li>Retry automatically up to 3× with exponential backoff.</li>
+                <li>Offline: viewing balance + past transactions OK; new payments disabled.</li>
+                <li>Planned maintenance: in-app banner 24h in advance.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 14 USABILITY -->
+      <div class="slide accent-blue bg-subtle" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> NFR 04 · Usability</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:820px"><h2 class="heading">🎨 How easy is it for real users to succeed?</h2></div>
+          <div class="cols-2" style="max-width:1100px; gap:1rem">
+            <div class="card" style="border-top:3px solid var(--blue)">
+              <h4 style="color:var(--blue)">Questions to ask</h4>
+              <ul style="font-size:0.92rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li>What's the <strong>success rate</strong> for first-time users?</li>
+                <li>How many <strong>taps/clicks</strong> to complete core actions?</li>
+                <li>Are <strong>errors</strong> clear, recoverable, in user language?</li>
+                <li>Is the <strong>learning curve</strong> acceptable for the target user?</li>
+                <li>Does it work for <strong>low-literacy users</strong> where relevant?</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--amber)">
+              <h4 style="color:var(--amber)">Concrete examples</h4>
+              <ul style="font-size:0.9rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li><strong>80% of first-time users</strong> complete account setup without help.</li>
+                <li>Send Money is reachable in <strong>≤2 taps</strong> from home.</li>
+                <li>Error messages written in <strong>plain language</strong> with a clear next action ("Try again" / "Contact support").</li>
+                <li>Standard primary actions on the <strong>right side of the screen</strong> (thumb-zone on Android).</li>
+                <li>Critical destructive actions require confirmation.</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">Usability turns into NFRs when you put <strong>numbers on it</strong>. "Intuitive" does not.</p>
+        </div>
+      </div>
+
+      <!-- 15 ACCESSIBILITY -->
+      <div class="slide accent-blue" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span> NFR 05 · Accessibility</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:820px"><h2 class="heading">♿ Can people with disabilities use your software?</h2></div>
+          <div class="cols-2" style="max-width:1100px; gap:1rem">
+            <div class="card" style="border-top:3px solid var(--blue)">
+              <h4 style="color:var(--blue)">The four dimensions (WCAG)</h4>
+              <ul style="font-size:0.92rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li><strong>Perceivable</strong> — can users perceive the content? (alt text, captions, contrast)</li>
+                <li><strong>Operable</strong> — can they use it? (keyboard, no time-trap, readable fonts)</li>
+                <li><strong>Understandable</strong> — do they understand it? (plain language, consistent nav)</li>
+                <li><strong>Robust</strong> — does it work with assistive tech? (screen readers, voice control)</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--amber)">
+              <h4 style="color:var(--amber)">Concrete examples</h4>
+              <ul style="font-size:0.9rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li>All interactive elements keyboard-reachable and focus-visible.</li>
+                <li>Text contrast ratio ≥ 4.5:1 (body) / 3:1 (large text).</li>
+                <li>All images with meaning have alt text; decorative images marked empty-alt.</li>
+                <li>Form errors linked to the field — not just a summary at the top.</li>
+                <li>Target <strong>WCAG 2.1 Level AA</strong> across the product.</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px"><strong>Also a legal bar</strong> in many jurisdictions. And good for everyone — not just people with disabilities.</p>
+        </div>
+      </div>
+
+      <!-- 16 SCALABILITY -->
+      <div class="slide accent-blue bg-subtle" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span> NFR 06 · Scalability</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:820px"><h2 class="heading">📈 What happens at 10× today's usage?</h2></div>
+          <div class="cols-2" style="max-width:1100px; gap:1rem">
+            <div class="card" style="border-top:3px solid var(--blue)">
+              <h4 style="color:var(--blue)">Questions to ask</h4>
+              <ul style="font-size:0.92rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li>What's <strong>normal load</strong>? What's <strong>peak</strong>?</li>
+                <li>What's the <strong>growth assumption</strong> over 12 months?</li>
+                <li>Which operations are <strong>bursty</strong> (pay day, month end)?</li>
+                <li>How does <strong>database</strong> growth affect cost?</li>
+                <li>Where are the <strong>bottlenecks</strong> likely to appear first?</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--amber)">
+              <h4 style="color:var(--amber)">Concrete examples</h4>
+              <ul style="font-size:0.9rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li>System supports <strong>10,000 concurrent users</strong> during pay-day peak (1st of the month).</li>
+                <li>Database handles <strong>5M transactions/month</strong>, growing to 25M in year 2.</li>
+                <li>No single request exceeds <strong>500ms p95</strong> under peak load.</li>
+                <li>Horizontal scaling plan documented; auto-scaling triggers on 70% CPU.</li>
+                <li>Reports older than 2 years archived to cheaper storage.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 17 SECTION: FURPS -->
+      <div class="slide bg-blue" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Three</div>
+          <h1 class="display" style="color: white">FURPS+</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">An industry-standard NFR checklist.</p>
+        </div>
+        <div class="section-num" style="color: white">03</div>
+      </div>
+
+      <!-- 18 FURPS LETTERS -->
+      <div class="slide accent-blue bg-subtle" data-slide="18">
+        <div class="slide-label"><span class="snum">18</span> FURPS+</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">The classic checklist</h2><p class="body-md" style="color:var(--muted); max-width:820px">Developed at HP in the 1980s. Still used. The "+" at the end accounts for everything the original letters forgot.</p></div>
+          <div class="furps">
+            <div class="ltr"><div class="lt">F</div><div class="meaning">Functionality</div><div class="note">Features &amp; capabilities</div></div>
+            <div class="ltr"><div class="lt">U</div><div class="meaning">Usability</div><div class="note">Ease of use &amp; human factors</div></div>
+            <div class="ltr"><div class="lt">R</div><div class="meaning">Reliability</div><div class="note">Availability &amp; fault tolerance</div></div>
+            <div class="ltr"><div class="lt">P</div><div class="meaning">Performance</div><div class="note">Speed, throughput, resource use</div></div>
+            <div class="ltr"><div class="lt">S</div><div class="meaning">Supportability</div><div class="note">Maintainability &amp; deployability</div></div>
+          </div>
+          <div class="card" style="max-width:1050px; background:white; border:2px dashed var(--border); padding:0.9rem 1.2rem;">
+            <h4 style="color:var(--indigo); margin-bottom:0.3rem; font-size:1rem">The "+" — extra concerns</h4>
+            <p style="font-size:0.9rem; color:var(--text); line-height:1.65"><strong>Design constraints</strong> (tech stack mandated), <strong>Implementation</strong> (language, coding standards), <strong>Interface</strong> (external APIs to integrate with), <strong>Physical</strong> (hardware / deployment target), <strong>Compliance</strong> (GDPR, PCI-DSS, local banking regs), <strong>Localization</strong> (languages, currency, date formats).</p>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">Accessibility often gets classed under Usability or the "+"  — but in modern practice it deserves its own column.</p>
+        </div>
+      </div>
+
+      <!-- 19 SECTION: WRITING NFRs -->
+      <div class="slide bg-indigo" data-slide="19">
+        <div class="slide-label"><span class="snum">19</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Four</div>
+          <h1 class="display" style="color: white">Writing NFRs<br>That Are Testable</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Numbers, not adjectives.</p>
+        </div>
+        <div class="section-num" style="color: white">04</div>
+      </div>
+
+      <!-- 20 BAD VS GOOD -->
+      <div class="slide accent-blue bg-subtle" data-slide="20">
+        <div class="slide-label"><span class="snum">20</span> Bad vs good NFRs</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Every NFR must be measurable by someone outside the team</h2></div>
+          <div style="max-width:1000px; width:100%">
+            <div class="bad-nfr"><pre>❌ "The app should be fast."</pre></div>
+            <div class="good-nfr"><pre>✅ "Home screen loads within 2 seconds on a 4G connection, at p95 (95 out of 100 users)."</pre></div>
+            <div class="bad-nfr" style="margin-top:0.8rem"><pre>❌ "The app must be secure."</pre></div>
+            <div class="good-nfr"><pre>✅ "All API traffic uses TLS 1.3. Passwords stored bcrypt-hashed with cost factor ≥ 12.
+   Government IDs encrypted at rest with AES-256. Pen test passes with zero Critical findings."</pre></div>
+            <div class="bad-nfr" style="margin-top:0.8rem"><pre>❌ "The system must handle many users."</pre></div>
+            <div class="good-nfr"><pre>✅ "System supports 10,000 concurrent active users with &lt;3s p95 response time
+   for core operations (login, balance, send money)."</pre></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 21 WRITING TEMPLATE -->
+      <div class="slide accent-blue" data-slide="21">
+        <div class="slide-label"><span class="snum">21</span> Template for a testable NFR</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">A testable NFR has four parts</h2></div>
+          <div class="card" style="max-width:920px; background:white; border:2px solid var(--blue); padding:1.4rem 2rem;">
+            <p style="font-size:1.1rem; line-height:2; color:var(--text); font-family:'Bahnschrift','Segoe UI',sans-serif; text-align:center">
+              <span style="color:var(--blue)">What</span> must be true · <span style="color:var(--blue)">measured by</span> · <span style="color:var(--blue)">under what conditions</span> · <span style="color:var(--blue)">with what tolerance</span>
+            </p>
+          </div>
+          <div class="card" style="max-width:920px; background:var(--bg); border:2px dashed var(--border); padding:1rem 1.3rem;">
+            <p style="font-size:0.95rem; color:var(--text); line-height:1.7">
+              <em>Example:</em> "<strong>[what]</strong> Home screen loads <strong>[measured by]</strong> time from tap to interactive <strong>[conditions]</strong> on a 4G connection in Gelephu, with a cold app start <strong>[tolerance]</strong> within 2 seconds at p95."
+            </p>
+          </div>
+          <div class="trap-row">
+            <strong>Common trap:</strong>
+            <p>Writing NFRs only as <em>absolute maxima</em> — "must be under 2 seconds." Better: <em>percentile-based</em> — "2s at p95, 4s at p99". This lets the team handle outliers sensibly.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 22 SECTION: BA/QA COLLAB -->
+      <div class="slide bg-blue" data-slide="22">
+        <div class="slide-label"><span class="snum">22</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Five</div>
+          <h1 class="display" style="color: white">BA + QA<br>on NFRs</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Who owns which part?</p>
+        </div>
+        <div class="section-num" style="color: white">05</div>
+      </div>
+
+      <!-- 23 ROLES -->
+      <div class="slide accent-blue bg-subtle" data-slide="23">
+        <div class="slide-label"><span class="snum">23</span> Roles in NFR discipline</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Two roles · one shared output</h2></div>
+          <div class="split">
+            <div class="half ba">
+              <h5>📋 BA · elicit and write</h5>
+              <ul>
+                <li>Ask stakeholders for <strong>implicit NFRs</strong> ("we can't be slower than the competitor app")</li>
+                <li>Surface <strong>compliance &amp; regulatory</strong> constraints early</li>
+                <li>Write NFRs in a <strong>testable form</strong> (with numbers)</li>
+                <li>Balance NFRs against scope — not every app needs 99.99% uptime</li>
+                <li>Document assumptions so the team knows what was agreed</li>
+              </ul>
+            </div>
+            <div class="half qa">
+              <h5>🔍 QA · challenge and verify</h5>
+              <ul>
+                <li>Challenge vague NFRs ("what exactly does 'secure' mean here?")</li>
+                <li>Design tests that <strong>measure</strong> each NFR objectively</li>
+                <li>Catch <strong>silent NFRs</strong> missing from the spec</li>
+                <li>Automate NFR checks where possible (perf, a11y, security scans)</li>
+                <li>Report NFR regressions clearly, not just functional bugs</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card" style="max-width:950px; background:white; border-left:4px solid var(--amber); padding:1rem 1.3rem;">
+            <h4 style="color:var(--indigo); margin-bottom:0.3rem; font-size:1rem">The most common NFR failure</h4>
+            <p style="font-size:0.92rem; color:var(--text); line-height:1.65">Not that NFRs are wrong — that they are <strong>silent</strong>. Specs describe features in loving detail and skip quality attributes entirely. When in doubt, <em>write it down</em>. A vague NFR you can revise is infinitely better than an invisible NFR you discover in production.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 24 WRAP -->
+      <div class="slide bg-dark" data-slide="24">
+        <div class="slide-label"><span class="snum">24</span> Wrap-up</div>
+        <div class="center" style="max-width: 820px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key Takeaways</div>
+          <h2 class="heading" style="color: white;">What we covered today</h2>
+          <ul class="reveal-list" style="color: rgba(255,255,255,0.9); text-align:left; max-width: 720px; margin: 1.5rem auto; font-size: 1rem; line-height: 2;">
+            <li>✅ <strong>FR</strong> = what the system does · <strong>NFR</strong> = how well it does it</li>
+            <li>✅ Requirements are an <strong>iceberg</strong> — NFRs are the 80% below the water</li>
+            <li>✅ The <strong>six core NFRs</strong>: Performance · Security · Reliability · Usability · Accessibility · Scalability</li>
+            <li>✅ <strong>FURPS+</strong> is the industry-standard checklist for the full landscape</li>
+            <li>✅ Testable NFRs have: what · measured by · under what conditions · with what tolerance</li>
+            <li>✅ Use <strong>percentiles</strong> (p95, p99), not just absolute maxima</li>
+            <li>✅ The most common NFR bug is <em>silence</em> — BAs and QAs must break that silence early</li>
+          </ul>
+          <p style="color: var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.2rem; margin-top:1.5rem">FRs get a product built. NFRs decide whether users keep using it.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 24</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>

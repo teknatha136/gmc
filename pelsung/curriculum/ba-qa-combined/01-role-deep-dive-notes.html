@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BA+QA Class 01 Notes — Role Deep-Dive</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#0066B2; --indigo:#001F35; --amber:#247EC1; --green:#7BC950; --purple:#4796D1; --red:#D80032; --text:#1B2021; --muted:#7B7C7F; --faint:#9CA3AF; --surf:#fff; --bg:#F9F9F9; --border:#EDEDED; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Open Sans','Aptos',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; font-size:17px; -webkit-font-smoothing:antialiased; }
+    h1,h2,h3,h4,h5,h6 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:400; letter-spacing:-0.01em; }
+    a { color: var(--blue); }
+
+    .hero { background:var(--surf); border-bottom:1px solid var(--border); padding:4rem 2rem 3rem; text-align:center; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background: linear-gradient(135deg, #0067A3, #002D72); }
+    .logo-corner { position:absolute; top: 1.25rem; left: 1.5rem; opacity:0.85; }
+    .logo-corner img { height: 34px; }
+    .hero-badge { display:inline-flex; align-items:center; gap:0.5rem; background:var(--bg); border:1px solid var(--border); border-radius:100px; padding:0.35rem 1rem; font-size:0.75rem; font-weight:700; color:var(--muted); letter-spacing:0.07em; text-transform:uppercase; margin-bottom:1.5rem; }
+    .hero-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--amber); }
+    .hero h1 { font-size:clamp(2rem,5vw,3.5rem); line-height:1.15; margin-bottom:0.75rem; }
+    .c-blue{color:var(--blue);} .c-indigo{color:var(--indigo);}
+    .hero-sub { font-size:1rem; color:var(--muted); margin-bottom:2rem; max-width:680px; margin-left:auto; margin-right:auto; }
+    .hero-tags { display:flex; justify-content:center; gap:0.6rem; flex-wrap:wrap; }
+    .hero-tag { padding:0.3rem 0.9rem; border-radius:8px; font-size:0.78rem; font-weight:600; background:#E6F0F8; color:var(--blue); }
+
+    .container { max-width:1040px; margin:0 auto; padding:0 2rem 6rem; }
+
+    .toc { background:var(--surf); border:1px solid var(--border); border-radius:16px; padding:1.75rem 2rem; margin:2.5rem 0; }
+    .toc h3 { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); margin-bottom:1.25rem; }
+    .toc ol { list-style: none; counter-reset: step; }
+    .toc li { counter-increment: step; padding:0.45rem 0; border-bottom:1px solid var(--border); }
+    .toc li:last-child { border-bottom:none; }
+    .toc li::before { content: counter(step, decimal-leading-zero); color:var(--faint); font-family:'Bahnschrift','Segoe UI',sans-serif; margin-right:0.8rem; font-size:0.9rem; }
+    .toc a { text-decoration:none; color:var(--text); font-weight:500; }
+    .toc a:hover { color: var(--blue); }
+
+    section.chapter { margin: 3.5rem 0; }
+    .chapter-head { margin-bottom:1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
+    .chapter-eyebrow { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--blue); margin-bottom:0.3rem; }
+    .chapter-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--indigo); }
+
+    p { margin: 0.7rem 0; }
+    ul, ol { margin: 0.6rem 0 0.6rem 1.3rem; }
+    li { margin: 0.3rem 0; }
+    strong { color: var(--indigo); }
+
+    .callout { background:var(--surf); border:1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 10px; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+    .callout.amber { border-left-color: var(--amber); }
+    .callout.green { border-left-color: var(--green); }
+    .callout.red { border-left-color: var(--red); }
+    .callout.indigo { border-left-color: var(--indigo); }
+    .callout h4 { font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--indigo); }
+
+    .myth-list { display:grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin: 1.2rem 0; }
+    @media (max-width: 720px){ .myth-list { grid-template-columns: 1fr; } }
+    .myth-list .m { background:var(--surf); border:1px solid var(--border); border-left:4px solid var(--red); border-radius:8px; padding:0.8rem 1rem; }
+    .myth-list .m h5 { color:var(--red); font-size:0.95rem; margin-bottom:0.3rem; }
+    .myth-list .m p { font-size:0.88rem; color:var(--text); margin:0; line-height:1.5; }
+    .myth-list .m .truth { display:block; margin-top:0.4rem; padding-top:0.4rem; border-top:1px dashed var(--border); color:var(--muted); font-size:0.84rem; }
+
+    .day-timeline { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin:1rem 0; }
+    @media (max-width: 720px){ .day-timeline { grid-template-columns: 1fr; } }
+    .day-timeline .blk { background:var(--surf); border:1px solid var(--border); border-radius:10px; padding:0.9rem 1.1rem; }
+    .day-timeline h5 { color:var(--indigo); font-size:1rem; margin-bottom:0.5rem; }
+    .day-timeline ul { list-style:none; margin:0; padding:0; }
+    .day-timeline li { font-size:0.88rem; padding:0.3rem 0; border-bottom:1px dashed var(--border); line-height:1.55; color:var(--text); }
+    .day-timeline li:last-child { border-bottom:none; }
+    .day-timeline .t { color:var(--blue); font-family:'Courier New',monospace; font-size:0.78rem; margin-right:0.5rem; font-weight:600; }
+
+    .grid-six { display:grid; grid-template-columns: repeat(3, 1fr); gap: 0.7rem; margin: 1rem 0; }
+    @media (max-width: 720px){ .grid-six { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 480px){ .grid-six { grid-template-columns: 1fr; } }
+    .grid-six .it { background:var(--surf); border:1px solid var(--border); border-top:3px solid var(--blue); border-radius:8px; padding:0.7rem 0.9rem; }
+    .grid-six .it h6 { color:var(--indigo); font-size:0.93rem; margin-bottom:0.2rem; }
+    .grid-six .it p { font-size:0.83rem; color:var(--text); margin:0; line-height:1.55; }
+    .grid-six.qa .it { border-top-color:var(--amber); }
+
+    .chain { display:flex; gap:0.4rem; flex-wrap:wrap; margin:1rem 0; }
+    .chain .n { background:var(--surf); border:1px solid var(--border); border-top:3px solid var(--blue); border-radius:8px; padding:0.5rem 0.8rem; font-size:0.83rem; flex:1 1 110px; text-align:center; min-width:110px; }
+    .chain .n strong { color:var(--indigo); display:block; font-size:0.9rem; font-family:'Bahnschrift','Segoe UI',sans-serif; }
+    .chain .n.ba { border-top-color:var(--indigo); }
+    .chain .n.qa { border-top-color:var(--amber); }
+
+    .table-wrap { background:var(--surf); border:1px solid var(--border); border-radius:10px; overflow:hidden; margin:1rem 0; }
+    table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+    thead th { background:var(--bg); padding:0.7rem 1rem; text-align:left; color:var(--muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; border-bottom:1px solid var(--border); }
+    thead th:not(:first-child) { text-align:center; }
+    tbody td { padding:0.55rem 1rem; border-bottom:1px solid var(--border); color:var(--text); }
+    tbody td:not(:first-child) { text-align:center; color:var(--faint); }
+    tbody tr:last-child td { border-bottom:none; }
+    .own { background:var(--indigo); color:white; width:22px; height:22px; border-radius:50%; display:inline-block; line-height:22px; font-size:0.72rem; font-weight:700; }
+    .own.qa { background:var(--amber); }
+    .own.dev { background:var(--blue); }
+    .own.pm { background:var(--purple); }
+    .own.ux { background:#3D7A3D; }
+
+    .ai-cols { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin:1rem 0; }
+    @media (max-width: 720px){ .ai-cols { grid-template-columns: 1fr; } }
+    .ai-cols .col { background:var(--surf); border:1px solid var(--border); border-top:3px solid var(--blue); border-radius:10px; padding:0.9rem 1.1rem; }
+    .ai-cols .col.qa { border-top-color:var(--amber); }
+    .ai-cols h5 { color:var(--indigo); font-size:1rem; margin-bottom:0.5rem; }
+    .ai-cols .lbl { color:var(--muted); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.07em; margin-top:0.5rem; font-weight:700; }
+
+    .summary { background: linear-gradient(135deg, #F9F9F9, #EDEDED); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+    .summary h4 { color: var(--indigo); margin-bottom: 0.5rem; font-size: 0.95rem; }
+    .summary ul { margin-left: 1.1rem; }
+    .summary li { font-size: 0.93rem; margin: 0.25rem 0; }
+
+    footer { text-align:center; padding: 2rem 1rem 3rem; color: var(--faint); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+    footer img { height: 28px; opacity:0.7; margin-bottom: 0.5rem; display: block; margin-left:auto; margin-right:auto; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="logo-corner"><img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE"></div>
+    <div class="hero-badge"><span class="dot"></span> BA + QA Combined · Class 01</div>
+    <h1><span class="c-indigo">What a BA Does.</span><br><span class="c-blue">What a QA Does.</span></h1>
+    <p class="hero-sub">Your take-home reference. Two roles. Same software team. Different crafts. This note explains what each actually does, the artifacts they produce, how they interact, and how AI is reshaping both.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">BA</span>
+      <span class="hero-tag">QA</span>
+      <span class="hero-tag">Role Clarity</span>
+      <span class="hero-tag">Handoffs</span>
+      <span class="hero-tag">AI Era</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="toc">
+      <h3>In this note</h3>
+      <ol>
+        <li><a href="#why">Why we start here</a></li>
+        <li><a href="#myths">Misconceptions worth clearing</a></li>
+        <li><a href="#ba-def">The BA · who they are</a></li>
+        <li><a href="#ba-day">The BA · a day in the life</a></li>
+        <li><a href="#ba-artifacts">The BA · the artifacts they produce</a></li>
+        <li><a href="#ba-skills">The BA · skills and career shape</a></li>
+        <li><a href="#qa-def">The QA · who they are</a></li>
+        <li><a href="#qa-day">The QA · a day in the life</a></li>
+        <li><a href="#qa-artifacts">The QA · the artifacts they produce</a></li>
+        <li><a href="#qa-skills">The QA · skills and career shape</a></li>
+        <li><a href="#meet">Where BA and QA meet</a></li>
+        <li><a href="#ai">How AI changes both roles</a></li>
+        <li><a href="#exercise">Exercise recap · Who does what?</a></li>
+        <li><a href="#takeaways">Key takeaways</a></li>
+      </ol>
+    </div>
+
+    <section class="chapter" id="why">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 1</div>
+        <h2>Why we start here</h2>
+      </div>
+      <p>In your 1-on-1s with the training team, many of you said versions of: "I thought BA was financial analysis" or "I thought QA was just clicking buttons." That's not a failure on your part — the job titles are genuinely misleading. "Business Analyst" could mean five different things in five different industries. "Quality Assurance" sounds like the last step in a factory line.</p>
+      <p>In software, both mean something specific. Today's class makes that specificity concrete. By the end, you should be able to describe both roles to a friend in one sentence each — and name three things each role actually produces in a typical work week.</p>
+      <div class="callout amber">
+        <h4>The big idea today</h4>
+        <p><strong>A BA makes sure the team builds the right thing.</strong> A <strong>QA makes sure the team builds the thing right.</strong> Two different jobs, two different crafts, one shared goal: software that works for the users who paid for it.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="myths">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 2</div>
+        <h2>Misconceptions worth clearing</h2>
+      </div>
+      <p>Before we describe what BAs and QAs do, it's worth explicitly naming what they <em>don't</em>. These misconceptions come up often enough that if we skip them, they'll keep coloring everything else in your head.</p>
+
+      <h3 style="color:var(--indigo); font-size:1.15rem; margin-top:1.5rem">BA — four common confusions</h3>
+      <div class="myth-list">
+        <div class="m">
+          <h5>"BA = Finance / Business Intelligence analyst"</h5>
+          <p>Reads financial reports, builds revenue dashboards, analyses money trends.</p>
+          <span class="truth"><strong>Reality:</strong> A software BA rarely touches money numbers. Their "analysis" is of <em>what the product should do</em>, not how the business is performing.</span>
+        </div>
+        <div class="m">
+          <h5>"BA = Project Manager"</h5>
+          <p>Tracks deadlines, runs standups, chases people.</p>
+          <span class="truth"><strong>Reality:</strong> BA cares about <em>what</em> gets built; PM cares about <em>when</em>. Different crafts, often different people.</span>
+        </div>
+        <div class="m">
+          <h5>"BA = Data Analyst"</h5>
+          <p>Writes SQL, explores data, finds insights.</p>
+          <span class="truth"><strong>Reality:</strong> A BA may read schemas and look at usage analytics to inform decisions, but their output is a spec — not an insight report.</span>
+        </div>
+        <div class="m">
+          <h5>"BA = meeting-minute writer"</h5>
+          <p>Attends meetings, types up notes, forwards emails.</p>
+          <span class="truth"><strong>Reality:</strong> Writing is tooling. The job is understanding and defining the software. Notes without judgment are secretarial, not analytical.</span>
+        </div>
+      </div>
+
+      <h3 style="color:var(--indigo); font-size:1.15rem; margin-top:1.5rem">QA — four common confusions</h3>
+      <div class="myth-list">
+        <div class="m">
+          <h5>"QA is the button-clicker"</h5>
+          <p>Clicks around, logs bugs when something looks off.</p>
+          <span class="truth"><strong>Reality:</strong> QAs <em>design</em> tests — deciding what to check and why. Clicking is the last 10% of the job, often automated.</span>
+        </div>
+        <div class="m">
+          <h5>"QA is the last line of defence"</h5>
+          <p>Everything is fine until QA catches it.</p>
+          <span class="truth"><strong>Reality:</strong> Quality is built in, not tested in. QAs start the day a requirement is drafted — not the day code lands.</span>
+        </div>
+        <div class="m">
+          <h5>"QA is the enemy of developers"</h5>
+          <p>Trying to make devs look bad.</p>
+          <span class="truth"><strong>Reality:</strong> Good QAs and devs are allies. One shared goal: a product users don't complain about.</span>
+        </div>
+        <div class="m">
+          <h5>"QA is a junior step to becoming a developer"</h5>
+          <p>A stepping-stone you grow out of.</p>
+          <span class="truth"><strong>Reality:</strong> QA has its own senior and principal tracks — automation, performance, security — with comparable pay to development.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="ba-def">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 3 · The BA</div>
+        <h2>Who the BA is</h2>
+      </div>
+      <p><strong>A BA discovers what users need, negotiates what the team will build, and writes it down clearly enough that developers — and AI — can build it.</strong></p>
+      <p>They live between two worlds. On one side are <em>users and stakeholders</em>: people with problems, preferences, politics, and opinions that often contradict each other. On the other side are <em>engineers</em>: people whose work demands precision, unambiguous input, and stable ground. A BA's job is to translate faithfully between these worlds — turning messy, contradictory human desires into clear, testable requirements the team can act on.</p>
+      <p>This is genuinely hard. It's not enough to listen and transcribe. You have to listen, interpret, challenge, negotiate, and write — all in a way that respects both sides of the conversation.</p>
+    </section>
+
+    <section class="chapter" id="ba-day">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 4 · The BA</div>
+        <h2>A day in the life</h2>
+      </div>
+      <p>Here's what a reasonably typical BA day looks like on a product team. Times are illustrative — the point is the <em>kind</em> of work, not the schedule.</p>
+      <div class="day-timeline">
+        <div class="blk">
+          <h5>☀️ Morning</h5>
+          <ul>
+            <li><span class="t">09:00</span>Stand-up with dev + QA. Clarify any questions raised yesterday.</li>
+            <li><span class="t">09:30</span>Meet a stakeholder — a product owner, customer, or support lead. Ask "what problem are we solving this quarter?"</li>
+            <li><span class="t">10:30</span>Pull recent support tickets and usage analytics. Look for patterns you can use as evidence.</li>
+            <li><span class="t">11:00</span>Draft a user story for a new feature. Send it to a developer for a feasibility check.</li>
+          </ul>
+        </div>
+        <div class="blk">
+          <h5>🌙 Afternoon</h5>
+          <ul>
+            <li><span class="t">13:00</span>Workshop with Design — walk through wireframes, flag edge cases and missing states.</li>
+            <li><span class="t">14:30</span>Update the spec document. Add acceptance criteria. Ping QA for a review.</li>
+            <li><span class="t">15:30</span>Sit in on a UAT session with a customer. Observe + take notes.</li>
+            <li><span class="t">16:30</span>File backlog items for the next sprint. Write a short release note for the feature shipping tomorrow.</li>
+          </ul>
+        </div>
+      </div>
+      <p>Notice the shape: <strong>conversations + writing + reviewing drafts</strong>. A BA doesn't write code, but they understand the product deeply enough to spec it — and to spot when what a stakeholder asked for doesn't actually solve the real problem.</p>
+    </section>
+
+    <section class="chapter" id="ba-artifacts">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 5 · The BA</div>
+        <h2>The artifacts a BA produces</h2>
+      </div>
+      <p>A BA is measured by the <strong>quality of the documents they produce</strong> — not by meeting attendance or word count. Here are the six you'll see most often. Later classes cover each in depth.</p>
+      <div class="grid-six">
+        <div class="it"><h6>User Story</h6><p>"As a &lt;who&gt;, I want &lt;what&gt; so &lt;why&gt;." One feature, one story, fits on a card.</p></div>
+        <div class="it"><h6>Acceptance Criteria</h6><p>Given / When / Then. Pass-fail rules that anchor both dev and QA work.</p></div>
+        <div class="it"><h6>SRS / Scope Document</h6><p>Long-form. Describes a whole product or module. 20–60 pages is normal.</p></div>
+        <div class="it"><h6>Process Flow (BPMN)</h6><p>Boxes and arrows. Swim lanes per actor. Shows how work moves through the system.</p></div>
+        <div class="it"><h6>Wireframe</h6><p>Low-fi UI sketch. Not visual design — a tool for agreeing where things go.</p></div>
+        <div class="it"><h6>Backlog Item</h6><p>Jira or Linear ticket. A single card with everything a dev needs to pick it up.</p></div>
+      </div>
+      <div class="callout">
+        <h4>A BA's "code" is documents</h4>
+        <p>If you imagine a developer's output as lines of code that ship, a BA's output is paragraphs of specification that ship. The quality standards are just as high — precision matters, and ambiguity has real costs downstream.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="ba-skills">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 6 · The BA</div>
+        <h2>Skills &amp; career shape</h2>
+      </div>
+
+      <h3 style="color:var(--indigo); font-size:1.1rem">The craft</h3>
+      <ul>
+        <li><strong>Listening</strong> — hearing what stakeholders mean, not just what they say.</li>
+        <li><strong>Asking why</strong> — five times if you need to. The first answer is rarely the real one.</li>
+        <li><strong>Writing clearly</strong> — short sentences. Precise verbs. No hedging.</li>
+        <li><strong>Reading critically</strong> — spotting gaps in specs before they reach dev. (This is our next class.)</li>
+        <li><strong>Drawing to think</strong> — wireframes and flows are thinking tools, not art.</li>
+      </ul>
+
+      <h3 style="color:var(--indigo); font-size:1.1rem; margin-top:1.2rem">The edge — what makes a <em>great</em> BA</h3>
+      <ul>
+        <li><strong>Systems thinking</strong> — seeing how a change in one screen affects three others.</li>
+        <li><strong>Saying no</strong> — protecting scope from stakeholder wishlists.</li>
+        <li><strong>Data literacy</strong> — reading ERDs, API contracts, usage funnels.</li>
+        <li><strong>Negotiation</strong> — trading off time, scope, and quality openly and honestly.</li>
+        <li><strong>Empathy for dev &amp; QA</strong> — respecting their time and constraints.</li>
+      </ul>
+
+      <h3 style="color:var(--indigo); font-size:1.1rem; margin-top:1.2rem">Where BAs come from</h3>
+      <ul>
+        <li>From <strong>customer support</strong> — they already know user pain.</li>
+        <li>From <strong>domain work</strong> — banking, healthcare, telecom backgrounds bring deep context.</li>
+        <li>From <strong>QA</strong> — already trained in reading specs and spotting edge cases.</li>
+        <li>From <strong>Dev</strong> — engineers who fall in love with product work.</li>
+        <li>Fresh grads with strong writing and analytical skills.</li>
+      </ul>
+
+      <h3 style="color:var(--indigo); font-size:1.1rem; margin-top:1.2rem">Where BAs go</h3>
+      <ul>
+        <li><strong>Senior / Lead BA</strong> — owns a whole product area.</li>
+        <li><strong>Product Owner / Product Manager</strong> — owns the "why" in addition to the "what".</li>
+        <li><strong>Solution Architect</strong> — pairs tightly with engineering leads.</li>
+        <li><strong>Consultant</strong> — drops into client projects to spec them out.</li>
+        <li><strong>Head of Product / CPO</strong> — some BAs climb to the top of product orgs.</li>
+      </ul>
+    </section>
+
+    <section class="chapter" id="qa-def">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 7 · The QA</div>
+        <h2>Who the QA is</h2>
+      </div>
+      <p><strong>A QA designs tests from a spec, runs them manually or automated, reports what fails clearly, and argues for quality when schedule pressure grows.</strong></p>
+      <p>Their superpower is <em>productive distrust</em>. A good QA walks into every feature assuming something is broken and needs their tools to prove otherwise — one scenario at a time. That's not cynicism; it's discipline. Software is complicated, humans make mistakes, and every unchecked assumption is a future bug.</p>
+      <p>If a BA's job is making sure we build the <em>right</em> thing, a QA's job is making sure we build the thing <em>right</em>. Both are necessary. Neither is sufficient alone.</p>
+    </section>
+
+    <section class="chapter" id="qa-day">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 8 · The QA</div>
+        <h2>A day in the life</h2>
+      </div>
+      <div class="day-timeline">
+        <div class="blk">
+          <h5>☀️ Morning</h5>
+          <ul>
+            <li><span class="t">09:00</span>Stand-up with dev + BA. Check overnight automation results — flag any new failures.</li>
+            <li><span class="t">09:30</span>Read a new user story the BA drafted. Write back acceptance-criteria questions ("what happens if there are 10 already?").</li>
+            <li><span class="t">10:30</span>Design test cases for a story entering dev tomorrow — happy path, three edge cases, a couple of negative flows.</li>
+            <li><span class="t">11:30</span>Pull a build from a feature branch. Run exploratory tests — no script, just curiosity.</li>
+          </ul>
+        </div>
+        <div class="blk">
+          <h5>🌙 Afternoon</h5>
+          <ul>
+            <li><span class="t">13:00</span>File a bug report from the morning's exploratory session. Attach screenshots, clean steps, severity.</li>
+            <li><span class="t">14:00</span>Write a Playwright automation test for a regression found last week — so it can't escape again.</li>
+            <li><span class="t">15:00</span>Pair with a developer to reproduce a tricky bug from production.</li>
+            <li><span class="t">16:00</span>Run the regression suite before release. Give a thumbs-up or file a blocker.</li>
+          </ul>
+        </div>
+      </div>
+      <p>Notice the shape: <strong>reading specs → designing tests → running tests → writing up findings</strong>. The clicking part happens, but it's half of the day at most — and increasingly, it's automated.</p>
+    </section>
+
+    <section class="chapter" id="qa-artifacts">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 9 · The QA</div>
+        <h2>The artifacts a QA produces</h2>
+      </div>
+      <p>Like a BA, a QA is measured by the quality of what they produce. Six staples:</p>
+      <div class="grid-six qa">
+        <div class="it"><h6>Test Case</h6><p>Precondition → Steps → Expected result. One per scenario. Written once, run many times.</p></div>
+        <div class="it"><h6>Bug Report</h6><p>Title, steps, expected vs actual, environment, severity, priority. A dev should reproduce it on first read.</p></div>
+        <div class="it"><h6>Test Plan</h6><p>"For this release — what do we test, how, with what coverage, and when do we stop?"</p></div>
+        <div class="it"><h6>Automation Script</h6><p>Playwright / Cypress / Selenium code. Runs on every commit. Catches regressions cheaply.</p></div>
+        <div class="it"><h6>Traceability Matrix</h6><p>Requirement → tests that cover it. Proves nothing was forgotten.</p></div>
+        <div class="it"><h6>Release Sign-off</h6><p>"Here's what's tested, what's flaky, what's broken." Basis for go/no-go calls.</p></div>
+      </div>
+    </section>
+
+    <section class="chapter" id="qa-skills">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 10 · The QA</div>
+        <h2>Skills &amp; career shape</h2>
+      </div>
+
+      <h3 style="color:var(--indigo); font-size:1.1rem">The craft</h3>
+      <ul>
+        <li><strong>Destructive curiosity</strong> — "what if I do the wrong thing?"</li>
+        <li><strong>Reading specs</strong> — same skill as a BA, used in the opposite direction.</li>
+        <li><strong>Test design techniques</strong> — boundary values, equivalence partitioning, decision tables, state transitions.</li>
+        <li><strong>Clear writing</strong> — a bug report that lands the first time.</li>
+        <li><strong>Patience</strong> — regression, retest, retest again.</li>
+      </ul>
+
+      <h3 style="color:var(--indigo); font-size:1.1rem; margin-top:1.2rem">The edge — what makes a <em>great</em> QA</h3>
+      <ul>
+        <li><strong>Coding</strong> — at minimum, JavaScript/TypeScript for Playwright. Senior QAs code comfortably.</li>
+        <li><strong>API &amp; DB fluency</strong> — testing the back-end, not just the visible UI.</li>
+        <li><strong>Automation architecture</strong> — tests that don't flake or rot over time.</li>
+        <li><strong>Security &amp; performance instincts</strong> — covering non-functional angles as a matter of routine.</li>
+        <li><strong>Courage to push back</strong> — "this shouldn't ship yet" and a calm explanation why.</li>
+      </ul>
+
+      <h3 style="color:var(--indigo); font-size:1.1rem; margin-top:1.2rem">Where QAs come from</h3>
+      <ul>
+        <li>From <strong>support / user-ops</strong> — already sees what breaks in the wild.</li>
+        <li>From <strong>dev</strong> — some engineers love the quality craft.</li>
+        <li>From <strong>BA</strong> — strong spec-reading turned toward verification.</li>
+        <li>Fresh grads with attention to detail and basic scripting ability.</li>
+      </ul>
+
+      <h3 style="color:var(--indigo); font-size:1.1rem; margin-top:1.2rem">Where QAs go</h3>
+      <ul>
+        <li><strong>SDET</strong> — Software Dev Engineer in Test. Strong coder in a QA title.</li>
+        <li><strong>Automation Lead</strong> — owns the test pyramid and CI strategy.</li>
+        <li><strong>Performance / Security QA</strong> — deep specialists.</li>
+        <li><strong>QA Manager / Head of Quality</strong> — culture, strategy, team.</li>
+        <li><strong>DevOps / SRE</strong> — quality concerns extended into reliability engineering.</li>
+      </ul>
+    </section>
+
+    <section class="chapter" id="meet">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 11</div>
+        <h2>Where BA and QA meet</h2>
+      </div>
+      <p>Every feature passes through a chain of hands. Each handoff is a translation, and every translation is a chance for meaning to be lost. BA sits near the start; QA sits near the end.</p>
+      <div class="chain">
+        <div class="n"><strong>👤 Stakeholder</strong>"We need a thing."</div>
+        <div class="n"><strong>🧭 PM</strong>"Do we, and why now?"</div>
+        <div class="n ba"><strong>📋 BA</strong>Spec · AC · wireframes</div>
+        <div class="n"><strong>🎨 Designer</strong>Visual &amp; flow</div>
+        <div class="n"><strong>💻 Developer</strong>Builds from spec</div>
+        <div class="n qa"><strong>🔍 QA</strong>Verifies against AC</div>
+        <div class="n"><strong>🚀 Release</strong>Users</div>
+      </div>
+      <p>Despite being far apart in the chain, BA and QA share a lot:</p>
+      <ul>
+        <li>Both <strong>read specs critically</strong> and spot gaps before they become bugs.</li>
+        <li>Both <strong>write testable acceptance criteria</strong> — BAs author them, QAs extend them into full test cases.</li>
+        <li>Both <strong>protect the user</strong> — BA by making sure we build the right thing, QA by making sure it works.</li>
+        <li>Both have to <strong>say "not yet"</strong> when things aren't ready — and say it with evidence.</li>
+      </ul>
+      <div class="callout indigo">
+        <h4>The AC bridge</h4>
+        <p>The single strongest overlap is <strong>acceptance criteria</strong>. A well-written AC from a BA becomes the first draft of a QA's test case. That handoff is why Classes 4 and onwards in this combined block will spend serious time on AC quality.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="ai">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 12</div>
+        <h2>How AI changes both roles</h2>
+      </div>
+      <p>AI hasn't replaced either role. It has <em>amplified</em> them — and raised the bar for what competent work looks like. In both cases, the typing part gets faster and the judgment part gets more valuable.</p>
+      <div class="ai-cols">
+        <div class="col">
+          <h5>📋 BA in the AI era</h5>
+          <div class="lbl">What gets easier</div>
+          <ul>
+            <li>Drafting user stories from a rough description.</li>
+            <li>Generating variations of acceptance criteria.</li>
+            <li>Turning a meeting transcript into a spec draft.</li>
+            <li>Cross-checking a long spec for internal contradictions.</li>
+          </ul>
+          <div class="lbl">What gets harder (higher bar)</div>
+          <ul>
+            <li>Spec <strong>clarity</strong> — AI generates code from it, so ambiguity is immediately expensive.</li>
+            <li><strong>Review</strong> — catching what AI got wrong in drafts it produced.</li>
+            <li><strong>Judgment</strong> — knowing which stories matter and which are noise.</li>
+          </ul>
+        </div>
+        <div class="col qa">
+          <h5>🔍 QA in the AI era</h5>
+          <div class="lbl">What gets easier</div>
+          <ul>
+            <li>Generating baseline test cases from a spec.</li>
+            <li>Writing Playwright automation scripts faster.</li>
+            <li>Summarising bug logs and error traces.</li>
+            <li>Suggesting edge cases you might miss.</li>
+          </ul>
+          <div class="lbl">What gets harder (higher bar)</div>
+          <ul>
+            <li><strong>Test design intuition</strong> — deciding <em>what</em> to test, not how to type it.</li>
+            <li><strong>Exploratory testing</strong> — the creative part AI is worst at.</li>
+            <li><strong>Reviewing AI-generated tests</strong> — many will be wrong, trivial, or duplicate existing coverage.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout amber">
+        <h4>The shift</h4>
+        <p>In both roles, <strong>typing speed matters less and thinking quality matters more</strong>. The people who thrive will be the ones who can judge AI output — not the ones who are fastest at prompting it.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="exercise">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 13</div>
+        <h2>Exercise recap — Who does what?</h2>
+      </div>
+      <p>In class, you matched ten tasks to roles. Here's the reference answer sheet. "Primary owner" marked ✓; common contributors marked with a small dot. Real teams vary, so if you disagreed with one or two, you weren't wrong — you were noticing the fuzziness that exists in real life.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Task</th><th>PM</th><th>BA</th><th>UX</th><th>Dev</th><th>QA</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1. Interview a customer about why they stopped using the app</td><td>·</td><td><span class="own">✓</span></td><td>·</td><td></td><td></td></tr>
+            <tr><td>2. Decide if the feature ships in April or June</td><td><span class="own pm">✓</span></td><td>·</td><td></td><td></td><td></td></tr>
+            <tr><td>3. Write acceptance criteria for a "forgot password" flow</td><td></td><td><span class="own">✓</span></td><td></td><td></td><td>·</td></tr>
+            <tr><td>4. Reproduce a bug that only happens on iPhone 12 in Dzongkha</td><td></td><td></td><td></td><td>·</td><td><span class="own qa">✓</span></td></tr>
+            <tr><td>5. Draw the screen where users save favourites</td><td></td><td>·</td><td><span class="own ux">✓</span></td><td></td><td></td></tr>
+            <tr><td>6. Write the React component for the favourites list</td><td></td><td></td><td></td><td><span class="own dev">✓</span></td><td></td></tr>
+            <tr><td>7. Run regression tests before release</td><td></td><td></td><td></td><td></td><td><span class="own qa">✓</span></td></tr>
+            <tr><td>8. Decide what "out of scope" for v1 means</td><td>·</td><td><span class="own">✓</span></td><td></td><td></td><td></td></tr>
+            <tr><td>9. Draw a BPMN of the leave-approval process</td><td></td><td><span class="own">✓</span></td><td></td><td></td><td></td></tr>
+            <tr><td>10. Write a Playwright script that logs in and makes a payment</td><td></td><td></td><td></td><td>·</td><td><span class="own qa">✓</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="color:var(--muted); font-size:0.93rem; font-style:italic">The job titles are a guide, not a wall. A small team might have one person wearing BA + PM hats; a big team might have a specialist owning each of these. The <em>activities</em> don't change — just who does them.</p>
+    </section>
+
+    <section class="chapter" id="takeaways">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Takeaways</div>
+        <h2>Key points to carry forward</h2>
+      </div>
+      <div class="summary">
+        <h4>What we covered today</h4>
+        <ul>
+          <li>A <strong>BA</strong> makes sure we build <em>the right thing</em> — discovers user needs, writes and negotiates specs.</li>
+          <li>A <strong>QA</strong> makes sure we build the thing <em>right</em> — designs and runs tests, protects release quality.</li>
+          <li>Both roles start <em>earlier</em> in a feature's life than most people assume.</li>
+          <li>Both roles are measured by the <strong>quality of their artifacts</strong>, not hours or clicks.</li>
+          <li>Both roles share spec-reading, AC writing, and user-protection as core skills.</li>
+          <li>AI amplifies both — typing matters less, judgment matters more.</li>
+          <li>The big one: <strong>BA is not finance. QA is not clicking. Both are thinking jobs.</strong></li>
+        </ul>
+      </div>
+      <p style="margin-top:1.5rem">Next class: <strong>Reading Requirements Critically</strong> — the one skill every BA and every QA uses every single day.</p>
+    </section>
+
+  </div>
+
+  <footer>
+    <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE">
+    SELISE × Pelsung · BA + QA Combined · Class 01<br>
+    Role Deep-Dive · BA and QA in Software
+  </footer>
+
+</body>
+</html>

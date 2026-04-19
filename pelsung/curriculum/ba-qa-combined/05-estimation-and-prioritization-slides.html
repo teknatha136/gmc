@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Estimation &amp; Prioritization Basics — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      .moscow-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:0.8rem; width:100%; max-width:1150px; }
+      @media (max-width: 900px){ .moscow-grid { grid-template-columns: 1fr 1fr; } }
+      @media (max-width: 560px){ .moscow-grid { grid-template-columns: 1fr; } }
+      .ms { background:white; border:1px solid var(--border); border-top:5px solid var(--blue); border-radius:12px; padding:0.9rem 1.1rem; display:flex; flex-direction:column; gap:0.3rem; }
+      .ms .letter { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:2.4rem; font-weight:700; line-height:1; }
+      .ms h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; margin-top:0.2rem; }
+      .ms p { font-size:0.88rem; color:var(--text); line-height:1.55; }
+      .ms .eg { background:var(--bg); border-radius:6px; padding:0.5rem 0.7rem; font-size:0.8rem; color:var(--muted); margin-top:0.5rem; font-style:italic; font-family:'Courier New',monospace; }
+      .ms.s { border-top-color:#247EC1; }
+      .ms.s .letter { color:#247EC1; }
+      .ms.c { border-top-color:#4796D1; }
+      .ms.c .letter { color:#4796D1; }
+      .ms.w { border-top-color:var(--muted); }
+      .ms.w .letter { color:var(--muted); }
+
+      .rice-eq { display:flex; align-items:center; justify-content:center; gap:0.6rem; flex-wrap:wrap; width:100%; margin:0.8rem 0; }
+      .rice-eq .term { background:white; border:1px solid var(--border); border-top:3px solid var(--blue); border-radius:8px; padding:0.6rem 0.9rem; min-width:100px; text-align:center; }
+      .rice-eq .term .l { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--blue); font-size:1.5rem; font-weight:700; line-height:1; }
+      .rice-eq .term .n { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.85rem; margin-top:0.2rem; }
+      .rice-eq .op { color:var(--faint); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.8rem; font-weight:700; }
+      .rice-eq .divider { position:relative; display:flex; flex-direction:column; align-items:center; padding:0 0.3rem; }
+
+      .rice-tbl { width:100%; max-width:1100px; background:white; border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+      .rice-tbl table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+      .rice-tbl th { background:var(--bg); padding:0.6rem 0.8rem; text-align:left; color:var(--muted); font-size:0.78rem; letter-spacing:0.05em; text-transform:uppercase; font-weight:700; border-bottom:1px solid var(--border); }
+      .rice-tbl td { padding:0.55rem 0.8rem; border-bottom:1px solid var(--border); color:var(--text); }
+      .rice-tbl td.n { text-align:center; font-family:'Courier New',monospace; color:var(--text); }
+      .rice-tbl td.s { text-align:center; font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; color:var(--blue); }
+      .rice-tbl tr.top td { background:#EAF3FA; }
+      .rice-tbl tr:last-child td { border-bottom:none; }
+
+      .sizes { display:flex; justify-content:center; gap:0.4rem; flex-wrap:wrap; margin:0.6rem 0; }
+      .size { background:white; border:1px solid var(--border); border-top:3px solid var(--blue); border-radius:50%; width:64px; height:64px; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+      .size .v { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.4rem; color:var(--indigo); font-weight:700; line-height:1; }
+      .size .l { font-size:0.7rem; color:var(--muted); margin-top:0.1rem; }
+
+      .tshirt { display:flex; justify-content:center; gap:0.6rem; flex-wrap:wrap; margin:0.6rem 0; }
+      .ts { background:white; border:1px solid var(--border); border-top:3px solid var(--amber); border-radius:10px; padding:0.5rem 0.9rem; min-width:80px; text-align:center; }
+      .ts .v { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-size:1rem; font-weight:600; line-height:1.2; }
+      .ts .n { font-size:0.72rem; color:var(--muted); margin-top:0.2rem; }
+
+      .trap-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:0.8rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px){ .trap-grid { grid-template-columns: 1fr; } }
+      .trap { background:white; border:1px solid var(--border); border-left:4px solid var(--red); border-radius:10px; padding:0.8rem 1.1rem; }
+      .trap h6 { color:var(--red); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.98rem; margin-bottom:0.25rem; }
+      .trap p { font-size:0.88rem; color:var(--text); line-height:1.55; }
+      .trap .fix { display:block; margin-top:0.4rem; padding-top:0.4rem; border-top:1px dashed var(--border); color:var(--muted); font-size:0.82rem; }
+      .trap .fix strong { color:#3D7A3D; }
+
+      .triangle { position:relative; max-width:460px; width:100%; aspect-ratio: 1/0.85; margin:0 auto; }
+      .triangle svg { width:100%; height:100%; }
+
+      .mvp-steps { display:grid; grid-template-columns: repeat(3, 1fr); gap:0.8rem; max-width:1050px; width:100%; }
+      @media (max-width: 820px){ .mvp-steps { grid-template-columns: 1fr; } }
+      .mvp-step { background:white; border:1px solid var(--border); border-top:3px solid var(--blue); border-radius:10px; padding:0.8rem 1rem; }
+      .mvp-step h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.25rem; }
+      .mvp-step p { font-size:0.88rem; color:var(--text); line-height:1.55; }
+      .mvp-step .eg { font-size:0.8rem; color:var(--muted); font-style:italic; margin-top:0.3rem; }
+
+      .ex-feature { background:white; border:1px solid var(--border); border-radius:10px; padding:0.7rem 1rem; margin-bottom:0.5rem; }
+      .ex-feature h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.2rem; }
+      .ex-feature p { font-size:0.85rem; color:var(--text); line-height:1.55; }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>BA + QA Combined · Class 05</div></div>
+          <h1 class="display" style="color: var(--text)">
+            <span style="color: var(--indigo)">Estimation &amp;</span><br />
+            <span style="color: var(--blue)">Prioritization</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted)">Too much to build, too little time. How teams decide what ships, when.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">MoSCoW</span>
+            <span class="class-tag tag-blue">RICE</span>
+            <span class="class-tag tag-blue">Story Points</span>
+            <span class="class-tag tag-blue">MVP</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 AGENDA -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 780px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem"><h2 class="heading">Session Journey · ~50 min</h2></div>
+          <div class="agenda-row" onclick="goTo(2)"><span class="ar-dot" style="background: var(--red)"></span><span class="ar-label">🎯 Too much, too little time</span><span class="ar-badge" style="background:#FEE9EC;color:var(--red)">5 min</span></div>
+          <div class="agenda-row" onclick="goTo(4)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🧭 Prioritization · MoSCoW</span><span class="ar-badge" style="background:#E6F0F8;color:var(--indigo)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(6)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🧮 Prioritization · RICE</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(9)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🎯 MVP thinking</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">5 min</span></div>
+          <div class="agenda-row" onclick="goTo(11)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">📏 Estimation · story points &amp; t-shirts</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(13)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">⚠️ Common estimation traps</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">5 min</span></div>
+          <div class="agenda-row" onclick="goTo(15)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🧪 Exercise · estimate &amp; prioritize 6 features</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(17)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🎯 Wrap-up</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">3 min</span></div>
+        </div>
+      </div>
+
+      <!-- 3 HOOK -->
+      <div class="slide bg-dark" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> Hook</div>
+        <div class="center" style="max-width: 840px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎤 The permanent condition</div>
+          <p class="disc-prompt" style="font-size:1.4rem">There is <span style="color:var(--amber)">always</span> more to build<br>than you have time for.<br><br>Always.</p>
+          <p style="color: rgba(255,255,255,0.7); font-size: 1rem; margin-top: 1.5rem; line-height:1.7">
+            Every project, every sprint, every product team. The question is never "can we do everything?"<br>
+            It's <strong style="color:var(--amber)">"what should we do <em>first</em>, and how long will it take?"</strong>
+          </p>
+          <p style="color: rgba(255,255,255,0.5); font-size: 0.95rem; margin-top: 1.5rem">That's prioritization + estimation. Today's 50 minutes.</p>
+        </div>
+      </div>
+
+      <!-- 4 SECTION: MOSCOW -->
+      <div class="slide bg-indigo" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part One</div>
+          <h1 class="display" style="color: white">MoSCoW</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">The simplest prioritization method. Four buckets. Works for stakeholders.</p>
+        </div>
+        <div class="section-num" style="color: white">01</div>
+      </div>
+
+      <!-- 5 MOSCOW -->
+      <div class="slide accent-blue bg-subtle" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span> The four buckets</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Every feature goes into one of four categories</h2><p class="body-md" style="color:var(--muted); max-width:820px">The capital letters spell MoSCoW — the little <em>o</em>'s are just padding to make it pronounceable.</p></div>
+          <div class="moscow-grid">
+            <div class="ms">
+              <div class="letter">M</div>
+              <h5>Must-have</h5>
+              <p>Without it, the release <strong>fails</strong>. Literally unshippable without this.</p>
+              <div class="eg">Login. Payment confirmation. Legal compliance.</div>
+            </div>
+            <div class="ms s">
+              <div class="letter">S</div>
+              <h5>Should-have</h5>
+              <p>Important but release <em>can</em> ship without it. Pain but not fatal.</p>
+              <div class="eg">Password reset. Transaction history filter. Nice error messages.</div>
+            </div>
+            <div class="ms c">
+              <div class="letter">C</div>
+              <h5>Could-have</h5>
+              <p>Would be nice. Add if there's budget. No one will complain if it's missing.</p>
+              <div class="eg">Dark mode. Bulk actions. Extra sort options.</div>
+            </div>
+            <div class="ms w">
+              <div class="letter">W</div>
+              <h5>Won't-have</h5>
+              <p>Explicitly <em>not</em> in this release. Important to say out loud — prevents scope creep.</p>
+              <div class="eg">Offline mode (v2). Admin analytics (v3). Sharing (later).</div>
+            </div>
+          </div>
+          <div class="card" style="max-width:900px; background:white; border-left:4px solid var(--amber); padding:0.9rem 1.2rem;">
+            <h4 style="color:var(--indigo); margin-bottom:0.3rem; font-size:1rem">The honesty test</h4>
+            <p style="font-size:0.92rem; color:var(--text); line-height:1.65">A real MoSCoW list has <strong>at most 60%</strong> of features marked Must-have. If everything is a Must, you haven't prioritized — you've labelled.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 SECTION: RICE -->
+      <div class="slide bg-blue" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Two</div>
+          <h1 class="display" style="color: white">RICE</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">When you need numbers, not labels.</p>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- 7 RICE FORMULA -->
+      <div class="slide accent-blue bg-subtle" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> The formula</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">A score = (impact × reach × confidence) ÷ effort</h2></div>
+          <div class="rice-eq">
+            <div class="term"><div class="l">R</div><div class="n">Reach<br><span style="font-weight:400; color:var(--muted); font-size:0.7rem">people/month</span></div></div>
+            <div class="op">×</div>
+            <div class="term"><div class="l">I</div><div class="n">Impact<br><span style="font-weight:400; color:var(--muted); font-size:0.7rem">0.25 · 0.5 · 1 · 2 · 3</span></div></div>
+            <div class="op">×</div>
+            <div class="term"><div class="l">C</div><div class="n">Confidence<br><span style="font-weight:400; color:var(--muted); font-size:0.7rem">50% · 80% · 100%</span></div></div>
+            <div class="op">÷</div>
+            <div class="term" style="border-top-color:var(--amber)"><div class="l" style="color:var(--amber)">E</div><div class="n">Effort<br><span style="font-weight:400; color:var(--muted); font-size:0.7rem">person-months</span></div></div>
+          </div>
+          <div class="cols-2" style="max-width:1100px; gap:1rem">
+            <div class="card" style="border-top:3px solid var(--blue)">
+              <h4 style="color:var(--blue)">What each means</h4>
+              <ul style="font-size:0.9rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li><strong>Reach</strong> — how many people does this affect per month?</li>
+                <li><strong>Impact</strong> — how big is the effect per person? (tiny = 0.25 ... massive = 3)</li>
+                <li><strong>Confidence</strong> — how sure are you of the first three? (50% = guess, 100% = we have data)</li>
+                <li><strong>Effort</strong> — how many person-months to build?</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--amber)">
+              <h4 style="color:var(--amber)">Why it's useful</h4>
+              <ul style="font-size:0.9rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li>Forces stakeholders to be <strong>honest</strong> about small reach features</li>
+                <li>Penalises expensive features unless impact justifies it</li>
+                <li>Confidence column exposes assumption-driven prioritization</li>
+                <li>Scores are <em>relative</em> — useful for comparing, not absolute truth</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8 RICE EXAMPLE -->
+      <div class="slide accent-blue" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> RICE in action</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Four features competing for one sprint</h2></div>
+          <div class="rice-tbl">
+            <table>
+              <thead>
+                <tr><th>Feature</th><th style="text-align:center">Reach<br>(people/mo)</th><th style="text-align:center">Impact<br>(0.25–3)</th><th style="text-align:center">Confidence</th><th style="text-align:center">Effort<br>(months)</th><th style="text-align:center">RICE Score</th></tr>
+              </thead>
+              <tbody>
+                <tr class="top"><td>Biller favourites</td><td class="n">8,000</td><td class="n">2</td><td class="n">100%</td><td class="n">1</td><td class="s">16,000</td></tr>
+                <tr><td>Bank statement PDF export</td><td class="n">3,000</td><td class="n">1</td><td class="n">100%</td><td class="n">1.5</td><td class="s">2,000</td></tr>
+                <tr><td>Dark mode</td><td class="n">12,000</td><td class="n">0.5</td><td class="n">80%</td><td class="n">2</td><td class="s">2,400</td></tr>
+                <tr><td>Split bill with friends</td><td class="n">2,000</td><td class="n">3</td><td class="n">50%</td><td class="n">3</td><td class="s">1,000</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px"><strong>Biller favourites wins</strong> — high reach, proven impact, known solution, low effort. Not because it's the flashiest — because the math says so.</p>
+        </div>
+      </div>
+
+      <!-- 9 SECTION: MVP -->
+      <div class="slide bg-blue" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Three</div>
+          <h1 class="display" style="color: white">MVP Thinking</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">The smallest useful thing you can ship.</p>
+        </div>
+        <div class="section-num" style="color: white">03</div>
+      </div>
+
+      <!-- 10 MVP -->
+      <div class="slide accent-blue bg-subtle" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> MVP is not a broken product</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">MVP = Minimum <em>Viable</em> Product</h2><p class="body-md" style="color:var(--muted); max-width:820px">Minimum — the least you can build. Viable — it actually works for the core use case. One of those words often gets dropped.</p></div>
+          <div class="mvp-steps">
+            <div class="mvp-step" style="border-top-color:var(--red)">
+              <h6>❌ Too minimum</h6>
+              <p>You shipped a broken, unfinished thing. Users bounce. You learn nothing.</p>
+              <div class="eg">"Users can 'save' — but favourites never actually show up yet."</div>
+            </div>
+            <div class="mvp-step" style="border-top-color:var(--green)">
+              <h6>✅ Right-sized MVP</h6>
+              <p>Smallest scope that lets real users complete the core action and give signal back.</p>
+              <div class="eg">"Save a biller. See it on home. Tap to pre-fill. That's it."</div>
+            </div>
+            <div class="mvp-step" style="border-top-color:var(--faint)">
+              <h6>😬 Too maximum</h6>
+              <p>You built everything. Took 6 months. Half of it wasn't used.</p>
+              <div class="eg">"Save, categorise, share, auto-pay, export to Excel, notify family…"</div>
+            </div>
+          </div>
+          <div class="card" style="max-width:900px; background:white; border-left:4px solid var(--amber); padding:0.9rem 1.2rem;">
+            <h4 style="color:var(--indigo); margin-bottom:0.3rem; font-size:1rem">The one-sentence test</h4>
+            <p style="font-size:0.92rem; color:var(--text); line-height:1.65">If you can't describe your MVP in <strong>one sentence</strong>, it's not an MVP — it's a wish list. Cut until it fits in a sentence.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11 SECTION: ESTIMATION -->
+      <div class="slide bg-indigo" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Four</div>
+          <h1 class="display" style="color: white">Estimation</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">How long will this take?</p>
+        </div>
+        <div class="section-num" style="color: white">04</div>
+      </div>
+
+      <!-- 12 RELATIVE SIZING -->
+      <div class="slide accent-blue bg-subtle" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> Relative sizing</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Humans are bad at absolute estimates — but good at comparisons</h2><p class="body-md" style="color:var(--muted); max-width:900px">"Is this bigger or smaller than that thing we did last month?" is much easier to answer accurately than "how many hours will this take?"</p></div>
+
+          <h3 style="color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem">Story points · Fibonacci-like scale</h3>
+          <div class="sizes">
+            <div class="size"><div class="v">1</div><div class="l">tiny</div></div>
+            <div class="size"><div class="v">2</div><div class="l">small</div></div>
+            <div class="size"><div class="v">3</div><div class="l">small-med</div></div>
+            <div class="size"><div class="v">5</div><div class="l">medium</div></div>
+            <div class="size"><div class="v">8</div><div class="l">large</div></div>
+            <div class="size"><div class="v">13</div><div class="l">very large</div></div>
+            <div class="size" style="border-top-color:var(--red)"><div class="v" style="color:var(--red)">20+</div><div class="l">break it down</div></div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-size:0.92rem; font-style:italic">Gaps widen as size grows — because the bigger a task, the more uncertain the estimate.</p>
+
+          <h3 style="color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-top:0.5rem">T-shirt sizing · for stakeholders</h3>
+          <div class="tshirt">
+            <div class="ts"><div class="v">XS</div><div class="n">a few hours</div></div>
+            <div class="ts"><div class="v">S</div><div class="n">a day or two</div></div>
+            <div class="ts"><div class="v">M</div><div class="n">a week</div></div>
+            <div class="ts"><div class="v">L</div><div class="n">2–3 weeks</div></div>
+            <div class="ts"><div class="v">XL</div><div class="n">a month+</div></div>
+            <div class="ts" style="border-top-color:var(--red)"><div class="v" style="color:var(--red)">XXL</div><div class="n">unknown · spike it</div></div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-size:0.92rem; font-style:italic">Use t-shirts when talking to non-technical stakeholders. Use story points with the dev team.</p>
+        </div>
+      </div>
+
+      <!-- 13 SECTION: TRAPS -->
+      <div class="slide bg-blue" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Five</div>
+          <h1 class="display" style="color: white">Estimation Traps</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">The five ways estimates go wrong.</p>
+        </div>
+        <div class="section-num" style="color: white">05</div>
+      </div>
+
+      <!-- 14 TRAPS -->
+      <div class="slide accent-blue bg-subtle" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> Common estimation traps</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">If you've ever been off by 2× or more, it was probably one of these</h2></div>
+          <div class="trap-grid">
+            <div class="trap">
+              <h6>🎯 Anchor bias</h6>
+              <p>First person to say a number sets everyone else's expectation. "I think 2 days" — now nobody will say 7.</p>
+              <span class="fix"><strong>Fix:</strong> write estimates privately first, reveal simultaneously (planning poker).</span>
+            </div>
+            <div class="trap">
+              <h6>😎 Happy-path blindness</h6>
+              <p>You estimated the main flow and forgot: error handling, edge cases, code review, QA, bug fixes, deployment.</p>
+              <span class="fix"><strong>Fix:</strong> when estimating, ask "does this include testing, review, and documentation?"</span>
+            </div>
+            <div class="trap">
+              <h6>🌫️ Dependency blindness</h6>
+              <p>"It's 3 days" — yes, but it depends on an API that doesn't exist yet + a design that hasn't been reviewed.</p>
+              <span class="fix"><strong>Fix:</strong> list dependencies explicitly. Can't start without them — can't estimate either.</span>
+            </div>
+            <div class="trap">
+              <h6>🧠 Optimism bias</h6>
+              <p>You estimated assuming everything goes right. Nothing ever goes 100% right.</p>
+              <span class="fix"><strong>Fix:</strong> look at your last 5 similar tasks. Use your actual velocity, not your hope.</span>
+            </div>
+            <div class="trap">
+              <h6>💢 Pressure to please</h6>
+              <p>Stakeholder says "we need this by Friday." Team says "sure, Friday." It arrives three Fridays later.</p>
+              <span class="fix"><strong>Fix:</strong> separate "estimate" from "commitment." Estimates are honest; commitments are negotiated.</span>
+            </div>
+            <div class="trap">
+              <h6>📦 Single-number fallacy</h6>
+              <p>"It'll take 5 days" — treated as truth. Reality is a range, not a point.</p>
+              <span class="fix"><strong>Fix:</strong> estimate ranges ("3 to 7 days") or confidence intervals.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 15 SECTION: EXERCISE -->
+      <div class="slide bg-blue" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Six · Hands-on</div>
+          <h1 class="display" style="color: white">6 Features,<br>1 Sprint</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">You have 10 story points of dev capacity. Which ones ship?</p>
+        </div>
+        <div class="section-num" style="color: white">06</div>
+      </div>
+
+      <!-- 16 EXERCISE -->
+      <div class="slide accent-blue bg-subtle" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span> The six features</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Prioritize (MoSCoW) + estimate (points) + pick your sprint</h2></div>
+          <div style="max-width:980px; width:100%">
+            <div class="ex-feature"><h6>1. Login with phone + MPIN</h6><p>Required to use the app at all. Well-understood pattern.</p></div>
+            <div class="ex-feature"><h6>2. Biller favourites</h6><p>High user demand. Uses existing biller data model. Small UI addition.</p></div>
+            <div class="ex-feature"><h6>3. PDF export of bank statement</h6><p>Enterprise users ask for it. Needs a new PDF library. Moderate new code.</p></div>
+            <div class="ex-feature"><h6>4. Dark mode</h6><p>Widespread user request. Requires rethinking every colour in the app.</p></div>
+            <div class="ex-feature"><h6>5. Support for Dzongkha in notes field</h6><p>Currently broken — Dzongkha characters corrupt on save. Legal/compliance concern.</p></div>
+            <div class="ex-feature"><h6>6. In-app chat with customer support</h6><p>Support team would love it. No integration exists with current helpdesk. Large effort.</p></div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:800px"><strong>Your task:</strong> assign each a MoSCoW tier and a rough story-point size (1, 2, 3, 5, 8, 13). <strong>Pick the ones that fit 10 points of Must/Should.</strong> 5 min individual → 2 min pair discussion → class debrief.</p>
+        </div>
+      </div>
+
+      <!-- 17 WRAP -->
+      <div class="slide bg-dark" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span> Wrap-up</div>
+        <div class="center" style="max-width: 820px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key Takeaways</div>
+          <h2 class="heading" style="color: white;">What we covered today</h2>
+          <ul class="reveal-list" style="color: rgba(255,255,255,0.9); text-align:left; max-width: 720px; margin: 1.5rem auto; font-size: 1rem; line-height: 2;">
+            <li>✅ There is <strong>always</strong> more to build than time. Prioritization is permanent.</li>
+            <li>✅ <strong>MoSCoW</strong> — fast, talkable, good with stakeholders · Must / Should / Could / Won't</li>
+            <li>✅ <strong>RICE</strong> — (R × I × C) ÷ E · for numerical trade-offs</li>
+            <li>✅ <strong>MVP</strong> is the smallest <em>viable</em> thing — one sentence or it's a wish list</li>
+            <li>✅ Estimate with <strong>relative sizing</strong> — story points with devs, t-shirts with stakeholders</li>
+            <li>✅ Watch for traps: anchoring, happy-path, dependencies, optimism, pressure, single-number</li>
+          </ul>
+          <p style="color: var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.2rem; margin-top:1.5rem">If everything is a Must, you haven't prioritized — you've labelled.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 17</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>

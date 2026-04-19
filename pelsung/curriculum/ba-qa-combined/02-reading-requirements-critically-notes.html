@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BA+QA Class 02 Notes — Reading Requirements Critically</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#0066B2; --indigo:#001F35; --amber:#247EC1; --green:#7BC950; --purple:#4796D1; --red:#D80032; --text:#1B2021; --muted:#7B7C7F; --faint:#9CA3AF; --surf:#fff; --bg:#F9F9F9; --border:#EDEDED; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Open Sans','Aptos',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; font-size:17px; -webkit-font-smoothing:antialiased; }
+    h1,h2,h3,h4,h5,h6 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:400; letter-spacing:-0.01em; }
+    a { color: var(--blue); }
+
+    .hero { background:var(--surf); border-bottom:1px solid var(--border); padding:4rem 2rem 3rem; text-align:center; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background: linear-gradient(135deg, #0067A3, #002D72); }
+    .logo-corner { position:absolute; top: 1.25rem; left: 1.5rem; opacity:0.85; }
+    .logo-corner img { height: 34px; }
+    .hero-badge { display:inline-flex; align-items:center; gap:0.5rem; background:var(--bg); border:1px solid var(--border); border-radius:100px; padding:0.35rem 1rem; font-size:0.75rem; font-weight:700; color:var(--muted); letter-spacing:0.07em; text-transform:uppercase; margin-bottom:1.5rem; }
+    .hero-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--amber); }
+    .hero h1 { font-size:clamp(2rem,5vw,3.5rem); line-height:1.15; margin-bottom:0.75rem; }
+    .c-blue{color:var(--blue);} .c-indigo{color:var(--indigo);}
+    .hero-sub { font-size:1rem; color:var(--muted); margin-bottom:2rem; max-width:680px; margin-left:auto; margin-right:auto; }
+    .hero-tags { display:flex; justify-content:center; gap:0.6rem; flex-wrap:wrap; }
+    .hero-tag { padding:0.3rem 0.9rem; border-radius:8px; font-size:0.78rem; font-weight:600; background:#E6F0F8; color:var(--blue); }
+
+    .container { max-width:1040px; margin:0 auto; padding:0 2rem 6rem; }
+
+    .toc { background:var(--surf); border:1px solid var(--border); border-radius:16px; padding:1.75rem 2rem; margin:2.5rem 0; }
+    .toc h3 { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); margin-bottom:1.25rem; }
+    .toc ol { list-style: none; counter-reset: step; }
+    .toc li { counter-increment: step; padding:0.45rem 0; border-bottom:1px solid var(--border); }
+    .toc li:last-child { border-bottom:none; }
+    .toc li::before { content: counter(step, decimal-leading-zero); color:var(--faint); font-family:'Bahnschrift','Segoe UI',sans-serif; margin-right:0.8rem; font-size:0.9rem; }
+    .toc a { text-decoration:none; color:var(--text); font-weight:500; }
+    .toc a:hover { color: var(--blue); }
+
+    section.chapter { margin: 3.5rem 0; }
+    .chapter-head { margin-bottom:1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
+    .chapter-eyebrow { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--blue); margin-bottom:0.3rem; }
+    .chapter-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--indigo); }
+
+    p { margin: 0.7rem 0; }
+    ul, ol { margin: 0.6rem 0 0.6rem 1.3rem; }
+    li { margin: 0.3rem 0; }
+    strong { color: var(--indigo); }
+
+    .callout { background:var(--surf); border:1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 10px; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+    .callout.amber { border-left-color: var(--amber); }
+    .callout.green { border-left-color: var(--green); }
+    .callout.red { border-left-color: var(--red); }
+    .callout.indigo { border-left-color: var(--indigo); }
+    .callout h4 { font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--indigo); }
+
+    .sin-row { background:var(--surf); border:1px solid var(--border); border-left:4px solid var(--red); border-radius:10px; padding:1rem 1.3rem; margin:1rem 0; }
+    .sin-row h4 { color:var(--indigo); font-size:1.1rem; margin-bottom:0.4rem; display:flex; align-items:center; gap:0.5rem; }
+    .sin-row .bad { background:#FFF5F7; border:1px solid #FADCE3; border-radius:6px; padding:0.7rem 1rem; font-family:'Courier New',monospace; font-size:0.88rem; line-height:1.65; margin:0.6rem 0; color:var(--text); }
+    .sin-row .good { background:#F3FAE9; border:1px solid #D4E8BD; border-radius:6px; padding:0.7rem 1rem; font-family:'Courier New',monospace; font-size:0.88rem; line-height:1.65; margin:0.6rem 0; color:var(--text); }
+    .sin-row .q { font-size:0.92rem; color:var(--text); margin-top:0.4rem; }
+    .sin-row .q ul { margin-left:1.2rem; line-height:1.7; }
+
+    .cost-row { background:linear-gradient(135deg,#0067A3,#002D72); color:white; border-radius:12px; padding:1.3rem 1.5rem; margin:1.2rem 0; }
+    .cost-row h4 { color:white; margin-bottom:0.4rem; font-size:1.05rem; }
+    .cost-row p { color:rgba(255,255,255,0.9); font-size:0.95rem; }
+    .cost-row strong { color:white; }
+    .cost-tbl { width:100%; margin-top:0.7rem; border-collapse:collapse; }
+    .cost-tbl th { text-align:left; padding:0.5rem 0.7rem; background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.9); font-size:0.8rem; letter-spacing:0.07em; text-transform:uppercase; }
+    .cost-tbl td { padding:0.5rem 0.7rem; border-top:1px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.95); font-size:0.92rem; }
+    .cost-tbl td.c { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--amber); font-size:1.1rem; font-weight:700; text-align:right; }
+
+    .lens { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin:1.2rem 0; }
+    @media (max-width: 720px){ .lens { grid-template-columns: 1fr; } }
+    .lens .col { background:var(--surf); border:1px solid var(--border); border-top:3px solid var(--indigo); border-radius:10px; padding:0.9rem 1.1rem; }
+    .lens .col.qa { border-top-color:var(--amber); }
+    .lens h5 { color:var(--indigo); font-size:1rem; margin-bottom:0.4rem; }
+    .lens .sub { color:var(--muted); font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.5rem; }
+    .lens ul { margin-left:1.2rem; }
+    .lens li { font-size:0.9rem; line-height:1.65; margin:0.2rem 0; }
+
+    .spec-full { background:var(--surf); border:1px solid var(--border); border-left:5px solid var(--red); border-radius:10px; padding:1.2rem 1.5rem; font-family:'Courier New',monospace; font-size:0.86rem; line-height:1.7; white-space:pre-wrap; color:var(--text); margin:1rem 0; overflow-x:auto; }
+    .answer-list { background:var(--surf); border:1px solid var(--border); border-radius:10px; padding:1rem 1.5rem; margin:1rem 0; }
+    .answer-list li { font-size:0.92rem; line-height:1.7; margin:0.5rem 0; }
+
+    .pass { background:var(--surf); border:1px solid var(--border); border-radius:10px; padding:1rem 1.2rem; margin:0.8rem 0; }
+    .pass.one { border-left:4px solid var(--blue); }
+    .pass.two { border-left:4px solid var(--amber); }
+    .pass.three { border-left:4px solid var(--green); }
+    .pass h5 { color:var(--indigo); font-size:1.05rem; margin-bottom:0.3rem; }
+
+    .summary { background: linear-gradient(135deg, #F9F9F9, #EDEDED); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+    .summary h4 { color: var(--indigo); margin-bottom: 0.5rem; font-size: 0.95rem; }
+    .summary ul { margin-left: 1.1rem; }
+    .summary li { font-size: 0.93rem; margin: 0.25rem 0; }
+
+    footer { text-align:center; padding: 2rem 1rem 3rem; color: var(--faint); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+    footer img { height: 28px; opacity:0.7; margin-bottom: 0.5rem; display: block; margin-left:auto; margin-right:auto; }
+
+    mark.hl { background:#FFF3CD; padding:0 0.2rem; border-radius:3px; }
+    mark.amb { background:#FEE9EC; color:var(--red); padding:0 0.2rem; border-radius:3px; font-weight:600; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="logo-corner"><img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE"></div>
+    <div class="hero-badge"><span class="dot"></span> BA + QA Combined · Class 02</div>
+    <h1><span class="c-blue">Reading Requirements</span><br><span class="c-indigo">Critically</span></h1>
+    <p class="hero-sub">Your take-home reference. The skill every BA and QA uses every single day — spotting ambiguity, hidden assumptions, contradictions, and missing angles before they become production bugs.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">7 Sins</span>
+      <span class="hero-tag">Spec Reading</span>
+      <span class="hero-tag">Annotation</span>
+      <span class="hero-tag">Testability</span>
+      <span class="hero-tag">Leave-Request Exercise</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="toc">
+      <h3>In this note</h3>
+      <ol>
+        <li><a href="#hook">The 20-second challenge</a></li>
+        <li><a href="#cost">Why bad requirements are so expensive</a></li>
+        <li><a href="#lenses">Two lenses on one spec — BA and QA</a></li>
+        <li><a href="#sins">The seven sins of written requirements</a></li>
+        <li><a href="#annotate">The three-pass annotation technique</a></li>
+        <li><a href="#exercise">Exercise · the leave-request spec</a></li>
+        <li><a href="#answers">Exercise reference answers</a></li>
+        <li><a href="#practice">How to practise on your own</a></li>
+        <li><a href="#takeaways">Key takeaways</a></li>
+      </ol>
+    </div>
+
+    <section class="chapter" id="hook">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 1</div>
+        <h2>The 20-second challenge</h2>
+      </div>
+      <p>Read this requirement quickly, and count how many questions you'd need answered before a developer could start coding it:</p>
+      <div class="spec-full" style="border-left-color:var(--amber)">The system should allow users to upload documents.
+The upload should be fast and secure.
+Users should be notified once it's done.</div>
+      <p>If your honest answer is "ten or more", congratulations — you already have the instinct this class sharpens. If it's "maybe two or three", read on. The aim today is to <strong>see</strong> what looks fine on the surface but isn't.</p>
+      <div class="callout indigo">
+        <h4>The big idea</h4>
+        <p>Reading requirements critically is not a gentle skim for meaning — it is an <em>active hunt</em> for ambiguity, gaps, and contradictions. The earlier you find them, the cheaper they are to fix.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="cost">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 2</div>
+        <h2>Why bad requirements are so expensive</h2>
+      </div>
+      <p>In the 1980s, Barry Boehm (a software economist) measured the cost of fixing the same defect depending on where in the SDLC it was discovered. His findings have been re-validated many times since. The curve is steep:</p>
+      <div class="cost-row">
+        <h4>The Boehm cost curve</h4>
+        <p>The cost of fixing a defect grows by roughly 10× at each stage it goes undetected.</p>
+        <table class="cost-tbl">
+          <tr><th>Stage caught</th><th>Relative cost to fix</th></tr>
+          <tr><td>Requirements review</td><td class="c">1×</td></tr>
+          <tr><td>Design review</td><td class="c">5×</td></tr>
+          <tr><td>During development</td><td class="c">10×</td></tr>
+          <tr><td>During QA / testing</td><td class="c">50×</td></tr>
+          <tr><td>After release (production)</td><td class="c">100×+</td></tr>
+        </table>
+      </div>
+      <p>A question you ask <em>during spec review</em> costs one minute. The same question, unanswered, can translate into a week of rework when it surfaces in development, a missed release when it surfaces in QA, or a production incident when it surfaces after launch.</p>
+      <p>This is why the instinct to <strong>read requirements critically</strong> is the single most leveraged skill in the BA and QA toolkit.</p>
+    </section>
+
+    <section class="chapter" id="lenses">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 3</div>
+        <h2>Two lenses on one spec</h2>
+      </div>
+      <p>A BA and a QA read the same document differently — not because the document is different, but because their <em>purpose</em> is different. BAs read to improve the spec; QAs read to test against it. Both arrive at roughly the same list of issues, often from opposite directions.</p>
+      <div class="lens">
+        <div class="col">
+          <h5>📋 The BA lens · reads to improve</h5>
+          <div class="sub">Intent: make the spec clearer and more complete</div>
+          <ul>
+            <li>Is the <strong>problem</strong> clearly stated? Is it worth solving?</li>
+            <li>Are the <strong>users</strong> named? Do we understand them?</li>
+            <li>Are hidden <strong>assumptions</strong> written down?</li>
+            <li>Is <strong>scope</strong> explicit — including what's out?</li>
+            <li>Does it <strong>contradict</strong> other specs in the same product?</li>
+            <li>What <strong>gaps</strong> did stakeholders not think to mention?</li>
+          </ul>
+        </div>
+        <div class="col qa">
+          <h5>🔍 The QA lens · reads to test</h5>
+          <div class="sub">Intent: write pass/fail test cases from it</div>
+          <ul>
+            <li>Can I write a <strong>pass/fail test</strong> for each statement?</li>
+            <li>Are <strong>edge cases</strong> defined — not just happy path?</li>
+            <li>Are <strong>non-functional</strong> angles named (performance, security…)?</li>
+            <li>What happens with <strong>invalid inputs</strong>?</li>
+            <li>Is the <strong>error behaviour</strong> specified?</li>
+            <li>Would <strong>two testers</strong> reading this agree on the verdict?</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="sins">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 4</div>
+        <h2>The seven sins of written requirements</h2>
+      </div>
+      <p>Almost every bad spec commits one or more of these seven sins. Learn to name them explicitly and your feedback becomes precise instead of vague.</p>
+
+      <div class="sin-row">
+        <h4>Sin 01 · Ambiguity</h4>
+        <p>Words that <em>sound</em> specific but aren't. "Fast", "user-friendly", "as needed", "several", "robust".</p>
+        <div class="bad">"The search should return results <mark class="amb">quickly</mark> and show <mark class="amb">relevant</mark> matches."</div>
+        <div class="q">
+          <strong>Questions to ask:</strong>
+          <ul>
+            <li>"Quickly" — under 200ms? 2 seconds? 10 seconds on a slow connection?</li>
+            <li>"Relevant" — by whose judgment? Exact match, fuzzy, or semantic?</li>
+            <li>What does the user see while waiting? What about zero matches?</li>
+          </ul>
+        </div>
+        <div class="good">"Search returns results within 500ms on 4G. Matches include product name (fuzzy, one-character typo tolerated) and SKU (exact only). Below 500ms shows a skeleton loader; above 5s shows an error with retry."</div>
+      </div>
+
+      <div class="sin-row">
+        <h4>Sin 02 · Unstated assumptions</h4>
+        <p>Things the writer thinks are obvious. They aren't. The author wrote the spec after long conversations; everyone else is reading it cold.</p>
+        <div class="bad">"When the user logs in, they see their dashboard."</div>
+        <div class="q">
+          <strong>Hidden assumptions:</strong>
+          <ul>
+            <li>A dashboard <em>exists</em>. (Which one? Customized or generic?)</li>
+            <li>"User" means a single type. (Admin? Deactivated? First login?)</li>
+            <li>Login always succeeds. (Wrong password? Locked? 2FA?)</li>
+            <li>"See" means a full page. (Mobile? Dark mode? Empty state if no data?)</li>
+          </ul>
+        </div>
+        <div class="callout amber">
+          <h4>Technique · read it out loud</h4>
+          <p>Reading a sentence out loud exposes assumptions. If you have to add words in your head to make it make sense — those added words are the assumptions. Write them down.</p>
+        </div>
+      </div>
+
+      <div class="sin-row">
+        <h4>Sin 03 · Contradictions</h4>
+        <p>Two sections of the same document disagreeing. Specs get long; reviewers read in chunks; contradictions survive unnoticed.</p>
+        <div class="bad"><strong>Section 2.1 — Registration:</strong> Users must register with a valid email address. Phone is optional.
+<strong>Section 4.3 — Login:</strong> Users log in with their phone number and OTP. Email login is not supported.</div>
+        <div class="q">
+          <strong>Your job when you spot it:</strong>
+          <ul>
+            <li><strong>Flag it</strong> rather than fix it — you don't know which side is correct.</li>
+            <li><strong>Don't assume</strong> both halves are right. Sometimes the real answer is neither. ("Phone for login, email for password reset.")</li>
+            <li>Contradictions are often hiding a <em>real</em> design decision nobody has made yet.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sin-row">
+        <h4>Sin 04 · Missing actors</h4>
+        <p>Passive voice hides the "who". "The email is sent" — by whom? To whom?</p>
+        <div class="bad">"The approval is sent for review. When approved, the document becomes active."</div>
+        <div class="q">
+          <strong>Questions to ask:</strong>
+          <ul>
+            <li>Sent <em>by</em> whom — system automatically, or a human trigger?</li>
+            <li>Sent <em>to</em> whom — a role, a queue, a distribution list?</li>
+            <li>Who has the authority to approve — one person, or quorum?</li>
+            <li>"Becomes active" — instantly, on next login, or after a batch job?</li>
+          </ul>
+        </div>
+        <div class="good">"When the author clicks Submit, the system emails all users with role Reviewer in the same department. When any Reviewer clicks Approve, the system marks the document active within 5 seconds."</div>
+      </div>
+
+      <div class="sin-row">
+        <h4>Sin 05 · Untestable statements</h4>
+        <p>If a QA can't verify yes or no — it is not a requirement. It's a mood.</p>
+        <div class="bad">"The app must be intuitive. Navigation should feel natural. The experience must be delightful."</div>
+        <div class="q">
+          <strong>The test that exposes it:</strong> imagine two QAs testing independently. Do they arrive at the same verdict? If the honest answer is "depends on taste", you don't have a requirement.
+        </div>
+        <div class="good">"80% of first-time users complete sign-up without abandoning. Average user reaches dashboard in ≤3 taps from app launch. Core actions (send money, pay bill, view balance) are reachable in ≤2 taps from home."</div>
+      </div>
+
+      <div class="sin-row">
+        <h4>Sin 06 · Missing non-functional requirements</h4>
+        <p>The spec says <em>what</em> to build, but nothing about <em>how well</em>.</p>
+        <div class="bad">"Users can upload their government ID to verify their account."</div>
+        <div class="q">
+          <strong>What's missing:</strong>
+          <ul>
+            <li>🏎️ <strong>Performance</strong> — max file size? timeout on slow networks?</li>
+            <li>🔒 <strong>Security</strong> — encrypted at rest? who can view? retention period?</li>
+            <li>♿ <strong>Accessibility</strong> — screen reader flow? keyboard-only upload?</li>
+            <li>🔁 <strong>Reliability</strong> — what if upload fails halfway?</li>
+            <li>📈 <strong>Scalability</strong> — supports 10,000 uploads/hour during a KYC campaign?</li>
+          </ul>
+        </div>
+        <p>Class 03 goes deep on non-functional requirements. For now, just notice when they're <em>silent</em>. Silence is the sin.</p>
+      </div>
+
+      <div class="sin-row">
+        <h4>Sin 07 · No "out of scope"</h4>
+        <p>If the spec doesn't say what's <em>not</em> being built, stakeholders will assume their favourite feature is in.</p>
+        <div class="bad">Spec covers: "Users can save billers as favourites. Favourites show on home. Tap to pre-fill."</div>
+        <div class="q">
+          <strong>What's not said — but will be assumed by somebody:</strong>
+          <ul>
+            <li>Can I share favourites with family?</li>
+            <li>Can I categorise them (utilities, school, rent)?</li>
+            <li>Can I set auto-pay from a favourite?</li>
+            <li>Does this work in the legacy app version?</li>
+          </ul>
+        </div>
+        <div class="good">Out of scope (v1):
+  • Sharing favourites between users
+  • Categorisation / custom tags
+  • Auto-pay from a favourite
+  • Support in the legacy mBoB v4 app</div>
+        <p style="font-style:italic; color:var(--muted); font-size:0.92rem">A good out-of-scope list is a deadline-saving device.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="annotate">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 5</div>
+        <h2>The three-pass annotation technique</h2>
+      </div>
+      <p>BAs and QAs don't read a spec once and pronounce judgment. They read it three times — each pass has a different goal. This is a repeatable technique you can start using today.</p>
+
+      <div class="pass one">
+        <h5>Pass 1 · Comprehension</h5>
+        <p>Read it end-to-end without stopping. No annotations. Goal is to understand the <strong>shape</strong> of the feature — what it roughly is, who it's for, what changes because of it. Resist the urge to mark things up on the first read.</p>
+      </div>
+      <div class="pass two">
+        <h5>Pass 2 · Hunt the seven sins</h5>
+        <p>Go through sentence by sentence with three colours:</p>
+        <ul>
+          <li><mark class="amb">Red</mark> — ambiguity, untestable statements, contradictions</li>
+          <li><mark class="hl">Yellow</mark> — unstated assumptions, missing actors, missing NFRs</li>
+          <li><mark style="background:#E8F4FF; color:var(--blue)" class="hl">Blue</mark> — questions to ask the author</li>
+        </ul>
+        <p>Don't rewrite anything yet. Just mark.</p>
+      </div>
+      <div class="pass three">
+        <h5>Pass 3 · Testability</h5>
+        <p>For every statement that looks like a requirement, ask: <em>could I write a pass/fail test for this?</em> If not, add it to your question list. This pass is where the QA lens really earns its keep.</p>
+      </div>
+
+      <div class="callout indigo">
+        <h4>The output — a clean question list</h4>
+        <p>The result of three passes is not a messy marked-up PDF. It's a <strong>numbered list of specific questions</strong> you send back to the author. Something they can read in five minutes and respond to. That's the artifact that actually moves the spec forward.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="exercise">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 6 · Hands-on</div>
+        <h2>Exercise · the leave-request spec</h2>
+      </div>
+      <p>In class, you annotated this deliberately flawed spec. You can repeat the exercise at home on your own or with a classmate. Aim to find at least 10 problems — more is better.</p>
+
+      <div class="spec-full">Feature: Online Leave Request
+
+1. Purpose
+   Employees should be able to submit leave requests online. The system will handle the
+   approval process. The solution should be simple and easy to use.
+
+2. Requirements
+   2.1  Employees can submit a leave request at any time.
+   2.2  The manager is notified when a leave is submitted.
+   2.3  The manager approves or rejects the request quickly.
+   2.4  Once approved, the leave is added to the employee's record.
+   2.5  The system should be secure.
+   2.6  Leave balance should be checked automatically.
+   2.7  Employees can cancel their leave request. If already approved, the manager handles it.
+   2.8  The system supports all types of leave.
+   2.9  Performance should be good even when many users are online.
+   2.10 Employees will see their leave history on the dashboard.
+
+3. Notifications
+   All relevant parties will be notified as appropriate.</div>
+    </section>
+
+    <section class="chapter" id="answers">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 7</div>
+        <h2>Exercise reference answers</h2>
+      </div>
+      <p>Your list does not need to match this word for word — the goal is to find the <em>categories</em> of problems. Twelve representative issues:</p>
+
+      <div class="answer-list">
+        <ol>
+          <li><strong>"Simple and easy to use" (§1)</strong> — untestable (Sin 05). What is the target time to submit a leave? How many taps?</li>
+          <li><strong>"At any time" (§2.1)</strong> — hidden assumption (Sin 02). Literally 24/7 including server maintenance windows? Or weekdays 9–5?</li>
+          <li><strong>"The manager" (§2.2, §2.3)</strong> — missing actor (Sin 04). Which manager — direct line, skip-level, delegated? What if manager is on leave?</li>
+          <li><strong>"Approves quickly" (§2.3)</strong> — ambiguity (Sin 01). Is there an SLA — 24 hours? Auto-approve after 3 days?</li>
+          <li><strong>"The system should be secure" (§2.5)</strong> — missing NFR detail (Sin 06). Encryption at rest? RBAC? Audit logging? Who can view leave records?</li>
+          <li><strong>"Leave balance checked automatically" (§2.6)</strong> — missing flow (Sin 02). What happens when balance is insufficient — blocked? warning? convert to unpaid?</li>
+          <li><strong>"Manager handles it" (§2.7)</strong> — missing actor + missing flow (Sin 04). What does "handles it" mean — does the employee get told?</li>
+          <li><strong>"All types of leave" (§2.8)</strong> — ambiguity (Sin 01). Which types — sick, annual, casual, bereavement, maternity, unpaid? Do they all behave the same?</li>
+          <li><strong>"Performance should be good" (§2.9)</strong> — untestable + missing NFR (Sins 05, 06). How many concurrent users? What response time?</li>
+          <li><strong>"Leave history on the dashboard" (§2.10)</strong> — contradiction (Sin 03). No dashboard mentioned anywhere else. Does one exist?</li>
+          <li><strong>"All relevant parties notified as appropriate" (§3)</strong> — missing actors, missing channels, missing triggers (Sins 04, 01). This whole sentence is essentially zero-content.</li>
+          <li><strong>Missing entirely (Sin 06, 07):</strong> accessibility, mobile support, Dzongkha support, error handling, half-day leave, holiday overlap, what happens to the request when an employee resigns.</li>
+        </ol>
+      </div>
+      <p style="margin-top:1rem">If you found <strong>10 of these 12</strong> — excellent; you have the instinct. If you found 6, you're well on the way. If you found 3, today's class has already paid for itself.</p>
+    </section>
+
+    <section class="chapter" id="practice">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 8</div>
+        <h2>How to practise on your own</h2>
+      </div>
+      <p>This skill gets sharper with use. Two ways to keep practising:</p>
+      <ol>
+        <li><strong>Audit a real spec you find online.</strong> Government tender documents and product "help" pages are a rich source of requirements-like writing. Pick one, mark up the 7 sins, and write a question list as if you'd been handed it to implement.</li>
+        <li><strong>Re-read your own writing.</strong> After writing any document longer than a page, put it down for a day. Come back and read it through the 7-sins lens. You'll be surprised how many sins your own writing commits when you're not defending it in real time.</li>
+      </ol>
+      <div class="callout green">
+        <h4>A useful habit</h4>
+        <p>Before agreeing to a piece of work — any piece of work, at any company — ask yourself: <em>can I write a pass/fail test for what I'm being asked to do?</em> If the answer is no, your first job is to get the answer to yes, not to start working.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="takeaways">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Takeaways</div>
+        <h2>Key points to carry forward</h2>
+      </div>
+      <div class="summary">
+        <h4>What we covered today</h4>
+        <ul>
+          <li>Defects get <strong>100× more expensive</strong> the later they're caught — reading specs critically is the highest-leverage BA/QA skill.</li>
+          <li>BAs read to <strong>improve</strong> the spec; QAs read to <strong>test against</strong> it — same skill, two lenses.</li>
+          <li>The <strong>seven sins</strong>: ambiguity, unstated assumptions, contradictions, missing actors, untestable statements, missing NFRs, no out-of-scope.</li>
+          <li>The <strong>three-pass annotation</strong>: comprehension → hunt the sins → test testability.</li>
+          <li>The output is a <strong>numbered question list</strong>, not scribbled margins.</li>
+          <li>A question asked at spec time costs a minute. A production bug costs a weekend.</li>
+        </ul>
+      </div>
+      <p style="margin-top:1.5rem">Next class: <strong>Functional vs Non-Functional Requirements</strong> — a dedicated deep-dive into Sin 06, the one that sinks more projects than any other.</p>
+    </section>
+
+  </div>
+
+  <footer>
+    <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE">
+    SELISE × Pelsung · BA + QA Combined · Class 02<br>
+    Reading Requirements Critically
+  </footer>
+
+</body>
+</html>

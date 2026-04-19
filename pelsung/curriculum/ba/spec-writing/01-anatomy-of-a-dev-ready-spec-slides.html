@@ -1,0 +1,784 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Anatomy of a Dev-Ready Spec — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../shared/slides.css" />
+    <style>
+      .naming-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:0.7rem; width:100%; max-width:1150px; }
+      @media (max-width: 900px){ .naming-grid { grid-template-columns: 1fr 1fr; } }
+      @media (max-width: 520px){ .naming-grid { grid-template-columns: 1fr; } }
+      .nm { background:white; border:1px solid var(--border); border-top:4px solid var(--blue); border-radius:10px; padding:0.8rem 1rem; }
+      .nm .abbr { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--blue); font-size:1.7rem; font-weight:700; line-height:1; }
+      .nm h5 { color:var(--indigo); font-size:0.95rem; margin:0.2rem 0 0.3rem; font-family:'Bahnschrift','Segoe UI',sans-serif; }
+      .nm p { font-size:0.82rem; color:var(--text); line-height:1.55; }
+      .nm .scope { color:var(--muted); font-size:0.75rem; margin-top:0.4rem; font-style:italic; }
+      .nm.pr { border-top-color:var(--indigo); } .nm.pr .abbr { color:var(--indigo); }
+      .nm.sr { border-top-color:var(--amber); } .nm.sr .abbr { color:var(--amber); }
+      .nm.sp { border-top-color:#3D7A3D; } .nm.sp .abbr { color:#3D7A3D; }
+
+      .standards { display:grid; grid-template-columns: 1fr 1fr 1fr; gap:0.8rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px){ .standards { grid-template-columns: 1fr; } }
+      .std { background:white; border:1px solid var(--border); border-top:3px solid var(--blue); border-radius:10px; padding:0.8rem 1rem; }
+      .std .tag { color:var(--muted); font-size:0.73rem; text-transform:uppercase; letter-spacing:0.07em; font-weight:700; margin-bottom:0.2rem; }
+      .std h5 { color:var(--indigo); font-size:1rem; margin-bottom:0.3rem; font-family:'Bahnschrift','Segoe UI',sans-serif; }
+      .std p { font-size:0.85rem; color:var(--text); line-height:1.55; }
+      .std .use { margin-top:0.4rem; padding-top:0.4rem; border-top:1px dashed var(--border); color:var(--muted); font-size:0.8rem; }
+      .std.mid { border-top-color:var(--amber); }
+      .std.new { border-top-color:#3D7A3D; }
+
+      .anat-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:0.55rem; width:100%; max-width:1200px; }
+      @media (max-width: 900px){ .anat-grid { grid-template-columns: repeat(3, 1fr); } }
+      @media (max-width: 620px){ .anat-grid { grid-template-columns: repeat(2, 1fr); } }
+      .an { background:white; border:1px solid var(--border); border-left:4px solid var(--blue); border-radius:8px; padding:0.6rem 0.8rem; }
+      .an .n { color:var(--muted); font-family:'Courier New',monospace; font-size:0.75rem; }
+      .an h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.88rem; margin:0.1rem 0 0.15rem; }
+      .an p { font-size:0.78rem; color:var(--text); line-height:1.5; }
+      .an.meta { border-left-color:var(--muted); }
+      .an.head { border-left-color:var(--indigo); }
+      .an.req { border-left-color:var(--blue); }
+      .an.supp { border-left-color:var(--amber); }
+      .an.scope { border-left-color:var(--red); }
+
+      .sec-block { background:white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.3rem; max-width:1050px; width:100%; }
+      .sec-block .tag { color:var(--muted); font-size:0.75rem; text-transform:uppercase; letter-spacing:0.07em; font-weight:700; margin-bottom:0.25rem; }
+      .sec-block h4 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.2rem; margin-bottom:0.5rem; }
+      .sec-block .what { background:var(--bg); border-left:3px solid var(--blue); border-radius:6px; padding:0.6rem 0.8rem; font-size:0.9rem; color:var(--text); margin:0.4rem 0; line-height:1.65; }
+      .sec-block ul { padding-left:1.2rem; margin:0.4rem 0; }
+      .sec-block li { font-size:0.9rem; line-height:1.7; color:var(--text); margin:0.15rem 0; }
+      .sec-block .eg { background:white; border:1px solid var(--border); border-radius:6px; padding:0.6rem 0.9rem; font-family:'Courier New',monospace; font-size:0.85rem; color:var(--text); line-height:1.6; margin-top:0.5rem; white-space:pre-wrap; }
+      .sec-block .flag { color:var(--muted); font-size:0.85rem; font-style:italic; margin-top:0.4rem; }
+
+      .dual { display:grid; grid-template-columns: 1fr 1fr; gap:0.9rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px){ .dual { grid-template-columns: 1fr; } }
+
+      .lifecycle { display:flex; gap:0.5rem; flex-wrap:wrap; justify-content:center; max-width:1100px; width:100%; }
+      .lc-st { background:white; border:1px solid var(--border); border-top:4px solid var(--blue); border-radius:10px; padding:0.65rem 0.9rem; flex:1 1 150px; min-width:140px; text-align:center; }
+      .lc-st .num { color:var(--muted); font-family:'Courier New',monospace; font-size:0.72rem; }
+      .lc-st h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin:0.1rem 0; }
+      .lc-st p { font-size:0.78rem; color:var(--text); line-height:1.5; }
+      .lc-st.draft { border-top-color:#9CA3AF; }
+      .lc-st.review { border-top-color:var(--amber); }
+      .lc-st.approved { border-top-color:#3D7A3D; }
+      .lc-st.impl { border-top-color:var(--blue); }
+      .lc-st.arch { border-top-color:var(--muted); }
+      .lc-arrow { display:flex; align-items:center; color:var(--faint); font-size:1.2rem; font-weight:700; }
+
+      .length-rule { background:white; border:1px solid var(--border); border-left:5px solid var(--amber); border-radius:10px; padding:0.9rem 1.2rem; max-width:900px; width:100%; }
+      .length-rule h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-bottom:0.35rem; }
+      .length-rule p { font-size:0.92rem; color:var(--text); line-height:1.65; }
+      .length-rule ul { margin-top:0.4rem; padding-left:1.2rem; }
+      .length-rule li { font-size:0.88rem; line-height:1.6; color:var(--text); margin:0.15rem 0; }
+
+      .spec-sample { background:white; border:1px solid var(--border); border-radius:12px; padding:0.8rem 1rem; max-width:1000px; width:100%; font-size:0.82rem; line-height:1.6; }
+      .spec-sample h6 { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.88rem; margin:0.5rem 0 0.2rem; border-bottom:1px solid var(--border); padding-bottom:0.15rem; }
+      .spec-sample h6:first-child { margin-top:0; }
+      .spec-sample .meta-row { color:var(--muted); font-family:'Courier New',monospace; font-size:0.78rem; margin:0.1rem 0; }
+      .spec-sample .meta-row b { color:var(--indigo); font-weight:600; }
+      .spec-sample p { font-size:0.82rem; color:var(--text); margin:0.2rem 0; line-height:1.55; }
+      .spec-sample ul { margin:0.2rem 0 0.2rem 1.2rem; }
+      .spec-sample li { font-size:0.82rem; color:var(--text); line-height:1.55; margin:0.1rem 0; }
+      .spec-sample pre { background:var(--bg); border:1px solid var(--border); border-radius:4px; padding:0.5rem 0.7rem; font-family:'Courier New',monospace; font-size:0.78rem; margin:0.3rem 0; white-space:pre-wrap; line-height:1.55; color:var(--text); }
+      .spec-sample .ac-block { background:#F3FAE9; border-left:3px solid #3D7A3D; border-radius:4px; padding:0.4rem 0.7rem; margin:0.25rem 0; font-size:0.78rem; line-height:1.55; }
+      .spec-sample .ac-block .gwt-k { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>Spec Writing · Class 01</div></div>
+          <h1 class="display" style="color: var(--text)">
+            <span style="color: var(--blue)">Anatomy of a</span><br />
+            <span style="color: var(--indigo)">Dev-Ready Spec</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted)">The industry-standard structure. 12 sections. Every dev-ready spec uses them.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">SRS</span>
+            <span class="class-tag tag-blue">PRD</span>
+            <span class="class-tag tag-blue">IEEE 29148</span>
+            <span class="class-tag tag-blue">Feature Spec</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 AGENDA -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 780px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem"><h2 class="heading">Session Journey · ~75 min</h2></div>
+          <div class="agenda-row" onclick="goTo(2)"><span class="ar-dot" style="background: var(--red)"></span><span class="ar-label">🎯 Dev-ready vs wishful thinking</span><span class="ar-badge" style="background:#FEE9EC;color:var(--red)">5 min</span></div>
+          <div class="agenda-row" onclick="goTo(4)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🔤 Spec vs Story vs PRD vs SRS</span><span class="ar-badge" style="background:#E6F0F8;color:var(--indigo)">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(6)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🏛️ Industry standards landscape</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">7 min</span></div>
+          <div class="agenda-row" onclick="goTo(8)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🧬 The 12-section anatomy</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">25 min</span></div>
+          <div class="agenda-row" onclick="goTo(16)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">📆 Lifecycle, versioning, length</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(20)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">📄 A complete annotated example</span><span class="ar-badge" style="background:#E6F0F8;color:var(--indigo)">15 min</span></div>
+          <div class="agenda-row" onclick="goTo(24)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🎯 Wrap-up</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">5 min</span></div>
+        </div>
+      </div>
+
+      <!-- 3 HOOK -->
+      <div class="slide bg-dark" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> Hook</div>
+        <div class="center" style="max-width: 900px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎤 A simple test</div>
+          <p class="disc-prompt" style="font-size:1.3rem">Hand a spec to a mid-level engineer.<br>Do they start coding,<br>or do they schedule a meeting?</p>
+          <ul class="reveal-list" style="color: rgba(255,255,255,0.9); text-align:left; max-width: 720px; margin: 2rem auto; font-size: 1.02rem; line-height: 2;">
+            <li>📄 A <strong style="color:var(--amber)">dev-ready spec</strong> → they code</li>
+            <li>🗒️ Anything else → they meet, then they guess, then they build the wrong thing</li>
+          </ul>
+          <p style="color: rgba(255,255,255,0.7); font-size: 0.95rem; margin-top: 1.5rem">Today: the structure that makes a spec dev-ready — and why it's been the same 12 sections for 30+ years.</p>
+        </div>
+      </div>
+
+      <!-- 4 NAMING -->
+      <div class="slide accent-blue bg-subtle" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> Spec, Story, PRD, SRS · what's the difference?</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Different names. Different scope. Same DNA.</h2></div>
+          <div class="naming-grid">
+            <div class="nm">
+              <div class="abbr">Story</div>
+              <h5>User Story</h5>
+              <p>One user-visible feature. 1 page max. "As a … I want … so that …" + 3–7 AC.</p>
+              <div class="scope">Scope: one feature</div>
+            </div>
+            <div class="nm sp">
+              <div class="abbr">Spec</div>
+              <h5>Feature Spec</h5>
+              <p>A story plus UX, data, edges, NFRs, out-of-scope. 2–5 pages. Today's focus.</p>
+              <div class="scope">Scope: one feature, fully specified</div>
+            </div>
+            <div class="nm pr">
+              <div class="abbr">PRD</div>
+              <h5>Product Requirements Document</h5>
+              <p>A product area or major release. Multiple features + rationale + metrics. 10–30 pages.</p>
+              <div class="scope">Scope: a release or product area</div>
+            </div>
+            <div class="nm sr">
+              <div class="abbr">SRS</div>
+              <h5>Software Requirements Specification</h5>
+              <p>Formal, exhaustive. IEEE/ISO standard. Used in regulated industries (banking, medical, aviation). 30–100+ pages.</p>
+              <div class="scope">Scope: the whole system</div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px"><strong>The sections are the same; the depth grows with scope.</strong> Master the feature spec and you can scale up or down.</p>
+        </div>
+      </div>
+
+      <!-- 5 WHERE IT FITS -->
+      <div class="slide accent-blue" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span> Where specs fit in the SDLC</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:900px"><h2 class="heading">A spec sits between <span style="color:var(--blue)">intent</span> and <span style="color:var(--blue)">code</span></h2></div>
+          <div class="card" style="max-width:1000px; background:white; border:1px solid var(--border); padding:1.2rem 1.5rem;">
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap; align-items:center; justify-content:center; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.92rem; color:var(--indigo);">
+              <div style="background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:0.5rem 0.9rem; border-top:3px solid var(--muted);">Need · Opportunity</div>
+              <span style="color:var(--faint)">→</span>
+              <div style="background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:0.5rem 0.9rem; border-top:3px solid var(--indigo);">Discovery · Interviews</div>
+              <span style="color:var(--faint)">→</span>
+              <div style="background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:0.5rem 0.9rem; border-top:3px solid var(--amber);">User Stories</div>
+              <span style="color:var(--faint)">→</span>
+              <div style="background:#EAF3FA; border:2px solid var(--blue); border-radius:8px; padding:0.6rem 1rem; border-top:3px solid var(--blue); font-weight:600;">Dev-Ready Spec</div>
+              <span style="color:var(--faint)">→</span>
+              <div style="background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:0.5rem 0.9rem; border-top:3px solid var(--blue);">Code</div>
+              <span style="color:var(--faint)">→</span>
+              <div style="background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:0.5rem 0.9rem; border-top:3px solid var(--amber);">Test · Ship</div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px">A spec is the <strong>last artifact</strong> before code. It converts messy human discovery into structured input a developer (or AI) can act on. Everything upstream feeds into it; everything downstream flows from it.</p>
+        </div>
+      </div>
+
+      <!-- 6 SECTION: STANDARDS -->
+      <div class="slide bg-indigo" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part One</div>
+          <h1 class="display" style="color: white">Industry<br>Standards</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Three traditions. One shared anatomy.</p>
+        </div>
+        <div class="section-num" style="color: white">01</div>
+      </div>
+
+      <!-- 7 STANDARDS LANDSCAPE -->
+      <div class="slide accent-blue bg-subtle" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> The three traditions</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Every shop draws from one of these</h2></div>
+          <div class="standards">
+            <div class="std">
+              <div class="tag">Formal · since 1984</div>
+              <h5>IEEE 830 / ISO/IEC/IEEE 29148</h5>
+              <p>The formal SRS (Software Requirements Specification) standard. Heavy structure: introduction · overall description · specific requirements · appendices. Still mandatory in banking, medical, aviation, defence.</p>
+              <div class="use">You'll see it in regulated industries and government RFPs.</div>
+            </div>
+            <div class="std mid">
+              <div class="tag">Modern tech · since ~2005</div>
+              <h5>PRD (Product Requirements Document)</h5>
+              <p>The tech-industry convention. Lighter than IEEE, more user-focused. Popularised by Google, Atlassian, Intercom, Lenny's Newsletter templates. Same core sections, friendlier tone.</p>
+              <div class="use">You'll see it at SELISE, startups, most product companies.</div>
+            </div>
+            <div class="std new">
+              <div class="tag">Agile · since ~2010</div>
+              <h5>Feature Spec / BDD</h5>
+              <p>Per-feature, story-sized. Given/When/Then acceptance criteria at the core. Often lives inside a Jira/Linear ticket or a lightweight Markdown file.</p>
+              <div class="use">You'll see it in daily sprint work — our main teaching focus.</div>
+            </div>
+          </div>
+          <div class="card" style="max-width:950px; background:white; border-left:4px solid var(--amber); padding:0.9rem 1.3rem;">
+            <h4 style="color:var(--indigo); margin-bottom:0.3rem; font-size:1rem">Same skeleton underneath</h4>
+            <p style="font-size:0.92rem; color:var(--text); line-height:1.65">Strip any of these down to its bones and you find the same 12 sections. The differences are <strong>tone, depth, and length</strong> — not structure. Learn the 12 sections and you can write in any of the three conventions.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8 SECTION: ANATOMY -->
+      <div class="slide bg-blue" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Two</div>
+          <h1 class="display" style="color: white">The 12 Sections</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Header · Requirements · Supporting · Scope.</p>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- 9 ANATOMY OVERVIEW -->
+      <div class="slide accent-blue bg-subtle" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> The 12 sections at a glance</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Grouped into four zones · written top-to-bottom</h2></div>
+          <div class="anat-grid">
+            <div class="an meta"><div class="n">§ 01</div><h6>📝 Metadata</h6><p>Title, version, author, status, reviewers, date.</p></div>
+            <div class="an meta"><div class="n">§ 02</div><h6>📌 TL;DR</h6><p>Two or three sentences. The whole spec in an elevator pitch.</p></div>
+            <div class="an head"><div class="n">§ 03</div><h6>🎯 Problem</h6><p>Whose pain, how big, with evidence.</p></div>
+            <div class="an head"><div class="n">§ 04</div><h6>🚦 Goals &amp; Non-goals</h6><p>Success criteria + explicit what-we're-not-doing.</p></div>
+            <div class="an head"><div class="n">§ 05</div><h6>👥 Users &amp; Personas</h6><p>Who this is for, specifically.</p></div>
+            <div class="an req"><div class="n">§ 06</div><h6>🧩 Functional Requirements</h6><p>User stories + flows + behaviour.</p></div>
+            <div class="an req"><div class="n">§ 07</div><h6>✅ Acceptance Criteria</h6><p>Given/When/Then per story. Pass-fail.</p></div>
+            <div class="an req"><div class="n">§ 08</div><h6>🛡️ Non-Functional Requirements</h6><p>Performance · security · reliability · a11y…</p></div>
+            <div class="an supp"><div class="n">§ 09</div><h6>🎨 UX &amp; UI</h6><p>Wireframes · flows · mockups where relevant.</p></div>
+            <div class="an supp"><div class="n">§ 10</div><h6>🗂️ Data Model</h6><p>Entities · fields · relationships · volumes.</p></div>
+            <div class="an supp"><div class="n">§ 11</div><h6>⚠️ Dependencies, Risks, Open Questions</h6><p>What could block or bite.</p></div>
+            <div class="an scope"><div class="n">§ 12</div><h6>♾️ Out of Scope</h6><p>The explicit not-doing list.</p></div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">Header (1–5) · Requirements (6–8) · Supporting (9–11) · Scope (12).</p>
+        </div>
+      </div>
+
+      <!-- 10 METADATA + TL;DR -->
+      <div class="slide accent-blue" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> §§ 01–02 · Metadata + TL;DR</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">The part that looks trivial but saves weeks</h2></div>
+          <div class="sec-block">
+            <div class="tag">§ 01 · Metadata</div>
+            <h4>The spec's "ID card"</h4>
+            <div class="what">A short block of key-value fields at the very top so any reader knows — in 5 seconds — what they're looking at and whether it's current.</div>
+            <ul>
+              <li><strong>Title</strong> — "Biller Favourites · mBoB · v1"</li>
+              <li><strong>Status</strong> — Draft / Review / Approved / Implemented / Archived</li>
+              <li><strong>Version</strong> — 0.3 (semantic; bump on every meaningful change)</li>
+              <li><strong>Author(s)</strong> — the BA / PM / owner</li>
+              <li><strong>Reviewers</strong> — dev lead, QA lead, design lead, stakeholder</li>
+              <li><strong>Last updated</strong> — date; single place that changes on every edit</li>
+              <li><strong>Link to ticket / epic</strong> — Jira / Linear / GitHub issue</li>
+            </ul>
+          </div>
+          <div class="sec-block">
+            <div class="tag">§ 02 · TL;DR</div>
+            <h4>Two or three sentences. That's it.</h4>
+            <div class="what">A senior leader should be able to read only this and know what's being built, for whom, and why. If someone skips the whole spec and only reads the TL;DR, they should still leave able to have a correct hallway conversation about it.</div>
+            <div class="eg">TL;DR — We let mBoB users save up to 10 repeat billers as favourites on
+the Bill Payments home. One-tap pre-fill, MPIN still required. Solves the
+36-per-year re-entry problem for the 62% of users who pay the same
+billers every month. Ships v1 end of May.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11 PROBLEM + GOALS -->
+      <div class="slide accent-blue bg-subtle" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> §§ 03–04 · Problem + Goals &amp; Non-goals</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Direction before implementation</h2></div>
+          <div class="sec-block">
+            <div class="tag">§ 03 · Problem Statement</div>
+            <h4>Whose pain, how big, with evidence</h4>
+            <div class="what">One tight paragraph. Name the user segment, describe the pain concretely, quantify it if possible, and say why now. Evidence matters — usage data, support tickets, research.</div>
+            <div class="eg">62% of mBoB users pay the same 3+ billers every month (data: Q1 2026
+usage analytics). Each payment requires re-typing a 12-digit account
+number. Support volume: 8% of all tickets reference "can I save billers".
+Pain compounds: ~36 re-entries per year per active user.</div>
+            <div class="flag">Problem statements fail when they describe the solution ("users need favourites") instead of the pain ("users re-type account numbers 36×/year").</div>
+          </div>
+          <div class="sec-block">
+            <div class="tag">§ 04 · Goals &amp; Non-goals</div>
+            <h4>What success looks like — and what it doesn't</h4>
+            <div class="dual" style="max-width:100%; margin-top:0.4rem">
+              <div style="background:#F3FAE9; border:1px solid #D4E8BD; border-radius:8px; padding:0.7rem 1rem;">
+                <h5 style="color:#3D7A3D; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.4rem;">✅ Goals</h5>
+                <ul style="padding-left:1.1rem; font-size:0.88rem; line-height:1.6; color:var(--text); margin:0;">
+                  <li>Reduce re-entry time for repeat billers by ≥ 80%</li>
+                  <li>Hit 40% weekly active use of favourites within 2 months</li>
+                  <li>Support volume on "save billers" drops to &lt;1%</li>
+                </ul>
+              </div>
+              <div style="background:#FFF5F7; border:1px solid #FADCE3; border-radius:8px; padding:0.7rem 1rem;">
+                <h5 style="color:var(--red); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.4rem;">❌ Non-goals</h5>
+                <ul style="padding-left:1.1rem; font-size:0.88rem; line-height:1.6; color:var(--text); margin:0;">
+                  <li>Not: sharing favourites between users</li>
+                  <li>Not: auto-pay from a favourite</li>
+                  <li>Not: moving money between bank accounts</li>
+                </ul>
+              </div>
+            </div>
+            <div class="flag" style="margin-top:0.5rem">Non-goals are just as important as goals. Every stakeholder has their own "what about X?" — a visible non-goals list protects scope without requiring a meeting.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12 USERS -->
+      <div class="slide accent-blue" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> § 05 · Users &amp; Personas</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Design for specific humans</h2></div>
+          <div class="sec-block">
+            <div class="tag">§ 05 · Users &amp; Personas</div>
+            <h4>"Everyone" is not a user</h4>
+            <div class="what">Name 2–4 concrete personas. Real details — age, context, constraints. If a feature works for your three named personas, it works for millions. If you can only name "the user", your spec is wearing a blindfold.</div>
+            <div class="eg">Primary persona — Tashi (power user)
+  Thimphu · 34 · shopkeeper · pays 30+ bills/month
+  Wants speed. Will learn shortcuts. Annoyed by extra taps.
+
+Secondary persona — Aum Pema (conservative user)
+  Trashigang · 58 · retired civil servant
+  Dzongkha. Big buttons. Uses mBoB for exactly 2 things.
+  Must not be surprised by new UI.
+
+Edge persona — Karma (student abroad)
+  Australia · 22 · may not have Bhutan SIM
+  Logs in over Wi-Fi; performance on slow networks matters.</div>
+            <div class="flag">Stories, AC, and UX decisions should all reference these personas by name — "Can Aum Pema use this in Dzongkha?" is the kind of question a persona section makes possible.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 13 FUNCTIONAL REQUIREMENTS -->
+      <div class="slide accent-blue bg-subtle" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> §§ 06–07 · Functional Requirements + AC</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">What the system does — and how we'll know it does</h2></div>
+          <div class="sec-block">
+            <div class="tag">§ 06 · Functional Requirements</div>
+            <h4>User stories + flows + behaviour</h4>
+            <div class="what">A list of user stories the feature delivers. Each story is "As a … I want … so that …" — with the <em>so that</em> explaining the real goal, so dev and AI can make smart trade-offs.</div>
+            <ul>
+              <li>FR-01 · Save a paid biller as a favourite</li>
+              <li>FR-02 · View favourites on Bill Payments home</li>
+              <li>FR-03 · Tap a favourite to pre-fill a payment</li>
+              <li>FR-04 · Remove a favourite</li>
+              <li>FR-05 · Edit alias / nickname on a favourite</li>
+            </ul>
+            <div class="flag">One feature = multiple FRs. If a single FR takes more than a sentence to describe, it's two FRs.</div>
+          </div>
+          <div class="sec-block" style="margin-top:0.5rem">
+            <div class="tag">§ 07 · Acceptance Criteria</div>
+            <h4>Given / When / Then · pass or fail</h4>
+            <div class="what">Every FR gets 1–3 AC. Taught in depth in Combined Class 04 — here, they live inside the spec. 3–7 total AC across a feature spec is normal.</div>
+            <div class="eg">AC-01 · Given user completed a payment,
+          When they tap ⭐ Save,
+          Then biller appears in Favourites within 1 second.
+
+AC-02 · Given user has 10 favourites already,
+          When they tap ⭐ Save,
+          Then system shows "Limit reached" and adds nothing.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 14 NFRs -->
+      <div class="slide accent-blue" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> § 08 · Non-Functional Requirements</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">How well the system must do it</h2></div>
+          <div class="sec-block">
+            <div class="tag">§ 08 · NFRs</div>
+            <h4>Performance · Security · Reliability · Usability · Accessibility · Scalability</h4>
+            <div class="what">Taught in depth in Combined Class 03. In the spec itself, list the NFRs that apply to <em>this feature</em> — not the whole system. Use numbers, not adjectives.</div>
+            <ul>
+              <li><strong>Performance</strong> — Favourites list renders &lt; 1s on 4G, p95</li>
+              <li><strong>Security</strong> — Favourites scoped to logged-in user; no cross-account leakage in audit</li>
+              <li><strong>Reliability</strong> — Offline save queues locally; syncs when online; never silently drops</li>
+              <li><strong>Accessibility</strong> — ⭐ button labelled for screen readers; colour-independent cue</li>
+              <li><strong>Scalability</strong> — Supports 10k concurrent users on pay-day without degraded UX</li>
+            </ul>
+            <div class="flag">The sin here is <em>silence</em>, not vagueness. If an NFR isn't named, it doesn't exist. Silent NFRs get discovered by users.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 15 UX + DATA -->
+      <div class="slide accent-blue bg-subtle" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span> §§ 09–10 · UX &amp; Data Model</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">What it looks like · what gets stored</h2></div>
+          <div class="dual">
+            <div class="sec-block">
+              <div class="tag">§ 09 · UX &amp; UI</div>
+              <h4>Where it lives and how it flows</h4>
+              <div class="what">Wireframes or a link to Figma. Low-fi is fine. The job is to align the team on placement and flow, not final visual design.</div>
+              <ul>
+                <li><strong>Entry point</strong> — Receipt screen after a successful payment</li>
+                <li><strong>Primary screen</strong> — Bill Payments home, new "Favourites" row above "Recent"</li>
+                <li><strong>States to cover</strong> — empty · populated · loading · error · offline</li>
+              </ul>
+              <div class="flag">Every state is a separate UX consideration. Miss one and QA will file a bug.</div>
+            </div>
+            <div class="sec-block">
+              <div class="tag">§ 10 · Data Model</div>
+              <h4>Entities · fields · relationships · volumes</h4>
+              <div class="what">Sketch the new or changed data structures. Field names, types, relationships. Not a full ERD — just enough for dev to match on existing schema.</div>
+              <div class="eg">Favourite {
+  id:           uuid
+  userId:       fk → users.id
+  billerId:     fk → billers.id
+  alias:        string (optional, max 30)
+  lastUsedAt:   timestamp
+  lastAmount:   decimal (optional)
+  createdAt:    timestamp
+}
+
+Volume: avg 4 favourites per active user
+Max 10 per user (enforced at app layer)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 16 DEPS + SCOPE -->
+      <div class="slide accent-blue" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span> §§ 11–12 · Dependencies, Risks, Out of Scope</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">The "what could hurt us" sections</h2></div>
+          <div class="sec-block">
+            <div class="tag">§ 11 · Dependencies, Risks, Open Questions</div>
+            <h4>What could block, bite, or surprise</h4>
+            <div class="what">Three short lists. Keeping them visible is how teams avoid the "oh, we forgot about that" moment a week before ship.</div>
+            <ul>
+              <li><strong>Dependencies</strong> — the biller-list API needs a new <code>lastUsedAt</code> sort; depends on Design finalising the star icon</li>
+              <li><strong>Risks</strong> — ≥ 10 favourites per user may happen before launch if we're not careful with the migration; plan a data backfill</li>
+              <li><strong>Open questions</strong> — does "favourite" persist across device re-install? Answer: yes, server-side — confirm with Support before launch</li>
+            </ul>
+          </div>
+          <div class="sec-block" style="border-left:5px solid var(--red)">
+            <div class="tag" style="color:var(--red)">§ 12 · Out of Scope</div>
+            <h4>The deadline-saving list</h4>
+            <div class="what">Every spec needs an explicit "we're <em>not</em> doing this" section. Without it, stakeholders quietly assume their favourite idea is included — until it isn't.</div>
+            <ul>
+              <li>Sharing favourites between users</li>
+              <li>Categories / custom tags / icons</li>
+              <li>Auto-pay from a favourite</li>
+              <li>Support for legacy mBoB v4</li>
+              <li>Bulk import / export</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 17 SECTION: LIFECYCLE -->
+      <div class="slide bg-indigo" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Three</div>
+          <h1 class="display" style="color: white">Lifecycle,<br>Versioning, Length</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">A spec is a living document.</p>
+        </div>
+        <div class="section-num" style="color: white">03</div>
+      </div>
+
+      <!-- 18 LIFECYCLE DIAGRAM -->
+      <div class="slide accent-blue bg-subtle" data-slide="18">
+        <div class="slide-label"><span class="snum">18</span> Status lifecycle</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Five statuses · every spec flows through them</h2></div>
+          <div class="lifecycle">
+            <div class="lc-st draft">
+              <div class="num">0.1–0.3</div>
+              <h6>📝 Draft</h6>
+              <p>Being written. Sections missing. Nobody builds from this.</p>
+            </div>
+            <div class="lc-arrow">→</div>
+            <div class="lc-st review">
+              <div class="num">0.4–0.9</div>
+              <h6>👀 Review</h6>
+              <p>All sections present. QA + dev + stakeholder review. Questions fly.</p>
+            </div>
+            <div class="lc-arrow">→</div>
+            <div class="lc-st approved">
+              <div class="num">1.0</div>
+              <h6>✅ Approved</h6>
+              <p>Signed off by reviewers. Dev can start. Changes need a bump + re-review.</p>
+            </div>
+            <div class="lc-arrow">→</div>
+            <div class="lc-st impl">
+              <div class="num">1.x</div>
+              <h6>🔨 Implemented</h6>
+              <p>Built, tested, shipped. Spec gets "as-built" updates if reality diverged.</p>
+            </div>
+            <div class="lc-arrow">→</div>
+            <div class="lc-st arch">
+              <div class="num">final</div>
+              <h6>📦 Archived</h6>
+              <p>Feature superseded or retired. Kept for historical context.</p>
+            </div>
+          </div>
+          <div class="card" style="max-width:900px; background:white; border-left:4px solid var(--amber); padding:0.9rem 1.2rem;">
+            <h5 style="color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.3rem;">Versioning convention</h5>
+            <p style="font-size:0.92rem; color:var(--text); line-height:1.65">Use <strong>major.minor</strong>. <strong>Minor bumps</strong> (0.4, 0.5) during drafting and review. <strong>Major bumps</strong> (1.0, 2.0) when status changes state. <strong>Keep a changelog at the bottom</strong> — one line per bump — so anyone re-opening the spec can see what moved.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 19 LENGTH DISCIPLINE -->
+      <div class="slide accent-blue" data-slide="19">
+        <div class="slide-label"><span class="snum">19</span> Length discipline</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">A spec you can't read in 20 minutes doesn't get read</h2></div>
+          <div class="length-rule">
+            <h5>🕐 The 20-minute rule</h5>
+            <p>A dev-ready feature spec should take a mid-level engineer <strong>20 minutes or less</strong> to read end-to-end. If yours takes longer, it's either the wrong type (should probably be a PRD) or it's got fat to trim.</p>
+          </div>
+          <div class="cols-2" style="max-width:1100px; gap:1rem">
+            <div class="card" style="border-top:3px solid var(--red)">
+              <h4 style="color:var(--red)">Common bloat</h4>
+              <ul style="font-size:0.9rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li>Paragraphs where a bullet list would do</li>
+                <li>Repeating the TL;DR three times</li>
+                <li>Embedding whole meeting transcripts</li>
+                <li>Speculating about future versions</li>
+                <li>Re-explaining company context everyone knows</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--green)">
+              <h4 style="color:#3D7A3D">Discipline moves</h4>
+              <ul style="font-size:0.9rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li>Bullets over prose wherever possible</li>
+                <li>Diagrams where 200 words would be needed</li>
+                <li>Link out to background docs — don't quote them</li>
+                <li>One sentence per sentence — no nested clauses</li>
+                <li>Cut every "it should be noted that"</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">Target: feature spec 2–5 pages · PRD 10–30 · SRS larger but never longer than necessary.</p>
+        </div>
+      </div>
+
+      <!-- 20 SECTION: EXAMPLE -->
+      <div class="slide bg-blue" data-slide="20">
+        <div class="slide-label"><span class="snum">20</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Four</div>
+          <h1 class="display" style="color: white">A Complete<br>Example</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Biller Favourites · mBoB · v1 — all 12 sections.</p>
+        </div>
+        <div class="section-num" style="color: white">04</div>
+      </div>
+
+      <!-- 21 EXAMPLE PART 1 -->
+      <div class="slide accent-blue bg-subtle" data-slide="21">
+        <div class="slide-label"><span class="snum">21</span> Example · header zone</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Sections 01–05</h2></div>
+          <div class="spec-sample">
+            <h6>§ 01 · Metadata</h6>
+            <p class="meta-row"><b>Title:</b> Biller Favourites · mBoB · v1</p>
+            <p class="meta-row"><b>Status:</b> Approved · <b>Version:</b> 1.0 · <b>Last updated:</b> 2026-05-02</p>
+            <p class="meta-row"><b>Author:</b> Tek N. Acharya · <b>Reviewers:</b> Bhuwan S. (Dev), QA Lead, Design Lead, PO</p>
+            <p class="meta-row"><b>Ticket:</b> MBOB-1042</p>
+
+            <h6>§ 02 · TL;DR</h6>
+            <p>Let mBoB users save up to 10 repeat billers as favourites on the Bill Payments home. One-tap pre-fill, MPIN still required. Solves the 36-per-year re-entry problem for the 62% of users who pay the same billers every month. Ships end of May.</p>
+
+            <h6>§ 03 · Problem</h6>
+            <p>62% of mBoB users pay the same 3+ billers every month (Q1 2026 analytics). Each payment requires re-typing a 12-digit account number — ≈36 re-entries per active user per year. 8% of all support tickets ask "can I save billers".</p>
+
+            <h6>§ 04 · Goals &amp; Non-goals</h6>
+            <ul>
+              <li><strong>Goals:</strong> reduce re-entry time ≥ 80%; 40% weekly active use of favourites within 2 months; support tickets on "save billers" drop to &lt; 1%.</li>
+              <li><strong>Non-goals:</strong> sharing favourites between users · auto-pay · custom categorisation · bulk import/export.</li>
+            </ul>
+
+            <h6>§ 05 · Users &amp; Personas</h6>
+            <ul>
+              <li><strong>Primary — Tashi:</strong> Thimphu · 34 · shopkeeper · 30+ bills/month · wants speed.</li>
+              <li><strong>Secondary — Aum Pema:</strong> Trashigang · 58 · Dzongkha · uses mBoB for exactly 2 things.</li>
+              <li><strong>Edge — Karma:</strong> Student in Australia · 22 · may not have Bhutan SIM; logs in over Wi-Fi.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 22 EXAMPLE PART 2 -->
+      <div class="slide accent-blue" data-slide="22">
+        <div class="slide-label"><span class="snum">22</span> Example · requirements zone</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Sections 06–08</h2></div>
+          <div class="spec-sample">
+            <h6>§ 06 · Functional Requirements</h6>
+            <ul>
+              <li>FR-01 · Save a paid biller as a favourite (from receipt screen)</li>
+              <li>FR-02 · View favourites on the Bill Payments home</li>
+              <li>FR-03 · Tap a favourite to pre-fill a payment</li>
+              <li>FR-04 · Remove a favourite</li>
+              <li>FR-05 · Edit alias / nickname on a favourite</li>
+            </ul>
+
+            <h6>§ 07 · Acceptance Criteria</h6>
+            <div class="ac-block">
+              <strong>AC-01 · Save</strong><br>
+              <span class="gwt-k">Given</span> user completed a bill payment,<br>
+              <span class="gwt-k">When</span> they tap ⭐ Save on the receipt,<br>
+              <span class="gwt-k">Then</span> biller appears in Favourites within 1 second.
+            </div>
+            <div class="ac-block">
+              <strong>AC-02 · Use</strong><br>
+              <span class="gwt-k">Given</span> user has a saved favourite,<br>
+              <span class="gwt-k">When</span> they tap it,<br>
+              <span class="gwt-k">Then</span> amount + account pre-fill; MPIN still required to confirm.
+            </div>
+            <div class="ac-block">
+              <strong>AC-03 · Edge · limit</strong><br>
+              <span class="gwt-k">Given</span> user has 10 favourites,<br>
+              <span class="gwt-k">When</span> they tap ⭐ Save,<br>
+              <span class="gwt-k">Then</span> system shows "Limit reached" and adds nothing.
+            </div>
+            <div class="ac-block">
+              <strong>AC-04 · Edge · offline</strong><br>
+              <span class="gwt-k">Given</span> user is offline,<br>
+              <span class="gwt-k">When</span> they tap ⭐ Save,<br>
+              <span class="gwt-k">Then</span> save is queued; syncs when online; shows "Will sync" toast.
+            </div>
+
+            <h6>§ 08 · Non-Functional Requirements</h6>
+            <ul>
+              <li><strong>Perf:</strong> favourites list renders &lt; 1s on 4G, p95.</li>
+              <li><strong>Security:</strong> favourites scoped to user; no cross-account leakage in audit logs.</li>
+              <li><strong>Reliability:</strong> offline save must never silently drop; queue + sync.</li>
+              <li><strong>Accessibility:</strong> ⭐ labelled for screen readers; colour-independent cue (star shape).</li>
+              <li><strong>Scalability:</strong> supports 10k concurrent users at pay-day peak without UX degradation.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 23 EXAMPLE PART 3 -->
+      <div class="slide accent-blue bg-subtle" data-slide="23">
+        <div class="slide-label"><span class="snum">23</span> Example · supporting &amp; scope</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Sections 09–12</h2></div>
+          <div class="spec-sample">
+            <h6>§ 09 · UX &amp; UI</h6>
+            <ul>
+              <li><strong>Entry:</strong> ⭐ button on post-payment receipt screen.</li>
+              <li><strong>Primary:</strong> Favourites row on Bill Payments home, above "Recent".</li>
+              <li><strong>States:</strong> empty · populated · loading · error · offline (all linked in Figma: <code>mbob-favs-v1</code>).</li>
+            </ul>
+
+            <h6>§ 10 · Data Model</h6>
+            <pre>Favourite {
+  id:          uuid
+  userId:      fk → users.id
+  billerId:    fk → billers.id
+  alias:       string (optional, max 30)
+  lastUsedAt:  timestamp
+  lastAmount:  decimal (optional)
+  createdAt:   timestamp
+}
+Volume: avg 4 favs / active user · max 10 enforced at app layer</pre>
+
+            <h6>§ 11 · Dependencies, Risks, Open Questions</h6>
+            <ul>
+              <li><strong>Dep:</strong> biller-list API needs a new <code>lastUsedAt</code> sort field.</li>
+              <li><strong>Risk:</strong> users may exceed 10 before launch — plan a migration cleanup.</li>
+              <li><strong>Open:</strong> does a favourite survive an app reinstall? Server-side yes — confirm with Support.</li>
+            </ul>
+
+            <h6>§ 12 · Out of Scope (v1)</h6>
+            <ul>
+              <li>Sharing favourites between users</li>
+              <li>Categories / custom tags / icons</li>
+              <li>Auto-pay from a favourite</li>
+              <li>Support for legacy mBoB v4</li>
+              <li>Bulk import / export</li>
+            </ul>
+
+            <h6 style="color:var(--muted)">Changelog</h6>
+            <p class="meta-row">v0.1 · initial draft · Tek · 2026-04-22</p>
+            <p class="meta-row">v0.5 · added NFRs, refined AC · Tek · 2026-04-28</p>
+            <p class="meta-row">v1.0 · approved; review comments folded in · 2026-05-02</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 24 WRAP -->
+      <div class="slide bg-dark" data-slide="24">
+        <div class="slide-label"><span class="snum">24</span> Wrap-up</div>
+        <div class="center" style="max-width: 820px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key Takeaways</div>
+          <h2 class="heading" style="color: white;">What we covered today</h2>
+          <ul class="reveal-list" style="color: rgba(255,255,255,0.9); text-align:left; max-width: 720px; margin: 1.5rem auto; font-size: 1rem; line-height: 2;">
+            <li>✅ <strong>Spec / Story / PRD / SRS</strong> — same DNA, different scope &amp; tone</li>
+            <li>✅ Three industry traditions: IEEE 29148 (formal), PRD (modern tech), Feature Spec (agile)</li>
+            <li>✅ The <strong>12-section anatomy</strong> — Header · Requirements · Supporting · Scope</li>
+            <li>✅ Status <strong>lifecycle</strong>: Draft → Review → Approved → Implemented → Archived · with versioning + changelog</li>
+            <li>✅ <strong>20-minute rule</strong> — a dev-ready feature spec reads end-to-end in 20 min</li>
+            <li>✅ The sin of <strong>silence</strong> — if it's not named, it doesn't exist</li>
+            <li>✅ Next class: <strong>Writing Mechanics for Specs</strong> — active voice, precise verbs, diagrams that carry weight</li>
+          </ul>
+          <p style="color: var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.2rem; margin-top:1.5rem">If a mid-level engineer reads your spec and opens their editor — you're done.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 24</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>

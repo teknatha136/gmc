@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BA+QA Class 04 Notes — Acceptance Criteria</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#0066B2; --indigo:#001F35; --amber:#247EC1; --green:#7BC950; --purple:#4796D1; --red:#D80032; --text:#1B2021; --muted:#7B7C7F; --faint:#9CA3AF; --surf:#fff; --bg:#F9F9F9; --border:#EDEDED; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Open Sans','Aptos',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; font-size:17px; -webkit-font-smoothing:antialiased; }
+    h1,h2,h3,h4,h5,h6 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:400; letter-spacing:-0.01em; }
+    a { color: var(--blue); }
+
+    .hero { background:var(--surf); border-bottom:1px solid var(--border); padding:4rem 2rem 3rem; text-align:center; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background: linear-gradient(135deg, #0067A3, #002D72); }
+    .logo-corner { position:absolute; top: 1.25rem; left: 1.5rem; opacity:0.85; }
+    .logo-corner img { height: 34px; }
+    .hero-badge { display:inline-flex; align-items:center; gap:0.5rem; background:var(--bg); border:1px solid var(--border); border-radius:100px; padding:0.35rem 1rem; font-size:0.75rem; font-weight:700; color:var(--muted); letter-spacing:0.07em; text-transform:uppercase; margin-bottom:1.5rem; }
+    .hero-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--amber); }
+    .hero h1 { font-size:clamp(2rem,5vw,3.5rem); line-height:1.15; margin-bottom:0.75rem; }
+    .c-blue{color:var(--blue);} .c-indigo{color:var(--indigo);}
+    .hero-sub { font-size:1rem; color:var(--muted); margin-bottom:2rem; max-width:680px; margin-left:auto; margin-right:auto; }
+    .hero-tags { display:flex; justify-content:center; gap:0.6rem; flex-wrap:wrap; }
+    .hero-tag { padding:0.3rem 0.9rem; border-radius:8px; font-size:0.78rem; font-weight:600; background:#E6F0F8; color:var(--blue); }
+
+    .container { max-width:1040px; margin:0 auto; padding:0 2rem 6rem; }
+
+    .toc { background:var(--surf); border:1px solid var(--border); border-radius:16px; padding:1.75rem 2rem; margin:2.5rem 0; }
+    .toc h3 { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); margin-bottom:1.25rem; }
+    .toc ol { list-style: none; counter-reset: step; }
+    .toc li { counter-increment: step; padding:0.45rem 0; border-bottom:1px solid var(--border); }
+    .toc li:last-child { border-bottom:none; }
+    .toc li::before { content: counter(step, decimal-leading-zero); color:var(--faint); font-family:'Bahnschrift','Segoe UI',sans-serif; margin-right:0.8rem; font-size:0.9rem; }
+    .toc a { text-decoration:none; color:var(--text); font-weight:500; }
+    .toc a:hover { color: var(--blue); }
+
+    section.chapter { margin: 3.5rem 0; }
+    .chapter-head { margin-bottom:1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
+    .chapter-eyebrow { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--blue); margin-bottom:0.3rem; }
+    .chapter-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--indigo); }
+
+    p { margin: 0.7rem 0; }
+    ul, ol { margin: 0.6rem 0 0.6rem 1.3rem; }
+    li { margin: 0.3rem 0; }
+    strong { color: var(--indigo); }
+
+    .callout { background:var(--surf); border:1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 10px; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+    .callout.amber { border-left-color: var(--amber); }
+    .callout.green { border-left-color: var(--green); }
+    .callout.red { border-left-color: var(--red); }
+    .callout.indigo { border-left-color: var(--indigo); }
+    .callout h4 { font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--indigo); }
+
+    .gwt { background:var(--surf); border:2px solid var(--blue); border-radius:12px; padding:1.1rem 1.5rem; margin:1rem 0; }
+    .gwt p { font-size:1.05rem; line-height:1.9; margin:0.2rem 0; color:var(--text); font-family:'Bahnschrift','Segoe UI',sans-serif; }
+    .gwt .k { color:var(--blue); font-weight:700; min-width:75px; display:inline-block; }
+    .gwt .blank { color:var(--faint); border-bottom:2px dashed var(--faint); padding:0 0.6rem; }
+
+    .gwt-filled { background:var(--surf); border:1px solid var(--border); border-left:5px solid var(--green); border-radius:10px; padding:0.8rem 1.2rem; margin:0.8rem 0; }
+    .gwt-filled p { font-size:0.95rem; line-height:1.8; margin:0.15rem 0; color:var(--text); }
+    .gwt-filled .k { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; min-width:72px; display:inline-block; }
+
+    .ac-block { background:var(--surf); border:1px solid var(--border); border-left:4px solid var(--green); border-radius:8px; padding:0.7rem 1rem; margin:0.6rem 0; }
+    .ac-block .lbl { color:var(--muted); font-size:0.73rem; text-transform:uppercase; letter-spacing:0.07em; font-weight:700; margin-bottom:0.3rem; }
+    .ac-block p { font-size:0.92rem; line-height:1.7; margin:0; color:var(--text); }
+    .ac-block .k { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; }
+
+    .three-readers { display:grid; grid-template-columns: repeat(3, 1fr); gap:0.8rem; margin:1rem 0; }
+    @media (max-width: 720px){ .three-readers { grid-template-columns: 1fr; } }
+    .three-readers .col { background:var(--surf); border:1px solid var(--border); border-top:3px solid var(--indigo); border-radius:10px; padding:0.9rem 1.1rem; }
+    .three-readers .col.dev { border-top-color:var(--blue); }
+    .three-readers .col.qa { border-top-color:var(--amber); }
+    .three-readers h5 { color:var(--indigo); font-size:1rem; margin-bottom:0.3rem; }
+    .three-readers p { font-size:0.88rem; line-height:1.6; color:var(--text); }
+
+    .props-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:0.7rem; margin:1rem 0; }
+    @media (max-width: 720px){ .props-grid { grid-template-columns: 1fr; } }
+    .prop { background:var(--surf); border:1px solid var(--border); border-left:3px solid var(--blue); border-radius:8px; padding:0.7rem 1rem; }
+    .prop h6 { color:var(--indigo); font-size:0.95rem; margin-bottom:0.2rem; }
+    .prop p { font-size:0.88rem; line-height:1.55; color:var(--text); margin:0.2rem 0; }
+    .prop .eg { color:var(--muted); font-size:0.82rem; font-style:italic; margin-top:0.3rem; font-family:'Courier New',monospace; }
+
+    .mistake { background:var(--surf); border:1px solid var(--border); border-left:4px solid var(--red); border-radius:8px; padding:0.7rem 1rem; margin:0.5rem 0; }
+    .mistake h5 { color:var(--red); font-size:0.98rem; margin-bottom:0.25rem; }
+    .mistake p { font-size:0.9rem; line-height:1.6; color:var(--text); margin:0.2rem 0; }
+    .mistake .fix { color:var(--muted); font-size:0.85rem; padding-top:0.3rem; border-top:1px dashed var(--border); margin-top:0.3rem; }
+    .mistake .fix strong { color:#3D7A3D; }
+
+    .bad { background:var(--surf); border:1px solid var(--border); border-radius:6px; padding:0.7rem 1rem; font-family:'Courier New',monospace; font-size:0.88rem; border-left:4px solid var(--red); margin:0.3rem 0; line-height:1.65; color:var(--text); white-space:pre-wrap; }
+    .good { background:var(--surf); border:1px solid var(--border); border-radius:6px; padding:0.7rem 1rem; font-family:'Courier New',monospace; font-size:0.88rem; border-left:4px solid var(--green); margin:0.3rem 0; line-height:1.65; color:var(--text); white-space:pre-wrap; }
+
+    .lifecycle-tbl { background:var(--surf); border:1px solid var(--border); border-radius:10px; overflow:hidden; margin:1rem 0; }
+    .lifecycle-tbl table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+    .lifecycle-tbl th { background:var(--bg); padding:0.6rem 0.8rem; text-align:left; color:var(--muted); font-size:0.76rem; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; border-bottom:1px solid var(--border); }
+    .lifecycle-tbl td { padding:0.55rem 0.8rem; border-bottom:1px solid var(--border); color:var(--text); vertical-align:top; line-height:1.55; }
+    .lifecycle-tbl tr:last-child td { border-bottom:none; }
+    .lifecycle-tbl td:first-child { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; }
+
+    .summary { background: linear-gradient(135deg, #F9F9F9, #EDEDED); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+    .summary h4 { color: var(--indigo); margin-bottom: 0.5rem; font-size: 0.95rem; }
+    .summary ul { margin-left: 1.1rem; }
+    .summary li { font-size: 0.93rem; margin: 0.25rem 0; }
+
+    footer { text-align:center; padding: 2rem 1rem 3rem; color: var(--faint); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+    footer img { height: 28px; opacity:0.7; margin-bottom: 0.5rem; display: block; margin-left:auto; margin-right:auto; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="logo-corner"><img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE"></div>
+    <div class="hero-badge"><span class="dot"></span> BA + QA Combined · Class 04</div>
+    <h1><span class="c-blue">Acceptance Criteria</span><br><span class="c-indigo">The Shared Artifact</span></h1>
+    <p class="hero-sub">Your take-home reference. AC is the one artifact a BA writes, a developer builds to, and a QA verifies. Get it right and the rest flows. Get it wrong and everyone spends the next three sprints arguing.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">AC</span>
+      <span class="hero-tag">Given/When/Then</span>
+      <span class="hero-tag">SCARCE</span>
+      <span class="hero-tag">BA → QA Handoff</span>
+      <span class="hero-tag">Password Reset Exercise</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="toc">
+      <h3>In this note</h3>
+      <ol>
+        <li><a href="#why">Why AC matters</a></li>
+        <li><a href="#what">What AC actually is</a></li>
+        <li><a href="#shared">The shared artifact · three readers</a></li>
+        <li><a href="#gwt">The Given/When/Then format</a></li>
+        <li><a href="#multi">One story · multiple AC</a></li>
+        <li><a href="#ac-vs-tc">AC vs test case</a></li>
+        <li><a href="#scarce">What good AC looks like · SCARCE</a></li>
+        <li><a href="#bad-good">Bad AC vs good AC</a></li>
+        <li><a href="#mistakes">Six common AC mistakes</a></li>
+        <li><a href="#lifecycle">AC lifecycle · who does what</a></li>
+        <li><a href="#exercise">Exercise · password reset AC</a></li>
+        <li><a href="#take">Key takeaways</a></li>
+      </ol>
+    </div>
+
+    <section class="chapter" id="why">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 1</div>
+        <h2>Why AC matters</h2>
+      </div>
+      <p>Imagine giving this user story to two different developers on the same day:</p>
+      <div class="callout">
+        <p><em>"As a user who has forgotten their password, I want to reset it online so I can log back in without contacting support."</em></p>
+      </div>
+      <p>They both say "done" a week later. They've built two very different things.</p>
+      <ul>
+        <li><strong>Developer A</strong> — email → reset link → new password. Thirty minutes of work. Nothing about expiry. Nothing about what happens if the user re-enters their old password.</li>
+        <li><strong>Developer B</strong> — phone + OTP → password rules → auto-login + email confirmation. Two hours of work. No support for users abroad without a phone.</li>
+      </ul>
+      <p>Both "finished" the story. Neither is objectively wrong. They each filled ambiguity with different assumptions — and neither matches what a manager, stakeholder, or QA expected. That's the cost of a story without AC.</p>
+      <div class="callout amber">
+        <h4>The big idea today</h4>
+        <p><strong>Acceptance criteria close the gap</strong> between "what we asked for" and "what got built." They're the specific, testable conditions that the whole team — BA, Dev, QA, stakeholder — agrees on <em>before</em> coding starts.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="what">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 2</div>
+        <h2>What AC actually is</h2>
+      </div>
+      <p><strong>Acceptance criteria are the specific, testable conditions a user story must meet for everyone to agree it's "done".</strong></p>
+      <p>Each AC is a pass/fail statement. Either the system does a specific thing when a specific trigger happens, or it doesn't. If a QA can't answer "yes" or "no" after testing the AC, the AC isn't written well enough yet.</p>
+
+      <div class="callout indigo">
+        <h4>Story vs AC</h4>
+        <p><strong>User story</strong> = <em>what we want and why</em>. "Save favourite billers so users don't re-type details."<br>
+        <strong>Acceptance criteria</strong> = <em>how we'll know we got it right</em>. "Given the user completed a payment, when they tap ⭐ Save, then the biller appears in Favourites within 1 second."</p>
+        <p>One story, multiple AC. AC can't stand alone — they always belong to a story.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="shared">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 3</div>
+        <h2>The shared artifact · three readers</h2>
+      </div>
+      <p>AC is unusual because <strong>three different roles depend on the same sentences</strong> for their jobs. That's what makes it the single highest-leverage document on the team.</p>
+      <div class="three-readers">
+        <div class="col">
+          <h5>📋 The BA</h5>
+          <p><strong>Writes</strong> AC. Uses them to clarify scope with stakeholders and to ensure nothing was assumed silently. If there's no AC, the story isn't ready.</p>
+        </div>
+        <div class="col dev">
+          <h5>💻 The Developer</h5>
+          <p><strong>Builds to</strong> AC. They're the "definition of done" from the implementer's side — no guessing required, the behaviour is specified.</p>
+        </div>
+        <div class="col qa">
+          <h5>🔍 The QA</h5>
+          <p><strong>Verifies</strong> AC. Each AC becomes at least one test case. QA signs off by walking every AC and confirming pass/fail.</p>
+        </div>
+      </div>
+      <p>Nowhere else in software do three roles depend on the same document for their job. That's the leverage — and that's why bad AC ripples through the whole team while good AC makes everyone faster.</p>
+    </section>
+
+    <section class="chapter" id="gwt">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 4</div>
+        <h2>The Given/When/Then format</h2>
+      </div>
+      <p>The industry-standard format for AC, used everywhere from small startups to regulated banking teams:</p>
+      <div class="gwt">
+        <p><span class="k">Given</span> <span class="blank">&nbsp; the starting situation &nbsp;</span></p>
+        <p><span class="k">When</span> <span class="blank">&nbsp; the user does a specific action &nbsp;</span></p>
+        <p><span class="k">Then</span> <span class="blank">&nbsp; a specific thing happens &nbsp;</span></p>
+      </div>
+      <ul>
+        <li><strong>Given</strong> — the context or precondition. What's true before the user acts?</li>
+        <li><strong>When</strong> — the triggering action or event. What does the user do?</li>
+        <li><strong>Then</strong> — the expected, observable outcome. What must happen as a result?</li>
+      </ul>
+      <h3 style="color:var(--indigo); font-size:1.1rem; margin-top:1.5rem">Why this shape works</h3>
+      <ul>
+        <li>Forces you to specify <strong>state</strong> before action. Many bugs come from unstated preconditions.</li>
+        <li>Makes the <strong>cause → effect</strong> explicit. No more "it should kind of do X."</li>
+        <li>Maps cleanly to a <strong>test case</strong> — precondition → step → expected result.</li>
+        <li>Reads well in plain English even to a non-technical stakeholder.</li>
+      </ul>
+
+      <h3 style="color:var(--indigo); font-size:1.1rem; margin-top:1.5rem">A filled-in example</h3>
+      <p>For the story "Save a biller as a favourite":</p>
+      <div class="gwt-filled">
+        <p><span class="k">Given</span> the user has just completed a bill payment successfully,</p>
+        <p><span class="k">When</span> they tap the "⭐ Save as favourite" button on the receipt screen,</p>
+        <p><span class="k">Then</span> the biller appears in their Favourites list on the Bill Payments home within 1 second.</p>
+      </div>
+      <p>Notice how this is:</p>
+      <ul>
+        <li><strong>Specific</strong> — one action, one outcome, no room for misreading.</li>
+        <li><strong>Testable</strong> — a QA can verify yes/no.</li>
+        <li><strong>Observable</strong> — about behaviour ("appears in list"), not implementation ("adds a row to <code>favourites_table</code>").</li>
+        <li><strong>Bounded</strong> — "within 1 second" quantifies the expectation.</li>
+      </ul>
+    </section>
+
+    <section class="chapter" id="multi">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 5</div>
+        <h2>One story · multiple AC</h2>
+      </div>
+      <p>A real story needs several AC to cover the behaviour properly. A good rule of thumb: <strong>3 to 7 AC per story</strong>.</p>
+      <ul>
+        <li>Fewer than 3 = probably missing edge cases.</li>
+        <li>More than 7 = the story is too big; split it.</li>
+      </ul>
+      <p>Shape of a well-covered story: <strong>one or two happy paths + one inverse (undo/remove) + two or three edges</strong>. Here's the favourites story, fully covered:</p>
+      <div class="ac-block">
+        <div class="lbl">AC 1 · Happy path · save</div>
+        <p><span class="k">Given</span> the user completed a payment, <span class="k">when</span> they tap ⭐ Save, <span class="k">then</span> the biller appears in Favourites within 1 second.</p>
+      </div>
+      <div class="ac-block">
+        <div class="lbl">AC 2 · Use the favourite</div>
+        <p><span class="k">Given</span> the user has a saved favourite, <span class="k">when</span> they tap it on the home screen, <span class="k">then</span> the payment form is pre-filled with biller and last amount; MPIN is still required to confirm.</p>
+      </div>
+      <div class="ac-block">
+        <div class="lbl">AC 3 · Remove a favourite</div>
+        <p><span class="k">Given</span> a saved favourite, <span class="k">when</span> the user long-presses it and taps "Remove", <span class="k">then</span> the favourite disappears immediately and no payment is triggered.</p>
+      </div>
+      <div class="ac-block">
+        <div class="lbl">AC 4 · Edge · limit reached</div>
+        <p><span class="k">Given</span> the user already has 10 saved favourites, <span class="k">when</span> they tap ⭐ Save, <span class="k">then</span> the system shows a message "You've reached the limit of 10. Remove one to save this." and no favourite is added.</p>
+      </div>
+      <div class="ac-block">
+        <div class="lbl">AC 5 · Edge · offline</div>
+        <p><span class="k">Given</span> the user is offline, <span class="k">when</span> they tap ⭐ Save, <span class="k">then</span> the save is queued locally and shows "Will sync when online"; it appears in the live list once the connection returns.</p>
+      </div>
+      <p style="font-style:italic; color:var(--muted)">Five AC. One happy path · one companion (use the favourite) · one inverse (remove) · two edges (limit + offline). That's a well-scoped story.</p>
+    </section>
+
+    <section class="chapter" id="ac-vs-tc">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 6</div>
+        <h2>AC vs test case · close cousins</h2>
+      </div>
+      <p>AC becomes test cases when QA prepares to verify — but they're not identical.</p>
+      <div class="lifecycle-tbl">
+        <table>
+          <thead>
+            <tr><th>Aspect</th><th>Acceptance Criterion</th><th>Test Case</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Written by</td><td>BA (often with QA review)</td><td>QA (derived from AC)</td></tr>
+            <tr><td>Purpose</td><td>Clarify what "done" means</td><td>Verify the built software</td></tr>
+            <tr><td>Level of detail</td><td>Behaviour-level, ~3 lines</td><td>Step-by-step, with data, environment, preconditions</td></tr>
+            <tr><td>Ratio</td><td>One AC typically spawns 1–3 test cases</td><td>Can be many</td></tr>
+            <tr><td>Lives in</td><td>User story</td><td>Test management tool (TestRail, Xray, etc.)</td></tr>
+            <tr><td>Changes when</td><td>Stakeholder clarifies behaviour</td><td>Environment or tooling changes</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>A QA reads the AC and asks <em>"what specific inputs, environments, or variations would exercise this?"</em> The test cases are the answer to that question.</p>
+    </section>
+
+    <section class="chapter" id="scarce">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 7</div>
+        <h2>What good AC looks like · SCARCE</h2>
+      </div>
+      <p>Good AC is SCARCE — a mnemonic for six properties every AC should have:</p>
+      <div class="props-grid">
+        <div class="prop">
+          <h6>🎯 S · Specific</h6>
+          <p>Anyone reading gets the same mental picture. No room for two interpretations.</p>
+          <div class="eg">"appears within 1 second" — not "appears quickly"</div>
+        </div>
+        <div class="prop">
+          <h6>📏 C · Concrete</h6>
+          <p>About <strong>behaviour</strong> you can observe, not implementation or intent.</p>
+          <div class="eg">"shows a red error label" — not "validates the input"</div>
+        </div>
+        <div class="prop">
+          <h6>✅ A · Atomic</h6>
+          <p>One criterion = one check. If the AC contains "and" in the Then, split it.</p>
+          <div class="eg">One AC for save; one AC for email confirmation</div>
+        </div>
+        <div class="prop">
+          <h6>🔁 R · Repeatable</h6>
+          <p>Running the same test twice should give the same result. No reliance on timing luck or mystery state.</p>
+          <div class="eg">Reset the user's state before the Given</div>
+        </div>
+        <div class="prop">
+          <h6>🧪 C · Checkable</h6>
+          <p>A QA can verify yes/no after executing the When. No judgement calls required.</p>
+          <div class="eg">Use exact wording, counts, timings — not feelings</div>
+        </div>
+        <div class="prop">
+          <h6>⚖️ E · Equal-parties</h6>
+          <p>BA, Dev, and QA all read the same AC and agree on what it means. No private knowledge needed.</p>
+          <div class="eg">If only the BA knows "we meant X" — the AC is bad</div>
+        </div>
+      </div>
+      <p style="margin-top:1rem">When you're reviewing AC — yours or someone else's — walk the SCARCE list. Anything that fails one property gets reworked before dev starts.</p>
+    </section>
+
+    <section class="chapter" id="bad-good">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 8</div>
+        <h2>Bad AC vs good AC</h2>
+      </div>
+      <p>For the forgotten-password feature:</p>
+
+      <div class="bad">❌ AC: The app should handle forgotten passwords in a user-friendly way and let users reset quickly.</div>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:0.3rem">Fails every SCARCE property. Vague ("user-friendly"), no observable behaviour, not atomic, not repeatable, definitely not checkable. A QA can't sign off on this; a dev can't build it; a stakeholder can't argue about it.</p>
+
+      <div class="good">✅ AC: Given the user taps "Forgot password" on the login screen,
+    When they enter a registered phone number,
+    Then the system sends an OTP within 10 seconds and navigates to the OTP entry screen.</div>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:0.3rem">Specific · concrete · atomic · repeatable · checkable. A QA can write a test; a dev can build it; a stakeholder can read it and spot if anything's wrong before coding starts.</p>
+    </section>
+
+    <section class="chapter" id="mistakes">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 9</div>
+        <h2>Six common AC mistakes</h2>
+      </div>
+      <p>Every new BA makes some combination of these. Spotting them is the shortcut to writing better AC than most of your more experienced colleagues.</p>
+
+      <div class="mistake">
+        <h5>1. Only the happy path</h5>
+        <p>You wrote the AC for when everything goes right. You wrote none for limits, errors, or weird states.</p>
+        <div class="fix"><strong>Fix:</strong> for every story, write at least one AC for a limit ("user already has 10"), one for an error ("payment fails"), and one for an edge ("user is offline").</div>
+      </div>
+
+      <div class="mistake">
+        <h5>2. Implementation leak</h5>
+        <p>"Then insert a row into the <code>favourites</code> table." That's <em>how</em>, not <em>what</em>. It constrains the developer for no user benefit.</p>
+        <div class="fix"><strong>Fix:</strong> ask "what does the user see or experience?" Describe that, not the database or API.</div>
+      </div>
+
+      <div class="mistake">
+        <h5>3. Vague verbs</h5>
+        <p>"The system <em>handles</em> errors gracefully." What does "handles" mean? To whom? In what form?</p>
+        <div class="fix"><strong>Fix:</strong> replace vague verbs with observable ones. "Shows", "displays", "returns", "navigates", "logs", "sends".</div>
+      </div>
+
+      <div class="mistake">
+        <h5>4. Mixing multiple behaviours</h5>
+        <p>"When user X, then the system does A <em>and</em> B <em>and</em> C." Fails atomicity — and makes the AC hard to test partially.</p>
+        <div class="fix"><strong>Fix:</strong> split at every "and" in the Then. Three behaviours = three AC.</div>
+      </div>
+
+      <div class="mistake">
+        <h5>5. Missing context</h5>
+        <p>Jumping straight to "When" without a "Given". Relies on a shared assumption about starting state — which often isn't actually shared.</p>
+        <div class="fix"><strong>Fix:</strong> always state the precondition, even if it feels obvious. "Given the user is logged in" is rarely wasted space.</div>
+      </div>
+
+      <div class="mistake">
+        <h5>6. Untestable adjectives</h5>
+        <p>"Intuitive." "Fast." "Smooth." "Delightful." These are moods, not requirements. Two QAs will arrive at different verdicts.</p>
+        <div class="fix"><strong>Fix:</strong> turn them into numbers or concrete behaviours. "Within 2 seconds." "Within 3 taps." "No horizontal scroll on iPhone SE."</div>
+      </div>
+    </section>
+
+    <section class="chapter" id="lifecycle">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 10</div>
+        <h2>AC lifecycle · who does what</h2>
+      </div>
+      <p>AC isn't a document that gets written once and forgotten. It moves through the team and gets touched at several stages.</p>
+      <div class="lifecycle-tbl">
+        <table>
+          <thead>
+            <tr><th>Step</th><th>Who owns it</th><th>What happens</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1 · Draft</td><td>BA</td><td>Writes 3–7 AC in G/W/T form based on stakeholder conversations and the user story.</td></tr>
+            <tr><td>2 · Pre-dev review</td><td>QA (BA participates)</td><td>QA reads AC with a testing lens. Challenges vagueness, asks about edges, adds missing scenarios. <em>Before</em> dev starts.</td></tr>
+            <tr><td>3 · Estimate</td><td>Dev</td><td>Uses AC to scope the work. If any AC is unclear or enormous, kicks back to BA/QA before committing.</td></tr>
+            <tr><td>4 · Build</td><td>Dev</td><td>Implements until every AC passes. Writes unit/integration tests alongside where possible.</td></tr>
+            <tr><td>5 · Verify</td><td>QA</td><td>Walks every AC on the built software. Passes/fails each one. Files bugs for fails.</td></tr>
+            <tr><td>6 · Sign-off</td><td>BA (stakeholder accepts)</td><td>Final check: does the software deliver the story, not just the AC? Then stakeholder accepts.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout amber">
+        <h4>The highest-leverage habit on this list</h4>
+        <p><strong>Step 2 · QA reviews AC before dev starts.</strong> Teams that skip this step write AC, hand it to dev, and QA only sees the AC after the build lands. By then the AC's weaknesses cost a whole cycle of rework. Introduce pre-dev AC review and you'll catch a huge proportion of defects before code is written.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="exercise">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 11 · Hands-on</div>
+        <h2>Exercise · password reset AC</h2>
+      </div>
+      <p>In class, you wrote 4–6 AC for this story:</p>
+      <div class="callout indigo">
+        <p><strong>Story:</strong> As a user who has forgotten my password, I want to reset it online so that I can log back in without contacting support.</p>
+      </div>
+      <p>You were asked to cover the happy path and at least three edges: unregistered account, expired OTP, and re-using an old password.</p>
+
+      <h3 style="color:var(--indigo); font-size:1.1rem; margin-top:1.5rem">A defensible reference answer</h3>
+      <div class="ac-block">
+        <div class="lbl">AC 1 · Happy path · request reset</div>
+        <p><span class="k">Given</span> the user is on the login screen and taps "Forgot password", <span class="k">when</span> they enter a registered phone number and tap Submit, <span class="k">then</span> the system sends a 6-digit OTP via SMS within 10 seconds and navigates to the OTP entry screen.</p>
+      </div>
+      <div class="ac-block">
+        <div class="lbl">AC 2 · Happy path · complete reset</div>
+        <p><span class="k">Given</span> the user is on the OTP entry screen with a valid OTP, <span class="k">when</span> they enter the OTP and a new password meeting the policy (≥ 8 chars, not one of the last 5 used), <span class="k">then</span> the password is updated and they are navigated to a "Reset successful" screen with a "Log in" button.</p>
+      </div>
+      <div class="ac-block">
+        <div class="lbl">AC 3 · Edge · unregistered account</div>
+        <p><span class="k">Given</span> the user enters a phone number not registered in the system, <span class="k">when</span> they tap Submit, <span class="k">then</span> the system shows the same message as on success ("If this number is registered, an OTP will arrive shortly") to avoid account enumeration, and takes no real action.</p>
+      </div>
+      <div class="ac-block">
+        <div class="lbl">AC 4 · Edge · expired OTP</div>
+        <p><span class="k">Given</span> an OTP was issued more than 5 minutes ago, <span class="k">when</span> the user enters it, <span class="k">then</span> the system shows "This code has expired. Request a new one." and provides a "Resend OTP" button.</p>
+      </div>
+      <div class="ac-block">
+        <div class="lbl">AC 5 · Edge · re-used password</div>
+        <p><span class="k">Given</span> the user enters a new password that matches any of their last 5 passwords, <span class="k">when</span> they submit, <span class="k">then</span> the system shows "Please choose a password you haven't used recently" and leaves the old password unchanged.</p>
+      </div>
+      <div class="ac-block">
+        <div class="lbl">AC 6 · Edge · rate limit</div>
+        <p><span class="k">Given</span> the user has requested 3 OTPs for the same number in the last 10 minutes, <span class="k">when</span> they try again, <span class="k">then</span> the system shows "Too many attempts. Try again in 10 minutes." and does not send another OTP.</p>
+      </div>
+      <p>Your answer doesn't need to match word-for-word. If you wrote 4–6 AC covering the happy path plus at least three edges, and each AC is specific, observable, and testable — you're in great shape.</p>
+      <div class="callout green">
+        <h4>Notice · AC 3 is the most interesting one</h4>
+        <p>Returning the <em>same</em> message for registered and unregistered phone numbers is a subtle but important security choice (prevents account enumeration). If you or your pair spotted that during the exercise — that's the kind of thinking a senior BA gets paid for.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="take">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Takeaways</div>
+        <h2>Key points to carry forward</h2>
+      </div>
+      <div class="summary">
+        <h4>What we covered today</h4>
+        <ul>
+          <li>AC are the <strong>specific, testable</strong> conditions a user story must meet to be "done".</li>
+          <li><strong>Given / When / Then</strong> is the industry-standard format.</li>
+          <li>One story = <strong>3–7 AC</strong> — fewer means missing edges; more means the story is too big.</li>
+          <li>Good AC are <strong>SCARCE</strong> — Specific, Concrete, Atomic, Repeatable, Checkable, Equal-parties.</li>
+          <li>AC is the <strong>shared artifact</strong> — BA writes, QA reviews, Dev builds, QA verifies, BA signs off.</li>
+          <li>The single highest-leverage habit: <strong>QA reviews AC before dev starts</strong>.</li>
+          <li>Avoid the six mistakes: happy-path only, implementation leak, vague verbs, mixed behaviours, missing context, untestable adjectives.</li>
+        </ul>
+      </div>
+      <p style="margin-top:1.5rem; font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-size:1.1rem">Good AC is the difference between "I thought you meant…" and "we all agreed."</p>
+    </section>
+
+  </div>
+
+  <footer>
+    <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE">
+    SELISE × Pelsung · BA + QA Combined · Class 04<br>
+    Acceptance Criteria · The Shared Artifact
+  </footer>
+
+</body>
+</html>
