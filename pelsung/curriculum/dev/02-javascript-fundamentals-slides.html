@@ -1,0 +1,1959 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="robots"
+      content="noindex, nofollow, noarchive, nosnippet, noimageindex"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Fundamentals — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      .code-block {
+        background: #001f35;
+        border-radius: 14px;
+        overflow: hidden;
+        width: 100%;
+        font-family: "Courier New", monospace;
+      }
+      .code-bar {
+        background: #0a2a45;
+        padding: 8px 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-family: "Open Sans", sans-serif;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .code-bar .cb-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+      .code-body {
+        padding: clamp(0.8rem, 1.5vw, 1.3rem);
+        font-size: clamp(0.72rem, 1vw, 0.88rem);
+        line-height: 1.85;
+        color: rgba(255, 255, 255, 0.85);
+      }
+      .code-body .ck {
+        color: #7dd3fc;
+      }
+      .code-body .cs {
+        color: #86efac;
+      }
+      .code-body .cn {
+        color: #fde68a;
+      }
+      .code-body .cc {
+        color: rgba(255, 255, 255, 0.35);
+      }
+      .code-body .cp {
+        color: #c4b5fd;
+      }
+      .code-body .cr {
+        color: #fca5a5;
+      }
+      .compare-table {
+        width: 100%;
+        max-width: 860px;
+        border-collapse: separate;
+        border-spacing: 0;
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surf);
+      }
+      .compare-table th {
+        background: #e6e9ec;
+        color: var(--indigo);
+        font-size: clamp(0.62rem, 0.9vw, 0.78rem);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        padding: clamp(0.5rem, 0.8vw, 0.7rem) clamp(0.6rem, 1vw, 0.9rem);
+        text-align: left;
+      }
+      .compare-table td {
+        padding: clamp(0.4rem, 0.7vw, 0.6rem) clamp(0.6rem, 1vw, 0.9rem);
+        font-size: clamp(0.75rem, 1.05vw, 0.88rem);
+        color: var(--muted);
+        border-top: 1px solid var(--border);
+      }
+      .compare-table td:first-child {
+        font-family: "Courier New", monospace;
+        font-weight: 700;
+        color: var(--blue);
+      }
+      .compare-table .yes {
+        color: var(--green);
+        font-weight: 700;
+      }
+      .compare-table .no {
+        color: var(--red);
+        font-weight: 700;
+      }
+      .type-chip {
+        display: inline-block;
+        padding: 0.2rem 0.6rem;
+        border-radius: 6px;
+        font-size: clamp(0.72rem, 1vw, 0.85rem);
+        font-weight: 700;
+        font-family: "Courier New", monospace;
+      }
+      .tc-blue {
+        background: #e6f0f8;
+        color: var(--blue);
+      }
+      .tc-green {
+        background: #f0f7ec;
+        color: var(--green);
+      }
+      .tc-amber {
+        background: #ebf0f7;
+        color: #1c5b8c;
+      }
+      .tc-indigo {
+        background: #e6e9ec;
+        color: var(--indigo);
+      }
+      .tc-purple {
+        background: #ecf2f8;
+        color: var(--purple);
+      }
+      .tc-red {
+        background: #f2e8ea;
+        color: var(--red);
+      }
+      .tc-faint {
+        background: var(--bg);
+        color: var(--faint);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+      <!-- ══════════════════════════════════════════
+       SLIDE 1 — TITLE
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-gradient bg-dark" data-slide="1">
+        <div class="slide-label">
+          <span class="snum">01</span> SELISE × Pelsung
+        </div>
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            text-align: center;
+            max-width: 900px;
+          "
+        >
+          <!-- <img src="../assets/SELISE_Logo_Reversed.png" alt="SELISE" style="height:56px;margin-bottom:1.5rem;"> -->
+          <div class="date-badge">
+            <span class="db-dot"></span>Dev Specialization · Class 02
+          </div>
+          <h1 class="display" style="color: white">
+            <span style="color: #7dd3fc">JavaScript</span><br />
+            <span style="color: white">Fundamentals</span>
+          </h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.65)">
+            Variables · Scoping · Data Types · Functions · Loops
+          </p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue"
+              >02 · JavaScript Fundamentals I</span
+            >
+          </div>
+        </div>
+        <div class="interact-hint">
+          Press → or click the right side to advance
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 2 — AGENDA
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 720px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              Session Journey
+            </h2>
+          </div>
+          <div class="agenda-row" onclick="goTo(2)">
+            <span class="ar-dot" style="background: var(--blue)"></span>
+            <span class="ar-label">📦 Variables — var, let, const</span>
+            <span
+              class="ar-badge"
+              style="background: #e6f0f8; color: var(--blue)"
+              >20 min</span
+            >
+          </div>
+          <div class="agenda-row" onclick="goTo(7)">
+            <span class="ar-dot" style="background: var(--indigo)"></span>
+            <span class="ar-label">🏗️ Hoisting & Scoping</span>
+            <span
+              class="ar-badge"
+              style="background: #e6e9ec; color: var(--indigo)"
+              >20 min</span
+            >
+          </div>
+          <div class="agenda-row" onclick="goTo(11)">
+            <span class="ar-dot" style="background: var(--amber)"></span>
+            <span class="ar-label">🧩 Data Types</span>
+            <span class="ar-badge" style="background: #ebf0f7; color: #1c5b8c"
+              >15 min</span
+            >
+          </div>
+          <div class="agenda-row" onclick="goTo(13)">
+            <span class="ar-dot" style="background: var(--purple)"></span>
+            <span class="ar-label">⚙️ Operators & Control Flow</span>
+            <span
+              class="ar-badge"
+              style="background: #ecf2f8; color: var(--purple)"
+              >15 min</span
+            >
+          </div>
+          <div class="agenda-row" onclick="goTo(16)">
+            <span class="ar-dot" style="background: var(--green)"></span>
+            <span class="ar-label">🔧 Functions</span>
+            <span
+              class="ar-badge"
+              style="background: #f0f7ec; color: var(--green)"
+              >20 min</span
+            >
+          </div>
+          <div class="agenda-row" onclick="goTo(19)">
+            <span class="ar-dot" style="background: var(--blue)"></span>
+            <span class="ar-label">🔄 Loops</span>
+            <span
+              class="ar-badge"
+              style="background: #e6f0f8; color: var(--blue)"
+              >15 min</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 3 — SECTION: VARIABLES
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-blue" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span> Section 01
+          </div>
+          <h1 class="display" style="color: white">Variables</h1>
+          <p
+            class="body-lg"
+            style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem"
+          >
+            var, let, and const — how JavaScript stores data
+          </p>
+        </div>
+        <div class="section-num" style="color: white">01</div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 4 — WHAT ARE VARIABLES
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> Variables</div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">Variables</div>
+            <h2 class="heading">What is a Variable?</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem">
+              A labeled container that holds a value
+            </p>
+          </div>
+          <div class="code-block" style="max-width: 620px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              variables.js
+            </div>
+            <div class="code-body">
+              <span class="cc">// Three ways to declare a variable</span><br />
+              <span class="ck">var</span> name =
+              <span class="cs">"Karma"</span>; &nbsp;&nbsp;&nbsp;<span
+                class="cc"
+                >// old way — avoid</span
+              ><br />
+              <span class="ck">let</span> age = <span class="cn">25</span>;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cc"
+                >// can be reassigned</span
+              ><br />
+              <span class="ck">const</span> city =
+              <span class="cs">"Gelephu"</span>;
+              <span class="cc">// cannot be reassigned</span><br /><br />
+              <span class="cc">// Reassignment</span><br />
+              age = <span class="cn">26</span>;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                class="cc"
+                >// ✅ works — let allows this</span
+              ><br />
+              city = <span class="cs">"Thimphu"</span>;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cc"
+                >// ❌ error — const prevents this</span
+              >
+            </div>
+          </div>
+          <div
+            class="card"
+            style="
+              background: var(--bg);
+              border: 2px dashed var(--border);
+              text-align: center;
+              padding: clamp(0.75rem, 1.5vw, 1.1rem);
+              max-width: 700px;
+            "
+          >
+            <p class="body-md" style="color: var(--muted)">
+              🎯 <strong style="color: var(--text)">Rule of thumb:</strong> Use
+              <code
+                style="
+                  background: #e6f0f8;
+                  padding: 0.1rem 0.4rem;
+                  border-radius: 4px;
+                  color: var(--blue);
+                  font-weight: 700;
+                "
+                >const</code
+              >
+              by default. Use
+              <code
+                style="
+                  background: #e6f0f8;
+                  padding: 0.1rem 0.4rem;
+                  border-radius: 4px;
+                  color: var(--blue);
+                  font-weight: 700;
+                "
+                >let</code
+              >
+              only when the value needs to change. Never use
+              <code
+                style="
+                  background: #f2e8ea;
+                  padding: 0.1rem 0.4rem;
+                  border-radius: 4px;
+                  color: var(--red);
+                  font-weight: 700;
+                "
+                >var</code
+              >.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 5 — VAR VS LET VS CONST
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span> Comparison</div>
+        <div class="stack" style="align-items: center; width: 100%">
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              var vs let vs const
+            </h2>
+          </div>
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>var</th>
+                <th>let</th>
+                <th>const</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td
+                  style="
+                    color: var(--text);
+                    font-family: &quot;Open Sans&quot;, sans-serif;
+                  "
+                >
+                  Can be reassigned?
+                </td>
+                <td><span class="yes">Yes</span></td>
+                <td><span class="yes">Yes</span></td>
+                <td><span class="no">No</span></td>
+              </tr>
+              <tr>
+                <td
+                  style="
+                    color: var(--text);
+                    font-family: &quot;Open Sans&quot;, sans-serif;
+                  "
+                >
+                  Can be re-declared?
+                </td>
+                <td><span class="yes">Yes</span></td>
+                <td><span class="no">No</span></td>
+                <td><span class="no">No</span></td>
+              </tr>
+              <tr>
+                <td
+                  style="
+                    color: var(--text);
+                    font-family: &quot;Open Sans&quot;, sans-serif;
+                  "
+                >
+                  Scope
+                </td>
+                <td>Function</td>
+                <td>Block</td>
+                <td>Block</td>
+              </tr>
+              <tr>
+                <td
+                  style="
+                    color: var(--text);
+                    font-family: &quot;Open Sans&quot;, sans-serif;
+                  "
+                >
+                  Hoisted?
+                </td>
+                <td><span class="yes">Yes</span> (as undefined)</td>
+                <td><span class="yes">Yes</span> (TDZ)</td>
+                <td><span class="yes">Yes</span> (TDZ)</td>
+              </tr>
+              <tr>
+                <td
+                  style="
+                    color: var(--text);
+                    font-family: &quot;Open Sans&quot;, sans-serif;
+                  "
+                >
+                  Use in 2026?
+                </td>
+                <td><span class="no">❌ Avoid</span></td>
+                <td>✅ When value changes</td>
+                <td>✅ Default choice</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 6 — WHY NOT VAR
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> Why Not var?</div>
+        <div
+          class="stack"
+          style="align-items: center; width: 100%; max-width: 900px"
+        >
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              Why We Avoid var
+            </h2>
+          </div>
+          <div class="cols-2" style="max-width: 820px">
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                var — surprising behavior
+              </div>
+              <div class="code-body">
+                <span class="cc">// var leaks out of blocks</span><br />
+                <span class="ck">if</span> (<span class="cp">true</span>) {<br />
+                &nbsp;&nbsp;<span class="ck">var</span> x =
+                <span class="cn">10</span>;<br />
+                }<br />
+                console.log(x); <span class="cc">// 10 😱</span><br /><br />
+                <span class="cc">// var can be re-declared</span><br />
+                <span class="ck">var</span> name =
+                <span class="cs">"Karma"</span>;<br />
+                <span class="ck">var</span> name =
+                <span class="cs">"Dorji"</span>;<br />
+                <span class="cc">// No error — silent bug!</span>
+              </div>
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                let — predictable behavior
+              </div>
+              <div class="code-body">
+                <span class="cc">// let stays in its block</span><br />
+                <span class="ck">if</span> (<span class="cp">true</span>) {<br />
+                &nbsp;&nbsp;<span class="ck">let</span> x =
+                <span class="cn">10</span>;<br />
+                }<br />
+                console.log(x); <span class="cc">// ❌ Error</span><br /><br />
+                <span class="cc">// let prevents re-declaration</span><br />
+                <span class="ck">let</span> name =
+                <span class="cs">"Karma"</span>;<br />
+                <span class="ck">let</span> name =
+                <span class="cs">"Dorji"</span>;<br />
+                <span class="cc">// ❌ Error — bug caught!</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 7 — DECLARATION EXAMPLES
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="7">
+        <div class="slide-label">
+          <span class="snum">07</span> When to Use Each
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; width: 100%; max-width: 800px"
+        >
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              const vs let in Practice
+            </h2>
+          </div>
+          <div class="code-block" style="max-width: 660px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              examples.js
+            </div>
+            <div class="code-body">
+              <span class="cc">// ✅ const — value won't change</span><br />
+              <span class="ck">const</span> API_URL =
+              <span class="cs">"https://api.example.com"</span>;<br />
+              <span class="ck">const</span> MAX_RETRIES =
+              <span class="cn">3</span>;<br />
+              <span class="ck">const</span> user = { name:
+              <span class="cs">"Karma"</span>, age:
+              <span class="cn">25</span> };<br /><br />
+              <span class="cc">// ✅ let — value will change</span><br />
+              <span class="ck">let</span> count =
+              <span class="cn">0</span>;<br />
+              count = count + <span class="cn">1</span>;<br /><br />
+              <span class="ck">let</span> isLoggedIn =
+              <span class="cp">false</span>;<br />
+              isLoggedIn = <span class="cp">true</span>;<br /><br />
+              <span class="cc"
+                >// ⚠️ const with objects — the reference is fixed,</span
+              ><br />
+              <span class="cc">// but properties can change</span><br />
+              user.age = <span class="cn">26</span>;
+              <span class="cc">// ✅ works!</span><br />
+              user = {}; &nbsp;&nbsp;&nbsp;&nbsp;<span class="cc"
+                >// ❌ error</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 8 — SECTION: HOISTING & SCOPING
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-indigo" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span> Section 02
+          </div>
+          <h1 class="display" style="color: white">Hoisting<br />& Scoping</h1>
+          <p
+            class="body-lg"
+            style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem"
+          >
+            Where variables live and how JavaScript reads your code
+          </p>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 9 — HOISTING
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> Hoisting</div>
+        <div
+          class="stack"
+          style="align-items: center; width: 100%; max-width: 900px"
+        >
+          <div class="center">
+            <div class="pill pill-blue">Hoisting</div>
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              JavaScript Reads Your Code Twice
+            </h2>
+            <p class="body-md" style="color: var(--muted)">
+              First pass: find all declarations. Second pass: execute the code.
+            </p>
+          </div>
+          <div class="cols-2" style="max-width: 820px">
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                var hoisting
+              </div>
+              <div class="code-body">
+                console.log(x); <span class="cc">// undefined</span><br />
+                <span class="ck">var</span> x = <span class="cn">5</span>;<br />
+                console.log(x); <span class="cc">// 5</span><br /><br />
+                <span class="cc">// JS sees this as:</span><br />
+                <span class="ck">var</span> x;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                  class="cc"
+                  >// hoisted</span
+                ><br />
+                console.log(x); <span class="cc">// undefined</span><br />
+                x = <span class="cn">5</span>;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                  class="cc"
+                  >// assigned</span
+                ><br />
+                console.log(x); <span class="cc">// 5</span>
+              </div>
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                let/const hoisting (TDZ)
+              </div>
+              <div class="code-body">
+                console.log(y); <span class="cc">// ❌ ReferenceError</span
+                ><br />
+                <span class="ck">let</span> y =
+                <span class="cn">5</span>;<br /><br />
+                <span class="cc">// let & const are hoisted too,</span><br />
+                <span class="cc">// but they stay in the</span><br />
+                <span class="cc">// "Temporal Dead Zone" (TDZ)</span><br />
+                <span class="cc">// until the declaration line.</span
+                ><br /><br />
+                <span class="cc">// This is SAFER — it catches</span><br />
+                <span class="cc">// bugs where you use a variable</span><br />
+                <span class="cc">// before declaring it.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 10 — SCOPING
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> Scoping</div>
+        <div class="stack" style="align-items: center; width: 100%">
+          <div class="center">
+            <div class="pill pill-blue">Scoping</div>
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              Where Can You Access a Variable?
+            </h2>
+          </div>
+          <div class="cols-3">
+            <div class="card" style="border-top: 3px solid var(--blue)">
+              <h4 style="color: var(--blue)">🌍 Global Scope</h4>
+              <ul>
+                <li>Declared outside any function or block</li>
+                <li>Accessible from <strong>anywhere</strong></li>
+                <li>Use sparingly — can cause bugs</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--indigo)">
+              <h4 style="color: var(--indigo)">🔧 Function Scope</h4>
+              <ul>
+                <li>Declared inside a function</li>
+                <li>Only accessible <strong>within that function</strong></li>
+                <li>var, let, and const all respect this</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--green)">
+              <h4 style="color: var(--green)">📦 Block Scope</h4>
+              <ul>
+                <li>Inside <code>{ }</code> — if, for, while blocks</li>
+                <li>let and const stay <strong>inside the block</strong></li>
+                <li>var ignores blocks (leaks out!)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 11 — SCOPING CODE
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="11">
+        <div class="slide-label">
+          <span class="snum">11</span> Scope Examples
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; width: 100%; max-width: 800px"
+        >
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              Scope in Action
+            </h2>
+          </div>
+          <div class="code-block" style="max-width: 660px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              scope.js
+            </div>
+            <div class="code-body">
+              <span class="ck">const</span> global =
+              <span class="cs">"I'm everywhere"</span>;
+              <span class="cc">// global</span><br /><br />
+              <span class="ck">function</span> <span class="cp">greet</span>()
+              {<br />
+              &nbsp;&nbsp;<span class="ck">const</span> local =
+              <span class="cs">"I'm only here"</span>;
+              <span class="cc">// function scope</span><br /><br />
+              &nbsp;&nbsp;<span class="ck">if</span> (<span class="cp"
+                >true</span
+              >) {<br />
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="ck">const</span> inner =
+              <span class="cs">"I'm trapped"</span>;
+              <span class="cc">// block scope</span><br />
+              &nbsp;&nbsp;&nbsp;&nbsp;console.log(global);
+              <span class="cc">// ✅</span><br />
+              &nbsp;&nbsp;&nbsp;&nbsp;console.log(local); &nbsp;<span class="cc"
+                >// ✅</span
+              ><br />
+              &nbsp;&nbsp;&nbsp;&nbsp;console.log(inner); &nbsp;<span class="cc"
+                >// ✅</span
+              ><br />
+              &nbsp;&nbsp;}<br /><br />
+              &nbsp;&nbsp;console.log(inner);
+              <span class="cc">// ❌ not defined</span><br />
+              }<br /><br />
+              console.log(local); <span class="cc">// ❌ not defined</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 12 — SECTION: DATA TYPES
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-amber" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span> Section 03
+          </div>
+          <h1 class="display" style="color: white">Data<br />Types</h1>
+          <p
+            class="body-lg"
+            style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem"
+          >
+            What kind of values can JavaScript hold?
+          </p>
+        </div>
+        <div class="section-num" style="color: white">03</div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 13 — PRIMITIVE TYPES
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> Data Types</div>
+        <div class="stack" style="align-items: center; width: 100%">
+          <div class="center">
+            <div class="pill pill-blue">Primitive Types</div>
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              JavaScript's Built-in Data Types
+            </h2>
+          </div>
+          <div class="cols-3" style="max-width: 960px">
+            <div class="card" style="border-top: 3px solid var(--blue)">
+              <h4 style="color: var(--blue)">
+                <span class="type-chip tc-blue">string</span>
+              </h4>
+              <ul>
+                <li>
+                  <code>"Hello"</code>, <code>'World'</code>,
+                  <code>`Hi ${name}`</code>
+                </li>
+                <li>Text values wrapped in quotes</li>
+                <li>Template literals use backticks</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--green)">
+              <h4 style="color: var(--green)">
+                <span class="type-chip tc-green">number</span>
+              </h4>
+              <ul>
+                <li>
+                  <code>42</code>, <code>3.14</code>, <code>-10</code>,
+                  <code>Infinity</code>
+                </li>
+                <li>Integers and decimals — same type</li>
+                <li>No separate int/float distinction</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--purple)">
+              <h4 style="color: var(--purple)">
+                <span class="type-chip tc-purple">boolean</span>
+              </h4>
+              <ul>
+                <li><code>true</code> or <code>false</code></li>
+                <li>Used in conditions and logic</li>
+                <li>
+                  Result of comparisons: <code>5 > 3</code> → <code>true</code>
+                </li>
+              </ul>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--faint)">
+              <h4><span class="type-chip tc-faint">undefined</span></h4>
+              <ul>
+                <li>Variable declared but not assigned</li>
+                <li><code>let x;</code> → x is <code>undefined</code></li>
+                <li>JS's default "no value yet"</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--red)">
+              <h4 style="color: var(--red)">
+                <span class="type-chip tc-red">null</span>
+              </h4>
+              <ul>
+                <li>Intentionally empty — "no value"</li>
+                <li><code>let result = null;</code></li>
+                <li>You set this deliberately</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--indigo)">
+              <h4 style="color: var(--indigo)">
+                <span class="type-chip tc-indigo">typeof</span>
+              </h4>
+              <ul>
+                <li><code>typeof "hi"</code> → <code>"string"</code></li>
+                <li><code>typeof 42</code> → <code>"number"</code></li>
+                <li>Check a value's type at runtime</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 14 — SECTION: OPERATORS & CONTROL FLOW
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-blue" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span> Section 04
+          </div>
+          <h1 class="display" style="color: white">
+            Operators<br />& Control Flow
+          </h1>
+          <p
+            class="body-lg"
+            style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem"
+          >
+            Making decisions in your code
+          </p>
+        </div>
+        <div class="section-num" style="color: white">04</div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 15 — OPERATORS
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span> Operators</div>
+        <div class="stack" style="align-items: center; width: 100%">
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              JavaScript Operators
+            </h2>
+          </div>
+          <div class="cols-3">
+            <div class="card" style="border-top: 3px solid var(--green)">
+              <h4 style="color: var(--green)">🔢 Arithmetic</h4>
+              <ul>
+                <li><code>+</code> — addition</li>
+                <li><code>-</code> — subtraction</li>
+                <li><code>*</code> — multiplication</li>
+                <li><code>/</code> — division</li>
+                <li><code>%</code> — modulo (remainder)</li>
+                <li><code>++</code> / <code>--</code> — increment / decrement</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--indigo)">
+              <h4 style="color: var(--indigo)">⚖️ Comparison</h4>
+              <ul>
+                <li><code>===</code> — strict equal (use this!)</li>
+                <li><code>!==</code> — strict not equal</li>
+                <li>
+                  <code>></code> <code><</code> <code>>=</code>
+                  <code><=</code> — greater/less than
+                </li>
+                <li><code>==</code> — loose equal (avoid!)</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--blue)">
+              <h4 style="color: var(--blue)">🔗 Logical</h4>
+              <ul>
+                <li><code>&&</code> — AND: both must be true</li>
+                <li><code>||</code> — OR: at least one must be true</li>
+                <li><code>!</code> — NOT: flips true ↔ false</li>
+              </ul>
+            </div>
+          </div>
+          <div class="code-block" style="max-width: 700px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              operators.js
+            </div>
+            <div class="code-body">
+              <span class="cn">10</span> + <span class="cn">3</span> &nbsp;&nbsp;&nbsp;<span class="cc">// 13</span> &nbsp;&nbsp;&nbsp;
+              <span class="cn">10</span> - <span class="cn">3</span> &nbsp;&nbsp;<span class="cc">// 7</span> &nbsp;&nbsp;&nbsp;
+              <span class="cn">10</span> * <span class="cn">3</span> &nbsp;&nbsp;<span class="cc">// 30</span><br />
+              <span class="cn">10</span> / <span class="cn">3</span> &nbsp;&nbsp;&nbsp;<span class="cc">// 3.33...</span> &nbsp;
+              <span class="cn">10</span> % <span class="cn">3</span> &nbsp;&nbsp;<span class="cc">// 1 (remainder)</span><br /><br />
+              <span class="cn">5</span> === <span class="cs">"5"</span> &nbsp;&nbsp;<span class="cc">// false — different types</span><br />
+              <span class="cn">5</span> == <span class="cs">"5"</span> &nbsp;&nbsp;&nbsp;<span class="cc">// true — type coercion (avoid!)</span><br /><br />
+              <span class="cp">true</span> && <span class="cp">false</span> &nbsp;<span class="cc">// false</span> &nbsp;&nbsp;
+              <span class="cp">true</span> || <span class="cp">false</span> &nbsp;<span class="cc">// true</span> &nbsp;&nbsp;
+              !<span class="cp">true</span> &nbsp;<span class="cc">// false</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 16 — IF/ELSE
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span> Control Flow</div>
+        <div
+          class="stack"
+          style="align-items: center; width: 100%; max-width: 900px"
+        >
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              if / else — Making Decisions
+            </h2>
+          </div>
+          <div class="cols-2" style="max-width: 820px">
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                if / else if / else
+              </div>
+              <div class="code-body">
+                <span class="ck">const</span> score =
+                <span class="cn">85</span>;<br /><br />
+                <span class="ck">if</span> (score >= <span class="cn">90</span>)
+                {<br />
+                &nbsp;&nbsp;console.log(<span class="cs">"Excellent!"</span
+                >);<br />
+                } <span class="ck">else if</span> (score >=
+                <span class="cn">70</span>) {<br />
+                &nbsp;&nbsp;console.log(<span class="cs">"Good job!"</span
+                >);<br />
+                } <span class="ck">else</span> {<br />
+                &nbsp;&nbsp;console.log(<span class="cs">"Keep trying!"</span
+                >);<br />
+                }<br /><br />
+                <span class="cc">// Output: "Good job!"</span>
+              </div>
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                ternary (shorthand)
+              </div>
+              <div class="code-body">
+                <span class="cc">// condition ? ifTrue : ifFalse</span
+                ><br /><br />
+                <span class="ck">const</span> age =
+                <span class="cn">20</span>;<br /><br />
+                <span class="ck">const</span> status = age >=
+                <span class="cn">18</span><br />
+                &nbsp;&nbsp;? <span class="cs">"adult"</span><br />
+                &nbsp;&nbsp;: <span class="cs">"minor"</span>;<br /><br />
+                <span class="cc">// status → "adult"</span><br /><br />
+                <span class="cc">// Great for simple conditions.</span><br />
+                <span class="cc">// Use if/else for complex ones.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 17 — SECTION: FUNCTIONS
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-green" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span> Section 05
+          </div>
+          <h1 class="display" style="color: white">Functions</h1>
+          <p
+            class="body-lg"
+            style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem"
+          >
+            Reusable blocks of code — the building blocks of every program
+          </p>
+        </div>
+        <div class="section-num" style="color: white">05</div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 18 — FUNCTION TYPES
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="18">
+        <div class="slide-label">
+          <span class="snum">18</span> Function Types
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; width: 100%; max-width: 900px"
+        >
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              Ways to Write Functions
+            </h2>
+          </div>
+          <div class="cols-2" style="max-width: 860px">
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                Function Declaration (named)
+              </div>
+              <div class="code-body">
+                <span class="cc">// Named function — hoisted</span><br />
+                <span class="ck">function</span>
+                <span class="cp">greet</span>(name) {<br />
+                &nbsp;&nbsp;<span class="ck">return</span>
+                <span class="cs">`Hello, ${</span>name<span class="cs">}!`</span
+                >;<br />
+                }<br /><br />
+                greet(<span class="cs">"Karma"</span>);<br />
+                <span class="cc">// "Hello, Karma!"</span>
+              </div>
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                Function Expression (anonymous)
+              </div>
+              <div class="code-body">
+                <span class="cc">// Stored in a variable — not hoisted</span
+                ><br />
+                <span class="ck">const</span> greet =
+                <span class="ck">function</span>(name) {<br />
+                &nbsp;&nbsp;<span class="ck">return</span>
+                <span class="cs">`Hello, ${</span>name<span class="cs">}!`</span
+                >;<br />
+                };<br /><br />
+                greet(<span class="cs">"Dorji"</span>);<br />
+                <span class="cc">// "Hello, Dorji!"</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 19 — ARROW FUNCTIONS
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="19">
+        <div class="slide-label">
+          <span class="snum">19</span> Arrow Functions
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; width: 100%; max-width: 800px"
+        >
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              Arrow Functions (ES6)
+            </h2>
+            <p class="body-md" style="color: var(--muted)">
+              Modern, concise syntax — the most common style in React
+            </p>
+          </div>
+          <div class="code-block" style="max-width: 660px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              arrow-functions.js
+            </div>
+            <div class="code-body">
+              <span class="cc">// Standard arrow function</span><br />
+              <span class="ck">const</span> greet = (name) => {<br />
+              &nbsp;&nbsp;<span class="ck">return</span>
+              <span class="cs">`Hello, ${</span>name<span class="cs">}!`</span
+              >;<br />
+              };<br /><br />
+              <span class="cc"
+                >// Short form — implicit return (one expression)</span
+              ><br />
+              <span class="ck">const</span> greet = (name) =>
+              <span class="cs">`Hello, ${</span>name<span class="cs">}!`</span
+              >;<br /><br />
+              <span class="cc">// Single param — parentheses optional</span
+              ><br />
+              <span class="ck">const</span> double = n => n *
+              <span class="cn">2</span>;<br /><br />
+              <span class="cc">// No params — empty parentheses required</span
+              ><br />
+              <span class="ck">const</span> sayHi = () =>
+              <span class="cs">"Hi!"</span>;<br /><br />
+              <span class="cc">// Multiple params</span><br />
+              <span class="ck">const</span> add = (a, b) => a + b;
+            </div>
+          </div>
+          <div
+            class="card"
+            style="
+              background: var(--bg);
+              border: 2px dashed var(--border);
+              text-align: center;
+              padding: clamp(0.75rem, 1.5vw, 1.1rem);
+              max-width: 700px;
+            "
+          >
+            <p class="body-md" style="color: var(--muted)">
+              🎯
+              <strong style="color: var(--text)">In this program:</strong> We'll
+              use arrow functions most of the time — they're the standard in
+              React and modern JavaScript.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 20 — SECTION: LOOPS
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-blue" data-slide="20">
+        <div class="slide-label"><span class="snum">20</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span> Section 06
+          </div>
+          <h1 class="display" style="color: white">Loops</h1>
+          <p
+            class="body-lg"
+            style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem"
+          >
+            Repeating code without repeating yourself
+          </p>
+        </div>
+        <div class="section-num" style="color: white">06</div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 21 — LOOP TYPES
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="21">
+        <div class="slide-label"><span class="snum">21</span> Loop Types</div>
+        <div
+          class="stack"
+          style="align-items: center; width: 100%; max-width: 900px"
+        >
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              Types of Loops
+            </h2>
+          </div>
+          <div class="cols-2" style="max-width: 860px">
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                for loop
+              </div>
+              <div class="code-body">
+                <span class="cc">// Classic for loop</span><br />
+                <span class="ck">for</span> (<span class="ck">let</span> i =
+                <span class="cn">0</span>; i < <span class="cn">5</span>; i++)
+                {<br />
+                &nbsp;&nbsp;console.log(i);<br />
+                }<br />
+                <span class="cc">// 0, 1, 2, 3, 4</span>
+              </div>
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                while loop
+              </div>
+              <div class="code-body">
+                <span class="cc">// Runs while condition is true</span><br />
+                <span class="ck">let</span> count =
+                <span class="cn">0</span>;<br />
+                <span class="ck">while</span> (count <
+                <span class="cn">3</span>) {<br />
+                &nbsp;&nbsp;console.log(count);<br />
+                &nbsp;&nbsp;count++;<br />
+                }<br />
+                <span class="cc">// 0, 1, 2</span>
+              </div>
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                do...while loop
+              </div>
+              <div class="code-body">
+                <span class="cc">// Runs at least once</span><br />
+                <span class="ck">let</span> n = <span class="cn">0</span>;<br />
+                <span class="ck">do</span> {<br />
+                &nbsp;&nbsp;console.log(n);<br />
+                &nbsp;&nbsp;n++;<br />
+                } <span class="ck">while</span> (n <
+                <span class="cn">3</span>);<br />
+                <span class="cc">// 0, 1, 2</span>
+              </div>
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                for...of loop
+              </div>
+              <div class="code-body">
+                <span class="cc">// Loop over arrays</span><br />
+                <span class="ck">const</span> cities = [<span class="cs"
+                  >"Gelephu"</span
+                >,<br />
+                &nbsp;&nbsp;<span class="cs">"Thimphu"</span>,
+                <span class="cs">"Paro"</span>];<br /><br />
+                <span class="ck">for</span> (<span class="ck">const</span> city
+                <span class="ck">of</span> cities) {<br />
+                &nbsp;&nbsp;console.log(city);<br />
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 22 — WHEN TO USE WHICH LOOP
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="22">
+        <div class="slide-label"><span class="snum">22</span> Which Loop?</div>
+        <div class="stack" style="align-items: center; width: 100%">
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              When to Use Which Loop
+            </h2>
+          </div>
+          <table class="compare-table" style="max-width: 860px">
+            <thead>
+              <tr>
+                <th>Loop</th>
+                <th>Best For</th>
+                <th>Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>for</td>
+                <td>When you know the exact count</td>
+                <td
+                  style="
+                    font-family: &quot;Courier New&quot;, monospace;
+                    font-size: 0.78rem;
+                    color: var(--muted);
+                  "
+                >
+                  Run 10 times, loop through indices
+                </td>
+              </tr>
+              <tr>
+                <td>while</td>
+                <td>When you don't know when to stop</td>
+                <td
+                  style="
+                    font-family: &quot;Courier New&quot;, monospace;
+                    font-size: 0.78rem;
+                    color: var(--muted);
+                  "
+                >
+                  Keep asking until user says "quit"
+                </td>
+              </tr>
+              <tr>
+                <td>do...while</td>
+                <td>Must run at least once</td>
+                <td
+                  style="
+                    font-family: &quot;Courier New&quot;, monospace;
+                    font-size: 0.78rem;
+                    color: var(--muted);
+                  "
+                >
+                  Show menu, then ask to continue
+                </td>
+              </tr>
+              <tr>
+                <td>for...of</td>
+                <td>Looping over arrays</td>
+                <td
+                  style="
+                    font-family: &quot;Courier New&quot;, monospace;
+                    font-size: 0.78rem;
+                    color: var(--muted);
+                  "
+                >
+                  Process each item in a list
+                </td>
+              </tr>
+              <tr>
+                <td>for...in</td>
+                <td>Looping over object keys</td>
+                <td
+                  style="
+                    font-family: &quot;Courier New&quot;, monospace;
+                    font-size: 0.78rem;
+                    color: var(--muted);
+                  "
+                >
+                  Read each property of an object
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 23 — SECTION: EXERCISES
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-amber" data-slide="23">
+        <div class="slide-label"><span class="snum">23</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span> Hands-On Practice
+          </div>
+          <h1 class="display" style="color: white">
+            Exercise<br />Time
+          </h1>
+          <p
+            class="body-lg"
+            style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem"
+          >
+            Put everything from today into practice — terminal, npm, and
+            JavaScript
+          </p>
+        </div>
+        <div class="section-num" style="color: white">✍</div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 24 — EXERCISE 1: TERMINAL & PROJECT SETUP
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-indigo" data-slide="24">
+        <div class="slide-label">
+          <span class="snum">24</span> Exercise 1 · Terminal & npm
+        </div>
+        <div
+          style="
+            display: flex;
+            gap: clamp(2rem, 5vw, 5rem);
+            align-items: center;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+          "
+        >
+          <div class="center">
+            <div class="pill pill-white" style="margin: 0 auto 1rem">
+              ✍ Exercise 1 · Individual
+            </div>
+            <h2
+              class="heading"
+              style="color: white; margin-bottom: 0.5rem; font-size: clamp(1.6rem, 3vw, 2.4rem)"
+            >
+              Terminal &<br />Project Setup
+            </h2>
+            <div class="timer-ring">
+              <div class="timer-display" id="timer1">15:00</div>
+            </div>
+            <div class="timer-controls">
+              <button class="timer-btn tbtn-start" onclick="startTimer('timer1', 15)">▶ Start</button>
+              <button class="timer-btn tbtn-reset" onclick="resetTimer('timer1', 15)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="timer-tasks">
+            <p
+              style="
+                color: rgba(255, 255, 255, 0.6);
+                font-size: clamp(0.72rem, 1vw, 0.82rem);
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+                margin-bottom: 0.5rem;
+              "
+            >
+              Steps — do these in your terminal
+            </p>
+            <div class="tt-item">
+              <div class="tt-num">1</div>
+              <span
+                >Create a new folder called
+                <strong style="color: white">js-practice</strong> and move into
+                it</span
+              >
+            </div>
+            <div class="tt-item">
+              <div class="tt-num">2</div>
+              <span
+                >Run <strong style="color: white">npm init -y</strong> to create
+                a package.json</span
+              >
+            </div>
+            <div class="tt-item">
+              <div class="tt-num">3</div>
+              <span
+                >Create a file called
+                <strong style="color: white">app.js</strong> using
+                <strong style="color: white">touch</strong></span
+              >
+            </div>
+            <div class="tt-item">
+              <div class="tt-num">4</div>
+              <span
+                >Open the folder in VS Code with
+                <strong style="color: white">code .</strong></span
+              >
+            </div>
+            <div class="tt-item">
+              <div class="tt-num">5</div>
+              <span
+                >In app.js, write
+                <strong style="color: white">console.log("Hello Pelsung!")</strong>
+                and save</span
+              >
+            </div>
+            <div class="tt-item">
+              <div class="tt-num">6</div>
+              <span
+                >Run it with
+                <strong style="color: white">node app.js</strong> — you should
+                see "Hello Pelsung!" in the terminal</span
+              >
+            </div>
+            <p
+              style="
+                color: rgba(255, 255, 255, 0.4);
+                font-size: clamp(0.68rem, 0.9vw, 0.78rem);
+                margin-top: 0.75rem;
+              "
+            >
+              Raise your hand when you see the output ✋
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 25 — EXERCISE 2: JS VARIABLES & FUNCTIONS
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-indigo" data-slide="25">
+        <div class="slide-label">
+          <span class="snum">25</span> Exercise 2 · Variables & Functions
+        </div>
+        <div
+          style="
+            display: flex;
+            gap: clamp(2rem, 5vw, 5rem);
+            align-items: center;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+          "
+        >
+          <div class="center">
+            <div class="pill pill-white" style="margin: 0 auto 1rem">
+              ✍ Exercise 2 · Individual
+            </div>
+            <h2
+              class="heading"
+              style="color: white; margin-bottom: 0.5rem; font-size: clamp(1.6rem, 3vw, 2.4rem)"
+            >
+              Variables &<br />Functions
+            </h2>
+            <div class="timer-ring">
+              <div class="timer-display" id="timer2">15:00</div>
+            </div>
+            <div class="timer-controls">
+              <button class="timer-btn tbtn-start" onclick="startTimer('timer2', 15)">▶ Start</button>
+              <button class="timer-btn tbtn-reset" onclick="resetTimer('timer2', 15)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="timer-tasks">
+            <p
+              style="
+                color: rgba(255, 255, 255, 0.6);
+                font-size: clamp(0.72rem, 1vw, 0.82rem);
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+                margin-bottom: 0.5rem;
+              "
+            >
+              Write these in app.js, then run with node app.js
+            </p>
+            <div class="tt-item">
+              <div class="tt-num">1</div>
+              <span
+                >Create a <strong style="color: white">const</strong> for your
+                name and a <strong style="color: white">let</strong> for your
+                age. Print both using
+                <strong style="color: white">console.log</strong></span
+              >
+            </div>
+            <div class="tt-item">
+              <div class="tt-num">2</div>
+              <span
+                >Reassign the age variable to your age next year. Try
+                reassigning the name — what happens?</span
+              >
+            </div>
+            <div class="tt-item">
+              <div class="tt-num">3</div>
+              <span
+                >Write an <strong style="color: white">arrow function</strong>
+                called <strong style="color: white">greet</strong> that takes a
+                name and returns
+                <strong style="color: white">"Hello, [name]!"</strong> using
+                template literals</span
+              >
+            </div>
+            <div class="tt-item">
+              <div class="tt-num">4</div>
+              <span
+                >Write a function
+                <strong style="color: white">isAdult</strong> that takes an age
+                and returns
+                <strong style="color: white">true</strong> if 18+ or
+                <strong style="color: white">false</strong> otherwise</span
+              >
+            </div>
+            <div class="tt-item">
+              <div class="tt-num">5</div>
+              <span
+                >Call both functions and print the results with
+                <strong style="color: white">console.log</strong></span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 26 — EXERCISE 3: LOOPS & CONTROL FLOW
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-indigo" data-slide="26">
+        <div class="slide-label">
+          <span class="snum">26</span> Exercise 3 · Loops & Logic
+        </div>
+        <div
+          style="
+            display: flex;
+            gap: clamp(2rem, 5vw, 5rem);
+            align-items: center;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+          "
+        >
+          <div class="center">
+            <div class="pill pill-white" style="margin: 0 auto 1rem">
+              ✍ Exercise 3 · Individual
+            </div>
+            <h2
+              class="heading"
+              style="color: white; margin-bottom: 0.5rem; font-size: clamp(1.6rem, 3vw, 2.4rem)"
+            >
+              Loops &<br />Control Flow
+            </h2>
+            <div class="timer-ring">
+              <div class="timer-display" id="timer3">15:00</div>
+            </div>
+            <div class="timer-controls">
+              <button class="timer-btn tbtn-start" onclick="startTimer('timer3', 15)">▶ Start</button>
+              <button class="timer-btn tbtn-reset" onclick="resetTimer('timer3', 15)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="timer-tasks">
+            <p
+              style="
+                color: rgba(255, 255, 255, 0.6);
+                font-size: clamp(0.72rem, 1vw, 0.82rem);
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+                margin-bottom: 0.5rem;
+              "
+            >
+              Continue in app.js — try each challenge
+            </p>
+            <div class="tt-item">
+              <div class="tt-num">1</div>
+              <span
+                >Use a <strong style="color: white">for loop</strong> to print
+                the numbers 1 to 10</span
+              >
+            </div>
+            <div class="tt-item">
+              <div class="tt-num">2</div>
+              <span
+                >Use a <strong style="color: white">for loop</strong> to print
+                only the <strong style="color: white">even</strong> numbers
+                from 1 to 20 (hint: use
+                <strong style="color: white">if</strong> and
+                <strong style="color: white">% 2 === 0</strong>)</span
+              >
+            </div>
+            <div class="tt-item">
+              <div class="tt-num">3</div>
+              <span
+                >Write a function
+                <strong style="color: white">getGrade(score)</strong> that
+                returns "Excellent" (90+), "Good" (70+), or "Keep going"
+                (below 70) using
+                <strong style="color: white">if/else if/else</strong></span
+              >
+            </div>
+            <div class="tt-item">
+              <div class="tt-num">4</div>
+              <span
+                >Test getGrade with scores
+                <strong style="color: white">95, 82, 55</strong> and print each
+                result</span
+              >
+            </div>
+            <div class="tt-item">
+              <div class="tt-num">5</div>
+              <span
+                ><strong style="color: #fde68a">Bonus:</strong> Use a
+                <strong style="color: white">while loop</strong> that starts at
+                <strong style="color: white">1</strong> and doubles each time.
+                Print the value each step. Stop when it
+                exceeds <strong style="color: white">1000</strong></span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 27 — EXERCISE REVIEW
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="27">
+        <div class="slide-label">
+          <span class="snum">27</span> Review
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; width: 100%; max-width: 800px"
+        >
+          <div class="center">
+            <div class="pill pill-blue">Solutions Walkthrough</div>
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              Let's Review Together
+            </h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem">
+              Sample solutions — there are many correct ways to write these!
+            </p>
+          </div>
+          <div class="code-block" style="max-width: 700px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              app.js — sample answers
+            </div>
+            <div class="code-body">
+              <span class="cc">// Exercise 2 — greet function</span><br />
+              <span class="ck">const</span> greet = (name) =>
+              <span class="cs">`Hello, ${</span>name<span class="cs">}!`</span
+              >;<br />
+              console.log(greet(<span class="cs">"Karma"</span>));<br /><br />
+
+              <span class="cc">// Exercise 2 — isAdult function</span><br />
+              <span class="ck">const</span> isAdult = (age) => age >=
+              <span class="cn">18</span>;<br />
+              console.log(isAdult(<span class="cn">25</span>));
+              <span class="cc">// true</span><br /><br />
+
+              <span class="cc">// Exercise 3 — getGrade function</span><br />
+              <span class="ck">const</span> getGrade = (score) => {<br />
+              &nbsp;&nbsp;<span class="ck">if</span> (score >=
+              <span class="cn">90</span>) <span class="ck">return</span>
+              <span class="cs">"Excellent"</span>;<br />
+              &nbsp;&nbsp;<span class="ck">if</span> (score >=
+              <span class="cn">70</span>) <span class="ck">return</span>
+              <span class="cs">"Good"</span>;<br />
+              &nbsp;&nbsp;<span class="ck">return</span>
+              <span class="cs">"Keep going"</span>;<br />
+              };<br /><br />
+
+              <span class="cc">// Exercise 3 — even numbers</span><br />
+              <span class="ck">for</span> (<span class="ck">let</span> i =
+              <span class="cn">1</span>; i &lt;=
+              <span class="cn">20</span>; i++) {<br />
+              &nbsp;&nbsp;<span class="ck">if</span> (i %
+              <span class="cn">2</span> ===
+              <span class="cn">0</span>) console.log(i);<br />
+              }<br /><br />
+
+              <span class="cc">// Exercise 3 bonus — doubling while loop</span
+              ><br />
+              <span class="ck">let</span> num =
+              <span class="cn">1</span>;<br />
+              <span class="ck">while</span> (num &lt;=
+              <span class="cn">1000</span>) {<br />
+              &nbsp;&nbsp;console.log(num);<br />
+              &nbsp;&nbsp;num = num *
+              <span class="cn">2</span>;<br />
+              }<br />
+              <span class="cc">// 1, 2, 4, 8, 16, 32, 64, 128, 256, 512</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 28 — WRAP UP
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-gradient" data-slide="28">
+        <div class="slide-label"><span class="snum">28</span></div>
+        <div class="center" style="max-width: 800px">
+          <div style="font-size: clamp(3rem, 8vw, 5rem); margin-bottom: 1.5rem">
+            🧠
+          </div>
+          <h1 class="display" style="font-size: clamp(2rem, 5vw, 4rem)">
+            <span style="color: var(--blue)">JavaScript</span><br />
+            <span style="color: var(--indigo)">Foundations</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted); margin: 1rem 0 1.5rem">
+            These fundamentals are the building blocks for everything we'll
+            build — React, APIs, full apps.
+          </p>
+          <div class="wu-grid" style="max-width: 700px">
+            <div class="wu-card">
+              <div class="wu-icon">📦</div>
+              <h4>Variables</h4>
+              <p>const by default, let when it changes, never var</p>
+            </div>
+            <div class="wu-card">
+              <div class="wu-icon">🔧</div>
+              <h4>Functions</h4>
+              <p>Named, anonymous, and arrow — reusable logic blocks</p>
+            </div>
+            <div class="wu-card">
+              <div class="wu-icon">🔄</div>
+              <h4>Loops</h4>
+              <p>for, while, for...of — repeat without repeating yourself</p>
+            </div>
+          </div>
+          <p
+            style="
+              font-size: clamp(0.75rem, 1vw, 0.85rem);
+              color: var(--faint);
+              margin-top: 1.5rem;
+            "
+          >
+            Next class → JavaScript Fundamentals II: arrays, objects, iteration,
+            destructuring
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- /#deck -->
+
+    <!-- ===== CONTROLS ===== -->
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 28</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">
+      ⛶
+    </button>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      let current = 0;
+
+      function goTo(n) {
+        slides[current].classList.remove("active");
+        slides[current].classList.add("exit");
+        const old = current;
+        setTimeout(() => slides[old].classList.remove("exit"), 380);
+        current = Math.max(0, Math.min(n, total - 1));
+        slides[current].classList.add("active");
+        document.getElementById("slide-counter").textContent =
+          `${current + 1} / ${total}`;
+        document.getElementById("progress").style.width =
+          `${((current + 1) / total) * 100}%`;
+        initReveal(slides[current]);
+      }
+
+      function nextSlide() {
+        if (current < total - 1) goTo(current + 1);
+      }
+      function prevSlide() {
+        if (current > 0) goTo(current - 1);
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight" || e.key === " ") {
+          e.preventDefault();
+          handleForward();
+        }
+        if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          prevSlide();
+        }
+        if (e.key === "f" || e.key === "F") toggleFullscreen();
+      });
+
+      document.getElementById("deck").addEventListener("click", function (e) {
+        if (
+          e.target.closest(
+            "button, .quiz-opt, .sl-item, .mq, a, input, select, textarea, .agenda-row, [data-noclick]",
+          )
+        )
+          return;
+        const pct = e.clientX / window.innerWidth;
+        if (pct < 0.15) prevSlide();
+        else if (pct > 0.85) handleForward();
+      });
+
+      function handleForward() {
+        const active = slides[current];
+        const list = active.querySelector(".reveal-list");
+        if (list) {
+          const hidden = list.querySelectorAll("li:not(.shown)");
+          if (hidden.length > 0) {
+            hidden[0].classList.add("shown");
+            const hint = active.querySelector(".reveal-hint");
+            if (hint && hidden.length === 1) hint.style.opacity = "0";
+            return;
+          }
+        }
+        nextSlide();
+      }
+
+      function initReveal(slide) {
+        const list = slide.querySelector(".reveal-list");
+        if (!list) return;
+        list
+          .querySelectorAll("li")
+          .forEach((li) => li.classList.remove("shown"));
+        const hint = slide.querySelector(".reveal-hint");
+        if (hint) hint.style.opacity = "1";
+      }
+
+      slides[0].classList.add("active");
+      document.getElementById("progress").style.width = `${(1 / total) * 100}%`;
+
+      function toggleFullscreen() {
+        if (!document.fullscreenElement)
+          document.documentElement.requestFullscreen().catch(() => {});
+        else document.exitFullscreen().catch(() => {});
+      }
+
+      /* ============================
+   TIMERS
+============================ */
+      const timerState = {};
+
+      function startTimer(id, minutes) {
+        if (timerState[id]?.interval) return;
+        if (!timerState[id]) timerState[id] = { remaining: minutes * 60 };
+        timerState[id].interval = setInterval(() => {
+          timerState[id].remaining--;
+          const el = document.getElementById(id);
+          if (!el) return;
+          if (timerState[id].remaining <= 0) {
+            clearInterval(timerState[id].interval);
+            timerState[id].interval = null;
+            el.textContent = "00:00";
+            el.style.color = "#ff5f56";
+            return;
+          }
+          const m = Math.floor(timerState[id].remaining / 60)
+            .toString()
+            .padStart(2, "0");
+          const s = (timerState[id].remaining % 60)
+            .toString()
+            .padStart(2, "0");
+          el.textContent = `${m}:${s}`;
+          if (timerState[id].remaining <= 60) el.style.color = "#febc2e";
+        }, 1000);
+      }
+
+      function resetTimer(id, minutes) {
+        if (timerState[id]?.interval) {
+          clearInterval(timerState[id].interval);
+          timerState[id].interval = null;
+        }
+        timerState[id] = { remaining: minutes * 60 };
+        const el = document.getElementById(id);
+        if (el) {
+          el.textContent = minutes.toString().padStart(2, "0") + ":00";
+          el.style.color = "";
+        }
+      }
+    </script>
+  </body>
+</html>

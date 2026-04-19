@@ -603,8 +603,10 @@
         sub: 'Frontend-focused track. Trainees build real web products using HTML/CSS/JS, React, and AI-assisted workflows anchored on Claude Code.',
         topics: 'FE-focused · HTML/CSS/JS · React · working with AI codegen',
         classes: [
-          { num:'01', title:'Dev Environment Deep Dive', topics:'Node.js · npm · VS Code extensions · terminal fluency' },
-          { num:'02', title:'JavaScript Fundamentals I', topics:'Values · variables · functions · control flow' },
+          { num:'01', title:'Dev Environment Deep Dive', topics:'Node.js · npm · VS Code extensions · terminal fluency',
+            status: 'done', files: { slides: 'dev/01-dev-environment-deep-dive-slides.html', notes: 'dev/01-dev-environment-deep-dive-notes.html' } },
+          { num:'02', title:'JavaScript Fundamentals I', topics:'Values · variables · functions · control flow',
+            status: 'done', files: { slides: 'dev/02-javascript-fundamentals-slides.html', notes: 'dev/02-javascript-fundamentals-notes.html' } },
           { num:'03', title:'JavaScript Fundamentals II', topics:'Arrays · objects · iteration · destructuring' },
           { num:'04', title:'DOM & Browser APIs', topics:'Selecting · events · forms · fetch' },
           { num:'05', title:'Modern CSS Layout', topics:'Flexbox · Grid · responsive patterns' },
@@ -819,8 +821,11 @@
       return card;
     }
 
-    /* ========== simple class row (no chips — for verticals/capstone) ========== */
+    /* ========== simple class row (for verticals/capstone — shows chips if files exist) ========== */
     function plainClassRow(r) {
+      if (r.files && (r.files.slides || r.files.notes)) {
+        return classRow(r);
+      }
       return el('div', { class: 'row' }, [
         el('div', { class: 'r-num mono' }, r.num),
         el('div', { class: 'r-body' }, [

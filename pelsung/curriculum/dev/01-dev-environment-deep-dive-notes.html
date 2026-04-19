@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Class Notes: Dev Environment Deep Dive</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue:    #0066B2;
+      --indigo:  #001F35;
+      --amber:   #247EC1;
+      --green:   #7BC950;
+      --purple:  #4796D1;
+      --red:     #D80032;
+      --text:    #1B2021;
+      --muted:   #7B7C7F;
+      --faint:   #9CA3AF;
+      --surf:    #ffffff;
+      --bg:      #F9F9F9;
+      --border:  #EDEDED;
+      --border-l:#F5F5F5;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Open Sans', 'Aptos', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.65;
+      font-size: 17px;
+    }
+    @media (max-width: 640px) { body { font-size: 16px; } }
+
+    /* ===== HERO ===== */
+    .hero {
+      background: var(--surf);
+      border-bottom: 1px solid var(--border);
+      padding: 4rem 2rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 5px;
+      background: linear-gradient(135deg, #0067A3, #002D72);
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 0.35rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); }
+    .hero h1 {
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero h1 .c-blue   { color: var(--blue); }
+    .hero h1 .c-indigo { color: var(--indigo); }
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 2rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero-tags {
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+    .hero-tag {
+      padding: 0.3rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .tag-blue   { background: #E6F0F8; color: var(--blue); }
+    .tag-indigo { background: #E6E9EC; color: var(--indigo); }
+    .tag-green  { background: #F0F7EC; color: var(--green); }
+
+    /* ===== LAYOUT ===== */
+    .container { max-width: 1040px; margin: 0 auto; padding: 0 2rem 6rem; }
+
+    /* ===== TOC ===== */
+    .toc {
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem 2rem;
+      margin: 2.5rem 0;
+    }
+    .toc h3 {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--faint);
+      margin-bottom: 1.25rem;
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.4rem 2rem;
+    }
+    .toc-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.875rem;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.3rem 0;
+      border-bottom: 1px solid var(--border-l);
+      transition: color 0.15s;
+    }
+    .toc-item:hover { color: var(--indigo); }
+    .toc-item .toc-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ===== SECTION HEADER ===== */
+    .section-hd { padding: 3.5rem 0 1.5rem; }
+    .section-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0.9rem;
+      border-radius: 100px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+    .pill-blue   { background: #E6F0F8; color: var(--blue); }
+    .pill-indigo { background: #E6E9EC; color: var(--indigo); }
+    .pill-green  { background: #F0F7EC; color: var(--green); }
+    .section-title {
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+      font-size: 2rem;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 0.4rem;
+    }
+    .section-desc { font-size: 0.95rem; color: var(--muted); }
+
+    /* ===== TOPIC BLOCK ===== */
+    .topic {
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem 2.25rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .topic::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 4px;
+      border-radius: 4px 0 0 4px;
+    }
+    .topic-blue::before   { background: var(--blue); }
+    .topic-indigo::before { background: var(--indigo); }
+    .topic-amber::before  { background: var(--amber); }
+    .topic-green::before  { background: var(--green); }
+    .topic-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* ===== TEXT ===== */
+    .explain {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+    }
+    .explain strong { color: var(--text); }
+
+    /* ===== CONCEPTS ===== */
+    .concepts { display: grid; gap: 0.9rem; margin-bottom: 1.25rem; }
+    .concepts-2 { grid-template-columns: repeat(2, 1fr); }
+    .concepts-3 { grid-template-columns: repeat(3, 1fr); }
+    .concept {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.1rem 1.25rem;
+    }
+    .concept h4 {
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .concept ul { list-style: none; display: flex; flex-direction: column; gap: 0.35rem; }
+    .concept ul li {
+      font-size: 0.83rem;
+      color: var(--muted);
+      padding-left: 1rem;
+      position: relative;
+      line-height: 1.5;
+    }
+    .concept ul li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--faint);
+      font-size: 0.72rem;
+      top: 0.15em;
+    }
+
+    /* ===== CODE ===== */
+    .code-block {
+      background: #001F35;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+      font-family: 'Courier New', monospace;
+    }
+    .code-bar {
+      background: #0A2A45;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.4);
+    }
+    .code-bar .cb-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .code-body {
+      padding: 1.1rem 1.25rem;
+      font-size: 0.82rem;
+      line-height: 1.85;
+      color: rgba(255,255,255,0.85);
+    }
+    .code-body .ck { color: #7dd3fc; }
+    .code-body .cs { color: #86efac; }
+    .code-body .cn { color: #fde68a; }
+    .code-body .cc { color: rgba(255,255,255,0.35); }
+    .code-body .cp { color: #c4b5fd; }
+
+    /* ===== COMMAND TABLE ===== */
+    .cmd-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.25rem;
+    }
+    .cmd-table th {
+      background: #E6E9EC;
+      color: var(--indigo);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0.6rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid #C0C8D0;
+    }
+    .cmd-table td {
+      padding: 0.55rem 1rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+    .cmd-table td:first-child {
+      font-family: 'Courier New', monospace;
+      font-weight: 700;
+      color: var(--blue);
+      white-space: nowrap;
+    }
+    .cmd-table tr:hover td { background: #EEF0F2; }
+
+    /* ===== CALLOUT ===== */
+    .callout {
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      font-size: 0.85rem;
+      display: flex;
+      gap: 0.6rem;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      line-height: 1.55;
+    }
+    .callout .ci { font-size: 1rem; min-width: 1.2rem; flex-shrink: 0; }
+    .callout-blue  { background: #f0f7fc; border: 1px solid #B0D4E9; color: var(--muted); }
+    .callout-amber { background: #F0F4FA; border: 1px solid #A3C4E0; color: var(--muted); }
+    .callout strong { color: var(--text); }
+
+    /* ===== SUMMARY ===== */
+    .summary {
+      background: linear-gradient(135deg, var(--indigo) 0%, #000D19 100%);
+      color: white;
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin: 3rem 0;
+      text-align: center;
+    }
+    .summary h2 {
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 400;
+      margin-bottom: 0.4rem;
+    }
+    .summary p { font-size: 0.9rem; opacity: 0.75; margin-bottom: 1.75rem; }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.9rem;
+    }
+    .su-card {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 12px;
+      padding: 1.1rem;
+      text-align: left;
+    }
+    .su-card h4 { font-size: 0.88rem; font-weight: 700; margin-bottom: 0.4rem; opacity: 0.9; }
+    .su-card p  { font-size: 0.78rem; opacity: 0.65; line-height: 1.5; }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: var(--surf);
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--faint);
+    }
+    .footer strong { color: var(--muted); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 720px) {
+      .hero { padding: 2.5rem 1rem 1.75rem !important; }
+      .hero h1 { font-size: clamp(1.7rem, 7vw, 2.2rem) !important; }
+      .container { padding: 0 1rem 4rem !important; }
+      .toc-grid { grid-template-columns: 1fr !important; }
+      .concepts-2, .concepts-3, .summary-grid { grid-template-columns: 1fr !important; }
+      .section-title { font-size: 1.5rem !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <img src="../assets/SELISE_Logo_Primary.png" alt="SELISE Digital Platforms" style="height: 48px; margin-bottom: 1rem; display: block;">
+  <div class="hero-badge">
+    <div class="dot"></div>
+    Pelsung · Dev Specialization
+  </div>
+  <h1>
+    <span class="c-blue">Dev Environment</span> <span class="c-indigo">Deep Dive</span>
+  </h1>
+  <p class="hero-sub">Class 01 · JavaScript, Node.js, npm, and essential terminal commands — your developer toolkit.</p>
+  <div class="hero-tags">
+    <span class="hero-tag tag-blue">JavaScript</span>
+    <span class="hero-tag tag-indigo">Node.js</span>
+    <span class="hero-tag tag-green">npm & Terminal</span>
+  </div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div class="container">
+
+  <!-- ===== TOC ===== -->
+  <div class="toc">
+    <h3>What's In These Notes</h3>
+    <div class="toc-grid">
+      <a class="toc-item" href="#javascript">
+        <span class="toc-dot" style="background:var(--blue)"></span>
+        💡 What is JavaScript?
+      </a>
+      <a class="toc-item" href="#nodejs">
+        <span class="toc-dot" style="background:var(--indigo)"></span>
+        🟢 What is Node.js?
+      </a>
+      <a class="toc-item" href="#npm">
+        <span class="toc-dot" style="background:var(--amber)"></span>
+        📦 npm — Node Package Manager
+      </a>
+      <a class="toc-item" href="#terminal">
+        <span class="toc-dot" style="background:var(--green)"></span>
+        ⌨️ Terminal Commands
+      </a>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION: JAVASCRIPT
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd">
+    <div class="section-pill pill-blue">Section 01</div>
+    <h2 class="section-title">What is JavaScript?</h2>
+    <p class="section-desc">The programming language that powers the web — and increasingly, everything else too.</p>
+  </div>
+
+  <div class="topic topic-blue" id="javascript">
+    <div class="topic-title">💡 JavaScript — The Language of the Web</div>
+
+    <p class="explain">
+      <strong>JavaScript</strong> (often abbreviated as JS) is a programming language that was created in 1995 by Brendan Eich at Netscape. It was originally designed to make web pages interactive — things like dropdown menus, image sliders, and form validation. But over the past 30 years, it has grown into one of the most widely used programming languages in the world.
+    </p>
+
+    <p class="explain">
+      JavaScript is special because it is the <strong>only programming language that every web browser understands natively</strong>. When you visit a website, your browser downloads HTML (structure), CSS (styling), and JavaScript (behavior). Without JavaScript, web pages would be completely static — no interactions, no animations, no real-time updates.
+    </p>
+
+    <div class="concepts concepts-3">
+      <div class="concept">
+        <h4>🌐 In the Browser</h4>
+        <ul>
+          <li>Every browser has a JS engine built in</li>
+          <li>Chrome uses V8, Firefox uses SpiderMonkey</li>
+          <li>Makes pages interactive and dynamic</li>
+          <li>Handles user clicks, form submissions, animations</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4>🖥️ On Servers</h4>
+        <ul>
+          <li>Node.js lets JS run outside the browser</li>
+          <li>Build backend APIs and web servers</li>
+          <li>Handle database operations</li>
+          <li>Used by Netflix, PayPal, LinkedIn</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4>📱 Everywhere Else</h4>
+        <ul>
+          <li>Mobile apps (React Native)</li>
+          <li>Desktop apps (Electron — VS Code, Slack)</li>
+          <li>IoT devices and embedded systems</li>
+          <li>AI tool interfaces and chatbots</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout callout-blue">
+      <span class="ci">🎯</span>
+      <span><strong>Why this matters for you:</strong> As a developer in this program, JavaScript will be your primary language. You'll use it to build web interfaces (frontend) and potentially server-side logic (backend). Learning JS well means you can build almost anything.</span>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION: NODE.JS
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd">
+    <div class="section-pill pill-indigo">Section 02</div>
+    <h2 class="section-title">What is Node.js?</h2>
+    <p class="section-desc">JavaScript was trapped in the browser. Node.js set it free.</p>
+  </div>
+
+  <div class="topic topic-indigo" id="nodejs">
+    <div class="topic-title">🟢 Node.js — JavaScript Runtime</div>
+
+    <p class="explain">
+      For the first 14 years of JavaScript's life, it could only run inside a web browser. If you wanted to build a server, process files, or interact with a database, you had to use a different language like PHP, Java, Python, or Ruby. This meant web developers had to learn <strong>at least two languages</strong> — one for the frontend and one for the backend.
+    </p>
+
+    <p class="explain">
+      In 2009, <strong>Ryan Dahl</strong> created Node.js. He took Chrome's V8 JavaScript engine (the part that actually executes JS code) and made it work outside the browser. Suddenly, JavaScript could read files, start web servers, connect to databases, and do everything other "backend" languages could do.
+    </p>
+
+    <div class="concepts concepts-2">
+      <div class="concept">
+        <h4>🔧 What Node.js Is</h4>
+        <ul>
+          <li>A <strong>runtime environment</strong> — a place where JS code can execute</li>
+          <li>Built on Chrome's V8 engine (same engine, different environment)</li>
+          <li>Gives JavaScript access to the file system, network, and OS</li>
+          <li>Free, open source, runs on Windows, Mac, and Linux</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4>🚫 What Node.js Is NOT</h4>
+        <ul>
+          <li>Not a programming language (JS is the language, Node is the environment)</li>
+          <li>Not a framework (Express, Fastify are frameworks that run on Node)</li>
+          <li>Not only for servers (it runs dev tools, scripts, CLI apps too)</li>
+          <li>Not a replacement for browser JS (they coexist)</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="explain">
+      <strong>Why does this matter?</strong> Almost every modern web development tool runs on Node.js. When you use VS Code extensions, run a React development server, or install packages — Node.js is doing the work behind the scenes. Even if you never write backend code, you'll use Node.js every single day as a frontend developer.
+    </p>
+
+    <div class="callout callout-amber">
+      <span class="ci">💡</span>
+      <span><strong>Simple analogy:</strong> Think of JavaScript as a language you speak, and Node.js as a new country where that language is understood. Before Node, JS could only "travel" inside browsers. Now it can go anywhere.</span>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION: NPM
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd">
+    <div class="section-pill pill-blue">Section 03</div>
+    <h2 class="section-title">npm — Node Package Manager</h2>
+    <p class="section-desc">Why write everything from scratch when millions of packages are free to use?</p>
+  </div>
+
+  <div class="topic topic-amber" id="npm">
+    <div class="topic-title">📦 npm — Your Developer Toolbox</div>
+
+    <p class="explain">
+      <strong>npm</strong> (Node Package Manager) comes bundled with Node.js — when you install Node, you automatically get npm. It serves two purposes: it's an <strong>online registry</strong> (a massive library of free, reusable code packages) and a <strong>command-line tool</strong> (what you use to install and manage those packages).
+    </p>
+
+    <p class="explain">
+      The npm registry has over <strong>2 million packages</strong> — everything from tiny helper functions to entire frameworks like React. Instead of writing a date formatting library from scratch, you run <code style="background:#E6F0F8;padding:0.1rem 0.4rem;border-radius:4px;font-size:0.9em">npm install date-fns</code> and it's ready to use in seconds.
+    </p>
+
+    <div class="concepts concepts-3">
+      <div class="concept">
+        <h4>📋 package.json</h4>
+        <ul>
+          <li>The "ID card" of every Node.js project</li>
+          <li>Lists project name, version, author</li>
+          <li>Lists all dependencies (packages your project needs)</li>
+          <li>Defines scripts (commands you can run)</li>
+          <li>Created with <code>npm init</code></li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4>📁 node_modules/</h4>
+        <ul>
+          <li>The folder where npm puts downloaded packages</li>
+          <li>Can get very large (hundreds of MB)</li>
+          <li>Never edit files inside it manually</li>
+          <li>Never commit it to git (use .gitignore)</li>
+          <li>Regenerated by running <code>npm install</code></li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4>🔒 package-lock.json</h4>
+        <ul>
+          <li>Auto-generated file — don't edit it</li>
+          <li>Locks exact versions of every dependency</li>
+          <li>Ensures your teammate gets the same versions</li>
+          <li>Always commit this file to git</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="explain" style="font-weight:600;color:var(--text);margin-top:0.5rem">Essential npm Commands</p>
+
+    <div class="code-block">
+      <div class="code-bar">
+        <span class="cb-dot" style="background:#FF5F57"></span>
+        <span class="cb-dot" style="background:#FEBC2E"></span>
+        <span class="cb-dot" style="background:#28C840"></span>
+        Terminal — npm commands
+      </div>
+      <div class="code-body">
+        <span class="cc"># Create a new project (generates package.json)</span><br>
+        <span class="ck">npm</span> init<br>
+        <span class="ck">npm</span> init -y &nbsp;&nbsp;&nbsp;&nbsp;<span class="cc"># skip the questions, use defaults</span><br><br>
+        <span class="cc"># Install all dependencies listed in package.json</span><br>
+        <span class="ck">npm</span> install<br><br>
+        <span class="cc"># Install a specific package</span><br>
+        <span class="ck">npm</span> install react<br>
+        <span class="ck">npm</span> install -D vite &nbsp;&nbsp;<span class="cc"># install as dev dependency</span><br><br>
+        <span class="cc"># Run scripts defined in package.json</span><br>
+        <span class="ck">npm</span> run dev &nbsp;&nbsp;&nbsp;&nbsp;<span class="cc"># start development server</span><br>
+        <span class="ck">npm</span> run build &nbsp;&nbsp;<span class="cc"># build for production</span><br>
+        <span class="ck">npm</span> start &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cc"># run the "start" script</span>
+      </div>
+    </div>
+
+    <div class="callout callout-blue">
+      <span class="ci">🎯</span>
+      <span><strong>The key commands you'll use daily:</strong> <code>npm install</code> (set up a project), <code>npm run dev</code> (start coding), and <code>npm run build</code> (prepare for deployment). That covers 90% of your npm usage.</span>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION: TERMINAL
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd">
+    <div class="section-pill pill-green">Section 04</div>
+    <h2 class="section-title">Essential Terminal Commands</h2>
+    <p class="section-desc">The terminal is not scary — it's just a different way to talk to your computer. And it's faster.</p>
+  </div>
+
+  <div class="topic topic-green" id="terminal">
+    <div class="topic-title">⌨️ Terminal — Your Developer Superpower</div>
+
+    <p class="explain">
+      The <strong>terminal</strong> (also called command line, console, or shell) lets you control your computer by typing commands instead of clicking around with a mouse. Every professional developer uses the terminal daily — it's essential for running code, managing files, using git, and working with npm.
+    </p>
+
+    <p class="explain">
+      It might feel unfamiliar at first, but once you learn a handful of commands, you'll find it's often <strong>faster</strong> than clicking through folders. And some things (like running a server or installing packages) can <strong>only</strong> be done from the terminal.
+    </p>
+
+    <p class="explain" style="font-weight:600;color:var(--text)">Navigation Commands</p>
+
+    <table class="cmd-table">
+      <thead>
+        <tr><th>Command</th><th>What It Does</th><th>Example</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>pwd</td><td>Print working directory — shows where you are</td><td><code>/Users/karma/projects</code></td></tr>
+        <tr><td>ls</td><td>List files and folders in current directory</td><td>Shows all items in the folder</td></tr>
+        <tr><td>cd folder</td><td>Change directory — move into a folder</td><td><code>cd my-project</code></td></tr>
+        <tr><td>cd ..</td><td>Go up one level (parent directory)</td><td>From <code>/projects/app</code> → <code>/projects</code></td></tr>
+        <tr><td>cd ~</td><td>Go to your home directory</td><td>Back to <code>/Users/karma</code></td></tr>
+      </tbody>
+    </table>
+
+    <p class="explain" style="font-weight:600;color:var(--text)">File & Folder Commands</p>
+
+    <table class="cmd-table">
+      <thead>
+        <tr><th>Command</th><th>What It Does</th><th>Example</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>mkdir name</td><td>Create a new folder</td><td><code>mkdir my-project</code></td></tr>
+        <tr><td>touch file</td><td>Create a new empty file</td><td><code>touch index.html</code></td></tr>
+        <tr><td>rm file</td><td>Delete a file (no undo!)</td><td><code>rm old-notes.txt</code></td></tr>
+        <tr><td>rm -r folder</td><td>Delete a folder and everything inside it</td><td><code>rm -r temp-folder</code></td></tr>
+        <tr><td>clear</td><td>Clear the terminal screen</td><td>Cleans up visual clutter</td></tr>
+      </tbody>
+    </table>
+
+    <p class="explain" style="font-weight:600;color:var(--text)">Developer Workflow Commands</p>
+
+    <table class="cmd-table">
+      <thead>
+        <tr><th>Command</th><th>What It Does</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>node file.js</td><td>Run a JavaScript file with Node.js</td></tr>
+        <tr><td>npm run dev</td><td>Start the development server</td></tr>
+        <tr><td>npm install</td><td>Install all project dependencies</td></tr>
+        <tr><td>git status</td><td>See what files have changed (version control)</td></tr>
+        <tr><td>code .</td><td>Open the current folder in VS Code</td></tr>
+        <tr><td>Ctrl + C</td><td>Stop a running process (e.g., dev server)</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-amber">
+      <span class="ci">⚠️</span>
+      <span><strong>Be careful with <code>rm</code>:</strong> Deleting files from the terminal is permanent — there is no Recycle Bin or Trash. Always double-check what you're deleting. When in doubt, move files to a temporary folder first instead of deleting them.</span>
+    </div>
+
+    <p class="explain" style="font-weight:600;color:var(--text);margin-top:1rem">Putting It All Together — A Typical Workflow</p>
+
+    <div class="code-block">
+      <div class="code-bar">
+        <span class="cb-dot" style="background:#FF5F57"></span>
+        <span class="cb-dot" style="background:#FEBC2E"></span>
+        <span class="cb-dot" style="background:#28C840"></span>
+        Terminal
+      </div>
+      <div class="code-body">
+        <span class="cc"># 1. Create a new project folder</span><br>
+        <span class="ck">mkdir</span> my-first-app<br>
+        <span class="ck">cd</span> my-first-app<br><br>
+        <span class="cc"># 2. Initialize a Node.js project</span><br>
+        <span class="ck">npm</span> init -y<br><br>
+        <span class="cc"># 3. Open in VS Code</span><br>
+        <span class="ck">code</span> .<br><br>
+        <span class="cc"># 4. Install dependencies</span><br>
+        <span class="ck">npm</span> install vite<br><br>
+        <span class="cc"># 5. Start the development server</span><br>
+        <span class="ck">npm</span> run dev<br><br>
+        <span class="cc"># 6. When done, stop the server</span><br>
+        <span class="cc"># Press Ctrl + C</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ===== SUMMARY ===== -->
+  <div class="summary">
+    <h2>What You Learned</h2>
+    <p>The four pillars of your development environment</p>
+    <div class="summary-grid">
+      <div class="su-card">
+        <h4>💡 JavaScript</h4>
+        <p>The only language browsers understand natively. Runs everywhere — web, server, mobile, desktop.</p>
+      </div>
+      <div class="su-card">
+        <h4>🟢 Node.js</h4>
+        <p>JavaScript runtime that lets JS run outside browsers. Powers dev tools, servers, and the entire npm ecosystem.</p>
+      </div>
+      <div class="su-card">
+        <h4>📦 npm</h4>
+        <p>2M+ free packages. Use npm install to add libraries, npm run to execute scripts. package.json is your project's ID card.</p>
+      </div>
+      <div class="su-card">
+        <h4>⌨️ Terminal</h4>
+        <p>Navigate folders, create files, run scripts, manage git. A handful of commands covers your daily workflow.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div class="footer">
+  <strong>SELISE × Pelsung</strong> · Dev Specialization · Class 01
+</div>
+
+</body>
+</html>

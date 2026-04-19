@@ -1,0 +1,1223 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="robots"
+      content="noindex, nofollow, noarchive, nosnippet, noimageindex"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dev Environment Deep Dive — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      .code-block {
+        background: #001f35;
+        border-radius: 14px;
+        overflow: hidden;
+        width: 100%;
+        font-family: "Courier New", monospace;
+      }
+      .code-bar {
+        background: #0a2a45;
+        padding: 8px 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-family: "Open Sans", sans-serif;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .code-bar .cb-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+      .code-body {
+        padding: clamp(1rem, 1.8vw, 1.5rem);
+        font-size: clamp(0.78rem, 1.1vw, 0.95rem);
+        line-height: 1.9;
+        color: rgba(255, 255, 255, 0.85);
+      }
+      .code-body .ck {
+        color: #7dd3fc;
+      }
+      .code-body .cs {
+        color: #86efac;
+      }
+      .code-body .cn {
+        color: #fde68a;
+      }
+      .code-body .cc {
+        color: rgba(255, 255, 255, 0.35);
+      }
+      .code-body .cp {
+        color: #c4b5fd;
+      }
+      .cmd-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: clamp(0.6rem, 1.2vw, 1rem);
+        width: 100%;
+        max-width: 900px;
+      }
+      .cmd-card {
+        background: var(--bg);
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        padding: clamp(0.7rem, 1.2vw, 1rem) clamp(0.9rem, 1.5vw, 1.2rem);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .cmd-code {
+        font-family: "Courier New", monospace;
+        font-size: clamp(0.82rem, 1.2vw, 1rem);
+        font-weight: 700;
+        color: var(--blue);
+        background: #e6f0f8;
+        padding: 0.25rem 0.6rem;
+        border-radius: 6px;
+        white-space: nowrap;
+      }
+      .cmd-desc {
+        font-size: clamp(0.78rem, 1.1vw, 0.92rem);
+        color: var(--muted);
+        line-height: 1.4;
+      }
+      @media (max-width: 680px) {
+        .cmd-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .timeline-flow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0;
+        width: 100%;
+        max-width: 900px;
+      }
+      .tl-node {
+        background: var(--surf);
+        border: 2px solid var(--border);
+        border-radius: 14px;
+        padding: clamp(0.7rem, 1.2vw, 1rem) clamp(0.9rem, 1.5vw, 1.2rem);
+        text-align: center;
+        min-width: clamp(80px, 10vw, 120px);
+        transition: transform 0.2s;
+      }
+      .tl-node:hover {
+        transform: translateY(-4px);
+      }
+      .tl-icon {
+        font-size: clamp(1.5rem, 2.5vw, 2rem);
+        display: block;
+        margin-bottom: 0.3rem;
+      }
+      .tl-title {
+        font-size: clamp(0.75rem, 1.1vw, 0.9rem);
+        font-weight: 700;
+      }
+      .tl-sub {
+        font-size: clamp(0.58rem, 0.82vw, 0.68rem);
+        color: var(--muted);
+        margin-top: 0.1rem;
+      }
+      .tl-arrow {
+        font-size: clamp(0.9rem, 1.3vw, 1.1rem);
+        color: var(--faint);
+        padding: 0 clamp(0.3rem, 0.6vw, 0.5rem);
+      }
+      .tl-blue {
+        border-color: var(--blue);
+      }
+      .tl-blue .tl-title {
+        color: var(--blue);
+      }
+      .tl-indigo {
+        border-color: var(--indigo);
+      }
+      .tl-indigo .tl-title {
+        color: var(--indigo);
+      }
+      .tl-green {
+        border-color: var(--green);
+      }
+      .tl-green .tl-title {
+        color: var(--green);
+      }
+      .tl-amber {
+        border-color: var(--amber);
+      }
+      .tl-amber .tl-title {
+        color: #1c5b8c;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+      <!-- ══════════════════════════════════════════
+       SLIDE 1 — TITLE
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-gradient bg-dark" data-slide="1">
+        <div class="slide-label">
+          <span class="snum">01</span> SELISE × Pelsung
+        </div>
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            text-align: center;
+            max-width: 900px;
+          "
+        >
+          <div class="date-badge">
+            <span class="db-dot"></span>Dev Specialization · Class 01
+          </div>
+          <h1 class="display" style="color: white">
+            <span style="color: #7dd3fc">Dev Environment</span><br />
+            <span style="color: white">Deep Dive</span>
+          </h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.65)">
+            JavaScript · Node.js · npm · Terminal Commands
+          </p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue"
+              >01 · Dev Environment Deep Dive</span
+            >
+          </div>
+        </div>
+        <div class="interact-hint">
+          Press → or click the right side to advance
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 2 — AGENDA
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 720px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              Session Journey
+            </h2>
+          </div>
+          <div class="agenda-row" onclick="goTo(2)">
+            <span class="ar-dot" style="background: var(--blue)"></span>
+            <span class="ar-label">💡 What is JavaScript?</span>
+            <span
+              class="ar-badge"
+              style="background: #e6f0f8; color: var(--blue)"
+              >15 min</span
+            >
+          </div>
+          <div class="agenda-row" onclick="goTo(5)">
+            <span class="ar-dot" style="background: var(--indigo)"></span>
+            <span class="ar-label">🟢 What is Node.js & Why We Need It</span>
+            <span
+              class="ar-badge"
+              style="background: #e6e9ec; color: var(--indigo)"
+              >25 min</span
+            >
+          </div>
+          <div class="agenda-row" onclick="goTo(9)">
+            <span class="ar-dot" style="background: var(--amber)"></span>
+            <span class="ar-label">📦 npm — Node Package Manager</span>
+            <span class="ar-badge" style="background: #ebf0f7; color: #1c5b8c"
+              >20 min</span
+            >
+          </div>
+          <div class="agenda-row" onclick="goTo(13)">
+            <span class="ar-dot" style="background: var(--green)"></span>
+            <span class="ar-label">⌨️ Essential Terminal Commands</span>
+            <span
+              class="ar-badge"
+              style="background: #f0f7ec; color: var(--green)"
+              >30 min</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 3 — SECTION: JAVASCRIPT
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-blue" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span> Section 01
+          </div>
+          <h1 class="display" style="color: white">What is<br />JavaScript?</h1>
+          <p
+            class="body-lg"
+            style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem"
+          >
+            The language of the web — and beyond
+          </p>
+        </div>
+        <div class="section-num" style="color: white">01</div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 4 — JAVASCRIPT EXPLAINED
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> JavaScript</div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">What is JavaScript?</div>
+            <h2 class="heading">The Language That Powers the Web</h2>
+          </div>
+          <div class="cols-3">
+            <div
+              class="card"
+              style="border-top: 3px solid var(--blue); text-align: center"
+            >
+              <div
+                style="
+                  font-size: clamp(2rem, 3.5vw, 3rem);
+                  margin-bottom: 0.5rem;
+                "
+              >
+                🌐
+              </div>
+              <h4 style="color: var(--blue); justify-content: center">
+                Born in the Browser
+              </h4>
+              <p
+                style="
+                  font-size: clamp(0.78rem, 1.1vw, 0.92rem);
+                  color: var(--muted);
+                  line-height: 1.5;
+                "
+              >
+                Created in 1995 by Brendan Eich at Netscape. Originally designed
+                to make web pages interactive.
+              </p>
+            </div>
+            <div
+              class="card"
+              style="border-top: 3px solid var(--indigo); text-align: center"
+            >
+              <div
+                style="
+                  font-size: clamp(2rem, 3.5vw, 3rem);
+                  margin-bottom: 0.5rem;
+                "
+              >
+                ⚡
+              </div>
+              <h4 style="color: var(--indigo); justify-content: center">
+                Runs Everywhere
+              </h4>
+              <p
+                style="
+                  font-size: clamp(0.78rem, 1.1vw, 0.92rem);
+                  color: var(--muted);
+                  line-height: 1.5;
+                "
+              >
+                Every browser has a JavaScript engine. Chrome uses V8, Firefox
+                uses SpiderMonkey, Safari uses JavaScriptCore.
+              </p>
+            </div>
+            <div
+              class="card"
+              style="border-top: 3px solid var(--green); text-align: center"
+            >
+              <div
+                style="
+                  font-size: clamp(2rem, 3.5vw, 3rem);
+                  margin-bottom: 0.5rem;
+                "
+              >
+                🏗️
+              </div>
+              <h4 style="color: var(--green); justify-content: center">
+                Not Just Browsers
+              </h4>
+              <p
+                style="
+                  font-size: clamp(0.78rem, 1.1vw, 0.92rem);
+                  color: var(--muted);
+                  line-height: 1.5;
+                "
+              >
+                Today JS also runs on servers (Node.js), mobile apps (React
+                Native), and desktop apps (Electron).
+              </p>
+            </div>
+          </div>
+          <div
+            class="card"
+            style="
+              background: var(--bg);
+              border: 2px dashed var(--border);
+              text-align: center;
+              padding: clamp(0.75rem, 1.5vw, 1.1rem);
+              max-width: 700px;
+            "
+          >
+            <p class="body-md" style="color: var(--muted)">
+              🎯
+              <strong style="color: var(--text)">Key insight:</strong>
+              JavaScript is the <strong>only</strong> programming language that
+              every web browser understands natively. That's why it dominates
+              web development.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 5 — JAVASCRIPT USES
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="5">
+        <div class="slide-label">
+          <span class="snum">05</span> JavaScript Today
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; width: 100%; max-width: 900px"
+        >
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              What JavaScript Can Do
+            </h2>
+          </div>
+          <ul class="reveal-list" id="js-uses" style="max-width: 750px">
+            <li>
+              <strong>Frontend:</strong> Build interactive web pages — buttons,
+              animations, forms, everything you see and click
+            </li>
+            <li>
+              <strong>Backend:</strong> Run server-side code with Node.js —
+              handle requests, talk to databases
+            </li>
+            <li>
+              <strong>Mobile:</strong> Build mobile apps with React Native — one
+              language for iOS and Android
+            </li>
+            <li>
+              <strong>Desktop:</strong> Build desktop apps with Electron — VS
+              Code, Slack, and Discord are all JavaScript
+            </li>
+            <li>
+              <strong>AI tools:</strong> Claude Code's interface, ChatGPT's
+              frontend, most AI tools use JavaScript on the client side
+            </li>
+          </ul>
+          <p class="reveal-hint" id="js-uses-hint">
+            Press space to reveal points
+          </p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 6 — SECTION: NODE.JS
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-indigo" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span> Section 02
+          </div>
+          <h1 class="display" style="color: white">What is<br />Node.js?</h1>
+          <p
+            class="body-lg"
+            style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem"
+          >
+            JavaScript breaks free from the browser
+          </p>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 7 — NODE.JS EXPLAINED
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> Node.js</div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">Node.js</div>
+            <h2 class="heading">JavaScript Outside the Browser</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem">
+              Node.js lets you run JavaScript on your computer — no browser
+              needed
+            </p>
+          </div>
+          <div class="timeline-flow">
+            <div class="tl-node tl-blue">
+              <span class="tl-icon">📝</span>
+              <span class="tl-title">You write JS</span>
+              <span class="tl-sub">app.js</span>
+            </div>
+            <span class="tl-arrow">→</span>
+            <div class="tl-node tl-indigo">
+              <span class="tl-icon">⚙️</span>
+              <span class="tl-title">Node.js</span>
+              <span class="tl-sub">V8 engine</span>
+            </div>
+            <span class="tl-arrow">→</span>
+            <div class="tl-node tl-green">
+              <span class="tl-icon">💻</span>
+              <span class="tl-title">Your Computer</span>
+              <span class="tl-sub">Runs the code</span>
+            </div>
+          </div>
+          <div class="cols-2" style="max-width: 800px">
+            <div class="card" style="border-top: 3px solid var(--blue)">
+              <h4 style="color: var(--blue)">🔧 What It Is</h4>
+              <ul>
+                <li>A <strong>runtime environment</strong> for JavaScript</li>
+                <li>Built on Chrome's V8 engine (same engine Chrome uses)</li>
+                <li>Created by Ryan Dahl in 2009</li>
+                <li>Free and open source</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--indigo)">
+              <h4 style="color: var(--indigo)">🧠 Think of It Like</h4>
+              <ul>
+                <li>JS in browser = fish in an aquarium (limited)</li>
+                <li>JS with Node = fish in the ocean (free to do anything)</li>
+                <li>Node gives JS access to your file system, network, OS</li>
+                <li>That's why we can build servers with it</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 8 — WHY NODE.JS
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> Why Node.js?</div>
+        <div
+          class="stack"
+          style="align-items: center; width: 100%; max-width: 900px"
+        >
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem)">
+              Why Do We Need Node.js?
+            </h2>
+          </div>
+          <ul class="reveal-list" id="why-node" style="max-width: 750px">
+            <li>
+              <strong>One language everywhere:</strong> Write JavaScript for
+              both frontend and backend — no need to learn two languages
+            </li>
+            <li>
+              <strong>npm ecosystem:</strong> Access to 2+ million free packages
+              — someone already solved your problem
+            </li>
+            <li>
+              <strong>Dev tooling:</strong> Almost every modern web development
+              tool runs on Node — Vite, React, ESLint, Prettier
+            </li>
+            <li>
+              <strong>Industry standard:</strong> Netflix, PayPal, LinkedIn,
+              Uber all use Node.js in production
+            </li>
+            <li>
+              <strong>Fast to get started:</strong> Install Node → write a .js
+              file → run it. That's it. No complex setup needed.
+            </li>
+          </ul>
+          <p class="reveal-hint" id="why-node-hint">
+            Press space to reveal points
+          </p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 9 — BEFORE / AFTER NODE
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="9">
+        <div class="slide-label">
+          <span class="snum">09</span> Before vs After
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; width: 100%; max-width: 900px"
+        >
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              Web Dev Before & After Node.js
+            </h2>
+          </div>
+          <div class="cols-2" style="max-width: 800px">
+            <div class="card" style="border-top: 3px solid var(--red)">
+              <h4 style="color: var(--red)">❌ Before Node.js</h4>
+              <ul>
+                <li>Frontend: JavaScript</li>
+                <li>Backend: PHP, Java, Ruby, Python</li>
+                <li>Learn 2+ languages to build a web app</li>
+                <li>Different tools, syntax, ecosystems</li>
+                <li>Hard to share code between FE & BE</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--green)">
+              <h4 style="color: var(--green)">✅ After Node.js</h4>
+              <ul>
+                <li>Frontend: JavaScript</li>
+                <li>Backend: JavaScript (Node.js)</li>
+                <li>One language for the entire stack</li>
+                <li>Share code, libraries, knowledge</li>
+                <li>Massive ecosystem via npm</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 10 — SECTION: NPM
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-amber" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span> Section 03
+          </div>
+          <h1 class="display" style="color: white">npm</h1>
+          <p
+            class="body-lg"
+            style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem"
+          >
+            Node Package Manager — your toolbox
+          </p>
+        </div>
+        <div class="section-num" style="color: white">03</div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 11 — WHAT IS NPM
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> npm Basics</div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">npm</div>
+            <h2 class="heading">What is npm?</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem">
+              The world's largest software registry — 2+ million packages
+            </p>
+          </div>
+          <div class="cols-3">
+            <div
+              class="card"
+              style="border-top: 3px solid var(--blue); text-align: center"
+            >
+              <div
+                style="
+                  font-size: clamp(2rem, 3.5vw, 3rem);
+                  margin-bottom: 0.5rem;
+                "
+              >
+                📦
+              </div>
+              <h4 style="color: var(--blue); justify-content: center">
+                Package Registry
+              </h4>
+              <p
+                style="
+                  font-size: clamp(0.78rem, 1.1vw, 0.92rem);
+                  color: var(--muted);
+                  line-height: 1.5;
+                "
+              >
+                A massive online library of free, reusable code that anyone can
+                publish and download.
+              </p>
+            </div>
+            <div
+              class="card"
+              style="border-top: 3px solid var(--indigo); text-align: center"
+            >
+              <div
+                style="
+                  font-size: clamp(2rem, 3.5vw, 3rem);
+                  margin-bottom: 0.5rem;
+                "
+              >
+                🛠️
+              </div>
+              <h4 style="color: var(--indigo); justify-content: center">
+                Command-Line Tool
+              </h4>
+              <p
+                style="
+                  font-size: clamp(0.78rem, 1.1vw, 0.92rem);
+                  color: var(--muted);
+                  line-height: 1.5;
+                "
+              >
+                Comes bundled with Node.js. You use it in the terminal to
+                install, update, and manage packages.
+              </p>
+            </div>
+            <div
+              class="card"
+              style="border-top: 3px solid var(--green); text-align: center"
+            >
+              <div
+                style="
+                  font-size: clamp(2rem, 3.5vw, 3rem);
+                  margin-bottom: 0.5rem;
+                "
+              >
+                📋
+              </div>
+              <h4 style="color: var(--green); justify-content: center">
+                package.json
+              </h4>
+              <p
+                style="
+                  font-size: clamp(0.78rem, 1.1vw, 0.92rem);
+                  color: var(--muted);
+                  line-height: 1.5;
+                "
+              >
+                Every project has one. It lists all your dependencies, scripts,
+                and project metadata.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 12 — PACKAGE.JSON
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> package.json</div>
+        <div
+          class="stack"
+          style="align-items: center; width: 100%; max-width: 800px"
+        >
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              Anatomy of package.json
+            </h2>
+            <p class="body-md" style="color: var(--muted)">
+              The ID card of every Node.js project
+            </p>
+          </div>
+          <div class="code-block" style="max-width: 620px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              package.json
+            </div>
+            <div class="code-body">
+              <span class="cp">{</span><br />
+              &nbsp;&nbsp;<span class="ck">"name"</span>:
+              <span class="cs">"my-first-project"</span>,<br />
+              &nbsp;&nbsp;<span class="ck">"version"</span>:
+              <span class="cs">"1.0.0"</span>,<br />
+              &nbsp;&nbsp;<span class="ck">"scripts"</span>:
+              <span class="cp">{</span><br />
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="ck">"dev"</span>:
+              <span class="cs">"vite"</span>,<br />
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="ck">"build"</span>:
+              <span class="cs">"vite build"</span>,<br />
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="ck">"start"</span>:
+              <span class="cs">"node server.js"</span><br />
+              &nbsp;&nbsp;<span class="cp">}</span>,<br />
+              &nbsp;&nbsp;<span class="ck">"dependencies"</span>:
+              <span class="cp">{</span><br />
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="ck">"react"</span>:
+              <span class="cs">"^18.2.0"</span>,<br />
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="ck">"axios"</span>:
+              <span class="cs">"^1.6.0"</span><br />
+              &nbsp;&nbsp;<span class="cp">}</span><br />
+              <span class="cp">}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 13 — NPM COMMANDS
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> npm Commands</div>
+        <div
+          class="stack"
+          style="align-items: center; width: 100%; max-width: 900px"
+        >
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              Essential npm Commands
+            </h2>
+          </div>
+          <div class="cmd-grid">
+            <div class="cmd-card">
+              <span class="cmd-code">npm init</span>
+              <span class="cmd-desc"
+                >Create a new project (generates package.json)</span
+              >
+            </div>
+            <div class="cmd-card">
+              <span class="cmd-code">npm install</span>
+              <span class="cmd-desc"
+                >Install all dependencies listed in package.json</span
+              >
+            </div>
+            <div class="cmd-card">
+              <span class="cmd-code">npm install react</span>
+              <span class="cmd-desc"
+                >Add a specific package to your project</span
+              >
+            </div>
+            <div class="cmd-card">
+              <span class="cmd-code">npm run dev</span>
+              <span class="cmd-desc"
+                >Run the "dev" script from package.json</span
+              >
+            </div>
+            <div class="cmd-card">
+              <span class="cmd-code">npm run build</span>
+              <span class="cmd-desc"
+                >Run the "build" script (create production files)</span
+              >
+            </div>
+            <div class="cmd-card">
+              <span class="cmd-code">npm start</span>
+              <span class="cmd-desc"
+                >Run the "start" script (launch the app)</span
+              >
+            </div>
+          </div>
+          <div
+            class="card"
+            style="
+              background: var(--bg);
+              border: 2px dashed var(--border);
+              text-align: center;
+              padding: clamp(0.75rem, 1.5vw, 1.1rem);
+              max-width: 700px;
+            "
+          >
+            <p class="body-md" style="color: var(--muted)">
+              💡 <strong style="color: var(--text)">node_modules/</strong> —
+              when you run
+              <code
+                style="
+                  background: #e6f0f8;
+                  padding: 0.1rem 0.4rem;
+                  border-radius: 4px;
+                  font-size: 0.9em;
+                "
+                >npm install</code
+              >, all downloaded packages go here. Never edit or commit this
+              folder.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 14 — SECTION: TERMINAL
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-green" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span> Section 04
+          </div>
+          <h1 class="display" style="color: white">Terminal<br />Commands</h1>
+          <p
+            class="body-lg"
+            style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem"
+          >
+            Your keyboard is more powerful than your mouse
+          </p>
+        </div>
+        <div class="section-num" style="color: white">04</div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 15 — WHAT IS THE TERMINAL
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span> Terminal</div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 900px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">Terminal</div>
+            <h2 class="heading">Why Use the Terminal?</h2>
+          </div>
+          <div class="cols-2" style="max-width: 800px">
+            <div class="card" style="border-top: 3px solid var(--blue)">
+              <h4 style="color: var(--blue)">🖱️ GUI (What You Know)</h4>
+              <ul>
+                <li>Click folders to open them</li>
+                <li>Drag files to move them</li>
+                <li>Right-click for options</li>
+                <li>Good for browsing, slow for dev work</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--green)">
+              <h4 style="color: var(--green)">⌨️ Terminal (What Devs Use)</h4>
+              <ul>
+                <li>Type commands to do things</li>
+                <li>Much faster once you learn it</li>
+                <li>Can automate repetitive tasks</li>
+                <li>Required for git, npm, Node.js, deployments</li>
+              </ul>
+            </div>
+          </div>
+          <div
+            class="card"
+            style="
+              background: var(--bg);
+              border: 2px dashed var(--border);
+              text-align: center;
+              padding: clamp(0.75rem, 1.5vw, 1.1rem);
+              max-width: 700px;
+            "
+          >
+            <p class="body-md" style="color: var(--muted)">
+              🎯
+              <strong style="color: var(--text)"
+                >Every professional developer uses the terminal daily.</strong
+              >
+              It's not optional — it's a core skill.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 16 — NAVIGATION COMMANDS
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span> Navigation</div>
+        <div
+          class="stack"
+          style="align-items: center; width: 100%; max-width: 900px"
+        >
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              Navigation & Files
+            </h2>
+            <p class="body-md" style="color: var(--muted)">
+              Moving around and managing files
+            </p>
+          </div>
+          <div class="cmd-grid">
+            <div class="cmd-card">
+              <span class="cmd-code">pwd</span>
+              <span class="cmd-desc"
+                >Print working directory — "where am I right now?"</span
+              >
+            </div>
+            <div class="cmd-card">
+              <span class="cmd-code">ls</span>
+              <span class="cmd-desc"
+                >List files and folders in current directory</span
+              >
+            </div>
+            <div class="cmd-card">
+              <span class="cmd-code">cd folder</span>
+              <span class="cmd-desc"
+                >Change directory — move into a folder</span
+              >
+            </div>
+            <div class="cmd-card">
+              <span class="cmd-code">cd ..</span>
+              <span class="cmd-desc"
+                >Go up one level (back to parent folder)</span
+              >
+            </div>
+            <div class="cmd-card">
+              <span class="cmd-code">mkdir name</span>
+              <span class="cmd-desc">Make a new directory (folder)</span>
+            </div>
+            <div class="cmd-card">
+              <span class="cmd-code">touch file.js</span>
+              <span class="cmd-desc">Create a new empty file</span>
+            </div>
+            <div class="cmd-card">
+              <span class="cmd-code">rm file.js</span>
+              <span class="cmd-desc">Delete a file (careful — no undo!)</span>
+            </div>
+            <div class="cmd-card">
+              <span class="cmd-code">clear</span>
+              <span class="cmd-desc">Clear the terminal screen</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 17 — DEV COMMANDS
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span> Dev Commands</div>
+        <div
+          class="stack"
+          style="align-items: center; width: 100%; max-width: 900px"
+        >
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              Dev Workflow Commands
+            </h2>
+            <p class="body-md" style="color: var(--muted)">
+              Commands you'll use every day as a developer
+            </p>
+          </div>
+          <div class="cmd-grid">
+            <div class="cmd-card">
+              <span class="cmd-code">node file.js</span>
+              <span class="cmd-desc">Run a JavaScript file with Node.js</span>
+            </div>
+            <div class="cmd-card">
+              <span class="cmd-code">npm run dev</span>
+              <span class="cmd-desc">Start the development server</span>
+            </div>
+            <div class="cmd-card">
+              <span class="cmd-code">npm install</span>
+              <span class="cmd-desc">Install project dependencies</span>
+            </div>
+            <div class="cmd-card">
+              <span class="cmd-code">git status</span>
+              <span class="cmd-desc">Check what files have changed</span>
+            </div>
+            <div class="cmd-card">
+              <span class="cmd-code">code .</span>
+              <span class="cmd-desc">Open current folder in VS Code</span>
+            </div>
+            <div class="cmd-card">
+              <span class="cmd-code">Ctrl + C</span>
+              <span class="cmd-desc"
+                >Stop a running process (e.g., dev server)</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 18 — TERMINAL DEMO
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="18">
+        <div class="slide-label">
+          <span class="snum">18</span> Putting It Together
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; width: 100%; max-width: 800px"
+        >
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              A Typical Dev Workflow
+            </h2>
+            <p class="body-md" style="color: var(--muted)">
+              Creating and running your first project
+            </p>
+          </div>
+          <div class="code-block" style="max-width: 660px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              Terminal
+            </div>
+            <div class="code-body">
+              <span class="cc"># Create a new folder and move into it</span
+              ><br />
+              <span class="ck">mkdir</span> my-project<br />
+              <span class="ck">cd</span> my-project<br /><br />
+              <span class="cc"># Initialize a new Node.js project</span><br />
+              <span class="ck">npm</span> init -y<br /><br />
+              <span class="cc"># Open in VS Code</span><br />
+              <span class="ck">code</span> .<br /><br />
+              <span class="cc"># Install a package</span><br />
+              <span class="ck">npm</span> install vite<br /><br />
+              <span class="cc"># Start development</span><br />
+              <span class="ck">npm</span> run dev
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 19 — WRAP UP
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-gradient" data-slide="19">
+        <div class="slide-label"><span class="snum">19</span></div>
+        <div class="center" style="max-width: 700px">
+          <div style="font-size: clamp(3rem, 8vw, 5rem); margin-bottom: 1.5rem">
+            🚀
+          </div>
+          <h1 class="display" style="font-size: clamp(2rem, 5vw, 4rem)">
+            <span style="color: var(--blue)">You're</span><br />
+            <span style="color: var(--indigo)">Set Up</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted); margin: 1rem 0 1.5rem">
+            JavaScript, Node.js, npm, and the terminal — the foundation of
+            everything we'll build together.
+          </p>
+          <div class="wu-grid" style="max-width: 700px">
+            <div class="wu-card">
+              <div class="wu-icon">💡</div>
+              <h4>JavaScript</h4>
+              <p>
+                The language of the web — runs in browsers and on servers via
+                Node.js
+              </p>
+            </div>
+            <div class="wu-card">
+              <div class="wu-icon">📦</div>
+              <h4>npm</h4>
+              <p>
+                2M+ packages at your fingertips — install, manage, and run
+                scripts
+              </p>
+            </div>
+            <div class="wu-card">
+              <div class="wu-icon">⌨️</div>
+              <h4>Terminal</h4>
+              <p>
+                Your new best friend — navigate, create, run, and control
+                everything
+              </p>
+            </div>
+          </div>
+          <p
+            style="
+              font-size: clamp(0.75rem, 1vw, 0.85rem);
+              color: var(--faint);
+              margin-top: 1.5rem;
+            "
+          >
+            Next class → JavaScript Fundamentals: variables, functions, loops
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- /#deck -->
+
+    <!-- ===== CONTROLS ===== -->
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 19</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">
+      ⛶
+    </button>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      let current = 0;
+
+      function goTo(n) {
+        slides[current].classList.remove("active");
+        slides[current].classList.add("exit");
+        const old = current;
+        setTimeout(() => slides[old].classList.remove("exit"), 380);
+        current = Math.max(0, Math.min(n, total - 1));
+        slides[current].classList.add("active");
+        document.getElementById("slide-counter").textContent =
+          `${current + 1} / ${total}`;
+        document.getElementById("progress").style.width =
+          `${((current + 1) / total) * 100}%`;
+        initReveal(slides[current]);
+      }
+
+      function nextSlide() {
+        if (current < total - 1) goTo(current + 1);
+      }
+      function prevSlide() {
+        if (current > 0) goTo(current - 1);
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight" || e.key === " ") {
+          e.preventDefault();
+          handleForward();
+        }
+        if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          prevSlide();
+        }
+        if (e.key === "f" || e.key === "F") toggleFullscreen();
+      });
+
+      document.getElementById("deck").addEventListener("click", function (e) {
+        if (
+          e.target.closest(
+            "button, .quiz-opt, .sl-item, .mq, a, input, select, textarea, .agenda-row, [data-noclick]",
+          )
+        )
+          return;
+        const pct = e.clientX / window.innerWidth;
+        if (pct < 0.15) prevSlide();
+        else if (pct > 0.85) handleForward();
+      });
+
+      function handleForward() {
+        const active = slides[current];
+        const list = active.querySelector(".reveal-list");
+        if (list) {
+          const hidden = list.querySelectorAll("li:not(.shown)");
+          if (hidden.length > 0) {
+            hidden[0].classList.add("shown");
+            const hint = active.querySelector(".reveal-hint");
+            if (hint && hidden.length === 1) hint.style.opacity = "0";
+            return;
+          }
+        }
+        nextSlide();
+      }
+
+      function initReveal(slide) {
+        const list = slide.querySelector(".reveal-list");
+        if (!list) return;
+        list
+          .querySelectorAll("li")
+          .forEach((li) => li.classList.remove("shown"));
+        const hint = slide.querySelector(".reveal-hint");
+        if (hint) hint.style.opacity = "1";
+      }
+
+      slides[0].classList.add("active");
+      document.getElementById("progress").style.width = `${(1 / total) * 100}%`;
+
+      function toggleFullscreen() {
+        if (!document.fullscreenElement)
+          document.documentElement.requestFullscreen().catch(() => {});
+        else document.exitFullscreen().catch(() => {});
+      }
+    </script>
+  </body>
+</html>
