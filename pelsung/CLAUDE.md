@@ -22,7 +22,7 @@ Software Development (Dev), Software Testing (QA), Business Analysis (BA), Softw
 - **AI-first:** Claude Code is the primary AI tool across all verticals, with pre-configured opinionated CLAUDE.md files per project to guide trainees and enforce conventions.
 - **Spec-driven development:** Emphasis on the "hourglass model" where specs/requirements and review/testing expand while AI handles implementation.
 - **Cross-vertical collaboration:** Designed so verticals interact (Design hands off to Dev, QA tests Dev's work, BA writes requirements for all).
-- **Matched to backgrounds:** A detailed trainer edition (`course-plan-detailed.html`) has per-trainee notes based on CV reviews.
+- **Matched to backgrounds:** CV reviews and per-trainee notes live in the cohort directory (`cohort-N/cv-review.md`, `cohort-N/people-notes.yaml`) — used to adapt pacing and pairings.
 
 ## Directory Structure
 
@@ -32,10 +32,8 @@ pelsung/
 ├── presentations/                        # Shared decks (not cohort-specific)
 │   └── SELISE X PELSUNG.pptx             #   Program intro deck (given 2026-03-08)
 ├── curriculum/                           # Shared across cohorts — evolves over time
-│   ├── course-plan.html                  #   Visual overview (SELISE×Pelsung branded)
-│   ├── course-plan-detailed.html         #   Trainer edition — per-trainee notes
+│   ├── index.html                        #   Structured landing page · source of truth for classes
 │   ├── software-development.docx         #   Original dev curriculum (reference)
-│   ├── index.html                        #   Landing page listing classes per phase/vertical
 │   ├── shared/                           #   Shared CSS/JS across lesson HTML (e.g. slides.css)
 │   ├── foundation/                       #   Phase 1 materials (all verticals together)
 │   ├── ba-qa-combined/                   #   Combined BA+QA opener classes
@@ -64,8 +62,7 @@ pelsung/
 - **Foundation phase includes AI literacy early** (typically class 03) so all trainees can use AI tools throughout.
 - **Vertical assignment happens at the end of foundation** (typically class 11) after trainees build a personal site as an aptitude signal.
 - **CV reviews drive vertical placement** — cohort-specific recommendations live in the cohort's `cv-review.md`.
-- **course-plan.html is the discussion document** — branded SELISE×Pelsung, designed for internal sharing.
-- **course-plan-detailed.html is trainer-only** — contains per-trainee notes, skill gaps, peer mentoring pairs, teaching strategies.
+- **`curriculum/index.html` is the single source of truth for classes** — structured, SELISE×Pelsung-branded landing page listing every phase and vertical class with links to slides and notes. Replaces the earlier `course-plan.html` / `course-plan-detailed.html`.
 - **RACI for training, RCI for SELISE:** Teach the industry-standard RACI matrix in Pelsung, then introduce SELISE's RCI adaptation (A dropped — Julian's insight that "Accountable" has no clean German equivalent; R is always exactly one person). Trainees should understand both.
 
 ## Conventions

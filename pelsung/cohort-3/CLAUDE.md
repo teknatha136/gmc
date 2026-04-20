@@ -45,7 +45,7 @@ After 1-on-1 interviews with every trainee (April 17, 2026), Bhuwan and Tek conc
 
 - **Dev vertical (12) is the primary SELISE hiring pipeline.** Train as a standard dev track — do not reshape dev curriculum around any specific future-role hypothesis.
 - **BA (14) and QA (11) tracks are taught as standard software BA and software QA curricula** — trainees connect the dots to their own day jobs themselves; we do not bias content toward their current-employer contexts.
-- **Internal only** — do not telegraph hiring expectations to trainees, and do not include this framing in `course-plan.html`, decks, or anything trainee-visible.
+- **Internal only** — do not telegraph hiring expectations to trainees, and do not include this framing in `curriculum/index.html`, decks, or anything trainee-visible.
 
 ## Training Team (Cohort 3)
 | Name | Role |

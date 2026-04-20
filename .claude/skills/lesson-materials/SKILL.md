@@ -24,7 +24,7 @@ Parse the user's message for:
 - **Topic title** — e.g., "How the Internet Works"
 - **Phase** — infer from class number (01–11 = foundation) or ask.
 
-If the user didn't provide the class title, read `pelsung/curriculum/course-plan.html` to look up the class number's title and subtopics.
+If the user didn't provide the class title, read `pelsung/curriculum/index.html` to look up the class number's title and subtopics (the `CLASSES` and `VERTICALS` arrays are the source of truth).
 
 ---
 
