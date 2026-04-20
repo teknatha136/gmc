@@ -1,0 +1,1870 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Fundamentals II — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      .code-block {
+        background: #001f35;
+        border-radius: 14px;
+        overflow: hidden;
+        width: 100%;
+        font-family: "Courier New", monospace;
+      }
+      .code-bar {
+        background: #0a2a45;
+        padding: 8px 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-family: "Open Sans", sans-serif;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .code-bar .cb-dot { width: 10px; height: 10px; border-radius: 50%; }
+      .code-body {
+        padding: clamp(0.8rem, 1.5vw, 1.3rem);
+        font-size: clamp(0.72rem, 1vw, 0.88rem);
+        line-height: 1.85;
+        color: rgba(255, 255, 255, 0.85);
+      }
+      .code-body .ck { color: #7dd3fc; }
+      .code-body .cs { color: #86efac; }
+      .code-body .cn { color: #fde68a; }
+      .code-body .cc { color: rgba(255, 255, 255, 0.35); }
+      .code-body .cp { color: #c4b5fd; }
+      .code-body .cr { color: #fca5a5; }
+      .code-body .ci { color: #f0abfc; }
+      .compare-table {
+        width: 100%;
+        max-width: 860px;
+        border-collapse: separate;
+        border-spacing: 0;
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surf);
+      }
+      .compare-table th {
+        background: #e6e9ec;
+        color: var(--indigo);
+        font-size: clamp(0.62rem, 0.9vw, 0.78rem);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        padding: clamp(0.5rem, 0.8vw, 0.7rem) clamp(0.6rem, 1vw, 0.9rem);
+        text-align: left;
+      }
+      .compare-table td {
+        padding: clamp(0.4rem, 0.7vw, 0.6rem) clamp(0.6rem, 1vw, 0.9rem);
+        font-size: clamp(0.75rem, 1.05vw, 0.88rem);
+        color: var(--muted);
+        border-top: 1px solid var(--border);
+      }
+      .compare-table td:first-child {
+        font-family: "Courier New", monospace;
+        font-weight: 700;
+        color: var(--blue);
+      }
+      .compare-table .yes { color: var(--green); font-weight: 700; }
+      .compare-table .no { color: var(--red); font-weight: 700; }
+      .method-card {
+        background: var(--surf);
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        padding: 1rem 1.2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+      }
+      .method-card .mc-name {
+        font-family: "Courier New", monospace;
+        font-weight: 700;
+        color: var(--blue);
+        font-size: clamp(0.9rem, 1.2vw, 1.05rem);
+      }
+      .method-card .mc-desc {
+        font-size: clamp(0.78rem, 1vw, 0.88rem);
+        color: var(--muted);
+        line-height: 1.4;
+      }
+      .method-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        width: 100%;
+        max-width: 880px;
+      }
+      .method-grid.three { grid-template-columns: repeat(3, 1fr); }
+      .analogy-box {
+        background: var(--bg);
+        border: 2px dashed var(--border);
+        border-radius: 14px;
+        padding: clamp(1rem, 1.8vw, 1.4rem);
+        max-width: 720px;
+        width: 100%;
+        text-align: center;
+      }
+      .analogy-box .ab-title {
+        font-size: clamp(0.78rem, 1vw, 0.88rem);
+        font-weight: 700;
+        color: var(--blue);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 0.5rem;
+      }
+      .analogy-box .ab-text {
+        font-size: clamp(0.9rem, 1.25vw, 1.05rem);
+        color: var(--text);
+        line-height: 1.5;
+      }
+      .big-emoji {
+        font-size: clamp(3rem, 6vw, 5rem);
+        line-height: 1;
+        margin-bottom: 0.5rem;
+      }
+      .break-timer {
+        font-family: "Courier New", monospace;
+        font-size: clamp(3.5rem, 9vw, 6rem);
+        color: white;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+      }
+      .break-btn {
+        padding: 0.6rem 1.4rem;
+        border-radius: 100px;
+        border: 1.5px solid rgba(255, 255, 255, 0.4);
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        cursor: pointer;
+        font-size: clamp(0.82rem, 1.1vw, 0.92rem);
+        font-weight: 600;
+        margin: 0 0.4rem;
+      }
+      .break-btn:hover { background: rgba(255, 255, 255, 0.2); }
+      .exercise-card {
+        background: var(--surf);
+        border: 1.5px solid var(--border);
+        border-radius: 16px;
+        padding: clamp(1rem, 1.8vw, 1.4rem);
+        max-width: 820px;
+        width: 100%;
+      }
+      .exercise-card .xc-badge {
+        display: inline-block;
+        background: #e6f0f8;
+        color: var(--blue);
+        font-size: clamp(0.7rem, 0.9vw, 0.78rem);
+        font-weight: 700;
+        padding: 0.2rem 0.7rem;
+        border-radius: 100px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 0.6rem;
+      }
+      .exercise-card .xc-title {
+        font-family: "Bahnschrift", "Segoe UI", sans-serif;
+        font-size: clamp(1.2rem, 2vw, 1.6rem);
+        color: var(--text);
+        margin-bottom: 0.5rem;
+      }
+      .exercise-card .xc-desc {
+        color: var(--muted);
+        font-size: clamp(0.85rem, 1.15vw, 0.98rem);
+        margin-bottom: 0.8rem;
+        line-height: 1.55;
+      }
+      .hint-box {
+        background: #fff8e6;
+        border: 1px solid #f0d890;
+        border-radius: 10px;
+        padding: 0.6rem 0.9rem;
+        font-size: clamp(0.78rem, 1vw, 0.88rem);
+        color: #664a00;
+        margin-top: 0.6rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 1 — TITLE
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-gradient bg-dark" data-slide="1">
+        <div class="slide-label">
+          <span class="snum">01</span> SELISE × Pelsung
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem; text-align: center; max-width: 900px;">
+          <div class="date-badge">
+            <span class="db-dot"></span>Dev Specialization · Class 03
+          </div>
+          <h1 class="display" style="color: white">
+            <span style="color: #7dd3fc">JavaScript</span><br />
+            <span style="color: white">Fundamentals II</span>
+          </h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.65)">
+            Objects · Arrays · Destructuring · Optional Chaining
+          </p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">03 · JavaScript Fundamentals II</span>
+          </div>
+        </div>
+        <div class="interact-hint">
+          Press → or click the right side to advance
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 2 — AGENDA
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan · 9:30 AM – 1:30 PM</div>
+        <div class="stack" style="max-width: 760px; width: 100%">
+          <div class="center" style="margin-bottom: 0.3rem">
+            <h2 class="heading" style="font-size: clamp(1.5rem, 2.8vw, 2.2rem)">Session Journey</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.3rem">4 hours · 15-min break in the middle</p>
+          </div>
+          <div class="agenda-row" onclick="goTo(3)">
+            <span class="ar-dot" style="background: var(--faint)"></span>
+            <span class="ar-label">👋 Welcome & recap of Class 02</span>
+            <span class="ar-badge" style="background: var(--bg); color: var(--muted)">10 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(5)">
+            <span class="ar-dot" style="background: var(--blue)"></span>
+            <span class="ar-label">📦 Objects — properties, methods, JSON</span>
+            <span class="ar-badge" style="background: #e6f0f8; color: var(--blue)">60 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(15)">
+            <span class="ar-dot" style="background: var(--indigo)"></span>
+            <span class="ar-label">📋 Arrays — methods, search, iterate, sort</span>
+            <span class="ar-badge" style="background: #e6e9ec; color: var(--indigo)">70 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(27)">
+            <span class="ar-dot" style="background: #666"></span>
+            <span class="ar-label">☕ Break</span>
+            <span class="ar-badge" style="background: var(--bg); color: var(--muted)">15 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(28)">
+            <span class="ar-dot" style="background: var(--amber)"></span>
+            <span class="ar-label">🎁 Destructuring & optional chaining</span>
+            <span class="ar-badge" style="background: #ebf0f7; color: #1c5b8c">45 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(36)">
+            <span class="ar-dot" style="background: var(--green)"></span>
+            <span class="ar-label">💻 Coding exercises</span>
+            <span class="ar-badge" style="background: #f0f7ec; color: var(--green)">45 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(43)">
+            <span class="ar-dot" style="background: var(--purple)"></span>
+            <span class="ar-label">🎯 Wrap-up & next class</span>
+            <span class="ar-badge" style="background: #ecf2f8; color: var(--purple)">5 min</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 3 — RECAP CLASS 02
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-gradient bg-subtle" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> Quick recap</div>
+        <div class="stack" style="align-items: center; max-width: 900px; width: 100%">
+          <div class="center">
+            <div class="pill pill-blue">Recap · Class 02</div>
+            <h2 class="heading">What we learned last time</h2>
+          </div>
+          <div class="method-grid three">
+            <div class="method-card">
+              <div class="mc-name">let / const</div>
+              <div class="mc-desc">Variables — labelled containers for values. Use <code>const</code> by default.</div>
+            </div>
+            <div class="method-card">
+              <div class="mc-name">functions</div>
+              <div class="mc-desc">Reusable blocks of code. Take input (parameters), return output.</div>
+            </div>
+            <div class="method-card">
+              <div class="mc-name">if / else</div>
+              <div class="mc-desc">Make decisions. Run different code based on a condition.</div>
+            </div>
+            <div class="method-card">
+              <div class="mc-name">for / while</div>
+              <div class="mc-desc">Loops — repeat actions many times without writing the same code.</div>
+            </div>
+            <div class="method-card">
+              <div class="mc-name">strings & numbers</div>
+              <div class="mc-desc">The simplest data types — text and numeric values.</div>
+            </div>
+            <div class="method-card">
+              <div class="mc-name">boolean</div>
+              <div class="mc-desc"><code>true</code> or <code>false</code> — used in conditions.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 4 — WHY TODAY MATTERS
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> Why today matters</div>
+        <div class="stack" style="align-items: center; max-width: 860px; width: 100%">
+          <div class="center">
+            <div class="pill pill-blue">Context</div>
+            <h2 class="heading">Real data is not just numbers and strings</h2>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 720px;">
+            When you build real apps, data comes in <strong>groups</strong> — a user has a name, email, age, address. A shopping cart has many items. A list of trainees has 300 entries.
+          </p>
+          <p class="body-md" style="color: var(--text); text-align: center; max-width: 720px; font-weight: 600;">
+            Today we learn the two tools that handle all of this: <span style="color: var(--blue)">objects</span> and <span style="color: var(--indigo)">arrays</span>.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 5 — SECTION: OBJECTS
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-blue" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span> Section 01
+          </div>
+          <h1 class="display" style="color: white">Objects</h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem">
+            How to group related data together
+          </p>
+        </div>
+        <div class="section-num" style="color: white">01</div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 6 — WHAT IS AN OBJECT
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> Objects</div>
+        <div class="stack" style="align-items: center; max-width: 960px; width: 100%">
+          <div class="center">
+            <div class="pill pill-blue">Concept</div>
+            <h2 class="heading">What is an object?</h2>
+          </div>
+          <div class="analogy-box">
+            <div class="ab-title">📦 Think of it like this</div>
+            <div class="ab-text">
+              An object is a <strong>box with labelled compartments</strong>. Each compartment holds one piece of information — and each compartment has a name so you can find it later.
+            </div>
+          </div>
+          <div class="code-block" style="max-width: 640px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              object.js
+            </div>
+            <div class="code-body">
+              <span class="cc">// A trainee — one box, many pieces of info</span><br />
+              <span class="ck">const</span> trainee = {<br />
+              &nbsp;&nbsp;name: <span class="cs">"Karma"</span>,<br />
+              &nbsp;&nbsp;age: <span class="cn">24</span>,<br />
+              &nbsp;&nbsp;vertical: <span class="cs">"Dev"</span>,<br />
+              &nbsp;&nbsp;isActive: <span class="ck">true</span><br />
+              };
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 7 — PROPERTIES & VALUES
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> Objects</div>
+        <div class="stack" style="align-items: center; max-width: 900px; width: 100%">
+          <div class="center">
+            <div class="pill pill-blue">Vocabulary</div>
+            <h2 class="heading">Key · Value · Property</h2>
+          </div>
+          <div class="code-block" style="max-width: 640px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              vocabulary.js
+            </div>
+            <div class="code-body">
+              <span class="ck">const</span> trainee = {<br />
+              &nbsp;&nbsp;<span class="ci">name</span>: <span class="cs">"Karma"</span>,<br />
+              &nbsp;&nbsp;<span class="ci">age</span>: <span class="cn">24</span><br />
+              };<br />
+              <span class="cc">//  ↑ key   ↑ value</span><br />
+              <span class="cc">//  "name: Karma"  is one property</span>
+            </div>
+          </div>
+          <div class="method-grid three">
+            <div class="method-card">
+              <div class="mc-name">key</div>
+              <div class="mc-desc">The label — the name you use to find the value. Always a string.</div>
+            </div>
+            <div class="method-card">
+              <div class="mc-name">value</div>
+              <div class="mc-desc">What's stored — can be any type (string, number, boolean, array, even another object).</div>
+            </div>
+            <div class="method-card">
+              <div class="mc-name">property</div>
+              <div class="mc-desc">A key + value pair together. <code>name: "Karma"</code> is one property.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 8 — ACCESSING PROPERTIES
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> Objects</div>
+        <div class="stack" style="align-items: center; max-width: 920px; width: 100%">
+          <div class="center">
+            <div class="pill pill-blue">Accessing values</div>
+            <h2 class="heading">Dot notation vs bracket notation</h2>
+          </div>
+          <div class="code-block" style="max-width: 680px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              access.js
+            </div>
+            <div class="code-body">
+              <span class="ck">const</span> trainee = { name: <span class="cs">"Karma"</span>, age: <span class="cn">24</span> };<br /><br />
+              <span class="cc">// Dot notation — most common, cleanest</span><br />
+              console.log(trainee.name); <span class="cc">// "Karma"</span><br />
+              console.log(trainee.age); &nbsp;<span class="cc">// 24</span><br /><br />
+              <span class="cc">// Bracket notation — when key is dynamic or has spaces</span><br />
+              console.log(trainee[<span class="cs">"name"</span>]); <span class="cc">// "Karma"</span><br /><br />
+              <span class="ck">const</span> key = <span class="cs">"age"</span>;<br />
+              console.log(trainee[key]); <span class="cc">// 24 — key is a variable</span>
+            </div>
+          </div>
+          <div class="callout" style="max-width: 680px; background: #f0f7fc; border: 1px solid #B0D4E9; border-radius: 10px; padding: 0.8rem 1rem; font-size: clamp(0.8rem, 1.1vw, 0.92rem); color: var(--muted);">
+            <strong style="color: var(--text)">Rule of thumb:</strong> Use dot notation when you know the key name. Use bracket notation when the key is stored in a variable or has special characters.
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 9 — ADD / UPDATE / DELETE
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> Objects</div>
+        <div class="stack" style="align-items: center; max-width: 920px; width: 100%">
+          <div class="center">
+            <div class="pill pill-blue">Modifying</div>
+            <h2 class="heading">Add · Update · Delete</h2>
+          </div>
+          <div class="code-block" style="max-width: 680px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              modify.js
+            </div>
+            <div class="code-body">
+              <span class="ck">const</span> trainee = { name: <span class="cs">"Karma"</span>, age: <span class="cn">24</span> };<br /><br />
+              <span class="cc">// Add a new property</span><br />
+              trainee.vertical = <span class="cs">"Dev"</span>;<br /><br />
+              <span class="cc">// Update an existing property</span><br />
+              trainee.age = <span class="cn">25</span>;<br /><br />
+              <span class="cc">// Delete a property</span><br />
+              <span class="ck">delete</span> trainee.age;<br /><br />
+              console.log(trainee);<br />
+              <span class="cc">// { name: "Karma", vertical: "Dev" }</span>
+            </div>
+          </div>
+          <div class="callout" style="max-width: 680px; background: #fff8e6; border: 1px solid #f0d890; border-radius: 10px; padding: 0.8rem 1rem; font-size: clamp(0.8rem, 1.1vw, 0.92rem); color: #664a00;">
+            💡 <strong>Notice:</strong> We used <code>const</code> but we're still modifying the object. That's fine — <code>const</code> prevents reassigning the variable, not changing what's inside.
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 10 — METHODS
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> Objects</div>
+        <div class="stack" style="align-items: center; max-width: 920px; width: 100%">
+          <div class="center">
+            <div class="pill pill-blue">Behavior</div>
+            <h2 class="heading">Methods — functions inside objects</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.3rem">When a value is a function, we call it a <strong>method</strong>.</p>
+          </div>
+          <div class="code-block" style="max-width: 680px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              methods.js
+            </div>
+            <div class="code-body">
+              <span class="ck">const</span> trainee = {<br />
+              &nbsp;&nbsp;name: <span class="cs">"Karma"</span>,<br />
+              &nbsp;&nbsp;age: <span class="cn">24</span>,<br />
+              &nbsp;&nbsp;<span class="cc">// a method — a function attached to the object</span><br />
+              &nbsp;&nbsp;<span class="cp">introduce</span>() {<br />
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="ck">return</span> <span class="cs">`Hi, I'm ${</span>this.name<span class="cs">}`</span>;<br />
+              &nbsp;&nbsp;}<br />
+              };<br /><br />
+              console.log(trainee.introduce()); <span class="cc">// "Hi, I'm Karma"</span>
+            </div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 680px; font-size: clamp(0.82rem, 1.1vw, 0.92rem);">
+            The word <code>this</code> means "the object the method is inside." We'll go deeper into <code>this</code> later — for now, just know it refers to the trainee.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 11 — NESTED OBJECTS
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> Objects</div>
+        <div class="stack" style="align-items: center; max-width: 920px; width: 100%">
+          <div class="center">
+            <div class="pill pill-blue">Composition</div>
+            <h2 class="heading">Objects inside objects</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.3rem">A value can itself be another object. This is how real data is shaped.</p>
+          </div>
+          <div class="code-block" style="max-width: 720px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              nested.js
+            </div>
+            <div class="code-body">
+              <span class="ck">const</span> trainee = {<br />
+              &nbsp;&nbsp;name: <span class="cs">"Karma"</span>,<br />
+              &nbsp;&nbsp;address: {<br />
+              &nbsp;&nbsp;&nbsp;&nbsp;city: <span class="cs">"Thimphu"</span>,<br />
+              &nbsp;&nbsp;&nbsp;&nbsp;country: <span class="cs">"Bhutan"</span><br />
+              &nbsp;&nbsp;},<br />
+              &nbsp;&nbsp;scores: {<br />
+              &nbsp;&nbsp;&nbsp;&nbsp;js: <span class="cn">82</span>,<br />
+              &nbsp;&nbsp;&nbsp;&nbsp;css: <span class="cn">74</span><br />
+              &nbsp;&nbsp;}<br />
+              };<br /><br />
+              console.log(trainee.address.city); <span class="cc">// "Thimphu"</span><br />
+              console.log(trainee.scores.js); &nbsp;&nbsp;<span class="cc">// 82</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 12 — JSON FROM BACKEND (intro)
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> Objects · Real world</div>
+        <div class="stack" style="align-items: center; max-width: 920px; width: 100%">
+          <div class="center">
+            <div class="pill pill-indigo">Real world</div>
+            <h2 class="heading">Where do objects come from?</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.3rem; max-width: 680px;">
+              Most of the time, you don't write objects by hand. They come from a <strong>backend server</strong> — usually as <strong>JSON</strong> text.
+            </p>
+          </div>
+          <div class="method-grid">
+            <div class="method-card">
+              <div class="mc-name">JSON</div>
+              <div class="mc-desc">JavaScript Object Notation — a text format for sending data between computers. Looks almost identical to JS objects.</div>
+            </div>
+            <div class="method-card">
+              <div class="mc-name">API response</div>
+              <div class="mc-desc">When you fetch data (e.g. from <code>/users/42</code>), the server sends back JSON, and JS turns it into an object.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 13 — JSON EXAMPLE
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo bg-subtle" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> Objects · JSON in the wild</div>
+        <div class="stack" style="align-items: center; max-width: 960px; width: 100%">
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.4rem, 2.5vw, 2rem)">A real API response</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.3rem">Imagine you called <code>GET /api/trainees/42</code> — the server sends back this:</p>
+          </div>
+          <div class="code-block" style="max-width: 700px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              response.json
+            </div>
+            <div class="code-body">
+              {<br />
+              &nbsp;&nbsp;<span class="ci">"id"</span>: <span class="cn">42</span>,<br />
+              &nbsp;&nbsp;<span class="ci">"name"</span>: <span class="cs">"Karma Dorji"</span>,<br />
+              &nbsp;&nbsp;<span class="ci">"vertical"</span>: <span class="cs">"Dev"</span>,<br />
+              &nbsp;&nbsp;<span class="ci">"isActive"</span>: <span class="ck">true</span>,<br />
+              &nbsp;&nbsp;<span class="ci">"contact"</span>: {<br />
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="ci">"email"</span>: <span class="cs">"karma@example.com"</span>,<br />
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="ci">"phone"</span>: <span class="cs">"+975-17-000000"</span><br />
+              &nbsp;&nbsp;},<br />
+              &nbsp;&nbsp;<span class="ci">"skills"</span>: [<span class="cs">"HTML"</span>, <span class="cs">"CSS"</span>, <span class="cs">"JS"</span>]<br />
+              }
+            </div>
+          </div>
+          <p class="body-md" style="color: var(--text); text-align: center; max-width: 680px; font-weight: 600;">
+            Once in JS, it's just an object. You access it exactly the same way:<br />
+            <code style="background: #e6f0f8; padding: 0.15rem 0.45rem; border-radius: 4px; color: var(--blue);">trainee.contact.email</code>
+          </p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 14 — QUIZ: OBJECTS
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo bg-subtle" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> Knowledge Check · Objects</div>
+        <div class="stack" style="align-items: center; width: 100%; max-width: 780px">
+          <div class="center">
+            <div class="pill pill-indigo">🧠 Quiz 1 of 3</div>
+            <h2 class="heading" style="font-size: clamp(1.3rem, 2.4vw, 2rem)" id="obj-q-text">Loading question...</h2>
+            <p style="color: var(--muted); font-size: clamp(0.75rem, 1vw, 0.85rem); margin-bottom: 0.8rem;" id="obj-q-num">Question 1 of 5</p>
+          </div>
+          <div class="quiz-options" id="obj-opts"></div>
+          <div class="quiz-feedback" id="obj-feedback"></div>
+          <button onclick="nextQuiz('obj')" id="obj-next" style="margin-top: 0.75rem; display: none; padding: 0.5rem 1.25rem; border-radius: 100px; border: 1.5px solid var(--border); background: var(--bg); cursor: pointer; font-size: clamp(0.8rem, 1.1vw, 0.9rem); font-weight: 600; color: var(--muted);">
+            Next Question →
+          </button>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 15 — SECTION: ARRAYS
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-indigo" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span> Section 02
+          </div>
+          <h1 class="display" style="color: white">Arrays</h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem">
+            Ordered lists of many things
+          </p>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 16 — WHAT IS AN ARRAY
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span> Arrays</div>
+        <div class="stack" style="align-items: center; max-width: 940px; width: 100%">
+          <div class="center">
+            <div class="pill pill-indigo">Concept</div>
+            <h2 class="heading">What is an array?</h2>
+          </div>
+          <div class="analogy-box">
+            <div class="ab-title">📋 Think of it like this</div>
+            <div class="ab-text">
+              An array is a <strong>numbered list</strong>. Each item has a position (called its <strong>index</strong>), starting from <strong>0</strong>.
+            </div>
+          </div>
+          <div class="code-block" style="max-width: 680px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              array.js
+            </div>
+            <div class="code-body">
+              <span class="ck">const</span> fruits = [<span class="cs">"apple"</span>, <span class="cs">"banana"</span>, <span class="cs">"mango"</span>];<br />
+              <span class="cc">//                ↑ 0        ↑ 1        ↑ 2</span><br /><br />
+              console.log(fruits[<span class="cn">0</span>]); <span class="cc">// "apple"</span><br />
+              console.log(fruits[<span class="cn">2</span>]); <span class="cc">// "mango"</span><br />
+              console.log(fruits.length); <span class="cc">// 3</span><br /><br />
+              <span class="cc">// Arrays can hold any type — numbers, objects, mixed</span><br />
+              <span class="ck">const</span> scores = [<span class="cn">82</span>, <span class="cn">91</span>, <span class="cn">74</span>];
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 17 — ADD / REMOVE
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo bg-subtle" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span> Arrays</div>
+        <div class="stack" style="align-items: center; max-width: 960px; width: 100%">
+          <div class="center">
+            <div class="pill pill-indigo">Modifying</div>
+            <h2 class="heading">Adding & removing items</h2>
+          </div>
+          <div class="method-grid">
+            <div class="method-card">
+              <div class="mc-name">push(item)</div>
+              <div class="mc-desc">Add to the <strong>end</strong>. Most common.</div>
+            </div>
+            <div class="method-card">
+              <div class="mc-name">pop()</div>
+              <div class="mc-desc">Remove from the <strong>end</strong> and return it.</div>
+            </div>
+            <div class="method-card">
+              <div class="mc-name">unshift(item)</div>
+              <div class="mc-desc">Add to the <strong>start</strong>. Shifts all others right.</div>
+            </div>
+            <div class="method-card">
+              <div class="mc-name">shift()</div>
+              <div class="mc-desc">Remove from the <strong>start</strong> and return it.</div>
+            </div>
+          </div>
+          <div class="code-block" style="max-width: 680px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              add-remove.js
+            </div>
+            <div class="code-body">
+              <span class="ck">const</span> fruits = [<span class="cs">"apple"</span>, <span class="cs">"banana"</span>];<br /><br />
+              fruits.push(<span class="cs">"mango"</span>); &nbsp;&nbsp;<span class="cc">// ["apple", "banana", "mango"]</span><br />
+              fruits.pop(); &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cc">// ["apple", "banana"]  — returns "mango"</span><br />
+              fruits.unshift(<span class="cs">"kiwi"</span>); <span class="cc">// ["kiwi", "apple", "banana"]</span><br />
+              fruits.shift(); &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cc">// ["apple", "banana"]  — returns "kiwi"</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 18 — SEARCHING
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo" data-slide="18">
+        <div class="slide-label"><span class="snum">18</span> Arrays</div>
+        <div class="stack" style="align-items: center; max-width: 960px; width: 100%">
+          <div class="center">
+            <div class="pill pill-indigo">Searching</div>
+            <h2 class="heading">Finding things in an array</h2>
+          </div>
+          <div class="method-grid">
+            <div class="method-card">
+              <div class="mc-name">includes(item)</div>
+              <div class="mc-desc">Returns <code>true</code> or <code>false</code>. "Is this value in the array?"</div>
+            </div>
+            <div class="method-card">
+              <div class="mc-name">indexOf(item)</div>
+              <div class="mc-desc">Returns the <strong>index</strong> of the item, or <code>-1</code> if not found.</div>
+            </div>
+            <div class="method-card">
+              <div class="mc-name">find(fn)</div>
+              <div class="mc-desc">Returns the <strong>first item</strong> that matches your test function.</div>
+            </div>
+            <div class="method-card">
+              <div class="mc-name">findIndex(fn)</div>
+              <div class="mc-desc">Like <code>find</code>, but returns the item's <strong>index</strong> instead.</div>
+            </div>
+          </div>
+          <div class="code-block" style="max-width: 700px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              search.js
+            </div>
+            <div class="code-body">
+              <span class="ck">const</span> trainees = [{name: <span class="cs">"Karma"</span>, age: <span class="cn">24</span>}, {name: <span class="cs">"Sonam"</span>, age: <span class="cn">26</span>}];<br /><br />
+              trainees.find(t =&gt; t.name === <span class="cs">"Sonam"</span>);<br />
+              <span class="cc">// { name: "Sonam", age: 26 }</span><br /><br />
+              [<span class="cn">1</span>, <span class="cn">2</span>, <span class="cn">3</span>].includes(<span class="cn">2</span>); <span class="cc">// true</span><br />
+              [<span class="cs">"a"</span>, <span class="cs">"b"</span>, <span class="cs">"c"</span>].indexOf(<span class="cs">"b"</span>); <span class="cc">// 1</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 19 — forEach
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-amber bg-subtle" data-slide="19">
+        <div class="slide-label"><span class="snum">19</span> Arrays · Iteration</div>
+        <div class="stack" style="align-items: center; max-width: 920px; width: 100%">
+          <div class="center">
+            <div class="pill" style="background: #ebf0f7; color: #1c5b8c">Iteration · 1/4</div>
+            <h2 class="heading">forEach — do something with each item</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.3rem">Runs a function once for every item. Does not return anything new.</p>
+          </div>
+          <div class="code-block" style="max-width: 700px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              forEach.js
+            </div>
+            <div class="code-body">
+              <span class="ck">const</span> names = [<span class="cs">"Karma"</span>, <span class="cs">"Sonam"</span>, <span class="cs">"Tshering"</span>];<br /><br />
+              names.forEach(name =&gt; {<br />
+              &nbsp;&nbsp;console.log(<span class="cs">`Hello ${</span>name<span class="cs">}!`</span>);<br />
+              });<br /><br />
+              <span class="cc">// Hello Karma!</span><br />
+              <span class="cc">// Hello Sonam!</span><br />
+              <span class="cc">// Hello Tshering!</span>
+            </div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 680px; font-size: clamp(0.82rem, 1.1vw, 0.92rem);">
+            Use <code>forEach</code> when you just want to <strong>do</strong> something (print, send a message) — not build a new list.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 20 — map
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-amber" data-slide="20">
+        <div class="slide-label"><span class="snum">20</span> Arrays · Iteration</div>
+        <div class="stack" style="align-items: center; max-width: 920px; width: 100%">
+          <div class="center">
+            <div class="pill" style="background: #ebf0f7; color: #1c5b8c">Iteration · 2/4</div>
+            <h2 class="heading">map — transform every item</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.3rem">Makes a <strong>new array</strong> where each item is transformed.</p>
+          </div>
+          <div class="code-block" style="max-width: 700px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              map.js
+            </div>
+            <div class="code-body">
+              <span class="ck">const</span> scores = [<span class="cn">82</span>, <span class="cn">91</span>, <span class="cn">74</span>];<br /><br />
+              <span class="ck">const</span> doubled = scores.map(s =&gt; s * <span class="cn">2</span>);<br />
+              <span class="cc">// [164, 182, 148]</span><br /><br />
+              <span class="ck">const</span> trainees = [{name: <span class="cs">"Karma"</span>}, {name: <span class="cs">"Sonam"</span>}];<br />
+              <span class="ck">const</span> names = trainees.map(t =&gt; t.name);<br />
+              <span class="cc">// ["Karma", "Sonam"]</span>
+            </div>
+          </div>
+          <div class="callout" style="max-width: 680px; background: #f0f7fc; border: 1px solid #B0D4E9; border-radius: 10px; padding: 0.7rem 1rem; font-size: clamp(0.8rem, 1.05vw, 0.88rem); color: var(--muted);">
+            <strong style="color: var(--text)">Original array is not changed.</strong> <code>map</code> always returns a new array of the same length.
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 21 — filter
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-amber bg-subtle" data-slide="21">
+        <div class="slide-label"><span class="snum">21</span> Arrays · Iteration</div>
+        <div class="stack" style="align-items: center; max-width: 920px; width: 100%">
+          <div class="center">
+            <div class="pill" style="background: #ebf0f7; color: #1c5b8c">Iteration · 3/4</div>
+            <h2 class="heading">filter — keep only what matches</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.3rem">Makes a <strong>new (possibly shorter) array</strong> containing only the items that pass your test.</p>
+          </div>
+          <div class="code-block" style="max-width: 720px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              filter.js
+            </div>
+            <div class="code-body">
+              <span class="ck">const</span> scores = [<span class="cn">82</span>, <span class="cn">41</span>, <span class="cn">91</span>, <span class="cn">55</span>, <span class="cn">74</span>];<br /><br />
+              <span class="ck">const</span> passing = scores.filter(s =&gt; s &gt;= <span class="cn">60</span>);<br />
+              <span class="cc">// [82, 91, 74]</span><br /><br />
+              <span class="ck">const</span> trainees = [<br />
+              &nbsp;&nbsp;{name: <span class="cs">"Karma"</span>, vertical: <span class="cs">"Dev"</span>},<br />
+              &nbsp;&nbsp;{name: <span class="cs">"Sonam"</span>, vertical: <span class="cs">"QA"</span>},<br />
+              &nbsp;&nbsp;{name: <span class="cs">"Tshering"</span>, vertical: <span class="cs">"Dev"</span>}<br />
+              ];<br />
+              <span class="ck">const</span> devs = trainees.filter(t =&gt; t.vertical === <span class="cs">"Dev"</span>);<br />
+              <span class="cc">// [{Karma...}, {Tshering...}]</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 22 — reduce
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-amber" data-slide="22">
+        <div class="slide-label"><span class="snum">22</span> Arrays · Iteration</div>
+        <div class="stack" style="align-items: center; max-width: 920px; width: 100%">
+          <div class="center">
+            <div class="pill" style="background: #ebf0f7; color: #1c5b8c">Iteration · 4/4</div>
+            <h2 class="heading">reduce — combine all items into one value</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.3rem; max-width: 700px;">
+              Takes the array and "rolls it up" into a single value — a sum, a product, a combined string, anything.
+            </p>
+          </div>
+          <div class="code-block" style="max-width: 720px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              reduce.js
+            </div>
+            <div class="code-body">
+              <span class="ck">const</span> scores = [<span class="cn">82</span>, <span class="cn">91</span>, <span class="cn">74</span>];<br /><br />
+              <span class="ck">const</span> total = scores.reduce((sum, s) =&gt; sum + s, <span class="cn">0</span>);<br />
+              <span class="cc">//                                             ↑ starting value</span><br />
+              <span class="cc">// total = 82 + 91 + 74 = 247</span><br /><br />
+              <span class="ck">const</span> average = total / scores.length; <span class="cc">// 82.3</span>
+            </div>
+          </div>
+          <div class="callout" style="max-width: 680px; background: #fff8e6; border: 1px solid #f0d890; border-radius: 10px; padding: 0.7rem 1rem; font-size: clamp(0.8rem, 1.05vw, 0.88rem); color: #664a00;">
+            💡 <code>reduce</code> feels tricky at first. Just remember: <strong>sum</strong> is the running total, <strong>s</strong> is the current number, and you return the new total each time.
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 23 — SORT
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-amber bg-subtle" data-slide="23">
+        <div class="slide-label"><span class="snum">23</span> Arrays</div>
+        <div class="stack" style="align-items: center; max-width: 940px; width: 100%">
+          <div class="center">
+            <div class="pill" style="background: #ebf0f7; color: #1c5b8c">Sorting</div>
+            <h2 class="heading">sort — reorder items</h2>
+          </div>
+          <div class="code-block" style="max-width: 720px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              sort.js
+            </div>
+            <div class="code-body">
+              <span class="cc">// Strings — sorts alphabetically</span><br />
+              [<span class="cs">"Sonam"</span>, <span class="cs">"Karma"</span>, <span class="cs">"Tshering"</span>].sort();<br />
+              <span class="cc">// ["Karma", "Sonam", "Tshering"]</span><br /><br />
+              <span class="cc">// Numbers — ⚠️ surprise! Sort treats them as strings by default</span><br />
+              [<span class="cn">10</span>, <span class="cn">2</span>, <span class="cn">30</span>, <span class="cn">4</span>].sort();<br />
+              <span class="cc">// [10, 2, 30, 4]  ← wrong!</span><br /><br />
+              <span class="cc">// Fix: pass a comparator function</span><br />
+              [<span class="cn">10</span>, <span class="cn">2</span>, <span class="cn">30</span>, <span class="cn">4</span>].sort((a, b) =&gt; a - b);<br />
+              <span class="cc">// [2, 4, 10, 30]  ✓</span>
+            </div>
+          </div>
+          <div class="callout" style="max-width: 680px; background: #f2e8ea; border: 1px solid #E0B5B9; border-radius: 10px; padding: 0.7rem 1rem; font-size: clamp(0.8rem, 1.05vw, 0.88rem); color: #8B001E;">
+            ⚠️ <strong>Gotcha:</strong> <code>sort()</code> modifies the <strong>original</strong> array (unlike <code>map</code>/<code>filter</code>). Also — always pass a comparator for numbers.
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 24 — SLICE vs SPLICE
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-amber" data-slide="24">
+        <div class="slide-label"><span class="snum">24</span> Arrays</div>
+        <div class="stack" style="align-items: center; max-width: 960px; width: 100%">
+          <div class="center">
+            <div class="pill" style="background: #ebf0f7; color: #1c5b8c">Commonly confused</div>
+            <h2 class="heading">slice vs splice</h2>
+          </div>
+          <table class="compare-table">
+            <thead>
+              <tr><th>Method</th><th>What it does</th><th>Modifies original?</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>slice(start, end)</td>
+                <td>Returns a <strong>copy</strong> of a section</td>
+                <td><span class="no">No</span></td>
+              </tr>
+              <tr>
+                <td>splice(start, count)</td>
+                <td><strong>Removes</strong> items (can also insert)</td>
+                <td><span class="yes">Yes</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="code-block" style="max-width: 720px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              slice-splice.js
+            </div>
+            <div class="code-body">
+              <span class="ck">const</span> nums = [<span class="cn">1</span>, <span class="cn">2</span>, <span class="cn">3</span>, <span class="cn">4</span>, <span class="cn">5</span>];<br /><br />
+              nums.slice(<span class="cn">1</span>, <span class="cn">3</span>);&nbsp;&nbsp;&nbsp;<span class="cc">// [2, 3] — nums is still [1,2,3,4,5]</span><br />
+              nums.splice(<span class="cn">1</span>, <span class="cn">2</span>); &nbsp;<span class="cc">// removes [2,3] — nums is now [1, 4, 5]</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 25 — ARRAYS OF OBJECTS (the real world)
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo bg-subtle" data-slide="25">
+        <div class="slide-label"><span class="snum">25</span> Arrays + Objects</div>
+        <div class="stack" style="align-items: center; max-width: 940px; width: 100%">
+          <div class="center">
+            <div class="pill pill-indigo">Real world</div>
+            <h2 class="heading">The most common pattern you'll see</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.3rem">An array of objects — e.g. a list of trainees from an API.</p>
+          </div>
+          <div class="code-block" style="max-width: 740px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              trainees.js
+            </div>
+            <div class="code-body">
+              <span class="ck">const</span> trainees = [<br />
+              &nbsp;&nbsp;{ name: <span class="cs">"Karma"</span>, vertical: <span class="cs">"Dev"</span>, score: <span class="cn">82</span> },<br />
+              &nbsp;&nbsp;{ name: <span class="cs">"Sonam"</span>, vertical: <span class="cs">"QA"</span>,  score: <span class="cn">74</span> },<br />
+              &nbsp;&nbsp;{ name: <span class="cs">"Tshering"</span>, vertical: <span class="cs">"Dev"</span>, score: <span class="cn">91</span> }<br />
+              ];<br /><br />
+              <span class="cc">// Questions we might ask:</span><br />
+              <span class="cc">//   - Who is in Dev?      → filter</span><br />
+              <span class="cc">//   - What are their names? → map</span><br />
+              <span class="cc">//   - Who scored highest?   → find / reduce</span><br />
+              <span class="cc">//   - Total of all scores?  → reduce</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 26 — QUIZ: ARRAYS
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo bg-subtle" data-slide="26">
+        <div class="slide-label"><span class="snum">26</span> Knowledge Check · Arrays</div>
+        <div class="stack" style="align-items: center; width: 100%; max-width: 780px">
+          <div class="center">
+            <div class="pill pill-indigo">🧠 Quiz 2 of 3</div>
+            <h2 class="heading" style="font-size: clamp(1.3rem, 2.4vw, 2rem)" id="arr-q-text">Loading question...</h2>
+            <p style="color: var(--muted); font-size: clamp(0.75rem, 1vw, 0.85rem); margin-bottom: 0.8rem;" id="arr-q-num">Question 1 of 6</p>
+          </div>
+          <div class="quiz-options" id="arr-opts"></div>
+          <div class="quiz-feedback" id="arr-feedback"></div>
+          <button onclick="nextQuiz('arr')" id="arr-next" style="margin-top: 0.75rem; display: none; padding: 0.5rem 1.25rem; border-radius: 100px; border: 1.5px solid var(--border); background: var(--bg); cursor: pointer; font-size: clamp(0.8rem, 1.1vw, 0.9rem); font-weight: 600; color: var(--muted);">
+            Next Question →
+          </button>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 27 — BREAK
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-dark" data-slide="27">
+        <div class="slide-label"><span class="snum">27</span></div>
+        <div class="center" style="gap: 1.4rem; display: flex; flex-direction: column; align-items: center;">
+          <div class="big-emoji">☕</div>
+          <h1 class="display" style="color: white">Break Time</h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.7);">15 minutes</p>
+          <div class="break-timer" id="break-timer">15:00</div>
+          <div style="margin-top: 0.5rem;">
+            <button class="break-btn" onclick="startTimer('break-timer', 15)">Start</button>
+            <button class="break-btn" onclick="resetTimer('break-timer', 15)">Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 28 — SECTION: DESTRUCTURING
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-blue" data-slide="28">
+        <div class="slide-label"><span class="snum">28</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span> Section 03
+          </div>
+          <h1 class="display" style="color: white">Destructuring</h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem">
+            Unpack values cleanly · plus <code style="color:#7dd3fc;">?.</code> optional chaining
+          </p>
+        </div>
+        <div class="section-num" style="color: white">03</div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 29 — WHY DESTRUCTURING
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="29">
+        <div class="slide-label"><span class="snum">29</span> Destructuring</div>
+        <div class="stack" style="align-items: center; max-width: 940px; width: 100%">
+          <div class="center">
+            <div class="pill pill-blue">Motivation</div>
+            <h2 class="heading">The problem</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.3rem">Pulling values out of objects gets repetitive fast.</p>
+          </div>
+          <div class="code-block" style="max-width: 720px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              the-old-way.js
+            </div>
+            <div class="code-body">
+              <span class="ck">const</span> trainee = { name: <span class="cs">"Karma"</span>, age: <span class="cn">24</span>, vertical: <span class="cs">"Dev"</span> };<br /><br />
+              <span class="cc">// Old way — write the object name three times</span><br />
+              <span class="ck">const</span> name = trainee.name;<br />
+              <span class="ck">const</span> age = trainee.age;<br />
+              <span class="ck">const</span> vertical = trainee.vertical;<br /><br />
+              <span class="cc">// Destructuring — one line</span><br />
+              <span class="ck">const</span> { name, age, vertical } = trainee;
+            </div>
+          </div>
+          <p class="body-md" style="color: var(--text); text-align: center; font-weight: 600;">
+            Same result. Much cleaner.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 30 — OBJECT DESTRUCTURING BASICS
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="30">
+        <div class="slide-label"><span class="snum">30</span> Destructuring · Objects</div>
+        <div class="stack" style="align-items: center; max-width: 960px; width: 100%">
+          <div class="center">
+            <div class="pill pill-blue">Object destructuring</div>
+            <h2 class="heading">Rename & default values</h2>
+          </div>
+          <div class="code-block" style="max-width: 740px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              destructure-object.js
+            </div>
+            <div class="code-body">
+              <span class="ck">const</span> trainee = { name: <span class="cs">"Karma"</span>, age: <span class="cn">24</span> };<br /><br />
+              <span class="cc">// Basic — names must match the keys</span><br />
+              <span class="ck">const</span> { name, age } = trainee;<br /><br />
+              <span class="cc">// Rename on the way out</span><br />
+              <span class="ck">const</span> { name: traineeName } = trainee;<br />
+              console.log(traineeName); <span class="cc">// "Karma"</span><br /><br />
+              <span class="cc">// Default values — used when the key is missing</span><br />
+              <span class="ck">const</span> { city = <span class="cs">"Thimphu"</span> } = trainee;<br />
+              console.log(city); <span class="cc">// "Thimphu"  (trainee has no city)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 31 — NESTED DESTRUCTURING
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="31">
+        <div class="slide-label"><span class="snum">31</span> Destructuring · Nested</div>
+        <div class="stack" style="align-items: center; max-width: 960px; width: 100%">
+          <div class="center">
+            <div class="pill pill-blue">Nested</div>
+            <h2 class="heading">Unpacking objects inside objects</h2>
+          </div>
+          <div class="code-block" style="max-width: 740px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              nested-destructure.js
+            </div>
+            <div class="code-body">
+              <span class="ck">const</span> trainee = {<br />
+              &nbsp;&nbsp;name: <span class="cs">"Karma"</span>,<br />
+              &nbsp;&nbsp;contact: { email: <span class="cs">"karma@x.com"</span>, phone: <span class="cs">"1234"</span> }<br />
+              };<br /><br />
+              <span class="cc">// Reach into contact and pull out email</span><br />
+              <span class="ck">const</span> { contact: { email } } = trainee;<br />
+              console.log(email); <span class="cc">// "karma@x.com"</span><br /><br />
+              <span class="cc">// Works great for API responses</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 32 — ARRAY DESTRUCTURING
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="32">
+        <div class="slide-label"><span class="snum">32</span> Destructuring · Arrays</div>
+        <div class="stack" style="align-items: center; max-width: 960px; width: 100%">
+          <div class="center">
+            <div class="pill pill-blue">Array destructuring</div>
+            <h2 class="heading">Unpack by position</h2>
+          </div>
+          <div class="code-block" style="max-width: 740px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              array-destructure.js
+            </div>
+            <div class="code-body">
+              <span class="ck">const</span> colors = [<span class="cs">"red"</span>, <span class="cs">"green"</span>, <span class="cs">"blue"</span>];<br /><br />
+              <span class="cc">// Basic — by position (not by name)</span><br />
+              <span class="ck">const</span> [first, second] = colors;<br />
+              console.log(first); <span class="cc">// "red"</span><br /><br />
+              <span class="cc">// Skip items with a comma</span><br />
+              <span class="ck">const</span> [, , third] = colors;<br />
+              console.log(third); <span class="cc">// "blue"</span><br /><br />
+              <span class="cc">// "Rest" — collect the remaining into one array</span><br />
+              <span class="ck">const</span> [head, ...tail] = colors;<br />
+              <span class="cc">// head = "red", tail = ["green", "blue"]</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 33 — SPREAD & REST
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="33">
+        <div class="slide-label"><span class="snum">33</span> Destructuring · Spread</div>
+        <div class="stack" style="align-items: center; max-width: 960px; width: 100%">
+          <div class="center">
+            <div class="pill pill-blue">Related idea</div>
+            <h2 class="heading">Spread <code>...</code> — the opposite of rest</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.3rem">Same three dots, used to <strong>copy or combine</strong> instead of collect.</p>
+          </div>
+          <div class="code-block" style="max-width: 740px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              spread.js
+            </div>
+            <div class="code-body">
+              <span class="cc">// Copy an array</span><br />
+              <span class="ck">const</span> colors = [<span class="cs">"red"</span>, <span class="cs">"green"</span>];<br />
+              <span class="ck">const</span> copy = [...colors, <span class="cs">"blue"</span>];<br />
+              <span class="cc">// ["red", "green", "blue"]</span><br /><br />
+              <span class="cc">// Merge objects — later keys overwrite earlier ones</span><br />
+              <span class="ck">const</span> base = { name: <span class="cs">"Karma"</span>, age: <span class="cn">24</span> };<br />
+              <span class="ck">const</span> updated = { ...base, age: <span class="cn">25</span> };<br />
+              <span class="cc">// { name: "Karma", age: 25 }</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 34 — OPTIONAL CHAINING
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="34">
+        <div class="slide-label"><span class="snum">34</span> Optional Chaining <code>?.</code></div>
+        <div class="stack" style="align-items: center; max-width: 960px; width: 100%">
+          <div class="center">
+            <div class="pill pill-blue">Safety</div>
+            <h2 class="heading">Accessing keys that might not exist</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.3rem; max-width: 720px;">
+              Backend data isn't always complete. What if <code>contact</code> is missing? Normal access crashes the app.
+            </p>
+          </div>
+          <div class="code-block" style="max-width: 760px">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f57"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #28c840"></span>
+              optional-chaining.js
+            </div>
+            <div class="code-body">
+              <span class="ck">const</span> trainee = { name: <span class="cs">"Karma"</span> };<br />
+              <span class="cc">// Note: no "contact" key!</span><br /><br />
+              <span class="cc">// ❌ Without optional chaining — this crashes</span><br />
+              console.log(trainee.contact.email);<br />
+              <span class="cr">// TypeError: Cannot read properties of undefined</span><br /><br />
+              <span class="cc">// ✓ With optional chaining — safe</span><br />
+              console.log(trainee.contact<span style="color:#f0abfc;">?.</span>email);<br />
+              <span class="cc">// undefined  (no error — just "nothing there")</span><br /><br />
+              <span class="cc">// Combine with default value</span><br />
+              <span class="ck">const</span> email = trainee.contact<span style="color:#f0abfc;">?.</span>email ?? <span class="cs">"not provided"</span>;
+            </div>
+          </div>
+          <p class="body-md" style="color: var(--text); text-align: center; max-width: 680px; font-weight: 600;">
+            Rule: if a key <em>might</em> not exist, use <code>?.</code> to be safe.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 35 — QUIZ: DESTRUCTURING
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo bg-subtle" data-slide="35">
+        <div class="slide-label"><span class="snum">35</span> Knowledge Check · Destructuring</div>
+        <div class="stack" style="align-items: center; width: 100%; max-width: 780px">
+          <div class="center">
+            <div class="pill pill-indigo">🧠 Quiz 3 of 3</div>
+            <h2 class="heading" style="font-size: clamp(1.3rem, 2.4vw, 2rem)" id="dst-q-text">Loading question...</h2>
+            <p style="color: var(--muted); font-size: clamp(0.75rem, 1vw, 0.85rem); margin-bottom: 0.8rem;" id="dst-q-num">Question 1 of 4</p>
+          </div>
+          <div class="quiz-options" id="dst-opts"></div>
+          <div class="quiz-feedback" id="dst-feedback"></div>
+          <button onclick="nextQuiz('dst')" id="dst-next" style="margin-top: 0.75rem; display: none; padding: 0.5rem 1.25rem; border-radius: 100px; border: 1.5px solid var(--border); background: var(--bg); cursor: pointer; font-size: clamp(0.8rem, 1.1vw, 0.9rem); font-weight: 600; color: var(--muted);">
+            Next Question →
+          </button>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 36 — SECTION: EXERCISES
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-indigo" data-slide="36">
+        <div class="slide-label"><span class="snum">36</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span> Section 04
+          </div>
+          <h1 class="display" style="color: white">Hands-on Coding</h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem">
+            ~45 minutes · work in pairs · ask when stuck
+          </p>
+        </div>
+        <div class="section-num" style="color: white">04</div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 37 — EXERCISE 1: FILTER
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="37">
+        <div class="slide-label"><span class="snum">37</span> Exercise · Trainee Directory 1/4</div>
+        <div class="stack" style="align-items: center; max-width: 960px; width: 100%">
+          <div class="exercise-card">
+            <span class="xc-badge">Exercise 1 · Filter</span>
+            <div class="xc-title">Find all Dev trainees</div>
+            <div class="xc-desc">Given the array of trainees, return a new array containing only those whose <code>vertical</code> is <code>"Dev"</code>.</div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                exercise-1.js
+              </div>
+              <div class="code-body">
+                <span class="ck">const</span> trainees = [<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Karma"</span>, vertical: <span class="cs">"Dev"</span> },<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Sonam"</span>, vertical: <span class="cs">"QA"</span> },<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Tshering"</span>, vertical: <span class="cs">"Dev"</span> },<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Pema"</span>, vertical: <span class="cs">"BA"</span> }<br />
+                ];<br /><br />
+                <span class="cc">// Your code:</span><br />
+                <span class="ck">const</span> devs = <span class="cc">/* ??? */</span>;<br /><br />
+                <span class="cc">// Expected: [{Karma...}, {Tshering...}]</span>
+              </div>
+            </div>
+            <div class="hint-box">💡 <strong>Hint:</strong> Use <code>.filter()</code> with a function that checks <code>t.vertical === "Dev"</code>.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 38 — EXERCISE 2: MAP
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="38">
+        <div class="slide-label"><span class="snum">38</span> Exercise · Trainee Directory 2/4</div>
+        <div class="stack" style="align-items: center; max-width: 960px; width: 100%">
+          <div class="exercise-card">
+            <span class="xc-badge">Exercise 2 · Map</span>
+            <div class="xc-title">Get just the names</div>
+            <div class="xc-desc">Using your result from Exercise 1 (the Dev trainees), return an array of just their names — no objects, just strings.</div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                exercise-2.js
+              </div>
+              <div class="code-body">
+                <span class="cc">// devs from Exercise 1:</span><br />
+                <span class="cc">// [{ name: "Karma", vertical: "Dev" }, { name: "Tshering", vertical: "Dev" }]</span><br /><br />
+                <span class="ck">const</span> devNames = <span class="cc">/* ??? */</span>;<br /><br />
+                <span class="cc">// Expected: ["Karma", "Tshering"]</span>
+              </div>
+            </div>
+            <div class="hint-box">💡 <strong>Hint:</strong> <code>.map()</code> turns each item into something new. For each trainee <code>t</code>, you want <code>t.name</code>.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 39 — EXERCISE 3: SORT
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="39">
+        <div class="slide-label"><span class="snum">39</span> Exercise · Trainee Directory 3/4</div>
+        <div class="stack" style="align-items: center; max-width: 960px; width: 100%">
+          <div class="exercise-card">
+            <span class="xc-badge">Exercise 3 · Sort</span>
+            <div class="xc-title">Sort them alphabetically</div>
+            <div class="xc-desc">Take the <code>devNames</code> array and sort it alphabetically.</div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                exercise-3.js
+              </div>
+              <div class="code-body">
+                <span class="cc">// devNames: ["Karma", "Tshering"]</span><br /><br />
+                <span class="ck">const</span> sorted = <span class="cc">/* ??? */</span>;<br /><br />
+                <span class="cc">// Expected: ["Karma", "Tshering"]  (already sorted here,</span><br />
+                <span class="cc">//           but try with ["Tshering", "Karma", "Ashi"])</span>
+              </div>
+            </div>
+            <div class="hint-box">💡 <strong>Hint:</strong> <code>.sort()</code> with no arguments works fine for strings. No comparator needed.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 40 — EXERCISE 4: CHAIN
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="40">
+        <div class="slide-label"><span class="snum">40</span> Exercise · Trainee Directory 4/4</div>
+        <div class="stack" style="align-items: center; max-width: 960px; width: 100%">
+          <div class="exercise-card">
+            <span class="xc-badge">Exercise 4 · Chain everything</span>
+            <div class="xc-title">All three in one line</div>
+            <div class="xc-desc">Now combine Exercises 1, 2, and 3 — filter, then map, then sort — in a single expression.</div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                exercise-4.js
+              </div>
+              <div class="code-body">
+                <span class="ck">const</span> result = trainees<br />
+                &nbsp;&nbsp;.filter(<span class="cc">/* ??? */</span>)<br />
+                &nbsp;&nbsp;.map(<span class="cc">/* ??? */</span>)<br />
+                &nbsp;&nbsp;.sort();<br /><br />
+                <span class="cc">// Expected: ["Karma", "Tshering"]</span>
+              </div>
+            </div>
+            <div class="hint-box">💡 <strong>Hint:</strong> Each method returns a new array, so you can call the next one right on it. This is called <strong>method chaining</strong>.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 41 — EXERCISE 5: SHOPPING CART
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-green" data-slide="41">
+        <div class="slide-label"><span class="snum">41</span> Exercise · Bonus 1</span></div>
+        <div class="stack" style="align-items: center; max-width: 960px; width: 100%">
+          <div class="exercise-card">
+            <span class="xc-badge" style="background: #f0f7ec; color: var(--green);">Exercise 5 · Reduce</span>
+            <div class="xc-title">Shopping cart total</div>
+            <div class="xc-desc">Given a cart of items, calculate the total. Each item has a <code>price</code> and <code>quantity</code>.</div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                exercise-5.js
+              </div>
+              <div class="code-body">
+                <span class="ck">const</span> cart = [<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Tea"</span>, price: <span class="cn">50</span>, quantity: <span class="cn">2</span> },<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Rice"</span>, price: <span class="cn">200</span>, quantity: <span class="cn">1</span> },<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Oil"</span>, price: <span class="cn">150</span>, quantity: <span class="cn">3</span> }<br />
+                ];<br /><br />
+                <span class="ck">const</span> total = <span class="cc">/* ??? */</span>;<br /><br />
+                <span class="cc">// Expected: 50*2 + 200*1 + 150*3 = 750</span>
+              </div>
+            </div>
+            <div class="hint-box">💡 <strong>Hint:</strong> <code>reduce((sum, item) =&gt; sum + item.price * item.quantity, 0)</code>.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 42 — EXERCISE 6: API PARSER
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-green bg-subtle" data-slide="42">
+        <div class="slide-label"><span class="snum">42</span> Exercise · Bonus 2</span></div>
+        <div class="stack" style="align-items: center; max-width: 960px; width: 100%">
+          <div class="exercise-card">
+            <span class="xc-badge" style="background: #f0f7ec; color: var(--green);">Exercise 6 · Destructuring + <code>?.</code></span>
+            <div class="xc-title">Safely read an API response</div>
+            <div class="xc-desc">The server sometimes returns incomplete data. Use destructuring and optional chaining to pull out the email — fallback to <code>"no email"</code> if missing.</div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                exercise-6.js
+              </div>
+              <div class="code-body">
+                <span class="ck">const</span> response = {<br />
+                &nbsp;&nbsp;id: <span class="cn">42</span>,<br />
+                &nbsp;&nbsp;name: <span class="cs">"Karma"</span><br />
+                &nbsp;&nbsp;<span class="cc">// note: no "contact" field!</span><br />
+                };<br /><br />
+                <span class="ck">const</span> email = <span class="cc">/* ??? */</span>;<br /><br />
+                <span class="cc">// Expected: "no email"  (no crash)</span>
+              </div>
+            </div>
+            <div class="hint-box">💡 <strong>Hint:</strong> <code>response.contact?.email ?? "no email"</code>. The <code>??</code> operator means "if left side is null/undefined, use right side."</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 43 — KEY TAKEAWAYS
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-indigo" data-slide="43">
+        <div class="slide-label"><span class="snum">43</span></div>
+        <div class="stack" style="align-items: center; max-width: 900px; width: 100%; color: white;">
+          <div class="center">
+            <div class="pill pill-white"><span class="pill-dot"></span> Wrap-up</div>
+            <h1 class="display" style="color: white">Key takeaways</h1>
+          </div>
+          <div class="method-grid" style="margin-top: 0.5rem;">
+            <div class="method-card" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: white;">
+              <div class="mc-name" style="color: #7dd3fc;">Objects group things</div>
+              <div class="mc-desc" style="color: rgba(255,255,255,0.7);">Related bits of data into one bundle. Access with <code>.key</code> or <code>["key"]</code>.</div>
+            </div>
+            <div class="method-card" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: white;">
+              <div class="mc-name" style="color: #7dd3fc;">Arrays are ordered lists</div>
+              <div class="mc-desc" style="color: rgba(255,255,255,0.7);"><code>map · filter · reduce · find · sort</code> are the five you'll use every day.</div>
+            </div>
+            <div class="method-card" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: white;">
+              <div class="mc-name" style="color: #7dd3fc;">JSON is just objects</div>
+              <div class="mc-desc" style="color: rgba(255,255,255,0.7);">Backend data arrives as objects. You already know how to read it.</div>
+            </div>
+            <div class="method-card" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: white;">
+              <div class="mc-name" style="color: #7dd3fc;">Destructuring is a shortcut</div>
+              <div class="mc-desc" style="color: rgba(255,255,255,0.7);">Pull keys out cleanly. Use <code>?.</code> when a key might not exist.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 44 — NEXT CLASS
+  ══════════════════════════════════════════ -->
+      <!-- <div class="slide bg-dark" data-slide="44">
+        <div class="slide-label"><span class="snum">44</span></div>
+        <div class="center" style="gap: 1.2rem; display: flex; flex-direction: column; align-items: center;">
+          <div class="pill pill-white"><span class="pill-dot"></span> Next class</div>
+          <h1 class="display" style="color: white">
+            <span style="color: #7dd3fc;">Class 04 —</span><br />
+            DOM & Browser APIs
+          </h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.7); max-width: 680px; text-align: center; margin-top: 0.5rem;">
+            How JavaScript talks to the web page · selecting elements · reacting to clicks · making requests.
+          </p>
+          <p class="body-md" style="color: rgba(255, 255, 255, 0.5); margin-top: 1rem;">
+            See you next session · Thank you 🙏
+          </p>
+        </div>
+      </div> -->
+
+    </div>
+    <!-- /#deck -->
+
+    <!-- ===== CONTROLS ===== -->
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 44</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      let current = 0;
+
+      function goTo(n) {
+        slides[current].classList.remove("active");
+        slides[current].classList.add("exit");
+        const old = current;
+        setTimeout(() => slides[old].classList.remove("exit"), 380);
+        current = Math.max(0, Math.min(n, total - 1));
+        slides[current].classList.add("active");
+        document.getElementById("slide-counter").textContent = `${current + 1} / ${total}`;
+        document.getElementById("progress").style.width = `${((current + 1) / total) * 100}%`;
+        initReveal(slides[current]);
+      }
+
+      function nextSlide() { if (current < total - 1) goTo(current + 1); }
+      function prevSlide() { if (current > 0) goTo(current - 1); }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight" || e.key === " ") { e.preventDefault(); handleForward(); }
+        if (e.key === "ArrowLeft") { e.preventDefault(); prevSlide(); }
+        if (e.key === "f" || e.key === "F") toggleFullscreen();
+      });
+
+      document.getElementById("deck").addEventListener("click", function (e) {
+        if (e.target.closest("button, .quiz-opt, .sl-item, .mq, a, input, select, textarea, .agenda-row, [data-noclick]")) return;
+        const pct = e.clientX / window.innerWidth;
+        if (pct < 0.15) prevSlide();
+        else if (pct > 0.85) handleForward();
+      });
+
+      function handleForward() {
+        const active = slides[current];
+        const list = active.querySelector(".reveal-list");
+        if (list) {
+          const hidden = list.querySelectorAll("li:not(.shown)");
+          if (hidden.length > 0) {
+            hidden[0].classList.add("shown");
+            const hint = active.querySelector(".reveal-hint");
+            if (hint && hidden.length === 1) hint.style.opacity = "0";
+            return;
+          }
+        }
+        nextSlide();
+      }
+
+      function initReveal(slide) {
+        const list = slide.querySelector(".reveal-list");
+        if (!list) return;
+        list.querySelectorAll("li").forEach((li) => li.classList.remove("shown"));
+        const hint = slide.querySelector(".reveal-hint");
+        if (hint) hint.style.opacity = "1";
+      }
+
+      slides[0].classList.add("active");
+      document.getElementById("progress").style.width = `${(1 / total) * 100}%`;
+
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
+        else document.exitFullscreen().catch(() => {});
+      }
+
+      /* ============================ TIMERS ============================ */
+      const timerState = {};
+      function startTimer(id, minutes) {
+        if (timerState[id]?.interval) return;
+        if (!timerState[id]) timerState[id] = { remaining: minutes * 60 };
+        timerState[id].interval = setInterval(() => {
+          timerState[id].remaining--;
+          const el = document.getElementById(id);
+          if (!el) return;
+          if (timerState[id].remaining <= 0) {
+            clearInterval(timerState[id].interval);
+            timerState[id].interval = null;
+            el.textContent = "00:00";
+            el.style.color = "#ff5f56";
+            return;
+          }
+          const m = Math.floor(timerState[id].remaining / 60).toString().padStart(2, "0");
+          const s = (timerState[id].remaining % 60).toString().padStart(2, "0");
+          el.textContent = `${m}:${s}`;
+          if (timerState[id].remaining <= 60) el.style.color = "#febc2e";
+        }, 1000);
+      }
+      function resetTimer(id, minutes) {
+        if (timerState[id]?.interval) {
+          clearInterval(timerState[id].interval);
+          timerState[id].interval = null;
+        }
+        timerState[id] = { remaining: minutes * 60 };
+        const el = document.getElementById(id);
+        if (el) {
+          el.textContent = minutes.toString().padStart(2, "0") + ":00";
+          el.style.color = "";
+        }
+      }
+
+      /* ============================ QUIZZES ============================ */
+      const quizData = {
+        obj: {
+          idx: 0,
+          qs: [
+            {
+              q: "Which keyword is used to remove a property from an object?",
+              opts: ["remove", "delete", "drop", "unset"],
+              correct: 1,
+              feedback: "✓ delete is the built-in keyword. e.g. delete trainee.age;"
+            },
+            {
+              qHtml: "<span style='font-family:Courier New,monospace;font-size:clamp(0.95rem,1.5vw,1.2rem);'>const u = { name: \"Karma\" };<br>console.log(u.age);</span><br><span style='font-size:clamp(0.85rem,1.1vw,0.95rem);color:#4A4C4F'>What will this print?</span>",
+              opts: ["null", "undefined", "Error", "0"],
+              correct: 1,
+              feedback: "✓ Accessing a missing key returns undefined (no crash). This is why optional chaining is useful for deeper access."
+            },
+            {
+              q: "What's the difference between dot and bracket notation?",
+              opts: [
+                "Dot is faster than bracket",
+                "Bracket can use a variable as the key; dot cannot",
+                "Dot works on objects, bracket works on arrays",
+                "There is no real difference"
+              ],
+              correct: 1,
+              feedback: "✓ Use bracket when the key name is stored in a variable or contains special characters."
+            },
+            {
+              qHtml: "<span style='font-family:Courier New,monospace;font-size:clamp(0.95rem,1.5vw,1.2rem);'>const u = { name: \"Karma\" };<br>u.name = \"Sonam\";<br>console.log(u.name);</span><br><span style='font-size:clamp(0.85rem,1.1vw,0.95rem);color:#4A4C4F'>Output?</span>",
+              opts: ["\"Karma\"", "\"Sonam\"", "TypeError — u is const", "undefined"],
+              correct: 1,
+              feedback: "✓ const prevents reassigning the variable, not modifying the object's contents. You can freely change properties."
+            },
+            {
+              q: "JSON and JavaScript objects — which is true?",
+              opts: [
+                "JSON is a completely different language",
+                "JSON is a text format; JS parses it into an object",
+                "JSON is only for numbers",
+                "JSON can't have nested objects"
+              ],
+              correct: 1,
+              feedback: "✓ JSON is just text that looks like a JS object. When data arrives from an API, JS converts the text into an actual object."
+            }
+          ]
+        },
+        arr: {
+          idx: 0,
+          qs: [
+            {
+              qHtml: "<span style='font-family:Courier New,monospace;font-size:clamp(0.95rem,1.5vw,1.2rem);'>const a = [10, 20, 30];<br>console.log(a[1]);</span><br><span style='font-size:clamp(0.85rem,1.1vw,0.95rem);color:#4A4C4F'>What prints?</span>",
+              opts: ["10", "20", "30", "undefined"],
+              correct: 1,
+              feedback: "✓ Arrays start at index 0. So a[0]=10, a[1]=20, a[2]=30."
+            },
+            {
+              q: "Which method returns a NEW array with each item transformed?",
+              opts: ["forEach", "filter", "map", "reduce"],
+              correct: 2,
+              feedback: "✓ map transforms every item and returns a new array of the same length. filter keeps a subset; forEach returns nothing."
+            },
+            {
+              qHtml: "<span style='font-family:Courier New,monospace;font-size:clamp(0.95rem,1.5vw,1.2rem);'>[3, 1, 2].filter(n =&gt; n &gt; 1);</span><br><span style='font-size:clamp(0.85rem,1.1vw,0.95rem);color:#4A4C4F'>Result?</span>",
+              opts: ["[3]", "[3, 2]", "[1, 2, 3]", "true"],
+              correct: 1,
+              feedback: "✓ filter keeps only items where the function returns true. 3 > 1 ✓, 1 > 1 ✗, 2 > 1 ✓. So [3, 2]."
+            },
+            {
+              qHtml: "<span style='font-family:Courier New,monospace;font-size:clamp(0.95rem,1.5vw,1.2rem);'>[10, 2, 30].sort();</span><br><span style='font-size:clamp(0.85rem,1.1vw,0.95rem);color:#4A4C4F'>Result?</span>",
+              opts: ["[2, 10, 30]", "[10, 2, 30]", "[30, 10, 2]", "[10, 30, 2]"],
+              correct: 3,
+              feedback: "✓ The classic sort gotcha! Without a comparator, sort() converts numbers to strings and sorts alphabetically: \"10\" < \"2\" < \"30\" → [10, 30, 2]. Fix it with .sort((a,b)=&gt;a-b)."
+            },
+            {
+              q: "You want to find the FIRST item where score > 80. Which method?",
+              opts: ["filter", "find", "map", "includes"],
+              correct: 1,
+              feedback: "✓ find returns the first match, or undefined. filter returns ALL matches (as an array)."
+            },
+            {
+              qHtml: "<span style='font-family:Courier New,monospace;font-size:clamp(0.95rem,1.5vw,1.2rem);'>const a = [1, 2, 3];<br>a.push(4);<br>console.log(a.length);</span><br><span style='font-size:clamp(0.85rem,1.1vw,0.95rem);color:#4A4C4F'>Output?</span>",
+              opts: ["3", "4", "5", "undefined"],
+              correct: 1,
+              feedback: "✓ push adds to the end, so the array becomes [1,2,3,4] — length is 4."
+            }
+          ]
+        },
+        dst: {
+          idx: 0,
+          qs: [
+            {
+              qHtml: "<span style='font-family:Courier New,monospace;font-size:clamp(0.95rem,1.5vw,1.2rem);'>const u = { name: \"Karma\", age: 24 };<br>const { name } = u;<br>console.log(name);</span><br><span style='font-size:clamp(0.85rem,1.1vw,0.95rem);color:#4A4C4F'>Output?</span>",
+              opts: ["\"Karma\"", "undefined", "{ name: \"Karma\" }", "Error"],
+              correct: 0,
+              feedback: "✓ Destructuring pulls out the value of the key 'name' — which is \"Karma\"."
+            },
+            {
+              q: "What does the ?. (optional chaining) operator do?",
+              opts: [
+                "Checks if a value equals something",
+                "Safely accesses a property — returns undefined if the parent is null/undefined instead of crashing",
+                "Makes a property required",
+                "Turns a property into a question mark"
+              ],
+              correct: 1,
+              feedback: "✓ Exactly. It's a safety net for data that might be incomplete — very common with API responses."
+            },
+            {
+              qHtml: "<span style='font-family:Courier New,monospace;font-size:clamp(0.95rem,1.5vw,1.2rem);'>const [a, , c] = [10, 20, 30];<br>console.log(c);</span><br><span style='font-size:clamp(0.85rem,1.1vw,0.95rem);color:#4A4C4F'>Output?</span>",
+              opts: ["10", "20", "30", "undefined"],
+              correct: 2,
+              feedback: "✓ The empty slot skips index 1 (the 20). a=10, (skipped), c=30."
+            },
+            {
+              qHtml: "<span style='font-family:Courier New,monospace;font-size:clamp(0.95rem,1.5vw,1.2rem);'>const u = { name: \"Karma\" };<br>console.log(u.contact?.email);</span><br><span style='font-size:clamp(0.85rem,1.1vw,0.95rem);color:#4A4C4F'>Output?</span>",
+              opts: ["\"karma@x.com\"", "null", "undefined", "TypeError"],
+              correct: 2,
+              feedback: "✓ Without ?., this would throw TypeError. With ?., the missing contact just gives undefined — no crash."
+            }
+          ]
+        }
+      };
+
+      function loadQuiz(key) {
+        const state = quizData[key];
+        const q = state.qs[state.idx];
+        const qEl = document.getElementById(`${key}-q-text`);
+        if (q.qHtml) qEl.innerHTML = q.qHtml;
+        else qEl.textContent = q.q;
+        document.getElementById(`${key}-q-num`).textContent = `Question ${state.idx + 1} of ${state.qs.length}`;
+        const opts = document.getElementById(`${key}-opts`);
+        opts.textContent = "";
+        q.opts.forEach((opt, i) => {
+          const letters = ["A", "B", "C", "D"];
+          const el = document.createElement("div");
+          el.className = "quiz-opt";
+          const letterDiv = document.createElement("div");
+          letterDiv.className = "qo-letter";
+          letterDiv.textContent = letters[i];
+          const span = document.createElement("span");
+          span.innerHTML = opt;
+          el.appendChild(letterDiv);
+          el.appendChild(span);
+          el.onclick = () => answerQuiz(key, i, el);
+          opts.appendChild(el);
+        });
+        document.getElementById(`${key}-feedback`).className = "quiz-feedback";
+        document.getElementById(`${key}-feedback`).textContent = "";
+        document.getElementById(`${key}-next`).style.display = "none";
+      }
+
+      function answerQuiz(key, i, el) {
+        const state = quizData[key];
+        const q = state.qs[state.idx];
+        const fb = document.getElementById(`${key}-feedback`);
+        document.querySelectorAll(`#${key}-opts .quiz-opt`).forEach((o) => {
+          o.classList.add("dim");
+          o.onclick = null;
+        });
+        el.classList.remove("dim");
+        if (i === q.correct) {
+          el.classList.add("correct");
+          fb.className = "quiz-feedback qf-correct show";
+        } else {
+          el.classList.add("wrong");
+          const correctEl = document.querySelectorAll(`#${key}-opts .quiz-opt`)[q.correct];
+          correctEl.classList.add("correct");
+          correctEl.classList.remove("dim");
+          fb.className = "quiz-feedback qf-wrong show";
+        }
+        fb.textContent = q.feedback;
+        if (state.idx < state.qs.length - 1) {
+          document.getElementById(`${key}-next`).style.display = "inline-block";
+        }
+      }
+
+      function nextQuiz(key) {
+        quizData[key].idx++;
+        if (quizData[key].idx < quizData[key].qs.length) loadQuiz(key);
+      }
+
+      loadQuiz('obj');
+      loadQuiz('arr');
+      loadQuiz('dst');
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Class Notes: JavaScript Fundamentals II</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue:    #0066B2;
+      --indigo:  #001F35;
+      --amber:   #247EC1;
+      --green:   #7BC950;
+      --purple:  #4796D1;
+      --red:     #D80032;
+      --text:    #1B2021;
+      --muted:   #7B7C7F;
+      --faint:   #9CA3AF;
+      --surf:    #ffffff;
+      --bg:      #F9F9F9;
+      --border:  #EDEDED;
+      --border-l:#F5F5F5;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Open Sans', 'Aptos', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.65;
+      font-size: 17px;
+    }
+    @media (max-width: 640px) { body { font-size: 16px; } }
+
+    .hero {
+      background: var(--surf);
+      border-bottom: 1px solid var(--border);
+      padding: 4rem 2rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 5px;
+      background: linear-gradient(135deg, #0067A3, #002D72);
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 0.35rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); }
+    .hero h1 {
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero h1 .c-blue   { color: var(--blue); }
+    .hero h1 .c-indigo { color: var(--indigo); }
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 2rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero-tags {
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+    .hero-tag {
+      padding: 0.3rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .tag-blue   { background: #E6F0F8; color: var(--blue); }
+    .tag-indigo { background: #E6E9EC; color: var(--indigo); }
+    .tag-green  { background: #F0F7EC; color: var(--green); }
+    .tag-amber  { background: #EBF0F7; color: #1C5B8C; }
+    .tag-purple { background: #ECF2F8; color: var(--purple); }
+
+    .container { max-width: 1040px; margin: 0 auto; padding: 0 2rem 6rem; }
+
+    .toc {
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem 2rem;
+      margin: 2.5rem 0;
+    }
+    .toc h3 {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--faint);
+      margin-bottom: 1.25rem;
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.4rem 2rem;
+    }
+    .toc-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.875rem;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.3rem 0;
+      border-bottom: 1px solid var(--border-l);
+      transition: color 0.15s;
+    }
+    .toc-item:hover { color: var(--indigo); }
+    .toc-item .toc-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+    .section-hd { padding: 3.5rem 0 1.5rem; }
+    .section-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0.9rem;
+      border-radius: 100px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+    .pill-blue   { background: #E6F0F8; color: var(--blue); }
+    .pill-indigo { background: #E6E9EC; color: var(--indigo); }
+    .pill-green  { background: #F0F7EC; color: var(--green); }
+    .pill-amber  { background: #EBF0F7; color: #1C5B8C; }
+    .pill-purple { background: #ECF2F8; color: var(--purple); }
+    .section-title {
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+      font-size: 2rem;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 0.4rem;
+    }
+    .section-desc { font-size: 0.95rem; color: var(--muted); }
+
+    .topic {
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem 2.25rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .topic::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 4px;
+      border-radius: 4px 0 0 4px;
+    }
+    .topic-blue::before   { background: var(--blue); }
+    .topic-indigo::before { background: var(--indigo); }
+    .topic-amber::before  { background: var(--amber); }
+    .topic-green::before  { background: var(--green); }
+    .topic-purple::before { background: var(--purple); }
+    .topic-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .explain {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+    }
+    .explain strong { color: var(--text); }
+
+    .concepts { display: grid; gap: 0.9rem; margin-bottom: 1.25rem; }
+    .concepts-2 { grid-template-columns: repeat(2, 1fr); }
+    .concepts-3 { grid-template-columns: repeat(3, 1fr); }
+    .concept {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.1rem 1.25rem;
+    }
+    .concept h4 {
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .concept ul { list-style: none; display: flex; flex-direction: column; gap: 0.35rem; }
+    .concept ul li {
+      font-size: 0.83rem;
+      color: var(--muted);
+      padding-left: 1rem;
+      position: relative;
+      line-height: 1.5;
+    }
+    .concept ul li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--faint);
+      font-size: 0.72rem;
+      top: 0.15em;
+    }
+
+    .code-block {
+      background: #001F35;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+      font-family: 'Courier New', monospace;
+    }
+    .code-bar {
+      background: #0A2A45;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.4);
+    }
+    .code-bar .cb-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .code-body {
+      padding: 1.1rem 1.25rem;
+      font-size: 0.82rem;
+      line-height: 1.85;
+      color: rgba(255,255,255,0.85);
+    }
+    .code-body .ck { color: #7dd3fc; }
+    .code-body .cs { color: #86efac; }
+    .code-body .cn { color: #fde68a; }
+    .code-body .cc { color: rgba(255,255,255,0.35); }
+    .code-body .cp { color: #c4b5fd; }
+    .code-body .cr { color: #fca5a5; }
+    .code-body .ci { color: #f0abfc; }
+
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.25rem;
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .compare-table th {
+      background: #E6E9EC;
+      color: var(--indigo);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0.6rem 1rem;
+      text-align: left;
+    }
+    .compare-table td {
+      padding: 0.55rem 1rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+    .compare-table td:first-child {
+      font-family: 'Courier New', monospace;
+      font-weight: 700;
+      color: var(--blue);
+    }
+    .compare-table .yes { color: var(--green); font-weight: 700; }
+    .compare-table .no  { color: var(--red); font-weight: 700; }
+
+    .callout {
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      font-size: 0.85rem;
+      display: flex;
+      gap: 0.6rem;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      line-height: 1.55;
+    }
+    .callout .ci { font-size: 1rem; min-width: 1.2rem; flex-shrink: 0; }
+    .callout-blue  { background: #f0f7fc; border: 1px solid #B0D4E9; color: var(--muted); }
+    .callout-amber { background: #FFF8E6; border: 1px solid #F0D890; color: #664A00; }
+    .callout-red   { background: #F2E8EA; border: 1px solid #E0B5B9; color: #8B001E; }
+    .callout strong { color: var(--text); }
+    .callout-amber strong { color: #664A00; }
+    .callout-red strong { color: #8B001E; }
+
+    .takeaway {
+      background: #F0F7EC;
+      border: 1px solid #B5DBA7;
+      border-radius: 12px;
+      padding: 1.1rem 1.3rem;
+      margin-top: 1.25rem;
+    }
+    .takeaway h4 {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #2A4D14;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 0.6rem;
+    }
+    .takeaway ul { list-style: none; display: flex; flex-direction: column; gap: 0.35rem; }
+    .takeaway ul li {
+      font-size: 0.85rem;
+      color: #3B5A22;
+      padding-left: 1.1rem;
+      position: relative;
+      line-height: 1.55;
+    }
+    .takeaway ul li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--green);
+      font-weight: 700;
+      font-size: 0.9rem;
+      top: 0;
+    }
+
+    .exercise {
+      background: var(--surf);
+      border: 2px dashed var(--border);
+      border-radius: 14px;
+      padding: 1.4rem 1.6rem;
+      margin-bottom: 1.1rem;
+    }
+    .exercise h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+    .exercise h4 .badge {
+      display: inline-block;
+      background: #E6F0F8;
+      color: var(--blue);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.15rem 0.55rem;
+      border-radius: 100px;
+      margin-right: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      vertical-align: middle;
+    }
+    .exercise p { font-size: 0.88rem; color: var(--muted); margin-bottom: 0.7rem; line-height: 1.6; }
+
+    .summary {
+      background: linear-gradient(135deg, var(--indigo) 0%, #000D19 100%);
+      color: white;
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin: 3rem 0;
+      text-align: center;
+    }
+    .summary h2 {
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 400;
+      margin-bottom: 0.4rem;
+    }
+    .summary p { font-size: 0.9rem; opacity: 0.75; margin-bottom: 1.75rem; }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.9rem;
+    }
+    .su-card {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 12px;
+      padding: 1.1rem;
+      text-align: left;
+    }
+    .su-card h4 { font-size: 0.88rem; font-weight: 700; margin-bottom: 0.4rem; opacity: 0.9; }
+    .su-card p  { font-size: 0.78rem; opacity: 0.65; line-height: 1.5; margin-bottom: 0; }
+
+    .footer {
+      background: var(--surf);
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--faint);
+    }
+    .footer strong { color: var(--muted); }
+
+    @media (max-width: 720px) {
+      .hero { padding: 2.5rem 1rem 1.75rem !important; }
+      .hero h1 { font-size: clamp(1.7rem, 7vw, 2.2rem) !important; }
+      .container { padding: 0 1rem 4rem !important; }
+      .toc-grid { grid-template-columns: 1fr !important; }
+      .concepts-2, .concepts-3, .summary-grid { grid-template-columns: 1fr !important; }
+      .section-title { font-size: 1.5rem !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <img src="../assets/SELISE_Logo_Primary.png" alt="SELISE Digital Platforms" style="height: 48px; margin-bottom: 1rem; display: block;">
+  <div class="hero-badge">
+    <div class="dot"></div>
+    Pelsung · Dev Specialization · Class 03
+  </div>
+  <h1>
+    <span class="c-blue">JavaScript</span> <span class="c-indigo">Fundamentals II</span>
+  </h1>
+  <p class="hero-sub">Objects, arrays, destructuring, and optional chaining — the tools you'll use every day for real-world data.</p>
+  <div class="hero-tags">
+    <span class="hero-tag tag-blue">Objects</span>
+    <span class="hero-tag tag-indigo">Arrays</span>
+    <span class="hero-tag tag-amber">Array Methods</span>
+    <span class="hero-tag tag-purple">Destructuring</span>
+    <span class="hero-tag tag-green">Optional Chaining</span>
+  </div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div class="container">
+
+  <!-- ===== TOC ===== -->
+  <div class="toc">
+    <h3>What's In These Notes</h3>
+    <div class="toc-grid">
+      <a class="toc-item" href="#objects">
+        <span class="toc-dot" style="background:var(--blue)"></span>
+        📦 Objects — properties, methods, JSON
+      </a>
+      <a class="toc-item" href="#arrays">
+        <span class="toc-dot" style="background:var(--indigo)"></span>
+        📋 Arrays — indexing, push/pop
+      </a>
+      <a class="toc-item" href="#array-methods">
+        <span class="toc-dot" style="background:var(--amber)"></span>
+        🔁 Array methods — map, filter, reduce
+      </a>
+      <a class="toc-item" href="#sort-slice">
+        <span class="toc-dot" style="background:var(--amber)"></span>
+        📊 Sort, slice, splice
+      </a>
+      <a class="toc-item" href="#destructuring">
+        <span class="toc-dot" style="background:var(--purple)"></span>
+        🎁 Destructuring
+      </a>
+      <a class="toc-item" href="#optional">
+        <span class="toc-dot" style="background:var(--green)"></span>
+        🛡️ Optional chaining
+      </a>
+      <a class="toc-item" href="#practice">
+        <span class="toc-dot" style="background:var(--green)"></span>
+        💻 Practice exercises
+      </a>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 1: OBJECTS
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd">
+    <div class="section-pill pill-blue">Section 01</div>
+    <h2 class="section-title">Objects — grouping related data</h2>
+    <p class="section-desc">Objects let you bundle many pieces of information about one thing into a single container.</p>
+  </div>
+
+  <div class="topic topic-blue" id="objects">
+    <div class="topic-title">📦 What is an object?</div>
+
+    <p class="explain">
+      An <strong>object</strong> is a collection of <strong>key–value pairs</strong>. Think of it like a labelled box with many compartments — each compartment has a name (the key) and holds a value.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar">
+        <span class="cb-dot" style="background:#FF5F57"></span>
+        <span class="cb-dot" style="background:#FEBC2E"></span>
+        <span class="cb-dot" style="background:#28C840"></span>
+        object-basics.js
+      </div>
+      <div class="code-body">
+        <span class="cc">// An object with four properties</span><br>
+        <span class="ck">const</span> trainee = {<br>
+        &nbsp;&nbsp;name: <span class="cs">"Karma"</span>,<br>
+        &nbsp;&nbsp;age: <span class="cn">24</span>,<br>
+        &nbsp;&nbsp;vertical: <span class="cs">"Dev"</span>,<br>
+        &nbsp;&nbsp;isActive: <span class="ck">true</span><br>
+        };
+      </div>
+    </div>
+
+    <p class="explain" style="font-weight:600;color:var(--text)">Vocabulary</p>
+
+    <div class="concepts concepts-3">
+      <div class="concept">
+        <h4 style="color:var(--blue)">Key</h4>
+        <ul>
+          <li>The label you use to find the value</li>
+          <li>e.g. <code>name</code>, <code>age</code></li>
+          <li>Must be unique within the object</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4 style="color:var(--blue)">Value</h4>
+        <ul>
+          <li>What's stored under that key</li>
+          <li>Can be any type: string, number, boolean, array, another object, even a function</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4 style="color:var(--blue)">Property</h4>
+        <ul>
+          <li>A key + value pair together</li>
+          <li><code>name: "Karma"</code> is one property</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic topic-blue">
+    <div class="topic-title">🎯 Accessing properties</div>
+
+    <p class="explain">
+      There are two ways to read a value from an object: <strong>dot notation</strong> and <strong>bracket notation</strong>. Most of the time you'll use dot notation — it's cleaner.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar">
+        <span class="cb-dot" style="background:#FF5F57"></span>
+        <span class="cb-dot" style="background:#FEBC2E"></span>
+        <span class="cb-dot" style="background:#28C840"></span>
+        accessing.js
+      </div>
+      <div class="code-body">
+        <span class="ck">const</span> trainee = { name: <span class="cs">"Karma"</span>, age: <span class="cn">24</span> };<br><br>
+        <span class="cc">// Dot notation — most common</span><br>
+        console.log(trainee.name); <span class="cc">// "Karma"</span><br>
+        console.log(trainee.age); &nbsp;<span class="cc">// 24</span><br><br>
+        <span class="cc">// Bracket notation — useful when the key is a variable</span><br>
+        <span class="ck">const</span> key = <span class="cs">"name"</span>;<br>
+        console.log(trainee[key]); <span class="cc">// "Karma"</span><br><br>
+        <span class="cc">// Also needed if the key has special characters</span><br>
+        <span class="ck">const</span> settings = { <span class="cs">"dark-mode"</span>: <span class="ck">true</span> };<br>
+        console.log(settings[<span class="cs">"dark-mode"</span>]); <span class="cc">// true</span>
+      </div>
+    </div>
+
+    <div class="callout callout-blue">
+      <span class="ci">💡</span>
+      <span><strong>Rule of thumb:</strong> Use dot notation by default. Reach for bracket notation only when the key is stored in a variable or contains special characters like spaces or dashes.</span>
+    </div>
+  </div>
+
+  <div class="topic topic-blue">
+    <div class="topic-title">✏️ Adding, updating, deleting</div>
+
+    <p class="explain">
+      Objects are flexible. You can add new properties after creation, update existing ones, or remove them entirely — even if the variable is declared with <code>const</code>.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar">
+        <span class="cb-dot" style="background:#FF5F57"></span>
+        <span class="cb-dot" style="background:#FEBC2E"></span>
+        <span class="cb-dot" style="background:#28C840"></span>
+        modify.js
+      </div>
+      <div class="code-body">
+        <span class="ck">const</span> trainee = { name: <span class="cs">"Karma"</span>, age: <span class="cn">24</span> };<br><br>
+        <span class="cc">// Add</span><br>
+        trainee.vertical = <span class="cs">"Dev"</span>;<br><br>
+        <span class="cc">// Update</span><br>
+        trainee.age = <span class="cn">25</span>;<br><br>
+        <span class="cc">// Delete</span><br>
+        <span class="ck">delete</span> trainee.age;<br><br>
+        console.log(trainee);<br>
+        <span class="cc">// { name: "Karma", vertical: "Dev" }</span>
+      </div>
+    </div>
+
+    <div class="callout callout-amber">
+      <span class="ci">⚠️</span>
+      <span><strong>Why does <code>const</code> still let us change the object?</strong> <code>const</code> locks the <em>variable</em> (so you can't point it at a different object) but not the <em>contents</em>. The object itself is mutable.</span>
+    </div>
+  </div>
+
+  <div class="topic topic-blue">
+    <div class="topic-title">⚙️ Methods — functions as values</div>
+
+    <p class="explain">
+      When a property's value is a function, we call it a <strong>method</strong>. Methods let objects <em>do</em> things, not just hold data.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar">
+        <span class="cb-dot" style="background:#FF5F57"></span>
+        <span class="cb-dot" style="background:#FEBC2E"></span>
+        <span class="cb-dot" style="background:#28C840"></span>
+        methods.js
+      </div>
+      <div class="code-body">
+        <span class="ck">const</span> trainee = {<br>
+        &nbsp;&nbsp;name: <span class="cs">"Karma"</span>,<br>
+        &nbsp;&nbsp;<span class="cp">introduce</span>() {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="ck">return</span> <span class="cs">`Hi, I'm ${</span>this.name<span class="cs">}`</span>;<br>
+        &nbsp;&nbsp;}<br>
+        };<br><br>
+        console.log(trainee.introduce()); <span class="cc">// "Hi, I'm Karma"</span>
+      </div>
+    </div>
+
+    <p class="explain">
+      Inside a method, the word <code>this</code> refers to the object the method belongs to — so <code>this.name</code> means "the <code>name</code> of this trainee." We'll go deeper into <code>this</code> in later classes.
+    </p>
+  </div>
+
+  <div class="topic topic-blue">
+    <div class="topic-title">🪆 Nested objects</div>
+
+    <p class="explain">
+      A value inside an object can itself be another object. This is how real data is shaped — a user has an address, which has a city, which has a district, and so on.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar">
+        <span class="cb-dot" style="background:#FF5F57"></span>
+        <span class="cb-dot" style="background:#FEBC2E"></span>
+        <span class="cb-dot" style="background:#28C840"></span>
+        nested.js
+      </div>
+      <div class="code-body">
+        <span class="ck">const</span> trainee = {<br>
+        &nbsp;&nbsp;name: <span class="cs">"Karma"</span>,<br>
+        &nbsp;&nbsp;address: {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;city: <span class="cs">"Thimphu"</span>,<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;country: <span class="cs">"Bhutan"</span><br>
+        &nbsp;&nbsp;}<br>
+        };<br><br>
+        console.log(trainee.address.city); <span class="cc">// "Thimphu"</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic topic-blue">
+    <div class="topic-title">🌐 JSON — data from the backend</div>
+
+    <p class="explain">
+      Most of the time, you won't write objects by hand. You'll <strong>fetch</strong> them from a server — a backend API. The server sends data as <strong>JSON</strong> (JavaScript Object Notation), which is just text that looks like a JS object.
+    </p>
+
+    <p class="explain">
+      When your code receives a JSON response, JavaScript automatically turns it into a regular object, and you read it the same way you've been reading any other object.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar">
+        <span class="cb-dot" style="background:#FF5F57"></span>
+        <span class="cb-dot" style="background:#FEBC2E"></span>
+        <span class="cb-dot" style="background:#28C840"></span>
+        api-response.json
+      </div>
+      <div class="code-body">
+        <span class="cc">// What the server sends when you call GET /api/trainees/42</span><br>
+        {<br>
+        &nbsp;&nbsp;<span class="ci">"id"</span>: <span class="cn">42</span>,<br>
+        &nbsp;&nbsp;<span class="ci">"name"</span>: <span class="cs">"Karma Dorji"</span>,<br>
+        &nbsp;&nbsp;<span class="ci">"vertical"</span>: <span class="cs">"Dev"</span>,<br>
+        &nbsp;&nbsp;<span class="ci">"isActive"</span>: <span class="ck">true</span>,<br>
+        &nbsp;&nbsp;<span class="ci">"contact"</span>: {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="ci">"email"</span>: <span class="cs">"karma@example.com"</span>,<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="ci">"phone"</span>: <span class="cs">"+975-17-000000"</span><br>
+        &nbsp;&nbsp;},<br>
+        &nbsp;&nbsp;<span class="ci">"skills"</span>: [<span class="cs">"HTML"</span>, <span class="cs">"CSS"</span>, <span class="cs">"JS"</span>]<br>
+        }
+      </div>
+    </div>
+
+    <div class="callout callout-blue">
+      <span class="ci">🔑</span>
+      <span><strong>Key insight:</strong> JSON keys are always wrapped in double quotes — that's the main visual difference from JS object literals. Once parsed into JavaScript, it's just an object: <code>trainee.contact.email</code>, <code>trainee.skills[0]</code>, etc.</span>
+    </div>
+
+    <div class="takeaway">
+      <h4>Objects — takeaways</h4>
+      <ul>
+        <li>Objects group related data as key–value pairs</li>
+        <li>Access values with dot notation (<code>user.name</code>) — fallback to bracket for dynamic keys</li>
+        <li>You can add, update, and delete properties even on a <code>const</code> object</li>
+        <li>Functions stored as values are called methods; <code>this</code> refers to the object</li>
+        <li>Most real-world data comes from APIs as JSON — it's just objects under the hood</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 2: ARRAYS
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd">
+    <div class="section-pill pill-indigo">Section 02</div>
+    <h2 class="section-title">Arrays — ordered lists</h2>
+    <p class="section-desc">When you have many of the same kind of thing (a list of trainees, scores, tasks), use an array.</p>
+  </div>
+
+  <div class="topic topic-indigo" id="arrays">
+    <div class="topic-title">📋 What is an array?</div>
+
+    <p class="explain">
+      An <strong>array</strong> is an ordered, numbered list. Each item has a position called an <strong>index</strong>, starting at <code>0</code>.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar">
+        <span class="cb-dot" style="background:#FF5F57"></span>
+        <span class="cb-dot" style="background:#FEBC2E"></span>
+        <span class="cb-dot" style="background:#28C840"></span>
+        arrays.js
+      </div>
+      <div class="code-body">
+        <span class="ck">const</span> fruits = [<span class="cs">"apple"</span>, <span class="cs">"banana"</span>, <span class="cs">"mango"</span>];<br>
+        <span class="cc">//                ↑ 0        ↑ 1        ↑ 2</span><br><br>
+        console.log(fruits[<span class="cn">0</span>]);     <span class="cc">// "apple"</span><br>
+        console.log(fruits[<span class="cn">2</span>]);     <span class="cc">// "mango"</span><br>
+        console.log(fruits.length); <span class="cc">// 3</span><br><br>
+        <span class="cc">// Arrays can hold any type, including mixed</span><br>
+        <span class="ck">const</span> mixed = [<span class="cn">1</span>, <span class="cs">"hello"</span>, <span class="ck">true</span>, { name: <span class="cs">"Karma"</span> }];
+      </div>
+    </div>
+
+    <div class="callout callout-blue">
+      <span class="ci">📌</span>
+      <span><strong>Zero-based indexing.</strong> The first item is at index 0, not 1. The last item is at index <code>length - 1</code>. This catches beginners out — always count from zero.</span>
+    </div>
+  </div>
+
+  <div class="topic topic-indigo">
+    <div class="topic-title">➕ Adding & removing</div>
+
+    <p class="explain">
+      Four methods handle adding and removing items at the ends of an array. They all <strong>modify the original</strong> array in place.
+    </p>
+
+    <table class="compare-table">
+      <thead>
+        <tr><th>Method</th><th>Where</th><th>What it does</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>push(item)</td><td>End</td><td>Adds an item to the end</td></tr>
+        <tr><td>pop()</td><td>End</td><td>Removes the last item and returns it</td></tr>
+        <tr><td>unshift(item)</td><td>Start</td><td>Adds an item to the beginning</td></tr>
+        <tr><td>shift()</td><td>Start</td><td>Removes the first item and returns it</td></tr>
+      </tbody>
+    </table>
+
+    <div class="code-block">
+      <div class="code-bar">
+        <span class="cb-dot" style="background:#FF5F57"></span>
+        <span class="cb-dot" style="background:#FEBC2E"></span>
+        <span class="cb-dot" style="background:#28C840"></span>
+        add-remove.js
+      </div>
+      <div class="code-body">
+        <span class="ck">const</span> fruits = [<span class="cs">"apple"</span>, <span class="cs">"banana"</span>];<br><br>
+        fruits.push(<span class="cs">"mango"</span>);    <span class="cc">// ["apple", "banana", "mango"]</span><br>
+        fruits.pop();             <span class="cc">// returns "mango" — array: ["apple", "banana"]</span><br>
+        fruits.unshift(<span class="cs">"kiwi"</span>);  <span class="cc">// ["kiwi", "apple", "banana"]</span><br>
+        fruits.shift();           <span class="cc">// returns "kiwi" — array: ["apple", "banana"]</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic topic-indigo">
+    <div class="topic-title">🔍 Searching</div>
+
+    <p class="explain">
+      When you need to check if a value exists, find its position, or locate the first item matching some rule, use one of these methods.
+    </p>
+
+    <table class="compare-table">
+      <thead>
+        <tr><th>Method</th><th>Returns</th><th>Use case</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>includes(item)</td><td><code>true</code> or <code>false</code></td><td>"Does this array contain X?"</td></tr>
+        <tr><td>indexOf(item)</td><td>Index (or -1)</td><td>"At what position is X?"</td></tr>
+        <tr><td>find(fn)</td><td>First matching item (or undefined)</td><td>"Give me the first trainee where X"</td></tr>
+        <tr><td>findIndex(fn)</td><td>Index of first match (or -1)</td><td>Same, but I want the position</td></tr>
+      </tbody>
+    </table>
+
+    <div class="code-block">
+      <div class="code-bar">
+        <span class="cb-dot" style="background:#FF5F57"></span>
+        <span class="cb-dot" style="background:#FEBC2E"></span>
+        <span class="cb-dot" style="background:#28C840"></span>
+        searching.js
+      </div>
+      <div class="code-body">
+        [<span class="cn">1</span>, <span class="cn">2</span>, <span class="cn">3</span>].includes(<span class="cn">2</span>);    <span class="cc">// true</span><br>
+        [<span class="cs">"a"</span>, <span class="cs">"b"</span>, <span class="cs">"c"</span>].indexOf(<span class="cs">"b"</span>); <span class="cc">// 1</span><br>
+        [<span class="cs">"a"</span>, <span class="cs">"b"</span>].indexOf(<span class="cs">"z"</span>);       <span class="cc">// -1 (not found)</span><br><br>
+        <span class="ck">const</span> trainees = [<br>
+        &nbsp;&nbsp;{ name: <span class="cs">"Karma"</span>, score: <span class="cn">82</span> },<br>
+        &nbsp;&nbsp;{ name: <span class="cs">"Sonam"</span>, score: <span class="cn">91</span> }<br>
+        ];<br>
+        trainees.find(t =&gt; t.score &gt; <span class="cn">85</span>);<br>
+        <span class="cc">// { name: "Sonam", score: 91 }</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 3: ARRAY ITERATION METHODS
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd">
+    <div class="section-pill pill-amber">Section 03</div>
+    <h2 class="section-title">Array iteration — map, filter, reduce</h2>
+    <p class="section-desc">These three methods are the heart of modern JavaScript. Learn them well — you'll use them every day.</p>
+  </div>
+
+  <div class="topic topic-amber" id="array-methods">
+    <div class="topic-title">👟 forEach — do something with each item</div>
+
+    <p class="explain">
+      <code>forEach</code> runs a function once for every item in the array. It does not return anything. Use it when you want to <strong>do</strong> something (log, send, print) for each item.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar">
+        <span class="cb-dot" style="background:#FF5F57"></span>
+        <span class="cb-dot" style="background:#FEBC2E"></span>
+        <span class="cb-dot" style="background:#28C840"></span>
+        forEach.js
+      </div>
+      <div class="code-body">
+        <span class="ck">const</span> names = [<span class="cs">"Karma"</span>, <span class="cs">"Sonam"</span>, <span class="cs">"Tshering"</span>];<br><br>
+        names.forEach(name =&gt; {<br>
+        &nbsp;&nbsp;console.log(<span class="cs">`Hello ${</span>name<span class="cs">}!`</span>);<br>
+        });<br>
+        <span class="cc">// Hello Karma! / Hello Sonam! / Hello Tshering!</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic topic-amber">
+    <div class="topic-title">🔄 map — transform every item</div>
+
+    <p class="explain">
+      <code>map</code> produces a <strong>new array</strong> of the same length, where each item is transformed by your function. The original array is not changed.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar">
+        <span class="cb-dot" style="background:#FF5F57"></span>
+        <span class="cb-dot" style="background:#FEBC2E"></span>
+        <span class="cb-dot" style="background:#28C840"></span>
+        map.js
+      </div>
+      <div class="code-body">
+        <span class="ck">const</span> scores = [<span class="cn">82</span>, <span class="cn">91</span>, <span class="cn">74</span>];<br><br>
+        <span class="cc">// Transform numbers</span><br>
+        <span class="ck">const</span> doubled = scores.map(s =&gt; s * <span class="cn">2</span>);<br>
+        <span class="cc">// [164, 182, 148]</span><br><br>
+        <span class="cc">// Extract one field from each object</span><br>
+        <span class="ck">const</span> trainees = [{ name: <span class="cs">"Karma"</span> }, { name: <span class="cs">"Sonam"</span> }];<br>
+        <span class="ck">const</span> names = trainees.map(t =&gt; t.name);<br>
+        <span class="cc">// ["Karma", "Sonam"]</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic topic-amber">
+    <div class="topic-title">🔍 filter — keep only what matches</div>
+
+    <p class="explain">
+      <code>filter</code> produces a <strong>new array</strong> containing only the items where your function returns <code>true</code>. The result may be shorter than the original.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar">
+        <span class="cb-dot" style="background:#FF5F57"></span>
+        <span class="cb-dot" style="background:#FEBC2E"></span>
+        <span class="cb-dot" style="background:#28C840"></span>
+        filter.js
+      </div>
+      <div class="code-body">
+        <span class="ck">const</span> scores = [<span class="cn">82</span>, <span class="cn">41</span>, <span class="cn">91</span>, <span class="cn">55</span>, <span class="cn">74</span>];<br><br>
+        <span class="ck">const</span> passing = scores.filter(s =&gt; s &gt;= <span class="cn">60</span>);<br>
+        <span class="cc">// [82, 91, 74]</span><br><br>
+        <span class="ck">const</span> trainees = [<br>
+        &nbsp;&nbsp;{ name: <span class="cs">"Karma"</span>, vertical: <span class="cs">"Dev"</span> },<br>
+        &nbsp;&nbsp;{ name: <span class="cs">"Sonam"</span>, vertical: <span class="cs">"QA"</span> }<br>
+        ];<br>
+        <span class="ck">const</span> devs = trainees.filter(t =&gt; t.vertical === <span class="cs">"Dev"</span>);
+      </div>
+    </div>
+  </div>
+
+  <div class="topic topic-amber">
+    <div class="topic-title">📉 reduce — combine all items into one value</div>
+
+    <p class="explain">
+      <code>reduce</code> "rolls up" an array into a single value — a sum, an average, a combined string, a count, etc. It takes two things: a function and a starting value.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar">
+        <span class="cb-dot" style="background:#FF5F57"></span>
+        <span class="cb-dot" style="background:#FEBC2E"></span>
+        <span class="cb-dot" style="background:#28C840"></span>
+        reduce.js
+      </div>
+      <div class="code-body">
+        <span class="ck">const</span> scores = [<span class="cn">82</span>, <span class="cn">91</span>, <span class="cn">74</span>];<br><br>
+        <span class="ck">const</span> total = scores.reduce((sum, s) =&gt; sum + s, <span class="cn">0</span>);<br>
+        <span class="cc">//                                             ↑ starting value</span><br>
+        <span class="cc">// Iteration 1: sum=0,  s=82 → returns 82</span><br>
+        <span class="cc">// Iteration 2: sum=82, s=91 → returns 173</span><br>
+        <span class="cc">// Iteration 3: sum=173, s=74 → returns 247</span><br>
+        <span class="cc">// total = 247</span>
+      </div>
+    </div>
+
+    <div class="callout callout-blue">
+      <span class="ci">💡</span>
+      <span><strong>Getting comfortable with reduce takes practice.</strong> Just remember: the first parameter (<code>sum</code>) is the "running total so far." Whatever you <code>return</code> becomes the next iteration's running total.</span>
+    </div>
+  </div>
+
+  <div class="topic topic-amber" id="sort-slice">
+    <div class="topic-title">📊 sort — reorder items</div>
+
+    <p class="explain">
+      <code>sort</code> reorders the array. For strings it works out of the box. For numbers there's a famous gotcha — you must pass a <strong>comparator function</strong>.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar">
+        <span class="cb-dot" style="background:#FF5F57"></span>
+        <span class="cb-dot" style="background:#FEBC2E"></span>
+        <span class="cb-dot" style="background:#28C840"></span>
+        sort.js
+      </div>
+      <div class="code-body">
+        <span class="cc">// Strings — works alphabetically</span><br>
+        [<span class="cs">"Sonam"</span>, <span class="cs">"Karma"</span>, <span class="cs">"Tshering"</span>].sort();<br>
+        <span class="cc">// ["Karma", "Sonam", "Tshering"]</span><br><br>
+        <span class="cc">// Numbers — default sort is wrong!</span><br>
+        [<span class="cn">10</span>, <span class="cn">2</span>, <span class="cn">30</span>, <span class="cn">4</span>].sort();<br>
+        <span class="cc">// [10, 2, 30, 4] ← sorted as strings: "10" &lt; "2" &lt; "30" &lt; "4"</span><br><br>
+        <span class="cc">// Fix: pass a comparator</span><br>
+        [<span class="cn">10</span>, <span class="cn">2</span>, <span class="cn">30</span>, <span class="cn">4</span>].sort((a, b) =&gt; a - b);<br>
+        <span class="cc">// [2, 4, 10, 30] ✓</span>
+      </div>
+    </div>
+
+    <div class="callout callout-red">
+      <span class="ci">⚠️</span>
+      <span><strong>Two things to know.</strong> First, <code>sort()</code> modifies the <em>original</em> array (unlike <code>map</code>/<code>filter</code>). Second, always pass <code>(a, b) =&gt; a - b</code> for numbers — otherwise they get sorted alphabetically.</span>
+    </div>
+  </div>
+
+  <div class="topic topic-amber">
+    <div class="topic-title">✂️ slice vs splice</div>
+
+    <p class="explain">
+      Two methods with almost the same name, but very different behavior.
+    </p>
+
+    <table class="compare-table">
+      <thead>
+        <tr><th>Method</th><th>What it does</th><th>Modifies original?</th><th>Returns</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>slice(start, end)</td><td>Makes a copy of a section</td><td><span class="no">No</span></td><td>New array</td></tr>
+        <tr><td>splice(start, count)</td><td>Removes items (can also insert)</td><td><span class="yes">Yes</span></td><td>Array of removed items</td></tr>
+      </tbody>
+    </table>
+
+    <div class="code-block">
+      <div class="code-bar">
+        <span class="cb-dot" style="background:#FF5F57"></span>
+        <span class="cb-dot" style="background:#FEBC2E"></span>
+        <span class="cb-dot" style="background:#28C840"></span>
+        slice-splice.js
+      </div>
+      <div class="code-body">
+        <span class="ck">const</span> nums = [<span class="cn">1</span>, <span class="cn">2</span>, <span class="cn">3</span>, <span class="cn">4</span>, <span class="cn">5</span>];<br><br>
+        nums.slice(<span class="cn">1</span>, <span class="cn">3</span>);  <span class="cc">// [2, 3] — nums unchanged</span><br>
+        nums.splice(<span class="cn">1</span>, <span class="cn">2</span>); <span class="cc">// removes [2,3] — nums is now [1, 4, 5]</span>
+      </div>
+    </div>
+
+    <div class="takeaway">
+      <h4>Arrays — takeaways</h4>
+      <ul>
+        <li>Indexes start at 0; <code>arr.length</code> tells you how many items</li>
+        <li><code>push</code>/<code>pop</code> add/remove at the end; <code>unshift</code>/<code>shift</code> at the start</li>
+        <li><code>map</code> transforms, <code>filter</code> selects, <code>reduce</code> combines — these are the workhorses</li>
+        <li><code>find</code> returns the first match; <code>filter</code> returns all matches</li>
+        <li><code>sort</code> modifies the original — always pass a comparator for numbers</li>
+        <li><code>slice</code> is safe (returns a copy); <code>splice</code> changes the original</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 4: DESTRUCTURING
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd">
+    <div class="section-pill pill-purple">Section 04</div>
+    <h2 class="section-title">Destructuring — unpack values cleanly</h2>
+    <p class="section-desc">A short syntax for pulling values out of objects and arrays. Makes code much easier to read.</p>
+  </div>
+
+  <div class="topic topic-purple" id="destructuring">
+    <div class="topic-title">📦 Object destructuring</div>
+
+    <p class="explain">
+      Instead of writing the same object name over and over to pull out its properties, destructuring lets you do it in one line.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar">
+        <span class="cb-dot" style="background:#FF5F57"></span>
+        <span class="cb-dot" style="background:#FEBC2E"></span>
+        <span class="cb-dot" style="background:#28C840"></span>
+        object-destructure.js
+      </div>
+      <div class="code-body">
+        <span class="ck">const</span> trainee = { name: <span class="cs">"Karma"</span>, age: <span class="cn">24</span>, vertical: <span class="cs">"Dev"</span> };<br><br>
+        <span class="cc">// Old way</span><br>
+        <span class="ck">const</span> name = trainee.name;<br>
+        <span class="ck">const</span> age = trainee.age;<br><br>
+        <span class="cc">// Destructured</span><br>
+        <span class="ck">const</span> { name, age, vertical } = trainee;<br>
+        console.log(name);     <span class="cc">// "Karma"</span><br>
+        console.log(vertical); <span class="cc">// "Dev"</span>
+      </div>
+    </div>
+
+    <p class="explain" style="font-weight:600;color:var(--text);margin-top:0.5rem">Rename and default values</p>
+
+    <div class="code-block">
+      <div class="code-bar">
+        <span class="cb-dot" style="background:#FF5F57"></span>
+        <span class="cb-dot" style="background:#FEBC2E"></span>
+        <span class="cb-dot" style="background:#28C840"></span>
+        rename-defaults.js
+      </div>
+      <div class="code-body">
+        <span class="ck">const</span> trainee = { name: <span class="cs">"Karma"</span>, age: <span class="cn">24</span> };<br><br>
+        <span class="cc">// Rename as you destructure</span><br>
+        <span class="ck">const</span> { name: traineeName } = trainee;<br>
+        console.log(traineeName); <span class="cc">// "Karma"</span><br><br>
+        <span class="cc">// Default — used only if the key is missing</span><br>
+        <span class="ck">const</span> { city = <span class="cs">"Thimphu"</span> } = trainee;<br>
+        console.log(city); <span class="cc">// "Thimphu" (trainee has no city)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic topic-purple">
+    <div class="topic-title">🪆 Nested destructuring</div>
+
+    <p class="explain">
+      You can reach into nested objects the same way they were built. This is particularly handy with API responses.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar">
+        <span class="cb-dot" style="background:#FF5F57"></span>
+        <span class="cb-dot" style="background:#FEBC2E"></span>
+        <span class="cb-dot" style="background:#28C840"></span>
+        nested-destructure.js
+      </div>
+      <div class="code-body">
+        <span class="ck">const</span> trainee = {<br>
+        &nbsp;&nbsp;name: <span class="cs">"Karma"</span>,<br>
+        &nbsp;&nbsp;contact: { email: <span class="cs">"karma@x.com"</span>, phone: <span class="cs">"1234"</span> }<br>
+        };<br><br>
+        <span class="ck">const</span> { contact: { email } } = trainee;<br>
+        console.log(email); <span class="cc">// "karma@x.com"</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic topic-purple">
+    <div class="topic-title">📋 Array destructuring</div>
+
+    <p class="explain">
+      Arrays are destructured by <strong>position</strong>, not name. You list variable names in brackets, and they grab the items in order.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar">
+        <span class="cb-dot" style="background:#FF5F57"></span>
+        <span class="cb-dot" style="background:#FEBC2E"></span>
+        <span class="cb-dot" style="background:#28C840"></span>
+        array-destructure.js
+      </div>
+      <div class="code-body">
+        <span class="ck">const</span> colors = [<span class="cs">"red"</span>, <span class="cs">"green"</span>, <span class="cs">"blue"</span>];<br><br>
+        <span class="cc">// Basic</span><br>
+        <span class="ck">const</span> [first, second] = colors;<br>
+        console.log(first);  <span class="cc">// "red"</span><br>
+        console.log(second); <span class="cc">// "green"</span><br><br>
+        <span class="cc">// Skip items using commas</span><br>
+        <span class="ck">const</span> [, , third] = colors;<br>
+        console.log(third); <span class="cc">// "blue"</span><br><br>
+        <span class="cc">// "Rest" — collect remaining items</span><br>
+        <span class="ck">const</span> [head, ...tail] = colors;<br>
+        <span class="cc">// head = "red", tail = ["green", "blue"]</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic topic-purple">
+    <div class="topic-title">📤 Spread <code>...</code> — copy & combine</div>
+
+    <p class="explain">
+      The same three dots used for "rest" can also be used to <strong>spread</strong> values out — copying arrays, merging objects, or passing list items as function arguments.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar">
+        <span class="cb-dot" style="background:#FF5F57"></span>
+        <span class="cb-dot" style="background:#FEBC2E"></span>
+        <span class="cb-dot" style="background:#28C840"></span>
+        spread.js
+      </div>
+      <div class="code-body">
+        <span class="cc">// Copy & extend an array</span><br>
+        <span class="ck">const</span> colors = [<span class="cs">"red"</span>, <span class="cs">"green"</span>];<br>
+        <span class="ck">const</span> extended = [...colors, <span class="cs">"blue"</span>];<br>
+        <span class="cc">// ["red", "green", "blue"]</span><br><br>
+        <span class="cc">// Merge objects — later keys overwrite earlier ones</span><br>
+        <span class="ck">const</span> base = { name: <span class="cs">"Karma"</span>, age: <span class="cn">24</span> };<br>
+        <span class="ck">const</span> updated = { ...base, age: <span class="cn">25</span> };<br>
+        <span class="cc">// { name: "Karma", age: 25 }</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 5: OPTIONAL CHAINING
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd">
+    <div class="section-pill pill-green">Section 05</div>
+    <h2 class="section-title">Optional chaining — safe property access</h2>
+    <p class="section-desc">How to read deep into an object without crashing when part of the path is missing.</p>
+  </div>
+
+  <div class="topic topic-green" id="optional">
+    <div class="topic-title">🛡️ The <code>?.</code> operator</div>
+
+    <p class="explain">
+      Real data from APIs is often incomplete. A user might not have filled in their address; a response might skip optional fields. Normal property access crashes when something in the chain is <code>undefined</code> or <code>null</code>. Optional chaining (<code>?.</code>) is a safety net.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar">
+        <span class="cb-dot" style="background:#FF5F57"></span>
+        <span class="cb-dot" style="background:#FEBC2E"></span>
+        <span class="cb-dot" style="background:#28C840"></span>
+        optional-chaining.js
+      </div>
+      <div class="code-body">
+        <span class="ck">const</span> trainee = { name: <span class="cs">"Karma"</span> };<br>
+        <span class="cc">// Notice: no "contact" field</span><br><br>
+        <span class="cc">// ❌ Without optional chaining — crashes</span><br>
+        console.log(trainee.contact.email);<br>
+        <span class="cr">// TypeError: Cannot read properties of undefined (reading 'email')</span><br><br>
+        <span class="cc">// ✓ With optional chaining — safe</span><br>
+        console.log(trainee.contact<span style="color:#f0abfc;">?.</span>email);<br>
+        <span class="cc">// undefined (no crash — just "nothing there")</span><br><br>
+        <span class="cc">// Combine with ?? to supply a fallback</span><br>
+        <span class="ck">const</span> email = trainee.contact<span style="color:#f0abfc;">?.</span>email ?? <span class="cs">"no email"</span>;<br>
+        console.log(email); <span class="cc">// "no email"</span>
+      </div>
+    </div>
+
+    <div class="callout callout-blue">
+      <span class="ci">🎯</span>
+      <span><strong>When to use it:</strong> any time you're accessing a property that <em>might</em> not exist. Most common with API responses, user input, and deeply nested data.</span>
+    </div>
+
+    <p class="explain">
+      You can chain multiple <code>?.</code> together. If anywhere in the chain is missing, the whole expression becomes <code>undefined</code> instead of throwing an error.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar">
+        <span class="cb-dot" style="background:#FF5F57"></span>
+        <span class="cb-dot" style="background:#FEBC2E"></span>
+        <span class="cb-dot" style="background:#28C840"></span>
+        deep-chaining.js
+      </div>
+      <div class="code-body">
+        <span class="ck">const</span> user = { profile: { address: <span class="ck">null</span> } };<br><br>
+        user.profile<span style="color:#f0abfc;">?.</span>address<span style="color:#f0abfc;">?.</span>city<span style="color:#f0abfc;">?.</span>zipCode;<br>
+        <span class="cc">// undefined — no crash, even though address is null</span>
+      </div>
+    </div>
+
+    <div class="takeaway">
+      <h4>Destructuring & <code>?.</code> — takeaways</h4>
+      <ul>
+        <li>Destructuring unpacks values from objects and arrays in one line</li>
+        <li>Object destructuring uses <strong>names</strong>; array destructuring uses <strong>positions</strong></li>
+        <li>You can rename (<code>{ name: x }</code>) and provide defaults (<code>{ city = "Thimphu" }</code>)</li>
+        <li><code>...</code> means "rest" on the left side, "spread" on the right — opposite operations, same syntax</li>
+        <li>Use <code>?.</code> to safely access keys that might not exist — no more unexpected crashes</li>
+        <li>Pair <code>?.</code> with <code>??</code> to provide a fallback value</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 6: PRACTICE EXERCISES
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd" id="practice">
+    <div class="section-pill pill-green">Section 06</div>
+    <h2 class="section-title">Practice exercises</h2>
+    <p class="section-desc">Try these again at home. If you got stuck in class, start fresh and walk through each one step by step.</p>
+  </div>
+
+  <div class="topic topic-green">
+    <div class="topic-title">💻 Trainee Directory (progressive)</div>
+
+    <p class="explain">
+      Use this data for all four steps. Each step builds on the previous one.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar">
+        <span class="cb-dot" style="background:#FF5F57"></span>
+        <span class="cb-dot" style="background:#FEBC2E"></span>
+        <span class="cb-dot" style="background:#28C840"></span>
+        data.js
+      </div>
+      <div class="code-body">
+        <span class="ck">const</span> trainees = [<br>
+        &nbsp;&nbsp;{ name: <span class="cs">"Karma"</span>, vertical: <span class="cs">"Dev"</span> },<br>
+        &nbsp;&nbsp;{ name: <span class="cs">"Sonam"</span>, vertical: <span class="cs">"QA"</span> },<br>
+        &nbsp;&nbsp;{ name: <span class="cs">"Tshering"</span>, vertical: <span class="cs">"Dev"</span> },<br>
+        &nbsp;&nbsp;{ name: <span class="cs">"Pema"</span>, vertical: <span class="cs">"BA"</span> },<br>
+        &nbsp;&nbsp;{ name: <span class="cs">"Ashi"</span>, vertical: <span class="cs">"Dev"</span> }<br>
+        ];
+      </div>
+    </div>
+
+    <div class="exercise">
+      <h4><span class="badge">Ex 1 · filter</span> Find all Dev trainees</h4>
+      <p>Return a new array containing only trainees whose <code>vertical</code> is <code>"Dev"</code>.</p>
+      <p style="font-size:0.82rem;color:var(--faint)">Hint: <code>trainees.filter(t =&gt; t.vertical === "Dev")</code></p>
+    </div>
+
+    <div class="exercise">
+      <h4><span class="badge">Ex 2 · map</span> Get just the names</h4>
+      <p>Take your result from Ex 1 and return an array of just the names (strings, not objects).</p>
+      <p style="font-size:0.82rem;color:var(--faint)">Hint: <code>devs.map(t =&gt; t.name)</code></p>
+    </div>
+
+    <div class="exercise">
+      <h4><span class="badge">Ex 3 · sort</span> Sort alphabetically</h4>
+      <p>Sort the names from Ex 2 alphabetically.</p>
+      <p style="font-size:0.82rem;color:var(--faint)">Hint: <code>names.sort()</code> — no comparator needed for strings.</p>
+    </div>
+
+    <div class="exercise">
+      <h4><span class="badge">Ex 4 · chain all</span> Do it in one expression</h4>
+      <p>Now combine Ex 1, 2, and 3 into a single chained expression on <code>trainees</code>.</p>
+      <p style="font-size:0.82rem;color:var(--faint)">Hint: <code>trainees.filter(…).map(…).sort()</code> — each method returns a new array you can chain.</p>
+    </div>
+  </div>
+
+  <div class="topic topic-green">
+    <div class="topic-title">🛒 Bonus — shopping cart total</div>
+
+    <div class="exercise">
+      <h4><span class="badge">Ex 5 · reduce</span> Total the cart</h4>
+      <p>Calculate the total cost of this cart. Each item has a <code>price</code> and <code>quantity</code>.</p>
+      <div class="code-block" style="margin-top:0.5rem">
+        <div class="code-bar">
+          <span class="cb-dot" style="background:#FF5F57"></span>
+          <span class="cb-dot" style="background:#FEBC2E"></span>
+          <span class="cb-dot" style="background:#28C840"></span>
+          cart.js
+        </div>
+        <div class="code-body">
+          <span class="ck">const</span> cart = [<br>
+          &nbsp;&nbsp;{ name: <span class="cs">"Tea"</span>, price: <span class="cn">50</span>, quantity: <span class="cn">2</span> },<br>
+          &nbsp;&nbsp;{ name: <span class="cs">"Rice"</span>, price: <span class="cn">200</span>, quantity: <span class="cn">1</span> },<br>
+          &nbsp;&nbsp;{ name: <span class="cs">"Oil"</span>, price: <span class="cn">150</span>, quantity: <span class="cn">3</span> }<br>
+          ];<br><br>
+          <span class="cc">// Expected total: 750</span>
+        </div>
+      </div>
+      <p style="font-size:0.82rem;color:var(--faint)">Hint: <code>cart.reduce((sum, item) =&gt; sum + item.price * item.quantity, 0)</code></p>
+    </div>
+  </div>
+
+  <div class="topic topic-green">
+    <div class="topic-title">🛡️ Bonus — safe API parse</div>
+
+    <div class="exercise">
+      <h4><span class="badge">Ex 6 · destructure + ?.</span> Read an incomplete response</h4>
+      <p>The server sometimes leaves out optional fields. Read the email safely, falling back to <code>"no email"</code> if it's missing.</p>
+      <div class="code-block" style="margin-top:0.5rem">
+        <div class="code-bar">
+          <span class="cb-dot" style="background:#FF5F57"></span>
+          <span class="cb-dot" style="background:#FEBC2E"></span>
+          <span class="cb-dot" style="background:#28C840"></span>
+          parse-response.js
+        </div>
+        <div class="code-body">
+          <span class="ck">const</span> response = {<br>
+          &nbsp;&nbsp;id: <span class="cn">42</span>,<br>
+          &nbsp;&nbsp;name: <span class="cs">"Karma"</span><br>
+          &nbsp;&nbsp;<span class="cc">// no "contact" field</span><br>
+          };<br><br>
+          <span class="ck">const</span> email = <span class="cc">/* ??? */</span>;<br>
+          <span class="cc">// Expected: "no email"</span>
+        </div>
+      </div>
+      <p style="font-size:0.82rem;color:var(--faint)">Hint: <code>response.contact?.email ?? "no email"</code></p>
+    </div>
+  </div>
+
+
+  <!-- ===== SUMMARY ===== -->
+  <div class="summary">
+    <h2>What You Learned</h2>
+    <p>The tools you need for every real-world JavaScript program</p>
+    <div class="summary-grid">
+      <div class="su-card">
+        <h4>📦 Objects & JSON</h4>
+        <p>Group related data as key–value pairs. Access with <code>.</code> or <code>[]</code>. Backend data arrives as JSON — it's just objects.</p>
+      </div>
+      <div class="su-card">
+        <h4>📋 Arrays & methods</h4>
+        <p><code>map</code> transforms, <code>filter</code> selects, <code>reduce</code> combines. Chain them to do a lot with very little code.</p>
+      </div>
+      <div class="su-card">
+        <h4>🎁 Destructuring & <code>?.</code></h4>
+        <p>Unpack values in one line. Use <code>?.</code> to safely read data that might be missing — no more unexpected crashes.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div class="footer">
+  <strong>SELISE × Pelsung</strong> · Dev Specialization · Class 03 · JavaScript Fundamentals II
+</div>
+
+</body>
+</html>
