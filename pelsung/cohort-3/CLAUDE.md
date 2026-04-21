@@ -25,8 +25,8 @@ Assignment records and per-trainee notes live in `pelsung-c3-vertical-selection.
 - **Foundation:** 11 classes (all 45 together)
 - **Core Specialization:** per-vertical counts below
   - Dev: **22 classes**
-  - Testing (QA): **24 classes**
-  - Business Analysis (BA): **25 classes**
+  - Testing (QA): **26 classes**
+  - Business Analysis (BA): **27 classes**
   - Software Design: not running this cohort
   - BA and QA begin with a **5-class combined opener** (`curriculum/ba-qa-combined/`) before splitting into vertical tracks
 - **Capstone:** 10 classes, **tiered** (see below)

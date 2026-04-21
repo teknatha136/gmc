@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spec Writing Class 04 Notes — HLD &amp; LLD Workshop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#0066B2; --indigo:#001F35; --amber:#247EC1; --green:#7BC950; --purple:#4796D1; --red:#D80032; --text:#1B2021; --muted:#7B7C7F; --faint:#9CA3AF; --surf:#fff; --bg:#F9F9F9; --border:#EDEDED; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Open Sans','Aptos',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; font-size:17px; -webkit-font-smoothing:antialiased; }
+    h1,h2,h3,h4,h5,h6 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:400; letter-spacing:-0.01em; }
+    a { color: var(--blue); }
+
+    .hero { background:var(--surf); border-bottom:1px solid var(--border); padding:4rem 2rem 3rem; text-align:center; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background: linear-gradient(135deg, #0067A3, #002D72); }
+    .logo-corner { position:absolute; top: 1.25rem; left: 1.5rem; opacity:0.85; }
+    .logo-corner img { height: 34px; }
+    .hero-badge { display:inline-flex; align-items:center; gap:0.5rem; background:var(--bg); border:1px solid var(--border); border-radius:100px; padding:0.35rem 1rem; font-size:0.75rem; font-weight:700; color:var(--muted); letter-spacing:0.07em; text-transform:uppercase; margin-bottom:1.5rem; }
+    .hero-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--amber); }
+    .hero h1 { font-size:clamp(2rem,5vw,3.5rem); line-height:1.15; margin-bottom:0.75rem; }
+    .c-blue{color:var(--blue);} .c-indigo{color:var(--indigo);}
+    .hero-sub { font-size:1rem; color:var(--muted); margin-bottom:2rem; max-width:720px; margin-left:auto; margin-right:auto; }
+    .hero-tags { display:flex; justify-content:center; gap:0.6rem; flex-wrap:wrap; }
+    .hero-tag { padding:0.3rem 0.9rem; border-radius:8px; font-size:0.78rem; font-weight:600; background:#E6F0F8; color:var(--blue); }
+
+    .container { max-width:1040px; margin:0 auto; padding:0 2rem 6rem; }
+
+    .toc { background:var(--surf); border:1px solid var(--border); border-radius:16px; padding:1.75rem 2rem; margin:2.5rem 0; }
+    .toc h3 { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); margin-bottom:1.25rem; }
+    .toc ol { list-style: none; counter-reset: step; }
+    .toc li { counter-increment: step; padding:0.45rem 0; border-bottom:1px solid var(--border); }
+    .toc li:last-child { border-bottom:none; }
+    .toc li::before { content: counter(step, decimal-leading-zero); color:var(--faint); font-family:'Bahnschrift','Segoe UI',sans-serif; margin-right:0.8rem; font-size:0.9rem; }
+    .toc a { text-decoration:none; color:var(--text); font-weight:500; }
+    .toc a:hover { color: var(--blue); }
+
+    section.chapter { margin: 3.5rem 0; }
+    .chapter-head { margin-bottom:1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
+    .chapter-eyebrow { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--blue); margin-bottom:0.3rem; }
+    .chapter-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--indigo); }
+
+    p { margin: 0.7rem 0; }
+    ul, ol { margin: 0.6rem 0 0.6rem 1.3rem; }
+    li { margin: 0.3rem 0; }
+    strong { color: var(--indigo); }
+
+    .callout { background:var(--surf); border:1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 10px; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+    .callout.amber { border-left-color: var(--amber); }
+    .callout.green { border-left-color: var(--green); }
+    .callout.red { border-left-color: var(--red); }
+    .callout.indigo { border-left-color: var(--indigo); }
+    .callout h4 { font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--indigo); }
+
+    .pair { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin:1rem 0; }
+    @media (max-width: 720px) { .pair { grid-template-columns: 1fr; } }
+
+    .big-tbl { background:var(--surf); border:1px solid var(--border); border-radius:10px; overflow:auto; margin:1rem 0; }
+    .big-tbl table { width:100%; border-collapse:collapse; font-size:0.9rem; }
+    .big-tbl th { background:var(--bg); padding:0.6rem 0.9rem; text-align:left; color:var(--muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; border-bottom:1px solid var(--border); }
+    .big-tbl td { padding:0.6rem 0.9rem; border-bottom:1px solid var(--border); color:var(--text); vertical-align:top; line-height:1.6; }
+    .big-tbl tr:last-child td { border-bottom:none; }
+    .big-tbl td:first-child { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; }
+
+    .section-deep { background:var(--surf); border:1px solid var(--border); border-radius:10px; padding:1rem 1.3rem; margin:1.2rem 0; }
+    .section-deep .tag { color:var(--muted); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.07em; font-weight:700; margin-bottom:0.25rem; }
+    .section-deep h4 { color:var(--indigo); font-size:1.15rem; margin-bottom:0.4rem; }
+
+    .diagram { background:var(--surf); border:1px solid var(--border); border-radius:10px; padding:1rem 1.5rem; margin:1rem 0; font-family:'Courier New',monospace; font-size:0.85rem; color:var(--indigo); line-height:1.8; white-space:pre; overflow-x:auto; }
+
+    .codeblock { background:#F8F9FA; border:1px solid var(--border); border-radius:8px; padding:0.9rem 1.1rem; font-family:'Courier New',monospace; font-size:0.82rem; line-height:1.65; color:var(--text); overflow-x:auto; margin:0.7rem 0; white-space:pre; }
+
+    .c4-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:0.7rem; margin:1rem 0; }
+    @media (max-width: 820px) { .c4-grid { grid-template-columns: 1fr 1fr; } }
+    .c4 { background:var(--surf); border:1px solid var(--border); border-top:4px solid var(--blue); border-radius:10px; padding:0.8rem 1rem; text-align:center; }
+    .c4 .level { color:var(--muted); font-family:'Courier New',monospace; font-size:0.73rem; }
+    .c4 h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin:0.25rem 0; }
+    .c4 p { font-size:0.82rem; color:var(--text); line-height:1.55; }
+
+    .summary { background: linear-gradient(135deg, #F9F9F9, #EDEDED); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+    .summary h4 { color: var(--indigo); margin-bottom: 0.5rem; font-size: 0.95rem; }
+
+    .dl-banner { background: linear-gradient(135deg, #002D72, #0066B2); color:white; border-radius:14px; padding:1.4rem 1.6rem; margin:1.5rem 0; display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+    .dl-banner h4 { color:white; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-bottom:0.3rem; }
+    .dl-banner p { font-size:0.88rem; color:rgba(255,255,255,0.88); margin:0; line-height:1.5; max-width:600px; }
+    .dl-btn { display:inline-flex; align-items:center; gap:0.4rem; padding:0.55rem 1rem; background:white; color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; font-size:0.88rem; text-decoration:none; border-radius:6px; margin-left:0.4rem; }
+    .dl-btn:hover { background:#E6F0F8; }
+
+    footer { text-align:center; padding: 2rem 1rem 3rem; color: var(--faint); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+    footer img { height: 28px; opacity:0.7; margin-bottom: 0.5rem; display: block; margin-left:auto; margin-right:auto; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="logo-corner"><img src="../../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE"></div>
+    <div class="hero-badge"><span class="dot"></span> Spec Writing · Class 04</div>
+    <h1><span class="c-blue">HLD &amp; LLD</span><br><span class="c-indigo">Workshop</span></h1>
+    <p class="hero-sub">The design-side of the spec stack. How engineers turn a signed spec into a system blueprint, then into code-ready component detail. What a BA needs to understand — and what a BA reviews — on both.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">C4 Model</span>
+      <span class="hero-tag">Architecture</span>
+      <span class="hero-tag">Component Design</span>
+      <span class="hero-tag">BA ↔ Dev Handoff</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="toc">
+      <h3>In this note</h3>
+      <ol>
+        <li><a href="#why">Why HLD and LLD exist</a></li>
+        <li><a href="#spectrum">The design spectrum — BRD → Spec → HLD → LLD → Code</a></li>
+        <li><a href="#ba-role">A BA's role on HLD and LLD</a></li>
+        <li><a href="#hld">HLD · the 16-section structure</a></li>
+        <li><a href="#c4">The C4 model · 4 levels of architecture diagrams</a></li>
+        <li><a href="#quality">Quality attributes drive architecture choices</a></li>
+        <li><a href="#lld">LLD · the 16-section structure</a></li>
+        <li><a href="#class-api">Class contracts, API contracts, schema</a></li>
+        <li><a href="#errors">Error taxonomy &amp; concurrency — often-missed sections</a></li>
+        <li><a href="#example">Worked example · Biller Favourites HLD → LLD</a></li>
+        <li><a href="#review">How a BA reviews an HLD / LLD</a></li>
+        <li><a href="#pitfalls">Common HLD / LLD mistakes</a></li>
+        <li><a href="#take">Key takeaways</a></li>
+      </ol>
+    </div>
+
+    <div class="dl-banner">
+      <div>
+        <h4>🏗️ Download the HLD &amp; LLD templates</h4>
+        <p>Both templates as Markdown — architect's blueprint (HLD) and developer's blueprint (LLD). Paired so you can start either one from a spec.</p>
+      </div>
+      <div>
+        <a class="dl-btn" href="templates/hld-template.md" download>⬇ HLD</a>
+        <a class="dl-btn" href="templates/lld-template.md" download>⬇ LLD</a>
+      </div>
+    </div>
+
+    <section class="chapter" id="why">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 1</div>
+        <h2>Why HLD and LLD exist</h2>
+      </div>
+      <p>A spec says <em>what</em> the system does. A design says <em>how</em> it does it. Without a written design, two problems bite:</p>
+      <ol>
+        <li><strong>Trade-offs get re-argued.</strong> If the design only lives in the architect's head, the next engineer rediscovers every constraint — and re-litigates every trade-off.</li>
+        <li><strong>Hand-offs break.</strong> A dev who didn't attend the design meeting builds something subtly different from what the architect intended. By code review it's too late to fix cheaply.</li>
+      </ol>
+      <p>Two documents split the load:</p>
+
+      <div class="pair">
+        <div class="callout indigo">
+          <h4>HLD · High-Level Design</h4>
+          <p><strong>Scope:</strong> system · boxes · integrations</p>
+          <p><strong>Audience:</strong> architects · tech leads · SRE · security</p>
+          <p><strong>Question answered:</strong> "How are the parts arranged, and why?"</p>
+          <p><strong>Length:</strong> 10–25 pages</p>
+        </div>
+        <div class="callout amber">
+          <h4>LLD · Low-Level Design</h4>
+          <p><strong>Scope:</strong> one component · classes · APIs · schema</p>
+          <p><strong>Audience:</strong> the devs who'll write the code</p>
+          <p><strong>Question answered:</strong> "How is this component built inside?"</p>
+          <p><strong>Length:</strong> 5–20 pages per component</p>
+        </div>
+      </div>
+
+      <div class="callout green">
+        <h4>The zoom-level rule</h4>
+        <p>HLD is the whiteboard photo. LLD is the photo of the sketch on the whiteboard, with every line labelled. You can't LLD without first HLD-ing; you can't write code well without first LLD-ing. Skipping a level is tempting — and expensive later.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="spectrum">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 2</div>
+        <h2>The design spectrum · BRD → Spec → HLD → LLD → Code</h2>
+      </div>
+      <p>Every document zooms in one level. Each is built on top of the one above it. Each has a different primary author and a different primary reviewer.</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead>
+            <tr><th>Document</th><th>Primary author</th><th>Primary reviewer</th><th>Zoom level</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>BRD</td><td>BA / PM</td><td>Sponsor · leadership</td><td>Business capability</td></tr>
+            <tr><td>PRD / SRS</td><td>BA / PM</td><td>Eng · QA · Compliance</td><td>System behaviour</td></tr>
+            <tr><td>Feature Spec</td><td>BA + PM</td><td>Dev · QA · Design</td><td>One feature's behaviour</td></tr>
+            <tr><td>HLD</td><td>Architect / Tech Lead</td><td>Architecture Review Board · Security · SRE</td><td>System structure</td></tr>
+            <tr><td>LLD</td><td>Senior Engineer</td><td>Peer engineers · Tech Lead · QA</td><td>Component internals</td></tr>
+            <tr><td>Code</td><td>Engineer</td><td>Peer code review</td><td>Implementation</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="chapter" id="ba-role">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 3</div>
+        <h2>A BA's role on HLD and LLD</h2>
+      </div>
+      <p>A common question: <em>"If I'm a BA, why am I reading design docs at all?"</em> Three reasons:</p>
+      <ol>
+        <li><strong>Traceability.</strong> Every FR and NFR in your spec must land somewhere in the HLD / LLD. If it doesn't, something is missing.</li>
+        <li><strong>Ambiguity detection.</strong> You wrote the spec. When the architect says "I interpreted FR-03 as …", you're the one who knows if that interpretation is right.</li>
+        <li><strong>Stakeholder translation.</strong> HLDs use language sponsors don't read. Someone has to explain "we're moving to an event-driven pattern for integration resilience" in business terms.</li>
+      </ol>
+
+      <div class="callout indigo">
+        <h4>What a BA does on the HLD/LLD review</h4>
+        <ul>
+          <li><strong>Checks traceability:</strong> every FR / NFR has a home in the design.</li>
+          <li><strong>Challenges interpretations:</strong> "The spec says X; the HLD seems to assume Y — which is right?"</li>
+          <li><strong>Surfaces impact on users:</strong> "This choice adds 200ms — does that breach NFR-Perf-01?"</li>
+          <li><strong>Flags compliance:</strong> "The HLD puts data in region A, but BRD §11 constraint C-01 requires region B."</li>
+          <li><strong>Does NOT:</strong> approve tech choices, design APIs, write algorithms. Those belong to engineering.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="chapter" id="hld">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 4</div>
+        <h2>HLD · the 16-section structure</h2>
+      </div>
+      <p>A well-formed HLD has 16 sections. Not every one is equally weighty on every project, but all appear — reviewers expect to find each topic in roughly the same place.</p>
+
+      <div class="section-deep">
+        <div class="tag">§§ 01–03 · Setup</div>
+        <h4>Metadata · Purpose &amp; Scope · Context</h4>
+        <p>Who wrote it · what system this covers · where this HLD sits relative to other HLDs · links to upstream PRD / SRS. <strong>Context diagram (C4 Level 1)</strong> showing the system as one box, with every external actor and system labelled.</p>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§§ 04–05 · The driving forces</div>
+        <h4>Quality attributes · Architectural style</h4>
+        <p>Architecturally-significant NFRs — availability, latency, throughput, security, data residency — and the style chosen (modular monolith · microservices · event-driven · serverless), plus why. Every later decision traces back to these.</p>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§§ 06–07 · The structure</div>
+        <h4>Container / Component diagram (C4 L2) · Data architecture</h4>
+        <p>The major deployable units — services, apps, datastores — as a diagram plus a component summary table. Data architecture: logical entities, data stores with consistency models, retention &amp; residency policies.</p>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§§ 08–10 · The cross-cutting mechanics</div>
+        <h4>Integration · Security · Deployment</h4>
+        <p>How the system talks to partners (protocols · idempotency · retry · SLAs) · the security architecture (AuthN · AuthZ · network · data protection · threat model summary) · deployment architecture (environments · regions · orchestration · release strategy).</p>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§§ 11–13 · The operational stance</div>
+        <h4>Observability · Reliability · Cross-cutting concerns</h4>
+        <p>Metrics · logs · traces · alerts · dashboards — golden signals per service. Failure modes considered · DR strategy · backup. Cross-cutting: I18n · accessibility · perf budgets · cost model · compliance posture.</p>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§§ 14–16 · The thinking</div>
+        <h4>ADRs · Trade-offs · Open questions · Out of scope</h4>
+        <p>Architectural Decision Records (one-line summary per ADR, link to full record). Trade-offs explicitly listed. Open questions with owners. Explicit out-of-scope boundaries.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="c4">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 5</div>
+        <h2>The C4 model · 4 levels of architecture diagrams</h2>
+      </div>
+      <p>C4 is the most widely-adopted way to draw architecture diagrams. It proposes four levels, each zooming in further. HLDs use Levels 1 &amp; 2; LLDs use Levels 3 &amp; 4.</p>
+
+      <div class="c4-grid">
+        <div class="c4">
+          <div class="level">Level 1</div>
+          <h5>🌍 Context</h5>
+          <p>The system as one box, with users and external systems around it. "What does this system touch?"</p>
+        </div>
+        <div class="c4">
+          <div class="level">Level 2</div>
+          <h5>📦 Container</h5>
+          <p>Deployable units — services, apps, DBs — inside the system. "What's the shape?"</p>
+        </div>
+        <div class="c4">
+          <div class="level">Level 3</div>
+          <h5>🧩 Component</h5>
+          <p>Inside one container — components, modules. "How is one service structured?"</p>
+        </div>
+        <div class="c4">
+          <div class="level">Level 4</div>
+          <h5>🔬 Code</h5>
+          <p>Class / function-level detail. Often rendered as a UML class diagram.</p>
+        </div>
+      </div>
+
+      <p><strong>Context diagram (Level 1) — the HLD's opening picture:</strong></p>
+
+      <div class="diagram">
+┌─────────────┐        ┌──────────────┐
+│  Customer   │───────▶│              │───────▶ Payment Gateway
+│ (mBoB app)  │        │  Biller Favs │         (external)
+└─────────────┘        │    Service   │
+                       │              │───────▶ Core Banking Ledger
+┌─────────────┐        │              │         (internal)
+│  Admin Tool │◀───────│              │
+│  (internal) │        └──────┬───────┘───────▶ Notification Bus
+└─────────────┘               │                 (internal)
+                              ▼
+                       [Favourites DB]
+      </div>
+
+      <p><strong>Container diagram (Level 2) — the HLD's structural picture:</strong></p>
+
+      <div class="diagram">
+┌──────────────┐   ┌─────────────┐   ┌─────────────┐
+│  Mobile App  │──▶│  API GW     │──▶│ Auth Svc    │
+└──────────────┘   └─────┬───────┘   └─────────────┘
+                         │
+                         ▼
+                  ┌─────────────┐   ┌──────────────┐
+                  │  Favs Svc   │──▶│ Favourites DB│
+                  └─────┬───────┘   └──────────────┘
+                        │
+                        ▼
+                  ┌─────────────┐
+                  │  Event Bus  │
+                  └─────────────┘
+      </div>
+    </section>
+
+    <section class="chapter" id="quality">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 6</div>
+        <h2>Quality attributes drive architecture choices</h2>
+      </div>
+      <p>Every HLD has a table of architecturally-significant quality attributes (a.k.a. NFRs that change the shape of the system). Each is a target + the architectural implication.</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead>
+            <tr><th>Attribute</th><th>Target</th><th>Architectural implication</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Availability</td><td>99.95% monthly</td><td>Multi-AZ active-active · no single DB primary</td></tr>
+            <tr><td>Latency</td><td>p95 &lt; 250 ms</td><td>Read replica · cache layer · connection pooling</td></tr>
+            <tr><td>Throughput</td><td>5 000 TPS peak</td><td>Horizontal scaling · queue-based back-pressure</td></tr>
+            <tr><td>Security</td><td>PCI-DSS scoped</td><td>Tokenisation at edge · card data never in app DB</td></tr>
+            <tr><td>Data residency</td><td>Bhutan only</td><td>Region-pinned deployment · no cross-border replication</td></tr>
+            <tr><td>Auditability</td><td>7-year retention</td><td>Append-only event log · immutable storage (S3 + object lock)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout amber">
+        <h4>The architecture trace rule</h4>
+        <p>Every box, arrow, and datastore in the HLD must trace back to at least one quality attribute. If you can't justify "why this?" with "because of target X", the element is a guess — not a decision.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="lld">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 7</div>
+        <h2>LLD · the 16-section structure</h2>
+      </div>
+      <p>The LLD is the developer's blueprint for one component. Two engineers reading the same LLD should produce near-identical code.</p>
+
+      <div class="section-deep">
+        <div class="tag">§§ 01–03 · Setup</div>
+        <h4>Metadata · Purpose · Responsibilities (and non-responsibilities)</h4>
+        <p>Links to parent HLD. What this component does. What this component explicitly does NOT do (delegated to other components).</p>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§§ 04–05 · The contract</div>
+        <h4>Public interface (API / methods) · Data model (physical)</h4>
+        <p>Endpoint signatures, request/response schemas, HTTP status-code contract. Full DDL for any schema changes — tables, indexes, constraints, migration up/down.</p>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§§ 06–07 · Internals</div>
+        <h4>Internal structure · Algorithms &amp; business logic</h4>
+        <p>Classes · modules · their relationships (C4 Level 3). Pseudocode or prose for each non-trivial algorithm. Concurrency reasoning. Transactional boundaries.</p>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§§ 08–10 · Error &amp; consistency discipline</div>
+        <h4>Error taxonomy · Retry, idempotency, timeouts · Concurrency &amp; transactions</h4>
+        <p>Every error code · when it fires · which HTTP status · user-facing vs generic. Idempotency strategy for writes. Isolation level per transaction. Locking strategy (optimistic / pessimistic).</p>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§§ 11–12 · Runtime behaviour</div>
+        <h4>Caching · Observability hooks · Security considerations</h4>
+        <p>What is cached, key, TTL, invalidation triggers. Metrics names, log fields, trace spans, alert thresholds. Per-method AuthZ rules, audit log, rate limits.</p>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§§ 13–16 · Validation &amp; release</div>
+        <h4>Component-level test plan · Deployment · Open questions · Out of scope</h4>
+        <p>Unit · integration · load tests this LLD implies. Feature flag strategy. Schema migration order. What this LLD doesn't cover (separate LLDs).</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="class-api">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 8</div>
+        <h2>Class contracts, API contracts, schema</h2>
+      </div>
+
+      <p><strong>API contract example (LLD §4):</strong></p>
+      <div class="codeblock">POST   /api/v1/favourites           -> 201 Favourite | 409 LimitReached | 409 Duplicate
+GET    /api/v1/favourites           -> 200 Favourite[]
+DELETE /api/v1/favourites/{id}      -> 204 | 404 NotFound
+PATCH  /api/v1/favourites/{id}      -> 200 Favourite | 404 | 400 ValidationError
+
+// Request / response
+POST /api/v1/favourites · request body
+{
+  "billerId": "uuid",
+  "alias":    "string, optional, max 30"
+}
+
+POST /api/v1/favourites · response 201
+{
+  "id":         "uuid",
+  "userId":     "uuid",
+  "billerId":   "uuid",
+  "alias":      "string | null",
+  "createdAt":  "ISO-8601",
+  "lastUsedAt": "ISO-8601 | null"
+}</div>
+
+      <p><strong>Class signature example (LLD §6):</strong></p>
+      <div class="codeblock">class FavouritesService {
+  constructor(private repo: FavouritesRepository) {}
+
+  /**
+   * Creates a favourite. Enforces max-10 rule.
+   * Returns 409 LimitReached if user already has 10.
+   * Returns 409 Duplicate if (user, biller) already exists.
+   */
+  async create(userId: UUID, billerId: UUID, alias?: string):
+    Promise&lt;Result&lt;Favourite, ServiceError&gt;&gt;
+
+  async list(userId: UUID): Promise&lt;Favourite[]&gt;
+  async remove(userId: UUID, id: UUID): Promise&lt;Result&lt;void, ServiceError&gt;&gt;
+  async rename(userId: UUID, id: UUID, alias: string):
+    Promise&lt;Result&lt;Favourite, ServiceError&gt;&gt;
+}</div>
+
+      <p><strong>Schema example (LLD §5):</strong></p>
+      <div class="codeblock">CREATE TABLE favourites (
+  id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id       UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  biller_id     UUID NOT NULL REFERENCES billers(id),
+  alias         VARCHAR(30),
+  last_amount   NUMERIC(12,2),
+  last_used_at  TIMESTAMPTZ,
+  created_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
+
+  CONSTRAINT favourites_user_biller_unique UNIQUE (user_id, biller_id)
+);
+
+CREATE INDEX favourites_user_idx ON favourites (user_id, last_used_at DESC);</div>
+    </section>
+
+    <section class="chapter" id="errors">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 9</div>
+        <h2>Error taxonomy &amp; concurrency — often-missed sections</h2>
+      </div>
+      <p>Two sections first-time LLD authors tend to skip — and that their first production incident punishes them for.</p>
+
+      <div class="section-deep">
+        <div class="tag">§ 8 · Error taxonomy</div>
+        <h4>Every error code · every HTTP status · user-facing or not</h4>
+        <p>A table that covers every failure mode. When each fires. What the caller sees. Without this, errors drift — two endpoints return different shapes, a mobile client can't distinguish a real error from a network blip, support can't correlate error codes across logs.</p>
+        <div class="big-tbl">
+          <table>
+            <thead><tr><th>Error</th><th>When</th><th>HTTP</th><th>User-facing?</th></tr></thead>
+            <tbody>
+              <tr><td>VALIDATION</td><td>Bad input (alias > 30 chars)</td><td>400</td><td>Yes</td></tr>
+              <tr><td>UNAUTHORIZED</td><td>Missing / invalid token</td><td>401</td><td>Yes</td></tr>
+              <tr><td>FORBIDDEN</td><td>Valid token, no permission</td><td>403</td><td>Yes</td></tr>
+              <tr><td>NOT_FOUND</td><td>ID doesn't exist or not owned</td><td>404</td><td>Yes</td></tr>
+              <tr><td>LIMIT_REACHED</td><td>User already has 10</td><td>409</td><td>Yes</td></tr>
+              <tr><td>DUPLICATE</td><td>(user, biller) already exists</td><td>409</td><td>Yes</td></tr>
+              <tr><td>DB_UNAVAILABLE</td><td>Transient DB failure</td><td>503</td><td>Generic</td></tr>
+              <tr><td>INTERNAL</td><td>Unexpected</td><td>500</td><td>Generic</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§ 9 · Concurrency &amp; transactions</div>
+        <h4>Race conditions caught on paper, not in production</h4>
+        <p>Example hazard: <em>two simultaneous create calls</em> when user has 9 favourites. Both pass the "count &lt; 10" check, both insert — user ends up with 11. Mitigation: serializable transaction, or DB-level constraint, or app-level lock. <strong>Which one</strong> you pick belongs in the LLD.</p>
+        <ul>
+          <li><strong>Transaction boundary:</strong> which operations are one atomic unit</li>
+          <li><strong>Isolation level:</strong> READ COMMITTED / REPEATABLE READ / SERIALIZABLE (justify the choice)</li>
+          <li><strong>Locking:</strong> optimistic (fail-fast) or pessimistic (row lock)</li>
+          <li><strong>Idempotency:</strong> how a client can safely retry</li>
+          <li><strong>At-least-once vs exactly-once</strong> for side effects (events · emails · SMS)</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="chapter" id="example">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 10</div>
+        <h2>Worked example · Biller Favourites HLD → LLD</h2>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">HLD excerpt</div>
+        <h4>§ 4 · Quality Attributes</h4>
+        <div class="codeblock">Availability:     99.95% monthly          → multi-AZ active-active
+Latency:          p95 < 250 ms list/save  → read replica + 60s Redis cache
+Throughput:       5 000 RPS peak (pay-day) → horizontal scaling
+Security:         RMA §7 compliance       → region-pinned (Bhutan only)
+Auditability:     7-year retention        → append-only event log + S3 lock</div>
+        <h4>§ 6 · Container Diagram</h4>
+        <p>API Gateway → Auth Service → Favourites Service → Favourites DB (Postgres). Event Bus (Kafka) receives all writes for audit.</p>
+        <h4>§ 14 · ADR summary</h4>
+        <ul>
+          <li><strong>ADR-001</strong> · Modular monolith (not microservices) for MVP — reduces ops cost; revisit at 2× current load.</li>
+          <li><strong>ADR-002</strong> · Serializable transactions over CQRS — simpler; latency targets still met.</li>
+          <li><strong>ADR-003</strong> · Postgres for ledger + Redis for cache. Rejected: Cassandra (overkill), MongoDB (consistency concerns).</li>
+        </ul>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">LLD excerpt (Favourites Service)</div>
+        <h4>§ 6 · Internal structure</h4>
+        <div class="codeblock">FavouritesController  (HTTP adapter)
+        │
+        ▼
+FavouritesService     (business rules, limit enforcement)
+        │
+        ▼
+FavouritesRepository  (DB access, SQL)
+        │
+        ▼
+   [ favourites table ]</div>
+        <h4>§ 7 · create() — flow</h4>
+        <div class="codeblock">function create(userId, billerId, alias):
+  validateAlias(alias)                     // trim · len ≤ 30 · else ValidationError
+
+  BEGIN TRANSACTION (SERIALIZABLE)
+    existing = repo.countByUser(userId)
+    if existing >= 10: ROLLBACK; return Err(LIMIT_REACHED)
+
+    duplicate = repo.findByUserAndBiller(userId, billerId)
+    if duplicate: ROLLBACK; return Err(DUPLICATE)
+
+    row = repo.insert({ userId, billerId, alias, createdAt: now() })
+  COMMIT
+
+  emit("favourite.created", row)   // via outbox table + relay
+  return Ok(row)</div>
+        <h4>§ 9 · Concurrency</h4>
+        <p><em>"Two concurrent create calls when count = 9 could both pass the limit check under READ COMMITTED. Mitigation: SERIALIZABLE isolation + retry on serialisation anomaly (client sees 409 DUPLICATE or LIMIT_REACHED depending on which commits first)."</em></p>
+      </div>
+    </section>
+
+    <section class="chapter" id="review">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 11</div>
+        <h2>How a BA reviews an HLD / LLD</h2>
+      </div>
+      <p>A BA is not an architect, but a BA's review adds specific value:</p>
+
+      <div class="section-deep">
+        <div class="tag">Review checklist</div>
+        <h4>What to tick off when reading an HLD</h4>
+        <ul>
+          <li>□ Every FR in the upstream spec has a home — which component owns it?</li>
+          <li>□ Every NFR has an architectural implication listed — or a rationale for why it doesn't.</li>
+          <li>□ The context diagram matches the external systems I wrote in the spec.</li>
+          <li>□ Constraints from the BRD / spec (regulation, region, budget) appear in §4 / §9 / §13.</li>
+          <li>□ Out-of-scope in the HLD matches out-of-scope in the spec.</li>
+          <li>□ Open questions have owners and deadlines.</li>
+          <li>□ ADRs exist for every non-obvious tech choice.</li>
+        </ul>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">Review checklist</div>
+        <h4>What to tick off when reading an LLD</h4>
+        <ul>
+          <li>□ The API contract matches the behaviour in the AC.</li>
+          <li>□ Error taxonomy covers every failure mode the AC implies (limit, dup, offline, validation).</li>
+          <li>□ Data model respects constraints from the spec (max 10, unique per user).</li>
+          <li>□ Concurrency reasoning exists for any race condition I can imagine.</li>
+          <li>□ Audit logging covers everything the spec / compliance req demands.</li>
+          <li>□ Feature flag / rollback plan exists and is sensible.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="chapter" id="pitfalls">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 12</div>
+        <h2>Common HLD / LLD mistakes</h2>
+      </div>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Mistake</th><th>Why it hurts</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr><td>No context diagram</td><td>Scope creeps invisibly — new integrations sneak in</td><td>C4 L1 always · update on every integration change</td></tr>
+            <tr><td>Quality attributes with no numbers</td><td>"Should be fast" — architect and dev disagree on pass/fail</td><td>Measurable target + method per attribute</td></tr>
+            <tr><td>ADRs missing</td><td>Trade-offs forgotten · re-argued every 6 months</td><td>One ADR per significant decision · linked from HLD</td></tr>
+            <tr><td>LLD without error taxonomy</td><td>Every endpoint returns a different shape</td><td>§8 Error taxonomy before §6 Internal structure</td></tr>
+            <tr><td>LLD without concurrency section</td><td>Race conditions land in production</td><td>§9 always · even if "no concurrency concerns — document why"</td></tr>
+            <tr><td>Copy-paste from other LLDs</td><td>Generic boilerplate; no decision captured</td><td>Every sentence specific to this component</td></tr>
+            <tr><td>Design doc after code</td><td>Post-hoc rationalisation · not a design, just an essay</td><td>Write HLD before code · LLD before coding each component</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="chapter" id="take">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Takeaways</div>
+        <h2>Key points to carry forward</h2>
+      </div>
+      <div class="summary">
+        <h4>What we covered today</h4>
+        <ul>
+          <li><strong>HLD</strong> = system structure · <strong>LLD</strong> = one component's internals. HLD is the whiteboard photo; LLD is the labelled sketch.</li>
+          <li>Design spectrum: BRD → Spec → HLD → LLD → Code. Each zooms in; each has a different author + reviewer.</li>
+          <li>A BA reads HLD / LLD to <strong>check traceability, detect ambiguity, translate to stakeholders, flag compliance</strong> — not to approve tech choices.</li>
+          <li>HLD &amp; LLD each have <strong>16 standard sections</strong>. Every project writes them; not every project weights them equally.</li>
+          <li><strong>C4 model</strong> · Level 1 Context · Level 2 Container (HLD); Level 3 Component · Level 4 Code (LLD).</li>
+          <li>Every architectural element traces back to a <strong>quality attribute</strong>. If not, it's a guess.</li>
+          <li>LLD sections first-time authors skip: <strong>error taxonomy</strong> and <strong>concurrency</strong>. Both punish you in prod.</li>
+          <li>Design written <em>after</em> code is a post-hoc essay, not a design. Write HLD before code · LLD before component.</li>
+        </ul>
+      </div>
+      <p style="margin-top:1.5rem; font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-size:1.1rem">The best LLD reads like a textbook for the feature. Two engineers, given the same LLD, produce near-identical code.</p>
+      <p style="margin-top:0.5rem">Next: <strong>Test Plan Document</strong> (QA) — the release-level QA artifact that pairs with HLD / LLD to close the spec stack.</p>
+    </section>
+
+  </div>
+
+  <footer>
+    <img src="../../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE">
+    SELISE × Pelsung · Spec Writing · Class 04<br>
+    HLD &amp; LLD Workshop
+  </footer>
+
+</body>
+</html>

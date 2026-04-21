@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Extra E2 Notes — Markdown</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#0066B2; --indigo:#001F35; --amber:#247EC1; --green:#7BC950; --purple:#4796D1; --red:#D80032; --text:#1B2021; --muted:#7B7C7F; --faint:#9CA3AF; --surf:#fff; --bg:#F9F9F9; --border:#EDEDED; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Open Sans','Aptos',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; font-size:17px; -webkit-font-smoothing:antialiased; }
+    h1,h2,h3,h4,h5 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:400; letter-spacing:-0.01em; }
+    a { color: var(--blue); }
+
+    .hero { background:var(--surf); border-bottom:1px solid var(--border); padding:4rem 2rem 3rem; text-align:center; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background: linear-gradient(135deg, #0067A3, #002D72); }
+    .logo-corner { position:absolute; top: 1.25rem; left: 1.5rem; opacity:0.85; }
+    .logo-corner img { height: 34px; }
+    .hero-badge { display:inline-flex; align-items:center; gap:0.5rem; background:var(--bg); border:1px solid var(--border); border-radius:100px; padding:0.35rem 1rem; font-size:0.75rem; font-weight:700; color:var(--muted); letter-spacing:0.07em; text-transform:uppercase; margin-bottom:1.5rem; }
+    .hero-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--amber); }
+    .hero h1 { font-size:clamp(2rem,5vw,3.5rem); line-height:1.15; margin-bottom:0.75rem; }
+    .c-blue{color:var(--blue);} .c-indigo{color:var(--indigo);}
+    .hero-sub { font-size:1rem; color:var(--muted); margin-bottom:2rem; max-width:720px; margin-left:auto; margin-right:auto; }
+    .hero-tags { display:flex; justify-content:center; gap:0.6rem; flex-wrap:wrap; }
+    .hero-tag { padding:0.3rem 0.9rem; border-radius:8px; font-size:0.78rem; font-weight:600; background:#E6F0F8; color:var(--blue); }
+
+    .container { max-width:1080px; margin:0 auto; padding:0 2rem 6rem; }
+
+    .toc { background:var(--surf); border:1px solid var(--border); border-radius:16px; padding:1.75rem 2rem; margin:2.5rem 0; }
+    .toc h3 { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); margin-bottom:1.25rem; }
+    .toc ol { list-style: none; counter-reset: step; }
+    .toc li { counter-increment: step; padding:0.45rem 0; border-bottom:1px solid var(--border); }
+    .toc li:last-child { border-bottom:none; }
+    .toc li::before { content: counter(step, decimal-leading-zero); color:var(--faint); font-family:'Bahnschrift','Segoe UI',sans-serif; margin-right:0.8rem; font-size:0.9rem; }
+    .toc a { text-decoration:none; color:var(--text); font-weight:500; }
+    .toc a:hover { color: var(--blue); }
+
+    section.chapter { margin: 3rem 0; }
+    .chapter-head { margin-bottom:1.25rem; padding-bottom: 0.6rem; border-bottom: 2px solid var(--border); }
+    .chapter-eyebrow { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--blue); margin-bottom:0.3rem; }
+    .chapter-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--indigo); }
+
+    p { margin: 0.7rem 0; }
+    ul, ol { margin: 0.6rem 0 0.6rem 1.3rem; }
+    li { margin: 0.3rem 0; }
+    strong { color: var(--indigo); }
+
+    .callout { background:var(--surf); border:1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 10px; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+    .callout.amber { border-left-color: var(--amber); background:#FFF5EA; }
+    .callout.green { border-left-color: var(--green); background:#F0F7EC; }
+    .callout.red { border-left-color: var(--red); background:#FDEBEF; }
+    .callout h4 { font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--indigo); }
+    .callout p { margin: 0.2rem 0; font-size: 0.95rem; }
+
+    code { font-family:'Courier New',monospace; background:#F0F3F7; color:var(--indigo); padding:0.12rem 0.4rem; border-radius:4px; font-size:0.88em; }
+    pre { background:#001F35; color:#E6F0F8; padding:0.9rem 1.1rem; border-radius:10px; overflow:auto; margin:0.7rem 0; font-family:'Courier New',monospace; font-size:0.88rem; line-height:1.6; }
+    pre code { background:transparent; color:inherit; padding:0; font-size:inherit; }
+
+    /* Side-by-side raw ↔ rendered examples */
+    .example { display:grid; grid-template-columns:1fr 1fr; gap:0.9rem; margin:1rem 0; }
+    @media (max-width: 740px){ .example { grid-template-columns:1fr; } }
+    .ex-pane { background:var(--surf); border:1px solid var(--border); border-radius:10px; overflow:hidden; display:flex; flex-direction:column; }
+    .ex-head { background:var(--bg); border-bottom:1px solid var(--border); padding:0.4rem 0.9rem; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); display:flex; align-items:center; gap:0.4rem; font-family:'Bahnschrift','Segoe UI',sans-serif; }
+    .ex-pane.raw .ex-head { color:var(--blue); }
+    .ex-pane.rendered .ex-head { color:#3D7A3D; }
+    .ex-dot { width:7px; height:7px; border-radius:50%; }
+    .ex-pane.raw .ex-dot { background:var(--blue); }
+    .ex-pane.rendered .ex-dot { background:var(--green); }
+    .ex-body { padding:0.8rem 1rem; font-size:0.88rem; line-height:1.65; flex:1; }
+    .ex-pane.raw .ex-body { font-family:'Courier New',monospace; background:#F6F9FC; color:var(--indigo); white-space:pre-wrap; font-size:0.85rem; }
+
+    /* Cheat sheet table */
+    table.cheat { width:100%; border-collapse:collapse; margin:1rem 0; background:var(--surf); border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+    table.cheat th { background:var(--bg); color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.8rem; font-weight:600; text-align:left; padding:0.7rem 1rem; border-bottom:1px solid var(--border); }
+    table.cheat td { padding:0.55rem 1rem; border-bottom:1px solid var(--border); font-size:0.9rem; vertical-align:top; }
+    table.cheat tr:last-child td { border-bottom:none; }
+    table.cheat td code { font-size:0.85em; }
+
+    /* Playground */
+    .playground { background:linear-gradient(135deg,#001F35,#000D19); border-radius:16px; padding:1.8rem 1.8rem 1.5rem; margin:1.5rem 0; color:white; }
+    .playground h3 { color:white; font-size:1.4rem; margin-bottom:0.4rem; }
+    .playground p.sub { color:rgba(255,255,255,0.7); font-size:0.95rem; margin-bottom:1rem; }
+    .pg-toolbar { display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:0.9rem; }
+    .pg-btn { background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.25); color:white; padding:0.4rem 0.8rem; border-radius:100px; font-size:0.78rem; font-weight:600; cursor:pointer; font-family:inherit; transition: background 0.15s; }
+    .pg-btn:hover { background:rgba(255,255,255,0.22); }
+    .pg-btn.clear { background:rgba(216,0,50,0.22); border-color:rgba(216,0,50,0.4); }
+    .pg-btn.clear:hover { background:rgba(216,0,50,0.38); }
+    .pg-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; min-height:420px; }
+    @media (max-width: 820px){ .pg-grid { grid-template-columns:1fr; min-height:auto; } }
+    .pg-pane { background:white; border-radius:10px; overflow:hidden; display:flex; flex-direction:column; color:var(--text); }
+    .pg-pane-head { background:var(--bg); border-bottom:1px solid var(--border); padding:0.45rem 0.9rem; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); display:flex; align-items:center; gap:0.4rem; }
+    #md-input { flex:1; resize:vertical; min-height:380px; border:none; padding:0.9rem 1.1rem; font-family:'Courier New',monospace; font-size:0.9rem; line-height:1.6; color:var(--indigo); background:#F6F9FC; outline:none; width:100%; }
+    #md-output { padding:0.9rem 1.1rem; flex:1; min-height:380px; overflow:auto; font-size:0.92rem; line-height:1.65; }
+    #md-output h1 { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-size:1.5rem; margin:0.5rem 0 0.4rem; line-height:1.2; font-weight:400; }
+    #md-output h2 { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-size:1.25rem; margin:0.5rem 0 0.3rem; line-height:1.2; font-weight:400; }
+    #md-output h3 { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-size:1.08rem; margin:0.4rem 0 0.25rem; line-height:1.2; font-weight:600; }
+    #md-output h4 { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-size:0.98rem; margin:0.4rem 0 0.25rem; line-height:1.2; font-weight:600; }
+    #md-output p { margin:0.4rem 0; }
+    #md-output ul, #md-output ol { margin:0.3rem 0 0.3rem 1.3rem; }
+    #md-output li { margin:0.18rem 0; }
+    #md-output code { background:#F0F3F7; color:var(--red); padding:0.1rem 0.35rem; border-radius:4px; font-family:'Courier New',monospace; font-size:0.88em; }
+    #md-output pre { background:#001F35; color:#E6F0F8; padding:0.7rem 0.9rem; border-radius:8px; overflow:auto; margin:0.4rem 0; }
+    #md-output pre code { background:transparent; color:inherit; padding:0; }
+    #md-output blockquote { border-left:3px solid var(--blue); padding:0.3rem 0.9rem; margin:0.5rem 0; color:var(--muted); background:#F0F5FA; border-radius:0 6px 6px 0; font-style:italic; }
+    #md-output table { border-collapse:collapse; width:100%; margin:0.5rem 0; font-size:0.9em; }
+    #md-output th, #md-output td { border:1px solid var(--border); padding:0.4rem 0.7rem; text-align:left; }
+    #md-output th { background:var(--bg); color:var(--indigo); }
+    #md-output hr { border:none; border-top:1px solid var(--border); margin:0.7rem 0; }
+    #md-output img { max-width:100%; border-radius:6px; }
+    #md-output input[type=checkbox] { margin-right:0.4rem; }
+    .pg-status { margin-top:0.5rem; font-size:0.78rem; color:rgba(255,255,255,0.55); text-align:right; }
+
+    /* Vertical example cards */
+    .vert-card { background:var(--surf); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin:1rem 0; }
+    .vert-head { padding:0.6rem 1.1rem; color:white; font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; font-size:1rem; display:flex; align-items:center; gap:0.5rem; }
+    .vert-card.dev .vert-head { background: linear-gradient(135deg, #0066B2, #004A80); }
+    .vert-card.qa .vert-head { background: linear-gradient(135deg, #247EC1, #185A8D); }
+    .vert-card.ba .vert-head { background: linear-gradient(135deg, #001F35, #000D19); }
+    .vert-body { padding:1rem 1.2rem; }
+
+    /* Exercise block */
+    .exercise { background:var(--surf); border:1px solid var(--border); border-left:4px solid var(--amber); border-radius:10px; padding:1rem 1.3rem; margin:1rem 0; }
+    .exercise h4 { color:var(--indigo); font-size:1.1rem; margin-bottom:0.3rem; font-weight:500; }
+    .exercise .tag { display:inline-block; background:#FFF5EA; color:#8A6300; padding:0.15rem 0.6rem; border-radius:100px; font-size:0.72rem; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; margin-bottom:0.5rem; }
+    .exercise p { font-size:0.95rem; margin:0.3rem 0; }
+
+    .summary { background: linear-gradient(135deg, #F9F9F9, #EDEDED); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+    .summary h4 { color: var(--indigo); margin-bottom: 0.5rem; font-size: 0.95rem; }
+    .summary ul { margin-left: 1.1rem; }
+    .summary li { font-size: 0.93rem; margin: 0.25rem 0; }
+
+    footer { text-align:center; padding: 2rem 1rem 3rem; color: var(--faint); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+    footer img { height: 28px; opacity:0.7; margin-bottom: 0.5rem; display: block; margin-left:auto; margin-right:auto; }
+
+    .link-row { display:flex; flex-wrap:wrap; gap:0.5rem; margin:0.6rem 0; }
+    .link-pill { display:inline-flex; align-items:center; gap:0.35rem; background:var(--bg); border:1px solid var(--border); border-radius:100px; padding:0.35rem 0.85rem; font-size:0.85rem; color:var(--blue); text-decoration:none; font-weight:500; }
+    .link-pill:hover { background:#E6F0F8; border-color:var(--blue); }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="logo-corner"><img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE"></div>
+    <div class="hero-badge"><span class="dot"></span> Extra E2 · Supplementary</div>
+    <h1><span class="c-blue">Markdown</span> — <span class="c-indigo">the universal way to write</span></h1>
+    <p class="hero-sub">A self-paced reference for every Pelsung trainee, regardless of vertical. The syntax, the worked examples, and a live playground where you can practice without installing anything.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">Syntax</span>
+      <span class="hero-tag">Cheat sheet</span>
+      <span class="hero-tag">Dev / QA / BA examples</span>
+      <span class="hero-tag">Live playground</span>
+      <span class="hero-tag">3 exercises</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="toc">
+      <h3>In this note</h3>
+      <ol>
+        <li><a href="#why">Why Markdown matters</a></li>
+        <li><a href="#what">What Markdown actually is</a></li>
+        <li><a href="#syntax">The syntax — one block per feature</a></li>
+        <li><a href="#cheat">One-page cheat sheet</a></li>
+        <li><a href="#gfm">GitHub-Flavored Markdown (GFM)</a></li>
+        <li><a href="#verticals">How each vertical uses it</a></li>
+        <li><a href="#ai">Markdown &amp; AI tools</a></li>
+        <li><a href="#playground">Live playground — practice here</a></li>
+        <li><a href="#exercises">Three exercises</a></li>
+        <li><a href="#mistakes">Common mistakes</a></li>
+        <li><a href="#tools">Tools &amp; further reading</a></li>
+      </ol>
+    </div>
+
+    <section class="chapter" id="why">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 1</div>
+        <h2>Why Markdown matters</h2>
+      </div>
+      <p>Everyone in software writes. Developers write READMEs. QAs write bug reports. BAs write specs and user stories. Designers write annotations. Everyone writes prompts to AI tools.</p>
+      <p>For all of these, Word documents are the wrong tool. They don't work inside GitHub, inside Jira, inside Slack, or inside Claude Code. <strong>Markdown does</strong>, and Markdown is everywhere in software. Learning it once pays off for the rest of your career.</p>
+
+      <div class="callout">
+        <h4>The one-minute argument</h4>
+        <p>Markdown is <strong>plain text with a handful of tiny marks</strong>. Any text editor can make it. GitHub, Jira, Linear, Slack, Notion, Obsidian, Claude Code, ChatGPT — all read and write it. You learn it once. You use it everywhere.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="what">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 2</div>
+        <h2>What Markdown actually is</h2>
+      </div>
+      <p>A rule book for how plain text turns into formatted text. You write a <code>#</code> and the tool turns it into a heading. You write <code>**word**</code> and the tool turns "word" bold. You don't click buttons — you type the marks inline.</p>
+
+      <div class="example">
+        <div class="ex-pane raw">
+          <div class="ex-head"><span class="ex-dot"></span>You write</div>
+          <div class="ex-body"># My Report
+
+I visited **Gelephu** last week.
+
+Three things I noticed:
+- Fast internet
+- New buildings
+- [Friendly people](https://gmc.bt)</div>
+        </div>
+        <div class="ex-pane rendered">
+          <div class="ex-head"><span class="ex-dot"></span>Readers see</div>
+          <div class="ex-body">
+            <h1 style="font-size:1.4rem; font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); margin:0.2rem 0 0.4rem">My Report</h1>
+            <p>I visited <strong>Gelephu</strong> last week.</p>
+            <p>Three things I noticed:</p>
+            <ul><li>Fast internet</li><li>New buildings</li><li><a href="#">Friendly people</a></li></ul>
+          </div>
+        </div>
+      </div>
+
+      <p><strong>The whole language fits on one page.</strong> You can learn the entire thing today, and be faster with it by next week.</p>
+    </section>
+
+    <section class="chapter" id="syntax">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 3</div>
+        <h2>The syntax, one feature at a time</h2>
+      </div>
+
+      <h3 style="color:var(--indigo); font-size:1.15rem; margin:1.2rem 0 0.4rem">1. Headings</h3>
+      <p>One <code>#</code> is the biggest heading. More <code>#</code> marks = smaller. You can go up to six. <strong>Always put a space after the <code>#</code>.</strong></p>
+      <div class="example">
+        <div class="ex-pane raw"><div class="ex-head"><span class="ex-dot"></span>Write</div><div class="ex-body"># Project plan
+## Phase 1
+### Week 1 goals
+#### Daily stand-ups</div></div>
+        <div class="ex-pane rendered"><div class="ex-head"><span class="ex-dot"></span>Shown</div><div class="ex-body">
+          <h1 style="font-size:1.4rem; font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); margin:0.2rem 0 0.3rem">Project plan</h1>
+          <h2 style="font-size:1.15rem; font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); margin:0.3rem 0 0.2rem">Phase 1</h2>
+          <h3 style="font-size:1rem; font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); margin:0.3rem 0 0.2rem">Week 1 goals</h3>
+          <h4 style="font-size:0.95rem; font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); margin:0.3rem 0 0.2rem">Daily stand-ups</h4>
+        </div></div>
+      </div>
+
+      <h3 style="color:var(--indigo); font-size:1.15rem; margin:1.6rem 0 0.4rem">2. Bold, italic &amp; strikethrough</h3>
+      <p>Wrap the word in stars. One star = italic. Two stars = bold. Three = both. Two tildes (<code>~~</code>) = strikethrough.</p>
+      <div class="example">
+        <div class="ex-pane raw"><div class="ex-head"><span class="ex-dot"></span>Write</div><div class="ex-body">*tired* — italic
+**important** — bold
+***urgent*** — bold italic
+~~cancelled~~ — strikethrough</div></div>
+        <div class="ex-pane rendered"><div class="ex-head"><span class="ex-dot"></span>Shown</div><div class="ex-body">
+          <p><em>tired</em> — italic</p>
+          <p><strong>important</strong> — bold</p>
+          <p><strong><em>urgent</em></strong> — bold italic</p>
+          <p><s>cancelled</s> — strikethrough</p>
+        </div></div>
+      </div>
+
+      <h3 style="color:var(--indigo); font-size:1.15rem; margin:1.6rem 0 0.4rem">3. Lists</h3>
+      <p>Use <code>-</code> for bullets or <code>1.</code> for numbered. Indent 2 spaces to nest.</p>
+      <div class="example">
+        <div class="ex-pane raw"><div class="ex-head"><span class="ex-dot"></span>Write</div><div class="ex-body">Groceries:
+- Rice
+- Chili
+  - Red
+  - Green
+- Oil
+
+Steps:
+1. Open laptop
+2. Open browser
+3. Visit gmail.com</div></div>
+        <div class="ex-pane rendered"><div class="ex-head"><span class="ex-dot"></span>Shown</div><div class="ex-body">
+          <p>Groceries:</p>
+          <ul><li>Rice</li><li>Chili<ul><li>Red</li><li>Green</li></ul></li><li>Oil</li></ul>
+          <p>Steps:</p>
+          <ol><li>Open laptop</li><li>Open browser</li><li>Visit gmail.com</li></ol>
+        </div></div>
+      </div>
+      <p><strong>Tip:</strong> for numbered lists, you can write <code>1. 1. 1.</code> and it still renders as <code>1. 2. 3.</code> — the tool fixes numbering for you.</p>
+
+      <h3 style="color:var(--indigo); font-size:1.15rem; margin:1.6rem 0 0.4rem">4. Links &amp; images</h3>
+      <p>Square brackets for the text, round brackets for the URL. For images, put a <code>!</code> in front.</p>
+      <div class="example">
+        <div class="ex-pane raw"><div class="ex-head"><span class="ex-dot"></span>Write</div><div class="ex-body">Visit [SELISE](https://selisegroup.com).
+
+Logo:
+![SELISE logo](logo.png)</div></div>
+        <div class="ex-pane rendered"><div class="ex-head"><span class="ex-dot"></span>Shown</div><div class="ex-body">
+          <p>Visit <a href="#">SELISE</a>.</p>
+          <p>Logo:<br><span style="display:inline-block; border:1px dashed var(--border); padding:0.4rem 0.9rem; color:var(--faint); font-size:0.8rem; border-radius:6px">📷 SELISE logo</span></p>
+        </div></div>
+      </div>
+
+      <h3 style="color:var(--indigo); font-size:1.15rem; margin:1.6rem 0 0.4rem">5. Code</h3>
+      <p>For a short bit of code inside a sentence, wrap it in single backticks: <code>`npm install`</code>. For a multi-line block, use three backticks on their own line. Optionally add the language after the opening backticks (<code>```js</code>, <code>```python</code>) so the code gets coloured.</p>
+      <div class="example">
+        <div class="ex-pane raw"><div class="ex-head"><span class="ex-dot"></span>Write</div><div class="ex-body">Run `npm install` first.
+
+```js
+function greet(name) {
+  return "Hello, " + name;
+}
+```</div></div>
+        <div class="ex-pane rendered"><div class="ex-head"><span class="ex-dot"></span>Shown</div><div class="ex-body">
+          <p>Run <code>npm install</code> first.</p>
+          <pre><code>function greet(name) {
+  return "Hello, " + name;
+}</code></pre>
+        </div></div>
+      </div>
+
+      <h3 style="color:var(--indigo); font-size:1.15rem; margin:1.6rem 0 0.4rem">6. Blockquotes &amp; horizontal rules</h3>
+      <p><code>&gt;</code> at the start of a line makes it a quote. <code>---</code> on its own line draws a divider.</p>
+      <div class="example">
+        <div class="ex-pane raw"><div class="ex-head"><span class="ex-dot"></span>Write</div><div class="ex-body">&gt; The best way to predict
+&gt; the future is to invent it.
+&gt; — Alan Kay
+
+---
+
+Next topic below the line.</div></div>
+        <div class="ex-pane rendered"><div class="ex-head"><span class="ex-dot"></span>Shown</div><div class="ex-body">
+          <blockquote style="border-left:3px solid var(--blue); padding:0.2rem 0.8rem; margin:0.4rem 0; color:var(--muted); background:#F0F5FA; border-radius:0 6px 6px 0; font-style:italic">The best way to predict the future is to invent it.<br>— Alan Kay</blockquote>
+          <hr>
+          <p>Next topic below the line.</p>
+        </div></div>
+      </div>
+
+      <h3 style="color:var(--indigo); font-size:1.15rem; margin:1.6rem 0 0.4rem">7. Tables</h3>
+      <p>Columns are split by <code>|</code>. The second row must be <code>---</code> (this is what tells Markdown "these are headers"). You don't need to line up the pipes; the tool fixes it.</p>
+      <div class="example">
+        <div class="ex-pane raw"><div class="ex-head"><span class="ex-dot"></span>Write</div><div class="ex-body">| Name  | Vertical | Status |
+|-------|----------|--------|
+| Karma | Dev      | Active |
+| Pema  | QA       | Active |
+| Tashi | BA       | Review |</div></div>
+        <div class="ex-pane rendered"><div class="ex-head"><span class="ex-dot"></span>Shown</div><div class="ex-body">
+          <table style="border-collapse:collapse; width:100%; font-size:0.88em">
+            <thead><tr><th style="border:1px solid var(--border); padding:0.3rem 0.6rem; background:var(--bg); color:var(--indigo); text-align:left">Name</th><th style="border:1px solid var(--border); padding:0.3rem 0.6rem; background:var(--bg); color:var(--indigo); text-align:left">Vertical</th><th style="border:1px solid var(--border); padding:0.3rem 0.6rem; background:var(--bg); color:var(--indigo); text-align:left">Status</th></tr></thead>
+            <tbody>
+              <tr><td style="border:1px solid var(--border); padding:0.3rem 0.6rem">Karma</td><td style="border:1px solid var(--border); padding:0.3rem 0.6rem">Dev</td><td style="border:1px solid var(--border); padding:0.3rem 0.6rem">Active</td></tr>
+              <tr><td style="border:1px solid var(--border); padding:0.3rem 0.6rem">Pema</td><td style="border:1px solid var(--border); padding:0.3rem 0.6rem">QA</td><td style="border:1px solid var(--border); padding:0.3rem 0.6rem">Active</td></tr>
+              <tr><td style="border:1px solid var(--border); padding:0.3rem 0.6rem">Tashi</td><td style="border:1px solid var(--border); padding:0.3rem 0.6rem">BA</td><td style="border:1px solid var(--border); padding:0.3rem 0.6rem">Review</td></tr>
+            </tbody>
+          </table>
+        </div></div>
+      </div>
+
+      <h3 style="color:var(--indigo); font-size:1.15rem; margin:1.6rem 0 0.4rem">8. Line breaks — the gotcha</h3>
+      <p>Markdown <strong>ignores single line breaks</strong>. If you hit Enter once, the two lines join into one paragraph. To split paragraphs, leave a <strong>blank line</strong> between them.</p>
+      <div class="callout amber">
+        <h4>This is the #1 thing beginners get wrong.</h4>
+        <p>If your text isn't splitting into paragraphs, you forgot the blank line.</p>
+      </div>
+
+      <h3 style="color:var(--indigo); font-size:1.15rem; margin:1.6rem 0 0.4rem">9. Escaping — showing the marks literally</h3>
+      <p>If you want to show a star or a hash without formatting, put a backslash <code>\</code> in front.</p>
+      <div class="example">
+        <div class="ex-pane raw"><div class="ex-head"><span class="ex-dot"></span>Write</div><div class="ex-body">This becomes italic: *hello*
+
+This stays: \*hello\*
+
+Not a heading: \# hello</div></div>
+        <div class="ex-pane rendered"><div class="ex-head"><span class="ex-dot"></span>Shown</div><div class="ex-body">
+          <p>This becomes italic: <em>hello</em></p>
+          <p>This stays: *hello*</p>
+          <p>Not a heading: # hello</p>
+        </div></div>
+      </div>
+    </section>
+
+    <section class="chapter" id="cheat">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 4</div>
+        <h2>One-page cheat sheet</h2>
+      </div>
+      <p>Keep this open while you practice. Everything you need is in this table.</p>
+      <table class="cheat">
+        <thead><tr><th style="width:28%">Thing</th><th style="width:40%">You write</th><th>You get</th></tr></thead>
+        <tbody>
+          <tr><td>Heading 1</td><td><code># Title</code></td><td><strong style="font-size:1.1rem">Title</strong></td></tr>
+          <tr><td>Heading 2</td><td><code>## Section</code></td><td><strong>Section</strong></td></tr>
+          <tr><td>Bold</td><td><code>**word**</code></td><td><strong>word</strong></td></tr>
+          <tr><td>Italic</td><td><code>*word*</code></td><td><em>word</em></td></tr>
+          <tr><td>Bold italic</td><td><code>***word***</code></td><td><strong><em>word</em></strong></td></tr>
+          <tr><td>Strikethrough</td><td><code>~~word~~</code></td><td><s>word</s></td></tr>
+          <tr><td>Bullet list</td><td><code>- item</code></td><td>• item</td></tr>
+          <tr><td>Numbered list</td><td><code>1. item</code></td><td>1. item</td></tr>
+          <tr><td>Nested list</td><td><code>&nbsp;&nbsp;- sub</code> (2 spaces)</td><td>&nbsp;&nbsp;• sub</td></tr>
+          <tr><td>Link</td><td><code>[text](url)</code></td><td><a href="#">text</a></td></tr>
+          <tr><td>Image</td><td><code>![alt](url)</code></td><td>📷 image</td></tr>
+          <tr><td>Inline code</td><td><code>`code`</code></td><td><code>code</code></td></tr>
+          <tr><td>Code block</td><td><code>```lang<br>...<br>```</code></td><td><em>coloured block</em></td></tr>
+          <tr><td>Blockquote</td><td><code>&gt; quote</code></td><td><em>indented quote</em></td></tr>
+          <tr><td>Divider</td><td><code>---</code></td><td><em>horizontal line</em></td></tr>
+          <tr><td>Table header</td><td><code>| col | col |<br>|---|---|</code></td><td><em>table</em></td></tr>
+          <tr><td>Checkbox (GFM)</td><td><code>- [ ] task</code></td><td>☐ task</td></tr>
+          <tr><td>Checked (GFM)</td><td><code>- [x] done</code></td><td>☑ done</td></tr>
+          <tr><td>Paragraph break</td><td><em>leave a blank line</em></td><td><em>new paragraph</em></td></tr>
+          <tr><td>Escape a mark</td><td><code>\*</code></td><td>*</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="chapter" id="gfm">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 5</div>
+        <h2>GitHub-Flavored Markdown</h2>
+      </div>
+      <p>GitHub extended standard Markdown with extras that you will use constantly at SELISE. Most modern tools (Linear, Jira, Notion, Obsidian) now support these too.</p>
+      <div class="example">
+        <div class="ex-pane raw"><div class="ex-head"><span class="ex-dot"></span>Write</div><div class="ex-body">Today's tasks:
+- [x] Write spec
+- [ ] Review with Tek
+- [ ] Share with team
+
+Tag people: @bhuwan
+Link an issue: #42
+Emoji: :rocket: :bug:</div></div>
+        <div class="ex-pane rendered"><div class="ex-head"><span class="ex-dot"></span>Shown on GitHub</div><div class="ex-body">
+          <p>Today's tasks:</p>
+          <ul style="list-style:none; padding-left:0.3rem">
+            <li><input type="checkbox" checked disabled> Write spec</li>
+            <li><input type="checkbox" disabled> Review with Tek</li>
+            <li><input type="checkbox" disabled> Share with team</li>
+          </ul>
+          <p>Tag people: <a href="#" style="font-weight:600">@bhuwan</a><br>Link an issue: <a href="#" style="font-weight:600">#42</a><br>Emoji: 🚀 🐛</p>
+        </div></div>
+      </div>
+      <p><strong>Task lists</strong> (checkboxes) are a big deal — they're how teams track progress inside issues and PRs.</p>
+    </section>
+
+    <section class="chapter" id="verticals">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 6</div>
+        <h2>How each vertical uses Markdown every day</h2>
+      </div>
+      <p>Same language, three very different documents.</p>
+
+      <div class="vert-card dev">
+        <div class="vert-head">👨‍💻 Dev — a project README</div>
+        <div class="vert-body">
+          <p>Every GitHub project has a <code>README.md</code>. It's the first thing a reviewer, a teammate, or your future self sees. A clear README is the single biggest signal that a developer is professional.</p>
+<pre><code># Weather App
+
+A simple weather app for GMC residents.
+
+## Setup
+
+```bash
+npm install
+npm start
+```
+
+## Features
+
+- Current temperature
+- 7-day forecast
+- Works offline
+
+## Built with
+
+- React
+- OpenWeather API</code></pre>
+        </div>
+      </div>
+
+      <div class="vert-card qa">
+        <div class="vert-head">🐛 QA — a bug report</div>
+        <div class="vert-body">
+          <p>A developer reads your bug report alone, at their desk, often hours after you filed it. Your Markdown structure is doing the explaining. A shapeless paragraph wastes their time; a structured report gets fixed fast.</p>
+<pre><code># Bug: Login fails on Bhutanese numbers
+
+**Environment:** Production, iPhone 14, Safari
+**Severity:** High
+
+## Steps to reproduce
+
+1. Go to login page
+2. Enter phone `+97517123456`
+3. Tap "Send OTP"
+
+## Expected
+OTP arrives within 30 seconds.
+
+## Actual
+Screen freezes. No error shown.
+
+## Evidence
+![screenshot](freeze.png)</code></pre>
+        </div>
+      </div>
+
+      <div class="vert-card ba">
+        <div class="vert-head">📋 BA — a user story / mini-spec</div>
+        <div class="vert-body">
+          <p>A BA's spec is read by developers, designers, and QAs. All of them should take the same thing away from it. Markdown's structure (headings, lists, checkboxes) makes that much more likely.</p>
+<pre><code># Story: Forgot password
+
+## Who
+Any registered user.
+
+## Why
+They forgot their password and can't log in.
+
+## Acceptance criteria
+
+- [ ] "Forgot password?" link on the login screen
+- [ ] User enters email → gets reset link
+- [ ] Link expires after 30 minutes
+- [ ] Link can only be used once
+
+## Out of scope
+
+- SMS-based reset
+- Security questions</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="ai">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 7</div>
+        <h2>Markdown &amp; AI — why structured prompts win</h2>
+      </div>
+      <p>AI tools like Claude Code, ChatGPT, and Gemini all read Markdown natively. They use its structure to understand what you want. This means the way you lay out a prompt directly affects the quality of the answer.</p>
+      <p><strong>A structured prompt gets a structured answer. A shapeless prompt gets a shapeless answer.</strong></p>
+
+      <div class="example">
+        <div class="ex-pane raw"><div class="ex-head"><span class="ex-dot"></span>❌ Shapeless prompt</div><div class="ex-body">make a react counter with buttons +1 and -1 also reset and use tailwind keep it in one file</div></div>
+        <div class="ex-pane rendered"><div class="ex-head"><span class="ex-dot"></span>✅ Markdown prompt</div><div class="ex-body" style="font-family:'Courier New',monospace; white-space:pre-wrap; font-size:0.85rem; background:#F6F9FC; color:var(--indigo)"># Task
+Build a small React counter component.
+
+# Requirements
+- Start at 0
+- Buttons: +1, -1, reset
+- Use Tailwind for styles
+
+# Constraint
+Keep it in one file.</div></div>
+      </div>
+
+      <p>The second one takes 20 extra seconds to write and gives you a dramatically better answer. Every time.</p>
+
+      <div class="callout green">
+        <h4>This is why Pelsung uses Claude Code</h4>
+        <p>Claude Code and similar AI tools read Markdown by default — <code>CLAUDE.md</code> files, specs, prompts, responses. If you can write good Markdown, you can work well with AI. The two skills are basically one skill.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="playground">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 8 · Hands-on</div>
+        <h2>Live playground — practice right here</h2>
+      </div>
+      <p>Don't switch tabs. Don't install anything. Type Markdown in the left pane. The right pane renders it live as you type. This is exactly how dillinger.io and stackedit.io work — but embedded in this page.</p>
+
+      <div class="playground">
+        <h3>Your practice lab</h3>
+        <p class="sub">Edit the left side. Watch the right side update. Try every button below to load a starter template.</p>
+
+        <div class="pg-toolbar">
+          <button class="pg-btn" data-sample="basics">📝 Basics starter</button>
+          <button class="pg-btn" data-sample="readme">👨‍💻 README starter (Dev)</button>
+          <button class="pg-btn" data-sample="bug">🐛 Bug report starter (QA)</button>
+          <button class="pg-btn" data-sample="story">📋 User story starter (BA)</button>
+          <button class="pg-btn" data-sample="prompt">🤖 AI prompt starter</button>
+          <button class="pg-btn" data-sample="empty">📄 Blank</button>
+          <button class="pg-btn clear" id="pg-clear-btn">🗑️ Clear saved</button>
+        </div>
+
+        <div class="pg-grid">
+          <div class="pg-pane">
+            <div class="pg-pane-head"><span class="ex-dot" style="background:var(--blue)"></span>Markdown · type here</div>
+            <textarea id="md-input" spellcheck="false"></textarea>
+          </div>
+          <div class="pg-pane">
+            <div class="pg-pane-head"><span class="ex-dot" style="background:var(--green)"></span>Preview · live</div>
+            <div id="md-output"></div>
+          </div>
+        </div>
+        <div class="pg-status" id="pg-status">Auto-saved · renders as you type</div>
+      </div>
+
+      <p style="margin-top:1.2rem">Want a bigger playground, or one you can save to Google Drive? Try these:</p>
+      <div class="link-row">
+        <a class="link-pill" href="https://dillinger.io" target="_blank" rel="noopener">🔗 dillinger.io</a>
+        <a class="link-pill" href="https://stackedit.io/app" target="_blank" rel="noopener">🔗 stackedit.io</a>
+        <a class="link-pill" href="https://markdownlivepreview.com" target="_blank" rel="noopener">🔗 markdownlivepreview.com</a>
+        <a class="link-pill" href="https://www.markdowntutorial.com" target="_blank" rel="noopener">🎓 markdowntutorial.com (guided lessons)</a>
+      </div>
+    </section>
+
+    <section class="chapter" id="exercises">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 9 · Do the work</div>
+        <h2>Three exercises — no shortcuts</h2>
+      </div>
+      <p>You cannot learn Markdown by reading about Markdown. Do these three exercises in the playground above. Don't copy-paste from the starter templates — <em>type every character yourself</em>. That's how your hands learn the language.</p>
+
+      <div class="exercise">
+        <span class="tag">Exercise 1 · ~15 min</span>
+        <h4>Write your "About Me"</h4>
+        <p>Create a short personal profile in Markdown. It must include:</p>
+        <ul>
+          <li>A big heading with your name</li>
+          <li>A smaller "About Me" heading and a paragraph about yourself</li>
+          <li>A bulleted list of <strong>3 things you like</strong></li>
+          <li>A numbered list of <strong>3 goals for Pelsung</strong></li>
+          <li>A link to a website you visit daily</li>
+          <li>Something in <em>italic</em> and something in <strong>bold</strong></li>
+          <li>A blockquote with a favourite saying</li>
+        </ul>
+        <p><strong>Done when:</strong> the right pane looks like a real profile page, not a dump of stars and hashes.</p>
+      </div>
+
+      <div class="exercise">
+        <span class="tag">Exercise 2 · ~15 min</span>
+        <h4>File a fake bug report</h4>
+        <p>Pretend you found a bug in WhatsApp (or any app you use daily). Write the report in Markdown as if you were filing it in Jira or GitHub. Must include:</p>
+        <ul>
+          <li>A clear <strong>one-line title</strong> (H1) — not "bug bug bug"</li>
+          <li><strong>Environment</strong> — device, browser/OS, app version (use bold labels)</li>
+          <li><strong>Steps to reproduce</strong> — a numbered list of 3+ steps</li>
+          <li><strong>Expected</strong> and <strong>Actual</strong> as two H2 sub-headings</li>
+          <li>A code snippet (e.g. a URL or error message) in backticks</li>
+          <li>A task list (checkboxes) of things still to verify</li>
+        </ul>
+        <p><strong>Tip:</strong> click the "Bug report starter (QA)" button above and <em>change every field</em>. Keep nothing the same.</p>
+      </div>
+
+      <div class="exercise">
+        <span class="tag">Exercise 3 · ~15 min</span>
+        <h4>Build a comparison table</h4>
+        <p>Pick 3 apps you use every day (WhatsApp, Instagram, Druk Pay, mBoB, etc.). Build a Markdown table comparing them. Columns:</p>
+        <ul>
+          <li>App name</li>
+          <li>What you use it for</li>
+          <li>One thing you like</li>
+          <li>One thing that annoys you</li>
+        </ul>
+        <p>Then, under the table, add a blockquote (<code>&gt;</code>) saying which one you'd keep if you could only have one — and why.</p>
+        <p><strong>This is the kind of document a BA might produce after a discovery interview.</strong></p>
+      </div>
+    </section>
+
+    <section class="chapter" id="mistakes">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 10</div>
+        <h2>Common mistakes</h2>
+      </div>
+      <div class="callout red">
+        <h4>❌ Missing space after #</h4>
+        <p><code>#Hello</code> does nothing. <code># Hello</code> becomes a heading. Always put one space after the hash.</p>
+      </div>
+      <div class="callout red">
+        <h4>❌ No blank lines between blocks</h4>
+        <p>Two lines of text with no blank line between them join into one paragraph. A table right after a paragraph with no blank line between often fails. When in doubt, add the blank line.</p>
+      </div>
+      <div class="callout red">
+        <h4>❌ Curly quotes in code</h4>
+        <p>If your text editor turned your backticks into curly quotes (<code>'</code>, <code>"</code>), code formatting breaks. Use plain straight backticks — the key below Esc on most keyboards.</p>
+      </div>
+      <div class="callout red">
+        <h4>❌ Tables without the <code>---</code> row</h4>
+        <p>Markdown tables need that second row of dashes. Without it, you just get ugly pipes and text.</p>
+      </div>
+      <div class="callout red">
+        <h4>❌ Using 1 space for nested lists</h4>
+        <p>Indent with <strong>2 spaces</strong> (or a tab) to nest a list. One space often fails silently.</p>
+      </div>
+      <div class="callout green">
+        <h4>✅ The fix for almost all of these</h4>
+        <p>Look at the rendered preview before you send. If it doesn't look right, it isn't right. Fix it first.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="tools">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 11</div>
+        <h2>Tools &amp; further reading</h2>
+      </div>
+      <h3 style="color:var(--indigo); font-size:1.1rem; margin:0.7rem 0 0.3rem">Where to write Markdown</h3>
+      <ul>
+        <li><strong>VS Code</strong> (free) — the editor you'll use for everything else too. Press <code>Ctrl+Shift+V</code> (Mac: <code>Cmd+Shift+V</code>) to open a preview. Install the "Markdown All in One" extension for more power.</li>
+        <li><strong>Obsidian</strong> (free) — keeps your notes as plain Markdown files on your laptop. Excellent for personal knowledge notes.</li>
+        <li><strong>GitHub</strong> — every <code>.md</code> file auto-previews when you click on it. This is where you'll end up writing most Markdown in your career.</li>
+        <li><strong>dillinger.io</strong>, <strong>stackedit.io</strong>, <strong>markdownlivepreview.com</strong> — browser-only playgrounds, great for quick edits.</li>
+      </ul>
+
+      <h3 style="color:var(--indigo); font-size:1.1rem; margin:1rem 0 0.3rem">To go deeper</h3>
+      <div class="link-row">
+        <a class="link-pill" href="https://www.markdownguide.org/cheat-sheet/" target="_blank" rel="noopener">📖 Markdown Guide — cheat sheet</a>
+        <a class="link-pill" href="https://www.markdownguide.org/basic-syntax/" target="_blank" rel="noopener">📖 Full basic syntax reference</a>
+        <a class="link-pill" href="https://www.markdowntutorial.com" target="_blank" rel="noopener">🎓 markdowntutorial.com — interactive lessons</a>
+        <a class="link-pill" href="https://github.github.com/gfm/" target="_blank" rel="noopener">📖 GitHub-Flavored Markdown spec</a>
+        <a class="link-pill" href="https://www.markdownguide.org/tools/" target="_blank" rel="noopener">🛠 List of Markdown editors</a>
+      </div>
+
+      <div class="summary">
+        <h4>🎯 What you should walk away with</h4>
+        <ul>
+          <li>You can write a README, a bug report, and a user story in Markdown without looking things up.</li>
+          <li>You recognise when a paragraph isn't rendering because you missed a blank line — and you fix it.</li>
+          <li>You can prompt AI tools with structured Markdown and get better answers back.</li>
+          <li>You know where to practice: the embedded playground above, dillinger.io, stackedit.io, markdowntutorial.com.</li>
+          <li>Markdown stops feeling like "extra syntax" and starts feeling like just how writing works in software.</li>
+        </ul>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE">
+    SELISE × Pelsung — Extra E2 · Markdown · Self-paced reference
+  </footer>
+
+  <!-- marked.js converts Markdown → HTML; DOMPurify sanitizes the result against XSS -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+  <script>
+    const SAMPLES = {
+      basics: `# Hello, Markdown!\n\nThis is a **paragraph** with some *italic* and ~~strikethrough~~ text.\n\n## A small list\n- First item\n- Second item\n  - Nested sub-item\n- Third item\n\n## A numbered list\n1. Wake up\n2. Drink tea\n3. Start coding\n\n> A good quote goes here.\n\n---\n\n[Visit SELISE](https://selisegroup.com)\n\n\`\`\`js\nfunction greet(name) {\n  return "Hello, " + name;\n}\n\`\`\`\n`,
+      readme: `# Project Name\n\nOne-line description of what this project does.\n\n## Setup\n\n\`\`\`bash\nnpm install\nnpm start\n\`\`\`\n\n## Features\n\n- Feature one\n- Feature two\n- Feature three\n\n## Built with\n\n- React\n- Node.js\n- An API of your choice\n\n## License\n\nMIT\n`,
+      bug: `# Bug: [short clear title]\n\n**Environment:** [device, browser, OS]\n**Severity:** [Low / Medium / High]\n\n## Steps to reproduce\n\n1. Step one\n2. Step two\n3. Step three\n\n## Expected\n\nWhat *should* happen.\n\n## Actual\n\nWhat *actually* happens. Include error messages: \`error text here\`\n\n## Evidence\n\n![screenshot](screenshot.png)\n\n## To verify\n\n- [ ] Reproduce on Android\n- [ ] Check server logs\n- [ ] Confirm fix with QA\n`,
+      story: `# Story: [feature name]\n\n## Who\n[Which type of user is this for?]\n\n## Why\n[What problem are they trying to solve?]\n\n## Acceptance criteria\n\n- [ ] Criterion one — specific and testable\n- [ ] Criterion two\n- [ ] Criterion three\n\n## Out of scope\n\n- Thing we are *not* building in this story\n- Another thing we're leaving for later\n\n## Open questions\n\n> Any open questions for the product owner go here.\n`,
+      prompt: `# Task\n[What you want the AI to do — one clear sentence.]\n\n# Context\n[Background the AI needs. Relevant files, tools, constraints.]\n\n# Requirements\n- Requirement one\n- Requirement two\n- Requirement three\n\n# Constraint\n[Anything the AI must NOT do.]\n\n# Output format\n[How you want the answer back — prose, bullet list, code only, etc.]\n`,
+      empty: ``
+    };
+
+    const input = document.getElementById('md-input');
+    const output = document.getElementById('md-output');
+    const status = document.getElementById('pg-status');
+    const STORAGE_KEY = 'e2-markdown-playground';
+
+    if (window.marked && marked.setOptions) {
+      marked.setOptions({ gfm: true, breaks: false });
+    }
+
+    function setHtml(el, html) {
+      // DOMPurify sanitizes the marked.js output against XSS (the textarea is user-local,
+      // but we sanitize anyway — good habit for trainees to see in the code).
+      const clean = window.DOMPurify
+        ? DOMPurify.sanitize(html, { USE_PROFILES: { html: true } })
+        : html;
+      el.innerHTML = clean;
+    }
+
+    function render() {
+      const md = input.value;
+      try {
+        const html = window.marked ? marked.parse(md) : md;
+        setHtml(output, html);
+      } catch (e) {
+        output.textContent = 'Preview error: ' + e.message;
+      }
+      try { localStorage.setItem(STORAGE_KEY, md); } catch (e) {}
+    }
+
+    function loadSample(key) {
+      input.value = SAMPLES[key] || '';
+      render();
+      input.focus();
+    }
+
+    function clearPlayground() {
+      try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+      input.value = '';
+      render();
+      status.textContent = 'Cleared · type something to start';
+      setTimeout(() => { status.textContent = 'Auto-saved · renders as you type'; }, 2000);
+    }
+
+    // Wire up toolbar buttons (data-sample attribute → loadSample)
+    document.querySelectorAll('.pg-btn[data-sample]').forEach(btn => {
+      btn.addEventListener('click', () => loadSample(btn.dataset.sample));
+    });
+    document.getElementById('pg-clear-btn').addEventListener('click', clearPlayground);
+    input.addEventListener('input', render);
+
+    // Load previous session, or basics starter if none
+    const saved = (() => { try { return localStorage.getItem(STORAGE_KEY); } catch (e) { return null; } })();
+    input.value = saved !== null && saved.length > 0 ? saved : SAMPLES.basics;
+    render();
+  </script>
+</body>
+</html>

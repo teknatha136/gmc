@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HLD &amp; LLD Workshop — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../shared/slides.css" />
+    <style>
+      .big-card { background:white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.3rem; max-width:1050px; width:100%; }
+      .big-card h4 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.12rem; margin-bottom:0.5rem; }
+      .big-card .tag { color:var(--muted); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.07em; font-weight:700; margin-bottom:0.25rem; }
+      .big-card ul { padding-left:1.2rem; margin:0.4rem 0; }
+      .big-card li { font-size:0.9rem; line-height:1.65; color:var(--text); margin:0.2rem 0; }
+
+      .diagram-box { background:white; border:1px solid var(--border); border-radius:10px; padding:1rem 1.5rem; max-width:950px; width:100%; font-family:'Courier New',monospace; font-size:0.88rem; line-height:1.75; color:var(--indigo); white-space:pre; overflow-x:auto; }
+      .codeblock { background:#F8F9FA; border:1px solid var(--border); border-radius:8px; padding:0.9rem 1.1rem; font-family:'Courier New',monospace; font-size:0.82rem; line-height:1.65; color:var(--text); max-width:1000px; width:100%; overflow-x:auto; white-space:pre; }
+
+      .dual { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px) { .dual { grid-template-columns: 1fr; } }
+
+      .c4 { display:grid; grid-template-columns: repeat(4, 1fr); gap:0.7rem; max-width:1180px; width:100%; }
+      @media (max-width: 900px) { .c4 { grid-template-columns: 1fr 1fr; } }
+      .c4-card { background:white; border:1px solid var(--border); border-top:4px solid var(--blue); border-radius:10px; padding:0.85rem 1rem; text-align:center; }
+      .c4-card.lvl3 { border-top-color:var(--amber); }
+      .c4-card.lvl4 { border-top-color:var(--purple); }
+      .c4-card .lvl { color:var(--muted); font-family:'Courier New',monospace; font-size:0.73rem; }
+      .c4-card h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin:0.25rem 0; }
+      .c4-card p { font-size:0.8rem; color:var(--text); line-height:1.55; }
+
+      .sec-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:0.55rem; max-width:1180px; width:100%; }
+      @media (max-width: 900px) { .sec-grid { grid-template-columns: 1fr 1fr; } }
+      .sec-card { background:white; border:1px solid var(--border); border-left:4px solid var(--blue); border-radius:8px; padding:0.6rem 0.85rem; }
+      .sec-card .num { font-family:'Courier New',monospace; font-size:0.72rem; color:var(--muted); }
+      .sec-card h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.86rem; margin:0.1rem 0 0.15rem; }
+      .sec-card p { font-size:0.76rem; color:var(--text); line-height:1.5; }
+
+      .qa-tbl { max-width:1100px; width:100%; background:white; border:1px solid var(--border); border-radius:10px; overflow:hidden; font-size:0.85rem; }
+      .qa-tbl table { width:100%; border-collapse:collapse; }
+      .qa-tbl th { background:var(--bg); padding:0.5rem 0.7rem; text-align:left; color:var(--muted); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; border-bottom:1px solid var(--border); }
+      .qa-tbl td { padding:0.5rem 0.7rem; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.55; }
+      .qa-tbl tr:last-child td { border-bottom:none; }
+      .qa-tbl td:first-child { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; white-space:nowrap; }
+
+      .pitfall-tbl { max-width:1100px; width:100%; background:white; border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+      .pitfall-tbl table { width:100%; border-collapse:collapse; font-size:0.82rem; }
+      .pitfall-tbl th { background:var(--bg); padding:0.5rem 0.7rem; text-align:left; color:var(--muted); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; border-bottom:1px solid var(--border); }
+      .pitfall-tbl td { padding:0.5rem 0.7rem; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.55; }
+      .pitfall-tbl tr:last-child td { border-bottom:none; }
+      .pitfall-tbl td:first-child { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; width:30%; }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>Spec Writing · Class 04</div></div>
+          <h1 class="display" style="color: var(--text)">
+            <span style="color: var(--blue)">HLD &amp; LLD</span><br />
+            <span style="color: var(--indigo)">Workshop</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted)">The design side of the spec stack. From architecture blueprint to component-level detail.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">C4 Model</span>
+            <span class="class-tag tag-blue">Architecture</span>
+            <span class="class-tag tag-blue">Component Design</span>
+            <span class="class-tag tag-blue">BA ↔ Dev</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 AGENDA -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 820px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem"><h2 class="heading">Session Journey · ~75 min</h2></div>
+          <div class="agenda-row" onclick="goTo(2)"><span class="ar-dot" style="background: var(--red)"></span><span class="ar-label">🎯 HLD vs LLD · why both exist</span><span class="ar-badge" style="background:#FEE9EC;color:var(--red)">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(5)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🏗️ HLD structure · 16 sections</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">15 min</span></div>
+          <div class="agenda-row" onclick="goTo(9)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🌍 C4 model · 4 levels of diagrams</span><span class="ar-badge" style="background:#E6F0F8;color:var(--indigo)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(12)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🔧 LLD structure · 16 sections</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">15 min</span></div>
+          <div class="agenda-row" onclick="goTo(15)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">⚡ Error taxonomy &amp; concurrency</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(17)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">📄 Worked example &amp; BA review</span><span class="ar-badge" style="background:#E6F0F8;color:var(--indigo)">15 min</span></div>
+        </div>
+      </div>
+
+      <!-- 3 HOOK -->
+      <div class="slide bg-dark" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> Hook</div>
+        <div class="center" style="max-width: 940px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎤 Scenario</div>
+          <p class="disc-prompt" style="font-size:1.3rem">An architect whiteboards a design.<br>The next day, two devs start building.<br>Three weeks later they realise they built <strong style="color:var(--amber)">different things</strong>.</p>
+          <p style="color: rgba(255,255,255,0.88); font-size: 1.05rem; margin-top:2rem; line-height:1.8;">
+            Why? The design only lived in one person's head.<br>
+            HLD and LLD turn that head-knowledge into <strong style="color:var(--amber)">a document two people can build from identically</strong>.
+          </p>
+        </div>
+      </div>
+
+      <!-- 4 HLD VS LLD -->
+      <div class="slide accent-blue bg-subtle" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> HLD vs LLD · what each covers</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Two zoom levels · two purposes</h2></div>
+          <div class="dual">
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--indigo); padding:1rem 1.3rem;">
+              <h4 style="color:var(--indigo); font-size:1.1rem; margin-bottom:0.4rem;">🏗️ HLD · High-Level Design</h4>
+              <ul style="padding-left:1.1rem; font-size:0.9rem; line-height:1.65; color:var(--text)">
+                <li><strong>Scope:</strong> system · boxes · integrations</li>
+                <li><strong>Audience:</strong> architects · SRE · security · ARB</li>
+                <li><strong>Answers:</strong> "How are the parts arranged, and why?"</li>
+                <li><strong>Length:</strong> 10–25 pages</li>
+                <li><strong>Diagrams:</strong> C4 Level 1 &amp; 2</li>
+              </ul>
+            </div>
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--amber); padding:1rem 1.3rem;">
+              <h4 style="color:var(--indigo); font-size:1.1rem; margin-bottom:0.4rem;">🔧 LLD · Low-Level Design</h4>
+              <ul style="padding-left:1.1rem; font-size:0.9rem; line-height:1.65; color:var(--text)">
+                <li><strong>Scope:</strong> one component · classes · APIs · schema</li>
+                <li><strong>Audience:</strong> the devs who'll write the code</li>
+                <li><strong>Answers:</strong> "How is this component built inside?"</li>
+                <li><strong>Length:</strong> 5–20 pages per component</li>
+                <li><strong>Diagrams:</strong> C4 Level 3 &amp; 4</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">HLD = the whiteboard photo. LLD = the labelled sketch on the whiteboard. Skipping a level is tempting — and expensive later.</p>
+        </div>
+      </div>
+
+      <!-- 5 HLD STRUCTURE intro -->
+      <div class="slide bg-indigo" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part One</div>
+          <h1 class="display" style="color: white">HLD Structure</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">16 sections · five zones.</p>
+        </div>
+        <div class="section-num" style="color: white">01</div>
+      </div>
+
+      <!-- 6 HLD 16 -->
+      <div class="slide accent-blue bg-subtle" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> The 16 sections of an HLD</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Setup · driving forces · structure · mechanics · thinking</h2></div>
+          <div class="sec-grid">
+            <div class="sec-card"><div class="num">§ 01</div><h6>Metadata</h6><p>Who · what · version</p></div>
+            <div class="sec-card"><div class="num">§ 02</div><h6>Purpose &amp; Scope</h6><p>Covered · not covered</p></div>
+            <div class="sec-card"><div class="num">§ 03</div><h6>Context</h6><p>C4 L1 · external systems</p></div>
+            <div class="sec-card"><div class="num">§ 04</div><h6>Quality Attributes</h6><p>NFRs that shape architecture</p></div>
+            <div class="sec-card"><div class="num">§ 05</div><h6>Arch Style</h6><p>Monolith · microservices · event · why</p></div>
+            <div class="sec-card"><div class="num">§ 06</div><h6>Container Diagram</h6><p>C4 L2 · deployable units</p></div>
+            <div class="sec-card"><div class="num">§ 07</div><h6>Data Architecture</h6><p>Entities · stores · consistency · retention</p></div>
+            <div class="sec-card"><div class="num">§ 08</div><h6>Integration</h6><p>Protocols · retry · idempotency · SLA</p></div>
+            <div class="sec-card"><div class="num">§ 09</div><h6>Security</h6><p>AuthN · AuthZ · encryption · threat model</p></div>
+            <div class="sec-card"><div class="num">§ 10</div><h6>Deployment</h6><p>Envs · regions · release strategy</p></div>
+            <div class="sec-card"><div class="num">§ 11</div><h6>Observability</h6><p>Metrics · logs · traces · alerts</p></div>
+            <div class="sec-card"><div class="num">§ 12</div><h6>Reliability</h6><p>Failure modes · DR · backup</p></div>
+            <div class="sec-card"><div class="num">§ 13</div><h6>Cross-cutting</h6><p>I18n · a11y · perf · cost · compliance</p></div>
+            <div class="sec-card"><div class="num">§ 14</div><h6>ADRs</h6><p>Decision records · one-liner each</p></div>
+            <div class="sec-card"><div class="num">§ 15</div><h6>Trade-offs</h6><p>Chose · rejected · cost of wrong</p></div>
+            <div class="sec-card"><div class="num">§ 16</div><h6>Open Q &amp; Out of Scope</h6><p>Owners · deadlines · not covered</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7 QUALITY ATTRIBUTES -->
+      <div class="slide accent-blue" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> § 04 · Quality attributes · the driver</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Every architectural choice traces back to one of these</h2></div>
+          <div class="qa-tbl">
+            <table>
+              <thead><tr><th>Attribute</th><th>Target</th><th>Architectural implication</th></tr></thead>
+              <tbody>
+                <tr><td>Availability</td><td>99.95% monthly</td><td>Multi-AZ active-active · no single DB primary</td></tr>
+                <tr><td>Latency</td><td>p95 &lt; 250 ms</td><td>Read replica · cache layer · connection pooling</td></tr>
+                <tr><td>Throughput</td><td>5 000 TPS peak</td><td>Horizontal scaling · queue-based back-pressure</td></tr>
+                <tr><td>Security</td><td>PCI-DSS scoped</td><td>Tokenisation at edge · card data never in app DB</td></tr>
+                <tr><td>Data residency</td><td>Bhutan only</td><td>Region-pinned deployment · no cross-border replication</td></tr>
+                <tr><td>Auditability</td><td>7-year retention</td><td>Append-only event log · immutable storage + object lock</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card" style="max-width:900px; background:white; border-left:4px solid var(--amber); padding:0.9rem 1.2rem;">
+            <p style="font-size:0.92rem; color:var(--text); line-height:1.65"><strong>The architecture trace rule:</strong> every box, arrow, and datastore must justify itself by "because of target X". Can't justify? Not a decision — a guess.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8 HLD SAMPLE CONTEXT -->
+      <div class="slide accent-blue bg-subtle" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> § 03 · Context diagram · always C4 Level 1</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="diagram-box">
+        ┌─────────────┐        ┌──────────────┐
+        │  Customer   │───────▶│              │───────▶ Payment Gateway
+        │ (mBoB app)  │        │  Biller Favs │         (external)
+        └─────────────┘        │    Service   │
+                               │              │───────▶ Core Banking Ledger
+        ┌─────────────┐        │              │         (internal)
+        │  Admin Tool │◀───────│              │
+        │  (internal) │        └──────┬───────┘───────▶ Notification Bus
+        └─────────────┘               │                 (internal)
+                                      ▼
+                               [Favourites DB]
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px">The system is ONE box. Everything around it is an actor or external system. This is the picture a sponsor can understand — and the one that catches missing integrations.</p>
+        </div>
+      </div>
+
+      <!-- 9 C4 MODEL -->
+      <div class="slide accent-blue" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> The C4 model · 4 levels of zoom</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Levels 1–2 live in HLD · Levels 3–4 live in LLD</h2></div>
+          <div class="c4">
+            <div class="c4-card"><div class="lvl">Level 1</div><h6>🌍 Context</h6><p>System as one box · actors around it. "What does it touch?"</p></div>
+            <div class="c4-card"><div class="lvl">Level 2</div><h6>📦 Container</h6><p>Deployable units inside. Services · apps · DBs.</p></div>
+            <div class="c4-card lvl3"><div class="lvl">Level 3</div><h6>🧩 Component</h6><p>Inside one container — modules &amp; their relationships.</p></div>
+            <div class="c4-card lvl4"><div class="lvl">Level 4</div><h6>🔬 Code</h6><p>Class / function-level. Usually UML.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10 HLD CONTAINER -->
+      <div class="slide accent-blue bg-subtle" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> § 06 · Container diagram · C4 Level 2</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="diagram-box">
+┌──────────────┐   ┌─────────────┐   ┌─────────────┐
+│  Mobile App  │──▶│  API GW     │──▶│ Auth Svc    │
+└──────────────┘   └─────┬───────┘   └─────────────┘
+                         │
+                         ▼
+                  ┌─────────────┐   ┌──────────────┐
+                  │  Favs Svc   │──▶│ Favourites DB│
+                  └─────┬───────┘   └──────────────┘
+                        │
+                        ▼
+                  ┌─────────────┐
+                  │  Event Bus  │
+                  └─────────────┘
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px">Each container is owned by a team · runs in a separate process or service · can be deployed independently.</p>
+        </div>
+      </div>
+
+      <!-- 11 ADRs -->
+      <div class="slide accent-blue" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> § 14 · ADRs · decision records</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Capture trade-offs on paper · don't re-argue them in 6 months</h2></div>
+          <div class="big-card">
+            <h4>Biller Favourites · ADR summary</h4>
+            <ul>
+              <li><strong>ADR-001</strong> · Modular monolith (not microservices) for MVP — reduces ops cost; revisit at 2× current load.</li>
+              <li><strong>ADR-002</strong> · Serializable transactions over CQRS — simpler; latency targets still met.</li>
+              <li><strong>ADR-003</strong> · Postgres for ledger · Redis for cache. Rejected: Cassandra (overkill) · MongoDB (consistency).</li>
+              <li><strong>ADR-004</strong> · Region-pinned to Bhutan per RMA §7; no multi-region DR because of residency constraint.</li>
+            </ul>
+            <p style="font-size:0.85rem; color:var(--muted); font-style:italic; margin-top:0.5rem">Each ADR is a ~1-page document. The HLD links to it; nothing gets re-argued because the record exists.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12 LLD intro -->
+      <div class="slide bg-blue" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Two</div>
+          <h1 class="display" style="color: white">LLD Structure</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">16 sections · devs write code from this.</p>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- 13 LLD 16 -->
+      <div class="slide accent-blue bg-subtle" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> The 16 sections of an LLD</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Two engineers · same LLD · near-identical code</h2></div>
+          <div class="sec-grid">
+            <div class="sec-card"><div class="num">§ 01</div><h6>Metadata</h6><p>Parent HLD link</p></div>
+            <div class="sec-card"><div class="num">§ 02</div><h6>Purpose</h6><p>What this component does</p></div>
+            <div class="sec-card"><div class="num">§ 03</div><h6>Responsibilities</h6><p>Owns · delegates</p></div>
+            <div class="sec-card"><div class="num">§ 04</div><h6>Public API</h6><p>Endpoints · methods · schemas</p></div>
+            <div class="sec-card"><div class="num">§ 05</div><h6>Data Model (physical)</h6><p>DDL · indexes · constraints</p></div>
+            <div class="sec-card"><div class="num">§ 06</div><h6>Internal Structure</h6><p>Classes · C4 L3</p></div>
+            <div class="sec-card"><div class="num">§ 07</div><h6>Algorithms</h6><p>Pseudocode · business rules</p></div>
+            <div class="sec-card"><div class="num">§ 08</div><h6>Error Taxonomy</h6><p>Every code · HTTP · user-facing?</p></div>
+            <div class="sec-card"><div class="num">§ 09</div><h6>Concurrency</h6><p>Isolation · locks · races</p></div>
+            <div class="sec-card"><div class="num">§ 10</div><h6>Retry &amp; Idempotency</h6><p>Timeouts · keys · semantics</p></div>
+            <div class="sec-card"><div class="num">§ 11</div><h6>Caching</h6><p>Keys · TTL · invalidation</p></div>
+            <div class="sec-card"><div class="num">§ 12</div><h6>Observability</h6><p>Metrics · logs · traces</p></div>
+            <div class="sec-card"><div class="num">§ 13</div><h6>Security</h6><p>AuthZ · audit · rate limit</p></div>
+            <div class="sec-card"><div class="num">§ 14</div><h6>Tests</h6><p>Unit · integration · load</p></div>
+            <div class="sec-card"><div class="num">§ 15</div><h6>Deployment</h6><p>Flag · migration · rollback</p></div>
+            <div class="sec-card"><div class="num">§ 16</div><h6>Open Q &amp; Out of Scope</h6><p>Unresolved · excluded</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 14 LLD API + SCHEMA -->
+      <div class="slide accent-blue" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> § 04 · API contract &amp; § 05 · schema</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="codeblock">POST   /api/v1/favourites     -> 201 Favourite | 409 LimitReached | 409 Duplicate
+GET    /api/v1/favourites     -> 200 Favourite[]
+DELETE /api/v1/favourites/{id} -> 204 | 404
+PATCH  /api/v1/favourites/{id} -> 200 | 404 | 400 ValidationError
+
+CREATE TABLE favourites (
+  id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id      UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  biller_id    UUID NOT NULL REFERENCES billers(id),
+  alias        VARCHAR(30),
+  created_at   TIMESTAMPTZ NOT NULL DEFAULT now(),
+  CONSTRAINT favourites_user_biller_unique UNIQUE (user_id, biller_id)
+);
+CREATE INDEX favourites_user_idx ON favourites (user_id, last_used_at DESC);</div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">Concrete enough that two engineers would produce near-identical code.</p>
+        </div>
+      </div>
+
+      <!-- 15 ERRORS -->
+      <div class="slide accent-blue bg-subtle" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span> § 08 · Error taxonomy · the often-missed section</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Every failure mode · every HTTP code · every caller can distinguish</h2></div>
+          <div class="qa-tbl">
+            <table>
+              <thead><tr><th>Error</th><th>When</th><th>HTTP</th><th>User-facing?</th></tr></thead>
+              <tbody>
+                <tr><td>VALIDATION</td><td>Bad input (alias > 30)</td><td>400</td><td>Yes</td></tr>
+                <tr><td>UNAUTHORIZED</td><td>Missing / invalid token</td><td>401</td><td>Yes</td></tr>
+                <tr><td>FORBIDDEN</td><td>Valid token · no permission</td><td>403</td><td>Yes</td></tr>
+                <tr><td>NOT_FOUND</td><td>ID doesn't exist or not owned</td><td>404</td><td>Yes</td></tr>
+                <tr><td>LIMIT_REACHED</td><td>User already has 10</td><td>409</td><td>Yes</td></tr>
+                <tr><td>DUPLICATE</td><td>(user, biller) already exists</td><td>409</td><td>Yes</td></tr>
+                <tr><td>DB_UNAVAILABLE</td><td>Transient DB failure</td><td>503</td><td>Generic</td></tr>
+                <tr><td>INTERNAL</td><td>Unexpected</td><td>500</td><td>Generic</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">Without this, every endpoint returns a different shape · mobile clients can't distinguish errors · support can't correlate logs.</p>
+        </div>
+      </div>
+
+      <!-- 16 CONCURRENCY -->
+      <div class="slide accent-blue" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span> § 09 · Concurrency · race conditions on paper</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Two concurrent creates at count = 9 → could both commit</h2></div>
+          <div class="codeblock">function create(userId, billerId, alias):
+  validateAlias(alias)           // trim · len ≤ 30 · else ValidationError
+
+  BEGIN TRANSACTION (SERIALIZABLE)
+    existing = repo.countByUser(userId)
+    if existing >= 10: ROLLBACK; return Err(LIMIT_REACHED)
+
+    duplicate = repo.findByUserAndBiller(userId, billerId)
+    if duplicate: ROLLBACK; return Err(DUPLICATE)
+
+    row = repo.insert({ userId, billerId, alias, createdAt: now() })
+  COMMIT
+
+  emit("favourite.created", row)  // via outbox + relay (at-least-once)
+  return Ok(row)</div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px"><strong>On paper:</strong> serializable isolation catches the race · one client sees 409 · retry-safe via idempotency key. <strong>In production:</strong> no 11th-favourite surprise.</p>
+        </div>
+      </div>
+
+      <!-- 17 BA REVIEW -->
+      <div class="slide accent-blue bg-subtle" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span> How a BA reviews an HLD / LLD</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Not approving tech choices — adding a different lens</h2></div>
+          <div class="dual">
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--blue); padding:0.9rem 1.2rem;">
+              <h4 style="color:var(--indigo); font-size:1rem; margin-bottom:0.4rem;">HLD review · tick list</h4>
+              <ul style="padding-left:1.1rem; font-size:0.85rem; line-height:1.65; color:var(--text)">
+                <li>Every FR has a home — which component owns it?</li>
+                <li>Every NFR → architectural implication or a stated rationale</li>
+                <li>Context diagram matches the spec's external systems</li>
+                <li>BRD / spec constraints appear (region · regulation · budget)</li>
+                <li>Out-of-scope matches spec's out-of-scope</li>
+                <li>Open questions have owners + deadlines</li>
+                <li>ADRs exist for every non-obvious tech choice</li>
+              </ul>
+            </div>
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--amber); padding:0.9rem 1.2rem;">
+              <h4 style="color:var(--indigo); font-size:1rem; margin-bottom:0.4rem;">LLD review · tick list</h4>
+              <ul style="padding-left:1.1rem; font-size:0.85rem; line-height:1.65; color:var(--text)">
+                <li>API contract matches AC behaviour</li>
+                <li>Error taxonomy covers all AC failure paths</li>
+                <li>Data model respects spec constraints (max 10 · unique)</li>
+                <li>Concurrency reasoning exists for races I can think of</li>
+                <li>Audit logging meets compliance reqs</li>
+                <li>Feature flag / rollback plan exists</li>
+                <li>Tests cover every FR + NFR in this component</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 18 PITFALLS -->
+      <div class="slide accent-blue" data-slide="18">
+        <div class="slide-label"><span class="snum">18</span> Common HLD / LLD mistakes</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="pitfall-tbl">
+            <table>
+              <thead><tr><th>Mistake</th><th>Why it hurts</th><th>Fix</th></tr></thead>
+              <tbody>
+                <tr><td>No context diagram</td><td>Scope creeps invisibly</td><td>C4 L1 always · update on every integration change</td></tr>
+                <tr><td>Quality attrs without numbers</td><td>"Fast" — architect and dev disagree</td><td>Measurable target + method per attribute</td></tr>
+                <tr><td>ADRs missing</td><td>Trade-offs re-argued every 6 months</td><td>One ADR per significant decision</td></tr>
+                <tr><td>LLD without error taxonomy</td><td>Every endpoint returns a different shape</td><td>§8 before §6</td></tr>
+                <tr><td>LLD without concurrency section</td><td>Races land in production</td><td>§9 always — even if "no concurrency · documented why"</td></tr>
+                <tr><td>Copy-paste boilerplate</td><td>No decision captured</td><td>Every sentence specific to this component</td></tr>
+                <tr><td>Design doc after code</td><td>Post-hoc essay · not a design</td><td>HLD before code · LLD before coding each component</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 19 WRAP -->
+      <div class="slide bg-dark" data-slide="19">
+        <div class="slide-label"><span class="snum">19</span> Wrap-up</div>
+        <div class="center" style="max-width: 860px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key Takeaways</div>
+          <h2 class="heading" style="color: white;">What we covered today</h2>
+          <ul class="reveal-list" style="color: rgba(255,255,255,0.9); text-align:left; max-width: 760px; margin: 1.5rem auto; font-size: 0.95rem; line-height: 1.9;">
+            <li>✅ HLD = system structure · LLD = component internals. Whiteboard photo vs labelled sketch.</li>
+            <li>✅ Design spectrum: BRD → Spec → HLD → LLD → Code. Each zooms in.</li>
+            <li>✅ BA's role: traceability · ambiguity · stakeholder translation · compliance — <strong>not tech choices</strong>.</li>
+            <li>✅ HLD + LLD each: <strong>16 standard sections</strong>.</li>
+            <li>✅ <strong>C4 model</strong>: L1 Context · L2 Container (HLD) · L3 Component · L4 Code (LLD).</li>
+            <li>✅ Every arch element → traces to a <strong>quality attribute</strong>.</li>
+            <li>✅ LLD skipped sections that hurt: <strong>error taxonomy</strong> and <strong>concurrency</strong>.</li>
+            <li>✅ Design after code is a post-hoc essay — not a design.</li>
+            <li>✅ Next class: <strong>Test Plan Document</strong> (QA · IEEE 829)</li>
+          </ul>
+          <p style="color: var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.15rem; margin-top:1.5rem">The best LLD reads like a textbook for the feature.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 19</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>

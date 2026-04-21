@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spec Writing Class 02 Notes — The SRS Document</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#0066B2; --indigo:#001F35; --amber:#247EC1; --green:#7BC950; --purple:#4796D1; --red:#D80032; --text:#1B2021; --muted:#7B7C7F; --faint:#9CA3AF; --surf:#fff; --bg:#F9F9F9; --border:#EDEDED; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Open Sans','Aptos',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; font-size:17px; -webkit-font-smoothing:antialiased; }
+    h1,h2,h3,h4,h5,h6 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:400; letter-spacing:-0.01em; }
+    a { color: var(--blue); }
+
+    .hero { background:var(--surf); border-bottom:1px solid var(--border); padding:4rem 2rem 3rem; text-align:center; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background: linear-gradient(135deg, #0067A3, #002D72); }
+    .logo-corner { position:absolute; top: 1.25rem; left: 1.5rem; opacity:0.85; }
+    .logo-corner img { height: 34px; }
+    .hero-badge { display:inline-flex; align-items:center; gap:0.5rem; background:var(--bg); border:1px solid var(--border); border-radius:100px; padding:0.35rem 1rem; font-size:0.75rem; font-weight:700; color:var(--muted); letter-spacing:0.07em; text-transform:uppercase; margin-bottom:1.5rem; }
+    .hero-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--amber); }
+    .hero h1 { font-size:clamp(2rem,5vw,3.5rem); line-height:1.15; margin-bottom:0.75rem; }
+    .c-blue{color:var(--blue);} .c-indigo{color:var(--indigo);}
+    .hero-sub { font-size:1rem; color:var(--muted); margin-bottom:2rem; max-width:720px; margin-left:auto; margin-right:auto; }
+    .hero-tags { display:flex; justify-content:center; gap:0.6rem; flex-wrap:wrap; }
+    .hero-tag { padding:0.3rem 0.9rem; border-radius:8px; font-size:0.78rem; font-weight:600; background:#E6F0F8; color:var(--blue); }
+
+    .container { max-width:1040px; margin:0 auto; padding:0 2rem 6rem; }
+
+    .toc { background:var(--surf); border:1px solid var(--border); border-radius:16px; padding:1.75rem 2rem; margin:2.5rem 0; }
+    .toc h3 { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); margin-bottom:1.25rem; }
+    .toc ol { list-style: none; counter-reset: step; }
+    .toc li { counter-increment: step; padding:0.45rem 0; border-bottom:1px solid var(--border); }
+    .toc li:last-child { border-bottom:none; }
+    .toc li::before { content: counter(step, decimal-leading-zero); color:var(--faint); font-family:'Bahnschrift','Segoe UI',sans-serif; margin-right:0.8rem; font-size:0.9rem; }
+    .toc a { text-decoration:none; color:var(--text); font-weight:500; }
+    .toc a:hover { color: var(--blue); }
+
+    section.chapter { margin: 3.5rem 0; }
+    .chapter-head { margin-bottom:1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
+    .chapter-eyebrow { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--blue); margin-bottom:0.3rem; }
+    .chapter-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--indigo); }
+
+    p { margin: 0.7rem 0; }
+    ul, ol { margin: 0.6rem 0 0.6rem 1.3rem; }
+    li { margin: 0.3rem 0; }
+    strong { color: var(--indigo); }
+
+    .callout { background:var(--surf); border:1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 10px; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+    .callout.amber { border-left-color: var(--amber); }
+    .callout.green { border-left-color: var(--green); }
+    .callout.red { border-left-color: var(--red); }
+    .callout.indigo { border-left-color: var(--indigo); }
+    .callout h4 { font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--indigo); }
+
+    .big-tbl { background:var(--surf); border:1px solid var(--border); border-radius:10px; overflow:auto; margin:1rem 0; }
+    .big-tbl table { width:100%; border-collapse:collapse; font-size:0.9rem; }
+    .big-tbl th { background:var(--bg); padding:0.6rem 0.9rem; text-align:left; color:var(--muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; border-bottom:1px solid var(--border); }
+    .big-tbl td { padding:0.6rem 0.9rem; border-bottom:1px solid var(--border); color:var(--text); vertical-align:top; line-height:1.6; }
+    .big-tbl tr:last-child td { border-bottom:none; }
+    .big-tbl td:first-child { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; }
+
+    .srs-section { background:var(--surf); border:1px solid var(--border); border-radius:10px; padding:1rem 1.3rem; margin:1.1rem 0; }
+    .srs-section .tag { color:var(--muted); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.07em; font-weight:700; margin-bottom:0.25rem; }
+    .srs-section h4 { color:var(--indigo); font-size:1.12rem; margin-bottom:0.4rem; }
+    .srs-section .eg { background:#FAFBFC; border:1px solid var(--border); border-radius:6px; padding:0.7rem 1rem; font-family:'Courier New',monospace; font-size:0.85rem; line-height:1.65; color:var(--text); margin:0.5rem 0; white-space:pre-wrap; }
+
+    .gate { background:var(--surf); border:1px solid var(--border); border-radius:12px; padding:1rem 1.3rem; margin:1rem 0; }
+    .gate h4 { color:var(--indigo); font-size:1rem; margin-bottom:0.5rem; }
+    .gate ul { list-style:none; margin-left:0; }
+    .gate li { padding:0.3rem 0; border-bottom:1px dashed var(--border); font-size:0.92rem; }
+    .gate li:last-child { border-bottom:none; }
+    .gate li::before { content:'☐'; color:var(--blue); margin-right:0.5rem; font-weight:700; }
+    .gate.yes li::before { content:'✅'; color:#3D7A3D; }
+    .gate.no li::before { content:'❌'; color:var(--red); }
+
+    .pair { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin:1rem 0; }
+    @media (max-width: 720px) { .pair { grid-template-columns: 1fr; } }
+
+    .diagram { background:var(--surf); border:1px solid var(--border); border-radius:10px; padding:1rem 1.3rem; margin:1rem 0; font-family:'Courier New',monospace; font-size:0.85rem; color:var(--indigo); line-height:1.8; white-space:pre; overflow-x:auto; }
+
+    .full-example { background:var(--surf); border:2px solid var(--border); border-radius:10px; padding:1.2rem 1.5rem; margin:1rem 0; font-size:0.9rem; line-height:1.7; }
+    .full-example h5 { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin:1rem 0 0.4rem; padding-bottom:0.2rem; border-bottom:1px solid var(--border); }
+    .full-example h5:first-child { margin-top:0; }
+    .full-example h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.9rem; margin:0.7rem 0 0.3rem; }
+    .full-example pre { background:var(--bg); border:1px solid var(--border); border-radius:5px; padding:0.6rem 0.9rem; font-family:'Courier New',monospace; font-size:0.82rem; line-height:1.6; margin:0.4rem 0; white-space:pre-wrap; color:var(--text); overflow-x:auto; }
+
+    .summary { background: linear-gradient(135deg, #F9F9F9, #EDEDED); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+    .summary h4 { color: var(--indigo); margin-bottom: 0.5rem; font-size: 0.95rem; }
+
+    .dl-banner { background: linear-gradient(135deg, #002D72, #0066B2); color:white; border-radius:14px; padding:1.4rem 1.6rem; margin:1.5rem 0; display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+    .dl-banner h4 { color:white; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-bottom:0.3rem; }
+    .dl-banner p { font-size:0.88rem; color:rgba(255,255,255,0.88); margin:0; line-height:1.5; max-width:600px; }
+    .dl-btn { display:inline-flex; align-items:center; gap:0.4rem; padding:0.55rem 1rem; background:white; color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; font-size:0.88rem; text-decoration:none; border-radius:6px; }
+    .dl-btn:hover { background:#E6F0F8; }
+
+    footer { text-align:center; padding: 2rem 1rem 3rem; color: var(--faint); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+    footer img { height: 28px; opacity:0.7; margin-bottom: 0.5rem; display: block; margin-left:auto; margin-right:auto; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="logo-corner"><img src="../../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE"></div>
+    <div class="hero-badge"><span class="dot"></span> Spec Writing · Class 02</div>
+    <h1><span class="c-blue">The SRS</span><br><span class="c-indigo">Document</span></h1>
+    <p class="hero-sub">The formal Software Requirements Specification — ISO/IEC/IEEE 29148:2018 in plain English. When to use one, when you're wasting weeks by using one, and how to write the hard sections that trip up every first-time author.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">IEEE 29148</span>
+      <span class="hero-tag">IEEE 830</span>
+      <span class="hero-tag">Regulated industries</span>
+      <span class="hero-tag">Traceability</span>
+      <span class="hero-tag">Verification</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="toc">
+      <h3>In this note</h3>
+      <ol>
+        <li><a href="#what">What an SRS actually is (and isn't)</a></li>
+        <li><a href="#when">When to use an SRS — the 6 signals</a></li>
+        <li><a href="#not">When an SRS would hurt you — 5 warning signs</a></li>
+        <li><a href="#skeleton">The IEEE 29148 skeleton</a></li>
+        <li><a href="#intro">§1 Introduction — setting the stage</a></li>
+        <li><a href="#desc">§2 Overall Description — the hard one</a></li>
+        <li><a href="#specific">§3 Specific Requirements — the heart</a></li>
+        <li><a href="#nfr">Writing NFRs that a regulator will accept</a></li>
+        <li><a href="#verif">§4 Verification — tracing every req to a test</a></li>
+        <li><a href="#example">A shortened worked SRS · mBoB Biller Favourites</a></li>
+        <li><a href="#map">Mapping an SRS to a Feature Spec and back</a></li>
+        <li><a href="#signoff">Sign-off, change control, baselining</a></li>
+        <li><a href="#pitfalls">The 8 most common SRS sins</a></li>
+        <li><a href="#take">Key takeaways</a></li>
+      </ol>
+    </div>
+
+    <div class="dl-banner">
+      <div>
+        <h4>📄 Download the SRS template</h4>
+        <p>Full IEEE 29148 skeleton as a Markdown file. Use it to start an SRS for any project that needs one — fill every section; leave "N/A — &lt;reason&gt;" where it doesn't apply.</p>
+      </div>
+      <a class="dl-btn" href="templates/srs-template.md" download>⬇ srs-template.md</a>
+    </div>
+
+    <section class="chapter" id="what">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 1</div>
+        <h2>What an SRS actually is (and isn't)</h2>
+      </div>
+      <p>An <strong>SRS — Software Requirements Specification</strong> — is a formal document that captures <em>every</em> requirement for a software system. It's structured per an international standard (ISO/IEC/IEEE 29148:2018, which supersedes IEEE 830-1998 and is still the reference text worldwide).</p>
+      <p>Think of the SRS as the <strong>contract</strong> between the customer (who wants the system) and the builder (who delivers it). In many industries, it literally <em>is</em> a contract — signed, dated, versioned, legally binding.</p>
+
+      <div class="pair">
+        <div class="callout green">
+          <h4>✅ An SRS is…</h4>
+          <ul>
+            <li><strong>Complete</strong> — every requirement appears</li>
+            <li><strong>Unambiguous</strong> — one interpretation only</li>
+            <li><strong>Verifiable</strong> — each req has a test method</li>
+            <li><strong>Traceable</strong> — each req links upward (business need) and downward (design · test case)</li>
+            <li><strong>Consistent</strong> — no two reqs contradict each other</li>
+            <li><strong>Ranked</strong> — priority / stability noted per req</li>
+            <li><strong>Modifiable</strong> — structured so changes don't ripple</li>
+          </ul>
+        </div>
+        <div class="callout red">
+          <h4>❌ An SRS is NOT…</h4>
+          <ul>
+            <li>A design document (HLD/LLD come later)</li>
+            <li>A project plan (that's a separate doc)</li>
+            <li>A user manual</li>
+            <li>Sales / marketing material</li>
+            <li>A back-of-the-napkin sketch — this is a 30–100+ page artifact</li>
+            <li>Code, pseudocode, or API signatures</li>
+            <li>Optional, in the industries that mandate it</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout indigo">
+        <h4>The SRS mental model</h4>
+        <p>A feature spec says <em>"Here's what we're building in the next two weeks."</em> An SRS says <em>"Here is the complete behavioural specification of this system. If you build anything matching this document, you have delivered. If you build something not in this document, it's out of scope."</em> The difference matters when millions of BTN, aircraft lives, or regulatory approvals are at stake.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="when">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 2</div>
+        <h2>When to use an SRS — the 6 signals</h2>
+      </div>
+      <p>An SRS is a <strong>heavyweight</strong> document. 30–100+ pages, multiple reviewers, formal sign-off, change-control process. You don't reach for one lightly. Reach for an SRS when one or more of these six signals are present:</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead>
+            <tr><th>Signal</th><th>Why it forces an SRS</th><th>Example</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Regulated industry</td><td>Auditors, regulators, or certifiers require structured requirements</td><td>Core banking · e-health · civil aviation · defence · automotive safety</td></tr>
+            <tr><td>Government / enterprise RFP</td><td>Procurement rules demand a standards-compliant specification</td><td>Bidding for a national ID system · tax portal · ministry ERP</td></tr>
+            <tr><td>Formal contract with a customer</td><td>Scope disputes will be resolved by reading the SRS</td><td>Fixed-price delivery to a government ministry or large corporate</td></tr>
+            <tr><td>Safety-critical system</td><td>Failure costs lives, money, or reputation at scale</td><td>Hospital monitoring · flight control · banking settlement</td></tr>
+            <tr><td>Long lifecycle (10+ years)</td><td>The original team won't be around; the SRS is institutional memory</td><td>National infrastructure · telecom backbone · military systems</td></tr>
+            <tr><td>Cross-organisation integration</td><td>Multiple parties need a shared, immutable reference</td><td>Inter-bank settlement · cross-ministry data exchange</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>If <strong>none</strong> of these apply, you probably want a PRD or a Feature Spec — not an SRS.</p>
+    </section>
+
+    <section class="chapter" id="not">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 3</div>
+        <h2>When an SRS would hurt you — 5 warning signs</h2>
+      </div>
+      <p>Writing an SRS where one isn't needed is almost as dangerous as <em>not</em> writing one where it is. The signs you've picked the wrong tool:</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead>
+            <tr><th>Warning sign</th><th>What goes wrong</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>The product is still being discovered</td><td>You'll "baseline" requirements that change two sprints later — every change becomes a 3-week review cycle</td></tr>
+            <tr><td>The team is 2–5 people building iteratively</td><td>SRS overhead exceeds the implementation effort; nothing gets built</td></tr>
+            <tr><td>You ship to production weekly or faster</td><td>The SRS can't keep up; it drifts from reality and becomes fiction</td></tr>
+            <tr><td>The customer is internal and in the same room</td><td>A shared Notion page + AC would give you 80% of the value for 10% of the cost</td></tr>
+            <tr><td>Your org has no change-control discipline</td><td>An unmaintained SRS is worse than no SRS — people treat a lie as truth</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout amber">
+        <h4>The reality at SELISE</h4>
+        <p>Most SELISE product work uses PRDs and feature specs, not SRSs. We teach the SRS because (a) some SELISE engagements <em>are</em> regulated (core banking, government systems), (b) clients and tenders sometimes demand it, and (c) once you understand the SRS, every smaller doc becomes easier to write — the SRS is the ancestor of all of them.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="skeleton">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 4</div>
+        <h2>The IEEE 29148 skeleton</h2>
+      </div>
+      <p>The standard prescribes four top-level sections plus front matter and appendices. Here's the full skeleton you must cover (though within each section you can adapt headings to your domain):</p>
+
+      <div class="srs-section">
+        <div class="tag">§ 1</div>
+        <h4>Introduction</h4>
+        <p>Purpose · Scope · Definitions/Acronyms · References · Document overview. This is the orientation section — a reader should know in two pages what the system is and where to look for each type of detail.</p>
+      </div>
+
+      <div class="srs-section">
+        <div class="tag">§ 2</div>
+        <h4>Overall Description</h4>
+        <p>Big-picture context. Product perspective (where the system sits), product functions (summary of what it does), user characteristics (who uses it), constraints (non-negotiable limits), assumptions and dependencies, apportioning (what's deferred).</p>
+      </div>
+
+      <div class="srs-section">
+        <div class="tag">§ 3</div>
+        <h4>Specific Requirements</h4>
+        <p>The main section — often 50–70% of the document. External interface requirements (UI, hardware, software, communications), functional requirements, non-functional requirements (performance · safety · security · quality attributes · business rules), and any other requirements (database, I18n, compliance).</p>
+      </div>
+
+      <div class="srs-section">
+        <div class="tag">§ 4</div>
+        <h4>Verification</h4>
+        <p>How each requirement will be verified — Test, Demonstration, Inspection, or Analysis. This section is what auditors actually read. Every req in §3 must trace to at least one verification method here.</p>
+      </div>
+
+      <div class="srs-section">
+        <div class="tag">§ 5 · Appendices</div>
+        <h4>Analysis models · Traceability matrix · Issues · Glossary</h4>
+        <p>Context diagrams, use-case diagrams, data flow, state diagrams, ER models. The traceability matrix is required — it's how you prove completeness during audit.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="intro">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 5</div>
+        <h2>§1 Introduction — setting the stage</h2>
+      </div>
+      <p>The Introduction is short but load-bearing. Five subsections:</p>
+
+      <div class="srs-section">
+        <div class="tag">§ 1.1 · Purpose</div>
+        <h4>State why this SRS exists and who should read it</h4>
+        <p>Example: <em>"This SRS specifies the requirements for the Biller Favourites feature of the mBoB mobile banking platform. It is intended for the development, test, and audit teams at Bank of Bhutan, and for the QA Assurance office of the Royal Monetary Authority."</em></p>
+      </div>
+
+      <div class="srs-section">
+        <div class="tag">§ 1.2 · Scope</div>
+        <h4>What the product will do — and will NOT do</h4>
+        <p>Two paragraphs. Name the product officially, summarise capabilities, list scope boundaries explicitly. The "will NOT" half is as important as the "will" half — it protects against contract disputes.</p>
+      </div>
+
+      <div class="srs-section">
+        <div class="tag">§ 1.3 · Definitions, Acronyms, Abbreviations</div>
+        <h4>A glossary of every domain term that a non-specialist reader would trip on</h4>
+        <p>Bank examples: <em>MPIN, UPI, NEFT, KYC, RTGS, biller aggregator, settlement window.</em> If a reviewer has to Google it, it belongs here.</p>
+      </div>
+
+      <div class="srs-section">
+        <div class="tag">§ 1.4 · References</div>
+        <h4>Numbered list of every document this SRS depends on or cites</h4>
+        <p>Other SRSs (interfacing systems), standards, regulations, prior versions. Each reference gets a number; §3 and §4 cite references by number. Example: <em>[1] ISO/IEC/IEEE 29148:2018; [2] RMA Directive on Digital Payments, 2024; [3] mBoB Core Banking SRS v3.2.</em></p>
+      </div>
+
+      <div class="srs-section">
+        <div class="tag">§ 1.5 · Document Overview</div>
+        <h4>A navigation map for the rest of the SRS</h4>
+        <p>One short paragraph: what §2, §3, §4, and the appendices each contain. Feels redundant, saves readers enormous time.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="desc">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 6</div>
+        <h2>§2 Overall Description — the hard one</h2>
+      </div>
+      <p>This is where first-time authors get stuck. §2 is the "big picture" section — non-specialists read it end-to-end, specialists skim it for context. Six subsections:</p>
+
+      <div class="srs-section">
+        <div class="tag">§ 2.1 · Product Perspective</div>
+        <h4>Where this system sits relative to everything else</h4>
+        <p>Is it standalone? A component of a bigger system? Replacing an older system? Always include a <strong>context diagram</strong> — one picture showing this system as a box, with arrows to every external actor (users, other systems, hardware). Then prose for each interface type.</p>
+        <div class="diagram">
+        ┌─────────────┐        ┌──────────────┐
+        │  Customer   │───────▶│              │───────▶ Payment Gateway
+        │ (mBoB app)  │        │  Biller Favs │
+        └─────────────┘        │    Service   │───────▶ Core Banking Ledger
+                               │              │
+        ┌─────────────┐        │              │───────▶ Notification Bus
+        │  Admin Tool │◀───────│              │
+        └─────────────┘        └──────────────┘
+                                       │
+                                       ▼
+                                 [Favourites DB]
+        </div>
+        <p><strong>Always enumerate six interface types:</strong> system interfaces, user interfaces, hardware interfaces, software interfaces, communication interfaces, memory/storage constraints.</p>
+      </div>
+
+      <div class="srs-section">
+        <div class="tag">§ 2.2 · Product Functions</div>
+        <h4>Summary of the major functions — details go in §3</h4>
+        <p>A bulleted list, not a full feature catalogue. If §3 is the microscope, §2.2 is the table of contents.</p>
+      </div>
+
+      <div class="srs-section">
+        <div class="tag">§ 2.3 · User Characteristics</div>
+        <h4>Every class of user — expertise, frequency of use, privileges</h4>
+        <p>This section DRIVES UX, training, help-system, and security requirements. A novice daily user and a power-user occasional admin need very different interfaces.</p>
+        <div class="eg">User Class           Description                Expertise    Frequency     Privilege
+---------------------------------------------------------------------------------------
+Retail Customer      mBoB app end-user          Novice       Daily         Own data only
+Branch Agent         Assists customers          Expert       Daily         Read + cust-on-behalf
+Ops Controller       Monitors daily settlement  Expert       Daily         Read-only, all data
+Compliance Auditor   Post-hoc review            Expert       Quarterly     Read-only + exports
+System Admin         Configures billers         Expert       Weekly        Full admin</div>
+      </div>
+
+      <div class="srs-section">
+        <div class="tag">§ 2.4 · Constraints</div>
+        <h4>The non-negotiable rules the design must honour</h4>
+        <p>Regulatory policies · hardware limits · interfaces to legacy · parallel-operation requirements · audit functions · safety · reliability · criticality · language/platform requirements. Every item here costs you design freedom; state them explicitly so reviewers see them.</p>
+      </div>
+
+      <div class="srs-section">
+        <div class="tag">§ 2.5 · Assumptions &amp; Dependencies</div>
+        <h4>What you're assuming is true — which if it changes, invalidates requirements</h4>
+        <p>Assumptions: "The RMA regulation on transaction limits will not change before launch." Dependencies: "The Core Banking API v3.2 will be available in the UAT environment by <em>date</em>." If any assumption is broken, you must revisit the SRS.</p>
+      </div>
+
+      <div class="srs-section">
+        <div class="tag">§ 2.6 · Apportioning of Requirements</div>
+        <h4>Which requirements are explicitly deferred to future versions</h4>
+        <p>Similar to "Out of Scope" in a feature spec, but phrased as "these requirements exist, but their implementation is deferred to v2/v3". Maintains traceability without committing to a timeline.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="specific">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 7</div>
+        <h2>§3 Specific Requirements — the heart</h2>
+      </div>
+      <p>§3 is the bulk of the document — often 50–70% of total length. Every requirement here must be <strong>uniquely identified, testable, traceable, prioritised</strong>. Structure:</p>
+
+      <div class="srs-section">
+        <div class="tag">§ 3.1 · External Interface Requirements</div>
+        <h4>Four sub-sub-sections — one per interface type</h4>
+        <ul>
+          <li><strong>3.1.1 User Interfaces</strong> — screen layouts, UI standards, navigation, error messages</li>
+          <li><strong>3.1.2 Hardware Interfaces</strong> — supported devices, logical/physical characteristics, protocols</li>
+          <li><strong>3.1.3 Software Interfaces</strong> — external systems (name · version · source · purpose · interface definition)</li>
+          <li><strong>3.1.4 Communications Interfaces</strong> — protocols, synchronous vs async, encryption standards</li>
+        </ul>
+      </div>
+
+      <div class="srs-section">
+        <div class="tag">§ 3.2 · Functional Requirements</div>
+        <h4>The requirements themselves — numbered, atomic, testable</h4>
+        <p>Each requirement is a structured block:</p>
+        <div class="eg">FR-01 · Save a biller as a favourite
+  Description:    A customer, having completed a bill payment, shall be able
+                  to save the paid biller as a favourite from the receipt
+                  screen with a single tap.
+  Inputs:         User tap event on 'Save as favourite' button.
+                  Current biller context (biller_id, alias default = biller name).
+  Processing:     Validate user has < 10 existing favourites. Validate biller not
+                  already a favourite for this user. Persist with timestamp.
+  Outputs:        UI confirmation toast within 1 s. New favourite visible on
+                  Bill Payments home on next render.
+  Preconditions:  User is authenticated; payment was successful; online.
+  Postconditions: Favourite persisted; audit event emitted; cache invalidated.
+  Error handling: Limit reached → display "Limit reached (10)" and abort save.
+                  Duplicate → display "Already saved" and abort save.
+                  Network failure → queue locally with retry.
+  Priority:       Must
+  Traces to:      BR-02 (Customer retention through convenience)
+  Verifies via:   TC-FR01-01 (happy path), TC-FR01-02 (limit), TC-FR01-03 (dup)</div>
+        <p>Repeat this block for every functional requirement. This is what makes an SRS long — but also what makes it <em>useful</em> during audit.</p>
+      </div>
+
+      <div class="srs-section">
+        <div class="tag">§ 3.3 · Non-Functional Requirements</div>
+        <h4>Five sub-types — all testable in numbers</h4>
+        <ul>
+          <li><strong>3.3.1 Performance</strong> — throughput · response time · capacity · p95/p99 targets</li>
+          <li><strong>3.3.2 Safety</strong> — prevents loss, damage, harm. References IEC 61508, ISO 26262, IEC 62304 where applicable.</li>
+          <li><strong>3.3.3 Security</strong> — authN · authZ · encryption · audit · compliance (PCI-DSS, HIPAA, GDPR, SOC 2)</li>
+          <li><strong>3.3.4 Software Quality Attributes</strong> — reliability · availability · maintainability · portability · usability · accessibility</li>
+          <li><strong>3.3.5 Business Rules</strong> — operating principles that aren't features but constrain behaviour ("Only a manager can approve transfers > BTN 100k")</li>
+        </ul>
+      </div>
+
+      <div class="srs-section">
+        <div class="tag">§ 3.5 · Other Requirements</div>
+        <h4>Database · I18n · Legal / Regulatory · anything that doesn't fit above</h4>
+        <p>Data retention policies, entity-relationship summaries, language/region support, statutes the system must comply with.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="nfr">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 8</div>
+        <h2>Writing NFRs that a regulator will accept</h2>
+      </div>
+      <p>NFRs are the single most common place where SRSs fail audit. The error pattern is always the same: <strong>adjectives instead of numbers</strong>. Every regulator rejects "system shall be fast". Every regulator accepts "system shall respond to 95% of biller-list reads in under 1.0 seconds over 4G".</p>
+
+      <div class="pair">
+        <div class="callout red">
+          <h4>❌ Bad (rejected by audit)</h4>
+          <ul>
+            <li>"The system shall be reliable."</li>
+            <li>"The UI shall be user-friendly."</li>
+            <li>"The system shall have high performance."</li>
+            <li>"Security shall be strong."</li>
+            <li>"Response time shall be acceptable."</li>
+          </ul>
+        </div>
+        <div class="callout green">
+          <h4>✅ Good (accepted by audit)</h4>
+          <ul>
+            <li>"MTBF ≥ 720 hours measured over a rolling 90-day window."</li>
+            <li>"A novice customer shall complete task T-01 in ≤ 60 seconds with ≤ 1 error, measured on a sample of 30 users."</li>
+            <li>"p95 response time ≤ 1.0 s for reads; ≤ 2.0 s for writes; tested at 5 000 concurrent users."</li>
+            <li>"All customer PII at rest shall be encrypted using AES-256; all PII in transit shall use TLS 1.3 or higher."</li>
+            <li>"95% of transactions shall complete within the performance envelope defined in §3.3.1; measured hourly."</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout amber">
+        <h4>The NFR test</h4>
+        <p>Read your NFR aloud. Can a tester set up an experiment that produces a yes/no answer? If yes, the NFR is good. If you'd need to ask "yes but how would we check?" the NFR isn't a requirement yet — it's an aspiration.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="verif">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 9</div>
+        <h2>§4 Verification — tracing every req to a test</h2>
+      </div>
+      <p>§4 is what separates a real SRS from a glossy pretender. Every requirement in §3 must be linked here to <strong>at least one verification method</strong>. Four methods are recognised by the standard:</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead>
+            <tr><th>Method</th><th>Code</th><th>What it means</th><th>Example</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Test</td><td>T</td><td>Execute the software and check outputs against expected values</td><td>Run test case TC-01 · assert response matches spec</td></tr>
+            <tr><td>Demonstration</td><td>D</td><td>Observe the software operating under representative conditions</td><td>Walk stakeholder through the UI flow on staging</td></tr>
+            <tr><td>Inspection</td><td>I</td><td>Review the product / design / code without executing it</td><td>Read the implementation against the security requirement</td></tr>
+            <tr><td>Analysis</td><td>A</td><td>Use models, simulations, or calculations rather than execution</td><td>Queueing-theory model to validate throughput under peak load</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>The verification matrix is typically a table at the start of §4:</p>
+
+      <div class="eg">Req ID     | Method | Acceptance Criterion                           | Test Artifact
+-----------+--------+------------------------------------------------+----------------
+FR-01      | T      | Favourite persists; visible within 1s          | TC-FR01-01..03
+FR-02      | T      | Favourites list renders in correct order       | TC-FR02-01
+NFR-3.3.1  | A      | p95 ≤ 1.0s at 5000 concurrent users            | Perf report R-01
+NFR-3.3.3  | I      | Code review confirms TLS 1.3 in all endpoints  | Review log REV-07
+NFR-3.3.5  | D      | Business-rule demo to compliance office        | Demo minutes D-03</div>
+
+      <div class="callout indigo">
+        <h4>Traceability is the whole game</h4>
+        <p>During audit, the regulator picks a requirement at random and asks: "Show me the evidence that this was met." If the trace exists — Req → Verification Method → Test Artifact → Result — you pass. If it doesn't, the audit fails regardless of whether the software actually works.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="example">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 10</div>
+        <h2>A shortened worked SRS · mBoB Biller Favourites</h2>
+      </div>
+      <p>To make the skeleton concrete, here's a <em>shortened</em> SRS for the same Biller Favourites feature we used in Class 01. A real SRS would be 40+ pages; this is a guided skeleton showing how each section lands.</p>
+
+      <div class="full-example">
+        <h5>§ 1 · Introduction</h5>
+        <h6>1.1 Purpose</h6>
+        <p>This SRS specifies the requirements for the <strong>Biller Favourites</strong> feature of the mBoB mobile banking platform. It is intended for the development and test teams at Bank of Bhutan and for the QA Assurance office of the Royal Monetary Authority (RMA).</p>
+
+        <h6>1.2 Scope</h6>
+        <p><strong>Will:</strong> Allow a retail mBoB customer to save up to 10 recurring billers as favourites, retrieve them from the Bill Payments home screen, and pre-fill a new payment with one tap. MPIN re-authentication is required to complete payment.</p>
+        <p><strong>Will not:</strong> Allow favourite sharing between customers; support auto-pay; support bulk import/export; support legacy mBoB v4 devices.</p>
+
+        <h6>1.3 Definitions</h6>
+        <p>mBoB — Mobile Bank of Bhutan app. MPIN — Mobile Personal Identification Number. Biller — entity to whom a customer pays (utility, telco, govt). Favourite — a customer-saved biller reference.</p>
+
+        <h6>1.4 References</h6>
+        <pre>[1] ISO/IEC/IEEE 29148:2018
+[2] RMA Directive on Digital Payments, Rev 3, 2024
+[3] mBoB Core Banking SRS v3.2
+[4] BoB Information Security Policy v2.1</pre>
+
+        <h6>1.5 Overview</h6>
+        <p>§2 describes the feature in context. §3 specifies all external interfaces, functional, and non-functional requirements. §4 maps each requirement to its verification method. Appendices contain the context diagram, use-case diagrams, and the traceability matrix.</p>
+
+        <h5>§ 2 · Overall Description</h5>
+        <h6>2.1 Product Perspective</h6>
+        <p>Biller Favourites is a sub-system of the mBoB mobile banking platform. It integrates with the Core Banking Ledger (for user identity and payment history), the Biller Aggregator (for biller metadata), and the mBoB Notification Bus. See Appendix A for the context diagram.</p>
+
+        <h6>2.2 Product Functions</h6>
+        <pre>- Save a biller as a favourite
+- List a customer's favourites
+- Use a favourite to pre-fill a payment
+- Remove a favourite
+- Rename a favourite's alias</pre>
+
+        <h6>2.3 User Characteristics</h6>
+        <pre>Retail Customer   Novice      Daily         Own data only
+Branch Agent      Expert      Daily         Customer-on-behalf
+Ops Controller    Expert      Daily         Read-only, all
+Compliance Audit  Expert      Quarterly     Read-only + export</pre>
+
+        <h6>2.4 Constraints</h6>
+        <pre>C-01 · Must comply with RMA Digital Payments Directive [Ref 2] § 7 (data residency: Bhutan only)
+C-02 · Must integrate with Core Banking [Ref 3] — no direct DB access
+C-03 · Must support Dzongkha and English UI
+C-04 · Must run on iOS 14+ and Android 9+</pre>
+
+        <h6>2.5 Assumptions &amp; Dependencies</h6>
+        <pre>A-01 · Core Banking API v3.2 available in UAT by <date>
+A-02 · Biller Aggregator will not introduce breaking changes before launch
+D-01 · Depends on Notification Bus v2 deployment (ticket PLAT-414)</pre>
+
+        <h5>§ 3 · Specific Requirements</h5>
+        <h6>3.1 External Interface Requirements</h6>
+        <pre>3.1.1 User Interface — per Design Reference BFAV-UI-v1 (Figma)
+3.1.2 Hardware — none (mobile handsets only; no external hardware)
+3.1.3 Software
+  - Core Banking API v3.2 (REST over TLS 1.3, JWT)
+  - Biller Aggregator API v1.8 (REST over TLS 1.3, mTLS)
+  - Notification Bus v2 (Kafka, TLS + SASL)
+3.1.4 Communications — HTTPS for UI, TLS 1.3 or higher for all backend hops</pre>
+
+        <h6>3.2 Functional Requirements (excerpt)</h6>
+        <pre>FR-01 · Save a biller as a favourite
+  Inputs:        Authenticated user; successful payment; tap event
+  Processing:    Enforce max 10 per user; enforce uniqueness (user, biller)
+  Outputs:       Toast within 1 s; favourite visible on next home render
+  Priority:      Must
+  Traces:        BR-02
+  Verifies:      TC-FR01-01..03
+
+FR-02 · List favourites
+  Inputs:        Authenticated user; open Bill Payments home
+  Processing:    Fetch favourites for user; sort by last_used_at DESC
+  Outputs:       Rendered list; p95 ≤ 1 s on 4G
+  Priority:      Must
+  Traces:        BR-02
+  Verifies:      TC-FR02-01, Perf-R-01
+
+(… remaining FRs …)</pre>
+
+        <h6>3.3 Non-Functional Requirements</h6>
+        <pre>3.3.1 Performance
+  NFR-Perf-01 · p95 ≤ 1.0 s for list; ≤ 2.0 s for save, at 5 000 RPS
+  NFR-Perf-02 · Max 10 favourites/user enforced at app layer
+
+3.3.3 Security
+  NFR-Sec-01 · All PII at rest encrypted AES-256
+  NFR-Sec-02 · TLS 1.3+ on all network hops
+  NFR-Sec-03 · Audit log on every write, retained 7 years
+  NFR-Sec-04 · Per-user access control; cross-account leakage must be impossible
+
+3.3.4 Software Quality
+  NFR-Rel-01 · 99.95% availability per month, excluding scheduled windows
+  NFR-A11y-01 · WCAG 2.1 Level AA compliant on iOS + Android
+
+3.3.5 Business Rules
+  BR-01 · A customer may save at most 10 favourites
+  BR-02 · A payment still requires MPIN, regardless of favourite origin</pre>
+
+        <h5>§ 4 · Verification (excerpt)</h5>
+        <pre>Req ID        | Method | Acceptance
+--------------+--------+---------------------------------------------------
+FR-01         | T      | TC-FR01-01..03 pass
+FR-02         | T      | TC-FR02-01 pass
+NFR-Perf-01   | A+T    | k6 perf report shows p95 within envelope
+NFR-Sec-02    | I      | Dependency scan + code review log REV-SRS02-07
+NFR-A11y-01   | T+D    | axe-core clean + screen-reader demo minutes D-03
+BR-01         | T      | TC-BR01 (attempt 11th favourite → error 'Limit reached')</pre>
+
+        <h5>§ 5 · Appendices</h5>
+        <h6>A · Context Diagram</h6>
+        <p><em>(See §2.1 diagram above, full-size in appendix)</em></p>
+
+        <h6>B · Traceability Matrix</h6>
+        <pre>Req ID  | Business Need        | Design          | Test        | Status
+--------+----------------------+-----------------+-------------+--------
+FR-01   | BR-02, Pain #3       | HLD §6.2        | TC-FR01-*   | Approved
+FR-02   | BR-02                | HLD §6.2        | TC-FR02-*   | Approved
+NFR-*   | RMA Directive §7     | HLD §12         | Perf + Sec  | Approved</pre>
+
+        <h6>C · Glossary</h6>
+        <p>See §1.3.</p>
+      </div>
+
+      <p style="margin-top:1rem">This skeleton, fleshed out with remaining FRs and detailed §3.1 interface specs, becomes a ~40 page SRS. Notice how tightly every section cross-references the others — the <em>structure</em> is what makes it auditable.</p>
+    </section>
+
+    <section class="chapter" id="map">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 11</div>
+        <h2>Mapping an SRS to a Feature Spec and back</h2>
+      </div>
+      <p>A feature spec is an SRS compressed to its essentials. Every section maps:</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead>
+            <tr><th>Feature Spec §</th><th>SRS § (equivalent)</th><th>Expansion in SRS</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>01 Metadata</td><td>Front matter + §1.1</td><td>Adds purpose statement, audience, readership</td></tr>
+            <tr><td>02 TL;DR</td><td>§1.2 Scope (first paragraph)</td><td>Becomes formal, contractual</td></tr>
+            <tr><td>03 Problem</td><td>— (moves to a BRD)</td><td>SRS assumes problem is settled; BRD holds the rationale</td></tr>
+            <tr><td>04 Goals &amp; Non-goals</td><td>§1.2 (will / will-not) + §2.6 (deferred)</td><td>Non-goals become formal scope exclusions</td></tr>
+            <tr><td>05 Users &amp; Personas</td><td>§2.3 User Characteristics</td><td>More classes, more detail (expertise, frequency, privileges)</td></tr>
+            <tr><td>06 Functional Requirements</td><td>§3.2</td><td>Each FR gets structured block with inputs / processing / outputs / pre / post / errors</td></tr>
+            <tr><td>07 Acceptance Criteria</td><td>§4 Verification</td><td>Moves from per-story to system-level with formal methods T/D/I/A</td></tr>
+            <tr><td>08 NFRs</td><td>§3.3</td><td>Split into Performance · Safety · Security · Quality · Business Rules</td></tr>
+            <tr><td>09 UX &amp; UI</td><td>§3.1.1</td><td>Style-guide compliance, explicit UI standards</td></tr>
+            <tr><td>10 Data Model</td><td>§3.5 (Database)</td><td>Full ER diagram, retention policy, constraints</td></tr>
+            <tr><td>11 Dependencies / Risks</td><td>§2.5 Assumptions &amp; Dependencies</td><td>Stronger formal framing</td></tr>
+            <tr><td>12 Out of Scope</td><td>§1.2 (will-not) + §2.6</td><td>Scope exclusions vs deferred reqs — subtly different</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p><strong>Takeaway:</strong> if you can write a good feature spec, you can scaffold an SRS by expanding each section. If you can write an SRS, you can distill a feature spec by keeping the essence of each part.</p>
+    </section>
+
+    <section class="chapter" id="signoff">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 12</div>
+        <h2>Sign-off, change control, baselining</h2>
+      </div>
+      <p>An SRS is <strong>baselined</strong> — a frozen, version-numbered reference point, signed by all stakeholders. After baselining, every change requires formal change-control.</p>
+
+      <div class="srs-section">
+        <div class="tag">Lifecycle</div>
+        <h4>Five states — similar to a spec but with formal gates</h4>
+        <ul>
+          <li><strong>Draft</strong> — author is writing; sections may be incomplete.</li>
+          <li><strong>Review</strong> — circulated to reviewers; change requests collected; version 0.x.</li>
+          <li><strong>Baseline</strong> (version 1.0) — signed by all stakeholders; frozen.</li>
+          <li><strong>Change-controlled</strong> (1.1, 1.2…) — every modification goes through a Change Control Board (CCB); impact analysis; re-approval.</li>
+          <li><strong>Superseded / Archived</strong> — replaced by a later version or retired.</li>
+        </ul>
+      </div>
+
+      <div class="srs-section">
+        <div class="tag">Sign-off table</div>
+        <h4>Every baselined SRS has one</h4>
+        <pre>Role                        Name        Signature   Date
+-----------------------------------------------------------
+Author (BA)
+Development Lead
+QA Lead
+Architect
+Product Owner
+Compliance / QA Assurance
+Customer Representative
+Regulator Liaison (if req)</pre>
+      </div>
+
+      <div class="callout amber">
+        <h4>Change control in practice</h4>
+        <p>Each proposed change is logged as a <strong>Change Request (CR)</strong>: description · rationale · impact (reqs affected · cost · schedule · risk). The CCB reviews weekly and either rejects, defers, or approves. Approved CRs trigger a minor version bump (1.1, 1.2) and a new review cycle. No one edits a baselined SRS without going through this.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="pitfalls">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 13</div>
+        <h2>The 8 most common SRS sins</h2>
+      </div>
+
+      <div class="big-tbl">
+        <table>
+          <thead>
+            <tr><th>Sin</th><th>What it looks like</th><th>How to avoid</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Adjective NFRs</td><td>"Fast, reliable, secure"</td><td>Numbers · units · test method per NFR</td></tr>
+            <tr><td>Design leakage in §3</td><td>"The system shall use Redis for caching"</td><td>§3 specifies <em>what</em>; design decides <em>how</em></td></tr>
+            <tr><td>Unverifiable reqs</td><td>No trace to a test method</td><td>Every req gets a row in §4 Verification</td></tr>
+            <tr><td>Inconsistent terminology</td><td>"User" / "customer" / "member" used interchangeably</td><td>Glossary + lint-style consistency check</td></tr>
+            <tr><td>Missing scope boundary</td><td>Only "will", no "will-not"</td><td>§1.2 always states both halves</td></tr>
+            <tr><td>Silent assumptions</td><td>Assumes a dependency without naming it</td><td>§2.5 Assumptions &amp; Dependencies section</td></tr>
+            <tr><td>Stale baseline</td><td>Code diverges from SRS; nobody updates either</td><td>CCB discipline; quarterly reconciliation</td></tr>
+            <tr><td>Copy-paste boilerplate</td><td>Generic paragraphs that could apply to any system</td><td>Every sentence must say something specific to this system</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="chapter" id="take">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Takeaways</div>
+        <h2>Key points to carry forward</h2>
+      </div>
+      <div class="summary">
+        <h4>What we covered today</h4>
+        <ul>
+          <li>An SRS is the <strong>formal, complete, auditable</strong> specification of a software system — structured per ISO/IEC/IEEE 29148:2018.</li>
+          <li>Use one when the project is <strong>regulated, contracted, safety-critical, long-lifecycle, or RFP-driven</strong>. Avoid for iterative small teams.</li>
+          <li>The skeleton has four major parts: <strong>Introduction · Overall Description · Specific Requirements · Verification</strong>, plus appendices.</li>
+          <li>§2.1 Product Perspective always includes a <strong>context diagram</strong>. §2.3 User Characteristics drives UX and security.</li>
+          <li>§3 Specific Requirements must be <strong>numbered, atomic, testable, traceable, prioritised</strong>. NFRs get numbers, not adjectives.</li>
+          <li>§4 Verification maps every req to one of four methods: <strong>Test · Demonstration · Inspection · Analysis</strong>.</li>
+          <li>Baseline is <strong>frozen and signed</strong>; change-control through a CCB keeps the doc honest.</li>
+          <li>A feature spec is an SRS in miniature; every section has an SRS counterpart.</li>
+        </ul>
+      </div>
+      <p style="margin-top:1.5rem; font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-size:1.1rem">An SRS isn't longer than a feature spec because it's better. It's longer because the stakes require it.</p>
+      <p style="margin-top:0.5rem">Next class: <strong>BRD — Business Requirements Document</strong>, the pre-solution artifact that answers "<em>should we do this at all?</em>" before any SRS or spec is written.</p>
+    </section>
+
+  </div>
+
+  <footer>
+    <img src="../../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE">
+    SELISE × Pelsung · Spec Writing · Class 02<br>
+    The SRS Document
+  </footer>
+
+</body>
+</html>

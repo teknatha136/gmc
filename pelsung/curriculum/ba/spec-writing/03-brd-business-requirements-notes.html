@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spec Writing Class 03 Notes — The BRD</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#0066B2; --indigo:#001F35; --amber:#247EC1; --green:#7BC950; --purple:#4796D1; --red:#D80032; --text:#1B2021; --muted:#7B7C7F; --faint:#9CA3AF; --surf:#fff; --bg:#F9F9F9; --border:#EDEDED; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Open Sans','Aptos',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; font-size:17px; -webkit-font-smoothing:antialiased; }
+    h1,h2,h3,h4,h5,h6 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:400; letter-spacing:-0.01em; }
+    a { color: var(--blue); }
+
+    .hero { background:var(--surf); border-bottom:1px solid var(--border); padding:4rem 2rem 3rem; text-align:center; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background: linear-gradient(135deg, #0067A3, #002D72); }
+    .logo-corner { position:absolute; top: 1.25rem; left: 1.5rem; opacity:0.85; }
+    .logo-corner img { height: 34px; }
+    .hero-badge { display:inline-flex; align-items:center; gap:0.5rem; background:var(--bg); border:1px solid var(--border); border-radius:100px; padding:0.35rem 1rem; font-size:0.75rem; font-weight:700; color:var(--muted); letter-spacing:0.07em; text-transform:uppercase; margin-bottom:1.5rem; }
+    .hero-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--amber); }
+    .hero h1 { font-size:clamp(2rem,5vw,3.5rem); line-height:1.15; margin-bottom:0.75rem; }
+    .c-blue{color:var(--blue);} .c-indigo{color:var(--indigo);}
+    .hero-sub { font-size:1rem; color:var(--muted); margin-bottom:2rem; max-width:720px; margin-left:auto; margin-right:auto; }
+    .hero-tags { display:flex; justify-content:center; gap:0.6rem; flex-wrap:wrap; }
+    .hero-tag { padding:0.3rem 0.9rem; border-radius:8px; font-size:0.78rem; font-weight:600; background:#E6F0F8; color:var(--blue); }
+
+    .container { max-width:1040px; margin:0 auto; padding:0 2rem 6rem; }
+
+    .toc { background:var(--surf); border:1px solid var(--border); border-radius:16px; padding:1.75rem 2rem; margin:2.5rem 0; }
+    .toc h3 { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); margin-bottom:1.25rem; }
+    .toc ol { list-style: none; counter-reset: step; }
+    .toc li { counter-increment: step; padding:0.45rem 0; border-bottom:1px solid var(--border); }
+    .toc li:last-child { border-bottom:none; }
+    .toc li::before { content: counter(step, decimal-leading-zero); color:var(--faint); font-family:'Bahnschrift','Segoe UI',sans-serif; margin-right:0.8rem; font-size:0.9rem; }
+    .toc a { text-decoration:none; color:var(--text); font-weight:500; }
+    .toc a:hover { color: var(--blue); }
+
+    section.chapter { margin: 3.5rem 0; }
+    .chapter-head { margin-bottom:1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
+    .chapter-eyebrow { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--blue); margin-bottom:0.3rem; }
+    .chapter-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--indigo); }
+
+    p { margin: 0.7rem 0; }
+    ul, ol { margin: 0.6rem 0 0.6rem 1.3rem; }
+    li { margin: 0.3rem 0; }
+    strong { color: var(--indigo); }
+
+    .callout { background:var(--surf); border:1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 10px; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+    .callout.amber { border-left-color: var(--amber); }
+    .callout.green { border-left-color: var(--green); }
+    .callout.red { border-left-color: var(--red); }
+    .callout.indigo { border-left-color: var(--indigo); }
+    .callout h4 { font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--indigo); }
+
+    .pair { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin:1rem 0; }
+    @media (max-width: 720px) { .pair { grid-template-columns: 1fr; } }
+
+    .big-tbl { background:var(--surf); border:1px solid var(--border); border-radius:10px; overflow:auto; margin:1rem 0; }
+    .big-tbl table { width:100%; border-collapse:collapse; font-size:0.9rem; }
+    .big-tbl th { background:var(--bg); padding:0.6rem 0.9rem; text-align:left; color:var(--muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; border-bottom:1px solid var(--border); }
+    .big-tbl td { padding:0.6rem 0.9rem; border-bottom:1px solid var(--border); color:var(--text); vertical-align:top; line-height:1.6; }
+    .big-tbl tr:last-child td { border-bottom:none; }
+    .big-tbl td:first-child { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; }
+
+    .section-deep { background:var(--surf); border:1px solid var(--border); border-radius:10px; padding:1rem 1.3rem; margin:1.2rem 0; }
+    .section-deep .tag { color:var(--muted); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.07em; font-weight:700; margin-bottom:0.25rem; }
+    .section-deep h4 { color:var(--indigo); font-size:1.15rem; margin-bottom:0.4rem; }
+    .section-deep .eg { background:#FAFBFC; border:1px solid var(--border); border-radius:6px; padding:0.7rem 1rem; font-size:0.88rem; line-height:1.65; color:var(--text); margin:0.5rem 0; }
+
+    .flow { background:var(--surf); border:1px solid var(--border); border-radius:10px; padding:1rem 1.3rem; margin:1rem 0; }
+    .flow-step { display:flex; align-items:flex-start; gap:0.8rem; padding:0.5rem 0; }
+    .flow-num { background:var(--blue); color:white; font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; width:32px; height:32px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:0.85rem; }
+    .flow-num.pain { background:var(--red); }
+    .flow-num.good { background:#3D7A3D; }
+    .flow-body { flex:1; }
+    .flow-body strong { display:block; margin-bottom:0.15rem; }
+    .flow-body .pain-tag { display:inline-block; background:#FEE9EC; color:var(--red); font-size:0.72rem; padding:0.1rem 0.5rem; border-radius:4px; margin-left:0.3rem; font-weight:700; }
+    .flow-body .good-tag { display:inline-block; background:#F3FAE9; color:#3D7A3D; font-size:0.72rem; padding:0.1rem 0.5rem; border-radius:4px; margin-left:0.3rem; font-weight:700; }
+
+    .raci-tbl { background:var(--surf); border:1px solid var(--border); border-radius:10px; overflow:auto; margin:1rem 0; }
+    .raci-tbl table { width:100%; border-collapse:collapse; font-size:0.85rem; }
+    .raci-tbl th { background:var(--bg); padding:0.5rem 0.6rem; text-align:center; color:var(--muted); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; border-bottom:1px solid var(--border); }
+    .raci-tbl td { padding:0.45rem 0.6rem; border-bottom:1px solid var(--border); vertical-align:middle; text-align:center; line-height:1.5; }
+    .raci-tbl td:first-child { text-align:left; color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; }
+    .raci-tbl tr:last-child td { border-bottom:none; }
+    .raci-r { background:#E6F0F8; color:var(--blue); font-weight:700; }
+    .raci-a { background:#FEE9EC; color:var(--red); font-weight:700; }
+    .raci-c { background:#FFF4E3; color:var(--amber); font-weight:700; }
+    .raci-i { background:#F3FAE9; color:#3D7A3D; font-weight:700; }
+
+    .summary { background: linear-gradient(135deg, #F9F9F9, #EDEDED); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+    .summary h4 { color: var(--indigo); margin-bottom: 0.5rem; font-size: 0.95rem; }
+
+    .dl-banner { background: linear-gradient(135deg, #002D72, #0066B2); color:white; border-radius:14px; padding:1.4rem 1.6rem; margin:1.5rem 0; display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+    .dl-banner h4 { color:white; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-bottom:0.3rem; }
+    .dl-banner p { font-size:0.88rem; color:rgba(255,255,255,0.88); margin:0; line-height:1.5; max-width:600px; }
+    .dl-btn { display:inline-flex; align-items:center; gap:0.4rem; padding:0.55rem 1rem; background:white; color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; font-size:0.88rem; text-decoration:none; border-radius:6px; }
+    .dl-btn:hover { background:#E6F0F8; }
+
+    footer { text-align:center; padding: 2rem 1rem 3rem; color: var(--faint); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+    footer img { height: 28px; opacity:0.7; margin-bottom: 0.5rem; display: block; margin-left:auto; margin-right:auto; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="logo-corner"><img src="../../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE"></div>
+    <div class="hero-badge"><span class="dot"></span> Spec Writing · Class 03</div>
+    <h1><span class="c-blue">The Business</span><br><span class="c-indigo">Requirements Document</span></h1>
+    <p class="hero-sub">The <em>why</em> and <em>what</em> — never the <em>how</em>. The document that gets leadership to fund the work before a single developer writes a line of code. A BRD is the <em>ancestor</em> of every PRD, SRS, and feature spec you'll ever write.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">Pre-solution</span>
+      <span class="hero-tag">Business language</span>
+      <span class="hero-tag">Stakeholders</span>
+      <span class="hero-tag">As-is / To-be</span>
+      <span class="hero-tag">Cost-benefit</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="toc">
+      <h3>In this note</h3>
+      <ol>
+        <li><a href="#what">What is a BRD (and what is it not)?</a></li>
+        <li><a href="#why">Why BRDs exist — the problem they solve</a></li>
+        <li><a href="#chain">The BRD → PRD → SRS chain</a></li>
+        <li><a href="#structure">BRD structure — 16 sections</a></li>
+        <li><a href="#problem">Problem statement — the anti-solution rule</a></li>
+        <li><a href="#asis">Current process · as-is</a></li>
+        <li><a href="#tobe">Future process · to-be</a></li>
+        <li><a href="#stake">Stakeholders · RACI · interest-influence</a></li>
+        <li><a href="#metrics">Success metrics · how the business will know</a></li>
+        <li><a href="#cost">Cost-benefit &amp; payback</a></li>
+        <li><a href="#risks">Risks · assumptions · constraints</a></li>
+        <li><a href="#signoff">Approvals · sign-off · governance</a></li>
+        <li><a href="#example">Worked example · mBoB Biller Favourites BRD</a></li>
+        <li><a href="#pitfalls">Common BRD mistakes</a></li>
+        <li><a href="#take">Key takeaways</a></li>
+      </ol>
+    </div>
+
+    <div class="dl-banner">
+      <div>
+        <h4>💼 Download the BRD template</h4>
+        <p>A ready-to-fill Markdown template with every section scaffolded. Sign-off table included. Use it next time you're pitching a new initiative to leadership.</p>
+      </div>
+      <a class="dl-btn" href="templates/brd-template.md" download>⬇ brd-template.md</a>
+    </div>
+
+    <section class="chapter" id="what">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 1</div>
+        <h2>What is a BRD (and what is it not)?</h2>
+      </div>
+      <p>A <strong>BRD — Business Requirements Document</strong> — is the earliest artifact in the spec lifecycle. It answers <em>"should we do this at all?"</em> — before any PRD, SRS, or feature spec exists. It describes <strong>the business problem, the business-level solution expected, and the business case for funding it</strong>.</p>
+      <p>The BRD is written in <strong>business language only</strong>. No systems. No apps. No databases. No APIs. A reader with no software background must be able to read the BRD and understand what's being proposed and why.</p>
+
+      <div class="pair">
+        <div class="callout green">
+          <h4>✅ A BRD is…</h4>
+          <ul>
+            <li><strong>Pre-solution</strong> — no specific technology named</li>
+            <li><strong>Business-focused</strong> — problem, users, outcomes, cost-benefit</li>
+            <li><strong>Stakeholder-ready</strong> — sponsors, leadership, compliance sign off</li>
+            <li><strong>Solution-agnostic</strong> — could be solved by software, process change, or policy</li>
+            <li><strong>The funding document</strong> — it gets budget approved</li>
+          </ul>
+        </div>
+        <div class="callout red">
+          <h4>❌ A BRD is NOT…</h4>
+          <ul>
+            <li>A design document</li>
+            <li>A functional / technical specification</li>
+            <li>A project plan</li>
+            <li>A user manual</li>
+            <li>A place to say "we'll build a mobile app"</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout indigo">
+        <h4>The BRD mental model</h4>
+        <p>A BRD describes <strong>a capability the business needs</strong>. Not a feature. Not an app. A capability. <em>"The business needs the ability to let retail customers reuse recurring payment details."</em> — that's a BRD sentence. <em>"The mBoB app should have a favourites screen."</em> — that's a spec sentence, already a solution.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="why">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 2</div>
+        <h2>Why BRDs exist — the problem they solve</h2>
+      </div>
+      <p>Without a BRD, projects start with someone saying <em>"let's build a mobile app"</em> — which is a <strong>solution looking for a problem</strong>. Six months later the app ships but nobody uses it, because nobody checked whether the real problem was worth solving, or whether an app was the right shape of solution.</p>
+
+      <p>A BRD forces four uncomfortable questions <em>before</em> money is spent:</p>
+
+      <ol>
+        <li><strong>Is this a real problem?</strong> — with evidence, not opinions.</li>
+        <li><strong>Who owns it?</strong> — named sponsor, not a committee.</li>
+        <li><strong>What does success look like?</strong> — a number, measurable, with a date.</li>
+        <li><strong>Is the business case positive?</strong> — benefits minus costs &gt; 0, including the risk-adjusted version.</li>
+      </ol>
+
+      <div class="callout amber">
+        <h4>Rule of thumb</h4>
+        <p>If leadership hasn't signed off a BRD, you're building on shifting sand. The next PRD, SRS, feature spec, and test plan all reference the BRD. If its foundations are wrong, everything downstream is wrong — you'll just find out later.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="chain">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 3</div>
+        <h2>The BRD → PRD → SRS chain</h2>
+      </div>
+      <p>Each document has a different job. The BRD doesn't replace them; it's the ancestor.</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead>
+            <tr><th>Document</th><th>Answers</th><th>Audience</th><th>Language</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>BRD</td><td>Should we do this at all?</td><td>Sponsor · leadership · steering</td><td>Business only</td></tr>
+            <tr><td>PRD</td><td>What product / release will we build?</td><td>Product · eng · design · GTM</td><td>Product + user</td></tr>
+            <tr><td>SRS</td><td>Full formal system spec (regulated)</td><td>Dev · QA · audit · regulator</td><td>Formal · precise</td></tr>
+            <tr><td>Feature Spec</td><td>How will engineering build this feature?</td><td>Dev · QA · design</td><td>Technical-precise</td></tr>
+            <tr><td>HLD / LLD</td><td>How is the system / component structured?</td><td>Eng · architect</td><td>Technical</td></tr>
+            <tr><td>Test Plan</td><td>How will we prove it works?</td><td>QA · dev · release</td><td>Test-specific</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout indigo">
+        <h4>Traceability goes all the way up</h4>
+        <p>A functional requirement in an SRS (FR-01) traces up to a business requirement in the BRD (BR-02) which traces up to a business objective (BO-01). When someone asks "why are we building this?" — the answer is a chain of BRD rationale, not a developer's memory of a meeting.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="structure">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 4</div>
+        <h2>BRD structure — 16 sections</h2>
+      </div>
+      <p>A well-formed BRD has 16 standard sections. You don't always write them in order, but they always appear, and reviewers expect to find each one in roughly this place.</p>
+
+      <div class="section-deep">
+        <div class="tag">§§ 01–04 · Setup</div>
+        <h4>Metadata · Executive Summary · Context · Problem</h4>
+        <p>Metadata (title · sponsor · reviewers · status · version), executive summary (2–3 paragraphs for a board member), business context and background (what triggered this), problem &amp; opportunity (who is affected, how much it costs today, what happens if we do nothing).</p>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§§ 05–07 · What's needed</div>
+        <h4>Business Objectives · Business Requirements · Stakeholders</h4>
+        <p>Objectives (numbered, measurable, time-bound). Business requirements (numbered capabilities: <em>"the business needs the ability to…"</em>). Stakeholders (name, interest, influence, engagement plan).</p>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§§ 08–09 · How work flows today vs tomorrow</div>
+        <h4>As-Is Process · To-Be Process</h4>
+        <p>Describe current process with pain points marked. Describe future process with improvements marked. Delta is the value proposition.</p>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§§ 10–12 · The context that limits us</div>
+        <h4>Assumptions · Constraints · Risks</h4>
+        <p>Assumptions (what must remain true). Constraints (budget · deadline · regulatory · tech). Risks (likelihood · impact · mitigation · owner).</p>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§§ 13–14 · Making the case</div>
+        <h4>Success Metrics · Cost-Benefit</h4>
+        <p>How the business will know it worked (metric · baseline · target · timeframe · owner). Cost breakdown (build · run · change-mgmt). Benefit breakdown (quantified + qualitative). Payback / NPV if modelled.</p>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§§ 15–16 · Closing</div>
+        <h4>Out of Scope · Approvals</h4>
+        <p>Explicit "we are not doing this" list. Sign-off table with named roles: sponsor, finance, compliance, business-unit head, programme management.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="problem">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 5</div>
+        <h2>Problem statement — the anti-solution rule</h2>
+      </div>
+      <p>The single most common mistake in BRDs: naming a solution in the problem statement. If you catch yourself writing "we need a mobile app for X" — stop. Rewrite until the problem can be solved in multiple ways.</p>
+
+      <div class="pair">
+        <div class="callout red">
+          <h4>❌ Wrong (solution-laden)</h4>
+          <ul>
+            <li>"We need a mobile app for bill payments."</li>
+            <li>"Customers need a favourites feature."</li>
+            <li>"We should integrate with the Core Banking API."</li>
+            <li>"Build a chatbot for customer support."</li>
+          </ul>
+        </div>
+        <div class="callout green">
+          <h4>✅ Right (problem only)</h4>
+          <ul>
+            <li>"Retail customers pay the same recurring bills each month and must currently re-enter a 12-digit account number each time, costing ≈36 minutes of friction per customer per year."</li>
+            <li>"Customer support receives 12 000 tickets/month for questions that are already documented, costing ~800 agent-hours/month."</li>
+            <li>"Compliance reporting takes 14 staff-days/month to compile manually, with a 3% error rate."</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout amber">
+        <h4>The problem-statement checklist</h4>
+        <ul>
+          <li>Who is affected? (Segment · size)</li>
+          <li>What concretely hurts? (Described in observable detail)</li>
+          <li>How much does it cost today? (Hours · money · tickets · churn · risk)</li>
+          <li>What's the evidence? (Analytics · research · interviews · incidents)</li>
+          <li>Why now? (What changed · what's the trigger)</li>
+          <li>What happens if we do nothing? (Baseline trajectory)</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="chapter" id="asis">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 6</div>
+        <h2>Current process · as-is</h2>
+      </div>
+      <p>Describe how the work gets done today. Number each step. Mark pain points explicitly — reviewers need to see where the friction lives.</p>
+
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-num pain">1</div>
+          <div class="flow-body"><strong>Customer opens mBoB</strong> <span class="pain-tag">pain: login latency ~8s</span>
+          <p style="font-size:0.88rem; color:var(--muted); margin:0.15rem 0">Two-factor login, average wait 8 seconds on 4G.</p></div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <div class="flow-body"><strong>Customer navigates to Bill Payments</strong>
+          <p style="font-size:0.88rem; color:var(--muted); margin:0.15rem 0">Two taps from home.</p></div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num pain">3</div>
+          <div class="flow-body"><strong>Customer types 12-digit account number</strong> <span class="pain-tag">pain: ~38s · high error rate</span>
+          <p style="font-size:0.88rem; color:var(--muted); margin:0.15rem 0">Manual entry · 6% error rate on first try · often requires reference to a physical bill.</p></div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <div class="flow-body"><strong>Customer enters amount</strong>
+          <p style="font-size:0.88rem; color:var(--muted); margin:0.15rem 0">~5 seconds.</p></div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">5</div>
+          <div class="flow-body"><strong>Customer enters MPIN and confirms</strong>
+          <p style="font-size:0.88rem; color:var(--muted); margin:0.15rem 0">~8 seconds.</p></div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num pain">6</div>
+          <div class="flow-body"><strong>Payment complete · receipt shown</strong> <span class="pain-tag">pain: total ~65s per payment</span>
+          <p style="font-size:0.88rem; color:var(--muted); margin:0.15rem 0">For 62% of users paying 3+ same billers monthly = 36× friction per year.</p></div>
+        </div>
+      </div>
+
+      <p><strong>Tip:</strong> for service or ops processes, use a <em>swim-lane</em> diagram showing who does what. For customer-facing processes, a step list with pain tags is usually enough.</p>
+    </section>
+
+    <section class="chapter" id="tobe">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 7</div>
+        <h2>Future process · to-be</h2>
+      </div>
+      <p>Now describe the <em>capability</em> you're proposing — still without naming a technology. Mark improvements.</p>
+
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <div class="flow-body"><strong>Customer opens mBoB (unchanged)</strong></div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num good">2</div>
+          <div class="flow-body"><strong>Customer sees recurring billers on home</strong> <span class="good-tag">improvement: 0 typing</span>
+          <p style="font-size:0.88rem; color:var(--muted); margin:0.15rem 0">Saved recurring billers are displayed for one-tap access.</p></div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num good">3</div>
+          <div class="flow-body"><strong>Customer taps a saved biller</strong> <span class="good-tag">38s → 1s saved</span>
+          <p style="font-size:0.88rem; color:var(--muted); margin:0.15rem 0">Amount and account pre-filled.</p></div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <div class="flow-body"><strong>Customer confirms with MPIN (unchanged for security)</strong></div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num good">5</div>
+          <div class="flow-body"><strong>Payment complete</strong> <span class="good-tag">total ~20s vs 65s</span>
+          <p style="font-size:0.88rem; color:var(--muted); margin:0.15rem 0">≥70% reduction in payment-time for recurring billers.</p></div>
+        </div>
+      </div>
+
+      <p class="callout indigo" style="margin-top:1rem"><strong>Key rule:</strong> notice we didn't say "add a favourites screen" or "use local storage" — those are design choices. The BRD says "the business needs the ability to save and retrieve recurring billers with one tap". <em>How</em> that capability is delivered is for the PRD and spec to decide.</p>
+    </section>
+
+    <section class="chapter" id="stake">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 8</div>
+        <h2>Stakeholders · RACI · interest-influence</h2>
+      </div>
+      <p>Every BRD has a stakeholder section. Two tools combine to make it useful:</p>
+
+      <div class="section-deep">
+        <div class="tag">Tool 1</div>
+        <h4>Interest / Influence grid</h4>
+        <p>A 2×2 that categorises stakeholders by how much they care and how much they can affect the outcome. Drives engagement strategy.</p>
+        <ul>
+          <li><strong>High interest · High influence</strong> — manage closely · weekly check-ins</li>
+          <li><strong>High interest · Low influence</strong> — keep informed · fortnightly</li>
+          <li><strong>Low interest · High influence</strong> — keep satisfied · key decision points only</li>
+          <li><strong>Low interest · Low influence</strong> — monitor · monthly newsletter</li>
+        </ul>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">Tool 2</div>
+        <h4>RACI matrix (SELISE uses <em>RCI</em> — "A" dropped per Julian's adaptation)</h4>
+        <p><strong>R</strong>esponsible · <strong>A</strong>ccountable · <strong>C</strong>onsulted · <strong>I</strong>nformed. SELISE's <strong>RCI</strong> variant drops Accountable and requires Responsible to be exactly one person. Teach both; pick per engagement.</p>
+        <div class="raci-tbl">
+          <table>
+            <thead>
+              <tr><th>Activity</th><th>Sponsor</th><th>BA</th><th>PM</th><th>Dev Lead</th><th>QA Lead</th><th>Compliance</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Define problem</td><td class="raci-a">A</td><td class="raci-r">R</td><td class="raci-c">C</td><td></td><td></td><td class="raci-c">C</td></tr>
+              <tr><td>Approve business case</td><td class="raci-r">R</td><td class="raci-c">C</td><td class="raci-i">I</td><td></td><td></td><td class="raci-c">C</td></tr>
+              <tr><td>Author BRD</td><td class="raci-c">C</td><td class="raci-r">R</td><td class="raci-c">C</td><td class="raci-i">I</td><td class="raci-i">I</td><td class="raci-c">C</td></tr>
+              <tr><td>Sign off BRD</td><td class="raci-a">A</td><td class="raci-c">C</td><td class="raci-c">C</td><td class="raci-c">C</td><td class="raci-c">C</td><td class="raci-a">A</td></tr>
+              <tr><td>Escalate scope changes</td><td class="raci-a">A</td><td class="raci-c">C</td><td class="raci-r">R</td><td></td><td></td><td></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="metrics">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 9</div>
+        <h2>Success metrics · how the business will know</h2>
+      </div>
+      <p>Every BO (Business Objective) needs at least one metric. Good metrics are <strong>specific, measurable, time-bound, and instrumented</strong> — if you can't measure it today, plan how you will.</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead>
+            <tr><th>Metric</th><th>Baseline</th><th>Target</th><th>Timeframe</th><th>Measurement method</th><th>Owner</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Recurring-payment completion time</td><td>65 s p50</td><td>≤ 20 s p50</td><td>Launch + 60 days</td><td>mBoB app timing analytics</td><td>BA</td></tr>
+            <tr><td>Support tickets on "save billers"</td><td>8% of ticket volume</td><td>&lt; 1%</td><td>Launch + 90 days</td><td>Zendesk tag report</td><td>Support Lead</td></tr>
+            <tr><td>Weekly active use of favourites</td><td>0</td><td>≥ 40% of active customers</td><td>Launch + 60 days</td><td>Product analytics</td><td>BA</td></tr>
+            <tr><td>Customer NPS (recurring-payer segment)</td><td>+22</td><td>+30</td><td>Launch + 120 days</td><td>Quarterly NPS survey</td><td>Customer Insights</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout green">
+        <h4>The "instrument before you launch" rule</h4>
+        <p>If your metric requires data that isn't being collected today, build the measurement <em>before</em> the feature ships. Otherwise, launch day finds you unable to compare to baseline, and "did it work?" becomes a permanently open question.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="cost">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 10</div>
+        <h2>Cost-benefit &amp; payback</h2>
+      </div>
+      <p>A BRD without a business case is a wish list. The business case has three parts:</p>
+
+      <div class="section-deep">
+        <div class="tag">A · Costs</div>
+        <h4>Build · Run · Change-management</h4>
+        <ul>
+          <li><strong>Build:</strong> engineering effort (days × rate) · design · BA · QA · tooling · one-time licences</li>
+          <li><strong>Run:</strong> ongoing hosting · support · licences · monitoring (per month, then annualised)</li>
+          <li><strong>Change-management:</strong> training · comms · rollout coordination</li>
+        </ul>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">B · Benefits</div>
+        <h4>Quantified · Qualitative · Risk-reduction</h4>
+        <ul>
+          <li><strong>Quantified revenue:</strong> uplift × customers × conversion × retention</li>
+          <li><strong>Quantified cost savings:</strong> hours saved × rate × volume, or error-rate reduction × cost per error</li>
+          <li><strong>Risk reduction:</strong> probability × magnitude of averted losses (e.g. avoided regulatory fine)</li>
+          <li><strong>Qualitative:</strong> brand · staff morale · strategic optionality · competitive differentiation</li>
+        </ul>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">C · Payback</div>
+        <h4>When does cumulative benefit exceed cumulative cost?</h4>
+        <ul>
+          <li><strong>Break-even month</strong> — single headline number</li>
+          <li><strong>NPV over 3 years</strong> — if discount rate policy exists</li>
+          <li><strong>Sensitivity</strong> — what if adoption is 50% of target? 25%? Still positive?</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="chapter" id="risks">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 11</div>
+        <h2>Risks · Assumptions · Constraints</h2>
+      </div>
+      <p>Three lists, each serving a different reader. All three go into the BRD.</p>
+
+      <div class="pair">
+        <div class="callout indigo">
+          <h4>Assumptions</h4>
+          <p>What we're taking as true. If any of these change, revisit the BRD.</p>
+          <ul>
+            <li>"Regulation X will not change before Q3."</li>
+            <li>"Vendor Y remains our partner of record."</li>
+            <li>"Team Z will have capacity starting &lt;date&gt;."</li>
+          </ul>
+        </div>
+        <div class="callout amber">
+          <h4>Constraints</h4>
+          <p>Fixed, non-negotiable boundaries.</p>
+          <ul>
+            <li><strong>Budget:</strong> &lt; BTN 3M total build</li>
+            <li><strong>Timeline:</strong> live by &lt;regulatory deadline&gt;</li>
+            <li><strong>Regulatory:</strong> RMA directive compliance</li>
+            <li><strong>Tech estate:</strong> must sit inside existing mBoB stack</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">Risks</div>
+        <h4>Each risk has an owner and a mitigation</h4>
+        <div class="big-tbl">
+          <table>
+            <thead><tr><th>Risk</th><th>Likelihood</th><th>Impact</th><th>Mitigation</th><th>Owner</th></tr></thead>
+            <tbody>
+              <tr><td>Regulator requires additional audit controls</td><td>M</td><td>H</td><td>Early engagement with RMA; design for auditability from day 1</td><td>Compliance</td></tr>
+              <tr><td>Customer adoption below target</td><td>L</td><td>M</td><td>In-app promotion · onboarding tooltips · branch staff training</td><td>Marketing</td></tr>
+              <tr><td>Integration dependency delayed</td><td>M</td><td>M</td><td>Parallel-track workstream · feature-flag launch</td><td>PM</td></tr>
+              <tr><td>Data migration corrupts existing records</td><td>L</td><td>H</td><td>Shadow DB · dry-run · rollback plan</td><td>Dev Lead</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="signoff">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 12</div>
+        <h2>Approvals · sign-off · governance</h2>
+      </div>
+      <p>A BRD without approvals is a draft. The sign-off table is the contract that unlocks funding.</p>
+
+      <div class="section-deep">
+        <div class="tag">Who signs off</div>
+        <h4>Standard sign-off roster</h4>
+        <ul>
+          <li><strong>Business Sponsor</strong> — the exec who owns the outcome</li>
+          <li><strong>Finance</strong> — budget approval</li>
+          <li><strong>Compliance / Legal</strong> — confirms no regulatory blockers</li>
+          <li><strong>Head of affected business unit(s)</strong> — agrees to the process change</li>
+          <li><strong>Programme Management</strong> — agrees to slot the work</li>
+          <li><em>Optional:</em> Customer / end-user representative · Trade union (if ops change impacts staff) · External partner</li>
+        </ul>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">Governance lifecycle</div>
+        <h4>From draft to baselined</h4>
+        <ul>
+          <li><strong>Draft (v0.1–0.5)</strong> — BA is writing; sections incomplete</li>
+          <li><strong>Review (v0.5–0.9)</strong> — reviewers adding comments; multiple minor bumps</li>
+          <li><strong>Approved (v1.0)</strong> — signed; baseline; funding released</li>
+          <li><strong>Updated (v1.x)</strong> — material change after approval; goes back to sponsors for re-approval</li>
+          <li><strong>Closed</strong> — initiative completed or cancelled; archived</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="chapter" id="example">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 13</div>
+        <h2>Worked example · mBoB Biller Favourites BRD</h2>
+      </div>
+      <p>A compressed BRD for the same feature we've used throughout — this time framed pre-solution, with a sponsor signing off funding.</p>
+
+      <div class="section-deep">
+        <div class="tag">§ 2 · Executive Summary</div>
+        <p>Retail customers of mBoB paying recurring bills face significant friction — re-entering 12-digit account numbers on every payment, 36 times per year for the typical customer. This initiative proposes a capability that lets customers save and reuse recurring payees with a single tap, reducing payment time by ≥70% and reducing support-ticket load on "save billers" questions by &gt;80%. Estimated build cost BTN 2.4M · break-even in month 9 post-launch.</p>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§ 4 · Problem</div>
+        <p>62% of mBoB retail customers pay the same 3+ billers every month (Q1 2026 analytics). Each payment requires re-typing a 12-digit account number — a 38-second task with a 6% first-try error rate, resulting in ≈36 re-entries per active customer per year. Customer support receives 8% of its ticket volume on "can I save my biller?" questions — ≈9 600 tickets/month costing ≈800 agent-hours. Current NPS among recurring-payers is +22, trailing non-payers at +31.</p>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§ 6 · Business Requirements (selected)</div>
+        <ul>
+          <li><strong>BR-01</strong> — The business needs the ability for a retail customer to mark a recently-paid biller as recurring, so that future payments to that biller are faster.</li>
+          <li><strong>BR-02</strong> — The business needs the ability for a customer to retrieve their recurring billers from the bill-payments entry point with no more than one interaction, so that payment time drops.</li>
+          <li><strong>BR-03</strong> — The business needs to remain compliant with RMA Digital Payments Directive §7 on data residency, so that no regulatory breach occurs.</li>
+          <li><strong>BR-04</strong> — The business needs to enforce MPIN re-authentication on every payment regardless of origin, so that security is not compromised.</li>
+        </ul>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§ 13 · Success Metrics</div>
+        <p>Recurring-payment completion time ≤ 20 s p50 (from 65 s baseline) within 60 days. Weekly active use ≥ 40% of active customers within 60 days. Support tickets on "save billers" drop to &lt;1% within 90 days. NPS for recurring-payer segment lifts from +22 to +30 within 120 days.</p>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§ 14 · Cost-Benefit (summary)</div>
+        <p><strong>Build:</strong> BTN 2.4M (80 dev-days · 20 QA-days · 12 design-days · 5 BA-days + tooling).<br>
+        <strong>Run:</strong> BTN 220k/year (negligible marginal hosting · monitoring · support).<br>
+        <strong>Quantified benefit:</strong> 800 agent-hours/month × BTN 250/hr = BTN 2.4M/year in support savings alone. Excludes customer-retention benefit from NPS lift.<br>
+        <strong>Break-even:</strong> Month 9 post-launch (conservative scenario: 50% of target adoption).</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="pitfalls">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 14</div>
+        <h2>Common BRD mistakes</h2>
+      </div>
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Mistake</th><th>Why it hurts</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr><td>Naming a solution in the problem statement</td><td>Prematurely narrows the design space</td><td>Rewrite until the pain could be solved ≥2 ways</td></tr>
+            <tr><td>Unquantified problem ("customers are frustrated")</td><td>No way to size the opportunity or measure success</td><td>Tickets · hours · BTN · %s · dates</td></tr>
+            <tr><td>Sponsor-less BRD</td><td>Nobody to sign off; it sits in draft forever</td><td>Name the sponsor on page 1 · get their verbal commitment early</td></tr>
+            <tr><td>Success metrics that can't be measured today</td><td>Post-launch, nobody knows if it worked</td><td>Build measurement before the feature</td></tr>
+            <tr><td>Missing out-of-scope list</td><td>Scope creep kills timeline or budget</td><td>Explicit "will NOT" list</td></tr>
+            <tr><td>Risks without owners</td><td>Risks everyone "knows about" but nobody mitigates</td><td>Named person per risk</td></tr>
+            <tr><td>No re-review after approval</td><td>Stale BRD used as source of truth even as reality moves</td><td>Re-approval triggered by material change</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="chapter" id="take">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Takeaways</div>
+        <h2>Key points to carry forward</h2>
+      </div>
+      <div class="summary">
+        <h4>What we covered today</h4>
+        <ul>
+          <li>A BRD answers <strong>should we do this at all?</strong> — before any spec is written.</li>
+          <li>Written in <strong>business language only</strong> — no technology, no systems, no solutions named.</li>
+          <li>16 sections: <strong>metadata · exec summary · context · problem · objectives · business reqs · stakeholders · as-is · to-be · assumptions · constraints · risks · metrics · cost-benefit · out of scope · approvals</strong>.</li>
+          <li>Problem statement must <strong>not</strong> name a solution. The test: could the pain be solved ≥2 ways?</li>
+          <li>Use <strong>as-is / to-be</strong> flows with pain tags and improvement tags. Delta = value.</li>
+          <li>Stakeholder engagement: <strong>Interest/Influence grid</strong> + <strong>RACI (or SELISE's RCI)</strong>.</li>
+          <li>Every BO gets at least one <strong>measurable metric with a baseline, target, and timeframe</strong>.</li>
+          <li>A BRD without a <strong>signed approval table</strong> is a draft, not a BRD.</li>
+          <li>Traceability runs <em>up</em> from FR → BR → BO. That chain is how you answer "why are we building this?"</li>
+        </ul>
+      </div>
+      <p style="margin-top:1.5rem; font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-size:1.1rem">A good BRD makes every downstream doc easier. A bad BRD makes every downstream doc a fight.</p>
+      <p style="margin-top:0.5rem">Next class: <strong>HLD &amp; LLD Workshop</strong> — the design-side of the spec stack. From requirements to architecture to component-level detail.</p>
+    </section>
+
+  </div>
+
+  <footer>
+    <img src="../../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE">
+    SELISE × Pelsung · Spec Writing · Class 03<br>
+    The Business Requirements Document
+  </footer>
+
+</body>
+</html>

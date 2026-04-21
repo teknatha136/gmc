@@ -1,0 +1,971 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Markdown — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      /* Markdown-specific styles */
+      .md-split { display:grid; grid-template-columns: 1fr 1fr; gap:1.2rem; width:100%; max-width:1180px; }
+      @media (max-width: 900px){ .md-split { grid-template-columns: 1fr; } }
+      .md-pane { background:white; border:1px solid var(--border); border-radius:12px; overflow:hidden; display:flex; flex-direction:column; box-shadow: 0 4px 14px rgba(0,0,0,0.05); }
+      .md-pane-head { background:var(--bg); border-bottom:1px solid var(--border); padding:0.5rem 1rem; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); display:flex; align-items:center; gap:0.4rem; }
+      .md-pane.raw .md-pane-head { color: var(--blue); }
+      .md-pane.rendered .md-pane-head { color: #3D7A3D; }
+      .md-dot { width:8px; height:8px; border-radius:50%; }
+      .md-pane.raw .md-dot { background: var(--blue); }
+      .md-pane.rendered .md-dot { background: var(--green); }
+      .md-code { font-family:'Courier New',monospace; font-size:clamp(0.78rem, 1.1vw, 0.95rem); line-height:1.7; padding:1rem 1.2rem; color:var(--indigo); background:#F6F9FC; white-space:pre-wrap; flex:1; min-height:180px; }
+      .md-preview { padding:1rem 1.4rem; flex:1; font-size:clamp(0.82rem, 1.1vw, 0.95rem); line-height:1.65; color:var(--text); min-height:180px; }
+      .md-preview h1, .md-preview h2, .md-preview h3 { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); margin:0.5rem 0 0.3rem; line-height:1.2; }
+      .md-preview h1 { font-size:1.35rem; }
+      .md-preview h2 { font-size:1.15rem; }
+      .md-preview h3 { font-size:1rem; }
+      .md-preview p { margin:0.3rem 0; }
+      .md-preview ul, .md-preview ol { margin:0.3rem 0 0.3rem 1.3rem; }
+      .md-preview code { background:#F0F3F7; color:var(--red); padding:0.1rem 0.35rem; border-radius:4px; font-family:'Courier New',monospace; font-size:0.88em; }
+      .md-preview pre { background:#001F35; color:#E6F0F8; padding:0.7rem 0.9rem; border-radius:8px; overflow:auto; margin:0.4rem 0; }
+      .md-preview pre code { background:transparent; color:inherit; padding:0; }
+      .md-preview blockquote { border-left:3px solid var(--blue); padding:0.2rem 0.8rem; margin:0.4rem 0; color:var(--muted); background:#F0F5FA; border-radius:0 6px 6px 0; font-style:italic; }
+      .md-preview a { color:var(--blue); }
+      .md-preview table { border-collapse:collapse; width:100%; margin:0.4rem 0; font-size:0.88em; }
+      .md-preview th, .md-preview td { border:1px solid var(--border); padding:0.3rem 0.6rem; text-align:left; }
+      .md-preview th { background:var(--bg); color:var(--indigo); }
+      .md-preview hr { border:none; border-top:1px solid var(--border); margin:0.6rem 0; }
+      .md-preview img { max-width:100%; }
+      .md-preview input[type=checkbox] { margin-right:0.3rem; }
+
+      .syntax-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:0.7rem; width:100%; max-width:1140px; }
+      @media (max-width: 900px){ .syntax-grid { grid-template-columns: 1fr; } }
+      .syntax-card { background:white; border:1px solid var(--border); border-left:4px solid var(--blue); border-radius:10px; padding:0.75rem 1rem; }
+      .syntax-card h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.98rem; margin-bottom:0.35rem; }
+      .syntax-card .row { display:grid; grid-template-columns: 1fr auto 1fr; align-items:center; gap:0.6rem; font-size:0.82rem; }
+      .syntax-card .write { font-family:'Courier New',monospace; background:#F0F3F7; color:var(--indigo); padding:0.25rem 0.45rem; border-radius:4px; }
+      .syntax-card .arrow { color:var(--faint); font-weight:700; }
+      .syntax-card .out { color:var(--text); }
+
+      .use-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:0.9rem; width:100%; max-width:1200px; }
+      @media (max-width: 900px){ .use-grid { grid-template-columns: 1fr; } }
+      .use-card { background:white; border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+      .use-card .use-head { padding:0.6rem 1rem; color:white; font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; font-size:1rem; display:flex; align-items:center; gap:0.5rem; }
+      .use-card.dev .use-head { background: linear-gradient(135deg, #0066B2, #004A80); }
+      .use-card.qa .use-head { background: linear-gradient(135deg, #247EC1, #185A8D); }
+      .use-card.ba .use-head { background: linear-gradient(135deg, #001F35, #000D19); }
+      .use-card .use-body { padding:0.8rem 1rem; font-size:0.88rem; }
+      .use-card .use-body code { background:#F0F3F7; padding:0.1rem 0.3rem; border-radius:4px; font-family:'Courier New',monospace; font-size:0.85em; color:var(--blue); }
+      .use-card .use-body ul { padding-left:1.1rem; line-height:1.65; }
+      .use-card .use-body li { margin:0.2rem 0; }
+
+      .try-box { background: linear-gradient(135deg, #0067A3, #002D72); color:white; border-radius:16px; padding:1.4rem 1.8rem; max-width:860px; width:100%; }
+      .try-box h3 { color:white; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.3rem; margin-bottom:0.5rem; }
+      .try-box p { color:rgba(255,255,255,0.9); font-size:0.95rem; line-height:1.65; margin:0.3rem 0; }
+      .try-box .link-pill { display:inline-flex; align-items:center; gap:0.4rem; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); border-radius:100px; padding:0.35rem 0.9rem; font-size:0.85rem; font-weight:600; color:white; text-decoration:none; margin:0.3rem 0.3rem 0 0; }
+      .try-box .link-pill:hover { background:rgba(255,255,255,0.25); }
+
+      .cheat-row { display:grid; grid-template-columns: auto 1fr 1fr; gap:0.4rem 1rem; align-items:center; font-size:0.9rem; max-width:900px; width:100%; }
+      .cheat-row .label { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-weight:600; font-size:0.88rem; }
+      .cheat-row .src { font-family:'Courier New',monospace; background:#F6F9FC; color:var(--indigo); padding:0.25rem 0.55rem; border-radius:4px; font-size:0.82rem; border:1px solid var(--border); }
+      .cheat-row .out { color:var(--text); font-size:0.9rem; }
+
+      .practice-step { background:white; border:1px solid var(--border); border-left:4px solid var(--amber); border-radius:10px; padding:0.9rem 1.2rem; max-width:880px; width:100%; }
+      .practice-step h4 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; margin-bottom:0.3rem; }
+      .practice-step p { font-size:0.92rem; color:var(--text); margin:0.3rem 0; line-height:1.6; }
+      .practice-step code { background:#F0F3F7; color:var(--blue); padding:0.1rem 0.35rem; border-radius:4px; font-family:'Courier New',monospace; font-size:0.86em; }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient bg-dark" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung · Extra</div>
+        <div style="display:flex; flex-direction:column; align-items:center; gap:1.3rem; text-align:center; max-width:920px;">
+          <img src="../assets/SELISE_Logo_Reversed.png" alt="SELISE" style="height:52px; margin-bottom:1rem;">
+          <div class="date-badge"><span class="db-dot"></span>Extra · E2 · Self-paced</div>
+          <h1 class="display" style="color:white">
+            <span style="color:#7dd3fc">Markdown</span><br />
+            <span style="color:white" style="font-style:italic">The universal way</span><br>
+            <span style="color:var(--amber); font-family:'Courier New',monospace; font-size:0.6em"># to write #</span>
+          </h1>
+          <p class="body-lg" style="color:rgba(255,255,255,0.7)">Write once. Read everywhere. READMEs, bug reports, specs, AI prompts.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">All verticals</span>
+            <span class="class-tag tag-indigo">Hands-on · live playground</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → or click right side to advance</div>
+      </div>
+
+      <!-- 2 WHY CARE -->
+      <div class="slide bg-dark" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Why bother?</div>
+        <div class="center" style="max-width:820px">
+          <div class="pill pill-white" style="margin:0 auto 1.2rem">🤔 Honest question</div>
+          <p class="disc-prompt">
+            "I can already write text in Word.<br>
+            <span style="color:var(--amber)">Why do I need another way to write?</span>"
+          </p>
+          <p style="color:rgba(255,255,255,0.55); font-size:0.95rem; margin-top:1.5rem; line-height:1.7">
+            Because Word files don't work in GitHub, in bug trackers, in AI chats, in team wikis, or in code.<br>
+            <strong style="color:white">Markdown does.</strong> Every tool you will use in software speaks it.
+          </p>
+        </div>
+      </div>
+
+      <!-- 3 WHAT IS IT -->
+      <div class="slide accent-blue" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> Definition</div>
+        <div class="stack" style="align-items:center; max-width:1180px">
+          <div class="center">
+            <div class="pill pill-blue">Extra · E2</div>
+            <h2 class="heading">What is Markdown?</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:0.3rem">Plain text with tiny marks that turn into formatted text</p>
+          </div>
+          <div class="md-split">
+            <div class="md-pane raw">
+              <div class="md-pane-head"><span class="md-dot"></span>You write this</div>
+              <pre class="md-code"># My Report
+
+I visited **Gelephu** last week.
+
+Three things I noticed:
+- Fast internet
+- New buildings
+- [Friendly people](https://gmc.bt)</pre>
+            </div>
+            <div class="md-pane rendered">
+              <div class="md-pane-head"><span class="md-dot"></span>People see this</div>
+              <div class="md-preview">
+                <h1>My Report</h1>
+                <p>I visited <strong>Gelephu</strong> last week.</p>
+                <p>Three things I noticed:</p>
+                <ul><li>Fast internet</li><li>New buildings</li><li><a href="#">Friendly people</a></li></ul>
+              </div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); margin-top:0.4rem">That's it. The whole language fits on one page. You can learn it today.</p>
+        </div>
+      </div>
+
+      <!-- 4 WHERE IT WORKS -->
+      <div class="slide accent-blue bg-subtle" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> Where it works</div>
+        <div class="stack" style="align-items:center; max-width:1100px">
+          <div class="center"><h2 class="heading">Places that speak Markdown</h2></div>
+          <div class="cols-3" style="max-width:1100px">
+            <div class="card" style="border-top:3px solid var(--blue); text-align:center">
+              <div style="font-size:2.2rem; margin-bottom:0.4rem">🐙</div>
+              <h4 style="color:var(--blue); justify-content:center">GitHub / GitLab</h4>
+              <p style="font-size:0.85rem; color:var(--muted); line-height:1.5">README · issues · PRs · wikis · everything</p>
+            </div>
+            <div class="card" style="border-top:3px solid var(--indigo); text-align:center">
+              <div style="font-size:2.2rem; margin-bottom:0.4rem">🤖</div>
+              <h4 style="color:var(--indigo); justify-content:center">AI tools</h4>
+              <p style="font-size:0.85rem; color:var(--muted); line-height:1.5">Claude Code · ChatGPT · Gemini — all read &amp; write MD</p>
+            </div>
+            <div class="card" style="border-top:3px solid var(--amber); text-align:center">
+              <div style="font-size:2.2rem; margin-bottom:0.4rem">📝</div>
+              <h4 style="color:#1C5B8C; justify-content:center">Notes apps</h4>
+              <p style="font-size:0.85rem; color:var(--muted); line-height:1.5">Notion · Obsidian · Bear · Joplin</p>
+            </div>
+            <div class="card" style="border-top:3px solid var(--green); text-align:center">
+              <div style="font-size:2.2rem; margin-bottom:0.4rem">💬</div>
+              <h4 style="color:var(--green); justify-content:center">Chat tools</h4>
+              <p style="font-size:0.85rem; color:var(--muted); line-height:1.5">Slack · Discord · Microsoft Teams</p>
+            </div>
+            <div class="card" style="border-top:3px solid var(--purple); text-align:center">
+              <div style="font-size:2.2rem; margin-bottom:0.4rem">🐛</div>
+              <h4 style="color:var(--purple); justify-content:center">Bug trackers</h4>
+              <p style="font-size:0.85rem; color:var(--muted); line-height:1.5">Jira · Linear · GitHub Issues</p>
+            </div>
+            <div class="card" style="border-top:3px solid var(--blue); text-align:center">
+              <div style="font-size:2.2rem; margin-bottom:0.4rem">📚</div>
+              <h4 style="color:var(--blue); justify-content:center">Docs sites</h4>
+              <p style="font-size:0.85rem; color:var(--muted); line-height:1.5">Docusaurus · MkDocs · Hugo · Jekyll</p>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; margin-top:0.4rem">If you're in software — at SELISE, at GMC, anywhere — <strong>you will meet Markdown every day</strong>.</p>
+        </div>
+      </div>
+
+      <!-- 5 SECTION: SYNTAX -->
+      <div class="slide bg-blue" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin:0 auto 1.5rem"><span class="pill-dot"></span>Part 1 · The Syntax</div>
+          <h1 class="display" style="color:white">The whole<br>language</h1>
+          <p class="body-lg" style="color:rgba(255,255,255,0.75); margin-top:1rem">10 things. That's it. Let's walk through each.</p>
+        </div>
+        <div class="section-num" style="color:white">01</div>
+      </div>
+
+      <!-- 6 HEADINGS -->
+      <div class="slide accent-blue" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> 1/10 · Headings</div>
+        <div class="stack" style="align-items:center; max-width:1180px">
+          <div class="center">
+            <h2 class="heading">Headings · use <code style="font-family:'Courier New',monospace; background:#F0F3F7; padding:0.1rem 0.4rem; border-radius:4px; font-size:0.7em; color:var(--blue)">#</code></h2>
+            <p class="body-md" style="color:var(--muted); margin-top:0.3rem">One <code>#</code> = biggest. Add more <code>#</code> = smaller.</p>
+          </div>
+          <div class="md-split">
+            <div class="md-pane raw">
+              <div class="md-pane-head"><span class="md-dot"></span>Write</div>
+              <pre class="md-code"># Project Plan
+## Phase 1
+### Week 1 goals
+#### Daily stand-ups</pre>
+            </div>
+            <div class="md-pane rendered">
+              <div class="md-pane-head"><span class="md-dot"></span>Shown</div>
+              <div class="md-preview">
+                <h1 style="font-size:1.6rem">Project Plan</h1>
+                <h2 style="font-size:1.3rem">Phase 1</h2>
+                <h3 style="font-size:1.1rem">Week 1 goals</h3>
+                <h4 style="font-size:1rem; color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; margin:0.4rem 0 0.2rem">Daily stand-ups</h4>
+              </div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center">⚠️ <strong>Space after the <code>#</code>.</strong> <code>#Hello</code> does nothing. <code># Hello</code> is a heading.</p>
+        </div>
+      </div>
+
+      <!-- 7 EMPHASIS -->
+      <div class="slide accent-blue" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> 2/10 · Bold &amp; italic</div>
+        <div class="stack" style="align-items:center; max-width:1180px">
+          <div class="center">
+            <h2 class="heading">Emphasis</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:0.3rem">Stars wrap around the word you want to highlight</p>
+          </div>
+          <div class="cheat-row">
+            <span class="label">Italic</span>
+            <span class="src">*tired*</span>
+            <span class="out"><em>tired</em></span>
+            <span class="label">Bold</span>
+            <span class="src">**important**</span>
+            <span class="out"><strong>important</strong></span>
+            <span class="label">Bold italic</span>
+            <span class="src">***urgent***</span>
+            <span class="out"><strong><em>urgent</em></strong></span>
+            <span class="label">Strikethrough</span>
+            <span class="src">~~wrong~~</span>
+            <span class="out"><s>wrong</s></span>
+          </div>
+          <div class="callout" style="background:#EAF3FA; border-left:4px solid var(--blue); padding:0.8rem 1.1rem; border-radius:8px; max-width:820px; font-size:0.92rem">
+            <strong>Trick to remember:</strong> one star = mild (italic), two stars = strong (bold). Same as emphasis in speech.
+          </div>
+        </div>
+      </div>
+
+      <!-- 8 LISTS -->
+      <div class="slide accent-blue" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> 3/10 · Lists</div>
+        <div class="stack" style="align-items:center; max-width:1180px">
+          <div class="center">
+            <h2 class="heading">Lists</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:0.3rem">Use <code>-</code> for bullets or <code>1.</code> for numbered. Indent to nest.</p>
+          </div>
+          <div class="md-split">
+            <div class="md-pane raw">
+              <div class="md-pane-head"><span class="md-dot"></span>Write</div>
+              <pre class="md-code">Groceries:
+- Rice
+- Chili
+  - Red
+  - Green
+- Oil
+
+Steps:
+1. Open laptop
+2. Open browser
+3. Go to gmail.com</pre>
+            </div>
+            <div class="md-pane rendered">
+              <div class="md-pane-head"><span class="md-dot"></span>Shown</div>
+              <div class="md-preview">
+                <p>Groceries:</p>
+                <ul>
+                  <li>Rice</li>
+                  <li>Chili
+                    <ul><li>Red</li><li>Green</li></ul>
+                  </li>
+                  <li>Oil</li>
+                </ul>
+                <p>Steps:</p>
+                <ol><li>Open laptop</li><li>Open browser</li><li>Go to gmail.com</li></ol>
+              </div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; font-size:0.95rem">💡 Numbered lists auto-renumber — if you write <code>1. 1. 1.</code> it still shows <code>1. 2. 3.</code></p>
+        </div>
+      </div>
+
+      <!-- 9 LINKS & IMAGES -->
+      <div class="slide accent-blue" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> 4/10 · Links &amp; images</div>
+        <div class="stack" style="align-items:center; max-width:1180px">
+          <div class="center">
+            <h2 class="heading">Links &amp; images</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:0.3rem">Square brackets for the text, parens for the URL.</p>
+          </div>
+          <div class="md-split">
+            <div class="md-pane raw">
+              <div class="md-pane-head"><span class="md-dot"></span>Write</div>
+              <pre class="md-code">Visit [SELISE](https://selisegroup.com)
+for more info.
+
+Logo:
+![SELISE logo](logo.png)
+
+Bare URL:
+&lt;https://selisegroup.com&gt;</pre>
+            </div>
+            <div class="md-pane rendered">
+              <div class="md-pane-head"><span class="md-dot"></span>Shown</div>
+              <div class="md-preview">
+                <p>Visit <a href="#" style="color:var(--blue)">SELISE</a> for more info.</p>
+                <p>Logo:<br><span style="display:inline-block; border:1px dashed var(--border); padding:0.5rem 1rem; color:var(--faint); font-size:0.8rem; border-radius:6px">📷 SELISE logo</span></p>
+                <p>Bare URL:<br><a href="#" style="color:var(--blue)">https://selisegroup.com</a></p>
+              </div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; font-size:0.95rem">
+            <strong>Pattern:</strong> <code>[text](url)</code> is a link. Add <code>!</code> in front — <code>![alt](url)</code> — and it's an image.
+          </p>
+        </div>
+      </div>
+
+      <!-- 10 CODE -->
+      <div class="slide accent-blue" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> 5/10 · Code</div>
+        <div class="stack" style="align-items:center; max-width:1180px">
+          <div class="center">
+            <h2 class="heading">Code · backticks</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:0.3rem">One backtick for a word. Three backticks for a whole block.</p>
+          </div>
+          <div class="md-split">
+            <div class="md-pane raw">
+              <div class="md-pane-head"><span class="md-dot"></span>Write</div>
+              <pre class="md-code">Run the `npm install` command.
+
+```js
+function greet(name) {
+  return "Hello, " + name;
+}
+```</pre>
+            </div>
+            <div class="md-pane rendered">
+              <div class="md-pane-head"><span class="md-dot"></span>Shown</div>
+              <div class="md-preview">
+                <p>Run the <code>npm install</code> command.</p>
+                <pre><code>function greet(name) {
+  return "Hello, " + name;
+}</code></pre>
+              </div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; font-size:0.95rem">
+            Add the language after the first three backticks (<code>```js</code>, <code>```python</code>) — GitHub and most tools will color the code.
+          </p>
+        </div>
+      </div>
+
+      <!-- 11 BLOCKQUOTES & HR -->
+      <div class="slide accent-blue" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> 6/10 · Quotes &amp; dividers</div>
+        <div class="stack" style="align-items:center; max-width:1180px">
+          <div class="center">
+            <h2 class="heading">Quotes · horizontal rules</h2>
+          </div>
+          <div class="md-split">
+            <div class="md-pane raw">
+              <div class="md-pane-head"><span class="md-dot"></span>Write</div>
+              <pre class="md-code">&gt; "The best way to predict
+&gt; the future is to invent it."
+&gt; — Alan Kay
+
+---
+
+Next topic below the line.</pre>
+            </div>
+            <div class="md-pane rendered">
+              <div class="md-pane-head"><span class="md-dot"></span>Shown</div>
+              <div class="md-preview">
+                <blockquote>"The best way to predict the future is to invent it."<br>— Alan Kay</blockquote>
+                <hr>
+                <p>Next topic below the line.</p>
+              </div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; font-size:0.95rem">
+            <strong>&gt;</strong> at the start of a line makes it a quote. <strong>---</strong> on its own line draws a divider.
+          </p>
+        </div>
+      </div>
+
+      <!-- 12 TABLES -->
+      <div class="slide accent-blue" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> 7/10 · Tables</div>
+        <div class="stack" style="align-items:center; max-width:1180px">
+          <div class="center">
+            <h2 class="heading">Tables · pipes &amp; dashes</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:0.3rem">Column dividers are <code>|</code>. The second row (with <code>---</code>) separates header from body.</p>
+          </div>
+          <div class="md-split">
+            <div class="md-pane raw">
+              <div class="md-pane-head"><span class="md-dot"></span>Write</div>
+              <pre class="md-code">| Name    | Vertical | Status |
+|---------|----------|--------|
+| Karma   | Dev      | Active |
+| Pema    | QA       | Active |
+| Tashi   | BA       | Review |</pre>
+            </div>
+            <div class="md-pane rendered">
+              <div class="md-pane-head"><span class="md-dot"></span>Shown</div>
+              <div class="md-preview">
+                <table>
+                  <thead><tr><th>Name</th><th>Vertical</th><th>Status</th></tr></thead>
+                  <tbody>
+                    <tr><td>Karma</td><td>Dev</td><td>Active</td></tr>
+                    <tr><td>Pema</td><td>QA</td><td>Active</td></tr>
+                    <tr><td>Tashi</td><td>BA</td><td>Review</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; font-size:0.95rem">💡 Don't hand-align spaces — most editors have "Format Table" which does it for you. Or just leave it messy; it still works.</p>
+        </div>
+      </div>
+
+      <!-- 13 TASK LISTS & MORE GFM -->
+      <div class="slide accent-blue" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> 8/10 · GitHub flavor</div>
+        <div class="stack" style="align-items:center; max-width:1180px">
+          <div class="center">
+            <h2 class="heading">GitHub-Flavored Markdown</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:0.3rem">GitHub added a few extras you'll use all the time.</p>
+          </div>
+          <div class="md-split">
+            <div class="md-pane raw">
+              <div class="md-pane-head"><span class="md-dot"></span>Write</div>
+              <pre class="md-code">Today's tasks:
+- [x] Write spec
+- [ ] Review with Tek
+- [ ] Share with team
+
+Tag people: @bhuwan
+Link an issue: #42
+Emoji: :rocket: :bug: :tada:</pre>
+            </div>
+            <div class="md-pane rendered">
+              <div class="md-pane-head"><span class="md-dot"></span>Shown</div>
+              <div class="md-preview">
+                <p>Today's tasks:</p>
+                <ul style="list-style:none; padding-left:0.3rem">
+                  <li><input type="checkbox" checked disabled> Write spec</li>
+                  <li><input type="checkbox" disabled> Review with Tek</li>
+                  <li><input type="checkbox" disabled> Share with team</li>
+                </ul>
+                <p>Tag people: <a href="#" style="color:var(--blue); font-weight:600">@bhuwan</a><br>
+                Link an issue: <a href="#" style="color:var(--blue); font-weight:600">#42</a><br>
+                Emoji: 🚀 🐛 🎉</p>
+              </div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; font-size:0.95rem">These only work on GitHub &amp; tools that copy GitHub's flavor (most modern ones do).</p>
+        </div>
+      </div>
+
+      <!-- 14 ESCAPING -->
+      <div class="slide accent-amber" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> 9/10 · Escaping</div>
+        <div class="stack" style="align-items:center; max-width:1180px">
+          <div class="center">
+            <h2 class="heading">"But what if I <em>want</em> to write a star?"</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:0.3rem">Put a backslash <code>\</code> before any Markdown character to show it literally.</p>
+          </div>
+          <div class="md-split">
+            <div class="md-pane raw">
+              <div class="md-pane-head"><span class="md-dot"></span>Write</div>
+              <pre class="md-code">This becomes italic: *hello*
+
+This stays as stars: \*hello\*
+
+Show a hash: \# not a heading
+
+Show a backslash: \\</pre>
+            </div>
+            <div class="md-pane rendered">
+              <div class="md-pane-head"><span class="md-dot"></span>Shown</div>
+              <div class="md-preview">
+                <p>This becomes italic: <em>hello</em></p>
+                <p>This stays as stars: *hello*</p>
+                <p>Show a hash: # not a heading</p>
+                <p>Show a backslash: \</p>
+              </div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; font-size:0.95rem">You rarely need this — but remember it exists for that one moment when Markdown is eating your text.</p>
+        </div>
+      </div>
+
+      <!-- 15 LINE BREAKS -->
+      <div class="slide accent-amber" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span> 10/10 · The weird one</div>
+        <div class="stack" style="align-items:center; max-width:1180px">
+          <div class="center">
+            <h2 class="heading">Line breaks · the gotcha</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:0.3rem">Markdown ignores single line breaks. Use a <strong>blank line</strong> between paragraphs.</p>
+          </div>
+          <div class="md-split">
+            <div class="md-pane raw">
+              <div class="md-pane-head"><span class="md-dot"></span>Write</div>
+              <pre class="md-code">Line one.
+Line two.
+
+Line three after a blank line.</pre>
+            </div>
+            <div class="md-pane rendered">
+              <div class="md-pane-head"><span class="md-dot"></span>Shown</div>
+              <div class="md-preview">
+                <p>Line one. Line two.</p>
+                <p>Line three after a blank line.</p>
+              </div>
+            </div>
+          </div>
+          <div class="callout" style="background:#FFF5EA; border-left:4px solid var(--amber); padding:0.8rem 1.1rem; border-radius:8px; max-width:820px; font-size:0.92rem">
+            <strong>The #1 thing beginners get wrong.</strong> If your text isn't breaking into new lines, you're missing a <em>blank line</em> between the paragraphs.
+          </div>
+        </div>
+      </div>
+
+      <!-- 16 SECTION: PER VERTICAL -->
+      <div class="slide bg-indigo" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin:0 auto 1.5rem"><span class="pill-dot"></span>Part 2 · Apply It</div>
+          <h1 class="display" style="color:white">How <em>your</em><br>vertical uses it</h1>
+          <p class="body-lg" style="color:rgba(255,255,255,0.75); margin-top:1rem">Dev, QA, and BA each write Markdown every day — different documents, same language.</p>
+        </div>
+        <div class="section-num" style="color:white">02</div>
+      </div>
+
+      <!-- 17 DEV EXAMPLE -->
+      <div class="slide accent-blue" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span> Dev · README.md</div>
+        <div class="stack" style="align-items:center; max-width:1180px">
+          <div class="center">
+            <div class="pill pill-blue">For the Dev vertical</div>
+            <h2 class="heading">A project README</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:0.3rem">Every project on GitHub has one. It's the first thing anyone reads. <strong>This is your first impression as a developer.</strong></p>
+          </div>
+          <div class="md-split">
+            <div class="md-pane raw">
+              <div class="md-pane-head"><span class="md-dot"></span>README.md</div>
+              <pre class="md-code"># Weather App
+
+A simple weather app for GMC residents.
+
+## Setup
+
+```bash
+npm install
+npm start
+```
+
+## Features
+
+- Current temperature
+- 7-day forecast
+- Works offline
+
+## Built with
+
+- React
+- OpenWeather API</pre>
+            </div>
+            <div class="md-pane rendered">
+              <div class="md-pane-head"><span class="md-dot"></span>On GitHub</div>
+              <div class="md-preview">
+                <h1>Weather App</h1>
+                <p>A simple weather app for GMC residents.</p>
+                <h2>Setup</h2>
+                <pre><code>npm install
+npm start</code></pre>
+                <h2>Features</h2>
+                <ul><li>Current temperature</li><li>7-day forecast</li><li>Works offline</li></ul>
+                <h2>Built with</h2>
+                <ul><li>React</li><li>OpenWeather API</li></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 18 QA EXAMPLE -->
+      <div class="slide accent-amber" data-slide="18">
+        <div class="slide-label"><span class="snum">18</span> QA · bug report</div>
+        <div class="stack" style="align-items:center; max-width:1180px">
+          <div class="center">
+            <div class="pill" style="background:rgba(36,126,193,0.15); color:#1C5B8C">For the QA vertical</div>
+            <h2 class="heading">A bug report</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:0.3rem">The developer reads this at 10pm when you're asleep. Make it clear.</p>
+          </div>
+          <div class="md-split">
+            <div class="md-pane raw">
+              <div class="md-pane-head"><span class="md-dot"></span>Bug in Jira / GitHub</div>
+              <pre class="md-code"># Bug: Login fails on Bhutanese numbers
+
+**Environment:** Production, iPhone 14, Safari
+**Severity:** High
+
+## Steps to reproduce
+
+1. Go to login page
+2. Enter phone `+97517123456`
+3. Tap "Send OTP"
+
+## Expected
+OTP arrives within 30s.
+
+## Actual
+Screen freezes. No error shown.
+
+## Evidence
+![screenshot](freeze.png)</pre>
+            </div>
+            <div class="md-pane rendered">
+              <div class="md-pane-head"><span class="md-dot"></span>What the dev sees</div>
+              <div class="md-preview">
+                <h1>Bug: Login fails on Bhutanese numbers</h1>
+                <p><strong>Environment:</strong> Production, iPhone 14, Safari<br>
+                <strong>Severity:</strong> High</p>
+                <h2>Steps to reproduce</h2>
+                <ol><li>Go to login page</li><li>Enter phone <code>+97517123456</code></li><li>Tap "Send OTP"</li></ol>
+                <h2>Expected</h2>
+                <p>OTP arrives within 30s.</p>
+                <h2>Actual</h2>
+                <p>Screen freezes. No error shown.</p>
+                <h2>Evidence</h2>
+                <p><span style="display:inline-block; border:1px dashed var(--border); padding:0.4rem 0.9rem; color:var(--faint); font-size:0.78rem; border-radius:6px">📷 screenshot</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 19 BA EXAMPLE -->
+      <div class="slide accent-indigo" data-slide="19">
+        <div class="slide-label"><span class="snum">19</span> BA · user story</div>
+        <div class="stack" style="align-items:center; max-width:1180px">
+          <div class="center">
+            <div class="pill pill-indigo">For the BA vertical</div>
+            <h2 class="heading">A user story / mini-spec</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:0.3rem">Developers and QAs both read this before work starts. Structure matters.</p>
+          </div>
+          <div class="md-split">
+            <div class="md-pane raw">
+              <div class="md-pane-head"><span class="md-dot"></span>spec.md</div>
+              <pre class="md-code"># Story: Forgot password
+
+## Who
+Any registered user.
+
+## Why
+They forgot their password and
+can't log in.
+
+## Acceptance criteria
+
+- [ ] "Forgot password?" link on login
+- [ ] User enters email → gets reset link
+- [ ] Link expires after 30 minutes
+- [ ] Link used once only
+
+## Out of scope
+
+- SMS-based reset
+- Security questions</pre>
+            </div>
+            <div class="md-pane rendered">
+              <div class="md-pane-head"><span class="md-dot"></span>In Jira / Notion</div>
+              <div class="md-preview">
+                <h1>Story: Forgot password</h1>
+                <h2>Who</h2>
+                <p>Any registered user.</p>
+                <h2>Why</h2>
+                <p>They forgot their password and can't log in.</p>
+                <h2>Acceptance criteria</h2>
+                <ul style="list-style:none; padding-left:0.3rem">
+                  <li><input type="checkbox" disabled> "Forgot password?" link on login</li>
+                  <li><input type="checkbox" disabled> User enters email → gets reset link</li>
+                  <li><input type="checkbox" disabled> Link expires after 30 minutes</li>
+                  <li><input type="checkbox" disabled> Link used once only</li>
+                </ul>
+                <h2>Out of scope</h2>
+                <ul><li>SMS-based reset</li><li>Security questions</li></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 20 AI PROMPTS -->
+      <div class="slide bg-blue" data-slide="20">
+        <div class="slide-label"><span class="snum">20</span> Markdown + AI</div>
+        <div class="stack" style="align-items:center; max-width:1100px">
+          <div class="center">
+            <div class="pill pill-white">Bonus · for every vertical</div>
+            <h2 class="heading" style="color:white">Markdown is the AI language</h2>
+            <p class="body-md" style="color:rgba(255,255,255,0.8); margin-top:0.5rem; max-width:780px">When you write prompts to Claude Code, ChatGPT, or any AI — use Markdown. Structure the request. Number your asks. The AI understands it better than a wall of text.</p>
+          </div>
+          <div class="card-dark" style="max-width:760px; font-family:'Courier New',monospace; font-size:0.9rem; line-height:1.7; padding:1.2rem 1.4rem">
+            <div style="color:#7dd3fc; font-weight:700; margin-bottom:0.4rem"># Task</div>
+            <div style="color:rgba(255,255,255,0.85)">Build a small React counter component.</div>
+            <br>
+            <div style="color:#7dd3fc; font-weight:700; margin-bottom:0.4rem"># Requirements</div>
+            <div style="color:rgba(255,255,255,0.85)">- Start at 0<br>- Buttons: +1, -1, reset<br>- Use Tailwind for styles</div>
+            <br>
+            <div style="color:#7dd3fc; font-weight:700; margin-bottom:0.4rem"># Constraint</div>
+            <div style="color:rgba(255,255,255,0.85)">Keep it in one file.</div>
+          </div>
+          <p class="body-md" style="color:rgba(255,255,255,0.75); text-align:center; font-size:0.92rem">A structured prompt = a structured answer. A messy prompt = a messy answer.</p>
+        </div>
+      </div>
+
+      <!-- 21 SECTION: PRACTICE -->
+      <div class="slide bg-green" data-slide="21">
+        <div class="slide-label"><span class="snum">21</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin:0 auto 1.5rem"><span class="pill-dot"></span>Part 3 · Do It</div>
+          <h1 class="display" style="color:white">Practice.<br>Right now.</h1>
+          <p class="body-lg" style="color:rgba(255,255,255,0.8); margin-top:1rem">You cannot learn Markdown by watching. You have to type it.</p>
+        </div>
+        <div class="section-num" style="color:white">03</div>
+      </div>
+
+      <!-- 22 PLAYGROUND POINTER -->
+      <div class="slide accent-gradient bg-dark" data-slide="22">
+        <div class="slide-label"><span class="snum">22</span> The playground</div>
+        <div class="stack" style="align-items:center; max-width:960px">
+          <div class="center">
+            <div class="pill pill-white">🧪 Live playground</div>
+            <h2 class="heading" style="color:white">Open the Notes page</h2>
+            <p class="body-md" style="color:rgba(255,255,255,0.78); margin-top:0.4rem; max-width:720px">It has a full editor built in. Type Markdown on the left, see it rendered on the right, instantly. No install needed. No login.</p>
+          </div>
+          <div class="try-box">
+            <h3>🎯 Your practice lab</h3>
+            <p>Open <strong>e2-markdown-notes.html</strong> → scroll to "Playground". Type anything. It renders live.</p>
+            <p style="margin-top:0.7rem">Or use these public ones if you want a bigger screen:</p>
+            <div style="margin-top:0.5rem">
+              <a href="https://dillinger.io" target="_blank" class="link-pill">🔗 dillinger.io</a>
+              <a href="https://stackedit.io/app" target="_blank" class="link-pill">🔗 stackedit.io</a>
+              <a href="https://markdownlivepreview.com" target="_blank" class="link-pill">🔗 markdownlivepreview.com</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 23 EXERCISE 1 -->
+      <div class="slide accent-blue bg-subtle" data-slide="23">
+        <div class="slide-label"><span class="snum">23</span> Exercise 1 of 3</div>
+        <div class="stack" style="align-items:center; max-width:1000px">
+          <div class="center">
+            <div class="pill pill-blue">15 minutes</div>
+            <h2 class="heading">Exercise 1 · Write your "About Me"</h2>
+          </div>
+          <div class="practice-step">
+            <h4>The task</h4>
+            <p>Write a short personal profile in Markdown. Open the playground and type it. No help, no copy-paste.</p>
+            <h4 style="margin-top:0.6rem">It must include:</h4>
+            <ul style="padding-left:1.2rem; font-size:0.92rem; line-height:1.75">
+              <li>A big heading with your name</li>
+              <li>A smaller heading "About Me" and a paragraph about yourself</li>
+              <li>A list of <strong>3 things you like</strong> (use bullets)</li>
+              <li>A list of <strong>3 goals for Pelsung</strong> (use numbers)</li>
+              <li>A link to a website you visit daily</li>
+              <li>Something in <em>italic</em> and something in <strong>bold</strong></li>
+              <li>A blockquote with a quote you like</li>
+            </ul>
+            <p style="margin-top:0.5rem">✅ Done when the right-hand preview looks like a real profile page.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 24 EXERCISE 2 -->
+      <div class="slide accent-amber bg-subtle" data-slide="24">
+        <div class="slide-label"><span class="snum">24</span> Exercise 2 of 3</div>
+        <div class="stack" style="align-items:center; max-width:1000px">
+          <div class="center">
+            <div class="pill pill-amber">15 minutes</div>
+            <h2 class="heading">Exercise 2 · File a fake bug</h2>
+          </div>
+          <div class="practice-step">
+            <h4>The task</h4>
+            <p>Pretend you found a bug in Facebook. Write the bug report in Markdown, in the format a developer would actually read.</p>
+            <h4 style="margin-top:0.6rem">Must include:</h4>
+            <ul style="padding-left:1.2rem; font-size:0.92rem; line-height:1.75">
+              <li><strong>Title</strong> (H1) — one clear sentence, not "bug bug bug"</li>
+              <li><strong>Environment</strong> — device, browser, OS (use bold labels)</li>
+              <li><strong>Steps to reproduce</strong> — a numbered list of 3+ steps</li>
+              <li><strong>Expected</strong> vs <strong>Actual</strong> — two sub-headings (H2)</li>
+              <li>A code snippet somewhere — use backticks (e.g. the URL or an error)</li>
+              <li>A task list (checkboxes) of things still to verify</li>
+            </ul>
+            <p style="margin-top:0.5rem">💡 Tip: copy the QA example from slide 18 and <em>change every field</em>. Don't leave anything the same.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 25 EXERCISE 3 -->
+      <div class="slide accent-indigo bg-subtle" data-slide="25">
+        <div class="slide-label"><span class="snum">25</span> Exercise 3 of 3</div>
+        <div class="stack" style="align-items:center; max-width:1000px">
+          <div class="center">
+            <div class="pill pill-indigo">15 minutes</div>
+            <h2 class="heading">Exercise 3 · A comparison table</h2>
+          </div>
+          <div class="practice-step">
+            <h4>The task</h4>
+            <p>Build a Markdown table comparing <strong>3 apps you use every day</strong> (WhatsApp, Instagram, Druk Pay, BoB, Pelrithang — your choice).</p>
+            <h4 style="margin-top:0.6rem">Columns:</h4>
+            <ul style="padding-left:1.2rem; font-size:0.92rem; line-height:1.75">
+              <li>App name</li>
+              <li>What you use it for</li>
+              <li>One thing you like</li>
+              <li>One thing that annoys you</li>
+            </ul>
+            <p style="margin-top:0.5rem">Then below the table, add a <strong>&gt; blockquote</strong> with which app you'd keep if you could only have one, and why.</p>
+            <p style="margin-top:0.3rem; color:var(--muted); font-size:0.9rem">This is the kind of document a BA would write in a discovery meeting.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 26 TOOLS -->
+      <div class="slide accent-blue" data-slide="26">
+        <div class="slide-label"><span class="snum">26</span> Tools</div>
+        <div class="stack" style="align-items:center; max-width:1140px">
+          <div class="center">
+            <h2 class="heading">Where to actually write Markdown</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:0.3rem">Any text editor works — but these are built for it.</p>
+          </div>
+          <div class="cols-3" style="max-width:1100px">
+            <div class="card" style="border-top:3px solid var(--blue)">
+              <h4 style="color:var(--blue)">VS Code</h4>
+              <ul style="padding-left:1.1rem; font-size:0.88rem; line-height:1.65; color:var(--text)">
+                <li>The editor you'll use for all code</li>
+                <li>Press <code>Ctrl+Shift+V</code> (Mac: <code>Cmd+Shift+V</code>) to preview</li>
+                <li>Install "Markdown All in One" extension</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--amber)">
+              <h4 style="color:#1C5B8C">Browser tools</h4>
+              <ul style="padding-left:1.1rem; font-size:0.88rem; line-height:1.65; color:var(--text)">
+                <li><strong>dillinger.io</strong> — clean split-screen</li>
+                <li><strong>stackedit.io</strong> — syncs to Google Drive</li>
+                <li><strong>markdownlivepreview.com</strong> — tiny, fast</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--green)">
+              <h4 style="color:var(--green)">Note apps</h4>
+              <ul style="padding-left:1.1rem; font-size:0.88rem; line-height:1.65; color:var(--text)">
+                <li><strong>Obsidian</strong> (free) — local files, powerful</li>
+                <li><strong>Notion</strong> — team-friendly, Markdown-like</li>
+                <li><strong>GitHub</strong> — every .md file auto-previews</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; font-size:0.95rem">Stick with one. Learn its keyboard shortcuts. You'll save <strong>hours</strong>.</p>
+        </div>
+      </div>
+
+      <!-- 27 COMMON MISTAKES -->
+      <div class="slide accent-amber" data-slide="27">
+        <div class="slide-label"><span class="snum">27</span> Gotchas</div>
+        <div class="stack" style="align-items:center; max-width:1140px">
+          <div class="center">
+            <h2 class="heading">The 5 things beginners always get wrong</h2>
+          </div>
+          <div class="syntax-grid" style="max-width:1100px">
+            <div class="syntax-card" style="border-left-color:var(--red)">
+              <h5 style="color:var(--red)">❌ Missing space after #</h5>
+              <p style="font-size:0.88rem; color:var(--muted); margin:0.2rem 0"><code style="background:#F0F3F7; padding:0.1rem 0.3rem; border-radius:4px">#Hello</code> is broken. <code style="background:#F0F3F7; padding:0.1rem 0.3rem; border-radius:4px"># Hello</code> works.</p>
+            </div>
+            <div class="syntax-card" style="border-left-color:var(--red)">
+              <h5 style="color:var(--red)">❌ Forgot blank lines</h5>
+              <p style="font-size:0.88rem; color:var(--muted); margin:0.2rem 0">Two lines with no blank between = one paragraph. Always put a blank line between blocks.</p>
+            </div>
+            <div class="syntax-card" style="border-left-color:var(--red)">
+              <h5 style="color:var(--red)">❌ Wrong backticks</h5>
+              <p style="font-size:0.88rem; color:var(--muted); margin:0.2rem 0">Curly quotes (<code>'</code>, <code>"</code>) don't work. Use straight backtick (<code>`</code>) — below Esc key.</p>
+            </div>
+            <div class="syntax-card" style="border-left-color:var(--red)">
+              <h5 style="color:var(--red)">❌ Tables without the <code>---</code> row</h5>
+              <p style="font-size:0.88rem; color:var(--muted); margin:0.2rem 0">No dash row = no table. Just ugly pipes and text.</p>
+            </div>
+            <div class="syntax-card" style="border-left-color:var(--red)">
+              <h5 style="color:var(--red)">❌ Nested lists with 1 space</h5>
+              <p style="font-size:0.88rem; color:var(--muted); margin:0.2rem 0">Indent <strong>2 spaces</strong> (or tab) to nest. One space won't nest reliably.</p>
+            </div>
+            <div class="syntax-card" style="border-left-color:var(--green)">
+              <h5 style="color:var(--green)">✅ When in doubt — preview</h5>
+              <p style="font-size:0.88rem; color:var(--muted); margin:0.2rem 0">Always look at the rendered side before you send it. Saves embarrassment.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 28 WRAP -->
+      <div class="slide bg-dark" data-slide="28">
+        <div class="slide-label"><span class="snum">28</span> Wrap-up</div>
+        <div class="center" style="max-width:860px">
+          <div class="pill pill-white" style="margin:0 auto 1.5rem">🎯 After this class you can</div>
+          <h2 class="heading" style="color:white">The bar for "you know Markdown"</h2>
+          <ul class="reveal-list" style="color:rgba(255,255,255,0.9); text-align:left; max-width:700px; margin:1.5rem auto; font-size:1rem; line-height:1.9">
+            <li>✅ Write a README for any project without looking up syntax</li>
+            <li>✅ File a bug report your developer doesn't have to ask questions about</li>
+            <li>✅ Write a user story that a designer, dev, and QA all understand</li>
+            <li>✅ Prompt an AI with structure — and get structured answers back</li>
+            <li>✅ Recognise when Markdown is "eating" your text, and fix it</li>
+          </ul>
+          <p class="body-md" style="color:var(--amber); margin-top:1.5rem; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.15rem">The people who write clearly get their ideas shipped. Markdown is the cheapest way to write clearly in software.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 28</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>

@@ -113,6 +113,54 @@
     .summary ul { margin-left: 1.1rem; }
     .summary li { font-size: 0.93rem; margin: 0.25rem 0; }
 
+    /* Decision block */
+    .decision { background:var(--surf); border:1px solid var(--border); border-radius:12px; padding:1.25rem 1.5rem; margin:1.25rem 0; }
+    .decision h4 { color:var(--indigo); font-size:1.05rem; margin-bottom:0.7rem; }
+    .decision-tbl { width:100%; border-collapse:collapse; font-size:0.92rem; }
+    .decision-tbl th { background:var(--bg); padding:0.6rem 0.8rem; text-align:left; color:var(--muted); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.06em; font-weight:700; border-bottom:1px solid var(--border); }
+    .decision-tbl td { padding:0.7rem 0.8rem; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.55; }
+    .decision-tbl td:first-child { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; white-space:nowrap; width:25%; }
+    .decision-tbl td:nth-child(2) { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; width:22%; }
+    .decision-tbl tr:last-child td { border-bottom:none; }
+
+    /* Side-by-side skeleton compare */
+    .compare { display:grid; grid-template-columns: repeat(3, 1fr); gap:1rem; margin:1.25rem 0; }
+    @media (max-width: 900px) { .compare { grid-template-columns: 1fr; } }
+    .compare-col { background:var(--surf); border:1px solid var(--border); border-radius:12px; padding:1rem 1.2rem; }
+    .compare-col.srs { border-top:4px solid var(--blue); }
+    .compare-col.prd { border-top:4px solid var(--amber); }
+    .compare-col.spec { border-top:4px solid #3D7A3D; }
+    .compare-col .tag { color:var(--muted); font-size:0.7rem; text-transform:uppercase; letter-spacing:0.08em; font-weight:700; margin-bottom:0.2rem; }
+    .compare-col h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.5rem; }
+    .compare-col .meta { font-size:0.78rem; color:var(--muted); margin-bottom:0.6rem; font-style:italic; line-height:1.5; }
+    .compare-col ol { margin-left:1.1rem; padding:0; }
+    .compare-col li { font-size:0.82rem; line-height:1.55; margin:0.15rem 0; color:var(--text); }
+    .compare-col li .sub { display:block; color:var(--muted); font-size:0.75rem; margin-left:0; padding-left:0.3rem; border-left:2px solid var(--border); line-height:1.4; margin-top:0.15rem; padding-top:0.1rem; padding-bottom:0.1rem; }
+
+    /* Template download grid */
+    .downloads { display:grid; grid-template-columns: repeat(2, 1fr); gap:0.9rem; margin:1rem 0; }
+    @media (max-width: 700px) { .downloads { grid-template-columns: 1fr; } }
+    .dl-card { background:var(--surf); border:1px solid var(--border); border-left:4px solid var(--blue); border-radius:10px; padding:1rem 1.2rem; display:flex; flex-direction:column; gap:0.5rem; }
+    .dl-card.featured { border-left-color:#3D7A3D; background:linear-gradient(135deg, #F8FCF4, #FFFFFF); }
+    .dl-card.formal { border-left-color:var(--indigo); }
+    .dl-card.business { border-left-color:var(--amber); }
+    .dl-card.design { border-left-color:var(--purple); }
+    .dl-card.testing { border-left-color:var(--red); }
+    .dl-head { display:flex; align-items:baseline; justify-content:space-between; gap:0.5rem; flex-wrap:wrap; }
+    .dl-card h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.02rem; margin:0; }
+    .dl-card .dl-tag { font-size:0.68rem; text-transform:uppercase; letter-spacing:0.07em; font-weight:700; color:var(--muted); background:var(--bg); padding:0.15rem 0.5rem; border-radius:4px; }
+    .dl-card p { font-size:0.85rem; color:var(--text); line-height:1.55; margin:0; }
+    .dl-card .dl-meta { font-size:0.76rem; color:var(--faint); font-family:'Courier New',monospace; }
+    .dl-btn { display:inline-flex; align-items:center; justify-content:center; gap:0.45rem; padding:0.5rem 0.9rem; background:var(--blue); color:white; font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; font-size:0.85rem; text-decoration:none; border-radius:6px; border:1px solid var(--blue); transition:background 0.15s ease, transform 0.1s ease; margin-top:auto; align-self:flex-start; }
+    .dl-btn:hover { background:#004F89; border-color:#004F89; }
+    .dl-btn:active { transform:translateY(1px); }
+    .dl-btn .arrow { font-size:0.95rem; line-height:1; }
+    .dl-banner { background: linear-gradient(135deg, #002D72, #0066B2); color:white; border-radius:14px; padding:1.5rem 1.75rem; margin:1.5rem 0; display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+    .dl-banner h4 { color:white; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.15rem; margin-bottom:0.3rem; }
+    .dl-banner p { font-size:0.9rem; color:rgba(255,255,255,0.88); margin:0; line-height:1.5; max-width:560px; }
+    .dl-banner .dl-btn { background:white; color:var(--indigo); border-color:white; }
+    .dl-banner .dl-btn:hover { background:#E6F0F8; border-color:#E6F0F8; }
+
     footer { text-align:center; padding: 2rem 1rem 3rem; color: var(--faint); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
     footer img { height: 28px; opacity:0.7; margin-bottom: 0.5rem; display: block; margin-left:auto; margin-right:auto; }
   </style>
@@ -140,7 +188,10 @@
       <ol>
         <li><a href="#why">Why specs matter — the dev-ready test</a></li>
         <li><a href="#names">Spec · Story · PRD · SRS — what's the difference?</a></li>
+        <li><a href="#decide">Which format when? — the decision table</a></li>
         <li><a href="#standards">Industry standards · three traditions</a></li>
+        <li><a href="#compare">The three skeletons side-by-side</a></li>
+        <li><a href="#downloads">🗂️ Grab the template kit</a></li>
         <li><a href="#overview">The 12-section anatomy · overview</a></li>
         <li><a href="#header">Header zone · metadata to personas</a></li>
         <li><a href="#req">Requirements zone · FR · AC · NFR</a></li>
@@ -152,6 +203,14 @@
         <li><a href="#checklist">Spec author's checklist</a></li>
         <li><a href="#take">Key takeaways</a></li>
       </ol>
+    </div>
+
+    <div class="dl-banner">
+      <div>
+        <h4>📦 Spec Template Kit — download and use</h4>
+        <p>Seven Markdown templates covering every major industry doc (Feature Spec, PRD, SRS, BRD, HLD, LLD, Test Plan). Drop them into any repo, Notion page, or Google Doc. Jump to <a href="#downloads" style="color:white; text-decoration:underline">the download list</a>.</p>
+      </div>
+      <a class="dl-btn" href="#downloads"><span>Jump to downloads</span><span class="arrow">↓</span></a>
     </div>
 
     <section class="chapter" id="why">
@@ -213,9 +272,68 @@
       <p>Throughout this class, when we say "spec" we mean the <strong>feature spec</strong> — the level you'll use in daily sprint work. But everything we teach scales up to PRD and SRS; you just add more depth per section.</p>
     </section>
 
-    <section class="chapter" id="standards">
+    <section class="chapter" id="decide">
       <div class="chapter-head">
         <div class="chapter-eyebrow">Part 3</div>
+        <h2>Which format when? — the decision table</h2>
+      </div>
+      <p>Before you pick up a template, know which one you're reaching for. The wrong format at the wrong time is the top-one cause of wasted spec effort — a 50-page SRS for a one-sprint feature is as broken as a one-paragraph story for a nationwide banking system.</p>
+
+      <div class="decision">
+        <h4>Pick by what you're trying to ship</h4>
+        <table class="decision-tbl">
+          <thead>
+            <tr><th>If you're…</th><th>…use this</th><th>Why</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Shipping one user-visible feature next sprint</td>
+              <td>Feature Spec</td>
+              <td>Sprint-sized. 2–5 pages. Dev can start coding in 20 minutes.</td>
+            </tr>
+            <tr>
+              <td>Planning a release or product area (multiple features)</td>
+              <td>PRD</td>
+              <td>Aligns PM · Eng · Design · GTM. Includes metrics, rollout, launch plan.</td>
+            </tr>
+            <tr>
+              <td>Building for a regulated industry (bank, medical, aviation), or responding to a government RFP</td>
+              <td>SRS (IEEE 29148)</td>
+              <td>Formal, exhaustive, audit-traceable. Required by regulation or contract.</td>
+            </tr>
+            <tr>
+              <td>Getting leadership to approve the <em>idea</em> before any solution exists</td>
+              <td>BRD</td>
+              <td>Business language only. No systems named. Pre-solution artifact.</td>
+            </tr>
+            <tr>
+              <td>Designing the architecture of a new system or module</td>
+              <td>HLD</td>
+              <td>Boxes, arrows, integrations, NFR-driven choices. Architect-level.</td>
+            </tr>
+            <tr>
+              <td>Designing the internals of one component before coding</td>
+              <td>LLD</td>
+              <td>Class signatures, SQL, error taxonomy, concurrency. Implementation-ready.</td>
+            </tr>
+            <tr>
+              <td>Planning testing for a project / release</td>
+              <td>Test Plan (IEEE 829)</td>
+              <td>Scope of testing, entry/exit, environments, responsibilities, schedule.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout amber">
+        <h4>Rule of thumb</h4>
+        <p>Start from the <em>smallest</em> document that captures what you need. A BRD is not "better" than a Feature Spec — it answers a different question (<em>should we?</em> vs <em>how exactly?</em>). Pick by the decision you're trying to unblock.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="standards">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 4</div>
         <h2>Industry standards · three traditions</h2>
       </div>
       <p>Every shop draws from one of three traditions. They look different on the surface — the underlying skeleton is the same.</p>
@@ -245,9 +363,180 @@
       </div>
     </section>
 
+    <section class="chapter" id="compare">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 5</div>
+        <h2>The three skeletons side-by-side</h2>
+      </div>
+      <p>Here are the actual tables-of-contents from the three traditions, next to each other. Notice: the section <em>names</em> differ, but every concept in one shows up in the others — just with different labels and different depth. This is what we mean by "same DNA".</p>
+
+      <div class="compare">
+        <div class="compare-col srs">
+          <div class="tag">Formal · 30–100+ pages</div>
+          <h5>SRS · IEEE 29148</h5>
+          <p class="meta">Banking, medical, aviation, government RFPs.</p>
+          <ol>
+            <li>Introduction
+              <span class="sub">Purpose · Scope · Definitions · References · Overview</span>
+            </li>
+            <li>Overall Description
+              <span class="sub">Product perspective · Functions · User characteristics · Constraints · Assumptions</span>
+            </li>
+            <li>Specific Requirements
+              <span class="sub">External interfaces · Functional · NFRs · System features · Database · I18n · Compliance</span>
+            </li>
+            <li>Verification
+              <span class="sub">How each req is verified — Test / Demo / Inspect / Analyse</span>
+            </li>
+            <li>Appendices
+              <span class="sub">Analysis models · Traceability matrix · Issues · Glossary</span>
+            </li>
+          </ol>
+        </div>
+
+        <div class="compare-col prd">
+          <div class="tag">Modern tech · 10–30 pages</div>
+          <h5>PRD · Product Requirements</h5>
+          <p class="meta">Release-level / product-area planning at tech companies.</p>
+          <ol>
+            <li>Metadata</li>
+            <li>Executive Summary</li>
+            <li>Context &amp; Background</li>
+            <li>Problem &amp; Opportunity</li>
+            <li>Goals, Non-goals, Success Metrics</li>
+            <li>Users &amp; Personas</li>
+            <li>User Journeys</li>
+            <li>Scope · Features in this Release</li>
+            <li>Requirements (high-level + NFRs)</li>
+            <li>UX Direction</li>
+            <li>Technical Considerations</li>
+            <li>Dependencies</li>
+            <li>Risks &amp; Mitigations</li>
+            <li>Open Questions</li>
+            <li>Launch Plan</li>
+            <li>Post-Launch Review</li>
+            <li>Out of Scope</li>
+          </ol>
+        </div>
+
+        <div class="compare-col spec">
+          <div class="tag">Agile · 2–5 pages</div>
+          <h5>Feature Spec · our focus</h5>
+          <p class="meta">Sprint feature work. Today's teaching standard.</p>
+          <ol>
+            <li>Metadata</li>
+            <li>TL;DR</li>
+            <li>Problem Statement</li>
+            <li>Goals &amp; Non-goals</li>
+            <li>Users &amp; Personas</li>
+            <li>Functional Requirements</li>
+            <li>Acceptance Criteria</li>
+            <li>Non-Functional Requirements</li>
+            <li>UX &amp; UI</li>
+            <li>Data Model</li>
+            <li>Dependencies · Risks · Open Questions</li>
+            <li>Out of Scope</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="callout indigo">
+        <h4>Trace one concept across all three</h4>
+        <p>Take "<strong>non-functional requirements</strong>". In an SRS it's §3.3 ("Performance · Safety · Security · Quality attributes · Business rules"). In a PRD it's §9 ("Requirements · release-level NFRs"). In a Feature Spec it's §08 ("NFRs relevant to this feature"). Same concept. Different depth. Same idea: name the NFRs explicitly so silence doesn't bite you.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="downloads">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 6 · Your toolkit</div>
+        <h2>🗂️ Grab the template kit</h2>
+      </div>
+      <p>Every template below is a plain Markdown file. Download, rename, fill in. Works in any text editor, repo, Notion page, Google Doc, or Confluence page. Tick-box checklists are preserved; headings stay as headings.</p>
+      <p><strong>How to use in class:</strong> right-click the button → <em>Save link as…</em> → pick a folder. Or just click to open, then copy-paste into whatever tool you use.</p>
+
+      <div class="downloads">
+
+        <div class="dl-card featured">
+          <div class="dl-head">
+            <h5>📄 Feature Spec</h5>
+            <span class="dl-tag">start here</span>
+          </div>
+          <p>The 12-section feature spec we teach in this class. Sprint-sized. 2–5 pages. The one you'll use most often.</p>
+          <div class="dl-meta">feature-spec-template.md · ~6 KB</div>
+          <a class="dl-btn" href="templates/feature-spec-template.md" download><span>⬇ Download</span></a>
+        </div>
+
+        <div class="dl-card business">
+          <div class="dl-head">
+            <h5>📊 PRD · Product Requirements</h5>
+            <span class="dl-tag">release</span>
+          </div>
+          <p>Product Requirements Document. For a release, a product area, or a multi-feature initiative. Includes launch plan + post-launch review.</p>
+          <div class="dl-meta">prd-template.md · ~7 KB</div>
+          <a class="dl-btn" href="templates/prd-template.md" download><span>⬇ Download</span></a>
+        </div>
+
+        <div class="dl-card formal">
+          <div class="dl-head">
+            <h5>🏛️ SRS · Software Requirements Specification</h5>
+            <span class="dl-tag">ieee 29148</span>
+          </div>
+          <p>Full formal SRS template structured per ISO/IEC/IEEE 29148:2018. For regulated industries, RFPs, and long-lifecycle systems. Includes verification matrix + sign-off.</p>
+          <div class="dl-meta">srs-template.md · ~10 KB</div>
+          <a class="dl-btn" href="templates/srs-template.md" download><span>⬇ Download</span></a>
+        </div>
+
+        <div class="dl-card business">
+          <div class="dl-head">
+            <h5>💼 BRD · Business Requirements</h5>
+            <span class="dl-tag">pre-solution</span>
+          </div>
+          <p>For leadership approval before any system is designed. Business language only — no technology named. Covers problem, goals, stakeholders, cost-benefit.</p>
+          <div class="dl-meta">brd-template.md · ~7 KB</div>
+          <a class="dl-btn" href="templates/brd-template.md" download><span>⬇ Download</span></a>
+        </div>
+
+        <div class="dl-card design">
+          <div class="dl-head">
+            <h5>🏗️ HLD · High-Level Design</h5>
+            <span class="dl-tag">architecture</span>
+          </div>
+          <p>System architecture: context diagrams, components, data flow, integrations, quality-attribute trade-offs. The whiteboard blueprint, written down.</p>
+          <div class="dl-meta">hld-template.md · ~8 KB</div>
+          <a class="dl-btn" href="templates/hld-template.md" download><span>⬇ Download</span></a>
+        </div>
+
+        <div class="dl-card design">
+          <div class="dl-head">
+            <h5>🔧 LLD · Low-Level Design</h5>
+            <span class="dl-tag">implementation</span>
+          </div>
+          <p>Component internals: class signatures, SQL schema, API contracts, error taxonomy, concurrency, caching. What devs reference while coding.</p>
+          <div class="dl-meta">lld-template.md · ~9 KB</div>
+          <a class="dl-btn" href="templates/lld-template.md" download><span>⬇ Download</span></a>
+        </div>
+
+        <div class="dl-card testing">
+          <div class="dl-head">
+            <h5>🧪 Test Plan · IEEE 829</h5>
+            <span class="dl-tag">qa owner</span>
+          </div>
+          <p>The canonical QA artifact. Scope, strategy, entry/exit criteria, environments, schedule, RACI, defect lifecycle. Built for a release, not a single feature.</p>
+          <div class="dl-meta">test-plan-template.md · ~10 KB</div>
+          <a class="dl-btn" href="templates/test-plan-template.md" download><span>⬇ Download</span></a>
+        </div>
+
+      </div>
+
+      <div class="callout green">
+        <h4>🛠️ How the trainers use these</h4>
+        <p>In our Spec Teardown workshop, you'll pick one of these templates, fill it in for a real project (the group capstone ideas are great candidates), then swap with another trainee for a 7-sins critique. The templates aren't ornaments — they're the frame you'll actually write against.</p>
+      </div>
+    </section>
+
     <section class="chapter" id="overview">
       <div class="chapter-head">
-        <div class="chapter-eyebrow">Part 4</div>
+        <div class="chapter-eyebrow">Part 7</div>
         <h2>The 12-section anatomy · overview</h2>
       </div>
       <p>Every dev-ready spec has the same 12 sections, in the same order. Think of them as four zones:</p>
@@ -275,7 +564,7 @@
 
     <section class="chapter" id="header">
       <div class="chapter-head">
-        <div class="chapter-eyebrow">Part 5</div>
+        <div class="chapter-eyebrow">Part 8</div>
         <h2>Header zone · metadata to personas</h2>
       </div>
 
@@ -352,7 +641,7 @@ Edge — Karma (student abroad)
 
     <section class="chapter" id="req">
       <div class="chapter-head">
-        <div class="chapter-eyebrow">Part 6</div>
+        <div class="chapter-eyebrow">Part 9</div>
         <h2>Requirements zone · FR · AC · NFR</h2>
       </div>
 
@@ -407,7 +696,7 @@ AC-03 · Given user is offline,
 
     <section class="chapter" id="supp">
       <div class="chapter-head">
-        <div class="chapter-eyebrow">Part 7</div>
+        <div class="chapter-eyebrow">Part 10</div>
         <h2>Supporting zone · UX · data · dependencies</h2>
       </div>
 
@@ -455,7 +744,7 @@ Max: 10 per user (enforced at app layer)</div>
 
     <section class="chapter" id="scope">
       <div class="chapter-head">
-        <div class="chapter-eyebrow">Part 8</div>
+        <div class="chapter-eyebrow">Part 11</div>
         <h2>Scope · § 12 · Out of Scope</h2>
       </div>
       <div class="section-deep" style="border-left:5px solid var(--red)">
@@ -475,7 +764,7 @@ Max: 10 per user (enforced at app layer)</div>
 
     <section class="chapter" id="lifecycle">
       <div class="chapter-head">
-        <div class="chapter-eyebrow">Part 9</div>
+        <div class="chapter-eyebrow">Part 12</div>
         <h2>Status lifecycle &amp; versioning</h2>
       </div>
       <p>A spec is a living document. It moves through five statuses, each with its own bar for what's allowed.</p>
@@ -511,7 +800,7 @@ Max: 10 per user (enforced at app layer)</div>
 
     <section class="chapter" id="length">
       <div class="chapter-head">
-        <div class="chapter-eyebrow">Part 10</div>
+        <div class="chapter-eyebrow">Part 13</div>
         <h2>Length discipline · the 20-minute rule</h2>
       </div>
       <div class="callout amber">
@@ -539,7 +828,7 @@ Max: 10 per user (enforced at app layer)</div>
 
     <section class="chapter" id="example">
       <div class="chapter-head">
-        <div class="chapter-eyebrow">Part 11</div>
+        <div class="chapter-eyebrow">Part 14</div>
         <h2>A complete annotated example</h2>
       </div>
       <p>Here's a full feature spec for <strong>Biller Favourites · mBoB · v1</strong> — all 12 sections at production quality.</p>
@@ -640,7 +929,7 @@ Volume: avg 4 favs / active user · max 10 enforced at app layer</pre>
 
     <section class="chapter" id="checklist">
       <div class="chapter-head">
-        <div class="chapter-eyebrow">Part 12</div>
+        <div class="chapter-eyebrow">Part 15</div>
         <h2>Spec author's checklist</h2>
       </div>
       <p>Before you mark a spec as <strong>Ready for Review</strong>, walk this list. Each unchecked item is a future bug or rework cycle.</p>
@@ -678,17 +967,18 @@ Volume: avg 4 favs / active user · max 10 enforced at app layer</pre>
       <div class="summary">
         <h4>What we covered today</h4>
         <ul>
-          <li><strong>Spec / Story / PRD / SRS</strong> — same DNA, different scope and tone.</li>
-          <li>Three industry traditions: <strong>IEEE 29148</strong> (formal), <strong>PRD</strong> (modern tech), <strong>Feature Spec</strong> (agile).</li>
+          <li><strong>Spec / Story / PRD / SRS / BRD / HLD / LLD / Test Plan</strong> — the doc zoo, decoded. Pick by the <em>decision</em> you're trying to unblock.</li>
+          <li>Three industry traditions: <strong>IEEE 29148</strong> (formal), <strong>PRD</strong> (modern tech), <strong>Feature Spec</strong> (agile) — same DNA, different depth.</li>
           <li>The <strong>12-section anatomy</strong>: Header (01–05) · Requirements (06–08) · Supporting (09–11) · Scope (12).</li>
           <li>Status <strong>lifecycle</strong>: Draft → Review → Approved → Implemented → Archived — with <strong>semantic versioning</strong> and a changelog.</li>
           <li>The <strong>20-minute rule</strong>: a feature spec should read end-to-end in under 20 minutes.</li>
           <li>The sin of <strong>silence</strong> — if an attribute (NFR, edge case, scope boundary) isn't named, it doesn't exist.</li>
           <li>Use the <strong>spec author's checklist</strong> before every "Ready for Review".</li>
+          <li>Seven <strong>downloadable templates</strong> waiting in <a href="#downloads">Part 6</a> — don't write specs from a blank page.</li>
         </ul>
       </div>
       <p style="margin-top:1.5rem; font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-size:1.1rem">If a mid-level engineer reads your spec and opens their editor — you're done.</p>
-      <p style="margin-top:0.5rem">Next class: <strong>Writing Mechanics for Specs</strong> — active voice, precise verbs, consistent terminology, lists over prose, and diagrams that carry weight.</p>
+      <p style="margin-top:0.5rem">Next class: <strong>The SRS Document</strong> — going deeper into IEEE 29148, when to use a formal SRS, and a shortened worked example.</p>
     </section>
 
   </div>

@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The BRD — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../shared/slides.css" />
+    <style>
+      .big-card { background:white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.3rem; max-width:1050px; width:100%; }
+      .big-card h4 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.15rem; margin-bottom:0.5rem; }
+      .big-card .tag { color:var(--muted); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.07em; font-weight:700; margin-bottom:0.25rem; }
+      .big-card ul { padding-left:1.2rem; margin:0.4rem 0; }
+      .big-card li { font-size:0.92rem; line-height:1.7; color:var(--text); margin:0.2rem 0; }
+
+      .dual { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px) { .dual { grid-template-columns: 1fr; } }
+      .dual-bad { background:#FFF5F7; border:1px solid #FADCE3; border-radius:10px; padding:0.9rem 1.1rem; }
+      .dual-good { background:#F3FAE9; border:1px solid #D4E8BD; border-radius:10px; padding:0.9rem 1.1rem; }
+      .dual-bad h5 { color:var(--red); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.4rem; }
+      .dual-good h5 { color:#3D7A3D; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.4rem; }
+      .dual ul { padding-left:1.1rem; margin:0; }
+      .dual li { font-size:0.85rem; line-height:1.65; color:var(--text); margin:0.2rem 0; }
+
+      .sec-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:0.6rem; max-width:1180px; width:100%; }
+      @media (max-width: 900px) { .sec-grid { grid-template-columns: 1fr 1fr; } }
+      .sec-card { background:white; border:1px solid var(--border); border-left:4px solid var(--blue); border-radius:8px; padding:0.65rem 0.85rem; }
+      .sec-card .num { font-family:'Courier New',monospace; font-size:0.73rem; color:var(--muted); }
+      .sec-card h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.88rem; margin:0.15rem 0 0.15rem; }
+      .sec-card p { font-size:0.78rem; color:var(--text); line-height:1.5; }
+      .sec-card.setup { border-left-color:var(--muted); }
+      .sec-card.need { border-left-color:var(--blue); }
+      .sec-card.flow { border-left-color:var(--amber); }
+      .sec-card.ctx { border-left-color:var(--purple); }
+      .sec-card.case { border-left-color:#3D7A3D; }
+      .sec-card.close { border-left-color:var(--red); }
+
+      .flow-viz { background:white; border:1px solid var(--border); border-radius:10px; padding:1rem 1.2rem; max-width:1000px; width:100%; }
+      .flow-row { display:flex; align-items:center; gap:0.7rem; padding:0.4rem 0; border-bottom:1px solid var(--border); font-size:0.88rem; line-height:1.55; }
+      .flow-row:last-child { border-bottom:none; }
+      .flow-num { background:var(--blue); color:white; font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; width:28px; height:28px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:0.8rem; }
+      .flow-num.pain { background:var(--red); }
+      .flow-num.good { background:#3D7A3D; }
+      .flow-body { flex:1; color:var(--text); }
+      .flow-body strong { color:var(--indigo); }
+      .pain-tag { display:inline-block; background:#FEE9EC; color:var(--red); font-size:0.7rem; padding:0.08rem 0.4rem; border-radius:4px; margin-left:0.3rem; font-weight:700; }
+      .good-tag { display:inline-block; background:#F3FAE9; color:#3D7A3D; font-size:0.7rem; padding:0.08rem 0.4rem; border-radius:4px; margin-left:0.3rem; font-weight:700; }
+
+      .kv-row { display:flex; justify-content:space-between; align-items:center; padding:0.45rem 0.8rem; border-bottom:1px solid var(--border); font-size:0.88rem; }
+      .kv-row:last-child { border-bottom:none; }
+      .kv-row b { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; }
+      .kv-row span { color:var(--text); }
+
+      .chain-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:0.7rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px) { .chain-grid { grid-template-columns: 1fr; } }
+      .chain { background:white; border:1px solid var(--border); border-radius:10px; padding:0.85rem 1rem; border-top:4px solid var(--blue); }
+      .chain h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.3rem; }
+      .chain p.ans { font-size:0.85rem; color:var(--text); line-height:1.6; font-style:italic; }
+      .chain .meta { color:var(--muted); font-size:0.75rem; margin-top:0.4rem; padding-top:0.4rem; border-top:1px dashed var(--border); }
+
+      .metrics-tbl { max-width:1100px; width:100%; background:white; border:1px solid var(--border); border-radius:10px; overflow:hidden; font-size:0.85rem; }
+      .metrics-tbl table { width:100%; border-collapse:collapse; }
+      .metrics-tbl th { background:var(--bg); padding:0.5rem 0.7rem; text-align:left; color:var(--muted); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; border-bottom:1px solid var(--border); }
+      .metrics-tbl td { padding:0.45rem 0.7rem; border-bottom:1px solid var(--border); line-height:1.5; }
+      .metrics-tbl tr:last-child td { border-bottom:none; }
+      .metrics-tbl td:first-child { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; }
+
+      .pitfall-tbl { max-width:1100px; width:100%; background:white; border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+      .pitfall-tbl table { width:100%; border-collapse:collapse; font-size:0.82rem; }
+      .pitfall-tbl th { background:var(--bg); padding:0.5rem 0.7rem; text-align:left; color:var(--muted); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; border-bottom:1px solid var(--border); }
+      .pitfall-tbl td { padding:0.5rem 0.7rem; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+      .pitfall-tbl tr:last-child td { border-bottom:none; }
+      .pitfall-tbl td:first-child { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; width:30%; }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>Spec Writing · Class 03</div></div>
+          <h1 class="display" style="color: var(--text)">
+            <span style="color: var(--blue)">The Business</span><br />
+            <span style="color: var(--indigo)">Requirements Doc</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted)">The <em>why</em>. The pre-solution document. The one that gets you funded.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">Pre-solution</span>
+            <span class="class-tag tag-blue">Business language</span>
+            <span class="class-tag tag-blue">Cost-benefit</span>
+            <span class="class-tag tag-blue">Sign-off</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 AGENDA -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 820px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem"><h2 class="heading">Session Journey · ~70 min</h2></div>
+          <div class="agenda-row" onclick="goTo(2)"><span class="ar-dot" style="background: var(--red)"></span><span class="ar-label">🎯 Why BRDs exist &amp; where they sit</span><span class="ar-badge" style="background:#FEE9EC;color:var(--red)">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(6)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🧬 BRD structure · 16 sections</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">12 min</span></div>
+          <div class="agenda-row" onclick="goTo(9)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">📝 Problem statement · the anti-solution rule</span><span class="ar-badge" style="background:#E6F0F8;color:var(--indigo)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(11)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🔄 As-is / To-be flows</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">12 min</span></div>
+          <div class="agenda-row" onclick="goTo(14)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">👥 Stakeholders · RACI · RCI</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(16)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">📊 Metrics · cost-benefit · approvals</span><span class="ar-badge" style="background:#E6F0F8;color:var(--indigo)">12 min</span></div>
+          <div class="agenda-row" onclick="goTo(19)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">📄 Worked example &amp; pitfalls</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">8 min</span></div>
+        </div>
+      </div>
+
+      <!-- 3 HOOK -->
+      <div class="slide bg-dark" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> Hook</div>
+        <div class="center" style="max-width: 940px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎤 A simple test</div>
+          <p class="disc-prompt" style="font-size:1.3rem">"Let's build a mobile app for X."</p>
+          <p style="color: rgba(255,255,255,0.88); font-size: 1.05rem; margin-top:2rem; line-height:1.8;">
+            That sentence is a <strong style="color:var(--amber)">solution looking for a problem</strong>.<br>
+            Six months later the app ships. Nobody uses it.<br>
+            Because nobody asked — <strong style="color:var(--amber)">should we have built this at all?</strong>
+          </p>
+          <p style="color: var(--amber); font-size: 1.2rem; margin-top: 2rem; font-family:'Bahnschrift','Segoe UI',sans-serif">The BRD answers that question. Before a single developer is hired.</p>
+        </div>
+      </div>
+
+      <!-- 4 WHAT IS / ISN'T -->
+      <div class="slide accent-blue bg-subtle" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> What a BRD is (and isn't)</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Pre-solution · business language only</h2></div>
+          <div class="dual">
+            <div class="dual-good">
+              <h5>✅ A BRD is…</h5>
+              <ul>
+                <li><strong>Pre-solution</strong> — no tech named</li>
+                <li><strong>Business-focused</strong> — problem · users · outcomes</li>
+                <li><strong>Stakeholder-ready</strong> — sponsors · leadership sign off</li>
+                <li><strong>Solution-agnostic</strong> — software / process / policy</li>
+                <li><strong>The funding document</strong> — gets budget approved</li>
+              </ul>
+            </div>
+            <div class="dual-bad">
+              <h5>❌ A BRD is NOT…</h5>
+              <ul>
+                <li>A design document</li>
+                <li>A functional / technical spec</li>
+                <li>A project plan</li>
+                <li>A user manual</li>
+                <li>A place to say "we'll build a mobile app"</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px"><em>"The business needs the ability to…"</em> is a BRD sentence. <em>"The mBoB app should have a favourites screen"</em> is a spec sentence — already a solution.</p>
+        </div>
+      </div>
+
+      <!-- 5 WHERE IT FITS (CHAIN) -->
+      <div class="slide accent-blue" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span> The BRD → PRD → SRS chain</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Each document answers a different question</h2></div>
+          <div class="chain-grid">
+            <div class="chain">
+              <h6>📋 BRD</h6>
+              <p class="ans">"Should we do this at all?"</p>
+              <div class="meta">Audience: sponsor · leadership · steering<br>Language: business only</div>
+            </div>
+            <div class="chain">
+              <h6>📊 PRD</h6>
+              <p class="ans">"What product / release will we build?"</p>
+              <div class="meta">Audience: product · eng · design · GTM<br>Language: product + user</div>
+            </div>
+            <div class="chain">
+              <h6>📄 SRS / Feature Spec</h6>
+              <p class="ans">"How will we build this exactly?"</p>
+              <div class="meta">Audience: dev · QA · audit<br>Language: formal / technical</div>
+            </div>
+          </div>
+          <div class="card" style="max-width:900px; background:white; border-left:4px solid var(--amber); padding:0.9rem 1.2rem;">
+            <p style="font-size:0.92rem; color:var(--text); line-height:1.65"><strong>Traceability goes up too:</strong> FR-01 → BR-02 → BO-01. When someone asks <em>"why are we building this?"</em> — the answer is a chain, not a developer's memory of a meeting.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 STRUCTURE -->
+      <div class="slide bg-indigo" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Two</div>
+          <h1 class="display" style="color: white">BRD Structure</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">16 sections · six zones.</p>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- 7 16 SECTIONS -->
+      <div class="slide accent-blue bg-subtle" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> The 16 sections of a BRD</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Six zones · grouped by purpose</h2></div>
+          <div class="sec-grid">
+            <div class="sec-card setup"><div class="num">§ 01</div><h6>Metadata</h6><p>Title · sponsor · version · status</p></div>
+            <div class="sec-card setup"><div class="num">§ 02</div><h6>Executive Summary</h6><p>2–3 para for a board member</p></div>
+            <div class="sec-card setup"><div class="num">§ 03</div><h6>Context &amp; Background</h6><p>What triggered this</p></div>
+            <div class="sec-card setup"><div class="num">§ 04</div><h6>Problem &amp; Opportunity</h6><p>Pain · size · evidence · cost of inaction</p></div>
+            <div class="sec-card need"><div class="num">§ 05</div><h6>Business Objectives</h6><p>Numbered · measurable · time-bound</p></div>
+            <div class="sec-card need"><div class="num">§ 06</div><h6>Business Requirements</h6><p>Capabilities — not features</p></div>
+            <div class="sec-card need"><div class="num">§ 07</div><h6>Stakeholders</h6><p>Named · interest · influence · RACI</p></div>
+            <div class="sec-card flow"><div class="num">§ 08</div><h6>Current Process · As-Is</h6><p>With pain tags</p></div>
+            <div class="sec-card flow"><div class="num">§ 09</div><h6>Future Process · To-Be</h6><p>With improvement tags</p></div>
+            <div class="sec-card ctx"><div class="num">§ 10</div><h6>Assumptions</h6><p>Must remain true</p></div>
+            <div class="sec-card ctx"><div class="num">§ 11</div><h6>Constraints</h6><p>Budget · timeline · regulatory · tech</p></div>
+            <div class="sec-card ctx"><div class="num">§ 12</div><h6>Risks</h6><p>Likelihood · impact · mitigation · owner</p></div>
+            <div class="sec-card case"><div class="num">§ 13</div><h6>Success Metrics</h6><p>Baseline · target · timeframe · owner</p></div>
+            <div class="sec-card case"><div class="num">§ 14</div><h6>Cost-Benefit</h6><p>Build · run · payback</p></div>
+            <div class="sec-card close"><div class="num">§ 15</div><h6>Out of Scope</h6><p>Explicit "not doing this"</p></div>
+            <div class="sec-card close"><div class="num">§ 16</div><h6>Approvals</h6><p>Named · dated · signed</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8 BR format -->
+      <div class="slide accent-blue" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> § 06 · Business Requirements · capability, not feature</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">"The business needs the ability to ___"</h2></div>
+          <div class="big-card">
+            <h4>Format</h4>
+            <div style="background:var(--bg); border-radius:6px; padding:0.7rem 1rem; font-family:'Courier New',monospace; font-size:0.92rem; line-height:1.7; color:var(--text);">
+BR-01 · The business needs the ability to [capability], so that [business outcome].
+BR-02 · The business needs to [comply with / avoid / reduce X], so that [outcome].
+            </div>
+            <h4 style="margin-top:0.8rem">Examples (Biller Favourites)</h4>
+            <ul>
+              <li><strong>BR-01</strong> — The business needs the ability for customers to mark a recently-paid biller as recurring, so that future payments to that biller are faster.</li>
+              <li><strong>BR-02</strong> — The business needs the ability for customers to retrieve recurring billers with one interaction, so that payment time drops.</li>
+              <li><strong>BR-03</strong> — The business needs to remain compliant with RMA §7 on data residency, so that no regulatory breach occurs.</li>
+              <li><strong>BR-04</strong> — The business needs MPIN re-authentication on every payment regardless of origin, so that security is not compromised.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9 PROBLEM ANTI-SOLUTION -->
+      <div class="slide accent-blue bg-subtle" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> § 04 · Problem statement · the anti-solution rule</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">If you name a solution, rewrite</h2></div>
+          <div class="dual">
+            <div class="dual-bad">
+              <h5>❌ Solution-laden</h5>
+              <ul>
+                <li>"We need a mobile app for bill payments"</li>
+                <li>"Customers need a favourites feature"</li>
+                <li>"We should integrate with Core Banking API"</li>
+                <li>"Build a chatbot for support"</li>
+              </ul>
+            </div>
+            <div class="dual-good">
+              <h5>✅ Problem only</h5>
+              <ul>
+                <li>"Customers re-type 12-digit account numbers 36× per year each — 38 seconds per payment, 6% error rate"</li>
+                <li>"Support receives 12k tickets/month on self-serve questions — ~800 agent-hours lost"</li>
+                <li>"Compliance reporting takes 14 staff-days/month manual compile, 3% error rate"</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">The test: could this problem be solved in ≥ 2 ways? If only one solution fits, you've already written the solution.</p>
+        </div>
+      </div>
+
+      <!-- 10 PROBLEM CHECKLIST -->
+      <div class="slide accent-blue" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> The problem-statement checklist</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Six questions a sponsor will ask</h2></div>
+          <div class="big-card">
+            <ul class="reveal-list" style="list-style:none; padding:0;">
+              <li style="padding:0.5rem 0; border-bottom:1px dashed var(--border); font-size:0.95rem;">🧍 <strong>Who is affected?</strong> Segment · size.</li>
+              <li style="padding:0.5rem 0; border-bottom:1px dashed var(--border); font-size:0.95rem;">💥 <strong>What concretely hurts?</strong> Described in observable detail.</li>
+              <li style="padding:0.5rem 0; border-bottom:1px dashed var(--border); font-size:0.95rem;">💰 <strong>How much does it cost today?</strong> Hours · BTN · tickets · churn · risk.</li>
+              <li style="padding:0.5rem 0; border-bottom:1px dashed var(--border); font-size:0.95rem;">📊 <strong>What's the evidence?</strong> Analytics · research · incidents.</li>
+              <li style="padding:0.5rem 0; border-bottom:1px dashed var(--border); font-size:0.95rem;">⏰ <strong>Why now?</strong> What changed · what's the trigger.</li>
+              <li style="padding:0.5rem 0; font-size:0.95rem;">⚠️ <strong>What happens if we do nothing?</strong> Baseline trajectory.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11 AS-IS -->
+      <div class="slide accent-blue bg-subtle" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> § 08 · Current process · as-is · with pain tags</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Show where friction lives today</h2></div>
+          <div class="flow-viz">
+            <div class="flow-row"><div class="flow-num pain">1</div><div class="flow-body"><strong>Customer opens mBoB</strong> <span class="pain-tag">pain: login ~8s</span></div></div>
+            <div class="flow-row"><div class="flow-num">2</div><div class="flow-body"><strong>Navigates to Bill Payments</strong> — two taps from home</div></div>
+            <div class="flow-row"><div class="flow-num pain">3</div><div class="flow-body"><strong>Types 12-digit account number</strong> <span class="pain-tag">pain: ~38s · 6% error</span></div></div>
+            <div class="flow-row"><div class="flow-num">4</div><div class="flow-body"><strong>Enters amount</strong> ~5s</div></div>
+            <div class="flow-row"><div class="flow-num">5</div><div class="flow-body"><strong>Enters MPIN · confirms</strong> ~8s</div></div>
+            <div class="flow-row"><div class="flow-num pain">6</div><div class="flow-body"><strong>Payment complete</strong> <span class="pain-tag">pain: ~65s total · 36×/year</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12 TO-BE -->
+      <div class="slide accent-blue" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> § 09 · Future process · to-be · still no solution named</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Describe the capability, not the implementation</h2></div>
+          <div class="flow-viz">
+            <div class="flow-row"><div class="flow-num">1</div><div class="flow-body"><strong>Customer opens mBoB</strong> (unchanged)</div></div>
+            <div class="flow-row"><div class="flow-num good">2</div><div class="flow-body"><strong>Sees recurring billers on home</strong> <span class="good-tag">zero typing</span></div></div>
+            <div class="flow-row"><div class="flow-num good">3</div><div class="flow-body"><strong>Taps a saved biller</strong> <span class="good-tag">38s → 1s saved</span> — amount + account pre-filled</div></div>
+            <div class="flow-row"><div class="flow-num">4</div><div class="flow-body"><strong>Confirms with MPIN</strong> (unchanged for security)</div></div>
+            <div class="flow-row"><div class="flow-num good">5</div><div class="flow-body"><strong>Payment complete</strong> <span class="good-tag">~20s vs 65s</span> — 70% time saved</div></div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">We never said "add a favourites screen" or "use local storage" — those are design choices for the PRD / spec.</p>
+        </div>
+      </div>
+
+      <!-- 13 GAP-ANALYSIS -->
+      <div class="slide accent-blue bg-subtle" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> The delta = the value proposition</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Quantify the gap before someone else argues it</h2></div>
+          <div class="big-card">
+            <div class="kv-row"><b>Average payment time</b><span>65 s → 20 s · <span style="color:#3D7A3D">−69%</span></span></div>
+            <div class="kv-row"><b>Typing load (recurring)</b><span>12 digits → 0 · <span style="color:#3D7A3D">eliminated</span></span></div>
+            <div class="kv-row"><b>First-try error rate</b><span>6% → ≈0% · <span style="color:#3D7A3D">eliminated</span></span></div>
+            <div class="kv-row"><b>Support tickets on "save billers"</b><span>8% vol → &lt;1% · <span style="color:#3D7A3D">−87%</span></span></div>
+            <div class="kv-row"><b>Per-customer time reclaimed (annual)</b><span>≈27 min/yr</span></div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px">Every row here must trace to a <strong>success metric</strong> in §13 — and a <strong>measurement method</strong> that's instrumented before launch.</p>
+        </div>
+      </div>
+
+      <!-- 14 STAKEHOLDERS -->
+      <div class="slide accent-blue" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> § 07 · Stakeholders · Interest / Influence grid</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Engagement is driven by the 2×2</h2></div>
+          <div class="dual" style="max-width:1100px">
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--blue); padding:0.9rem 1.2rem;">
+              <h4 style="color:var(--indigo); font-size:1.02rem; margin-bottom:0.4rem;">High interest · High influence</h4>
+              <p style="font-size:0.9rem; color:var(--text); line-height:1.65">Manage closely — weekly check-ins, in every key decision.</p>
+              <p style="color:var(--muted); font-size:0.8rem; font-style:italic">Sponsor · Product Lead · Compliance</p>
+            </div>
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--amber); padding:0.9rem 1.2rem;">
+              <h4 style="color:var(--indigo); font-size:1.02rem; margin-bottom:0.4rem;">High interest · Low influence</h4>
+              <p style="font-size:0.9rem; color:var(--text); line-height:1.65">Keep informed — fortnightly updates, include in demos.</p>
+              <p style="color:var(--muted); font-size:0.8rem; font-style:italic">Support team · Branch agents</p>
+            </div>
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--purple); padding:0.9rem 1.2rem;">
+              <h4 style="color:var(--indigo); font-size:1.02rem; margin-bottom:0.4rem;">Low interest · High influence</h4>
+              <p style="font-size:0.9rem; color:var(--text); line-height:1.65">Keep satisfied — key decision points only, don't over-engage.</p>
+              <p style="color:var(--muted); font-size:0.8rem; font-style:italic">Finance · Legal · CTO</p>
+            </div>
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--muted); padding:0.9rem 1.2rem;">
+              <h4 style="color:var(--indigo); font-size:1.02rem; margin-bottom:0.4rem;">Low interest · Low influence</h4>
+              <p style="font-size:0.9rem; color:var(--text); line-height:1.65">Monitor — monthly newsletter, no individual engagement.</p>
+              <p style="color:var(--muted); font-size:0.8rem; font-style:italic">Adjacent teams</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 15 RACI / RCI -->
+      <div class="slide accent-blue bg-subtle" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span> RACI — and the SELISE RCI adaptation</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Who does what · industry RACI + SELISE RCI</h2></div>
+          <div class="dual" style="max-width:1100px">
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--blue); padding:0.9rem 1.2rem;">
+              <h4 style="color:var(--indigo); font-size:1.02rem; margin-bottom:0.4rem;">RACI (industry standard)</h4>
+              <ul style="padding-left:1.1rem; font-size:0.88rem; line-height:1.65; color:var(--text)">
+                <li><strong>R</strong>esponsible — the person(s) doing the work</li>
+                <li><strong>A</strong>ccountable — single owner of the outcome</li>
+                <li><strong>C</strong>onsulted — input sought before decision</li>
+                <li><strong>I</strong>nformed — kept in the loop after decision</li>
+              </ul>
+            </div>
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--amber); padding:0.9rem 1.2rem;">
+              <h4 style="color:var(--indigo); font-size:1.02rem; margin-bottom:0.4rem;">RCI (SELISE adaptation)</h4>
+              <p style="font-size:0.88rem; color:var(--text); line-height:1.65">Julian's insight: "Accountable" has no clean German equivalent and confuses teams. SELISE drops A and requires R to be <strong>exactly one person</strong>.</p>
+              <p style="font-size:0.85rem; color:var(--muted); margin-top:0.4rem">Teach both. Use RACI with external partners; RCI internally.</p>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px"><strong>Regardless of which you use:</strong> every row of the matrix has exactly one Responsible party. If two people are R, nobody is.</p>
+        </div>
+      </div>
+
+      <!-- 16 METRICS -->
+      <div class="slide accent-blue" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span> § 13 · Success metrics · instrumented before launch</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Every objective · at least one metric</h2></div>
+          <div class="metrics-tbl">
+            <table>
+              <thead><tr><th>Metric</th><th>Baseline</th><th>Target</th><th>Timeframe</th><th>Method</th></tr></thead>
+              <tbody>
+                <tr><td>Recurring-payment time (p50)</td><td>65 s</td><td>≤ 20 s</td><td>Launch + 60d</td><td>App timing analytics</td></tr>
+                <tr><td>"Save billers" support tickets</td><td>8% vol</td><td>&lt;1%</td><td>Launch + 90d</td><td>Zendesk tag report</td></tr>
+                <tr><td>Weekly active use of favourites</td><td>0</td><td>≥ 40%</td><td>Launch + 60d</td><td>Product analytics</td></tr>
+                <tr><td>NPS · recurring-payer segment</td><td>+22</td><td>+30</td><td>Launch + 120d</td><td>Quarterly survey</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card" style="max-width:900px; background:white; border-left:4px solid var(--green); padding:0.9rem 1.2rem;">
+            <p style="font-size:0.92rem; color:var(--text); line-height:1.65"><strong>The instrument-before-launch rule:</strong> if your metric needs data that isn't collected today, build the measurement <em>before</em> the feature ships. Otherwise "did it work?" becomes permanently unanswerable.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 17 COST-BENEFIT -->
+      <div class="slide accent-blue bg-subtle" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span> § 14 · Cost-benefit · three parts</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Wish list vs business case — the sign-off gate</h2></div>
+          <div class="chain-grid">
+            <div class="chain">
+              <h6>A · Costs</h6>
+              <p class="ans">Build (effort × rate) · Run (hosting · support · licences) · Change-mgmt (training · rollout comms)</p>
+            </div>
+            <div class="chain">
+              <h6>B · Benefits</h6>
+              <p class="ans">Quantified revenue · quantified cost savings · risk reduction · qualitative (brand · morale · strategic)</p>
+            </div>
+            <div class="chain">
+              <h6>C · Payback</h6>
+              <p class="ans">Break-even month · 3-yr NPV · sensitivity (what if adoption is 50% of target?)</p>
+            </div>
+          </div>
+          <div class="big-card">
+            <h4>Biller Favourites · summary</h4>
+            <div class="kv-row"><b>Build cost</b><span>BTN 2.4M (80 dev · 20 QA · 12 design · 5 BA + tooling)</span></div>
+            <div class="kv-row"><b>Run cost</b><span>BTN 220k/yr (hosting · monitoring · support)</span></div>
+            <div class="kv-row"><b>Quantified benefit</b><span>BTN 2.4M/yr support savings (800 agent-hr/mo × 250/hr)</span></div>
+            <div class="kv-row"><b>Break-even</b><span>Month 9 post-launch (50% adoption scenario)</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 18 SIGN-OFF -->
+      <div class="slide accent-blue" data-slide="18">
+        <div class="slide-label"><span class="snum">18</span> § 16 · Approvals · sign-off unlocks funding</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">A BRD without signatures is a draft</h2></div>
+          <div class="big-card">
+            <h4>Standard sign-off roster</h4>
+            <div class="kv-row"><b>Business Sponsor</b><span>owns the outcome</span></div>
+            <div class="kv-row"><b>Finance</b><span>budget approval</span></div>
+            <div class="kv-row"><b>Compliance / Legal</b><span>no regulatory blocker</span></div>
+            <div class="kv-row"><b>Head of Business Unit(s)</b><span>agrees to process change</span></div>
+            <div class="kv-row"><b>Programme Management</b><span>slots the work</span></div>
+            <div class="kv-row" style="color:var(--muted); font-style:italic"><b>Optional</b><span>Customer rep · Union (if ops impact) · External partner</span></div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">Lifecycle: Draft (v0.1–0.5) → Review (0.5–0.9) → Approved (1.0) → Updated (1.x) → Closed.</p>
+        </div>
+      </div>
+
+      <!-- 19 WORKED EXAMPLE -->
+      <div class="slide accent-blue bg-subtle" data-slide="19">
+        <div class="slide-label"><span class="snum">19</span> Worked example · mBoB Biller Favourites BRD</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="big-card">
+            <h4>§ 2 · Executive Summary (excerpt)</h4>
+            <p style="font-size:0.88rem; line-height:1.7; color:var(--text)">Retail customers of mBoB paying recurring bills face significant friction — re-entering 12-digit account numbers 36× per year. This initiative proposes a capability that lets customers save and reuse recurring payees with a single tap, reducing payment time by ≥70% and support-ticket load on "save billers" by &gt;80%. Build cost BTN 2.4M · break-even month 9 post-launch.</p>
+            <h4 style="margin-top:0.8rem">§ 6 · Business Requirements (selected)</h4>
+            <ul style="padding-left:1.2rem; font-size:0.88rem; line-height:1.7;">
+              <li><strong>BR-01</strong> — ability for a customer to mark a recently-paid biller as recurring</li>
+              <li><strong>BR-02</strong> — ability to retrieve recurring billers with one interaction</li>
+              <li><strong>BR-03</strong> — remain compliant with RMA §7 on data residency</li>
+              <li><strong>BR-04</strong> — MPIN re-authentication on every payment regardless of origin</li>
+            </ul>
+            <p style="margin-top:0.6rem; font-style:italic; color:var(--muted); font-size:0.85rem">Notice: not a single mention of "app", "screen", "favourites UI", "database". Pure capability.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 20 PITFALLS -->
+      <div class="slide accent-blue" data-slide="20">
+        <div class="slide-label"><span class="snum">20</span> Common BRD mistakes</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Fix early · save months</h2></div>
+          <div class="pitfall-tbl">
+            <table>
+              <thead><tr><th>Mistake</th><th>Why it hurts</th><th>Fix</th></tr></thead>
+              <tbody>
+                <tr><td>Solution named in problem statement</td><td>Narrows design space prematurely</td><td>Rewrite until ≥2 solutions fit</td></tr>
+                <tr><td>"Customers are frustrated"</td><td>Unmeasurable · unsellable</td><td>Tickets · hours · BTN · %s · dates</td></tr>
+                <tr><td>Sponsor-less BRD</td><td>Nobody signs · sits in draft forever</td><td>Name sponsor on page 1</td></tr>
+                <tr><td>Metric can't be measured today</td><td>Success is unknowable post-launch</td><td>Build measurement before feature ships</td></tr>
+                <tr><td>Missing out-of-scope list</td><td>Scope creep kills timeline</td><td>Explicit "will NOT" list</td></tr>
+                <tr><td>Risks without owners</td><td>Nobody mitigates</td><td>Named person per risk</td></tr>
+                <tr><td>Stale BRD after approval</td><td>Reality moves; truth doesn't</td><td>Re-approval on material change</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 21 WRAP -->
+      <div class="slide bg-dark" data-slide="21">
+        <div class="slide-label"><span class="snum">21</span> Wrap-up</div>
+        <div class="center" style="max-width: 860px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key Takeaways</div>
+          <h2 class="heading" style="color: white;">What we covered today</h2>
+          <ul class="reveal-list" style="color: rgba(255,255,255,0.9); text-align:left; max-width: 760px; margin: 1.5rem auto; font-size: 0.98rem; line-height: 1.9;">
+            <li>✅ BRD answers <strong>"should we do this at all?"</strong> — before any spec</li>
+            <li>✅ Written in <strong>business language only</strong> — no tech named</li>
+            <li>✅ 16 sections across six zones · problem · capability · flow · context · case · close</li>
+            <li>✅ Problem statement must not contain a solution — test: ≥2 ways to solve it?</li>
+            <li>✅ <strong>As-is / to-be</strong> flows with pain / improvement tags — delta = value</li>
+            <li>✅ Stakeholders: <strong>Interest/Influence grid</strong> + <strong>RACI / RCI</strong></li>
+            <li>✅ Every BO gets a <strong>baseline · target · timeframe · method · owner</strong></li>
+            <li>✅ Cost-benefit makes the funding case — build · run · payback · sensitivity</li>
+            <li>✅ Signed sign-off table = contract that unlocks budget</li>
+            <li>✅ Next class: <strong>HLD &amp; LLD Workshop</strong> — the design side of spec stack</li>
+          </ul>
+          <p style="color: var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.15rem; margin-top:1.5rem">A good BRD makes every downstream doc easier. A bad BRD makes every downstream doc a fight.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 21</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Testing Class 01 Notes — The Test Plan Document</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#0066B2; --indigo:#001F35; --amber:#247EC1; --green:#7BC950; --purple:#4796D1; --red:#D80032; --text:#1B2021; --muted:#7B7C7F; --faint:#9CA3AF; --surf:#fff; --bg:#F9F9F9; --border:#EDEDED; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Open Sans','Aptos',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; font-size:17px; -webkit-font-smoothing:antialiased; }
+    h1,h2,h3,h4,h5,h6 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:400; letter-spacing:-0.01em; }
+    a { color: var(--blue); }
+
+    .hero { background:var(--surf); border-bottom:1px solid var(--border); padding:4rem 2rem 3rem; text-align:center; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background: linear-gradient(135deg, #0067A3, #002D72); }
+    .logo-corner { position:absolute; top: 1.25rem; left: 1.5rem; opacity:0.85; }
+    .logo-corner img { height: 34px; }
+    .hero-badge { display:inline-flex; align-items:center; gap:0.5rem; background:var(--bg); border:1px solid var(--border); border-radius:100px; padding:0.35rem 1rem; font-size:0.75rem; font-weight:700; color:var(--muted); letter-spacing:0.07em; text-transform:uppercase; margin-bottom:1.5rem; }
+    .hero-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--amber); }
+    .hero h1 { font-size:clamp(2rem,5vw,3.5rem); line-height:1.15; margin-bottom:0.75rem; }
+    .c-blue{color:var(--blue);} .c-indigo{color:var(--indigo);}
+    .hero-sub { font-size:1rem; color:var(--muted); margin-bottom:2rem; max-width:720px; margin-left:auto; margin-right:auto; }
+    .hero-tags { display:flex; justify-content:center; gap:0.6rem; flex-wrap:wrap; }
+    .hero-tag { padding:0.3rem 0.9rem; border-radius:8px; font-size:0.78rem; font-weight:600; background:#E6F0F8; color:var(--blue); }
+
+    .container { max-width:1040px; margin:0 auto; padding:0 2rem 6rem; }
+
+    .toc { background:var(--surf); border:1px solid var(--border); border-radius:16px; padding:1.75rem 2rem; margin:2.5rem 0; }
+    .toc h3 { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); margin-bottom:1.25rem; }
+    .toc ol { list-style: none; counter-reset: step; }
+    .toc li { counter-increment: step; padding:0.45rem 0; border-bottom:1px solid var(--border); }
+    .toc li:last-child { border-bottom:none; }
+    .toc li::before { content: counter(step, decimal-leading-zero); color:var(--faint); font-family:'Bahnschrift','Segoe UI',sans-serif; margin-right:0.8rem; font-size:0.9rem; }
+    .toc a { text-decoration:none; color:var(--text); font-weight:500; }
+    .toc a:hover { color: var(--blue); }
+
+    section.chapter { margin: 3.5rem 0; }
+    .chapter-head { margin-bottom:1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
+    .chapter-eyebrow { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--blue); margin-bottom:0.3rem; }
+    .chapter-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--indigo); }
+
+    p { margin: 0.7rem 0; }
+    ul, ol { margin: 0.6rem 0 0.6rem 1.3rem; }
+    li { margin: 0.3rem 0; }
+    strong { color: var(--indigo); }
+
+    .callout { background:var(--surf); border:1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 10px; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+    .callout.amber { border-left-color: var(--amber); }
+    .callout.green { border-left-color: var(--green); }
+    .callout.red { border-left-color: var(--red); }
+    .callout.indigo { border-left-color: var(--indigo); }
+    .callout h4 { font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--indigo); }
+
+    .pair { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin:1rem 0; }
+    @media (max-width: 720px) { .pair { grid-template-columns: 1fr; } }
+
+    .big-tbl { background:var(--surf); border:1px solid var(--border); border-radius:10px; overflow:auto; margin:1rem 0; }
+    .big-tbl table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+    .big-tbl th { background:var(--bg); padding:0.6rem 0.8rem; text-align:left; color:var(--muted); font-size:0.76rem; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; border-bottom:1px solid var(--border); }
+    .big-tbl td { padding:0.55rem 0.8rem; border-bottom:1px solid var(--border); color:var(--text); vertical-align:top; line-height:1.6; }
+    .big-tbl tr:last-child td { border-bottom:none; }
+    .big-tbl td:first-child { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; }
+
+    .section-deep { background:var(--surf); border:1px solid var(--border); border-radius:10px; padding:1rem 1.3rem; margin:1.2rem 0; }
+    .section-deep .tag { color:var(--muted); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.07em; font-weight:700; margin-bottom:0.25rem; }
+    .section-deep h4 { color:var(--indigo); font-size:1.15rem; margin-bottom:0.4rem; }
+    .section-deep .eg { background:#FAFBFC; border:1px solid var(--border); border-radius:6px; padding:0.7rem 1rem; font-family:'Courier New',monospace; font-size:0.85rem; line-height:1.65; color:var(--text); margin:0.5rem 0; white-space:pre-wrap; }
+
+    .gate { background:var(--surf); border:1px solid var(--border); border-radius:12px; padding:1rem 1.3rem; margin:1rem 0; }
+    .gate h4 { color:var(--indigo); font-size:1rem; margin-bottom:0.5rem; }
+    .gate ul { list-style:none; margin-left:0; }
+    .gate li { padding:0.35rem 0; border-bottom:1px dashed var(--border); font-size:0.92rem; line-height:1.6; }
+    .gate li:last-child { border-bottom:none; }
+    .gate li::before { content:'☐'; color:var(--blue); margin-right:0.5rem; font-weight:700; }
+    .gate.pass { border-left:4px solid #3D7A3D; }
+    .gate.pass li::before { content:'✅'; color:#3D7A3D; }
+    .gate.fail { border-left:4px solid var(--red); }
+    .gate.fail li::before { content:'❌'; color:var(--red); }
+
+    .raci-tbl { background:var(--surf); border:1px solid var(--border); border-radius:10px; overflow:auto; margin:1rem 0; }
+    .raci-tbl table { width:100%; border-collapse:collapse; font-size:0.85rem; }
+    .raci-tbl th { background:var(--bg); padding:0.5rem 0.6rem; text-align:center; color:var(--muted); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; border-bottom:1px solid var(--border); }
+    .raci-tbl td { padding:0.45rem 0.6rem; border-bottom:1px solid var(--border); vertical-align:middle; text-align:center; line-height:1.5; }
+    .raci-tbl td:first-child { text-align:left; color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; }
+    .raci-tbl tr:last-child td { border-bottom:none; }
+    .raci-r { background:#E6F0F8; color:var(--blue); font-weight:700; }
+    .raci-a { background:#FEE9EC; color:var(--red); font-weight:700; }
+    .raci-c { background:#FFF4E3; color:var(--amber); font-weight:700; }
+    .raci-i { background:#F3FAE9; color:#3D7A3D; font-weight:700; }
+
+    .summary { background: linear-gradient(135deg, #F9F9F9, #EDEDED); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+    .summary h4 { color: var(--indigo); margin-bottom: 0.5rem; font-size: 0.95rem; }
+
+    .dl-banner { background: linear-gradient(135deg, #002D72, #0066B2); color:white; border-radius:14px; padding:1.4rem 1.6rem; margin:1.5rem 0; display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+    .dl-banner h4 { color:white; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-bottom:0.3rem; }
+    .dl-banner p { font-size:0.88rem; color:rgba(255,255,255,0.88); margin:0; line-height:1.5; max-width:600px; }
+    .dl-btn { display:inline-flex; align-items:center; gap:0.4rem; padding:0.55rem 1rem; background:white; color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; font-size:0.88rem; text-decoration:none; border-radius:6px; }
+    .dl-btn:hover { background:#E6F0F8; }
+
+    footer { text-align:center; padding: 2rem 1rem 3rem; color: var(--faint); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+    footer img { height: 28px; opacity:0.7; margin-bottom: 0.5rem; display: block; margin-left:auto; margin-right:auto; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="logo-corner"><img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE"></div>
+    <div class="hero-badge"><span class="dot"></span> Software Testing · Class 01</div>
+    <h1><span class="c-blue">The Test Plan</span><br><span class="c-indigo">Document</span></h1>
+    <p class="hero-sub">The canonical QA artifact — structured per IEEE 829 / ISO/IEC/IEEE 29119-3. One document that tells every reader what will be tested, how, by whom, to what quality bar, and when we say "done".</p>
+    <div class="hero-tags">
+      <span class="hero-tag">IEEE 829</span>
+      <span class="hero-tag">ISO 29119</span>
+      <span class="hero-tag">Entry / Exit</span>
+      <span class="hero-tag">Release readiness</span>
+      <span class="hero-tag">RACI</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="toc">
+      <h3>In this note</h3>
+      <ol>
+        <li><a href="#what">What a Test Plan is · and what it is not</a></li>
+        <li><a href="#why">Why written Test Plans exist · the 4 fires they put out</a></li>
+        <li><a href="#scale">Project Test Plan vs Release vs Feature</a></li>
+        <li><a href="#structure">Test Plan structure · 21 sections (IEEE 829)</a></li>
+        <li><a href="#scope">Test items · features IN · features OUT</a></li>
+        <li><a href="#strategy">Test approach · levels · types · techniques</a></li>
+        <li><a href="#entry">Entry · suspension · resumption · exit criteria</a></li>
+        <li><a href="#env">Environment · test data · deliverables</a></li>
+        <li><a href="#staff">Responsibilities (RACI) · schedule · risks</a></li>
+        <li><a href="#metrics">Metrics · reporting · defect management</a></li>
+        <li><a href="#example">Worked example · Biller Favourites Test Plan</a></li>
+        <li><a href="#pitfalls">The 9 most common Test Plan mistakes</a></li>
+        <li><a href="#take">Key takeaways</a></li>
+      </ol>
+    </div>
+
+    <div class="dl-banner">
+      <div>
+        <h4>🧪 Download the Test Plan template</h4>
+        <p>Full IEEE 829 skeleton as Markdown — ready to fork for any project or release. Every section has the cues that make a test plan usable on day one.</p>
+      </div>
+      <a class="dl-btn" href="../ba/spec-writing/templates/test-plan-template.md" download>⬇ test-plan-template.md</a>
+    </div>
+
+    <section class="chapter" id="what">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 1</div>
+        <h2>What a Test Plan is · and what it is not</h2>
+      </div>
+      <p>A <strong>Test Plan</strong> is the single document that defines <em>testing for a defined scope</em> — a project, a release, or a feature. It answers five questions up front, so nobody has to ask them mid-cycle:</p>
+
+      <ol>
+        <li><strong>What is being tested?</strong> (items · versions · features in scope / out of scope)</li>
+        <li><strong>How will it be tested?</strong> (levels, types, techniques, tools)</li>
+        <li><strong>Who will test it?</strong> (roles, skill levels, staffing, responsibilities)</li>
+        <li><strong>When will it be tested?</strong> (milestones, entry / exit criteria, calendar)</li>
+        <li><strong>How will we know we're done?</strong> (pass/fail criteria, release readiness, metrics)</li>
+      </ol>
+
+      <div class="pair">
+        <div class="callout green">
+          <h4>✅ A Test Plan is…</h4>
+          <ul>
+            <li>A <strong>strategy document</strong> — sets direction, not test cases</li>
+            <li>A <strong>contract</strong> between QA, Dev, and PM on what "done" means</li>
+            <li>Released-scoped — one per project or release</li>
+            <li>Signed off before testing starts; referenced throughout</li>
+            <li>The doc a new joiner reads to get oriented in 20 minutes</li>
+          </ul>
+        </div>
+        <div class="callout red">
+          <h4>❌ A Test Plan is NOT…</h4>
+          <ul>
+            <li>A list of individual test cases (those live in TestRail / Xray / Zephyr)</li>
+            <li>A QA strategy (that's organisation-wide; the Test Plan cites it)</li>
+            <li>A defect report</li>
+            <li>A "what I did this week" status update</li>
+            <li>A document written AFTER testing starts</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="why">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 2</div>
+        <h2>Why written Test Plans exist · the 4 fires they put out</h2>
+      </div>
+      <p>Teams without a Test Plan run into the same four fires, every release:</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Fire</th><th>What it looks like</th><th>How a Test Plan stops it</th></tr></thead>
+          <tbody>
+            <tr><td>"Who tested that?"</td><td>Mid-incident, nobody can say which team verified feature X</td><td>§ 15 Responsibilities explicitly names R for each test area</td></tr>
+            <tr><td>"Are we done?"</td><td>PM pushes for release; QA says "still testing"; nobody has a definition</td><td>§ 11 Exit Criteria — a release-readiness check-list</td></tr>
+            <tr><td>"That was never in scope"</td><td>A bug lands post-launch; dev says "not tested because nobody said to"</td><td>§ 05 Features to be Tested + § 06 Features NOT to be Tested (with reason)</td></tr>
+            <tr><td>"We can't start testing"</td><td>Build not deployed, test data not refreshed, yet QA is scheduled</td><td>§ 09 Entry Criteria — pre-flight check-list</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout indigo">
+        <h4>Rule of thumb</h4>
+        <p>The Test Plan is for everyone, not just QA. A dev reads it to know which parts of their code will be exercised and when. A PM reads it to know when they'll have signal to ship. A support lead reads it to know when to staff up. Sponsors read the exit criteria to sign off the release.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="scale">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 3</div>
+        <h2>Project Test Plan vs Release vs Feature</h2>
+      </div>
+      <p>Test Plans nest. The plan for a whole project is the parent; release-level plans inherit from it; feature-level plans inherit from release. Each level has a different length.</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Level</th><th>Scope</th><th>Length</th><th>When to write one</th></tr></thead>
+          <tbody>
+            <tr><td>Project Test Plan</td><td>Whole project / product lifecycle</td><td>15–30 pages</td><td>Once · at kickoff · updated quarterly</td></tr>
+            <tr><td>Release Test Plan</td><td>One major release (e.g. v3.0)</td><td>10–20 pages</td><td>Per release · 4–6 weeks before cut</td></tr>
+            <tr><td>Feature Test Plan</td><td>One significant feature</td><td>3–5 pages</td><td>When feature is big enough to need its own strategy</td></tr>
+            <tr><td>Test Case</td><td>One concrete scenario</td><td>~half a page</td><td>Lives in TestRail / Xray — not in a plan document</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>For the rest of this note, we focus on the <strong>Release Test Plan</strong> — the most common level and the one you'll author first.</p>
+    </section>
+
+    <section class="chapter" id="structure">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 4</div>
+        <h2>Test Plan structure · 21 sections (IEEE 829)</h2>
+      </div>
+      <p>IEEE 829 specifies 21 sections. Not every section needs a page of text — some are two lines — but every section exists so reviewers find what they expect where they expect it.</p>
+
+      <div class="section-deep">
+        <div class="tag">§§ 01–03 · Identification</div>
+        <h4>Identifier · Introduction · References</h4>
+        <p>Test plan ID (e.g. <code>TP-BFAV-v1.0</code>), status, version. Introduction (purpose, scope, audience). References (PRD, SRS, HLD/LLD, strategy docs, standards).</p>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§§ 04–06 · What's in scope</div>
+        <h4>Test Items · Features to be Tested · Features NOT to be Tested</h4>
+        <p>Items = what's under test (modules · services · versions). Features-to-be-tested: traced to requirements + priority. Features-NOT-to-be-tested: explicit list with <strong>reason</strong> for each.</p>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§§ 07–08 · Strategy</div>
+        <h4>Approach · Pass/Fail criteria</h4>
+        <p>Levels (unit · integration · system · acceptance) · types (functional · regression · perf · security · a11y · compat · localisation · recovery) · techniques (EP · BVA · decision tables · state transition · exploratory) · automation strategy. Pass/fail thresholds per test item.</p>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§§ 09–11 · The gates</div>
+        <h4>Entry · Suspension &amp; Resumption · Exit criteria</h4>
+        <p>When testing can start · when it must pause · when it can resume · when the release is ready to ship. Check-list style; binary yes/no per item.</p>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§§ 12–14 · Logistics</div>
+        <h4>Deliverables · Environment · Test data</h4>
+        <p>What QA will produce (cases · reports · automation · traceability matrix). Environment(s) · URLs · data type · stability SLA. Test data sources, sensitive-data handling, refresh cadence.</p>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§§ 15–17 · People &amp; calendar</div>
+        <h4>Responsibilities (RACI) · Staffing · Schedule</h4>
+        <p>RACI matrix for the release (or SELISE's RCI variant). Staffing: roles, counts, names, ramp-up needs. Schedule: milestones tied to project calendar.</p>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§§ 18–20 · Risk &amp; ops</div>
+        <h4>Risks · Metrics &amp; Reporting · Defect management</h4>
+        <p>Risks with likelihood · impact · mitigation · owner. Metrics captured daily, reporting cadence, audience. Defect taxonomy, triage cadence, SLA per severity.</p>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§ 21 · Close</div>
+        <h4>Approvals</h4>
+        <p>Sign-off by QA Lead · Dev Lead · PM · Security · Release Manager. Dated and archived alongside the baselined plan.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="scope">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 5</div>
+        <h2>Test items · features IN · features OUT</h2>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§ 05 · Features to be Tested</div>
+        <h4>Trace every feature back to a requirement · assign priority · pick test type</h4>
+        <p>This table is the bridge between spec and test cases. If a feature isn't here, it won't be tested — period.</p>
+        <div class="big-tbl">
+          <table>
+            <thead><tr><th>Feature / Requirement</th><th>Source</th><th>Priority</th><th>Test type(s)</th></tr></thead>
+            <tbody>
+              <tr><td>FR-01 · Save a favourite</td><td>Feature Spec § 6</td><td>P0</td><td>Functional · Integration</td></tr>
+              <tr><td>FR-02 · View favourites</td><td>Feature Spec § 6</td><td>P0</td><td>Functional · Perf · A11y</td></tr>
+              <tr><td>NFR-Perf-01 · p95 &lt; 1s on 4G</td><td>Feature Spec § 8</td><td>P0</td><td>Performance</td></tr>
+              <tr><td>NFR-Sec-01 · Scope to user</td><td>Feature Spec § 8</td><td>P0</td><td>Security</td></tr>
+              <tr><td>Cross-device sync</td><td>Feature Spec § 11 · risks</td><td>P1</td><td>Functional · Manual</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§ 06 · Features NOT to be Tested</div>
+        <h4>Explicit · with reason for each</h4>
+        <p>Prevents "nobody tested that" fights post-launch. Every exclusion has a documented reason.</p>
+        <ul>
+          <li><strong>Bulk import / export of favourites</strong> — deferred to v2 per PM decision 2026-04-18.</li>
+          <li><strong>Legacy mBoB v4 compatibility</strong> — unsupported per product decision.</li>
+          <li><strong>Payment-gateway failure modes</strong> — external; relying on vendor QA warranty.</li>
+          <li><strong>iOS 13 and below</strong> — below platform support floor (iOS 14+).</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="chapter" id="strategy">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 6</div>
+        <h2>Test approach · levels · types · techniques</h2>
+      </div>
+      <p>A Test Plan doesn't re-derive QA theory; it <em>selects</em> from the available levels / types / techniques and justifies each choice for this release.</p>
+
+      <div class="section-deep">
+        <div class="tag">Levels</div>
+        <h4>Who tests what, at what scale</h4>
+        <div class="big-tbl">
+          <table>
+            <thead><tr><th>Level</th><th>Who</th><th>What</th><th>Tool(s)</th></tr></thead>
+            <tbody>
+              <tr><td>Unit</td><td>Dev</td><td>Isolated functions / classes</td><td>Jest · JUnit · pytest</td></tr>
+              <tr><td>Integration</td><td>Dev + QA</td><td>Service↔service · DB · cache</td><td>Testcontainers</td></tr>
+              <tr><td>System (E2E)</td><td>QA</td><td>End-to-end user flows</td><td>Playwright</td></tr>
+              <tr><td>Acceptance (UAT)</td><td>Business / QA</td><td>Business-scenario validation</td><td>Manual + scripted</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">Types</div>
+        <h4>What <em>kind</em> of quality we're checking</h4>
+        <p>Functional · Regression · Performance (load · stress · soak · spike) · Security (OWASP Top 10 · authZ matrix · deps) · Accessibility (WCAG AA · axe · keyboard · screen reader) · Compatibility (browsers · OS · devices) · Localisation · Recovery / resilience (chaos · failover) · Usability (session-based).</p>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">Techniques</div>
+        <h4>How test cases are designed</h4>
+        <p>Equivalence partitioning (EP) · Boundary value analysis (BVA) · Decision tables · State transition · Pairwise · Exploratory (charter-led) · Risk-based prioritisation.</p>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">Automation strategy</div>
+        <h4>What is automated, what isn't, why</h4>
+        <ul>
+          <li><strong>Unit:</strong> 100% of changed code paths touched (dev owns)</li>
+          <li><strong>Integration:</strong> all happy paths + critical edges automated</li>
+          <li><strong>E2E:</strong> top 20 user journeys automated · long-tail via exploratory</li>
+          <li><strong>Perf:</strong> automated in k6 against staging · weekly baseline</li>
+          <li><strong>Security:</strong> dep scan (Snyk) automated in CI · pen-test before major release</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="chapter" id="entry">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 7</div>
+        <h2>Entry · suspension · resumption · exit criteria</h2>
+      </div>
+      <p>Four gates govern the test cycle. Each is a check-list with binary yes/no items.</p>
+
+      <div class="gate">
+        <h4>§ 09 · Entry criteria · when testing can START</h4>
+        <ul>
+          <li>Feature spec / SRS approved</li>
+          <li>Build deployed to test environment · smoke test green</li>
+          <li>Test data prepared &amp; refreshed</li>
+          <li>Test cases reviewed &amp; approved</li>
+          <li>Dev has marked ticket(s) "Ready for QA"</li>
+          <li>Known blocker defects resolved or flagged</li>
+        </ul>
+      </div>
+
+      <div class="gate">
+        <h4>§ 10 · Suspend when…</h4>
+        <ul>
+          <li>Smoke tests fail on a new build</li>
+          <li>A P0 defect blocks &gt; 50% of remaining test cases</li>
+          <li>Test environment unavailable &gt; 4 h</li>
+        </ul>
+      </div>
+
+      <div class="gate">
+        <h4>§ 10 · Resume when…</h4>
+        <ul>
+          <li>Blocker fixed &amp; verified</li>
+          <li>Environment restored · data valid</li>
+        </ul>
+      </div>
+
+      <div class="gate pass">
+        <h4>§ 11 · Exit criteria · release readiness</h4>
+        <ul>
+          <li>100% of P0 test cases executed · <strong>0 P0 defects open</strong></li>
+          <li>≥ 95% of P1 test cases executed · <strong>0 P1 defects open</strong> (or accepted by PM with mitigation)</li>
+          <li>Known-issue list published &amp; reviewed with PM</li>
+          <li>Performance targets met (see § 05 NFRs)</li>
+          <li>Security scan clean OR exceptions approved by Security</li>
+          <li>Accessibility scan: no critical axe violations</li>
+          <li>Regression suite green on final build</li>
+          <li>Test report signed by QA Lead · Dev Lead · PM</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="chapter" id="env">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 8</div>
+        <h2>Environment · test data · deliverables</h2>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§ 13 · Environment</div>
+        <h4>One row per environment</h4>
+        <div class="big-tbl">
+          <table>
+            <thead><tr><th>Env</th><th>Purpose</th><th>Data</th><th>Stability SLA</th></tr></thead>
+            <tbody>
+              <tr><td>QA-A</td><td>Functional · regression</td><td>Synthetic</td><td>95%</td></tr>
+              <tr><td>QA-B</td><td>Integration w/ sandbox partners</td><td>Synthetic + sandbox</td><td>90%</td></tr>
+              <tr><td>Perf</td><td>Load · stress</td><td>Scaled prod-like</td><td>On-demand</td></tr>
+              <tr><td>Staging</td><td>UAT · release rehearsal</td><td>Anonymised prod subset</td><td>99%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§ 14 · Test data</div>
+        <h4>Sources · sensitivity · refresh</h4>
+        <ul>
+          <li><strong>Sources:</strong> synthetic generators · masked prod snapshots · fixture files</li>
+          <li><strong>Sensitive data:</strong> PII masked · CID scrambled · no real card data</li>
+          <li><strong>Refresh:</strong> reset-before-run for E2E · shared pool for exploratory</li>
+          <li><strong>Volume (perf):</strong> 1M users · 10M transactions · 30-day history</li>
+        </ul>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§ 12 · Deliverables</div>
+        <h4>What QA produces and hands over</h4>
+        <ul>
+          <li>Test strategy &amp; plan (this doc)</li>
+          <li>Test cases (TestRail / Xray / Zephyr)</li>
+          <li>Defect reports (Jira / Linear)</li>
+          <li>Automation code (repo)</li>
+          <li>Test data scripts</li>
+          <li>Daily execution reports</li>
+          <li>Final test summary report</li>
+          <li>Traceability matrix (reqs → test cases → defects)</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="chapter" id="staff">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 9</div>
+        <h2>Responsibilities (RACI) · schedule · risks</h2>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§ 15 · Responsibilities · RACI matrix</div>
+        <h4>Role per activity — R/A/C/I</h4>
+        <div class="raci-tbl">
+          <table>
+            <thead>
+              <tr><th>Activity</th><th>QA Lead</th><th>QA Eng</th><th>SDET</th><th>Dev Lead</th><th>PM</th><th>Security</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Test plan authorship</td><td class="raci-r">R</td><td class="raci-c">C</td><td class="raci-c">C</td><td class="raci-c">C</td><td class="raci-c">C</td><td class="raci-i">I</td></tr>
+              <tr><td>Test case design</td><td class="raci-a">A</td><td class="raci-r">R</td><td class="raci-c">C</td><td class="raci-c">C</td><td class="raci-i">I</td><td></td></tr>
+              <tr><td>Automation build</td><td class="raci-a">A</td><td class="raci-c">C</td><td class="raci-r">R</td><td class="raci-c">C</td><td></td><td></td></tr>
+              <tr><td>Test execution</td><td class="raci-a">A</td><td class="raci-r">R</td><td class="raci-r">R</td><td class="raci-c">C</td><td class="raci-i">I</td><td></td></tr>
+              <tr><td>Defect triage</td><td class="raci-r">R</td><td class="raci-c">C</td><td></td><td class="raci-c">C</td><td class="raci-a">A</td><td class="raci-c">C</td></tr>
+              <tr><td>Release sign-off</td><td class="raci-r">R</td><td></td><td></td><td class="raci-r">R</td><td class="raci-a">A</td><td class="raci-c">C</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.85rem; color:var(--muted); font-style:italic">SELISE uses <strong>RCI</strong> internally (A dropped per Julian's insight); map A↔R where needed.</p>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§ 17 · Schedule · tied to project calendar</div>
+        <h4>One row per milestone</h4>
+        <div class="big-tbl">
+          <table>
+            <thead><tr><th>Milestone</th><th>Date</th><th>Owner</th></tr></thead>
+            <tbody>
+              <tr><td>Test cases drafted</td><td>T-21</td><td>QA engineers</td></tr>
+              <tr><td>Test cases reviewed</td><td>T-14</td><td>QA Lead + Dev</td></tr>
+              <tr><td>Automation framework ready</td><td>T-14</td><td>SDET</td></tr>
+              <tr><td>Functional testing starts</td><td>T-10</td><td>QA</td></tr>
+              <tr><td>Integration testing</td><td>T-7</td><td>QA + Dev</td></tr>
+              <tr><td>Performance testing</td><td>T-5</td><td>SDET</td></tr>
+              <tr><td>Regression cycle</td><td>T-3</td><td>QA</td></tr>
+              <tr><td>UAT</td><td>T-2</td><td>Business</td></tr>
+              <tr><td>Go/No-Go review</td><td>T-1</td><td>PM + QA + Dev</td></tr>
+              <tr><td>Release</td><td>T-0</td><td>Release Mgr</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§ 18 · Risks · with owners</div>
+        <h4>Likelihood · impact · mitigation</h4>
+        <div class="big-tbl">
+          <table>
+            <thead><tr><th>Risk</th><th>L</th><th>I</th><th>Mitigation</th></tr></thead>
+            <tbody>
+              <tr><td>Test environment unstable</td><td>M</td><td>H</td><td>Daily smoke · backup env</td></tr>
+              <tr><td>Late feature delivery compresses QA</td><td>H</td><td>H</td><td>Risk-based prioritisation · feature-flag buffer</td></tr>
+              <tr><td>Perf test data unavailable</td><td>M</td><td>M</td><td>Synthetic generator ready at T-14</td></tr>
+              <tr><td>Key QA person out</td><td>L</td><td>M</td><td>Pair rotation + knowledge doc</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="metrics">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 10</div>
+        <h2>Metrics · reporting · defect management</h2>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§ 19 · Metrics captured daily</div>
+        <h4>What QA reports to the rest of the team</h4>
+        <ul>
+          <li>Test cases: planned · executed · passed · failed · blocked · deferred</li>
+          <li>Defects by severity: open · closed · reopened</li>
+          <li>Automation pass rate</li>
+          <li>Coverage vs requirements (% reqs with ≥ 1 test)</li>
+        </ul>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§ 19 · Reporting cadence</div>
+        <h4>Who gets what, when</h4>
+        <ul>
+          <li><strong>Daily</strong> — 3-line Slack summary (execution · top defect · top risk)</li>
+          <li><strong>Weekly</strong> — burndown + risks to PM</li>
+          <li><strong>End of cycle</strong> — full test summary report</li>
+        </ul>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">§ 20 · Defect management</div>
+        <h4>Severity · SLA · triage</h4>
+        <p><strong>Severity definitions:</strong></p>
+        <ul>
+          <li><strong>S1 Critical</strong> — data loss · security breach · &gt; 50% users blocked</li>
+          <li><strong>S2 Major</strong> — core feature broken · no clear workaround</li>
+          <li><strong>S3 Minor</strong> — feature degraded · workaround exists</li>
+          <li><strong>S4 Cosmetic</strong> — UI polish · docs · non-blocking</li>
+        </ul>
+        <p><strong>SLA:</strong> S1 ack &lt; 1 h · S2 &lt; 4 h · S3 / S4 &lt; 1 day.<br>
+        <strong>Triage:</strong> daily during active testing; 2×/week otherwise.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="example">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 11</div>
+        <h2>Worked example · Biller Favourites Test Plan</h2>
+      </div>
+
+      <div class="section-deep">
+        <div class="tag">TP-BFAV-v1.0 · excerpt</div>
+        <h4>Condensed Test Plan for Biller Favourites · mBoB v1</h4>
+
+        <p><strong>§ 01 Identifier:</strong> TP-BFAV-v1.0 · Draft · 2026-04-21 · Author: QA Lead · Reviewers: Dev Lead, PM, Security, Release Mgr</p>
+
+        <p><strong>§ 05 Features to be Tested (excerpt):</strong></p>
+        <ul>
+          <li>FR-01 · Save a favourite — P0 · Functional + Integration</li>
+          <li>FR-02 · View favourites — P0 · Functional + Perf + A11y</li>
+          <li>FR-03 · Use a favourite (pre-fill payment) — P0 · Functional + Security</li>
+          <li>NFR-Perf-01 · p95 &lt; 1s for list — P0 · Performance</li>
+          <li>NFR-Sec-01 · Scope to user (no cross-account leakage) — P0 · Security</li>
+          <li>NFR-A11y-01 · WCAG 2.1 AA — P1 · Accessibility</li>
+        </ul>
+
+        <p><strong>§ 06 NOT to be Tested:</strong> bulk import/export (deferred v2) · legacy mBoB v4 (unsupported) · payment gateway internals (vendor responsibility).</p>
+
+        <p><strong>§ 07 Approach:</strong> Unit (dev) · Integration · System (Playwright) · UAT (branch agents in Thimphu). Automation covers top 8 user journeys + all API endpoints.</p>
+
+        <p><strong>§ 09 Entry:</strong> Build deployed to QA-A · smoke green · test data reset · tickets marked Ready-for-QA.</p>
+
+        <p><strong>§ 11 Exit:</strong> 0 P0 defects · 0 P1 defects · p95 &lt; 1s verified at 5k RPS · axe clean · RMA §7 compliance confirmed · sign-off by QA Lead, Dev Lead, PM.</p>
+
+        <p><strong>§ 13 Environments:</strong> QA-A · QA-B (sandbox partners) · Perf (scaled prod-like) · Staging (UAT).</p>
+
+        <p><strong>§ 17 Schedule:</strong> Test cases T-21 · automation T-14 · functional T-10 · perf T-5 · UAT T-2 · go/no-go T-1 · release T-0.</p>
+
+        <p><strong>§ 21 Approvals:</strong> QA Lead, Dev Lead, PM, Security — all required before test entry.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="pitfalls">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 12</div>
+        <h2>The 9 most common Test Plan mistakes</h2>
+      </div>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Mistake</th><th>What goes wrong</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr><td>Writing after testing starts</td><td>Plan rationalises past choices instead of driving them</td><td>Draft at T-21 · baseline at T-14</td></tr>
+            <tr><td>No "features NOT to be tested" list</td><td>"Nobody tested that" after launch</td><td>§ 06 · explicit exclusions with reasons</td></tr>
+            <tr><td>Exit criteria are vague</td><td>PM and QA disagree on release readiness</td><td>Binary check-list · "0 P0 open" not "few P0"</td></tr>
+            <tr><td>Entry criteria missing</td><td>Testing starts on a broken build · wastes days</td><td>§ 09 · smoke-test gate before any QA work</td></tr>
+            <tr><td>No traceability</td><td>Can't prove a requirement was tested</td><td>Traceability matrix · req → test case → result</td></tr>
+            <tr><td>Metrics reported only at end</td><td>No time to correct course</td><td>Daily 3-line Slack + weekly burndown</td></tr>
+            <tr><td>Vague risks without owners</td><td>Risks everyone knows, nobody mitigates</td><td>Named owner per risk</td></tr>
+            <tr><td>One environment for everything</td><td>Perf testing breaks functional testing</td><td>§ 13 · separate environments per purpose</td></tr>
+            <tr><td>Plan written once, never updated</td><td>Reality diverges; plan becomes fiction</td><td>Re-baseline per release · living doc not a museum piece</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="chapter" id="take">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Takeaways</div>
+        <h2>Key points to carry forward</h2>
+      </div>
+      <div class="summary">
+        <h4>What we covered today</h4>
+        <ul>
+          <li>A Test Plan answers <strong>what · how · who · when · when done</strong> up front — for everyone, not just QA.</li>
+          <li>Three levels: <strong>project · release · feature</strong>. Most plans you'll author are release-level (10–20 pages).</li>
+          <li>21 sections per IEEE 829 · from identification → scope → strategy → gates → logistics → responsibilities → risk → metrics → approvals.</li>
+          <li>Features NOT to be tested is as important as features to be tested — with reason for each.</li>
+          <li>Four gates: <strong>Entry · Suspension · Resumption · Exit</strong>. Each a binary check-list.</li>
+          <li>Exit criteria make "are we done?" unambiguous: <strong>0 P0 defects · 0 P1 defects</strong> (or PM-accepted with mitigation) · perf · security · a11y · regression all green.</li>
+          <li>RACI (or SELISE's RCI) matrix assigns every activity a single Responsible party.</li>
+          <li>Metrics captured <strong>daily</strong> — not saved for the post-mortem.</li>
+          <li>The Test Plan is a <strong>living document</strong> — written before testing, updated during, reviewed after.</li>
+        </ul>
+      </div>
+      <p style="margin-top:1.5rem; font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-size:1.1rem">If your release conversation ends with "how do we know we're done?" — your Test Plan has already failed.</p>
+    </section>
+
+  </div>
+
+  <footer>
+    <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE">
+    SELISE × Pelsung · Software Testing · Class 01<br>
+    The Test Plan Document
+  </footer>
+
+</body>
+</html>
