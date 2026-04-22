@@ -1,0 +1,2184 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="robots"
+      content="noindex, nofollow, noarchive, nosnippet, noimageindex"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Practice — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      .code-block {
+        background: #001f35;
+        border-radius: 14px;
+        overflow: hidden;
+        width: 100%;
+        font-family: "Courier New", monospace;
+      }
+      .code-bar {
+        background: #0a2a45;
+        padding: 8px 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-family: "Open Sans", sans-serif;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .code-bar .cb-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+      .code-body {
+        padding: clamp(0.8rem, 1.5vw, 1.3rem);
+        font-size: clamp(0.72rem, 1vw, 0.88rem);
+        line-height: 1.85;
+        color: rgba(255, 255, 255, 0.85);
+      }
+      .code-body .ck {
+        color: #7dd3fc;
+      }
+      .code-body .cs {
+        color: #86efac;
+      }
+      .code-body .cn {
+        color: #fde68a;
+      }
+      .code-body .cc {
+        color: rgba(255, 255, 255, 0.35);
+      }
+      .code-body .cp {
+        color: #c4b5fd;
+      }
+      .code-body .ci {
+        color: #f0abfc;
+      }
+      .method-card {
+        background: var(--surf);
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        padding: 1rem 1.2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+      }
+      .method-card .mc-name {
+        font-family: "Courier New", monospace;
+        font-weight: 700;
+        color: var(--blue);
+        font-size: clamp(0.9rem, 1.2vw, 1.05rem);
+      }
+      .method-card .mc-desc {
+        font-size: clamp(0.78rem, 1vw, 0.88rem);
+        color: var(--muted);
+        line-height: 1.4;
+      }
+      .method-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        width: 100%;
+        max-width: 880px;
+      }
+      .method-grid.three {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .break-timer {
+        font-family: "Courier New", monospace;
+        font-size: clamp(3.5rem, 9vw, 6rem);
+        color: white;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+      }
+      .break-btn {
+        padding: 0.6rem 1.4rem;
+        border-radius: 100px;
+        border: 1.5px solid rgba(255, 255, 255, 0.4);
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        cursor: pointer;
+        font-size: clamp(0.82rem, 1.1vw, 0.92rem);
+        font-weight: 600;
+        margin: 0 0.4rem;
+      }
+      .break-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .exercise-card {
+        background: var(--surf);
+        border: 1.5px solid var(--border);
+        border-radius: 16px;
+        padding: clamp(1rem, 1.8vw, 1.4rem);
+        max-width: 820px;
+        width: 100%;
+      }
+      .exercise-card .xc-badge {
+        display: inline-block;
+        background: #e6f0f8;
+        color: var(--blue);
+        font-size: clamp(0.7rem, 0.9vw, 0.78rem);
+        font-weight: 700;
+        padding: 0.2rem 0.7rem;
+        border-radius: 100px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 0.6rem;
+      }
+      .exercise-card .xc-title {
+        font-family: "Bahnschrift", "Segoe UI", sans-serif;
+        font-size: clamp(1.2rem, 2vw, 1.6rem);
+        color: var(--text);
+        margin-bottom: 0.5rem;
+      }
+      .exercise-card .xc-desc {
+        color: var(--muted);
+        font-size: clamp(0.85rem, 1.15vw, 0.98rem);
+        margin-bottom: 0.8rem;
+        line-height: 1.55;
+      }
+      .setup-step {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.8rem;
+        padding: 0.7rem 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .setup-step:last-child {
+        border-bottom: none;
+      }
+      .setup-step .ss-num {
+        background: var(--blue);
+        color: white;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.85rem;
+        flex-shrink: 0;
+      }
+      .setup-step .ss-body {
+        font-size: clamp(0.88rem, 1.15vw, 1rem);
+        color: var(--text);
+        line-height: 1.5;
+      }
+      .setup-step .ss-body code {
+        background: var(--bg);
+        padding: 1px 6px;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+        font-size: 0.92em;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+      <!-- ══════════════════════════════════════════
+       SLIDE 1 — TITLE
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-gradient bg-dark" data-slide="1">
+        <div class="slide-label">
+          <span class="snum">01</span> SELISE × Pelsung
+        </div>
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            text-align: center;
+            max-width: 900px;
+          "
+        >
+          <div class="date-badge">
+            <span class="db-dot"></span>Dev Specialization · Class 03b
+          </div>
+          <h1 class="display" style="color: white">
+            <span style="color: #7dd3fc">JavaScript</span><br />
+            <span style="color: white">Practice Day</span>
+          </h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.65)">
+            4 hours · 29 problems · Classes 02 + 03 in your fingers
+          </p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">Variables</span>
+            <span class="class-tag tag-indigo">Loops</span>
+            <span class="class-tag tag-amber">Objects</span>
+            <span class="class-tag tag-green">Array methods</span>
+          </div>
+        </div>
+        <div class="interact-hint">
+          Press → or click the right side to advance
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 2 — AGENDA
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label">
+          <span class="snum">02</span> Today's Plan · 9:30 AM – 1:30 PM
+        </div>
+        <div class="stack" style="max-width: 780px; width: 100%">
+          <div class="center" style="margin-bottom: 0.3rem">
+            <h2 class="heading" style="font-size: clamp(1.5rem, 2.8vw, 2.2rem)">
+              How the day flows
+            </h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.3rem">
+              Five blocks · one break · one mini-challenge at the end
+            </p>
+          </div>
+          <div class="agenda-row" onclick="goTo(3)">
+            <span class="ar-dot" style="background: var(--faint)"></span>
+            <span class="ar-label">⚙️ Setup — VS Code + Node sanity check</span>
+            <span
+              class="ar-badge"
+              style="background: var(--bg); color: var(--muted)"
+              >9:30 · 10 min</span
+            >
+          </div>
+          <div class="agenda-row" onclick="goTo(4)">
+            <span class="ar-dot" style="background: var(--blue)"></span>
+            <span class="ar-label"
+              >🧱 Block 1 — Warm-up (variables, types, if/else)</span
+            >
+            <span
+              class="ar-badge"
+              style="background: #e6f0f8; color: var(--blue)"
+              >9:40 · 50 min</span
+            >
+          </div>
+          <div class="agenda-row" onclick="goTo(13)">
+            <span class="ar-dot" style="background: var(--indigo)"></span>
+            <span class="ar-label">🔁 Block 2 — Loops & strings</span>
+            <span
+              class="ar-badge"
+              style="background: #e6e9ec; color: var(--indigo)"
+              >10:30 · 50 min</span
+            >
+          </div>
+          <div class="agenda-row" onclick="goTo(21)">
+            <span class="ar-dot" style="background: #666"></span>
+            <span class="ar-label">☕ Break</span>
+            <span
+              class="ar-badge"
+              style="background: var(--bg); color: var(--muted)"
+              >11:20 · 15 min</span
+            >
+          </div>
+          <div class="agenda-row" onclick="goTo(22)">
+            <span class="ar-dot" style="background: var(--amber)"></span>
+            <span class="ar-label">📦 Block 3 — Objects & arrays</span>
+            <span class="ar-badge" style="background: #ebf0f7; color: #1c5b8c"
+              >11:35 · 50 min</span
+            >
+          </div>
+          <div class="agenda-row" onclick="goTo(29)">
+            <span class="ar-dot" style="background: var(--green)"></span>
+            <span class="ar-label"
+              >⚡ Block 4 — Array methods & destructuring</span
+            >
+            <span
+              class="ar-badge"
+              style="background: #f0f7ec; color: var(--green)"
+              >12:25 · 45 min</span
+            >
+          </div>
+          <div class="agenda-row" onclick="goTo(38)">
+            <span class="ar-dot" style="background: var(--purple)"></span>
+            <span class="ar-label"
+              >🏆 Mini-challenge — Pelsung Leaderboard</span
+            >
+            <span
+              class="ar-badge"
+              style="background: #ecf2f8; color: var(--purple)"
+              >1:10 · 20 min</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 3 — SETUP
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="3">
+        <div class="slide-label">
+          <span class="snum">03</span> Setup · Before we start
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 820px; width: 100%"
+        >
+          <div class="center">
+            <div class="pill pill-blue">Environment</div>
+            <h2 class="heading">VS Code + Node.js</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.3rem">
+              You'll write and run every problem in VS Code using Node.
+            </p>
+          </div>
+          <div class="exercise-card" style="max-width: 720px">
+            <div class="setup-step">
+              <div class="ss-num">1</div>
+              <div class="ss-body">
+                Create a folder: <code>js-practice</code>. Open it in VS Code.
+              </div>
+            </div>
+            <div class="setup-step">
+              <div class="ss-num">2</div>
+              <div class="ss-body">
+                For each problem, create a new file like
+                <code>1-1-even-or-odd.js</code>.
+              </div>
+            </div>
+            <div class="setup-step">
+              <div class="ss-num">3</div>
+              <div class="ss-body">
+                Run your code with <code>node 1-1-even-or-odd.js</code> in the
+                integrated terminal.
+              </div>
+            </div>
+            <div class="setup-step">
+              <div class="ss-num">4</div>
+              <div class="ss-body">
+                Use <code>console.log(...)</code> to print. Test your function
+                with a few inputs before moving on.
+              </div>
+            </div>
+            <div class="setup-step">
+              <div class="ss-num">5</div>
+              <div class="ss-body">
+                Stuck for more than 10 minutes? Raise a hand. Don't lose the
+                whole block on one problem.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 4 — BLOCK 1 SECTION
+      ══════════════════════════════════════════ -->
+      <div class="slide bg-blue" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span> Block 1 · 50 minutes
+          </div>
+          <h1 class="display" style="color: white">Warm-up</h1>
+          <p
+            class="body-lg"
+            style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem"
+          >
+            Variables · types · if / else · functions · ternary
+          </p>
+          <p
+            class="body-md"
+            style="color: rgba(255, 255, 255, 0.55); margin-top: 0.8rem"
+          >
+            8 problems · ~6 minutes each
+          </p>
+        </div>
+        <div class="section-num" style="color: white">01</div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 5 — P 1.1 EVEN OR ODD
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="5">
+        <div class="slide-label">
+          <span class="snum">05</span> Block 1 · Warm-up
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card">
+            <span class="xc-badge">Problem 1.1 · Ternary</span>
+            <div class="xc-title">Even or odd</div>
+            <div class="xc-desc">
+              Write a function <code>isEven(n)</code> that returns
+              <code>true</code> if <code>n</code> is even and
+              <code>false</code> otherwise. Use the
+              <strong>ternary operator</strong>.
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                1-1-even-or-odd.js
+              </div>
+              <div class="code-body">
+                <span class="cc">// Examples</span><br />
+                isEven(<span class="cn">4</span>);
+                <span class="cc">// true</span><br />
+                isEven(<span class="cn">7</span>);
+                <span class="cc">// false</span><br />
+                isEven(<span class="cn">0</span>);
+                <span class="cc">// true</span><br />
+                isEven(-<span class="cn">3</span>);
+                <span class="cc">// false</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 6 — P 1.2 GRADE
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="6">
+        <div class="slide-label">
+          <span class="snum">06</span> Block 1 · Warm-up
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card">
+            <span class="xc-badge">Problem 1.2 · if / else if</span>
+            <div class="xc-title">Grade classifier</div>
+            <div class="xc-desc">
+              Write <code>getGrade(score)</code> that returns a letter grade
+              based on the score. Valid scores are 0–100.
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                1-2-grade.js
+              </div>
+              <div class="code-body">
+                <span class="cc">// Rules</span><br />
+                <span class="cc">// 90 and above → "A"</span><br />
+                <span class="cc">// 75–89 → "B"</span><br />
+                <span class="cc">// 60–74 → "C"</span><br />
+                <span class="cc">// below 60 → "F"</span><br /><br />
+                <span class="cc">// Examples</span><br />
+                getGrade(<span class="cn">95</span>);
+                <span class="cc">// "A"</span><br />
+                getGrade(<span class="cn">78</span>);
+                <span class="cc">// "B"</span><br />
+                getGrade(<span class="cn">45</span>);
+                <span class="cc">// "F"</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 7 — P 1.3 LEAP YEAR
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="7">
+        <div class="slide-label">
+          <span class="snum">07</span> Block 1 · Warm-up
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card">
+            <span class="xc-badge">Problem 1.3 · Logical operators</span>
+            <div class="xc-title">Leap year</div>
+            <div class="xc-desc">
+              Write <code>isLeapYear(year)</code> that returns
+              <code>true</code> for leap years (years with an extra day).<br /><br />
+              Check these rules <strong>in order</strong>:<br />
+              1. If divisible by <strong>400</strong> → leap year<br />
+              2. Else if divisible by <strong>100</strong> → not a leap year<br />
+              3. Else if divisible by <strong>4</strong> → leap year<br />
+              4. Else → not a leap year
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                1-3-leap-year.js
+              </div>
+              <div class="code-body">
+                <span class="cc">// Examples</span><br />
+                isLeapYear(<span class="cn">2024</span>);
+                <span class="cc">// true (÷4, not ÷100)</span><br />
+                isLeapYear(<span class="cn">2023</span>);
+                <span class="cc">// false</span><br />
+                isLeapYear(<span class="cn">1900</span>);
+                <span class="cc">// false (÷100 but not ÷400)</span><br />
+                isLeapYear(<span class="cn">2000</span>);
+                <span class="cc">// true (÷400)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 8 — P 1.4 GREETING
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="8">
+        <div class="slide-label">
+          <span class="snum">08</span> Block 1 · Warm-up
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card">
+            <span class="xc-badge">Problem 1.4 · Template literals</span>
+            <div class="xc-title">Greeting by time of day</div>
+            <div class="xc-desc">
+              Write <code>greet(name, hour)</code> that returns a greeting based
+              on the hour (0–23). <br />Before 12 → <em>morning</em>. 12–17 →
+              <em>afternoon</em>. 18 and later → <em>evening</em>.
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                1-4-greeting.js
+              </div>
+              <div class="code-body">
+                <span class="cc">// Examples</span><br />
+                greet(<span class="cs">"Karma"</span>,
+                <span class="cn">9</span>);
+                <span class="cc">// "Good morning, Karma!"</span><br />
+                greet(<span class="cs">"Dorji"</span>,
+                <span class="cn">14</span>);
+                <span class="cc">// "Good afternoon, Dorji!"</span><br />
+                greet(<span class="cs">"Sonam"</span>,
+                <span class="cn">20</span>);
+                <span class="cc">// "Good evening, Sonam!"</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 9 — P 1.5 TEMP CONVERTER
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="9">
+        <div class="slide-label">
+          <span class="snum">09</span> Block 1 · Warm-up
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card">
+            <span class="xc-badge">Problem 1.5 · Arrow functions</span>
+            <div class="xc-title">Celsius ↔ Fahrenheit</div>
+            <div class="xc-desc">
+              Write <strong>two arrow functions</strong>:
+              <code>cToF(c)</code> and <code>fToC(f)</code>.
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                1-5-temperature.js
+              </div>
+              <div class="code-body">
+                <span class="cc">// Formulas</span><br />
+                <span class="cc">// F = C × 9/5 + 32</span><br />
+                <span class="cc">// C = (F − 32) × 5/9</span><br /><br />
+                <span class="cc">// Examples</span><br />
+                cToF(<span class="cn">0</span>); <span class="cc">// 32</span
+                ><br />
+                cToF(<span class="cn">100</span>); <span class="cc">// 212</span
+                ><br />
+                fToC(<span class="cn">32</span>); <span class="cc">// 0</span
+                ><br />
+                fToC(<span class="cn">212</span>);
+                <span class="cc">// 100</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 10 — P 1.6 BILL SPLITTER
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="10">
+        <div class="slide-label">
+          <span class="snum">10</span> Block 1 · Warm-up
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card">
+            <span class="xc-badge">Problem 1.6 · Functions + math</span>
+            <div class="xc-title">Bill splitter</div>
+            <div class="xc-desc">
+              You're out for dinner with friends. Write
+              <code>splitBill(total, people, tipPercent)</code> that returns the
+              amount <strong>each person</strong> should pay, including the tip.
+              The tip is a percentage of the bill.
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                1-6-bill-splitter.js
+              </div>
+              <div class="code-body">
+                <span class="cc">// Examples</span><br />
+                splitBill(<span class="cn">1000</span>,
+                <span class="cn">4</span>, <span class="cn">10</span>);
+                <span class="cc">// 275 (1000 + 10% = 1100, ÷4)</span><br />
+                splitBill(<span class="cn">500</span>,
+                <span class="cn">2</span>, <span class="cn">10</span>);
+                <span class="cc">// 275</span><br />
+                splitBill(<span class="cn">1200</span>,
+                <span class="cn">3</span>, <span class="cn">15</span>);
+                <span class="cc">// 460</span><br />
+                splitBill(<span class="cn">600</span>,
+                <span class="cn">5</span>, <span class="cn">0</span>);
+                <span class="cc">// 120 (no tip)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 11 — P 1.7 UNIT PRICE
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="11">
+        <div class="slide-label">
+          <span class="snum">11</span> Block 1 · Warm-up
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card">
+            <span class="xc-badge">Problem 1.7 · Functions + comparison</span>
+            <div class="xc-title">Unit-price comparator</div>
+            <div class="xc-desc">
+              You're at the shop comparing two pack sizes. Write
+              <code>cheaperPerUnit(priceA, qtyA, priceB, qtyB)</code> that
+              returns <code>"A"</code>, <code>"B"</code>, or
+              <code>"same"</code>.
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                1-7-unit-price.js
+              </div>
+              <div class="code-body">
+                <span class="cc">// Examples</span><br />
+                cheaperPerUnit(<span class="cn">100</span>,
+                <span class="cn">2</span>, <span class="cn">120</span>,
+                <span class="cn">3</span>);
+                <span class="cc">// "B" (50 vs 40)</span><br />
+                cheaperPerUnit(<span class="cn">60</span>,
+                <span class="cn">3</span>, <span class="cn">100</span>,
+                <span class="cn">4</span>);
+                <span class="cc">// "A" (20 vs 25)</span><br />
+                cheaperPerUnit(<span class="cn">50</span>,
+                <span class="cn">1</span>, <span class="cn">100</span>,
+                <span class="cn">2</span>); <span class="cc">// "same"</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 12 — P 1.8 BMI
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="12">
+        <div class="slide-label">
+          <span class="snum">12</span> Block 1 · Warm-up
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card">
+            <span class="xc-badge">Problem 1.8 · Control flow + math</span>
+            <div class="xc-title">BMI classifier</div>
+            <div class="xc-desc">
+              Write <code>classifyBMI(weightKg, heightM)</code> that computes
+              Body Mass Index (<code>weight / height²</code>) and returns a
+              category.
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                1-8-bmi.js
+              </div>
+              <div class="code-body">
+                <span class="cc">// Categories</span><br />
+                <span class="cc">// below 18.5 → "Underweight"</span><br />
+                <span class="cc">// 18.5 – 24.9 → "Normal"</span><br />
+                <span class="cc">// 25.0 – 29.9 → "Overweight"</span><br />
+                <span class="cc">// 30.0 and up → "Obese"</span><br /><br />
+                <span class="cc">// Examples</span><br />
+                classifyBMI(<span class="cn">55</span>,
+                <span class="cn">1.70</span>);
+                <span class="cc">// "Normal"</span><br />
+                classifyBMI(<span class="cn">95</span>,
+                <span class="cn">1.75</span>);
+                <span class="cc">// "Obese"</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 13 — BLOCK 2 SECTION
+      ══════════════════════════════════════════ -->
+      <div class="slide bg-indigo" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span> Block 2 · 50 minutes
+          </div>
+          <h1 class="display" style="color: white">Loops & Strings</h1>
+          <p
+            class="body-lg"
+            style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem"
+          >
+            for · while · for...of · string walking
+          </p>
+          <p
+            class="body-md"
+            style="color: rgba(255, 255, 255, 0.55); margin-top: 0.8rem"
+          >
+            7 problems · ~7 minutes each
+          </p>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 14 — P 2.1 SUM TO N
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo" data-slide="14">
+        <div class="slide-label">
+          <span class="snum">14</span> Block 2 · Loops & Strings
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card">
+            <span
+              class="xc-badge"
+              style="background: #e6e9ec; color: var(--indigo)"
+              >Problem 2.1 · for loop</span
+            >
+            <div class="xc-title">Sum from 1 to N</div>
+            <div class="xc-desc">
+              Write <code>sumTo(n)</code> that returns 1 + 2 + 3 + ... + n using
+              a <strong>for loop</strong>. Assume <code>n ≥ 1</code>.
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                2-1-sum-to-n.js
+              </div>
+              <div class="code-body">
+                <span class="cc">// Examples</span><br />
+                sumTo(<span class="cn">5</span>);
+                <span class="cc">// 15 (1+2+3+4+5)</span><br />
+                sumTo(<span class="cn">10</span>); <span class="cc">// 55</span
+                ><br />
+                sumTo(<span class="cn">100</span>);
+                <span class="cc">// 5050</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 15 — P 2.2 LARGEST IN ARRAY
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo bg-subtle" data-slide="15">
+        <div class="slide-label">
+          <span class="snum">15</span> Block 2 · Loops & Strings
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card">
+            <span
+              class="xc-badge"
+              style="background: #e6e9ec; color: var(--indigo)"
+              >Problem 2.2 · for loop on arrays</span
+            >
+            <div class="xc-title">Largest in array</div>
+            <div class="xc-desc">
+              Write <code>findLargest(nums)</code> that returns the largest
+              number in the array. Use a loop — <strong>do not</strong> use
+              <code>Math.max()</code>. Assume the array has at least one number.
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                2-2-largest.js
+              </div>
+              <div class="code-body">
+                <span class="cc">// Examples</span><br />
+                findLargest([<span class="cn">3</span>,
+                <span class="cn">7</span>, <span class="cn">2</span>,
+                <span class="cn">9</span>, <span class="cn">1</span>]);
+                <span class="cc">// 9</span><br />
+                findLargest([-<span class="cn">5</span>, -<span class="cn"
+                  >2</span
+                >, -<span class="cn">10</span>]); <span class="cc">// -2</span
+                ><br />
+                findLargest([<span class="cn">42</span>]);
+                <span class="cc">// 42</span><br />
+                findLargest([<span class="cn">100</span>,
+                <span class="cn">100</span>, <span class="cn">100</span>]);
+                <span class="cc">// 100</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 16 — P 2.3 COUNT VOWELS
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo" data-slide="16">
+        <div class="slide-label">
+          <span class="snum">16</span> Block 2 · Loops & Strings
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card">
+            <span
+              class="xc-badge"
+              style="background: #e6e9ec; color: var(--indigo)"
+              >Problem 2.3 · for...of on strings</span
+            >
+            <div class="xc-title">Count vowels</div>
+            <div class="xc-desc">
+              Write <code>countVowels(str)</code> that returns the number of
+              vowels (a, e, i, o, u) in the string. Case-insensitive.
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                2-3-count-vowels.js
+              </div>
+              <div class="code-body">
+                <span class="cc">// Examples</span><br />
+                countVowels(<span class="cs">"Gelephu"</span>);
+                <span class="cc">// 3 (e, e, u)</span><br />
+                countVowels(<span class="cs">"BHUTAN"</span>);
+                <span class="cc">// 2 (U, A)</span><br />
+                countVowels(<span class="cs">"xyz"</span>);
+                <span class="cc">// 0</span><br />
+                countVowels(<span class="cs">""</span>);
+                <span class="cc">// 0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 17 — P 2.4 REVERSE STRING
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo bg-subtle" data-slide="17">
+        <div class="slide-label">
+          <span class="snum">17</span> Block 2 · Loops & Strings
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card">
+            <span
+              class="xc-badge"
+              style="background: #e6e9ec; color: var(--indigo)"
+              >Problem 2.4 · String building</span
+            >
+            <div class="xc-title">Reverse a string</div>
+            <div class="xc-desc">
+              Write <code>reverseString(str)</code>. Use a loop —
+              <strong>do not</strong> use <code>.reverse()</code> or
+              <code>.split().reverse().join()</code>.
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                2-4-reverse-string.js
+              </div>
+              <div class="code-body">
+                <span class="cc">// Examples</span><br />
+                reverseString(<span class="cs">"hello"</span>);
+                <span class="cc">// "olleh"</span><br />
+                reverseString(<span class="cs">"Bhutan"</span>);
+                <span class="cc">// "natuhB"</span><br />
+                reverseString(<span class="cs">"a"</span>);
+                <span class="cc">// "a"</span><br />
+                reverseString(<span class="cs">""</span>);
+                <span class="cc">// ""</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 18 — P 2.5 MULTIPLICATION TABLE
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo" data-slide="18">
+        <div class="slide-label">
+          <span class="snum">18</span> Block 2 · Loops & Strings
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card">
+            <span
+              class="xc-badge"
+              style="background: #e6e9ec; color: var(--indigo)"
+              >Problem 2.5 · for loop + console</span
+            >
+            <div class="xc-title">Multiplication table</div>
+            <div class="xc-desc">
+              Write <code>printTable(n)</code> that prints the n× table from 1
+              to 10 using <code>console.log</code>.
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                2-5-multiplication-table.js
+              </div>
+              <div class="code-body">
+                <span class="cc">// printTable(7) should print:</span><br />
+                <span class="cc">// 1 × 7 = 7</span><br />
+                <span class="cc">// 2 × 7 = 14</span><br />
+                <span class="cc">// 3 × 7 = 21</span><br />
+                <span class="cc">// ...</span><br />
+                <span class="cc">// 10 × 7 = 70</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 19 — P 2.6 PALINDROME
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo bg-subtle" data-slide="19">
+        <div class="slide-label">
+          <span class="snum">19</span> Block 2 · Loops & Strings
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card">
+            <span
+              class="xc-badge"
+              style="background: #e6e9ec; color: var(--indigo)"
+              >Problem 2.6 · Comparison with loops</span
+            >
+            <div class="xc-title">Palindrome checker</div>
+            <div class="xc-desc">
+              Write <code>isPalindrome(str)</code> that returns
+              <code>true</code> if the string reads the same forwards and
+              backwards. Make it <strong>case-insensitive</strong>.
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                2-6-palindrome.js
+              </div>
+              <div class="code-body">
+                <span class="cc">// Examples</span><br />
+                isPalindrome(<span class="cs">"madam"</span>);
+                <span class="cc">// true</span><br />
+                isPalindrome(<span class="cs">"Racecar"</span>);
+                <span class="cc">// true</span><br />
+                isPalindrome(<span class="cs">"hello"</span>);
+                <span class="cc">// false</span><br />
+                isPalindrome(<span class="cs">"a"</span>);
+                <span class="cc">// true</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 20 — P 2.7 FIZZBUZZ
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo" data-slide="20">
+        <div class="slide-label">
+          <span class="snum">20</span> Block 2 · Loops & Strings
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card">
+            <span
+              class="xc-badge"
+              style="background: #e6e9ec; color: var(--indigo)"
+              >Problem 2.7 · Classic</span
+            >
+            <div class="xc-title">FizzBuzz</div>
+            <div class="xc-desc">
+              Write <code>fizzBuzz(n)</code> that prints numbers from 1 to
+              <code>n</code>, with two rules:<br />
+              • Multiples of 3 → print <code>"Fizz"</code>.<br />
+              • Multiples of 5 → print <code>"Buzz"</code>.<br />
+              • Multiples of both → print <code>"FizzBuzz"</code>.
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                2-7-fizzbuzz.js
+              </div>
+              <div class="code-body">
+                <span class="cc">// fizzBuzz(15) prints:</span><br />
+                <span class="cc">// 1, 2, Fizz, 4, Buzz, Fizz, 7, 8,</span
+                ><br />
+                <span class="cc"
+                  >// Fizz, Buzz, 11, Fizz, 13, 14, FizzBuzz</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 21 — BREAK
+      ══════════════════════════════════════════ -->
+      <div class="slide bg-dark" data-slide="21">
+        <div class="slide-label"><span class="snum">21</span></div>
+        <div
+          class="center"
+          style="
+            gap: 1.6rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          "
+        >
+          <div class="pill pill-white">
+            <span class="pill-dot"></span> Break time
+          </div>
+          <div class="big-emoji" style="font-size: clamp(4rem, 8vw, 6rem)">
+            ☕
+          </div>
+          <h1 class="display" style="color: white">15-minute break</h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.65)">
+            Stretch · hydrate · back at 11:35 AM
+          </p>
+          <div id="break-timer" class="break-timer">15:00</div>
+          <div>
+            <button class="break-btn" onclick="startTimer('break-timer', 15)">
+              ▶ Start
+            </button>
+            <button class="break-btn" onclick="resetTimer('break-timer', 15)">
+              ↻ Reset
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 22 — BLOCK 3 SECTION
+      ══════════════════════════════════════════ -->
+      <div class="slide bg-amber" data-slide="22">
+        <div class="slide-label"><span class="snum">22</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span> Block 3 · 50 minutes
+          </div>
+          <h1 class="display" style="color: white">Objects & Arrays</h1>
+          <p
+            class="body-lg"
+            style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem"
+          >
+            Build · read · update · search · JSON
+          </p>
+          <p
+            class="body-md"
+            style="color: rgba(255, 255, 255, 0.55); margin-top: 0.8rem"
+          >
+            6 problems · ~8 minutes each
+          </p>
+        </div>
+        <div class="section-num" style="color: white">03</div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 23 — P 3.1 BUILD TRAINEE
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-amber" data-slide="23">
+        <div class="slide-label">
+          <span class="snum">23</span> Block 3 · Objects & Arrays
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card">
+            <span class="xc-badge" style="background: #ebf0f7; color: #1c5b8c"
+              >Problem 3.1 · Add / update / delete</span
+            >
+            <div class="xc-title">Build a trainee</div>
+            <div class="xc-desc">
+              Create an object <code>trainee</code> with keys <code>name</code>,
+              <code>age</code>, <code>city</code>, <code>vertical</code>. Then:
+              (1) update <code>vertical</code> to <code>"Dev"</code>, (2) add a
+              new <code>email</code> property, (3) delete <code>age</code>.
+              Print the final object.
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                3-1-build-trainee.js
+              </div>
+              <div class="code-body">
+                <span class="cc">// Starter</span><br />
+                <span class="ck">const</span> trainee = {<br />
+                &nbsp;&nbsp;name: <span class="cs">"Karma"</span>,<br />
+                &nbsp;&nbsp;age: <span class="cn">24</span>,<br />
+                &nbsp;&nbsp;city: <span class="cs">"Gelephu"</span>,<br />
+                &nbsp;&nbsp;vertical: <span class="cs">"QA"</span><br />
+                };<br /><br />
+                <span class="cc">// Expected final shape:</span><br />
+                <span class="cc">// { name: "Karma", city: "Gelephu",</span
+                ><br />
+                <span class="cc"
+                  >// vertical: "Dev", email: "karma@selisegroup.com" }</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 24 — P 3.2 NESTED
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-amber bg-subtle" data-slide="24">
+        <div class="slide-label">
+          <span class="snum">24</span> Block 3 · Objects & Arrays
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card">
+            <span class="xc-badge" style="background: #ebf0f7; color: #1c5b8c"
+              >Problem 3.2 · Nested access</span
+            >
+            <div class="xc-title">A course with an instructor</div>
+            <div class="xc-desc">
+              Create a <code>course</code> object with <code>title</code>,
+              <code>duration</code>, and a nested <code>instructor</code> object
+              (with <code>name</code> and <code>email</code>). Then print the
+              instructor's email in a template-literal sentence.
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                3-2-nested.js
+              </div>
+              <div class="code-body">
+                <span class="cc">// Expected output:</span><br />
+                <span class="cc"
+                  >// "Contact the instructor (Bhuwan) at
+                  bhuwan@selisegroup.com"</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 25 — P 3.3 CITIES PLAYGROUND
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-amber" data-slide="25">
+        <div class="slide-label">
+          <span class="snum">25</span> Block 3 · Objects & Arrays
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card">
+            <span class="xc-badge" style="background: #ebf0f7; color: #1c5b8c"
+              >Problem 3.3 · Array basics</span
+            >
+            <div class="xc-title">Cities playground</div>
+            <div class="xc-desc">
+              Start with
+              <code>const cities = ["Gelephu", "Thimphu", "Paro"]</code>. Do all
+              four, printing <code>cities</code> after each:<br />
+              (a) add <code>"Punakha"</code> at the end · (b) remove
+              <code>"Thimphu"</code> · (c) find the index of
+              <code>"Paro"</code> · (d) check if <code>"Bumthang"</code> is in
+              the list.
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                3-3-cities.js
+              </div>
+              <div class="code-body">
+                <span class="cc">// Methods you'll need:</span><br />
+                <span class="cc"
+                  >// .push() .splice() .indexOf() .includes()</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 26 — P 3.4 FIND BY NAME
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-amber bg-subtle" data-slide="26">
+        <div class="slide-label">
+          <span class="snum">26</span> Block 3 · Objects & Arrays
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card">
+            <span class="xc-badge" style="background: #ebf0f7; color: #1c5b8c"
+              >Problem 3.4 · .find()</span
+            >
+            <div class="xc-title">Find trainee by name</div>
+            <div class="xc-desc">
+              Given an array of trainee objects, write
+              <code>findByName(trainees, name)</code> that returns the matching
+              object or <code>undefined</code>. Use <code>.find()</code>.
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                3-4-find-by-name.js
+              </div>
+              <div class="code-body">
+                <span class="ck">const</span> trainees = [<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Karma"</span>, vertical:
+                <span class="cs">"Dev"</span> },<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Dorji"</span>, vertical:
+                <span class="cs">"QA"</span> },<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Sonam"</span>, vertical:
+                <span class="cs">"BA"</span> }<br />
+                ];<br /><br />
+                <span class="cc">// Examples</span><br />
+                findByName(trainees, <span class="cs">"Dorji"</span>);
+                <span class="cc">// { name: "Dorji", vertical: "QA" }</span
+                ><br />
+                findByName(trainees, <span class="cs">"Pema"</span>);
+                <span class="cc">// undefined</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 27 — P 3.5 DESCRIBE
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-amber" data-slide="27">
+        <div class="slide-label">
+          <span class="snum">27</span> Block 3 · Objects & Arrays
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card">
+            <span class="xc-badge" style="background: #ebf0f7; color: #1c5b8c"
+              >Problem 3.5 · Destructuring + templates</span
+            >
+            <div class="xc-title">Describe a trainee</div>
+            <div class="xc-desc">
+              Write <code>describe(trainee)</code> that uses
+              <strong>object destructuring</strong> in the parameter to pull out
+              <code>name</code>, <code>age</code>, <code>city</code>, and
+              <code>vertical</code>, then returns a sentence.
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                3-5-describe.js
+              </div>
+              <div class="code-body">
+                <span class="cc">// Example</span><br />
+                describe({<br />
+                &nbsp;&nbsp;name: <span class="cs">"Karma"</span>,<br />
+                &nbsp;&nbsp;age: <span class="cn">25</span>,<br />
+                &nbsp;&nbsp;city: <span class="cs">"Gelephu"</span>,<br />
+                &nbsp;&nbsp;vertical: <span class="cs">"Dev"</span><br />
+                });<br /><br />
+                <span class="cc"
+                  >// → "Karma, 25, from Gelephu, assigned to Dev."</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 28 — P 3.6 METHOD WITH THIS
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-amber bg-subtle" data-slide="28">
+        <div class="slide-label">
+          <span class="snum">28</span> Block 3 · Objects & Arrays
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card">
+            <span class="xc-badge" style="background: #ebf0f7; color: #1c5b8c"
+              >Problem 3.6 · Methods + <code>this</code></span
+            >
+            <div class="xc-title">Trainee introduces themselves</div>
+            <div class="xc-desc">
+              Create an object <code>trainee</code> with:<br />
+              • <code>name</code> (string) ·
+              <code>vertical</code> (string)<br />
+              • a method <code>introduce()</code> that returns a sentence using
+              <code>this.name</code> and <code>this.vertical</code>.<br /><br />
+              Then call <code>trainee.introduce()</code> and print the result.
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                3-6-introduce.js
+              </div>
+              <div class="code-body">
+                <span class="cc">// Expected</span><br />
+                trainee.introduce();<br />
+                <span class="cc">// → "Hi, I'm Karma, training in Dev."</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 29 — BLOCK 4 SECTION
+      ══════════════════════════════════════════ -->
+      <div class="slide bg-green" data-slide="29">
+        <div class="slide-label"><span class="snum">29</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span> Block 4 · 45 minutes
+          </div>
+          <h1 class="display" style="color: white">
+            Array Methods & Destructuring
+          </h1>
+          <p
+            class="body-lg"
+            style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem"
+          >
+            map · filter · reduce · sort · destructuring ·
+            <code style="color: white">?.</code>
+          </p>
+          <p
+            class="body-md"
+            style="color: rgba(255, 255, 255, 0.55); margin-top: 0.8rem"
+          >
+            8 problems · ~5 minutes each
+          </p>
+        </div>
+        <div class="section-num" style="color: white">04</div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 30 — P 4.1 DOUBLE MAP
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-green" data-slide="30">
+        <div class="slide-label">
+          <span class="snum">30</span> Block 4 · Array Methods
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card">
+            <span
+              class="xc-badge"
+              style="background: #f0f7ec; color: var(--green)"
+              >Problem 4.1 · .map()</span
+            >
+            <div class="xc-title">Double every number</div>
+            <div class="xc-desc">
+              Given an array of numbers, return a new array where every value is
+              doubled. Use <code>.map()</code>.
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                4-1-double.js
+              </div>
+              <div class="code-body">
+                <span class="ck">const</span> nums = [<span class="cn">1</span>,
+                <span class="cn">2</span>, <span class="cn">3</span>,
+                <span class="cn">4</span>,
+                <span class="cn">5</span>];<br /><br />
+                <span class="cc">// Expected: [2, 4, 6, 8, 10]</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 31 — P 4.2 FILTER ADULTS
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-green bg-subtle" data-slide="31">
+        <div class="slide-label">
+          <span class="snum">31</span> Block 4 · Array Methods
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card">
+            <span
+              class="xc-badge"
+              style="background: #f0f7ec; color: var(--green)"
+              >Problem 4.2 · .filter()</span
+            >
+            <div class="xc-title">Filter adults (age ≥ 25)</div>
+            <div class="xc-desc">
+              From an array of trainee objects, return only those aged 25 or
+              older.
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                4-2-filter-adults.js
+              </div>
+              <div class="code-body">
+                <span class="ck">const</span> trainees = [<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Karma"</span>, age:
+                <span class="cn">24</span> },<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Dorji"</span>, age:
+                <span class="cn">28</span> },<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Sonam"</span>, age:
+                <span class="cn">22</span> },<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Pema"</span>, age:
+                <span class="cn">31</span> }<br />
+                ];<br /><br />
+                <span class="cc">// Expected: [{Dorji, 28}, {Pema, 31}]</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 32 — P 4.3 TOTAL NU
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-green" data-slide="32">
+        <div class="slide-label">
+          <span class="snum">32</span> Block 4 · Array Methods
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card">
+            <span
+              class="xc-badge"
+              style="background: #f0f7ec; color: var(--green)"
+              >Problem 4.3 · .reduce()</span
+            >
+            <div class="xc-title">Total Ngultrum</div>
+            <div class="xc-desc">
+              Given an array of amounts (in Nu), use <code>.reduce()</code> to
+              compute the total. Write it as <code>sum(amounts)</code>.
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                4-3-total-nu.js
+              </div>
+              <div class="code-body">
+                <span class="cc">// Examples</span><br />
+                sum([<span class="cn">100</span>, <span class="cn">200</span>,
+                <span class="cn">350</span>, <span class="cn">75</span>]);
+                <span class="cc">// 725</span><br />
+                sum([]); <span class="cc">// 0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 33 — P 4.4 NAMES OF DEVS
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-green bg-subtle" data-slide="33">
+        <div class="slide-label">
+          <span class="snum">33</span> Block 4 · Array Methods
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card">
+            <span
+              class="xc-badge"
+              style="background: #f0f7ec; color: var(--green)"
+              >Problem 4.4 · .filter() + .map() chain</span
+            >
+            <div class="xc-title">Names of all Devs</div>
+            <div class="xc-desc">
+              Given an array of trainees, return an array of just the
+              <strong>names</strong> of trainees in the Dev vertical. Chain
+              <code>.filter()</code> and <code>.map()</code> in a single
+              expression.
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                4-4-dev-names.js
+              </div>
+              <div class="code-body">
+                <span class="ck">const</span> trainees = [<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Karma"</span>, vertical:
+                <span class="cs">"Dev"</span> },<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Dorji"</span>, vertical:
+                <span class="cs">"QA"</span> },<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Sonam"</span>, vertical:
+                <span class="cs">"Dev"</span> },<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Pema"</span>, vertical:
+                <span class="cs">"BA"</span> }<br />
+                ];<br /><br />
+                <span class="cc">// Expected: ["Karma", "Sonam"]</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 34 — P 4.5 TOP SCORER
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-green" data-slide="34">
+        <div class="slide-label">
+          <span class="snum">34</span> Block 4 · Array Methods
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card">
+            <span
+              class="xc-badge"
+              style="background: #f0f7ec; color: var(--green)"
+              >Problem 4.5 · .sort()</span
+            >
+            <div class="xc-title">Top scorer</div>
+            <div class="xc-desc">
+              Given an array of <code>{ name, score }</code> objects, return the
+              trainee with the highest score.
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                4-5-top-scorer.js
+              </div>
+              <div class="code-body">
+                <span class="ck">const</span> trainees = [<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Karma"</span>, score:
+                <span class="cn">82</span> },<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Dorji"</span>, score:
+                <span class="cn">91</span> },<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Sonam"</span>, score:
+                <span class="cn">74</span> },<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Pema"</span>, score:
+                <span class="cn">88</span> }<br />
+                ];<br /><br />
+                <span class="cc"
+                  >// Expected: { name: "Dorji", score: 91 }</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 35 — P 4.6 COUNT PER VERTICAL
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-green bg-subtle" data-slide="35">
+        <div class="slide-label">
+          <span class="snum">35</span> Block 4 · Array Methods
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card">
+            <span
+              class="xc-badge"
+              style="background: #f0f7ec; color: var(--green)"
+              >Problem 4.6 · .filter() + .length</span
+            >
+            <div class="xc-title">Count trainees per vertical</div>
+            <div class="xc-desc">
+              Given an array of trainees, count how many are in each vertical
+              (Dev, QA, BA) and print a single line like
+              <code>"Dev: 2, QA: 2, BA: 1"</code>.
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                4-6-count-per-vertical.js
+              </div>
+              <div class="code-body">
+                <span class="ck">const</span> trainees = [<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Karma"</span>, vertical:
+                <span class="cs">"Dev"</span> },<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Dorji"</span>, vertical:
+                <span class="cs">"QA"</span> },<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Sonam"</span>, vertical:
+                <span class="cs">"BA"</span> },<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Pema"</span>, vertical:
+                <span class="cs">"Dev"</span> },<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Tshering"</span>,vertical:
+                <span class="cs">"QA"</span> }<br />
+                ];<br /><br />
+                <span class="cc">// Expected output:</span><br />
+                <span class="cc">// "Dev: 2, QA: 2, BA: 1"</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 36 — P 4.7 SAFE EMAIL ACCESS
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-green" data-slide="36">
+        <div class="slide-label">
+          <span class="snum">36</span> Block 4 · Optional chaining
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card">
+            <span
+              class="xc-badge"
+              style="background: #f0f7ec; color: var(--green)"
+              >Problem 4.7 · Optional chaining <code>?.</code></span
+            >
+            <div class="xc-title">Safe email access</div>
+            <div class="xc-desc">
+              Not every user has a <code>contact</code> field. Write
+              <code>getEmail(user)</code> that returns
+              <code>user.contact.email</code> if it exists, or
+              <code>undefined</code> if <code>contact</code> is missing. Use
+              <code>?.</code> so it doesn't crash.
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                4-7-safe-email.js
+              </div>
+              <div class="code-body">
+                <span class="cc">// Examples</span><br />
+                getEmail({ name: <span class="cs">"Karma"</span>, contact: {
+                email: <span class="cs">"karma@selisegroup.com"</span> } });<br />
+                <span class="cc">// → "karma@selisegroup.com"</span><br /><br />
+                getEmail({ name: <span class="cs">"Dorji"</span> });<br />
+                <span class="cc">// → undefined (no crash)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 37 — P 4.8 SORT NUMBERS ASCENDING
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-green bg-subtle" data-slide="37">
+        <div class="slide-label">
+          <span class="snum">37</span> Block 4 · Array Methods
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card">
+            <span
+              class="xc-badge"
+              style="background: #f0f7ec; color: var(--green)"
+              >Problem 4.8 · .sort() with comparator</span
+            >
+            <div class="xc-title">Sort numbers ascending</div>
+            <div class="xc-desc">
+              Write <code>sortAscending(nums)</code> that returns an array of
+              numbers sorted from smallest to largest. <br />
+              <strong>Heads-up:</strong> the plain <code>.sort()</code> with no
+              arguments sorts numbers as <em>text</em> — so
+              <code>[10, 2, 30]</code> becomes <code>[10, 2, 30]</code>, not
+              <code>[2, 10, 30]</code>. You'll need a comparator.
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                4-8-sort-ascending.js
+              </div>
+              <div class="code-body">
+                <span class="cc">// Examples</span><br />
+                sortAscending([<span class="cn">10</span>,
+                <span class="cn">2</span>, <span class="cn">5</span>,
+                <span class="cn">1</span>, <span class="cn">30</span>]);
+                <span class="cc">// [1, 2, 5, 10, 30]</span><br />
+                sortAscending([-<span class="cn">3</span>, -<span class="cn"
+                  >10</span
+                >, -<span class="cn">1</span>]);
+                <span class="cc">// [-10, -3, -1]</span><br />
+                sortAscending([<span class="cn">7</span>]);
+                <span class="cc">// [7]</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 38 — MINI-CHALLENGE INTRO
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-gradient bg-dark" data-slide="38">
+        <div class="slide-label"><span class="snum">38</span></div>
+        <div
+          class="center"
+          style="
+            gap: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 900px;
+          "
+        >
+          <div class="pill pill-white">
+            <span class="pill-dot"></span> Mini-challenge · 20 minutes
+          </div>
+          <div class="big-emoji">🏆</div>
+          <h1 class="display" style="color: white">Pelsung Top 3</h1>
+          <p
+            class="body-lg"
+            style="
+              color: rgba(255, 255, 255, 0.75);
+              max-width: 720px;
+              text-align: center;
+            "
+          >
+            One last problem — sort, destructuring, template literals, and medal
+            emojis.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 39 — MINI-CHALLENGE SPEC
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-gradient" data-slide="39">
+        <div class="slide-label">
+          <span class="snum">39</span> Mini-challenge · Spec
+        </div>
+        <div
+          class="stack"
+          style="align-items: center; max-width: 960px; width: 100%"
+        >
+          <div class="exercise-card" style="max-width: 880px">
+            <span
+              class="xc-badge"
+              style="background: #ecf2f8; color: var(--purple)"
+              >Challenge · Combine everything</span
+            >
+            <div class="xc-title">Rank the top 3 trainees</div>
+            <div class="xc-desc">
+              You have an array of 10 trainees, each with <code>name</code>,
+              <code>vertical</code>, and a single
+              <code>score</code>.<br /><br />
+              <strong>1.</strong> Sort the trainees by <code>score</code>
+              <strong>descending</strong>.<br />
+              <strong>2.</strong> Print the top 3 using template literals,
+              formatted like:<br />
+              <code>🥇 Yangchen (Dev) — 92</code>
+            </div>
+            <div class="code-block">
+              <div class="code-bar">
+                <span class="cb-dot" style="background: #ff5f57"></span>
+                <span class="cb-dot" style="background: #febc2e"></span>
+                <span class="cb-dot" style="background: #28c840"></span>
+                mini-challenge.js
+              </div>
+              <div class="code-body">
+                <span class="ck">const</span> trainees = [<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Karma"</span>, vertical:
+                <span class="cs">"Dev"</span>, score:
+                <span class="cn">83</span> },<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Dorji"</span>, vertical:
+                <span class="cs">"Dev"</span>, score:
+                <span class="cn">88</span> },<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Sonam"</span>, vertical:
+                <span class="cs">"QA"</span>, score:
+                <span class="cn">77</span> },<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Pema"</span>, vertical:
+                <span class="cs">"BA"</span>, score:
+                <span class="cn">90</span> },<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Tshering"</span>,
+                vertical: <span class="cs">"QA"</span>, score:
+                <span class="cn">75</span> },<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Ugyen"</span>, vertical:
+                <span class="cs">"Dev"</span>, score:
+                <span class="cn">86</span> },<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Tandin"</span>, vertical:
+                <span class="cs">"BA"</span>, score:
+                <span class="cn">82</span> },<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Yangchen"</span>,
+                vertical: <span class="cs">"Dev"</span>, score:
+                <span class="cn">92</span> },<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Kinley"</span>, vertical:
+                <span class="cs">"QA"</span>, score:
+                <span class="cn">72</span> },<br />
+                &nbsp;&nbsp;{ name: <span class="cs">"Choden"</span>, vertical:
+                <span class="cs">"BA"</span>, score:
+                <span class="cn">84</span> }<br />
+                ];<br /><br />
+                <span class="cc">// Expected output:</span><br />
+                <span class="cc">// 🥇 Yangchen (Dev) — 92</span><br />
+                <span class="cc">// 🥈 Pema (BA) — 90</span><br />
+                <span class="cc">// 🥉 Dorji (Dev) — 88</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 40 — WRAP-UP
+      ══════════════════════════════════════════ -->
+      <div class="slide bg-indigo" data-slide="40">
+        <div class="slide-label"><span class="snum">40</span></div>
+        <div
+          class="stack"
+          style="
+            align-items: center;
+            max-width: 900px;
+            width: 100%;
+            color: white;
+          "
+        >
+          <div class="center">
+            <div class="pill pill-white">
+              <span class="pill-dot"></span> Wrap-up
+            </div>
+            <h1 class="display" style="color: white">That's a wrap</h1>
+            <p
+              class="body-lg"
+              style="
+                color: rgba(255, 255, 255, 0.7);
+                margin-top: 0.8rem;
+                max-width: 720px;
+              "
+            >
+              29 problems across 4 hours. You practiced the whole surface of JS
+              Fundamentals I and II.
+            </p>
+          </div>
+          <div class="method-grid" style="margin-top: 1rem">
+            <div
+              class="method-card"
+              style="
+                background: rgba(255, 255, 255, 0.08);
+                border-color: rgba(255, 255, 255, 0.15);
+                color: white;
+              "
+            >
+              <div class="mc-name" style="color: #7dd3fc">
+                Repetition builds speed
+              </div>
+              <div class="mc-desc" style="color: rgba(255, 255, 255, 0.7)">
+                Rewrite any problem you struggled with tonight — from scratch,
+                without looking. That's where fluency comes from.
+              </div>
+            </div>
+            <div
+              class="method-card"
+              style="
+                background: rgba(255, 255, 255, 0.08);
+                border-color: rgba(255, 255, 255, 0.15);
+                color: white;
+              "
+            >
+              <div class="mc-name" style="color: #7dd3fc">
+                Read each other's code
+              </div>
+              <div class="mc-desc" style="color: rgba(255, 255, 255, 0.7)">
+                Compare solutions with a neighbour. Different brains solve the
+                same problem in surprising ways.
+              </div>
+            </div>
+            <div
+              class="method-card"
+              style="
+                background: rgba(255, 255, 255, 0.08);
+                border-color: rgba(255, 255, 255, 0.15);
+                color: white;
+              "
+            >
+              <div class="mc-name" style="color: #7dd3fc">
+                Next: DOM & browser APIs
+              </div>
+              <div class="mc-desc" style="color: rgba(255, 255, 255, 0.7)">
+                We take JavaScript out of the terminal and into the browser —
+                selectors, events, fetch.
+              </div>
+            </div>
+            <div
+              class="method-card"
+              style="
+                background: rgba(255, 255, 255, 0.08);
+                border-color: rgba(255, 255, 255, 0.15);
+                color: white;
+              "
+            >
+              <div class="mc-name" style="color: #7dd3fc">
+                🏠 Take-home challenge
+              </div>
+              <div class="mc-desc" style="color: rgba(255, 255, 255, 0.7)">
+                Pelsung Leaderboard — the full version with score averaging is
+                in your notes. Try it tonight.
+              </div>
+            </div>
+          </div>
+          <p
+            class="body-md"
+            style="color: rgba(255, 255, 255, 0.5); margin-top: 1.6rem"
+          >
+            Thank you 🙏
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- /#deck -->
+
+    <!-- ===== CONTROLS ===== -->
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 40</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">
+      ⛶
+    </button>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      let current = 0;
+
+      function goTo(n) {
+        slides[current].classList.remove("active");
+        slides[current].classList.add("exit");
+        const old = current;
+        setTimeout(() => slides[old].classList.remove("exit"), 380);
+        current = Math.max(0, Math.min(n, total - 1));
+        slides[current].classList.add("active");
+        document.getElementById("slide-counter").textContent =
+          `${current + 1} / ${total}`;
+        document.getElementById("progress").style.width =
+          `${((current + 1) / total) * 100}%`;
+        initReveal(slides[current]);
+      }
+
+      function nextSlide() {
+        if (current < total - 1) goTo(current + 1);
+      }
+      function prevSlide() {
+        if (current > 0) goTo(current - 1);
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight" || e.key === " ") {
+          e.preventDefault();
+          handleForward();
+        }
+        if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          prevSlide();
+        }
+        if (e.key === "f" || e.key === "F") toggleFullscreen();
+      });
+
+      document.getElementById("deck").addEventListener("click", function (e) {
+        if (
+          e.target.closest(
+            "button, a, input, select, textarea, .agenda-row, [data-noclick]",
+          )
+        )
+          return;
+        const pct = e.clientX / window.innerWidth;
+        if (pct < 0.15) prevSlide();
+        else if (pct > 0.85) handleForward();
+      });
+
+      function handleForward() {
+        const active = slides[current];
+        const list = active.querySelector(".reveal-list");
+        if (list) {
+          const hidden = list.querySelectorAll("li:not(.shown)");
+          if (hidden.length > 0) {
+            hidden[0].classList.add("shown");
+            const hint = active.querySelector(".reveal-hint");
+            if (hint && hidden.length === 1) hint.style.opacity = "0";
+            return;
+          }
+        }
+        nextSlide();
+      }
+
+      function initReveal(slide) {
+        const list = slide.querySelector(".reveal-list");
+        if (!list) return;
+        list
+          .querySelectorAll("li")
+          .forEach((li) => li.classList.remove("shown"));
+        const hint = slide.querySelector(".reveal-hint");
+        if (hint) hint.style.opacity = "1";
+      }
+
+      slides[0].classList.add("active");
+      document.getElementById("progress").style.width = `${(1 / total) * 100}%`;
+
+      function toggleFullscreen() {
+        if (!document.fullscreenElement)
+          document.documentElement.requestFullscreen().catch(() => {});
+        else document.exitFullscreen().catch(() => {});
+      }
+
+      /* ============================ TIMERS ============================ */
+      const timerState = {};
+      function startTimer(id, minutes) {
+        if (timerState[id]?.interval) return;
+        if (!timerState[id]) timerState[id] = { remaining: minutes * 60 };
+        timerState[id].interval = setInterval(() => {
+          timerState[id].remaining--;
+          const el = document.getElementById(id);
+          if (!el) return;
+          if (timerState[id].remaining <= 0) {
+            clearInterval(timerState[id].interval);
+            timerState[id].interval = null;
+            el.textContent = "00:00";
+            el.style.color = "#ff5f56";
+            return;
+          }
+          const m = Math.floor(timerState[id].remaining / 60)
+            .toString()
+            .padStart(2, "0");
+          const s = (timerState[id].remaining % 60).toString().padStart(2, "0");
+          el.textContent = `${m}:${s}`;
+          if (timerState[id].remaining <= 60) el.style.color = "#febc2e";
+        }, 1000);
+      }
+      function resetTimer(id, minutes) {
+        if (timerState[id]?.interval) {
+          clearInterval(timerState[id].interval);
+          timerState[id].interval = null;
+        }
+        timerState[id] = { remaining: minutes * 60 };
+        const el = document.getElementById(id);
+        if (el) {
+          el.textContent = minutes.toString().padStart(2, "0") + ":00";
+          el.style.color = "";
+        }
+      }
+    </script>
+  </body>
+</html>

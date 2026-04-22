@@ -1,0 +1,1841 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="robots"
+      content="noindex, nofollow, noarchive, nosnippet, noimageindex"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Class Notes: JavaScript Practice Day</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --blue: #0066b2;
+        --indigo: #001f35;
+        --amber: #247ec1;
+        --green: #7bc950;
+        --purple: #4796d1;
+        --red: #d80032;
+        --text: #1b2021;
+        --muted: #7b7c7f;
+        --faint: #9ca3af;
+        --surf: #ffffff;
+        --bg: #f9f9f9;
+        --border: #ededed;
+        --border-l: #f5f5f5;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Open Sans", "Aptos", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+        line-height: 1.65;
+        font-size: 17px;
+      }
+      @media (max-width: 640px) {
+        body {
+          font-size: 16px;
+        }
+      }
+
+      .hero {
+        background: var(--surf);
+        border-bottom: 1px solid var(--border);
+        padding: 4rem 2rem 3rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(135deg, #0067a3, #002d72);
+      }
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 100px;
+        padding: 0.35rem 1rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--muted);
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        margin-bottom: 1.5rem;
+      }
+      .hero-badge .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--amber);
+      }
+      .hero h1 {
+        font-family: "Bahnschrift", "Segoe UI", sans-serif;
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        line-height: 1.15;
+        margin-bottom: 0.75rem;
+      }
+      .hero h1 .c-blue {
+        color: var(--blue);
+      }
+      .hero h1 .c-indigo {
+        color: var(--indigo);
+      }
+      .hero-sub {
+        font-size: 1rem;
+        color: var(--muted);
+        margin-bottom: 2rem;
+        max-width: 640px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .hero-tags {
+        display: flex;
+        justify-content: center;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+      }
+      .hero-tag {
+        padding: 0.3rem 0.9rem;
+        border-radius: 8px;
+        font-size: 0.78rem;
+        font-weight: 600;
+      }
+      .tag-blue {
+        background: #e6f0f8;
+        color: var(--blue);
+      }
+      .tag-indigo {
+        background: #e6e9ec;
+        color: var(--indigo);
+      }
+      .tag-green {
+        background: #f0f7ec;
+        color: var(--green);
+      }
+      .tag-amber {
+        background: #ebf0f7;
+        color: #1c5b8c;
+      }
+      .tag-purple {
+        background: #ecf2f8;
+        color: var(--purple);
+      }
+
+      .container {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 0 2rem 6rem;
+      }
+
+      .toc {
+        background: var(--surf);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.75rem 2rem;
+        margin: 2.5rem 0;
+      }
+      .toc h3 {
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--faint);
+        margin-bottom: 1.25rem;
+      }
+      .toc-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.4rem 2rem;
+      }
+      .toc-item {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-size: 0.875rem;
+        color: var(--muted);
+        text-decoration: none;
+        padding: 0.3rem 0;
+        border-bottom: 1px solid var(--border-l);
+        transition: color 0.15s;
+      }
+      .toc-item:hover {
+        color: var(--indigo);
+      }
+      .toc-item .toc-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .toc-item .toc-meta {
+        margin-left: auto;
+        font-size: 0.75rem;
+        color: var(--faint);
+        font-family: "Courier New", monospace;
+      }
+
+      .section-hd {
+        padding: 3.5rem 0 1.5rem;
+      }
+      .section-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.3rem 0.9rem;
+        border-radius: 100px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 0.6rem;
+      }
+      .pill-blue {
+        background: #e6f0f8;
+        color: var(--blue);
+      }
+      .pill-indigo {
+        background: #e6e9ec;
+        color: var(--indigo);
+      }
+      .pill-green {
+        background: #f0f7ec;
+        color: var(--green);
+      }
+      .pill-amber {
+        background: #ebf0f7;
+        color: #1c5b8c;
+      }
+      .pill-purple {
+        background: #ecf2f8;
+        color: var(--purple);
+      }
+      .section-title {
+        font-family: "Bahnschrift", "Segoe UI", sans-serif;
+        font-size: 2rem;
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+        margin-bottom: 0.4rem;
+      }
+      .section-desc {
+        font-size: 0.95rem;
+        color: var(--muted);
+        max-width: 62ch;
+      }
+
+      .problem {
+        background: var(--surf);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.6rem 1.9rem;
+        margin-bottom: 1.1rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .problem::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 4px;
+        border-radius: 4px 0 0 4px;
+      }
+      .problem-blue::before {
+        background: var(--blue);
+      }
+      .problem-indigo::before {
+        background: var(--indigo);
+      }
+      .problem-amber::before {
+        background: var(--amber);
+      }
+      .problem-green::before {
+        background: var(--green);
+      }
+      .problem-purple::before {
+        background: var(--purple);
+      }
+
+      .problem-hd {
+        display: flex;
+        align-items: baseline;
+        gap: 0.8rem;
+        margin-bottom: 0.4rem;
+        flex-wrap: wrap;
+      }
+      .problem-num {
+        font-family: "Courier New", monospace;
+        font-weight: 700;
+        font-size: 0.8rem;
+        color: var(--muted);
+        background: var(--bg);
+        padding: 0.15rem 0.5rem;
+        border-radius: 5px;
+      }
+      .problem-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        flex: 1;
+        min-width: 0;
+      }
+      .problem-tag {
+        font-size: 0.72rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        padding: 0.2rem 0.6rem;
+        border-radius: 4px;
+      }
+      .problem-desc {
+        font-size: 0.95rem;
+        color: var(--muted);
+        line-height: 1.6;
+        margin-bottom: 1rem;
+      }
+      .problem-desc strong {
+        color: var(--text);
+      }
+      .problem-desc code {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        padding: 1px 6px;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+        font-size: 0.88em;
+      }
+
+      .code-block {
+        background: #001f35;
+        border-radius: 10px;
+        overflow: hidden;
+        font-family: "Courier New", monospace;
+      }
+      .code-bar {
+        background: #0a2a45;
+        padding: 7px 12px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-family: "Open Sans", sans-serif;
+        font-size: 0.7rem;
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .code-bar .cb-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+      }
+      .code-body {
+        padding: 0.9rem 1.15rem;
+        font-size: 0.8rem;
+        line-height: 1.8;
+        color: rgba(255, 255, 255, 0.85);
+      }
+      .code-body .ck {
+        color: #7dd3fc;
+      }
+      .code-body .cs {
+        color: #86efac;
+      }
+      .code-body .cn {
+        color: #fde68a;
+      }
+      .code-body .cc {
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .code-body .cp {
+        color: #c4b5fd;
+      }
+
+      .setup {
+        background: var(--surf);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.6rem 1.9rem;
+        margin-bottom: 2rem;
+      }
+      .setup h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 0.9rem;
+      }
+      .setup ol {
+        padding-left: 1.4rem;
+      }
+      .setup li {
+        font-size: 0.95rem;
+        color: var(--muted);
+        line-height: 1.6;
+        margin-bottom: 0.4rem;
+      }
+      .setup li strong {
+        color: var(--text);
+      }
+      .setup code {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        padding: 1px 6px;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+        font-size: 0.9em;
+        color: var(--blue);
+      }
+
+      .schedule-card {
+        background: var(--surf);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1rem 1.2rem;
+        margin-bottom: 0.6rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .sc-time {
+        font-family: "Courier New", monospace;
+        font-weight: 700;
+        font-size: 0.85rem;
+        color: var(--muted);
+        background: var(--bg);
+        padding: 0.3rem 0.6rem;
+        border-radius: 6px;
+        min-width: 120px;
+        text-align: center;
+      }
+      .sc-label {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--text);
+        flex: 1;
+      }
+      .sc-dur {
+        font-size: 0.8rem;
+        color: var(--faint);
+        font-family: "Courier New", monospace;
+      }
+
+      .challenge {
+        background: linear-gradient(135deg, var(--indigo) 0%, #000d19 100%);
+        color: white;
+        border-radius: 20px;
+        padding: 2.5rem;
+        margin: 3rem 0;
+      }
+      .challenge .c-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 100px;
+        padding: 0.25rem 0.8rem;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+      }
+      .challenge h2 {
+        font-family: "Bahnschrift", "Segoe UI", sans-serif;
+        font-size: 1.8rem;
+        font-weight: 400;
+        margin-bottom: 0.6rem;
+      }
+      .challenge p {
+        font-size: 0.95rem;
+        opacity: 0.8;
+        margin-bottom: 1rem;
+        line-height: 1.6;
+      }
+      .challenge p strong {
+        color: white;
+        opacity: 1;
+      }
+      .challenge code {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 1px 6px;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+        font-size: 0.9em;
+      }
+
+      .footer {
+        background: var(--surf);
+        border-top: 1px solid var(--border);
+        padding: 2rem;
+        text-align: center;
+        font-size: 0.78rem;
+        color: var(--faint);
+      }
+      .footer strong {
+        color: var(--muted);
+      }
+
+      @media (max-width: 720px) {
+        .hero {
+          padding: 2.5rem 1rem 1.75rem !important;
+        }
+        .hero h1 {
+          font-size: clamp(1.7rem, 7vw, 2.2rem) !important;
+        }
+        .container {
+          padding: 0 1rem 4rem !important;
+        }
+        .toc-grid {
+          grid-template-columns: 1fr !important;
+        }
+        .section-title {
+          font-size: 1.5rem !important;
+        }
+        .schedule-card {
+          flex-wrap: wrap;
+        }
+        .sc-time {
+          min-width: 90px;
+          font-size: 0.78rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ===== HERO ===== -->
+    <div class="hero">
+      <img
+        src="../assets/SELISE_Logo_Primary.png"
+        alt="SELISE Digital Platforms"
+        style="height: 48px; margin-bottom: 1rem; display: block"
+      />
+      <div class="hero-badge">
+        <div class="dot"></div>
+        Pelsung · Dev Specialization
+      </div>
+      <h1>
+        <span class="c-blue">JavaScript</span>
+        <span class="c-indigo">Practice Day</span>
+      </h1>
+      <p class="hero-sub">
+        Class 03b · 29 coding problems across 4 hours, exercising everything you
+        learned in JS Fundamentals I &amp; II.
+      </p>
+      <div class="hero-tags">
+        <span class="hero-tag tag-blue">Warm-up</span>
+        <span class="hero-tag tag-indigo">Loops &amp; Strings</span>
+        <span class="hero-tag tag-amber">Objects &amp; Arrays</span>
+        <span class="hero-tag tag-green">Array Methods</span>
+        <span class="hero-tag tag-purple">Mini-challenge</span>
+      </div>
+    </div>
+
+    <!-- ===== MAIN ===== -->
+    <div class="container">
+      <!-- ===== TOC ===== -->
+      <div class="toc">
+        <h3>What's In These Notes</h3>
+        <div class="toc-grid">
+          <a class="toc-item" href="#setup">
+            <span class="toc-dot" style="background: var(--muted)"></span>
+            ⚙️ Setup — VS Code + Node
+          </a>
+          <a class="toc-item" href="#schedule">
+            <span class="toc-dot" style="background: var(--faint)"></span>
+            🗓️ Schedule
+          </a>
+          <a class="toc-item" href="#block1">
+            <span class="toc-dot" style="background: var(--blue)"></span>
+            🧱 Block 1 — Warm-up
+            <span class="toc-meta">8 problems</span>
+          </a>
+          <a class="toc-item" href="#block2">
+            <span class="toc-dot" style="background: var(--indigo)"></span>
+            🔁 Block 2 — Loops &amp; Strings
+            <span class="toc-meta">7 problems</span>
+          </a>
+          <a class="toc-item" href="#block3">
+            <span class="toc-dot" style="background: var(--amber)"></span>
+            📦 Block 3 — Objects &amp; Arrays
+            <span class="toc-meta">6 problems</span>
+          </a>
+          <a class="toc-item" href="#block4">
+            <span class="toc-dot" style="background: var(--green)"></span>
+            ⚡ Block 4 — Array Methods
+            <span class="toc-meta">8 problems</span>
+          </a>
+          <a class="toc-item" href="#challenge">
+            <span class="toc-dot" style="background: var(--purple)"></span>
+            🏆 Mini-challenge
+          </a>
+          <a class="toc-item" href="#takehome">
+            <span class="toc-dot" style="background: var(--indigo)"></span>
+            🏠 Take-home challenge
+          </a>
+        </div>
+      </div>
+
+      <!-- ===== SETUP ===== -->
+      <div class="section-hd" id="setup">
+        <div class="section-pill pill-blue">Setup</div>
+        <h2 class="section-title">Before you start</h2>
+        <p class="section-desc">
+          You'll run every problem in VS Code with Node.js. No browser, no HTML
+          — just JavaScript and the terminal.
+        </p>
+      </div>
+      <div class="setup">
+        <ol>
+          <li>
+            Create a new folder called <code>js-practice</code> and open it in
+            VS Code.
+          </li>
+          <li>
+            For each problem, create a new file (e.g.
+            <code>1-1-even-or-odd.js</code>). Keeping one file per problem makes
+            it easy to come back later.
+          </li>
+          <li>
+            Open the integrated terminal (<strong>View → Terminal</strong> or
+            <code>Ctrl + `</code>).
+          </li>
+          <li>Run your file with <code>node 1-1-even-or-odd.js</code>.</li>
+          <li>
+            Use <code>console.log(...)</code> to print. Always test your
+            function with a few inputs before moving on.
+          </li>
+          <li>
+            <strong>Stuck for more than 10 minutes?</strong> Raise a hand. Don't
+            burn a whole block on one problem.
+          </li>
+        </ol>
+      </div>
+
+      <!-- ===== SCHEDULE ===== -->
+      <div class="section-hd" id="schedule">
+        <div class="section-pill pill-indigo">Schedule</div>
+        <h2 class="section-title">How the day flows</h2>
+      </div>
+      <div class="schedule-card">
+        <div class="sc-time">9:30 – 9:40</div>
+        <div class="sc-label">
+          ⚙️ Setup &amp; warm-up of the dev environment
+        </div>
+        <div class="sc-dur">10 min</div>
+      </div>
+      <div class="schedule-card">
+        <div class="sc-time">9:40 – 10:30</div>
+        <div class="sc-label">
+          🧱 Block 1 — Warm-up (variables, types, if/else, functions)
+        </div>
+        <div class="sc-dur">50 min</div>
+      </div>
+      <div class="schedule-card">
+        <div class="sc-time">10:30 – 11:20</div>
+        <div class="sc-label">🔁 Block 2 — Loops &amp; strings</div>
+        <div class="sc-dur">50 min</div>
+      </div>
+      <div class="schedule-card">
+        <div class="sc-time">11:20 – 11:35</div>
+        <div class="sc-label">☕ Break</div>
+        <div class="sc-dur">15 min</div>
+      </div>
+      <div class="schedule-card">
+        <div class="sc-time">11:35 – 12:25</div>
+        <div class="sc-label">📦 Block 3 — Objects &amp; arrays</div>
+        <div class="sc-dur">50 min</div>
+      </div>
+      <div class="schedule-card">
+        <div class="sc-time">12:25 – 1:10</div>
+        <div class="sc-label">
+          ⚡ Block 4 — Array methods &amp; destructuring
+        </div>
+        <div class="sc-dur">45 min</div>
+      </div>
+      <div class="schedule-card">
+        <div class="sc-time">1:10 – 1:30</div>
+        <div class="sc-label">🏆 Mini-challenge — Pelsung Leaderboard</div>
+        <div class="sc-dur">20 min</div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════
+       BLOCK 1 — WARM-UP
+  ═══════════════════════════════════════════ -->
+      <div class="section-hd" id="block1">
+        <div class="section-pill pill-blue">Block 01 · 50 min</div>
+        <h2 class="section-title">Warm-up</h2>
+        <p class="section-desc">
+          Dust off variables, types, comparison and logical operators, if /
+          else, the ternary, and all three function forms.
+        </p>
+      </div>
+
+      <div class="problem problem-blue">
+        <div class="problem-hd">
+          <span class="problem-num">1.1</span>
+          <span class="problem-title">Even or odd</span>
+          <span class="problem-tag tag-blue">ternary</span>
+        </div>
+        <p class="problem-desc">
+          Write a function <code>isEven(n)</code> that returns
+          <strong>true</strong> if <code>n</code> is even and
+          <strong>false</strong> otherwise. Use the ternary operator in your
+          solution.
+        </p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >1-1-even-or-odd.js
+          </div>
+          <div class="code-body">
+            <span class="cc">// Examples</span><br />
+            isEven(<span class="cn">4</span>); <span class="cc">// true</span
+            ><br />
+            isEven(<span class="cn">7</span>); <span class="cc">// false</span
+            ><br />
+            isEven(<span class="cn">0</span>); <span class="cc">// true</span
+            ><br />
+            isEven(-<span class="cn">3</span>); <span class="cc">// false</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="problem problem-blue">
+        <div class="problem-hd">
+          <span class="problem-num">1.2</span>
+          <span class="problem-title">Grade classifier</span>
+          <span class="problem-tag tag-blue">if / else if</span>
+        </div>
+        <p class="problem-desc">
+          Write <code>getGrade(score)</code> that returns a letter grade.
+          <strong>90+ → A</strong> · <strong>75–89 → B</strong> ·
+          <strong>60–74 → C</strong> · <strong>below 60 → F</strong>. Assume
+          valid scores from 0 to 100.
+        </p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >1-2-grade.js
+          </div>
+          <div class="code-body">
+            <span class="cc">// Examples</span><br />
+            getGrade(<span class="cn">95</span>); <span class="cc">// "A"</span
+            ><br />
+            getGrade(<span class="cn">78</span>); <span class="cc">// "B"</span
+            ><br />
+            getGrade(<span class="cn">60</span>); <span class="cc">// "C"</span
+            ><br />
+            getGrade(<span class="cn">45</span>); <span class="cc">// "F"</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="problem problem-blue">
+        <div class="problem-hd">
+          <span class="problem-num">1.3</span>
+          <span class="problem-title">Leap year</span>
+          <span class="problem-tag tag-blue">&amp;&amp; · ||</span>
+        </div>
+        <p class="problem-desc">
+          Write <code>isLeapYear(year)</code> that returns <code>true</code> for
+          leap years (years with an extra day, like Feb 29). Check these rules
+          <strong>in order</strong>:
+        </p>
+        <p class="problem-desc" style="margin-top: -0.5rem">
+          <strong>1.</strong> If divisible by <strong>400</strong> → leap
+          year<br />
+          <strong>2.</strong> Else if divisible by <strong>100</strong> → not a
+          leap year<br />
+          <strong>3.</strong> Else if divisible by <strong>4</strong> → leap
+          year<br />
+          <strong>4.</strong> Else → not a leap year
+        </p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >1-3-leap-year.js
+          </div>
+          <div class="code-body">
+            <span class="cc">// Examples</span><br />
+            isLeapYear(<span class="cn">2024</span>);
+            <span class="cc">// true (÷4, not ÷100)</span><br />
+            isLeapYear(<span class="cn">2023</span>);
+            <span class="cc">// false (not ÷4)</span><br />
+            isLeapYear(<span class="cn">1900</span>);
+            <span class="cc">// false (÷100 but not ÷400)</span><br />
+            isLeapYear(<span class="cn">2000</span>);
+            <span class="cc">// true (÷400)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="problem problem-blue">
+        <div class="problem-hd">
+          <span class="problem-num">1.4</span>
+          <span class="problem-title">Greeting by time of day</span>
+          <span class="problem-tag tag-blue">template literal</span>
+        </div>
+        <p class="problem-desc">
+          Write <code>greet(name, hour)</code>. Before 12 →
+          <em>"Good morning"</em>. 12–17 → <em>"Good afternoon"</em>. 18 and
+          later → <em>"Good evening"</em>. Include the name.
+        </p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >1-4-greeting.js
+          </div>
+          <div class="code-body">
+            <span class="cc">// Examples</span><br />
+            greet(<span class="cs">"Karma"</span>, <span class="cn">9</span>);
+            <span class="cc">// "Good morning, Karma!"</span><br />
+            greet(<span class="cs">"Dorji"</span>, <span class="cn">14</span>);
+            <span class="cc">// "Good afternoon, Dorji!"</span><br />
+            greet(<span class="cs">"Sonam"</span>, <span class="cn">20</span>);
+            <span class="cc">// "Good evening, Sonam!"</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="problem problem-blue">
+        <div class="problem-hd">
+          <span class="problem-num">1.5</span>
+          <span class="problem-title">Celsius ↔ Fahrenheit</span>
+          <span class="problem-tag tag-blue">arrow fns</span>
+        </div>
+        <p class="problem-desc">
+          Write two <strong>arrow functions</strong>: <code>cToF(c)</code> and
+          <code>fToC(f)</code>. Formulas: <code>F = C × 9/5 + 32</code> and
+          <code>C = (F − 32) × 5/9</code>.
+        </p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >1-5-temperature.js
+          </div>
+          <div class="code-body">
+            <span class="cc">// Examples</span><br />
+            cToF(<span class="cn">0</span>); <span class="cc">// 32</span><br />
+            cToF(<span class="cn">100</span>); <span class="cc">// 212</span
+            ><br />
+            fToC(<span class="cn">32</span>); <span class="cc">// 0</span><br />
+            fToC(<span class="cn">212</span>); <span class="cc">// 100</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="problem problem-blue">
+        <div class="problem-hd">
+          <span class="problem-num">1.6</span>
+          <span class="problem-title">Bill splitter</span>
+          <span class="problem-tag tag-blue">functions + math</span>
+        </div>
+        <p class="problem-desc">
+          You're out for dinner with friends. Write
+          <code>splitBill(total, people, tipPercent)</code> that returns the
+          amount <strong>each person</strong> should pay, including the tip. The
+          tip is a percentage of the bill.
+        </p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >1-6-bill-splitter.js
+          </div>
+          <div class="code-body">
+            <span class="cc">// Examples</span><br />
+            splitBill(<span class="cn">1000</span>, <span class="cn">4</span>,
+            <span class="cn">10</span>);
+            <span class="cc">// 275 (1000 + 10% = 1100, ÷4)</span><br />
+            splitBill(<span class="cn">500</span>, <span class="cn">2</span>,
+            <span class="cn">10</span>); <span class="cc">// 275</span><br />
+            splitBill(<span class="cn">1200</span>, <span class="cn">3</span>,
+            <span class="cn">15</span>); <span class="cc">// 460</span><br />
+            splitBill(<span class="cn">600</span>, <span class="cn">5</span>,
+            <span class="cn">0</span>); <span class="cc">// 120 (no tip)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="problem problem-blue">
+        <div class="problem-hd">
+          <span class="problem-num">1.7</span>
+          <span class="problem-title">Unit-price comparator</span>
+          <span class="problem-tag tag-blue">comparison</span>
+        </div>
+        <p class="problem-desc">
+          Write <code>cheaperPerUnit(priceA, qtyA, priceB, qtyB)</code>. Return
+          <code>"A"</code> if A is cheaper per unit, <code>"B"</code> if B is,
+          or <code>"same"</code> if they're equal.
+        </p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >1-7-unit-price.js
+          </div>
+          <div class="code-body">
+            <span class="cc">// Examples</span><br />
+            cheaperPerUnit(<span class="cn">100</span>,
+            <span class="cn">2</span>, <span class="cn">120</span>,
+            <span class="cn">3</span>); <span class="cc">// "B" (50 vs 40)</span
+            ><br />
+            cheaperPerUnit(<span class="cn">60</span>,
+            <span class="cn">3</span>, <span class="cn">100</span>,
+            <span class="cn">4</span>); <span class="cc">// "A" (20 vs 25)</span
+            ><br />
+            cheaperPerUnit(<span class="cn">50</span>,
+            <span class="cn">1</span>, <span class="cn">100</span>,
+            <span class="cn">2</span>); <span class="cc">// "same"</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="problem problem-blue">
+        <div class="problem-hd">
+          <span class="problem-num">1.8</span>
+          <span class="problem-title">BMI classifier</span>
+          <span class="problem-tag tag-blue">math + if</span>
+        </div>
+        <p class="problem-desc">
+          Write <code>classifyBMI(weightKg, heightM)</code> that computes BMI
+          (<code>weight / height²</code>) and returns one of:
+          <strong>"Underweight"</strong> (&lt; 18.5) ·
+          <strong>"Normal"</strong> (18.5–24.9) ·
+          <strong>"Overweight"</strong> (25.0–29.9) ·
+          <strong>"Obese"</strong> (≥ 30).
+        </p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span>1-8-bmi.js
+          </div>
+          <div class="code-body">
+            <span class="cc">// Examples</span><br />
+            classifyBMI(<span class="cn">55</span>,
+            <span class="cn">1.70</span>);
+            <span class="cc">// "Normal" (19.03)</span><br />
+            classifyBMI(<span class="cn">50</span>,
+            <span class="cn">1.75</span>);
+            <span class="cc">// "Underweight"</span><br />
+            classifyBMI(<span class="cn">95</span>,
+            <span class="cn">1.75</span>); <span class="cc">// "Obese"</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════
+       BLOCK 2 — LOOPS & STRINGS
+  ═══════════════════════════════════════════ -->
+      <div class="section-hd" id="block2">
+        <div class="section-pill pill-indigo">Block 02 · 50 min</div>
+        <h2 class="section-title">Loops &amp; Strings</h2>
+        <p class="section-desc">
+          Walk over numbers and characters with <code>for</code>,
+          <code>while</code>, and <code>for...of</code>. Build and compare
+          strings.
+        </p>
+      </div>
+
+      <div class="problem problem-indigo">
+        <div class="problem-hd">
+          <span class="problem-num">2.1</span>
+          <span class="problem-title">Sum from 1 to N</span>
+          <span class="problem-tag tag-indigo">for loop</span>
+        </div>
+        <p class="problem-desc">
+          Write <code>sumTo(n)</code> that returns
+          <code>1 + 2 + ... + n</code> using a for loop. Assume
+          <code>n ≥ 1</code>.
+        </p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >2-1-sum-to-n.js
+          </div>
+          <div class="code-body">
+            sumTo(<span class="cn">5</span>); <span class="cc">// 15</span
+            ><br />
+            sumTo(<span class="cn">10</span>); <span class="cc">// 55</span
+            ><br />
+            sumTo(<span class="cn">100</span>); <span class="cc">// 5050</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="problem problem-indigo">
+        <div class="problem-hd">
+          <span class="problem-num">2.2</span>
+          <span class="problem-title">Largest in array</span>
+          <span class="problem-tag tag-indigo">for loop on arrays</span>
+        </div>
+        <p class="problem-desc">
+          Write <code>findLargest(nums)</code> that returns the largest number
+          in the array. Use a loop — do <strong>not</strong> use
+          <code>Math.max()</code>. Assume the array has at least one number.
+        </p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >2-2-largest.js
+          </div>
+          <div class="code-body">
+            findLargest([<span class="cn">3</span>, <span class="cn">7</span>,
+            <span class="cn">2</span>, <span class="cn">9</span>,
+            <span class="cn">1</span>]); <span class="cc">// 9</span><br />
+            findLargest([-<span class="cn">5</span>, -<span class="cn">2</span>,
+            -<span class="cn">10</span>]); <span class="cc">// -2</span><br />
+            findLargest([<span class="cn">42</span>]);
+            <span class="cc">// 42</span><br />
+            findLargest([<span class="cn">100</span>,
+            <span class="cn">100</span>, <span class="cn">100</span>]);
+            <span class="cc">// 100</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="problem problem-indigo">
+        <div class="problem-hd">
+          <span class="problem-num">2.3</span>
+          <span class="problem-title">Count vowels</span>
+          <span class="problem-tag tag-indigo">for...of</span>
+        </div>
+        <p class="problem-desc">
+          Write <code>countVowels(str)</code> that counts
+          <strong>a, e, i, o, u</strong> in the string. Case-insensitive.
+        </p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >2-3-count-vowels.js
+          </div>
+          <div class="code-body">
+            countVowels(<span class="cs">"Gelephu"</span>);
+            <span class="cc">// 3</span><br />
+            countVowels(<span class="cs">"BHUTAN"</span>);
+            <span class="cc">// 2</span><br />
+            countVowels(<span class="cs">"xyz"</span>);
+            <span class="cc">// 0</span><br />
+            countVowels(<span class="cs">""</span>);
+            <span class="cc">// 0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="problem problem-indigo">
+        <div class="problem-hd">
+          <span class="problem-num">2.4</span>
+          <span class="problem-title">Reverse a string</span>
+          <span class="problem-tag tag-indigo">loop + concat</span>
+        </div>
+        <p class="problem-desc">
+          Write <code>reverseString(str)</code>. Use a loop — do
+          <strong>not</strong> use <code>.reverse()</code> or
+          <code>.split().reverse().join()</code>.
+        </p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >2-4-reverse-string.js
+          </div>
+          <div class="code-body">
+            reverseString(<span class="cs">"hello"</span>);
+            <span class="cc">// "olleh"</span><br />
+            reverseString(<span class="cs">"Bhutan"</span>);
+            <span class="cc">// "natuhB"</span><br />
+            reverseString(<span class="cs">"a"</span>);
+            <span class="cc">// "a"</span><br />
+            reverseString(<span class="cs">""</span>);
+            <span class="cc">// ""</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="problem problem-indigo">
+        <div class="problem-hd">
+          <span class="problem-num">2.5</span>
+          <span class="problem-title">Multiplication table</span>
+          <span class="problem-tag tag-indigo">for + console</span>
+        </div>
+        <p class="problem-desc">
+          Write <code>printTable(n)</code> that prints the
+          <strong>n×</strong> table from 1 to 10 with <code>console.log</code>.
+        </p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >2-5-multiplication-table.js
+          </div>
+          <div class="code-body">
+            <span class="cc">// printTable(7) prints:</span><br />
+            <span class="cc">// 1 × 7 = 7</span><br />
+            <span class="cc">// 2 × 7 = 14</span><br />
+            <span class="cc">// ...</span><br />
+            <span class="cc">// 10 × 7 = 70</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="problem problem-indigo">
+        <div class="problem-hd">
+          <span class="problem-num">2.6</span>
+          <span class="problem-title">Palindrome checker</span>
+          <span class="problem-tag tag-indigo">loop + compare</span>
+        </div>
+        <p class="problem-desc">
+          Write <code>isPalindrome(str)</code> that returns <code>true</code> if
+          the string reads the same forwards and backwards. Make it
+          <strong>case-insensitive</strong>.
+        </p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >2-6-palindrome.js
+          </div>
+          <div class="code-body">
+            isPalindrome(<span class="cs">"madam"</span>);
+            <span class="cc">// true</span><br />
+            isPalindrome(<span class="cs">"Racecar"</span>);
+            <span class="cc">// true</span><br />
+            isPalindrome(<span class="cs">"hello"</span>);
+            <span class="cc">// false</span><br />
+            isPalindrome(<span class="cs">"a"</span>);
+            <span class="cc">// true</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="problem problem-indigo">
+        <div class="problem-hd">
+          <span class="problem-num">2.7</span>
+          <span class="problem-title">FizzBuzz</span>
+          <span class="problem-tag tag-indigo">classic</span>
+        </div>
+        <p class="problem-desc">
+          Write <code>fizzBuzz(n)</code> that prints 1 to <code>n</code>,
+          replacing: multiples of 3 with <code>"Fizz"</code>, multiples of 5
+          with <code>"Buzz"</code>, and multiples of both with
+          <code>"FizzBuzz"</code>.
+        </p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >2-7-fizzbuzz.js
+          </div>
+          <div class="code-body">
+            <span class="cc">// fizzBuzz(15) prints:</span><br />
+            <span class="cc">// 1, 2, Fizz, 4, Buzz, Fizz, 7, 8,</span><br />
+            <span class="cc">// Fizz, Buzz, 11, Fizz, 13, 14, FizzBuzz</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════
+       BLOCK 3 — OBJECTS & ARRAYS
+  ═══════════════════════════════════════════ -->
+      <div class="section-hd" id="block3">
+        <div class="section-pill pill-amber">Block 03 · 50 min</div>
+        <h2 class="section-title">Objects &amp; Arrays</h2>
+        <p class="section-desc">
+          Build objects, read nested data, modify arrays with
+          <code>push</code>/<code>splice</code>/<code>indexOf</code>, and parse
+          JSON.
+        </p>
+      </div>
+
+      <div class="problem problem-amber">
+        <div class="problem-hd">
+          <span class="problem-num">3.1</span>
+          <span class="problem-title">Build a trainee</span>
+          <span class="problem-tag tag-amber">add / update / delete</span>
+        </div>
+        <p class="problem-desc">
+          Create an object <code>trainee</code> with keys <code>name</code>,
+          <code>age</code>, <code>city</code>, <code>vertical</code>. Then: (1)
+          update <code>vertical</code> to <code>"Dev"</code>, (2) add a new
+          <code>email</code>, (3) delete <code>age</code>. Print the final
+          object.
+        </p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >3-1-build-trainee.js
+          </div>
+          <div class="code-body">
+            <span class="ck">const</span> trainee = {<br />
+            &nbsp;&nbsp;name: <span class="cs">"Karma"</span>, age:
+            <span class="cn">24</span>,<br />
+            &nbsp;&nbsp;city: <span class="cs">"Gelephu"</span>, vertical:
+            <span class="cs">"QA"</span><br />
+            };<br /><br />
+            <span class="cc">// Expected final:</span><br />
+            <span class="cc">// { name: "Karma", city: "Gelephu",</span><br />
+            <span class="cc"
+              >// vertical: "Dev", email: "karma@selisegroup.com" }</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="problem problem-amber">
+        <div class="problem-hd">
+          <span class="problem-num">3.2</span>
+          <span class="problem-title">A course with an instructor</span>
+          <span class="problem-tag tag-amber">nested</span>
+        </div>
+        <p class="problem-desc">
+          Create a <code>course</code> object with <code>title</code>,
+          <code>duration</code>, and a nested <code>instructor</code> object
+          (with <code>name</code>, <code>email</code>). Print a sentence that
+          pulls data from both levels.
+        </p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >3-2-nested.js
+          </div>
+          <div class="code-body">
+            <span class="cc">// Expected output (exact format up to you):</span
+            ><br />
+            <span class="cc"
+              >// "Contact the instructor (Bhuwan) at
+              bhuwan@selisegroup.com"</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="problem problem-amber">
+        <div class="problem-hd">
+          <span class="problem-num">3.3</span>
+          <span class="problem-title">Cities playground</span>
+          <span class="problem-tag tag-amber">array basics</span>
+        </div>
+        <p class="problem-desc">
+          Start with <code>const cities = ["Gelephu", "Thimphu", "Paro"]</code>.
+          Do each of the following and print <code>cities</code> (or the result)
+          after each step:<br />
+          <strong>(a)</strong> add <code>"Punakha"</code> at the end ·
+          <strong>(b)</strong> remove <code>"Thimphu"</code> ·
+          <strong>(c)</strong> find the index of <code>"Paro"</code> ·
+          <strong>(d)</strong> check if <code>"Bumthang"</code> is in the list.
+        </p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >3-3-cities.js
+          </div>
+          <div class="code-body">
+            <span class="cc">// Methods you'll need:</span><br />
+            <span class="cc">// .push() .splice() .indexOf() .includes()</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="problem problem-amber">
+        <div class="problem-hd">
+          <span class="problem-num">3.4</span>
+          <span class="problem-title">Find trainee by name</span>
+          <span class="problem-tag tag-amber">.find()</span>
+        </div>
+        <p class="problem-desc">
+          Write <code>findByName(trainees, name)</code> that returns the
+          matching trainee object, or <code>undefined</code> if nobody matches.
+        </p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >3-4-find-by-name.js
+          </div>
+          <div class="code-body">
+            <span class="ck">const</span> trainees = [<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Karma"</span>, vertical:
+            <span class="cs">"Dev"</span> },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Dorji"</span>, vertical:
+            <span class="cs">"QA"</span> },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Sonam"</span>, vertical:
+            <span class="cs">"BA"</span> }<br />
+            ];<br /><br />
+            findByName(trainees, <span class="cs">"Dorji"</span>);
+            <span class="cc">// { name: "Dorji", vertical: "QA" }</span><br />
+            findByName(trainees, <span class="cs">"Pema"</span>);
+            <span class="cc">// undefined</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="problem problem-amber">
+        <div class="problem-hd">
+          <span class="problem-num">3.5</span>
+          <span class="problem-title">Describe a trainee</span>
+          <span class="problem-tag tag-amber">destructuring</span>
+        </div>
+        <p class="problem-desc">
+          Write <code>describe(trainee)</code> that uses
+          <strong>object destructuring in the parameter</strong> to pull out
+          <code>name</code>, <code>age</code>, <code>city</code>,
+          <code>vertical</code>, then returns a single sentence.
+        </p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >3-5-describe.js
+          </div>
+          <div class="code-body">
+            describe({ name: <span class="cs">"Karma"</span>, age:
+            <span class="cn">25</span>,<br />
+            &nbsp;&nbsp;city: <span class="cs">"Gelephu"</span>, vertical:
+            <span class="cs">"Dev"</span> });<br />
+            <span class="cc"
+              >// → "Karma, 25, from Gelephu, assigned to Dev."</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="problem problem-amber">
+        <div class="problem-hd">
+          <span class="problem-num">3.6</span>
+          <span class="problem-title">Trainee introduces themselves</span>
+          <span class="problem-tag tag-amber">methods + this</span>
+        </div>
+        <p class="problem-desc">
+          Create an object <code>trainee</code> with <code>name</code>,
+          <code>vertical</code>, and a method <code>introduce()</code> that
+          returns a sentence using <code>this.name</code> and
+          <code>this.vertical</code>. Then call the method and print the result.
+        </p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >3-6-introduce.js
+          </div>
+          <div class="code-body">
+            <span class="cc">// Expected</span><br />
+            trainee.introduce();<br />
+            <span class="cc">// → "Hi, I'm Karma, training in Dev."</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════
+       BLOCK 4 — ARRAY METHODS & DESTRUCTURING
+  ═══════════════════════════════════════════ -->
+      <div class="section-hd" id="block4">
+        <div class="section-pill pill-green">Block 04 · 45 min</div>
+        <h2 class="section-title">Array Methods &amp; Destructuring</h2>
+        <p class="section-desc">
+          The five you'll use every day — <code>map</code>, <code>filter</code>,
+          <code>reduce</code>, <code>find</code>, <code>sort</code> — plus
+          optional chaining and spread.
+        </p>
+      </div>
+
+      <div class="problem problem-green">
+        <div class="problem-hd">
+          <span class="problem-num">4.1</span>
+          <span class="problem-title">Double every number</span>
+          <span class="problem-tag tag-green">.map()</span>
+        </div>
+        <p class="problem-desc">
+          Given an array of numbers, return a new array where each value is
+          doubled. Use <code>.map()</code>.
+        </p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >4-1-double.js
+          </div>
+          <div class="code-body">
+            <span class="ck">const</span> nums = [<span class="cn">1</span>,
+            <span class="cn">2</span>, <span class="cn">3</span>,
+            <span class="cn">4</span>, <span class="cn">5</span>];<br />
+            <span class="cc">// Expected: [2, 4, 6, 8, 10]</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="problem problem-green">
+        <div class="problem-hd">
+          <span class="problem-num">4.2</span>
+          <span class="problem-title">Filter adults (age ≥ 25)</span>
+          <span class="problem-tag tag-green">.filter()</span>
+        </div>
+        <p class="problem-desc">
+          From an array of trainee objects, return only those aged 25 or older.
+        </p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >4-2-filter-adults.js
+          </div>
+          <div class="code-body">
+            <span class="ck">const</span> trainees = [<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Karma"</span>, age:
+            <span class="cn">24</span> },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Dorji"</span>, age:
+            <span class="cn">28</span> },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Sonam"</span>, age:
+            <span class="cn">22</span> },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Pema"</span>, age:
+            <span class="cn">31</span> }<br />
+            ];<br />
+            <span class="cc">// Expected: [{Dorji, 28}, {Pema, 31}]</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="problem problem-green">
+        <div class="problem-hd">
+          <span class="problem-num">4.3</span>
+          <span class="problem-title">Total Ngultrum</span>
+          <span class="problem-tag tag-green">.reduce()</span>
+        </div>
+        <p class="problem-desc">
+          Write <code>sum(amounts)</code> that adds up an array of numbers using
+          <code>.reduce()</code>.
+        </p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >4-3-total-nu.js
+          </div>
+          <div class="code-body">
+            sum([<span class="cn">100</span>, <span class="cn">200</span>,
+            <span class="cn">350</span>, <span class="cn">75</span>]);
+            <span class="cc">// 725</span><br />
+            sum([]); <span class="cc">// 0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="problem problem-green">
+        <div class="problem-hd">
+          <span class="problem-num">4.4</span>
+          <span class="problem-title">Names of all Devs</span>
+          <span class="problem-tag tag-green">.filter() + .map()</span>
+        </div>
+        <p class="problem-desc">
+          Given an array of trainees, return an array of just the
+          <strong>names</strong> of trainees in the Dev vertical. Chain
+          <code>.filter()</code> and <code>.map()</code> in a single expression.
+        </p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >4-4-dev-names.js
+          </div>
+          <div class="code-body">
+            <span class="ck">const</span> trainees = [<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Karma"</span>, vertical:
+            <span class="cs">"Dev"</span> },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Dorji"</span>, vertical:
+            <span class="cs">"QA"</span> },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Sonam"</span>, vertical:
+            <span class="cs">"Dev"</span> },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Pema"</span>, vertical:
+            <span class="cs">"BA"</span> }<br />
+            ];<br />
+            <span class="cc">// Expected: ["Karma", "Sonam"]</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="problem problem-green">
+        <div class="problem-hd">
+          <span class="problem-num">4.5</span>
+          <span class="problem-title">Top scorer</span>
+          <span class="problem-tag tag-green">.sort()</span>
+        </div>
+        <p class="problem-desc">
+          From an array of <code>{ name, score }</code> objects, return the
+          trainee with the highest score.
+        </p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >4-5-top-scorer.js
+          </div>
+          <div class="code-body">
+            <span class="ck">const</span> trainees = [<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Karma"</span>, score:
+            <span class="cn">82</span> },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Dorji"</span>, score:
+            <span class="cn">91</span> },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Sonam"</span>, score:
+            <span class="cn">74</span> },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Pema"</span>, score:
+            <span class="cn">88</span> }<br />
+            ];<br />
+            <span class="cc">// Expected: { name: "Dorji", score: 91 }</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="problem problem-green">
+        <div class="problem-hd">
+          <span class="problem-num">4.6</span>
+          <span class="problem-title">Count trainees per vertical</span>
+          <span class="problem-tag tag-green">.filter() + .length</span>
+        </div>
+        <p class="problem-desc">
+          Given an array of trainees, count how many are in each vertical (Dev,
+          QA, BA) and print a single line like
+          <code>"Dev: 2, QA: 2, BA: 1"</code>.
+        </p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >4-6-count-per-vertical.js
+          </div>
+          <div class="code-body">
+            <span class="ck">const</span> trainees = [<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Karma"</span>, vertical:
+            <span class="cs">"Dev"</span> },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Dorji"</span>, vertical:
+            <span class="cs">"QA"</span> },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Sonam"</span>, vertical:
+            <span class="cs">"BA"</span> },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Pema"</span>, vertical:
+            <span class="cs">"Dev"</span> },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Tshering"</span>, vertical:
+            <span class="cs">"QA"</span> }<br />
+            ];<br />
+            <span class="cc">// Expected output:</span><br />
+            <span class="cc">// "Dev: 2, QA: 2, BA: 1"</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="problem problem-green">
+        <div class="problem-hd">
+          <span class="problem-num">4.7</span>
+          <span class="problem-title">Safe email access</span>
+          <span class="problem-tag tag-green">optional chaining</span>
+        </div>
+        <p class="problem-desc">
+          Not every user has a <code>contact</code> field. Write
+          <code>getEmail(user)</code> that returns
+          <code>user.contact.email</code> if it exists, or
+          <code>undefined</code> if <code>contact</code> is missing. Use
+          <code>?.</code> so it doesn't crash.
+        </p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >4-7-safe-email.js
+          </div>
+          <div class="code-body">
+            getEmail({ name: <span class="cs">"Karma"</span>, contact: { email:
+            <span class="cs">"karma@selisegroup.com"</span> } });<br />
+            <span class="cc">// → "karma@selisegroup.com"</span><br /><br />
+            getEmail({ name: <span class="cs">"Dorji"</span> });<br />
+            <span class="cc">// → undefined (no crash)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="problem problem-green">
+        <div class="problem-hd">
+          <span class="problem-num">4.8</span>
+          <span class="problem-title">Sort numbers ascending</span>
+          <span class="problem-tag tag-green">.sort() + comparator</span>
+        </div>
+        <p class="problem-desc">
+          Write <code>sortAscending(nums)</code> that returns an array of
+          numbers sorted from smallest to largest.<br /><br />
+          <strong>Heads-up:</strong> the plain <code>.sort()</code> with no
+          arguments sorts numbers as <em>text</em> — so
+          <code>[10, 2, 30]</code> becomes <code>[10, 2, 30]</code> (treated as
+          <code>"10", "2", "30"</code>), not <code>[2, 10, 30]</code>. You'll
+          need to pass a comparator function.
+        </p>
+        <div class="code-block">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >4-8-sort-ascending.js
+          </div>
+          <div class="code-body">
+            sortAscending([<span class="cn">10</span>,
+            <span class="cn">2</span>, <span class="cn">5</span>,
+            <span class="cn">1</span>, <span class="cn">30</span>]);
+            <span class="cc">// [1, 2, 5, 10, 30]</span><br />
+            sortAscending([-<span class="cn">3</span>, -<span class="cn"
+              >10</span
+            >, -<span class="cn">1</span>]);
+            <span class="cc">// [-10, -3, -1]</span><br />
+            sortAscending([<span class="cn">7</span>]);
+            <span class="cc">// [7]</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════
+       MINI-CHALLENGE
+  ═══════════════════════════════════════════ -->
+      <div class="section-hd" id="challenge">
+        <div class="section-pill pill-purple">Mini-Challenge · 20 min</div>
+        <h2 class="section-title">Pelsung Top 3</h2>
+        <p class="section-desc">
+          The last problem of the day — sort, destructuring, template literals,
+          medal emojis.
+        </p>
+      </div>
+
+      <div class="challenge">
+        <div class="c-badge">🏆 Combine everything</div>
+        <h2>Rank the top 3 trainees</h2>
+        <p>
+          You have an array of 10 trainees, each with <code>name</code>,
+          <code>vertical</code>, and a single <code>score</code>. Your job:
+        </p>
+        <p>
+          <strong>1.</strong> Sort the trainees by <code>score</code>
+          <strong>descending</strong>.<br />
+          <strong>2.</strong> Print the top 3 using template literals, formatted
+          like:<br />
+          <code style="margin-top: 0.4rem; display: inline-block"
+            >🥇 Yangchen (Dev) — 92</code
+          ><br />
+          <code style="display: inline-block">🥈 Pema (BA) — 90</code><br />
+          <code style="display: inline-block">🥉 Dorji (Dev) — 88</code>
+        </p>
+        <div class="code-block" style="margin-top: 1.2rem">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >mini-challenge.js
+          </div>
+          <div class="code-body">
+            <span class="ck">const</span> trainees = [<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Karma"</span>, vertical:
+            <span class="cs">"Dev"</span>, score:
+            <span class="cn">83</span> },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Dorji"</span>, vertical:
+            <span class="cs">"Dev"</span>, score:
+            <span class="cn">88</span> },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Sonam"</span>, vertical:
+            <span class="cs">"QA"</span>, score:
+            <span class="cn">77</span> },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Pema"</span>, vertical:
+            <span class="cs">"BA"</span>, score:
+            <span class="cn">90</span> },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Tshering"</span>, vertical:
+            <span class="cs">"QA"</span>, score:
+            <span class="cn">75</span> },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Ugyen"</span>, vertical:
+            <span class="cs">"Dev"</span>, score:
+            <span class="cn">86</span> },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Tandin"</span>, vertical:
+            <span class="cs">"BA"</span>, score:
+            <span class="cn">82</span> },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Yangchen"</span>, vertical:
+            <span class="cs">"Dev"</span>, score:
+            <span class="cn">92</span> },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Kinley"</span>, vertical:
+            <span class="cs">"QA"</span>, score:
+            <span class="cn">72</span> },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Choden"</span>, vertical:
+            <span class="cs">"BA"</span>, score:
+            <span class="cn">84</span> }<br />
+            ];
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════
+       TAKE-HOME CHALLENGE
+  ═══════════════════════════════════════════ -->
+      <div class="section-hd" id="takehome">
+        <div class="section-pill pill-indigo">Take-home · Stretch</div>
+        <h2 class="section-title">Pelsung Leaderboard</h2>
+        <p class="section-desc">
+          A harder version of the mini-challenge — try this one at home tonight.
+          Each trainee has an array of 5 scores; you compute the average before
+          ranking.
+        </p>
+      </div>
+
+      <div
+        class="challenge"
+        style="background: linear-gradient(135deg, #0067a3 0%, #002d72 100%)"
+      >
+        <div class="c-badge">🏠 Take-home</div>
+        <h2>Rank the top 3 by average score</h2>
+        <p>
+          Same idea as the mini-challenge, but now each trainee has
+          <code>scores</code> — an array of 5 numbers. You need to compute the
+          average first, then rank.
+        </p>
+        <p>
+          <strong>1.</strong> Write <code>getLeaderboard(trainees)</code> that
+          returns a new array of <code>{ name, vertical, average }</code>,
+          sorted by average <strong>descending</strong>.<br />
+          <strong>2.</strong> Print the top 3, formatted like:<br />
+          <code style="margin-top: 0.4rem; display: inline-block"
+            >🥇 Yangchen (Dev) — 92.2</code
+          ><br />
+          <code style="display: inline-block">🥈 Pema (BA) — 89.8</code><br />
+          <code style="display: inline-block">🥉 Dorji (Dev) — 88.4</code>
+        </p>
+        <p>
+          <strong>Tip:</strong> use a <code>for</code> loop to sum the 5 scores,
+          and <code>.toFixed(1)</code> to format the average to 1 decimal place.
+        </p>
+        <div class="code-block" style="margin-top: 1.2rem">
+          <div class="code-bar">
+            <span class="cb-dot" style="background: #ff5f57"></span
+            ><span class="cb-dot" style="background: #febc2e"></span
+            ><span class="cb-dot" style="background: #28c840"></span
+            >take-home-leaderboard.js
+          </div>
+          <div class="code-body">
+            <span class="ck">const</span> trainees = [<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Karma"</span>, vertical:
+            <span class="cs">"Dev"</span>, scores: [<span class="cn">82</span
+            >,<span class="cn">78</span>,<span class="cn">90</span>,<span
+              class="cn"
+              >85</span
+            >,<span class="cn">80</span>] },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Dorji"</span>, vertical:
+            <span class="cs">"Dev"</span>, scores: [<span class="cn">91</span
+            >,<span class="cn">88</span>,<span class="cn">85</span>,<span
+              class="cn"
+              >90</span
+            >,<span class="cn">88</span>] },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Sonam"</span>, vertical:
+            <span class="cs">"QA"</span>, scores: [<span class="cn">75</span
+            >,<span class="cn">80</span>,<span class="cn">72</span>,<span
+              class="cn"
+              >78</span
+            >,<span class="cn">81</span>] },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Pema"</span>, vertical:
+            <span class="cs">"BA"</span>, scores: [<span class="cn">88</span
+            >,<span class="cn">92</span>,<span class="cn">85</span>,<span
+              class="cn"
+              >90</span
+            >,<span class="cn">94</span>] },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Tshering"</span>, vertical:
+            <span class="cs">"QA"</span>, scores: [<span class="cn">70</span
+            >,<span class="cn">75</span>,<span class="cn">80</span>,<span
+              class="cn"
+              >72</span
+            >,<span class="cn">78</span>] },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Ugyen"</span>, vertical:
+            <span class="cs">"Dev"</span>, scores: [<span class="cn">85</span
+            >,<span class="cn">82</span>,<span class="cn">88</span>,<span
+              class="cn"
+              >90</span
+            >,<span class="cn">86</span>] },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Tandin"</span>, vertical:
+            <span class="cs">"BA"</span>, scores: [<span class="cn">78</span
+            >,<span class="cn">82</span>,<span class="cn">80</span>,<span
+              class="cn"
+              >85</span
+            >,<span class="cn">83</span>] },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Yangchen"</span>, vertical:
+            <span class="cs">"Dev"</span>, scores: [<span class="cn">92</span
+            >,<span class="cn">95</span>,<span class="cn">90</span>,<span
+              class="cn"
+              >93</span
+            >,<span class="cn">91</span>] },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Kinley"</span>, vertical:
+            <span class="cs">"QA"</span>, scores: [<span class="cn">68</span
+            >,<span class="cn">72</span>,<span class="cn">75</span>,<span
+              class="cn"
+              >70</span
+            >,<span class="cn">74</span>] },<br />
+            &nbsp;&nbsp;{ name: <span class="cs">"Choden"</span>, vertical:
+            <span class="cs">"BA"</span>, scores: [<span class="cn">80</span
+            >,<span class="cn">85</span>,<span class="cn">82</span>,<span
+              class="cn"
+              >88</span
+            >,<span class="cn">84</span>] }<br />
+            ];
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <div class="footer">
+      <strong>SELISE × Pelsung</strong> · Dev Specialization · Class 03b ·
+      JavaScript Practice Day
+    </div>
+  </body>
+</html>
