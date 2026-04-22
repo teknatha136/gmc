@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DOM Live Demo — GMC Attendance</title>
+    <style>
+      :root {
+        --blue: #0066b2;
+        --indigo: #001f35;
+        --green: #7bc950;
+        --red: #d80032;
+        --bg: #f9f9f9;
+        --border: #ededed;
+        --muted: #7b7c7f;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Open Sans", "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: var(--indigo);
+        padding: 2rem 1rem;
+        line-height: 1.5;
+      }
+      .app {
+        max-width: 560px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 14px;
+        padding: 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+      }
+      h1 {
+        color: var(--blue);
+        font-size: 1.75rem;
+        margin-bottom: 0.25rem;
+      }
+      .count {
+        color: var(--muted);
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+      }
+      .form-row {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1.25rem;
+      }
+      input {
+        flex: 1;
+        padding: 0.6rem 0.85rem;
+        font-size: 1rem;
+        border: 1.5px solid var(--border);
+        border-radius: 8px;
+        font-family: inherit;
+      }
+      input:focus {
+        outline: none;
+        border-color: var(--blue);
+      }
+      button {
+        padding: 0.6rem 1.1rem;
+        background: var(--blue);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        font-weight: 600;
+        font-family: inherit;
+      }
+      button:hover {
+        opacity: 0.9;
+      }
+      button.secondary {
+        background: white;
+        color: var(--muted);
+        border: 1.5px solid var(--border);
+      }
+      ul {
+        list-style: none;
+        margin-bottom: 1rem;
+      }
+      li {
+        padding: 0.75rem 1rem;
+        background: var(--bg);
+        margin-bottom: 0.5rem;
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        border: 1.5px solid transparent;
+        transition: all 0.15s;
+      }
+      li:hover {
+        border-color: var(--blue);
+      }
+      li.present {
+        background: #f0f7ec;
+        color: #2a4d14;
+        text-decoration: line-through;
+        border-color: #b5dba7;
+      }
+      li button {
+        background: transparent;
+        color: var(--red);
+        font-size: 1rem;
+        padding: 0.25rem 0.5rem;
+        font-weight: 700;
+      }
+      .empty {
+        color: var(--muted);
+        font-style: italic;
+        text-align: center;
+        padding: 1rem;
+      }
+      .hint {
+        font-size: 0.8rem;
+        color: var(--muted);
+        margin-top: 1rem;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <h1>GMC Attendance</h1>
+      <p class="count" id="count">0 trainees</p>
+
+      <div class="form-row">
+        <input type="text" class="name" placeholder="Trainee name…" />
+        <button id="add">Add</button>
+      </div>
+
+      <ul id="list">
+        <li class="empty" id="empty">No trainees yet — add one above.</li>
+      </ul>
+
+      <button class="secondary" id="clear">Clear all</button>
+
+      <p class="hint">Click a name to mark present · ✕ to remove</p>
+    </div>
+
+    <script>
+      // ── 1. SELECT elements we'll use ────────────────────────────
+      const input = document.querySelector(".name");
+      const addBtn = document.querySelector("#add");
+      const clearBtn = document.querySelector("#clear");
+      const list = document.querySelector("#list");
+      const count = document.querySelector("#count");
+      const emptyMsg = document.querySelector("#empty");
+
+      // ── 2. Helper: keep the count in sync ───────────────────────
+      function updateCount() {
+        const items = list.querySelectorAll("li:not(.empty)");
+        const n = items.length;
+        count.textContent = n + " trainee" + (n === 1 ? "" : "s");
+        emptyMsg.style.display = n === 0 ? "block" : "none";
+      }
+
+      // ── 3. ADD a trainee ────────────────────────────────────────
+      function addTrainee(name) {
+        if (!name) return;
+
+        // Create the <li> and set its text
+        const li = document.createElement("li");
+        li.textContent = name;
+
+        // Click the name to toggle a "present" class
+        li.addEventListener("click", () => {
+          li.classList.toggle("present");
+        });
+
+        // Add a remove button inside the <li>
+        const remove = document.createElement("button");
+        remove.textContent = "✕";
+        remove.addEventListener("click", (e) => {
+          e.stopPropagation(); // don't also fire the <li> click
+          li.remove(); // take it off the page
+          updateCount();
+        });
+        li.appendChild(remove);
+
+        // Put the <li> on the page
+        list.appendChild(li);
+        updateCount();
+      }
+
+      // ── 4. Wire up the "Add" button ─────────────────────────────
+      addBtn.addEventListener("click", () => {
+        addTrainee(input.value.trim());
+        input.value = "";
+        input.focus();
+      });
+
+      // Pressing Enter in the input also adds
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") addBtn.click();
+      });
+
+      // ── 5. Wire up the "Clear all" button ───────────────────────
+      clearBtn.addEventListener("click", () => {
+        if (!confirm("Clear everyone?")) return;
+        list.querySelectorAll("li:not(.empty)").forEach((li) => li.remove());
+        updateCount();
+      });
+
+      // Start with a clean count
+      updateCount();
+    </script>
+  </body>
+</html>

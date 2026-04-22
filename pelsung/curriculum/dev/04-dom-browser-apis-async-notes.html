@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Class Notes: DOM, Browser APIs & Async</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue:    #0066B2;
+      --indigo:  #001F35;
+      --amber:   #247EC1;
+      --green:   #7BC950;
+      --purple:  #4796D1;
+      --red:     #D80032;
+      --text:    #1B2021;
+      --muted:   #7B7C7F;
+      --faint:   #9CA3AF;
+      --surf:    #ffffff;
+      --bg:      #F9F9F9;
+      --border:  #EDEDED;
+      --border-l:#F5F5F5;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Open Sans', 'Aptos', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.65;
+      font-size: 17px;
+    }
+    @media (max-width: 640px) { body { font-size: 16px; } }
+
+    .hero {
+      background: var(--surf);
+      border-bottom: 1px solid var(--border);
+      padding: 4rem 2rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 5px;
+      background: linear-gradient(135deg, #0067A3, #002D72);
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 0.35rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); }
+    .hero h1 {
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero h1 .c-blue   { color: var(--blue); }
+    .hero h1 .c-indigo { color: var(--indigo); }
+    .hero h1 .c-amber  { color: #1C5B8C; }
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 2rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero-tags {
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+    .hero-tag {
+      padding: 0.3rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .tag-blue   { background: #E6F0F8; color: var(--blue); }
+    .tag-indigo { background: #E6E9EC; color: var(--indigo); }
+    .tag-green  { background: #F0F7EC; color: var(--green); }
+    .tag-amber  { background: #EBF0F7; color: #1C5B8C; }
+    .tag-purple { background: #ECF2F8; color: var(--purple); }
+
+    .container { max-width: 1040px; margin: 0 auto; padding: 0 2rem 6rem; }
+
+    .toc {
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem 2rem;
+      margin: 2.5rem 0;
+    }
+    .toc h3 {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--faint);
+      margin-bottom: 1.25rem;
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.4rem 2rem;
+    }
+    .toc-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.875rem;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.3rem 0;
+      border-bottom: 1px solid var(--border-l);
+      transition: color 0.15s;
+    }
+    .toc-item:hover { color: var(--indigo); }
+    .toc-item .toc-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+    .section-hd { padding: 3.5rem 0 1.5rem; }
+    .section-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0.9rem;
+      border-radius: 100px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+    .pill-blue   { background: #E6F0F8; color: var(--blue); }
+    .pill-indigo { background: #E6E9EC; color: var(--indigo); }
+    .pill-green  { background: #F0F7EC; color: var(--green); }
+    .pill-amber  { background: #EBF0F7; color: #1C5B8C; }
+    .pill-purple { background: #ECF2F8; color: var(--purple); }
+    .section-title {
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+      font-size: 2rem;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 0.4rem;
+    }
+    .section-desc { font-size: 0.95rem; color: var(--muted); }
+
+    .topic {
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem 2.25rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .topic::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 4px;
+      border-radius: 4px 0 0 4px;
+    }
+    .topic-blue::before   { background: var(--blue); }
+    .topic-indigo::before { background: var(--indigo); }
+    .topic-amber::before  { background: var(--amber); }
+    .topic-green::before  { background: var(--green); }
+    .topic-purple::before { background: var(--purple); }
+    .topic-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .explain {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+    }
+    .explain strong { color: var(--text); }
+
+    .concepts { display: grid; gap: 0.9rem; margin-bottom: 1.25rem; }
+    .concepts-2 { grid-template-columns: repeat(2, 1fr); }
+    .concepts-3 { grid-template-columns: repeat(3, 1fr); }
+    .concept {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.1rem 1.25rem;
+    }
+    .concept h4 {
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .concept ul { list-style: none; display: flex; flex-direction: column; gap: 0.35rem; }
+    .concept ul li {
+      font-size: 0.83rem;
+      color: var(--muted);
+      padding-left: 1rem;
+      position: relative;
+      line-height: 1.5;
+    }
+    .concept ul li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--faint);
+      font-size: 0.72rem;
+      top: 0.15em;
+    }
+
+    .code-block {
+      background: #001F35;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+      font-family: 'Courier New', monospace;
+    }
+    .code-bar {
+      background: #0A2A45;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.4);
+    }
+    .code-bar .cb-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .code-body {
+      padding: 1.1rem 1.25rem;
+      font-size: 0.82rem;
+      line-height: 1.85;
+      color: rgba(255,255,255,0.85);
+      white-space: pre-wrap;
+    }
+    .code-body .ck { color: #7dd3fc; }
+    .code-body .cs { color: #86efac; }
+    .code-body .cn { color: #fde68a; }
+    .code-body .cc { color: rgba(255,255,255,0.35); }
+    .code-body .cp { color: #c4b5fd; }
+    .code-body .cr { color: #fca5a5; }
+    .code-body .ci { color: #f0abfc; }
+
+    code { font-family: 'Courier New', monospace; background: var(--bg); padding: 0.1em 0.35em; border-radius: 4px; font-size: 0.9em; color: var(--indigo); }
+
+    .callout {
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      font-size: 0.85rem;
+      display: flex;
+      gap: 0.6rem;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      line-height: 1.55;
+    }
+    .callout .ci { font-size: 1rem; min-width: 1.2rem; flex-shrink: 0; }
+    .callout-blue  { background: #f0f7fc; border: 1px solid #B0D4E9; color: var(--muted); }
+    .callout-amber { background: #FFF8E6; border: 1px solid #F0D890; color: #664A00; }
+    .callout-red   { background: #F2E8EA; border: 1px solid #E0B5B9; color: #8B001E; }
+    .callout strong { color: var(--text); }
+    .callout-amber strong { color: #664A00; }
+    .callout-red strong { color: #8B001E; }
+
+    .takeaway {
+      background: #F0F7EC;
+      border: 1px solid #B5DBA7;
+      border-radius: 12px;
+      padding: 1.1rem 1.3rem;
+      margin-top: 1.25rem;
+    }
+    .takeaway h4 {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #2A4D14;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 0.6rem;
+    }
+    .takeaway ul { list-style: none; display: flex; flex-direction: column; gap: 0.35rem; }
+    .takeaway ul li {
+      font-size: 0.85rem;
+      color: #3B5A22;
+      padding-left: 1.1rem;
+      position: relative;
+      line-height: 1.55;
+    }
+    .takeaway ul li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--green);
+      font-weight: 700;
+      font-size: 0.9rem;
+      top: 0;
+    }
+
+    .exercise {
+      background: var(--surf);
+      border: 2px dashed var(--border);
+      border-radius: 14px;
+      padding: 1.4rem 1.6rem;
+      margin-bottom: 1.1rem;
+    }
+    .exercise h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+    .exercise h4 .badge {
+      display: inline-block;
+      background: #E6F0F8;
+      color: var(--blue);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.15rem 0.55rem;
+      border-radius: 100px;
+      margin-right: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      vertical-align: middle;
+    }
+    .exercise p { font-size: 0.88rem; color: var(--muted); margin-bottom: 0.7rem; line-height: 1.6; }
+    .exercise ul { padding-left: 1.2rem; margin-bottom: 0.5rem; color: var(--muted); font-size: 0.88rem; line-height: 1.7; }
+
+    .summary {
+      background: linear-gradient(135deg, var(--indigo) 0%, #000D19 100%);
+      color: white;
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin: 3rem 0;
+      text-align: center;
+    }
+    .summary h2 {
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 400;
+      margin-bottom: 0.4rem;
+    }
+    .summary p { font-size: 0.9rem; opacity: 0.75; margin-bottom: 1.75rem; }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.9rem;
+    }
+    .su-card {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 12px;
+      padding: 1.1rem;
+      text-align: left;
+    }
+    .su-card h4 { font-size: 0.88rem; font-weight: 700; margin-bottom: 0.4rem; opacity: 0.9; }
+    .su-card p  { font-size: 0.78rem; opacity: 0.65; line-height: 1.5; margin-bottom: 0; }
+
+    .tree {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.88rem;
+      line-height: 1.9;
+      color: var(--indigo);
+      margin-bottom: 1.25rem;
+    }
+
+    .state-row {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+    .state-pill {
+      padding: 0.35rem 0.9rem;
+      border-radius: 100px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      border: 2px solid;
+    }
+    .sp-pending { background: #FFF8E6; border-color: #F0D890; color: #664A00; }
+    .sp-fulfilled { background: #F0F7EC; border-color: #B5DBA7; color: #2A4D14; }
+    .sp-rejected { background: #F2E8EA; border-color: #E0B5B9; color: #8B001E; }
+
+    .footer {
+      background: var(--surf);
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--faint);
+    }
+    .footer strong { color: var(--muted); }
+
+    @media (max-width: 720px) {
+      .hero { padding: 2.5rem 1rem 1.75rem !important; }
+      .hero h1 { font-size: clamp(1.7rem, 7vw, 2.2rem) !important; }
+      .container { padding: 0 1rem 4rem !important; }
+      .toc-grid { grid-template-columns: 1fr !important; }
+      .concepts-2, .concepts-3, .summary-grid { grid-template-columns: 1fr !important; }
+      .section-title { font-size: 1.5rem !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <img src="../assets/SELISE_Logo_Primary.png" alt="SELISE Digital Platforms" style="height: 48px; margin-bottom: 1rem; display: block; margin-left: auto; margin-right: auto;">
+  <div class="hero-badge">
+    <div class="dot"></div>
+    Pelsung · Dev Specialization · Class 04
+  </div>
+  <h1>
+    <span class="c-blue">DOM</span>, <span class="c-indigo">Browser APIs</span> <span class="c-amber">&amp; Async</span>
+  </h1>
+  <p class="hero-sub">How JavaScript talks to the browser, saves data, calls the network, and waits patiently without freezing your page.</p>
+  <div class="hero-tags">
+    <span class="hero-tag tag-blue">DOM</span>
+    <span class="hero-tag tag-indigo">Events</span>
+    <span class="hero-tag tag-purple">localStorage</span>
+    <span class="hero-tag tag-amber">Promises</span>
+    <span class="hero-tag tag-green">async / await</span>
+    <span class="hero-tag tag-blue">fetch</span>
+  </div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div class="container">
+
+  <!-- ===== TOC ===== -->
+  <div class="toc">
+    <h3>What's In These Notes</h3>
+    <div class="toc-grid">
+      <a class="toc-item" href="#dom">
+        <span class="toc-dot" style="background:var(--blue)"></span>
+        🌳 The DOM — the page as a tree
+      </a>
+      <a class="toc-item" href="#selecting">
+        <span class="toc-dot" style="background:var(--blue)"></span>
+        🎯 Selecting &amp; changing elements
+      </a>
+      <a class="toc-item" href="#events">
+        <span class="toc-dot" style="background:var(--blue)"></span>
+        👂 Event listeners
+      </a>
+      <a class="toc-item" href="#live-demo">
+        <span class="toc-dot" style="background:var(--blue)"></span>
+        🧪 Complete live demo
+      </a>
+      <a class="toc-item" href="#browser-apis">
+        <span class="toc-dot" style="background:var(--indigo)"></span>
+        🧰 Browser APIs — a tour
+      </a>
+      <a class="toc-item" href="#async-why">
+        <span class="toc-dot" style="background:var(--amber)"></span>
+        ⏳ Why async exists
+      </a>
+      <a class="toc-item" href="#promises">
+        <span class="toc-dot" style="background:var(--amber)"></span>
+        🎟️ Promises &amp; async/await
+      </a>
+      <a class="toc-item" href="#fetch">
+        <span class="toc-dot" style="background:var(--amber)"></span>
+        🌐 fetch in practice
+      </a>
+      <a class="toc-item" href="#gotchas">
+        <span class="toc-dot" style="background:var(--red)"></span>
+        ⚠️ Common gotchas
+      </a>
+      <a class="toc-item" href="#exercises">
+        <span class="toc-dot" style="background:var(--green)"></span>
+        💻 Home exercises
+      </a>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 1 — THE DOM
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd" id="dom">
+    <span class="section-pill pill-blue">Section 01</span>
+    <h2 class="section-title">The DOM — <em>Document Object Model</em></h2>
+    <p class="section-desc">The page you see, as an object that JavaScript can touch.</p>
+  </div>
+
+  <div class="topic topic-blue">
+    <h3 class="topic-title">What the DOM is</h3>
+    <p class="explain">
+      When the browser loads your HTML, it reads the text and builds a <strong>tree of objects</strong> in memory. Every tag becomes a "node". JavaScript gets one variable, <code>document</code>, that is the root of this tree.
+    </p>
+    <p class="explain">
+      This tree is <strong>live</strong>. If you change a node in JavaScript, the page on the screen updates right away.
+    </p>
+
+    <div class="concepts concepts-2">
+      <div class="concept">
+        <h4>🌳 HTML (static text)</h4>
+        <ul>
+          <li>What you type in <code>index.html</code></li>
+          <li>Parsed once, when the page loads</li>
+          <li>The browser reads it top to bottom</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4>⚡ DOM (live object)</h4>
+        <ul>
+          <li>Built from the HTML</li>
+          <li>JavaScript reads and changes it</li>
+          <li>The screen reflects it in real time</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tree">
+html<br>
+└── body<br>
+&nbsp;&nbsp;&nbsp;&nbsp;├── h1 → "Gelephu Mindfulness City"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;├── p  → "A new city in Bhutan"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;└── ul<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── li → "Tek Nath"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── li → "Karma"
+    </div>
+
+    <div class="callout callout-blue">
+      <div class="ci">💡</div>
+      <div><strong>The entry point is always <code>document</code>.</strong> Open any page, hit F12, and in the Console try <code>document.title</code> or <code>document.body</code> — you're talking to the DOM.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 2 — SELECTING & CHANGING
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd" id="selecting">
+    <span class="section-pill pill-blue">Section 02</span>
+    <h2 class="section-title">Selecting &amp; changing elements</h2>
+    <p class="section-desc">The four things you'll do on the DOM every day.</p>
+  </div>
+
+  <div class="topic topic-blue">
+    <h3 class="topic-title">🎯 Selecting elements</h3>
+    <p class="explain">
+      To change an element, you first need to grab it. The browser gives us <code>querySelector</code> and <code>querySelectorAll</code> — they accept any CSS selector you already know.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">select.js</span></div>
+      <div class="code-body"><span class="cc">// Grab the FIRST match</span>
+<span class="cp">const</span> heading = <span class="cp">document</span>.<span class="ck">querySelector</span>(<span class="cs">"h1"</span>);
+<span class="cp">const</span> firstCard = <span class="cp">document</span>.<span class="ck">querySelector</span>(<span class="cs">".card"</span>);
+<span class="cp">const</span> saveBtn = <span class="cp">document</span>.<span class="ck">querySelector</span>(<span class="cs">"#save"</span>);
+
+<span class="cc">// Grab ALL matches (a NodeList — loop with forEach)</span>
+<span class="cp">const</span> allCards = <span class="cp">document</span>.<span class="ck">querySelectorAll</span>(<span class="cs">".card"</span>);
+allCards.<span class="ck">forEach</span>((card) =&gt; {
+  <span class="cp">console</span>.<span class="ck">log</span>(card.<span class="ck">textContent</span>);
+});</div>
+    </div>
+
+    <div class="callout callout-amber">
+      <div class="ci">⚠️</div>
+      <div><strong>Returns <code>null</code> if nothing matches.</strong> Always check that your selector is correct — otherwise you'll get <code>Cannot read property of null</code>.</div>
+    </div>
+  </div>
+
+  <div class="topic topic-blue">
+    <h3 class="topic-title">✏️ Reading &amp; writing</h3>
+    <p class="explain">
+      Once you have an element, you can read its text, change it, adjust attributes, or toggle CSS classes.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">modify.js</span></div>
+      <div class="code-body"><span class="cp">const</span> title = <span class="cp">document</span>.<span class="ck">querySelector</span>(<span class="cs">"h1"</span>);
+
+<span class="cc">// Read</span>
+<span class="cp">console</span>.<span class="ck">log</span>(title.<span class="ck">textContent</span>);
+
+<span class="cc">// Write</span>
+title.<span class="ck">textContent</span> = <span class="cs">"Gelephu Mindfulness City"</span>;
+
+<span class="cc">// Attributes</span>
+<span class="cp">const</span> img = <span class="cp">document</span>.<span class="ck">querySelector</span>(<span class="cs">"img"</span>);
+img.<span class="ck">src</span>   = <span class="cs">"gmc.png"</span>;
+img.<span class="ck">alt</span>   = <span class="cs">"GMC logo"</span>;
+
+<span class="cc">// Form inputs</span>
+<span class="cp">const</span> input = <span class="cp">document</span>.<span class="ck">querySelector</span>(<span class="cs">"#name"</span>);
+<span class="cp">console</span>.<span class="ck">log</span>(input.<span class="ck">value</span>);
+
+<span class="cc">// CSS classes</span>
+title.<span class="ck">classList</span>.<span class="ck">add</span>(<span class="cs">"highlight"</span>);
+title.<span class="ck">classList</span>.<span class="ck">remove</span>(<span class="cs">"muted"</span>);
+title.<span class="ck">classList</span>.<span class="ck">toggle</span>(<span class="cs">"active"</span>);</div>
+    </div>
+
+    <div class="callout callout-red">
+      <div class="ci">⚠️</div>
+      <div><strong>Avoid <code>innerHTML</code> with user input.</strong> It parses its contents as HTML — an attacker can inject <code>&lt;script&gt;</code> tags. Use <code>textContent</code> for text.</div>
+    </div>
+  </div>
+
+  <div class="topic topic-blue">
+    <h3 class="topic-title">🌱 Creating &amp; removing elements</h3>
+    <p class="explain">
+      To grow the tree, create an element, set its contents, then append it to a parent. To remove it, call <code>.remove()</code> on it.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">create.js</span></div>
+      <div class="code-body"><span class="cc">// 1. Create — not yet on the page</span>
+<span class="cp">const</span> li = <span class="cp">document</span>.<span class="ck">createElement</span>(<span class="cs">"li"</span>);
+li.<span class="ck">textContent</span> = <span class="cs">"Tek Nath"</span>;
+
+<span class="cc">// 2. Add to the page</span>
+<span class="cp">const</span> list = <span class="cp">document</span>.<span class="ck">querySelector</span>(<span class="cs">"#trainees"</span>);
+list.<span class="ck">appendChild</span>(li);
+
+<span class="cc">// 3. Remove</span>
+li.<span class="ck">remove</span>();</div>
+    </div>
+
+    <div class="takeaway">
+      <h4>Section takeaways</h4>
+      <ul>
+        <li><code>querySelector</code> → first match; <code>querySelectorAll</code> → every match</li>
+        <li><code>textContent</code> for reading/writing text; avoid <code>innerHTML</code> with user input</li>
+        <li><code>classList.add / remove / toggle</code> for CSS classes</li>
+        <li>Build new elements with <code>createElement</code> → set properties → <code>appendChild</code></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="topic topic-blue" id="live-demo">
+    <h3 class="topic-title">🧪 Complete live demo — GMC attendance</h3>
+    <p class="explain">
+      This is a single, self-contained HTML file that uses <strong>every DOM technique from this section</strong>: selecting, creating, appending, removing, toggling classes, and listening to click + keyboard events.
+    </p>
+    <p class="explain">
+      You can run it yourself — open <code>pelsung/curriculum/dev/04-dom-demo.html</code> in a browser. Type a name, press Enter, click a name to mark them present, press ✕ to remove.
+    </p>
+
+    <p class="explain"><strong>The HTML</strong></p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">04-dom-demo.html</span></div>
+      <div class="code-body"><span class="ck">&lt;h1&gt;</span><span class="cs">GMC Attendance</span><span class="ck">&lt;/h1&gt;</span>
+<span class="ck">&lt;p</span> <span class="cn">id</span>=<span class="cs">"count"</span><span class="ck">&gt;</span><span class="cs">0 trainees</span><span class="ck">&lt;/p&gt;</span>
+
+<span class="ck">&lt;input</span> <span class="cn">type</span>=<span class="cs">"text"</span> <span class="cn">id</span>=<span class="cs">"name"</span> <span class="cn">placeholder</span>=<span class="cs">"Trainee name…"</span><span class="ck">&gt;</span>
+<span class="ck">&lt;button</span> <span class="cn">id</span>=<span class="cs">"add"</span><span class="ck">&gt;</span><span class="cs">Add</span><span class="ck">&lt;/button&gt;</span>
+
+<span class="ck">&lt;ul</span> <span class="cn">id</span>=<span class="cs">"list"</span><span class="ck">&gt;&lt;/ul&gt;</span>
+
+<span class="ck">&lt;button</span> <span class="cn">id</span>=<span class="cs">"clear"</span><span class="ck">&gt;</span><span class="cs">Clear all</span><span class="ck">&lt;/button&gt;</span></div>
+    </div>
+
+    <p class="explain"><strong>The JavaScript</strong> (with comments explaining each step)</p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">script · inside 04-dom-demo.html</span></div>
+      <div class="code-body"><span class="cc">// ── 1. SELECT the elements we'll use ─────────────────────</span>
+<span class="cp">const</span> input    = <span class="cp">document</span>.<span class="ck">querySelector</span>(<span class="cs">"#name"</span>);
+<span class="cp">const</span> addBtn   = <span class="cp">document</span>.<span class="ck">querySelector</span>(<span class="cs">"#add"</span>);
+<span class="cp">const</span> clearBtn = <span class="cp">document</span>.<span class="ck">querySelector</span>(<span class="cs">"#clear"</span>);
+<span class="cp">const</span> list     = <span class="cp">document</span>.<span class="ck">querySelector</span>(<span class="cs">"#list"</span>);
+<span class="cp">const</span> count    = <span class="cp">document</span>.<span class="ck">querySelector</span>(<span class="cs">"#count"</span>);
+
+<span class="cc">// ── 2. Helper: keep the count text in sync ───────────────</span>
+<span class="cp">function</span> <span class="ck">updateCount</span>() {
+  <span class="cp">const</span> n = list.<span class="ck">querySelectorAll</span>(<span class="cs">"li"</span>).<span class="ck">length</span>;
+  count.<span class="ck">textContent</span> = n + <span class="cs">" trainee"</span> + (n === <span class="cn">1</span> ? <span class="cs">""</span> : <span class="cs">"s"</span>);
+}
+
+<span class="cc">// ── 3. ADD a trainee ─────────────────────────────────────</span>
+<span class="cp">function</span> <span class="ck">addTrainee</span>(name) {
+  <span class="cp">if</span> (!name) <span class="cp">return</span>;                      <span class="cc">// ignore empty input</span>
+
+  <span class="cc">// Create the &lt;li&gt; and fill its text</span>
+  <span class="cp">const</span> li = <span class="cp">document</span>.<span class="ck">createElement</span>(<span class="cs">"li"</span>);
+  li.<span class="ck">textContent</span> = name;
+
+  <span class="cc">// Click the name to toggle "present" class (CSS handles the look)</span>
+  li.<span class="ck">addEventListener</span>(<span class="cs">"click"</span>, () =&gt; {
+    li.<span class="ck">classList</span>.<span class="ck">toggle</span>(<span class="cs">"present"</span>);
+  });
+
+  <span class="cc">// Create the remove button and nest it inside the &lt;li&gt;</span>
+  <span class="cp">const</span> x = <span class="cp">document</span>.<span class="ck">createElement</span>(<span class="cs">"button"</span>);
+  x.<span class="ck">textContent</span> = <span class="cs">"✕"</span>;
+  x.<span class="ck">addEventListener</span>(<span class="cs">"click"</span>, (e) =&gt; {
+    e.<span class="ck">stopPropagation</span>();              <span class="cc">// don't trigger the li click</span>
+    li.<span class="ck">remove</span>();                      <span class="cc">// detach from the DOM</span>
+    <span class="ck">updateCount</span>();
+  });
+  li.<span class="ck">appendChild</span>(x);
+
+  <span class="cc">// Put the &lt;li&gt; on the page</span>
+  list.<span class="ck">appendChild</span>(li);
+  <span class="ck">updateCount</span>();
+}
+
+<span class="cc">// ── 4. Wire up the "Add" button ──────────────────────────</span>
+addBtn.<span class="ck">addEventListener</span>(<span class="cs">"click"</span>, () =&gt; {
+  <span class="ck">addTrainee</span>(input.<span class="ck">value</span>.<span class="ck">trim</span>());
+  input.<span class="ck">value</span> = <span class="cs">""</span>;                      <span class="cc">// reset the input</span>
+  input.<span class="ck">focus</span>();                          <span class="cc">// bring cursor back</span>
+});
+
+<span class="cc">// Pressing Enter in the input also adds</span>
+input.<span class="ck">addEventListener</span>(<span class="cs">"keydown"</span>, (e) =&gt; {
+  <span class="cp">if</span> (e.<span class="ck">key</span> === <span class="cs">"Enter"</span>) addBtn.<span class="ck">click</span>();
+});
+
+<span class="cc">// ── 5. Wire up the "Clear all" button ────────────────────</span>
+clearBtn.<span class="ck">addEventListener</span>(<span class="cs">"click"</span>, () =&gt; {
+  <span class="cp">if</span> (!<span class="ck">confirm</span>(<span class="cs">"Clear everyone?"</span>)) <span class="cp">return</span>;
+  list.<span class="ck">querySelectorAll</span>(<span class="cs">"li"</span>).<span class="ck">forEach</span>((li) =&gt; li.<span class="ck">remove</span>());
+  <span class="ck">updateCount</span>();
+});
+
+<span class="ck">updateCount</span>();                             <span class="cc">// initialise</span></div>
+    </div>
+
+    <p class="explain"><strong>Key CSS</strong> that changes when the "present" class toggles</p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">style</span></div>
+      <div class="code-body">li {
+  padding: <span class="cn">0.75rem</span> <span class="cn">1rem</span>;
+  background: <span class="cn">#F9F9F9</span>;
+  cursor: pointer;
+}
+li.<span class="ck">present</span> {
+  background: <span class="cn">#F0F7EC</span>;
+  color: <span class="cn">#2A4D14</span>;
+  text-decoration: line-through;
+}</div>
+    </div>
+
+    <div class="callout callout-blue">
+      <div class="ci">🎯</div>
+      <div><strong>What to point out while teaching:</strong> the HTML gives us the skeleton, the CSS describes the <em>two states</em> (plain / present), and the JavaScript's only job is to <strong>move elements between those states</strong> by toggling a class. No DOM trickery — just <code>classList.toggle</code>.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 3 — EVENTS
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd" id="events">
+    <span class="section-pill pill-blue">Section 03</span>
+    <h2 class="section-title">Event listeners</h2>
+    <p class="section-desc">How the page responds to clicks, typing, and form submissions.</p>
+  </div>
+
+  <div class="topic topic-blue">
+    <h3 class="topic-title">👂 addEventListener</h3>
+    <p class="explain">
+      An event listener is a function you attach to an element, saying: "When this event happens, please run this function." The most common events are <code>click</code>, <code>input</code>, <code>submit</code>, <code>keydown</code>, and <code>change</code>.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">events.js</span></div>
+      <div class="code-body"><span class="cp">const</span> btn = <span class="cp">document</span>.<span class="ck">querySelector</span>(<span class="cs">"#save"</span>);
+
+btn.<span class="ck">addEventListener</span>(<span class="cs">"click"</span>, () =&gt; {
+  <span class="cp">console</span>.<span class="ck">log</span>(<span class="cs">"Clicked!"</span>);
+});
+
+<span class="cc">// Reading what the user typed, on every keystroke</span>
+<span class="cp">const</span> input = <span class="cp">document</span>.<span class="ck">querySelector</span>(<span class="cs">"#name"</span>);
+input.<span class="ck">addEventListener</span>(<span class="cs">"input"</span>, (e) =&gt; {
+  <span class="cp">console</span>.<span class="ck">log</span>(e.<span class="ck">target</span>.<span class="ck">value</span>);
+});
+
+<span class="cc">// Submitting a form without reloading the page</span>
+<span class="cp">const</span> form = <span class="cp">document</span>.<span class="ck">querySelector</span>(<span class="cs">"form"</span>);
+form.<span class="ck">addEventListener</span>(<span class="cs">"submit"</span>, (e) =&gt; {
+  e.<span class="ck">preventDefault</span>(); <span class="cc">// stop default page reload</span>
+  <span class="cc">// … handle data …</span>
+});</div>
+    </div>
+
+    <div class="callout callout-blue">
+      <div class="ci">💡</div>
+      <div>The argument passed to your handler is an <strong>event object</strong>. It has useful things like <code>e.target</code> (the element that triggered it) and <code>e.preventDefault()</code>.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 4 — BROWSER APIs
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd" id="browser-apis">
+    <span class="section-pill pill-indigo">Section 04</span>
+    <h2 class="section-title">Browser APIs — a tour</h2>
+    <p class="section-desc">The other tools the browser hands to JavaScript for free.</p>
+  </div>
+
+  <div class="topic topic-indigo">
+    <h3 class="topic-title">🧰 What is a browser API?</h3>
+    <p class="explain">
+      The DOM is one API the browser gives you. There are dozens more — for saving data, timing things, getting the user's location, reading the clipboard, playing audio, and so on. The browser builds the hard parts; JavaScript just calls them.
+    </p>
+  </div>
+
+  <div class="topic topic-indigo">
+    <h3 class="topic-title">💾 localStorage &amp; sessionStorage</h3>
+    <p class="explain">
+      Two simple key-value stores built into every browser. Both only hold <strong>strings</strong> — to save an object, convert it with <code>JSON.stringify</code> first, and <code>JSON.parse</code> when reading back.
+    </p>
+
+    <div class="concepts concepts-2">
+      <div class="concept">
+        <h4>📦 localStorage</h4>
+        <ul>
+          <li>Survives closing the browser</li>
+          <li>Good for user settings, drafts</li>
+          <li>About 5MB of storage</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4>⏱ sessionStorage</h4>
+        <ul>
+          <li>Cleared when the tab closes</li>
+          <li>Good for short-lived state</li>
+          <li>Same API, same size limit</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">storage.js</span></div>
+      <div class="code-body"><span class="cc">// Save a string</span>
+<span class="cp">localStorage</span>.<span class="ck">setItem</span>(<span class="cs">"theme"</span>, <span class="cs">"dark"</span>);
+
+<span class="cc">// Read</span>
+<span class="cp">const</span> theme = <span class="cp">localStorage</span>.<span class="ck">getItem</span>(<span class="cs">"theme"</span>);
+
+<span class="cc">// Save an object — stringify it first</span>
+<span class="cp">const</span> user = { name: <span class="cs">"Karma"</span>, age: <span class="cn">24</span> };
+<span class="cp">localStorage</span>.<span class="ck">setItem</span>(<span class="cs">"user"</span>, <span class="cp">JSON</span>.<span class="ck">stringify</span>(user));
+
+<span class="cc">// Read and parse</span>
+<span class="cp">const</span> saved = <span class="cp">JSON</span>.<span class="ck">parse</span>(<span class="cp">localStorage</span>.<span class="ck">getItem</span>(<span class="cs">"user"</span>));
+
+<span class="cc">// Remove one item, or clear everything</span>
+<span class="cp">localStorage</span>.<span class="ck">removeItem</span>(<span class="cs">"theme"</span>);
+<span class="cp">localStorage</span>.<span class="ck">clear</span>();</div>
+    </div>
+  </div>
+
+  <div class="topic topic-indigo">
+    <h3 class="topic-title">🔍 console — more than just log</h3>
+    <p class="explain">
+      The <code>console</code> is your best friend during development. Beyond <code>console.log</code>:
+    </p>
+    <div class="concepts concepts-3">
+      <div class="concept">
+        <h4>console.warn / .error</h4>
+        <ul><li>Colored messages</li><li>Easier to spot issues</li></ul>
+      </div>
+      <div class="concept">
+        <h4>console.table</h4>
+        <ul><li>Prints arrays of objects as a table</li><li>Very readable</li></ul>
+      </div>
+      <div class="concept">
+        <h4>console.time / timeEnd</h4>
+        <ul><li>Measure how long code takes</li><li>Simple performance check</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic topic-indigo">
+    <h3 class="topic-title">📱 navigator — the user's device</h3>
+    <p class="explain">
+      <code>navigator</code> tells you things about where the user is and what their browser can do.
+    </p>
+    <div class="concepts concepts-2">
+      <div class="concept">
+        <h4>navigator.onLine</h4>
+        <ul><li><code>true</code> or <code>false</code></li><li>Good for showing "You're offline" banners</li></ul>
+      </div>
+      <div class="concept">
+        <h4>navigator.geolocation</h4>
+        <ul><li>Request GPS coordinates</li><li>Asks the user for permission</li></ul>
+      </div>
+      <div class="concept">
+        <h4>navigator.clipboard</h4>
+        <ul><li>Copy text with <code>writeText</code></li><li>Paste text with <code>readText</code></li></ul>
+      </div>
+      <div class="concept">
+        <h4>navigator.language</h4>
+        <ul><li>Preferred language code</li><li>e.g. <code>"en-US"</code>, <code>"dz"</code></li></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic topic-indigo">
+    <h3 class="topic-title">⏲ setTimeout, setInterval, dialogs</h3>
+    <p class="explain">
+      These live on <code>window</code>, the global browser object — you can call them without prefixing anything.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">timers.js</span></div>
+      <div class="code-body"><span class="cc">// Run ONCE after 2 seconds</span>
+<span class="ck">setTimeout</span>(() =&gt; {
+  <span class="cp">console</span>.<span class="ck">log</span>(<span class="cs">"2 seconds passed"</span>);
+}, <span class="cn">2000</span>);
+
+<span class="cc">// Run EVERY second</span>
+<span class="cp">const</span> id = <span class="ck">setInterval</span>(() =&gt; {
+  <span class="cp">console</span>.<span class="ck">log</span>(<span class="cs">"tick"</span>);
+}, <span class="cn">1000</span>);
+
+<span class="cc">// Stop it</span>
+<span class="ck">clearInterval</span>(id);
+
+<span class="cc">// Classic browser dialogs — quick but ugly</span>
+<span class="ck">alert</span>(<span class="cs">"Hello"</span>);
+<span class="cp">const</span> ok = <span class="ck">confirm</span>(<span class="cs">"Are you sure?"</span>); <span class="cc">// true/false</span>
+<span class="cp">const</span> nm = <span class="ck">prompt</span>(<span class="cs">"Your name?"</span>);        <span class="cc">// string or null</span></div>
+    </div>
+  </div>
+
+  <div class="topic topic-indigo">
+    <h3 class="topic-title">🌐 location &amp; history</h3>
+    <p class="explain">
+      <code>location</code> describes the URL bar; <code>history</code> is how you navigate. Later, when we learn React Router, it builds on <code>history</code> to change the URL without reloading the page.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">nav.js</span></div>
+      <div class="code-body"><span class="cp">location</span>.<span class="ck">href</span>;       <span class="cc">// full URL</span>
+<span class="cp">location</span>.<span class="ck">pathname</span>;   <span class="cc">// "/page"</span>
+<span class="cp">location</span>.<span class="ck">search</span>;     <span class="cc">// "?id=5"</span>
+
+<span class="cc">// Send the user somewhere</span>
+<span class="cp">location</span>.<span class="ck">href</span> = <span class="cs">"/dashboard"</span>;
+
+<span class="cc">// Go back (like the back button)</span>
+<span class="cp">history</span>.<span class="ck">back</span>();</div>
+    </div>
+
+    <div class="takeaway">
+      <h4>Browser API takeaways</h4>
+      <ul>
+        <li><code>localStorage</code> persists across restarts; <code>sessionStorage</code> is per-tab</li>
+        <li>Storage holds strings only — use <code>JSON.stringify / parse</code> for objects</li>
+        <li><code>console.table / time / timeEnd</code> are underused debugging gems</li>
+        <li><code>navigator</code>, <code>location</code>, <code>history</code> are always ready to use</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 5 — WHY ASYNC
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd" id="async-why">
+    <span class="section-pill pill-amber">Section 05</span>
+    <h2 class="section-title">Why async exists</h2>
+    <p class="section-desc">The big idea: JavaScript is single-threaded, so slow work has to be clever.</p>
+  </div>
+
+  <div class="topic topic-amber">
+    <h3 class="topic-title">🏪 The shop with one cashier</h3>
+    <p class="explain">
+      JavaScript runs on a single thread — like a shop with exactly one cashier. If a customer asks for something that takes 3 minutes to fetch from the warehouse, the cashier has two choices:
+    </p>
+    <div class="concepts concepts-2">
+      <div class="concept">
+        <h4>❌ Block</h4>
+        <ul>
+          <li>Cashier freezes, queue waits</li>
+          <li>In a browser: clicks, scrolls, animations all stop</li>
+          <li>Page looks broken</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4>✓ Async</h4>
+        <ul>
+          <li>Cashier starts the fetch, takes next customer</li>
+          <li>When the item arrives, they return to the first person</li>
+          <li>Queue keeps moving</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout callout-blue">
+      <div class="ci">💡</div>
+      <div><strong>Any slow operation is async in JS:</strong> network calls (<code>fetch</code>), timers (<code>setTimeout</code>), reading files, user events. The rest of your code keeps running while they do their thing.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 6 — PROMISES & ASYNC/AWAIT
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd" id="promises">
+    <span class="section-pill pill-amber">Section 06</span>
+    <h2 class="section-title">Promises &amp; async/await</h2>
+    <p class="section-desc">The three patterns JavaScript uses to handle async work.</p>
+  </div>
+
+  <div class="topic topic-amber">
+    <h3 class="topic-title">📞 Pattern 1 — Callbacks</h3>
+    <p class="explain">
+      The oldest way. You pass a function as an argument, and that function gets called when the slow work finishes.
+    </p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">callback.js</span></div>
+      <div class="code-body"><span class="cp">console</span>.<span class="ck">log</span>(<span class="cs">"A"</span>);
+<span class="ck">setTimeout</span>(() =&gt; {
+  <span class="cp">console</span>.<span class="ck">log</span>(<span class="cs">"B (after 1s)"</span>);
+}, <span class="cn">1000</span>);
+<span class="cp">console</span>.<span class="ck">log</span>(<span class="cs">"C"</span>);
+<span class="cc">// Prints: A, C, B</span></div>
+    </div>
+    <p class="explain">
+      Callbacks still exist (events are callbacks!), but when you need to chain many async steps, callbacks nest deeper and deeper — the "pyramid of doom". That's why we got Promises.
+    </p>
+  </div>
+
+  <div class="topic topic-amber">
+    <h3 class="topic-title">🎟️ Pattern 2 — Promises</h3>
+    <p class="explain">
+      A Promise is an <strong>object that represents a future value</strong>. Think of it as a receipt: you hand it to JavaScript, and eventually it'll either give you the goods (fulfilled) or an apology (rejected).
+    </p>
+
+    <div class="state-row">
+      <span class="state-pill sp-pending">⏳ Pending — still waiting</span>
+      <span class="state-pill sp-fulfilled">✓ Fulfilled — we got a value</span>
+      <span class="state-pill sp-rejected">✕ Rejected — something went wrong</span>
+    </div>
+
+    <p class="explain">
+      You handle a Promise with three methods:
+    </p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">promise.js</span></div>
+      <div class="code-body"><span class="ck">fetch</span>(<span class="cs">"/api/user"</span>)
+  .<span class="ck">then</span>((response) =&gt; response.<span class="ck">json</span>())   <span class="cc">// got a response</span>
+  .<span class="ck">then</span>((data) =&gt; {
+    <span class="cp">console</span>.<span class="ck">log</span>(data);                           <span class="cc">// success path</span>
+  })
+  .<span class="ck">catch</span>((err) =&gt; {
+    <span class="cp">console</span>.<span class="ck">error</span>(err);                        <span class="cc">// failure path</span>
+  })
+  .<span class="ck">finally</span>(() =&gt; {
+    <span class="cp">console</span>.<span class="ck">log</span>(<span class="cs">"done either way"</span>);
+  });</div>
+    </div>
+    <p class="explain">
+      Each <code>.then</code> runs when the previous step succeeds. <code>.catch</code> runs if any step in the chain rejects. <code>.finally</code> runs no matter what — great for cleanup like hiding a loading spinner.
+    </p>
+  </div>
+
+  <div class="topic topic-amber">
+    <h3 class="topic-title">✨ Pattern 3 — async / await (modern)</h3>
+    <p class="explain">
+      Chained <code>.then</code> calls still get messy when you have many steps. <code>async</code> and <code>await</code> let you write async code that <strong>looks exactly like normal code</strong>, one line after another.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">async.js</span></div>
+      <div class="code-body"><span class="cp">async</span> <span class="cp">function</span> <span class="ck">loadUser</span>() {
+  <span class="cp">const</span> response = <span class="cp">await</span> <span class="ck">fetch</span>(<span class="cs">"/api/user"</span>);
+  <span class="cp">const</span> data     = <span class="cp">await</span> response.<span class="ck">json</span>();
+  <span class="cp">console</span>.<span class="ck">log</span>(data);
+}
+
+<span class="ck">loadUser</span>();</div>
+    </div>
+
+    <div class="concepts concepts-2">
+      <div class="concept">
+        <h4><code>async</code> function</h4>
+        <ul>
+          <li>Marks a function as asynchronous</li>
+          <li>It always returns a Promise</li>
+          <li>Required before you can use <code>await</code> inside</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4><code>await</code> keyword</h4>
+        <ul>
+          <li>Pauses the function until the Promise settles</li>
+          <li>Unwraps the value</li>
+          <li>Only valid inside an <code>async</code> function</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="explain">
+      For errors with <code>async</code>/<code>await</code>, wrap the calls in a <code>try / catch</code> block — the same way you'd handle any other error.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">safe-fetch.js</span></div>
+      <div class="code-body"><span class="cp">async</span> <span class="cp">function</span> <span class="ck">loadUser</span>() {
+  <span class="cp">try</span> {
+    <span class="cp">const</span> res  = <span class="cp">await</span> <span class="ck">fetch</span>(<span class="cs">"/api/user"</span>);
+    <span class="cp">if</span> (!res.<span class="ck">ok</span>) <span class="cp">throw</span> <span class="cp">new</span> <span class="ck">Error</span>(<span class="cs">"Bad status: "</span> + res.<span class="ck">status</span>);
+    <span class="cp">const</span> data = <span class="cp">await</span> res.<span class="ck">json</span>();
+    <span class="cp">return</span> data;
+  } <span class="cp">catch</span> (err) {
+    <span class="cp">console</span>.<span class="ck">error</span>(<span class="cs">"Failed:"</span>, err);
+    <span class="cp">return</span> <span class="cp">null</span>;
+  }
+}</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 7 — FETCH IN PRACTICE
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd" id="fetch">
+    <span class="section-pill pill-amber">Section 07</span>
+    <h2 class="section-title">fetch in practice</h2>
+    <p class="section-desc">Get real data from the internet — and put it on the page.</p>
+  </div>
+
+  <div class="topic topic-amber">
+    <h3 class="topic-title">🌐 A complete fetch example</h3>
+    <p class="explain">
+      This example fetches the current weather for Gelephu from the free Open-Meteo API, and writes the temperature into an <code>&lt;h1&gt;</code> on the page.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">weather.js</span></div>
+      <div class="code-body"><span class="cp">async</span> <span class="cp">function</span> <span class="ck">showWeather</span>() {
+  <span class="cp">const</span> h1 = <span class="cp">document</span>.<span class="ck">querySelector</span>(<span class="cs">"#temp"</span>);
+  h1.<span class="ck">textContent</span> = <span class="cs">"Loading…"</span>;
+
+  <span class="cp">try</span> {
+    <span class="cp">const</span> url =
+      <span class="cs">"https://api.open-meteo.com/v1/forecast"</span> +
+      <span class="cs">"?latitude=26.86&amp;longitude=90.48&amp;current_weather=true"</span>;
+
+    <span class="cp">const</span> res  = <span class="cp">await</span> <span class="ck">fetch</span>(url);
+    <span class="cp">const</span> data = <span class="cp">await</span> res.<span class="ck">json</span>();
+    <span class="cp">const</span> temp = data.<span class="ck">current_weather</span>.<span class="ck">temperature</span>;
+
+    h1.<span class="ck">textContent</span> = <span class="cs">`Gelephu is ${temp}°C`</span>;
+  } <span class="cp">catch</span> (err) {
+    h1.<span class="ck">textContent</span> = <span class="cs">"Could not load weather"</span>;
+  }
+}
+
+<span class="ck">showWeather</span>();</div>
+    </div>
+
+    <div class="callout callout-blue">
+      <div class="ci">💡</div>
+      <div><code>fetch</code> returns a <strong>Response</strong> object. You need a second <code>await res.json()</code> to actually get the data — the body arrives separately.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 8 — GOTCHAS
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd" id="gotchas">
+    <span class="section-pill" style="background: #F2E8EA; color: #8B001E;">Section 08</span>
+    <h2 class="section-title">Common gotchas</h2>
+    <p class="section-desc">Three mistakes that trip up almost everyone.</p>
+  </div>
+
+  <div class="topic" style="border-left: 4px solid var(--red); padding-left: 2rem;">
+    <h3 class="topic-title">1. Forgetting <code>await</code></h3>
+    <p class="explain">
+      Without <code>await</code>, <code>fetch</code> gives you the <strong>Promise itself</strong>, not the value inside it. Your variable ends up as <code>Promise { &lt;pending&gt; }</code>.
+    </p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span style="margin-left:0.5rem; color: #fca5a5">bug.js — missing await</span></div>
+      <div class="code-body"><span class="cp">const</span> data = <span class="ck">fetch</span>(<span class="cs">"/api/x"</span>);
+<span class="cp">console</span>.<span class="ck">log</span>(data); <span class="cc">// Promise { &lt;pending&gt; }</span></div>
+    </div>
+  </div>
+
+  <div class="topic" style="border-left: 4px solid var(--red); padding-left: 2rem;">
+    <h3 class="topic-title">2. Unhandled promise rejections</h3>
+    <p class="explain">
+      If a Promise rejects and you haven't caught it, the browser logs a warning but the user sees nothing. Every <code>await</code> should live inside a <code>try / catch</code>, or every <code>.then</code> chain should end with a <code>.catch</code>.
+    </p>
+  </div>
+
+  <div class="topic" style="border-left: 4px solid var(--red); padding-left: 2rem;">
+    <h3 class="topic-title">3. Sequential awaits when parallel would do</h3>
+    <p class="explain">
+      If two requests don't depend on each other, don't await them one after another — fire both at once with <code>Promise.all</code>. You get the total time of the <em>slower</em> request, not the sum.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">parallel.js</span></div>
+      <div class="code-body"><span class="cc">// 🐢 Sequential — total time is a + b</span>
+<span class="cp">const</span> a = <span class="cp">await</span> <span class="ck">fetch</span>(urlA);
+<span class="cp">const</span> b = <span class="cp">await</span> <span class="ck">fetch</span>(urlB);
+
+<span class="cc">// ⚡ Parallel — total time is max(a, b)</span>
+<span class="cp">const</span> [a, b] = <span class="cp">await</span> <span class="cp">Promise</span>.<span class="ck">all</span>([
+  <span class="ck">fetch</span>(urlA),
+  <span class="ck">fetch</span>(urlB)
+]);</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SUMMARY
+  ═══════════════════════════════════════════ -->
+  <div class="summary">
+    <h2>Today's big ideas</h2>
+    <p>Three tools. Same underlying idea: JavaScript talking to the world outside itself.</p>
+    <div class="summary-grid">
+      <div class="su-card">
+        <h4>🌳 DOM</h4>
+        <p>The page as a live tree. Select with <code>querySelector</code>, change with <code>textContent</code> / <code>classList</code>, listen with <code>addEventListener</code>.</p>
+      </div>
+      <div class="su-card">
+        <h4>🧰 Browser APIs</h4>
+        <p>Free tools: <code>localStorage</code> for saving, <code>navigator</code> for device info, <code>setInterval</code> for timing, <code>location</code> for URLs.</p>
+      </div>
+      <div class="su-card">
+        <h4>⏳ Async</h4>
+        <p>Promises + <code>async</code>/<code>await</code>. Wait for slow work without freezing the page. Always handle errors with <code>try / catch</code>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       EXERCISES
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd" id="exercises">
+    <span class="section-pill pill-green" style="background:#F0F7EC; color: var(--green);">Practice</span>
+    <h2 class="section-title">Home exercises</h2>
+    <p class="section-desc">Three exercises — do them in order. Stretch parts are optional.</p>
+  </div>
+
+  <div class="exercise">
+    <h4><span class="badge">Ex 1 · Easy</span> Class attendance list</h4>
+    <p>Build a single HTML file with an input, a button, and an empty list.</p>
+    <ul>
+      <li>When the "Add" button is clicked, append the typed name to the list</li>
+      <li>Each list item should have a "Remove" button that deletes that item</li>
+      <li>Clear the input after adding</li>
+      <li>Don't add empty names</li>
+      <li><strong>Bonus:</strong> show a count at the top — <em>"5 trainees present"</em> — and keep it in sync when items are added or removed</li>
+    </ul>
+  </div>
+
+  <div class="exercise">
+    <h4><span class="badge">Ex 2 · Medium</span> Make it persistent</h4>
+    <p>Extend Exercise 1 so the list survives a page reload.</p>
+    <ul>
+      <li>Save the list of names to <code>localStorage</code> after every change (add or remove)</li>
+      <li>On page load, read the saved list and render it</li>
+      <li>Add a "Clear all" button that empties the list and the storage</li>
+      <li><em>Hint:</em> store the names as an array via <code>JSON.stringify</code></li>
+      <li><strong>Optional stretch:</strong> show the current time at the top of the page using <code>setInterval</code> — it should update every second</li>
+    </ul>
+  </div>
+
+  <div class="exercise">
+    <h4><span class="badge">Ex 3 · Harder</span> Bhutan facts (using fetch!)</h4>
+    <p>Build a page that fetches and displays information about Bhutan from a public API.</p>
+    <ul>
+      <li>On load, fetch from <code>https://restcountries.com/v3.1/name/bhutan</code></li>
+      <li>Show a "Loading…" message while fetching</li>
+      <li>Display: country name, capital, population, region, and flag image</li>
+      <li>Show an error message if the fetch fails</li>
+      <li>Use <code>async</code>/<code>await</code> and wrap the calls in <code>try / catch</code></li>
+      <li><strong>Optional stretch:</strong> add a dropdown with 3 countries (Bhutan, Nepal, India) — refetch and re-render when the user changes the selection</li>
+    </ul>
+  </div>
+
+  <div class="callout callout-blue">
+    <div class="ci">📚</div>
+    <div><strong>Read the documentation as you go.</strong> MDN is the gold standard — search for "MDN querySelector" or "MDN fetch". Every method you use today has a well-written MDN page.</div>
+  </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div class="footer">
+  <img src="../assets/SELISE_Logo_Primary_Small.png" alt="SELISE" style="height: 24px; opacity: 0.7; display: block; margin: 0 auto 0.75rem;">
+  <strong>SELISE × Pelsung</strong> · Dev Specialization · Class 04
+</div>
+
+</body>
+</html>

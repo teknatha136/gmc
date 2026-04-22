@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Class Notes: TypeScript Foundations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue:    #0066B2;
+      --indigo:  #001F35;
+      --amber:   #247EC1;
+      --green:   #7BC950;
+      --purple:  #4796D1;
+      --red:     #D80032;
+      --text:    #1B2021;
+      --muted:   #7B7C7F;
+      --faint:   #9CA3AF;
+      --surf:    #ffffff;
+      --bg:      #F9F9F9;
+      --border:  #EDEDED;
+      --border-l:#F5F5F5;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Open Sans', 'Aptos', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.65;
+      font-size: 17px;
+    }
+    @media (max-width: 640px) { body { font-size: 16px; } }
+
+    .hero {
+      background: var(--surf);
+      border-bottom: 1px solid var(--border);
+      padding: 4rem 2rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 5px;
+      background: linear-gradient(135deg, #0067A3, #002D72);
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 0.35rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); }
+    .hero h1 {
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero h1 .c-blue   { color: var(--blue); }
+    .hero h1 .c-indigo { color: var(--indigo); }
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 2rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero-tags {
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+    .hero-tag {
+      padding: 0.3rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .tag-blue   { background: #E6F0F8; color: var(--blue); }
+    .tag-indigo { background: #E6E9EC; color: var(--indigo); }
+    .tag-green  { background: #F0F7EC; color: var(--green); }
+    .tag-amber  { background: #EBF0F7; color: #1C5B8C; }
+    .tag-purple { background: #ECF2F8; color: var(--purple); }
+
+    .container { max-width: 1040px; margin: 0 auto; padding: 0 2rem 6rem; }
+
+    .toc {
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem 2rem;
+      margin: 2.5rem 0;
+    }
+    .toc h3 {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--faint);
+      margin-bottom: 1.25rem;
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.4rem 2rem;
+    }
+    .toc-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.875rem;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.3rem 0;
+      border-bottom: 1px solid var(--border-l);
+      transition: color 0.15s;
+    }
+    .toc-item:hover { color: var(--indigo); }
+    .toc-item .toc-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+    .section-hd { padding: 3.5rem 0 1.5rem; }
+    .section-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0.9rem;
+      border-radius: 100px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+    .pill-blue   { background: #E6F0F8; color: var(--blue); }
+    .pill-indigo { background: #E6E9EC; color: var(--indigo); }
+    .pill-green  { background: #F0F7EC; color: var(--green); }
+    .pill-amber  { background: #EBF0F7; color: #1C5B8C; }
+    .pill-purple { background: #ECF2F8; color: var(--purple); }
+    .section-title {
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+      font-size: 2rem;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 0.4rem;
+    }
+    .section-desc { font-size: 0.95rem; color: var(--muted); }
+
+    .topic {
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem 2.25rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .topic::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 4px;
+      border-radius: 4px 0 0 4px;
+    }
+    .topic-blue::before   { background: var(--blue); }
+    .topic-indigo::before { background: var(--indigo); }
+    .topic-amber::before  { background: var(--amber); }
+    .topic-green::before  { background: var(--green); }
+    .topic-purple::before { background: var(--purple); }
+    .topic-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .explain {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+    }
+    .explain strong { color: var(--text); }
+
+    .concepts { display: grid; gap: 0.9rem; margin-bottom: 1.25rem; }
+    .concepts-2 { grid-template-columns: repeat(2, 1fr); }
+    .concepts-3 { grid-template-columns: repeat(3, 1fr); }
+    .concept {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.1rem 1.25rem;
+    }
+    .concept h4 {
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .concept ul { list-style: none; display: flex; flex-direction: column; gap: 0.35rem; }
+    .concept ul li {
+      font-size: 0.83rem;
+      color: var(--muted);
+      padding-left: 1rem;
+      position: relative;
+      line-height: 1.5;
+    }
+    .concept ul li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--faint);
+      font-size: 0.72rem;
+      top: 0.15em;
+    }
+
+    .code-block {
+      background: #001F35;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+      font-family: 'Courier New', monospace;
+    }
+    .code-bar {
+      background: #0A2A45;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.4);
+    }
+    .code-bar .cb-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .code-body {
+      padding: 1.1rem 1.25rem;
+      font-size: 0.82rem;
+      line-height: 1.85;
+      color: rgba(255,255,255,0.85);
+      white-space: pre-wrap;
+    }
+    .code-body .ck { color: #7dd3fc; }
+    .code-body .cs { color: #86efac; }
+    .code-body .cn { color: #fde68a; }
+    .code-body .cc { color: rgba(255,255,255,0.35); }
+    .code-body .cp { color: #c4b5fd; }
+    .code-body .cr { color: #fca5a5; }
+    .code-body .ci { color: #f0abfc; }
+    .code-body .ct { color: #fdba74; }
+
+    code { font-family: 'Courier New', monospace; background: var(--bg); padding: 0.1em 0.35em; border-radius: 4px; font-size: 0.9em; color: var(--indigo); }
+
+    .callout {
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      font-size: 0.85rem;
+      display: flex;
+      gap: 0.6rem;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      line-height: 1.55;
+    }
+    .callout .ci { font-size: 1rem; min-width: 1.2rem; flex-shrink: 0; }
+    .callout-blue  { background: #f0f7fc; border: 1px solid #B0D4E9; color: var(--muted); }
+    .callout-amber { background: #FFF8E6; border: 1px solid #F0D890; color: #664A00; }
+    .callout-red   { background: #F2E8EA; border: 1px solid #E0B5B9; color: #8B001E; }
+    .callout strong { color: var(--text); }
+    .callout-amber strong { color: #664A00; }
+    .callout-red strong { color: #8B001E; }
+
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.25rem;
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .compare-table th {
+      background: #E6E9EC;
+      color: var(--indigo);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0.6rem 1rem;
+      text-align: left;
+    }
+    .compare-table td {
+      padding: 0.55rem 1rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+    .compare-table .yes { color: var(--green); font-weight: 700; }
+    .compare-table .no  { color: var(--red); font-weight: 700; }
+
+    .takeaway {
+      background: #F0F7EC;
+      border: 1px solid #B5DBA7;
+      border-radius: 12px;
+      padding: 1.1rem 1.3rem;
+      margin-top: 1.25rem;
+    }
+    .takeaway h4 {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #2A4D14;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 0.6rem;
+    }
+    .takeaway ul { list-style: none; display: flex; flex-direction: column; gap: 0.35rem; }
+    .takeaway ul li {
+      font-size: 0.85rem;
+      color: #3B5A22;
+      padding-left: 1.1rem;
+      position: relative;
+      line-height: 1.55;
+    }
+    .takeaway ul li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--green);
+      font-weight: 700;
+      font-size: 0.9rem;
+      top: 0;
+    }
+
+    .exercise {
+      background: var(--surf);
+      border: 2px dashed var(--border);
+      border-radius: 14px;
+      padding: 1.4rem 1.6rem;
+      margin-bottom: 1.1rem;
+    }
+    .exercise h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+    .exercise h4 .badge {
+      display: inline-block;
+      background: #E6F0F8;
+      color: var(--blue);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.15rem 0.55rem;
+      border-radius: 100px;
+      margin-right: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      vertical-align: middle;
+    }
+    .exercise p { font-size: 0.88rem; color: var(--muted); margin-bottom: 0.7rem; line-height: 1.6; }
+    .exercise ul { padding-left: 1.2rem; margin-bottom: 0.5rem; color: var(--muted); font-size: 0.88rem; line-height: 1.7; }
+
+    .summary {
+      background: linear-gradient(135deg, var(--indigo) 0%, #000D19 100%);
+      color: white;
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin: 3rem 0;
+      text-align: center;
+    }
+    .summary h2 {
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 400;
+      margin-bottom: 0.4rem;
+    }
+    .summary p { font-size: 0.9rem; opacity: 0.75; margin-bottom: 1.75rem; }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.9rem;
+    }
+    .su-card {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 12px;
+      padding: 1.1rem;
+      text-align: left;
+    }
+    .su-card h4 { font-size: 0.88rem; font-weight: 700; margin-bottom: 0.4rem; opacity: 0.9; }
+    .su-card p  { font-size: 0.78rem; opacity: 0.65; line-height: 1.5; margin-bottom: 0; }
+
+    .footer {
+      background: var(--surf);
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--faint);
+    }
+    .footer strong { color: var(--muted); }
+
+    @media (max-width: 720px) {
+      .hero { padding: 2.5rem 1rem 1.75rem !important; }
+      .hero h1 { font-size: clamp(1.7rem, 7vw, 2.2rem) !important; }
+      .container { padding: 0 1rem 4rem !important; }
+      .toc-grid { grid-template-columns: 1fr !important; }
+      .concepts-2, .concepts-3, .summary-grid { grid-template-columns: 1fr !important; }
+      .section-title { font-size: 1.5rem !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <img src="../assets/SELISE_Logo_Primary.png" alt="SELISE Digital Platforms" style="height: 48px; margin-bottom: 1rem; display: block; margin-left: auto; margin-right: auto;">
+  <div class="hero-badge">
+    <div class="dot"></div>
+    Pelsung · Dev Specialization · Class 05
+  </div>
+  <h1>
+    <span class="c-blue">TypeScript</span> <span class="c-indigo">Foundations</span>
+  </h1>
+  <p class="hero-sub">Types, shapes, unions, and generics — the TypeScript you'll use every day when we start building React components.</p>
+  <div class="hero-tags">
+    <span class="hero-tag tag-blue">Types</span>
+    <span class="hero-tag tag-indigo">Shapes</span>
+    <span class="hero-tag tag-amber">Unions</span>
+    <span class="hero-tag tag-purple">Generics</span>
+    <span class="hero-tag tag-green">Utility types</span>
+  </div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div class="container">
+
+  <!-- ===== TOC ===== -->
+  <div class="toc">
+    <h3>What's In These Notes</h3>
+    <div class="toc-grid">
+      <a class="toc-item" href="#why">
+        <span class="toc-dot" style="background:var(--blue)"></span>
+        💡 Why TypeScript?
+      </a>
+      <a class="toc-item" href="#basics">
+        <span class="toc-dot" style="background:var(--blue)"></span>
+        🔤 Basic types &amp; annotations
+      </a>
+      <a class="toc-item" href="#functions">
+        <span class="toc-dot" style="background:var(--blue)"></span>
+        ⚡ Typing functions
+      </a>
+      <a class="toc-item" href="#any-unknown">
+        <span class="toc-dot" style="background:var(--blue)"></span>
+        🪤 any · unknown · void
+      </a>
+      <a class="toc-item" href="#types">
+        <span class="toc-dot" style="background:var(--indigo)"></span>
+        📦 Naming shapes with <code>type</code>
+      </a>
+      <a class="toc-item" href="#optional">
+        <span class="toc-dot" style="background:var(--indigo)"></span>
+        🎯 Optional &amp; readonly
+      </a>
+      <a class="toc-item" href="#unions">
+        <span class="toc-dot" style="background:var(--amber)"></span>
+        🔀 Unions &amp; literal types
+      </a>
+      <a class="toc-item" href="#narrowing">
+        <span class="toc-dot" style="background:var(--amber)"></span>
+        🎯 Type narrowing
+      </a>
+      <a class="toc-item" href="#generics">
+        <span class="toc-dot" style="background:var(--purple)"></span>
+        🧬 Generics
+      </a>
+      <a class="toc-item" href="#utility">
+        <span class="toc-dot" style="background:var(--purple)"></span>
+        🛠 Utility types
+      </a>
+      <a class="toc-item" href="#exercises">
+        <span class="toc-dot" style="background:var(--green)"></span>
+        💻 Home exercises
+      </a>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 1 — WHY TS
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd" id="why">
+    <span class="section-pill pill-blue">Section 01</span>
+    <h2 class="section-title">Why TypeScript?</h2>
+    <p class="section-desc">The short version: it's JavaScript plus a type checker that catches mistakes before you run the code.</p>
+  </div>
+
+  <div class="topic topic-blue">
+    <h3 class="topic-title">🛡 Catching bugs before the user does</h3>
+    <p class="explain">
+      Plain JavaScript only finds errors at <strong>runtime</strong> — meaning your code has to actually execute the broken line for you to notice. TypeScript runs a check when you save the file, and tells you about problems right there in the editor.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span style="margin-left:0.5rem; color:#fca5a5;">plain JS — silent bug</span></div>
+      <div class="code-body"><span class="cp">function</span> <span class="ck">greet</span>(user) {
+  <span class="cp">return</span> <span class="cs">"Hello, "</span> + user.<span class="ck">name</span>;
+}
+<span class="ck">greet</span>(<span class="cn">42</span>);  <span class="cc">// "Hello, undefined" — no error, just wrong output</span></div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem; color:#86efac;">TypeScript — caught instantly</span></div>
+      <div class="code-body"><span class="cp">function</span> <span class="ck">greet</span>(user: { <span class="ck">name</span>: <span class="ct">string</span> }) {
+  <span class="cp">return</span> <span class="cs">"Hello, "</span> + user.<span class="ck">name</span>;
+}
+<span class="ck">greet</span>(<span class="cn">42</span>);  <span class="cc">// ✕ Argument of type 'number' is not assignable</span></div>
+    </div>
+
+    <div class="concepts concepts-2">
+      <div class="concept">
+        <h4>🎯 Benefits</h4>
+        <ul>
+          <li>Bugs caught at compile time</li>
+          <li>Editor autocomplete everywhere</li>
+          <li>Safer refactors across files</li>
+          <li>Self-documenting function signatures</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4>⚙️ How it works</h4>
+        <ul>
+          <li>You write <code>.ts</code> files</li>
+          <li>The TS compiler checks types</li>
+          <li>Types are stripped out</li>
+          <li>Plain JS is what actually runs</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout callout-blue">
+      <div class="ci">💡</div>
+      <div><strong>Key mental model:</strong> types are <em>erased</em> at build time. At runtime, your code is just JavaScript — the browser and Node never see the types. TypeScript is a tool for <em>you</em>, not for the computer.</div>
+    </div>
+
+    <p class="explain">
+      For this class, we'll use the <a href="https://www.typescriptlang.org/play" target="_blank" style="color: var(--blue);">TypeScript Playground</a> — a browser-based editor where you type TS on the left and see the compiled JS (and any errors) on the right. No install needed.
+    </p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 2 — BASIC TYPES
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd" id="basics">
+    <span class="section-pill pill-blue">Section 02</span>
+    <h2 class="section-title">Basic types &amp; annotations</h2>
+    <p class="section-desc">The building blocks — primitives, arrays, objects.</p>
+  </div>
+
+  <div class="topic topic-blue">
+    <h3 class="topic-title">🔤 Primitives</h3>
+    <p class="explain">
+      TypeScript has names for each of JavaScript's built-in value types. You write them after a colon — that's a <strong>type annotation</strong>.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">primitives.ts</span></div>
+      <div class="code-body"><span class="cp">const</span> name: <span class="ct">string</span>    = <span class="cs">"Karma"</span>;
+<span class="cp">const</span> age: <span class="ct">number</span>     = <span class="cn">24</span>;
+<span class="cp">const</span> active: <span class="ct">boolean</span> = <span class="cp">true</span>;
+
+<span class="cp">const</span> none: <span class="ct">null</span>       = <span class="cp">null</span>;
+<span class="cp">const</span> notSet: <span class="ct">undefined</span> = <span class="cp">undefined</span>;</div>
+    </div>
+  </div>
+
+  <div class="topic topic-blue">
+    <h3 class="topic-title">📋 Arrays &amp; objects</h3>
+    <p class="explain">
+      Arrays have a type too. You can write them as <code>string[]</code> (the common style) or <code>Array&lt;string&gt;</code> (equivalent, slightly more formal).
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">arrays-objects.ts</span></div>
+      <div class="code-body"><span class="cc">// Arrays</span>
+<span class="cp">const</span> tags: <span class="ct">string</span>[] = [<span class="cs">"dev"</span>, <span class="cs">"qa"</span>];
+<span class="cp">const</span> scores: <span class="ct">Array</span>&lt;<span class="ct">number</span>&gt; = [<span class="cn">88</span>, <span class="cn">92</span>];
+
+<span class="cc">// Objects — inline type</span>
+<span class="cp">const</span> trainee: { <span class="ck">name</span>: <span class="ct">string</span>; <span class="ck">age</span>: <span class="ct">number</span> } = {
+  name: <span class="cs">"Karma"</span>,
+  age: <span class="cn">24</span>
+};</div>
+    </div>
+
+    <p class="explain">
+      Inline object types work fine for one-off uses. When the same shape shows up in two or more places, give it a <strong>name</strong> with a <code>type</code> alias — that's the next section.
+    </p>
+  </div>
+
+  <div class="topic topic-blue">
+    <h3 class="topic-title">🔍 Type inference — let TS figure it out</h3>
+    <p class="explain">
+      In most places, TypeScript can tell the type from the value. You don't need to write it.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">inference.ts</span></div>
+      <div class="code-body"><span class="cc">// TS infers these automatically</span>
+<span class="cp">const</span> name = <span class="cs">"Karma"</span>;         <span class="cc">// : string</span>
+<span class="cp">const</span> age  = <span class="cn">24</span>;               <span class="cc">// : number</span>
+<span class="cp">const</span> tags = [<span class="cs">"dev"</span>, <span class="cs">"qa"</span>];  <span class="cc">// : string[]</span>
+
+<span class="cc">// But annotate when inference isn't enough:</span>
+<span class="cp">const</span> items: <span class="ct">string</span>[] = [];  <span class="cc">// empty array → TS infers any[] without annotation</span></div>
+    </div>
+
+    <div class="callout callout-blue">
+      <div class="ci">💡</div>
+      <div><strong>Rule of thumb:</strong> let TS infer values, but <em>always</em> annotate function parameters. Parameters are the one place TS can't guess what you meant.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 3 — FUNCTIONS
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd" id="functions">
+    <span class="section-pill pill-blue">Section 03</span>
+    <h2 class="section-title">Typing functions</h2>
+    <p class="section-desc">Two annotations: one per parameter, one for the return type.</p>
+  </div>
+
+  <div class="topic topic-blue">
+    <h3 class="topic-title">⚡ Function signatures</h3>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">functions.ts</span></div>
+      <div class="code-body"><span class="cc">// Regular function — params + return type</span>
+<span class="cp">function</span> <span class="ck">add</span>(a: <span class="ct">number</span>, b: <span class="ct">number</span>): <span class="ct">number</span> {
+  <span class="cp">return</span> a + b;
+}
+
+<span class="cc">// Arrow function — same idea</span>
+<span class="cp">const</span> <span class="ck">greet</span> = (name: <span class="ct">string</span>): <span class="ct">string</span> =&gt; {
+  <span class="cp">return</span> <span class="cs">`Hello, ${name}`</span>;
+};
+
+<span class="cc">// No return value? Use void</span>
+<span class="cp">function</span> <span class="ck">log</span>(msg: <span class="ct">string</span>): <span class="ct">void</span> {
+  <span class="cp">console</span>.<span class="ck">log</span>(msg);
+}
+
+<span class="cc">// Optional parameter (notice the ?)</span>
+<span class="cp">function</span> <span class="ck">greetMaybe</span>(name?: <span class="ct">string</span>): <span class="ct">string</span> {
+  <span class="cp">return</span> name ? <span class="cs">`Hi ${name}`</span> : <span class="cs">"Hi!"</span>;
+}
+
+<span class="cc">// Default value — type is inferred from the default</span>
+<span class="cp">function</span> <span class="ck">greetDefault</span>(name = <span class="cs">"friend"</span>) {
+  <span class="cp">return</span> <span class="cs">`Hi ${name}`</span>;
+}</div>
+    </div>
+
+    <p class="explain">
+      The return type is often inferred from the <code>return</code> statement, but it's a good habit to annotate it for any function someone else might call. That way, if you accidentally change the return shape, TS tells you immediately.
+    </p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 4 — ANY / UNKNOWN / VOID
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd" id="any-unknown">
+    <span class="section-pill pill-blue">Section 04</span>
+    <h2 class="section-title">any · unknown · void</h2>
+    <p class="section-desc">Three special types. One to avoid, one to use carefully, one for return types.</p>
+  </div>
+
+  <div class="topic topic-blue">
+    <h3 class="topic-title">🪤 The three escape hatches</h3>
+    <div class="concepts concepts-3">
+      <div class="concept" style="border-left: 4px solid var(--red);">
+        <h4 style="color: var(--red);">any</h4>
+        <ul>
+          <li>Turns off all type checks</li>
+          <li>You can do anything with it</li>
+          <li><strong>Avoid it.</strong> Every <code>any</code> is a future bug</li>
+        </ul>
+      </div>
+      <div class="concept" style="border-left: 4px solid #1C5B8C;">
+        <h4 style="color: #1C5B8C;">unknown</h4>
+        <ul>
+          <li>"Could be anything"</li>
+          <li>You must check the type first</li>
+          <li>Use for API responses, JSON</li>
+        </ul>
+      </div>
+      <div class="concept" style="border-left: 4px solid var(--green);">
+        <h4 style="color: var(--green);">void</h4>
+        <ul>
+          <li>"Returns nothing"</li>
+          <li>For side-effect-only functions</li>
+          <li>Common on event handlers</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">safe-unknown.ts</span></div>
+      <div class="code-body"><span class="cc">// unknown is like any — but safer</span>
+<span class="cp">function</span> <span class="ck">handle</span>(data: <span class="ct">unknown</span>) {
+  <span class="cc">// You CAN'T just call methods:</span>
+  <span class="cc">// data.toUpperCase();  // ✕ error</span>
+
+  <span class="cc">// You MUST narrow the type first:</span>
+  <span class="cp">if</span> (<span class="cp">typeof</span> data === <span class="cs">"string"</span>) {
+    data.<span class="ck">toUpperCase</span>();   <span class="cc">// ✓ inside the check, TS knows it's a string</span>
+  }
+}</div>
+    </div>
+
+    <div class="takeaway">
+      <h4>Section takeaways</h4>
+      <ul>
+        <li>Annotate function parameters, let TS infer values</li>
+        <li><code>string[]</code>, <code>number[]</code> for arrays; inline <code>{ }</code> for one-off object shapes</li>
+        <li>Annotate return types on functions you export / reuse</li>
+        <li><strong>Avoid <code>any</code>.</strong> Use <code>unknown</code> when you genuinely don't know the type yet.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 5 — NAMING SHAPES WITH TYPE
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd" id="types">
+    <span class="section-pill pill-indigo">Section 05</span>
+    <h2 class="section-title">Naming shapes with <code>type</code></h2>
+    <p class="section-desc">Give names to the shapes you reuse — objects, unions, functions, all with one keyword.</p>
+  </div>
+
+  <div class="topic topic-indigo">
+    <h3 class="topic-title">📦 <code>type</code> — name an object shape</h3>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">trainee.ts</span></div>
+      <div class="code-body"><span class="cp">type</span> <span class="ct">Trainee</span> = {
+  <span class="ck">name</span>: <span class="ct">string</span>;
+  <span class="ck">age</span>: <span class="ct">number</span>;
+  <span class="ck">vertical</span>: <span class="ct">string</span>;
+};
+
+<span class="cp">const</span> t: <span class="ct">Trainee</span> = {
+  name: <span class="cs">"Karma"</span>,
+  age: <span class="cn">24</span>,
+  vertical: <span class="cs">"Dev"</span>
+};
+
+<span class="cc">// Reuse everywhere</span>
+<span class="cp">function</span> <span class="ck">describe</span>(t: <span class="ct">Trainee</span>): <span class="ct">string</span> {
+  <span class="cp">return</span> <span class="cs">`${t.name} is in ${t.vertical}`</span>;
+}
+
+<span class="cp">const</span> all: <span class="ct">Trainee</span>[] = [t];</div>
+    </div>
+
+    <p class="explain">
+      Read it as: <em>"<code>Trainee</code> is another name for this shape."</em> Once named, you can use <code>Trainee</code> anywhere you'd otherwise repeat the object shape.
+    </p>
+  </div>
+
+  <div class="topic topic-indigo">
+    <h3 class="topic-title">🔀 <code>type</code> does more than just objects</h3>
+    <p class="explain">
+      The real win of <code>type</code> is that <strong>one keyword handles everything</strong> — object shapes, unions, literal unions, primitives, function signatures. You use the same grammar for every kind of type definition.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">type-everywhere.ts</span></div>
+      <div class="code-body"><span class="cc">// Object shape</span>
+<span class="cp">type</span> <span class="ct">Trainee</span> = { <span class="ck">name</span>: <span class="ct">string</span>; <span class="ck">age</span>: <span class="ct">number</span>; };
+
+<span class="cc">// Unions</span>
+<span class="cp">type</span> <span class="ct">ID</span> = <span class="ct">string</span> | <span class="ct">number</span>;
+
+<span class="cc">// Literal unions</span>
+<span class="cp">type</span> <span class="ct">Status</span>   = <span class="cs">"loading"</span> | <span class="cs">"success"</span> | <span class="cs">"error"</span>;
+<span class="cp">type</span> <span class="ct">Vertical</span> = <span class="cs">"Dev"</span> | <span class="cs">"QA"</span> | <span class="cs">"BA"</span>;
+
+<span class="cc">// Function signatures</span>
+<span class="cp">type</span> <span class="ct">Click</span> = (e: <span class="ct">MouseEvent</span>) =&gt; <span class="ct">void</span>;</div>
+    </div>
+  </div>
+
+  <div class="topic topic-indigo">
+    <h3 class="topic-title">🏢 SELISE convention — <code>type</code> everywhere</h3>
+    <p class="explain">
+      TypeScript also has an <code>interface</code> keyword. For object shapes, <code>interface</code> and <code>type</code> work equivalently — but <code>interface</code> can't describe unions, primitives, or function aliases, and it silently allows "declaration merging" which can surprise readers.
+    </p>
+
+    <p class="explain">
+      <strong>At SELISE, we use <code>type</code> for everything.</strong> One keyword, no surprises, consistent grammar across all files.
+    </p>
+
+    <table class="compare-table">
+      <thead>
+        <tr><th>Feature</th><th><code>type</code></th><th><code>interface</code></th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Object shapes</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+        <tr><td>Unions &amp; primitives</td><td class="yes">✓</td><td class="no">✕</td></tr>
+        <tr><td>Function types</td><td class="yes">clean</td><td>via method syntax</td></tr>
+        <tr><td>One keyword for every kind of type</td><td class="yes">✓</td><td class="no">✕</td></tr>
+        <tr><td>Declaration merging (surprising)</td><td class="no">—</td><td class="yes">yes</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-blue">
+      <div class="ci">🏢</div>
+      <div><strong>SELISE convention:</strong> use <code>type</code> for all type definitions — objects (including React props), unions, literal unions, function types. You'll see <code>interface</code> in external libraries and other codebases — that's fine, but in your own code at SELISE, always reach for <code>type</code>.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 6 — OPTIONAL / READONLY
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd" id="optional">
+    <span class="section-pill pill-indigo">Section 06</span>
+    <h2 class="section-title">Optional &amp; readonly</h2>
+    <p class="section-desc">Two small modifiers that do a lot of work.</p>
+  </div>
+
+  <div class="topic topic-indigo">
+    <h3 class="topic-title">🎯 <code>?</code> — optional properties</h3>
+    <p class="explain">
+      A property followed by <code>?</code> is allowed to be missing. Whenever you access it, TS treats the value as <code>T | undefined</code> — so you're forced to handle both cases.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">optional.ts</span></div>
+      <div class="code-body"><span class="cp">type</span> <span class="ct">Trainee</span> = {
+  <span class="ck">name</span>: <span class="ct">string</span>;
+  <span class="ck">email</span>?: <span class="ct">string</span>;     <span class="cc">// optional</span>
+  <span class="ck">age</span>?: <span class="ct">number</span>;
+};
+
+<span class="cp">const</span> t: <span class="ct">Trainee</span> = { name: <span class="cs">"Karma"</span> };  <span class="cc">// ✓ no email/age</span>
+
+<span class="cc">// You must handle the undefined case</span>
+<span class="cp">const</span> upper = t.<span class="ck">email</span>?.<span class="ck">toUpperCase</span>();  <span class="cc">// optional chaining</span>
+<span class="cp">const</span> display = t.<span class="ck">email</span> ?? <span class="cs">"no email"</span>;    <span class="cc">// nullish coalescing</span></div>
+    </div>
+
+    <h3 class="topic-title" style="margin-top: 2rem;">🔒 <code>readonly</code> — can't reassign</h3>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">readonly.ts</span></div>
+      <div class="code-body"><span class="cp">type</span> <span class="ct">Trainee</span> = {
+  <span class="cp">readonly</span> <span class="ck">id</span>: <span class="ct">number</span>;   <span class="cc">// can't change after set</span>
+  <span class="ck">name</span>: <span class="ct">string</span>;
+};
+
+<span class="cp">const</span> t: <span class="ct">Trainee</span> = { id: <span class="cn">1</span>, name: <span class="cs">"Karma"</span> };
+t.<span class="ck">name</span> = <span class="cs">"Sonam"</span>;  <span class="cc">// ✓</span>
+t.<span class="ck">id</span>   = <span class="cn">2</span>;         <span class="cc">// ✕ Cannot assign to readonly property</span></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 7 — UNIONS & LITERALS
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd" id="unions">
+    <span class="section-pill pill-amber">Section 07</span>
+    <h2 class="section-title">Unions &amp; literal types</h2>
+    <p class="section-desc">"One of several" — the most powerful everyday TypeScript pattern.</p>
+  </div>
+
+  <div class="topic topic-amber">
+    <h3 class="topic-title">🔀 Union types</h3>
+    <p class="explain">
+      A union type uses the <code>|</code> operator to say "the value can be <em>any one</em> of these types."
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">union.ts</span></div>
+      <div class="code-body"><span class="cp">type</span> <span class="ct">ID</span> = <span class="ct">string</span> | <span class="ct">number</span>;
+
+<span class="cp">function</span> <span class="ck">format</span>(id: <span class="ct">ID</span>): <span class="ct">string</span> {
+  <span class="cp">return</span> <span class="cs">`ID: ${id}`</span>;
+}
+
+<span class="ck">format</span>(<span class="cn">42</span>);       <span class="cc">// ✓</span>
+<span class="ck">format</span>(<span class="cs">"abc"</span>);    <span class="cc">// ✓</span>
+<span class="ck">format</span>(<span class="cp">true</span>);     <span class="cc">// ✕</span>
+
+<span class="cc">// Extremely common: value-or-null while loading</span>
+<span class="cp">let</span> user: <span class="ct">Trainee</span> | <span class="ct">null</span> = <span class="cp">null</span>;</div>
+    </div>
+  </div>
+
+  <div class="topic topic-amber">
+    <h3 class="topic-title">🎯 Literal types</h3>
+    <p class="explain">
+      Instead of saying "any string", you can say "only <em>this exact</em> string". Combined with unions, this is how you build enums-on-the-cheap.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">literal.ts</span></div>
+      <div class="code-body"><span class="cp">type</span> <span class="ct">Align</span>    = <span class="cs">"left"</span> | <span class="cs">"right"</span> | <span class="cs">"center"</span>;
+<span class="cp">type</span> <span class="ct">Status</span>   = <span class="cs">"loading"</span> | <span class="cs">"success"</span> | <span class="cs">"error"</span>;
+<span class="cp">type</span> <span class="ct">Vertical</span> = <span class="cs">"Dev"</span> | <span class="cs">"QA"</span> | <span class="cs">"BA"</span> | <span class="cs">"Design"</span>;
+
+<span class="cp">function</span> <span class="ck">setAlign</span>(a: <span class="ct">Align</span>) { <span class="cc">/* … */</span> }
+
+<span class="ck">setAlign</span>(<span class="cs">"center"</span>);  <span class="cc">// ✓</span>
+<span class="ck">setAlign</span>(<span class="cs">"centre"</span>);  <span class="cc">// ✕ catches the typo</span></div>
+    </div>
+
+    <div class="callout callout-blue">
+      <div class="ci">💡</div>
+      <div>Your editor will autocomplete the allowed values — so you literally cannot typo them. This is one of the most loved features of TS.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 8 — NARROWING
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd" id="narrowing">
+    <span class="section-pill pill-amber">Section 08</span>
+    <h2 class="section-title">Type narrowing</h2>
+    <p class="section-desc">How you teach TypeScript what you know.</p>
+  </div>
+
+  <div class="topic topic-amber">
+    <h3 class="topic-title">🎯 typeof, in, truthy</h3>
+    <p class="explain">
+      When a value is a union, TypeScript won't let you use methods that exist on only one side. You have to <strong>narrow</strong> the type first — usually with a check.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">narrowing.ts</span></div>
+      <div class="code-body"><span class="cc">// typeof narrowing — for primitives</span>
+<span class="cp">function</span> <span class="ck">printId</span>(id: <span class="ct">string</span> | <span class="ct">number</span>) {
+  <span class="cp">if</span> (<span class="cp">typeof</span> id === <span class="cs">"string"</span>) {
+    <span class="cp">console</span>.<span class="ck">log</span>(id.<span class="ck">toUpperCase</span>());   <span class="cc">// TS: id is string here</span>
+  } <span class="cp">else</span> {
+    <span class="cp">console</span>.<span class="ck">log</span>(id.<span class="ck">toFixed</span>(<span class="cn">2</span>));      <span class="cc">// TS: id is number here</span>
+  }
+}
+
+<span class="cc">// "in" narrowing — for objects</span>
+<span class="cp">type</span> <span class="ct">Dog</span>  = { <span class="ck">bark</span>: () =&gt; <span class="ct">void</span> };
+<span class="cp">type</span> <span class="ct">Fish</span> = { <span class="ck">swim</span>: () =&gt; <span class="ct">void</span> };
+
+<span class="cp">function</span> <span class="ck">move</span>(a: <span class="ct">Dog</span> | <span class="ct">Fish</span>) {
+  <span class="cp">if</span> (<span class="cs">"bark"</span> <span class="cp">in</span> a) a.<span class="ck">bark</span>();
+  <span class="cp">else</span> a.<span class="ck">swim</span>();
+}
+
+<span class="cc">// Truthy narrowing — user | null</span>
+<span class="cp">function</span> <span class="ck">greet</span>(user: <span class="ct">Trainee</span> | <span class="ct">null</span>) {
+  <span class="cp">if</span> (!user) <span class="cp">return</span> <span class="cs">"hello, stranger"</span>;
+  <span class="cp">return</span> <span class="cs">`hello, ${user.name}`</span>;  <span class="cc">// TS knows user is Trainee here</span>
+}</div>
+    </div>
+  </div>
+
+  <div class="topic topic-amber">
+    <h3 class="topic-title">⭐ Discriminated unions</h3>
+    <p class="explain">
+      One of the most powerful patterns. Give each shape a distinct "tag" property (often called <code>status</code>, <code>kind</code>, or <code>type</code>). TS uses the tag to figure out which shape you have.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">discriminated.ts</span></div>
+      <div class="code-body"><span class="cp">type</span> <span class="ct">Request</span> =
+  | { <span class="ck">status</span>: <span class="cs">"loading"</span> }
+  | { <span class="ck">status</span>: <span class="cs">"success"</span>; <span class="ck">data</span>: <span class="ct">string</span> }
+  | { <span class="ck">status</span>: <span class="cs">"error"</span>;   <span class="ck">error</span>: <span class="ct">string</span> };
+
+<span class="cp">function</span> <span class="ck">render</span>(r: <span class="ct">Request</span>) {
+  <span class="cp">if</span> (r.<span class="ck">status</span> === <span class="cs">"success"</span>) <span class="cp">return</span> r.<span class="ck">data</span>;    <span class="cc">// ✓</span>
+  <span class="cp">if</span> (r.<span class="ck">status</span> === <span class="cs">"error"</span>)   <span class="cp">return</span> r.<span class="ck">error</span>;   <span class="cc">// ✓</span>
+  <span class="cp">return</span> <span class="cs">"Loading…"</span>;
+}</div>
+    </div>
+
+    <div class="callout callout-blue">
+      <div class="ci">🚀</div>
+      <div>This is exactly how you'll model API loading states in React. Instead of three booleans (<code>isLoading</code>, <code>isError</code>, <code>isSuccess</code>), you have one tagged type — and impossible states become impossible.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 9 — GENERICS
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd" id="generics">
+    <span class="section-pill pill-purple">Section 09</span>
+    <h2 class="section-title">Generics</h2>
+    <p class="section-desc">Types as parameters — one function, many types.</p>
+  </div>
+
+  <div class="topic topic-purple">
+    <h3 class="topic-title">🧬 The <code>&lt;T&gt;</code> syntax</h3>
+    <p class="explain">
+      Sometimes you want to write a function that works for <em>any</em> type, but should preserve the specific type in the return. Generics let you do that.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">generic.ts</span></div>
+      <div class="code-body"><span class="cp">function</span> <span class="ck">first</span>&lt;<span class="ct">T</span>&gt;(arr: <span class="ct">T</span>[]): <span class="ct">T</span> | <span class="ct">undefined</span> {
+  <span class="cp">return</span> arr[<span class="cn">0</span>];
+}
+
+<span class="cp">const</span> n = <span class="ck">first</span>([<span class="cn">1</span>, <span class="cn">2</span>, <span class="cn">3</span>]);       <span class="cc">// number | undefined</span>
+<span class="cp">const</span> s = <span class="ck">first</span>([<span class="cs">"a"</span>, <span class="cs">"b"</span>, <span class="cs">"c"</span>]); <span class="cc">// string | undefined</span>
+
+<span class="cc">// T is a placeholder. TS fills it in from the argument.</span></div>
+    </div>
+
+    <p class="explain">
+      You've already used generics without realising it:
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">everyday-generics.ts</span></div>
+      <div class="code-body"><span class="cc">// Array&lt;T&gt; is a generic built into TS</span>
+<span class="cp">const</span> names: <span class="ct">Array</span>&lt;<span class="ct">string</span>&gt; = [<span class="cs">"Karma"</span>];
+
+<span class="cc">// Promise&lt;T&gt; — resolves to a value of type T</span>
+<span class="cp">async</span> <span class="cp">function</span> <span class="ck">load</span>(): <span class="ct">Promise</span>&lt;<span class="ct">number</span>&gt; {
+  <span class="cp">return</span> <span class="cn">42</span>;
+}
+
+<span class="cc">// In React, you'll write:</span>
+<span class="cc">// const [count, setCount] = useState&lt;number&gt;(0);</span>
+<span class="cc">// const [user, setUser]   = useState&lt;User | null&gt;(null);</span></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 10 — UTILITY TYPES
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd" id="utility">
+    <span class="section-pill pill-purple">Section 10</span>
+    <h2 class="section-title">Utility types</h2>
+    <p class="section-desc">Built-in generic types that transform other types.</p>
+  </div>
+
+  <div class="topic topic-purple">
+    <h3 class="topic-title">🛠 Partial · Required · Pick · Omit</h3>
+    <p class="explain">
+      Once you have a <code>Trainee</code> type, utility types let you <em>derive</em> related types from it instead of duplicating. Fewer types to maintain, no drift between them.
+    </p>
+
+    <div class="concepts concepts-2">
+      <div class="concept">
+        <h4>Partial&lt;T&gt;</h4>
+        <ul><li>Every property becomes optional</li><li>Great for "update" operations</li></ul>
+      </div>
+      <div class="concept">
+        <h4>Required&lt;T&gt;</h4>
+        <ul><li>Every optional becomes required</li><li>Opposite of Partial</li></ul>
+      </div>
+      <div class="concept">
+        <h4>Pick&lt;T, K&gt;</h4>
+        <ul><li>Keep only the listed properties</li><li>e.g. <code>Pick&lt;User, "name" | "email"&gt;</code></li></ul>
+      </div>
+      <div class="concept">
+        <h4>Omit&lt;T, K&gt;</h4>
+        <ul><li>Keep everything EXCEPT the listed</li><li>e.g. <code>Omit&lt;User, "password"&gt;</code></li></ul>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">utilities.ts</span></div>
+      <div class="code-body"><span class="cp">type</span> <span class="ct">Trainee</span> = {
+  <span class="ck">id</span>: <span class="ct">number</span>;
+  <span class="ck">name</span>: <span class="ct">string</span>;
+  <span class="ck">email</span>: <span class="ct">string</span>;
+  <span class="ck">vertical</span>: <span class="ct">string</span>;
+};
+
+<span class="cc">// Form for creating — no id yet</span>
+<span class="cp">type</span> <span class="ct">NewTrainee</span>     = <span class="ct">Omit</span>&lt;<span class="ct">Trainee</span>, <span class="cs">"id"</span>&gt;;
+
+<span class="cc">// Patch request — anything optional</span>
+<span class="cp">type</span> <span class="ct">TraineeUpdate</span>  = <span class="ct">Partial</span>&lt;<span class="ct">Trainee</span>&gt;;
+
+<span class="cc">// Public view — only safe fields</span>
+<span class="cp">type</span> <span class="ct">TraineePublic</span>  = <span class="ct">Pick</span>&lt;<span class="ct">Trainee</span>, <span class="cs">"name"</span> | <span class="cs">"vertical"</span>&gt;;</div>
+    </div>
+  </div>
+
+  <div class="topic topic-purple">
+    <h3 class="topic-title">⚛️ Where this all leads — React props</h3>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:0.5rem;">TraineeCard.tsx</span></div>
+      <div class="code-body"><span class="cp">type</span> <span class="ct">TraineeCardProps</span> = {
+  <span class="ck">name</span>: <span class="ct">string</span>;                       <span class="cc">// primitive</span>
+  <span class="ck">vertical</span>: <span class="cs">"Dev"</span> | <span class="cs">"QA"</span> | <span class="cs">"BA"</span>;           <span class="cc">// literal union</span>
+  <span class="ck">tags</span>?: <span class="ct">string</span>[];                      <span class="cc">// optional array</span>
+  <span class="ck">onClick</span>?: () =&gt; <span class="ct">void</span>;                 <span class="cc">// optional function</span>
+  <span class="ck">variant</span>?: <span class="cs">"default"</span> | <span class="cs">"compact"</span>;        <span class="cc">// literal union</span>
+};
+
+<span class="cp">function</span> <span class="ck">TraineeCard</span>(props: <span class="ct">TraineeCardProps</span>) {
+  <span class="cp">return</span> (
+    &lt;<span class="ct">div</span>&gt;
+      &lt;<span class="ct">strong</span>&gt;{props.<span class="ck">name</span>}&lt;/<span class="ct">strong</span>&gt;
+      &lt;<span class="ct">small</span>&gt;{props.<span class="ck">vertical</span>}&lt;/<span class="ct">small</span>&gt;
+    &lt;/<span class="ct">div</span>&gt;
+  );
+}</div>
+    </div>
+
+    <p class="explain">
+      Every piece of this component props type — primitives, literal unions, optional properties, function signatures — is something you learned today. That's the point.
+    </p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SUMMARY
+  ═══════════════════════════════════════════ -->
+  <div class="summary">
+    <h2>Today's four big ideas</h2>
+    <p>Everything you need to start writing typed React components.</p>
+    <div class="summary-grid">
+      <div class="su-card">
+        <h4>🔤 Basic types</h4>
+        <p>Primitives, arrays, function signatures. Let TS infer values; annotate parameters. Avoid <code>any</code>.</p>
+      </div>
+      <div class="su-card">
+        <h4>📦 Naming shapes with <code>type</code></h4>
+        <p>One keyword for everything — objects, unions, primitives, functions. Use <code>?</code> for optional, <code>readonly</code> for immutable. SELISE convention: <code>type</code> everywhere.</p>
+      </div>
+      <div class="su-card">
+        <h4>🔀 Unions &amp; narrowing</h4>
+        <p><code>A | B</code> for "one of several". Literal strings. Narrow with <code>typeof</code>, <code>in</code>, truthy checks, and discriminator tags.</p>
+      </div>
+      <div class="su-card">
+        <h4>🧬 Generics &amp; utilities</h4>
+        <p><code>&lt;T&gt;</code> makes functions work for any type. <code>Partial</code>, <code>Pick</code>, <code>Omit</code> derive new types without duplication.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       EXERCISES
+  ═══════════════════════════════════════════ -->
+  <div class="section-hd" id="exercises">
+    <span class="section-pill pill-green" style="background:#F0F7EC; color: var(--green);">Practice</span>
+    <h2 class="section-title">Home exercises</h2>
+    <p class="section-desc">
+      Six problems you already solved in plain JavaScript during Class 03b. Now solve them again in TypeScript. Use <a href="https://www.typescriptlang.org/play" target="_blank" style="color: var(--blue);">TS Playground</a> or a <code>.ts</code> file in VS Code.
+    </p>
+  </div>
+
+  <div class="callout callout-blue" style="margin-bottom: 2rem;">
+    <div class="ci">🎯</div>
+    <div><strong>Focus on parameters and return types.</strong> Most other types will be inferred. When you're done, look at the compiled JS tab — notice that all the types disappear. That's normal.</div>
+  </div>
+
+  <div class="exercise">
+    <h4><span class="badge">Ex 1 · from 1.2</span> Grade classifier</h4>
+    <p>Write a function that takes a score (0–100) and returns a grade letter.</p>
+    <ul>
+      <li>Signature: <code>classify(score: number): "A" | "B" | "C" | "D" | "F"</code></li>
+      <li>90+ → A · 80–89 → B · 70–79 → C · 60–69 → D · below 60 → F</li>
+      <li><em>Why this matters:</em> the literal union return type prevents you from accidentally returning <code>"E"</code> or a lowercase <code>"a"</code>.</li>
+    </ul>
+  </div>
+
+  <div class="exercise">
+    <h4><span class="badge">Ex 2 · from 1.5</span> Celsius ↔ Fahrenheit</h4>
+    <p>Two typed arrow functions.</p>
+    <ul>
+      <li><code>const cToF = (c: number): number =&gt; …</code></li>
+      <li><code>const fToC = (f: number): number =&gt; …</code></li>
+      <li>Formulas: <code>F = C × 9/5 + 32</code> · <code>C = (F − 32) × 5/9</code></li>
+    </ul>
+  </div>
+
+  <div class="exercise">
+    <h4><span class="badge">Ex 3 · from 2.2</span> Largest in array</h4>
+    <p>Find the largest number in an array.</p>
+    <ul>
+      <li>Signature: <code>largest(arr: number[]): number</code></li>
+      <li>What should happen if the array is empty? Try throwing, or changing the signature to <code>number | undefined</code> and handling it.</li>
+    </ul>
+  </div>
+
+  <div class="exercise">
+    <h4><span class="badge">Ex 4 · from 2.6</span> Palindrome checker</h4>
+    <p>Return <code>true</code> if the string reads the same forwards and backwards.</p>
+    <ul>
+      <li>Signature: <code>isPalindrome(s: string): boolean</code></li>
+      <li>Ignore case: <code>"Racecar"</code> should count as a palindrome.</li>
+    </ul>
+  </div>
+
+  <div class="exercise">
+    <h4><span class="badge">Ex 5 · from 3.1</span> Build a Trainee type</h4>
+    <p>Define a proper type alias and create two example trainees.</p>
+    <ul>
+      <li>Define <code>type Trainee = { name: string; age: number; vertical: string; }</code></li>
+      <li>Create two variables typed as <code>Trainee</code>, each with all three fields filled in.</li>
+      <li><strong>Bonus:</strong> add an optional <code>email?: string</code> and only set it on one of them.</li>
+    </ul>
+  </div>
+
+  <div class="exercise">
+    <h4><span class="badge">Ex 6 · from 3.4</span> Find trainee by name</h4>
+    <p>Given an array of trainees, find one by name.</p>
+    <ul>
+      <li>Signature: <code>findByName(ts: Trainee[], name: string): Trainee | undefined</code></li>
+      <li>Why <code>| undefined</code>? Because the name might not exist. TS forces the caller to handle that case.</li>
+      <li><em>Hint:</em> use the array method <code>.find</code>.</li>
+    </ul>
+  </div>
+
+  <div class="callout callout-blue">
+    <div class="ci">📚</div>
+    <div><strong>Reading suggestion:</strong> the official TypeScript handbook chapter <em>"Everyday Types"</em> is excellent for revising today's material. Search for "TypeScript handbook everyday types".</div>
+  </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div class="footer">
+  <img src="../assets/SELISE_Logo_Primary_Small.png" alt="SELISE" style="height: 24px; opacity: 0.7; display: block; margin: 0 auto 0.75rem;">
+  <strong>SELISE × Pelsung</strong> · Dev Specialization · Class 05
+</div>
+
+</body>
+</html>
