@@ -156,6 +156,14 @@ trainees:
         text: No professional or tech experience (tour guide background only)
         tags: [observation]
 
+  - name: Man Dhoj Raika
+    cid: ""
+    vertical: ba
+    notes:
+      - date: 2026-04-22
+        text: "Transferring from SELISE mini cohort to Innovate for GMC. Was placed in BA vertical (B.Com background, Finance Officer at Saint Gobain, multilingual). Second transfer out of the SELISE sub-cohort after Rigzang Dorji."
+        tags: [flag, observation]
+
   - name: Puran Adhikari
     cid: ""
     vertical: dev
