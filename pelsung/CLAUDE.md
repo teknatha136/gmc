@@ -33,7 +33,6 @@ pelsung/
 │   └── SELISE X PELSUNG.pptx             #   Program intro deck (given 2026-03-08)
 ├── curriculum/                           # Shared across cohorts — evolves over time
 │   ├── index.html                        #   Structured landing page · source of truth for classes
-│   ├── software-development.docx         #   Original dev curriculum (reference)
 │   ├── shared/                           #   Shared CSS/JS across lesson HTML (e.g. slides.css)
 │   ├── foundation/                       #   Phase 1 materials (all verticals together)
 │   ├── ba-qa-combined/                   #   Combined BA+QA opener classes
