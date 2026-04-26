@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Class Notes: Intro to React</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue:    #0066B2;
+      --indigo:  #001F35;
+      --amber:   #247EC1;
+      --green:   #7BC950;
+      --purple:  #4796D1;
+      --red:     #D80032;
+      --text:    #1B2021;
+      --muted:   #7B7C7F;
+      --faint:   #9CA3AF;
+      --surf:    #ffffff;
+      --bg:      #F9F9F9;
+      --border:  #EDEDED;
+      --border-l:#F5F5F5;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Open Sans', 'Aptos', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.65;
+      font-size: 17px;
+    }
+    @media (max-width: 640px) { body { font-size: 16px; } }
+
+    .hero {
+      background: var(--surf);
+      border-bottom: 1px solid var(--border);
+      padding: 4rem 2rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 5px;
+      background: linear-gradient(135deg, #0067A3, #002D72);
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 0.35rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); }
+    .hero h1 {
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero h1 .c-blue   { color: var(--blue); }
+    .hero h1 .c-indigo { color: var(--indigo); }
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 2rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero-tags {
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+    .hero-tag {
+      padding: 0.3rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .tag-blue   { background: #E6F0F8; color: var(--blue); }
+    .tag-indigo { background: #E6E9EC; color: var(--indigo); }
+    .tag-green  { background: #F0F7EC; color: var(--green); }
+    .tag-amber  { background: #EBF0F7; color: #1C5B8C; }
+    .tag-purple { background: #ECF2F8; color: var(--purple); }
+
+    .container { max-width: 1040px; margin: 0 auto; padding: 0 2rem 6rem; }
+
+    .toc {
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem 2rem;
+      margin: 2.5rem 0;
+    }
+    .toc h3 {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--faint);
+      margin-bottom: 1.25rem;
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.4rem 2rem;
+    }
+    .toc-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.875rem;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.3rem 0;
+      border-bottom: 1px solid var(--border-l);
+      transition: color 0.15s;
+    }
+    .toc-item:hover { color: var(--indigo); }
+    .toc-item .toc-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+    .section-hd { padding: 3.5rem 0 1.5rem; }
+    .section-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0.9rem;
+      border-radius: 100px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+    .pill-blue   { background: #E6F0F8; color: var(--blue); }
+    .pill-indigo { background: #E6E9EC; color: var(--indigo); }
+    .pill-green  { background: #F0F7EC; color: var(--green); }
+    .pill-amber  { background: #EBF0F7; color: #1C5B8C; }
+    .pill-purple { background: #ECF2F8; color: var(--purple); }
+    .section-title {
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+      font-size: 2rem;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 0.4rem;
+    }
+    .section-desc { font-size: 0.95rem; color: var(--muted); }
+
+    .topic {
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem 2.25rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .topic::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 4px;
+      border-radius: 4px 0 0 4px;
+    }
+    .topic-blue::before   { background: var(--blue); }
+    .topic-indigo::before { background: var(--indigo); }
+    .topic-amber::before  { background: var(--amber); }
+    .topic-green::before  { background: var(--green); }
+    .topic-purple::before { background: var(--purple); }
+    .topic-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .explain {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+    }
+    .explain strong { color: var(--text); }
+
+    .concepts { display: grid; gap: 0.9rem; margin-bottom: 1.25rem; }
+    .concepts-2 { grid-template-columns: repeat(2, 1fr); }
+    .concepts-3 { grid-template-columns: repeat(3, 1fr); }
+    .concept {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.1rem 1.25rem;
+    }
+    .concept h4 {
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .concept ul { list-style: none; display: flex; flex-direction: column; gap: 0.35rem; }
+    .concept ul li {
+      font-size: 0.83rem;
+      color: var(--muted);
+      padding-left: 1rem;
+      position: relative;
+      line-height: 1.5;
+    }
+    .concept ul li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--faint);
+      font-size: 0.72rem;
+      top: 0.15em;
+    }
+
+    .code-block {
+      background: #001F35;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+      font-family: 'Courier New', monospace;
+    }
+    .code-bar {
+      background: #0A2A45;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.4);
+    }
+    .code-bar .cb-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .code-body {
+      padding: 1.1rem 1.25rem;
+      font-size: 0.82rem;
+      line-height: 1.85;
+      color: rgba(255,255,255,0.85);
+      white-space: pre-wrap;
+    }
+    .code-body .ck { color: #7dd3fc; }
+    .code-body .cs { color: #86efac; }
+    .code-body .cn { color: #fde68a; }
+    .code-body .cc { color: rgba(255,255,255,0.35); }
+    .code-body .cp { color: #c4b5fd; }
+    .code-body .cr { color: #fca5a5; }
+    .code-body .ci { color: #f0abfc; }
+    .code-body .ct { color: #fdba74; }
+    .code-body .ctag { color: #f472b6; }
+    .code-body .cattr { color: #fde68a; }
+
+    code { font-family: 'Courier New', monospace; background: var(--bg); padding: 0.1em 0.35em; border-radius: 4px; font-size: 0.9em; color: var(--indigo); }
+
+    .callout {
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      font-size: 0.85rem;
+      display: flex;
+      gap: 0.6rem;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      line-height: 1.55;
+    }
+    .callout .ci { font-size: 1rem; min-width: 1.2rem; flex-shrink: 0; }
+    .callout-blue  { background: #f0f7fc; border: 1px solid #B0D4E9; color: var(--muted); }
+    .callout-amber { background: #FFF8E6; border: 1px solid #F0D890; color: #664A00; }
+    .callout-red   { background: #F2E8EA; border: 1px solid #E0B5B9; color: #8B001E; }
+    .callout strong { color: var(--text); }
+    .callout-amber strong { color: #664A00; }
+    .callout-red strong { color: #8B001E; }
+
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.25rem;
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .compare-table th {
+      background: #E6E9EC;
+      color: var(--indigo);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0.6rem 1rem;
+      text-align: left;
+    }
+    .compare-table td {
+      padding: 0.55rem 1rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+
+    .takeaway {
+      background: #F0F7EC;
+      border: 1px solid #B5DBA7;
+      border-radius: 12px;
+      padding: 1.1rem 1.3rem;
+      margin-top: 1.25rem;
+    }
+    .takeaway h4 {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #2A4D14;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 0.6rem;
+    }
+    .takeaway ul { list-style: none; display: flex; flex-direction: column; gap: 0.35rem; }
+    .takeaway ul li {
+      font-size: 0.85rem;
+      color: #3B5A22;
+      padding-left: 1.1rem;
+      position: relative;
+      line-height: 1.55;
+    }
+    .takeaway ul li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--green);
+      font-weight: 700;
+      font-size: 0.9rem;
+      top: 0;
+    }
+
+    .exercise {
+      background: var(--surf);
+      border: 2px dashed var(--border);
+      border-radius: 14px;
+      padding: 1.4rem 1.6rem;
+      margin-bottom: 1.1rem;
+    }
+    .exercise h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+    .exercise h4 .badge {
+      display: inline-block;
+      background: #E6F0F8;
+      color: var(--blue);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.15rem 0.55rem;
+      border-radius: 100px;
+      margin-right: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      vertical-align: middle;
+    }
+    .exercise p { font-size: 0.88rem; color: var(--muted); margin-bottom: 0.7rem; line-height: 1.6; }
+    .exercise ul { padding-left: 1.2rem; margin-bottom: 0.5rem; color: var(--muted); font-size: 0.88rem; line-height: 1.7; }
+
+    .summary {
+      background: linear-gradient(135deg, var(--indigo) 0%, #000D19 100%);
+      color: white;
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin: 3rem 0;
+      text-align: center;
+    }
+    .summary h2 {
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 400;
+      margin-bottom: 0.4rem;
+    }
+    .summary p { font-size: 0.9rem; opacity: 0.75; margin-bottom: 1.75rem; }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.9rem;
+    }
+    .su-card {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 12px;
+      padding: 1.1rem;
+      text-align: left;
+    }
+    .su-card h4 { font-size: 0.88rem; font-weight: 700; margin-bottom: 0.4rem; opacity: 0.9; }
+    .su-card p  { font-size: 0.78rem; opacity: 0.65; line-height: 1.5; margin-bottom: 0; }
+
+    .footer {
+      background: var(--surf);
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--faint);
+    }
+    .footer strong { color: var(--muted); }
+
+    @media (max-width: 720px) {
+      .hero { padding: 2.5rem 1rem 1.75rem !important; }
+      .hero h1 { font-size: clamp(1.7rem, 7vw, 2.2rem) !important; }
+      .container { padding: 0 1rem 4rem !important; }
+      .toc-grid { grid-template-columns: 1fr !important; }
+      .concepts-2, .concepts-3, .summary-grid { grid-template-columns: 1fr !important; }
+      .section-title { font-size: 1.5rem !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <img src="../assets/SELISE_Logo_Primary.png" alt="SELISE Digital Platforms" style="height: 48px; margin-bottom: 1rem; display: block; margin-left: auto; margin-right: auto;">
+  <div class="hero-badge">
+    <div class="dot"></div>
+    Pelsung · Dev Specialization · Class 06
+  </div>
+  <h1>
+    <span class="c-blue">Intro</span> <span class="c-indigo">to React</span>
+  </h1>
+  <p class="hero-sub">Components, JSX, props, and a first taste of state — the foundation you'll use in every React class from here on.</p>
+  <div class="hero-tags">
+    <span class="hero-tag tag-blue">Components</span>
+    <span class="hero-tag tag-indigo">JSX</span>
+    <span class="hero-tag tag-amber">Props</span>
+    <span class="hero-tag tag-purple">useState</span>
+    <span class="hero-tag tag-green">Vite + TS</span>
+  </div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div class="container">
+
+  <!-- ===== TOC ===== -->
+  <div class="toc">
+    <h3>What's In These Notes</h3>
+    <div class="toc-grid">
+      <a class="toc-item" href="#why">
+        <span class="toc-dot" style="background:var(--blue)"></span>
+        💡 Why React?
+      </a>
+      <a class="toc-item" href="#setup">
+        <span class="toc-dot" style="background:var(--blue)"></span>
+        ⚙️ Setting up a Vite project
+      </a>
+      <a class="toc-item" href="#components">
+        <span class="toc-dot" style="background:var(--blue)"></span>
+        🧱 Components
+      </a>
+      <a class="toc-item" href="#jsx">
+        <span class="toc-dot" style="background:var(--blue)"></span>
+        🏷️ JSX
+      </a>
+      <a class="toc-item" href="#props">
+        <span class="toc-dot" style="background:var(--indigo)"></span>
+        📦 Props
+      </a>
+      <a class="toc-item" href="#typing-props">
+        <span class="toc-dot" style="background:var(--indigo)"></span>
+        🔤 Typing props
+      </a>
+      <a class="toc-item" href="#composition">
+        <span class="toc-dot" style="background:var(--indigo)"></span>
+        🧩 Composition &amp; the children prop
+      </a>
+      <a class="toc-item" href="#state">
+        <span class="toc-dot" style="background:var(--purple)"></span>
+        🔁 State with <code>useState</code>
+      </a>
+      <a class="toc-item" href="#rerender">
+        <span class="toc-dot" style="background:var(--purple)"></span>
+        🔄 The re-render mental model
+      </a>
+      <a class="toc-item" href="#exercises">
+        <span class="toc-dot" style="background:var(--green)"></span>
+        ⚒️ Hands-on exercises
+      </a>
+    </div>
+  </div>
+
+  <!-- ===== SECTION: WHY REACT ===== -->
+  <div id="why" class="section-hd">
+    <span class="section-pill pill-blue">Section 01 · Why</span>
+    <h2 class="section-title">Why React?</h2>
+    <p class="section-desc">A short answer: it's the right mental model for screens that change.</p>
+  </div>
+
+  <div class="topic topic-blue">
+    <h3 class="topic-title">💡 The DOM way (what you've been doing) vs. the React way</h3>
+    <p class="explain">
+      In Class 04 you built a counter the manual way — find an element with <code>querySelector</code>, listen for clicks, update <code>textContent</code> yourself. It works for one counter. It does not scale to a real product with dozens of moving parts. <strong>You spend more time keeping the screen in sync with your data than writing the actual feature.</strong>
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span><span style="margin-left:0.5rem">Vanilla JS — imperative</span></div>
+<div class="code-body"><span class="ck">let</span> <span class="cr">count</span> = <span class="cn">0</span>;
+<span class="ck">const</span> <span class="cr">btn</span>   = <span class="cr">document</span>.<span class="ci">querySelector</span>(<span class="cs">"#btn"</span>);
+<span class="ck">const</span> <span class="cr">label</span> = <span class="cr">document</span>.<span class="ci">querySelector</span>(<span class="cs">"#label"</span>);
+
+<span class="cr">btn</span>.<span class="ci">addEventListener</span>(<span class="cs">"click"</span>, () =&gt; {
+  <span class="cr">count</span>++;
+  <span class="cr">label</span>.<span class="cp">textContent</span> = <span class="cs">`Count: ${count}`</span>;
+});</div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span><span style="margin-left:0.5rem">React — declarative</span></div>
+<div class="code-body"><span class="ck">function</span> <span class="ci">Counter</span>() {
+  <span class="ck">const</span> [<span class="cr">count</span>, <span class="cr">setCount</span>] = <span class="ci">useState</span>(<span class="cn">0</span>);
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;button</span> <span class="cattr">onClick</span>={() =&gt; <span class="ci">setCount</span>(<span class="cr">count</span> + <span class="cn">1</span>)}<span class="ctag">&gt;</span>
+      Count: {<span class="cr">count</span>}
+    <span class="ctag">&lt;/button&gt;</span>
+  );
+}</div>
+    </div>
+
+    <p class="explain">
+      In React you describe <strong>what the screen looks like for a given state</strong>. When state changes, React figures out the smallest update needed and applies it to the DOM. You don't touch <code>textContent</code> ever again.
+    </p>
+
+    <div class="takeaway">
+      <h4>Section takeaways</h4>
+      <ul>
+        <li>Vanilla JS is imperative — you tell the browser every step.</li>
+        <li>React is declarative — you describe the shape, React handles updates.</li>
+        <li>Components are reusable: define once, use anywhere with different data.</li>
+        <li>React + TypeScript catches a whole class of bugs before you hit "save".</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== SECTION: SETUP ===== -->
+  <div id="setup" class="section-hd">
+    <span class="section-pill pill-blue">Section 02 · Setup</span>
+    <h2 class="section-title">Setting up a Vite project</h2>
+    <p class="section-desc">The same tool you used in earlier classes — now with a React + TypeScript template.</p>
+  </div>
+
+  <div class="topic topic-blue">
+    <h3 class="topic-title">⚙️ Scaffold and run</h3>
+    <p class="explain">
+      Vite is a fast dev server. The <code>react-ts</code> template gives you a working React + TypeScript starter in seconds.
+    </p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span><span style="margin-left:0.5rem">terminal</span></div>
+<div class="code-body"><span class="ci">npm</span> create vite@latest hello-react -- --template react-ts
+<span class="ci">cd</span> hello-react
+<span class="ci">npm</span> install
+<span class="ci">npm</span> run dev</div>
+    </div>
+    <p class="explain">Open the URL Vite prints (default <code>http://localhost:5173</code>) and you'll see the starter page. Edit a file → save → the page updates automatically.</p>
+
+    <div class="concepts concepts-3">
+      <div class="concept">
+        <h4>📄 src/main.tsx</h4>
+        <ul>
+          <li>The entry file — runs first.</li>
+          <li>Mounts <code>&lt;App /&gt;</code> into <code>&lt;div id="root"&gt;</code>.</li>
+          <li>You usually don't touch this much.</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4>📄 src/app.tsx</h4>
+        <ul>
+          <li>Your top-level component.</li>
+          <li>Where you start writing today.</li>
+          <li>Imports other components from <code>src/</code>.</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4>📄 index.html</h4>
+        <ul>
+          <li>Just one <code>&lt;div id="root"&gt;&lt;/div&gt;</code>.</li>
+          <li>React fills the page from there.</li>
+          <li>You almost never edit it.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION: COMPONENTS ===== -->
+  <div id="components" class="section-hd">
+    <span class="section-pill pill-blue">Section 03 · Components</span>
+    <h2 class="section-title">Components</h2>
+    <p class="section-desc">A component is a function that returns UI. That's it.</p>
+  </div>
+
+  <div class="topic topic-blue">
+    <h3 class="topic-title">🧱 Your first component</h3>
+    <p class="explain">
+      A React component is a JavaScript function whose name starts with a capital letter and whose return value is JSX. Capital letter is mandatory — React uses it to tell components apart from regular HTML tags.
+    </p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span><span style="margin-left:0.5rem">welcome.tsx</span></div>
+<div class="code-body"><span class="ck">function</span> <span class="ci">Welcome</span>() {
+  <span class="ck">return</span> <span class="ctag">&lt;h1&gt;</span>Hello, Pelsung!<span class="ctag">&lt;/h1&gt;</span>;
+}
+
+<span class="ck">export</span> <span class="ck">default</span> <span class="ci">Welcome</span>;</div>
+    </div>
+
+    <p class="explain">Once defined, you use it like an HTML tag:</p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span><span style="margin-left:0.5rem">app.tsx</span></div>
+<div class="code-body"><span class="ck">import</span> <span class="ci">Welcome</span> <span class="ck">from</span> <span class="cs">"./welcome"</span>;
+
+<span class="ck">function</span> <span class="ci">App</span>() {
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;div&gt;</span>
+      <span class="ctag">&lt;Welcome /&gt;</span>
+      <span class="ctag">&lt;Welcome /&gt;</span>
+    <span class="ctag">&lt;/div&gt;</span>
+  );
+}</div>
+    </div>
+
+    <div class="callout callout-amber">
+      <span class="ci">⚠️</span>
+      <div><strong>Functional components only.</strong> You may run into "class components" online — they look like <code>class App extends React.Component</code>. They're legacy. We don't write them in 2026, and we won't cover them in this course.</div>
+    </div>
+
+    <div class="takeaway">
+      <h4>Section takeaways</h4>
+      <ul>
+        <li>Components are just functions returning JSX.</li>
+        <li>Names start with a capital letter — always.</li>
+        <li>Use them like custom HTML tags: <code>&lt;Welcome /&gt;</code>.</li>
+        <li>One file per component is the convention.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== SECTION: JSX ===== -->
+  <div id="jsx" class="section-hd">
+    <span class="section-pill pill-blue">Section 04 · JSX</span>
+    <h2 class="section-title">JSX</h2>
+    <p class="section-desc">It looks like HTML. It's actually JavaScript.</p>
+  </div>
+
+  <div class="topic topic-blue">
+    <h3 class="topic-title">🏷️ What JSX really is</h3>
+    <p class="explain">
+      JSX is a syntax extension on top of JavaScript. The <code>&lt;h1&gt;</code> you write is not HTML — it's JS that gets compiled to a function call. Vite handles the conversion. You'll never write the compiled version yourself, but it's worth seeing once.
+    </p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span><span style="margin-left:0.5rem">JSX vs compiled</span></div>
+<div class="code-body"><span class="cc">// What you write</span>
+<span class="ck">const</span> <span class="cr">el</span> = <span class="ctag">&lt;h1</span> <span class="cattr">className</span>=<span class="cs">"title"</span><span class="ctag">&gt;</span>Hello<span class="ctag">&lt;/h1&gt;</span>;
+
+<span class="cc">// What it becomes after Vite compiles it</span>
+<span class="ck">const</span> <span class="cr">el</span> = <span class="ci">React.createElement</span>(<span class="cs">"h1"</span>, { <span class="cp">className</span>: <span class="cs">"title"</span> }, <span class="cs">"Hello"</span>);</div>
+    </div>
+  </div>
+
+  <div class="topic topic-blue">
+    <h3 class="topic-title">🔧 JSX rules to remember</h3>
+    <p class="explain">JSX has small but important differences from HTML. Memorise these — they catch every beginner.</p>
+
+    <div class="concepts concepts-2">
+      <div class="concept">
+        <h4>1. <code>className</code>, not <code>class</code></h4>
+        <ul>
+          <li><code>class</code> is reserved in JS.</li>
+          <li>Use <code>&lt;div className="card"&gt;</code>.</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4>2. camelCase events</h4>
+        <ul>
+          <li><code>onclick</code> → <code>onClick</code></li>
+          <li><code>onchange</code> → <code>onChange</code></li>
+          <li><code>onsubmit</code> → <code>onSubmit</code></li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4>3. Self-close empty tags</h4>
+        <ul>
+          <li><code>&lt;img /&gt;</code>, <code>&lt;input /&gt;</code>, <code>&lt;br /&gt;</code></li>
+          <li>The slash before <code>&gt;</code> is required.</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4>4. One parent element</h4>
+        <ul>
+          <li>JSX must return a single root.</li>
+          <li>Wrap siblings in <code>&lt;div&gt;</code> or a Fragment <code>&lt;&gt;...&lt;/&gt;</code>.</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4>5. <code>{ }</code> for JS expressions</h4>
+        <ul>
+          <li>Anything inside curly braces is JS.</li>
+          <li>Variables, calls, ternaries, math.</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4>6. <code>style</code> is an object</h4>
+        <ul>
+          <li><code>style={{ color: "red" }}</code> — double braces.</li>
+          <li>camelCase property names: <code>backgroundColor</code>.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic topic-blue">
+    <h3 class="topic-title">🔣 Embedding JS in JSX</h3>
+    <p class="explain">Curly braces inside JSX are an escape hatch back into JavaScript. Anything that evaluates to a value goes there.</p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span><span style="margin-left:0.5rem">app.tsx</span></div>
+<div class="code-body"><span class="ck">function</span> <span class="ci">App</span>() {
+  <span class="ck">const</span> <span class="cr">name</span> = <span class="cs">"Karma"</span>;
+  <span class="ck">const</span> <span class="cr">isOnline</span> = <span class="ck">true</span>;
+  <span class="ck">const</span> <span class="cr">topics</span> = [<span class="cs">"JSX"</span>, <span class="cs">"Props"</span>, <span class="cs">"State"</span>];
+
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;div&gt;</span>
+      <span class="ctag">&lt;h1&gt;</span>Hello, {<span class="cr">name</span>}!<span class="ctag">&lt;/h1&gt;</span>                      <span class="cc">// variable</span>
+      <span class="ctag">&lt;p&gt;</span>{<span class="cr">isOnline</span> ? <span class="cs">"🟢 Online"</span> : <span class="cs">"🔴 Offline"</span>}<span class="ctag">&lt;/p&gt;</span>  <span class="cc">// ternary</span>
+      <span class="ctag">&lt;ul&gt;</span>
+        {<span class="cr">topics</span>.<span class="ci">map</span>(<span class="cr">t</span> =&gt; <span class="ctag">&lt;li</span> <span class="cattr">key</span>={<span class="cr">t</span>}<span class="ctag">&gt;</span>{<span class="cr">t</span>}<span class="ctag">&lt;/li&gt;</span>)}        <span class="cc">// list</span>
+      <span class="ctag">&lt;/ul&gt;</span>
+    <span class="ctag">&lt;/div&gt;</span>
+  );
+}</div>
+    </div>
+
+    <div class="takeaway">
+      <h4>Section takeaways</h4>
+      <ul>
+        <li>JSX is JavaScript with HTML-shaped syntax — Vite compiles it to function calls.</li>
+        <li>Six rules: <code>className</code>, camelCase events, self-close, one parent, <code>{ }</code>, style is an object.</li>
+        <li>Inside <code>{ }</code> you have full JavaScript — variables, ternaries, <code>.map()</code>.</li>
+        <li>JSX can't run statements like <code>if</code> or loops directly — use ternaries and <code>.map()</code> instead.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== SECTION: PROPS ===== -->
+  <div id="props" class="section-hd">
+    <span class="section-pill pill-indigo">Section 05 · Props</span>
+    <h2 class="section-title">Props — passing data into components</h2>
+    <p class="section-desc">Props turn one component definition into many different appearances.</p>
+  </div>
+
+  <div class="topic topic-indigo">
+    <h3 class="topic-title">📦 What props are</h3>
+    <p class="explain">
+      A component without props is rigid — it always shows the same thing. Real apps need flexibility. <strong>Props are arguments to a component</strong>, the same way function arguments work. The parent passes data down; the child renders based on it.
+    </p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span><span style="margin-left:0.5rem">greet.tsx</span></div>
+<div class="code-body"><span class="cc">// Receive props as an argument</span>
+<span class="ck">function</span> <span class="ci">Greet</span>(<span class="cr">props</span>) {
+  <span class="ck">return</span> <span class="ctag">&lt;h1&gt;</span>Hello, {<span class="cr">props</span>.<span class="cp">name</span>}!<span class="ctag">&lt;/h1&gt;</span>;
+}
+
+<span class="cc">// Pass them like attributes</span>
+<span class="ctag">&lt;Greet</span> <span class="cattr">name</span>=<span class="cs">"Karma"</span> <span class="ctag">/&gt;</span>
+<span class="ctag">&lt;Greet</span> <span class="cattr">name</span>=<span class="cs">"Pema"</span> <span class="ctag">/&gt;</span>
+<span class="ctag">&lt;Greet</span> <span class="cattr">name</span>=<span class="cs">"Tashi"</span> <span class="ctag">/&gt;</span></div>
+    </div>
+
+    <div class="callout callout-red">
+      <span class="ci">🛑</span>
+      <div><strong>Props are read-only.</strong> Inside a component, never write <code>props.name = "X"</code>. Props flow downward — if the value needs to change, that's a job for state (next section), and the change is owned by the parent that passed the prop.</div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION: TYPING PROPS ===== -->
+  <div id="typing-props" class="section-hd">
+    <span class="section-pill pill-indigo">Section 06 · Typing</span>
+    <h2 class="section-title">Typing props with TypeScript</h2>
+    <p class="section-desc">Use <code>type</code> for the props shape — it's the SELISE convention you saw in Class 05.</p>
+  </div>
+
+  <div class="topic topic-indigo">
+    <h3 class="topic-title">🔤 Define a Props type, destructure in the signature</h3>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span><span style="margin-left:0.5rem">greet.tsx — typed</span></div>
+<div class="code-body"><span class="ck">type</span> <span class="ct">GreetProps</span> = {
+  <span class="cp">name</span>: <span class="ct">string</span>;
+  <span class="cp">role</span>?: <span class="ct">string</span>;          <span class="cc">// optional</span>
+};
+
+<span class="ck">function</span> <span class="ci">Greet</span>({ <span class="cr">name</span>, <span class="cr">role</span> }: <span class="ct">GreetProps</span>) {
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;div&gt;</span>
+      <span class="ctag">&lt;h1&gt;</span>Hello, {<span class="cr">name</span>}!<span class="ctag">&lt;/h1&gt;</span>
+      {<span class="cr">role</span> &amp;&amp; <span class="ctag">&lt;p&gt;</span>You are a {<span class="cr">role</span>}.<span class="ctag">&lt;/p&gt;</span>}
+    <span class="ctag">&lt;/div&gt;</span>
+  );
+}</div>
+    </div>
+
+    <p class="explain">Two things to notice:</p>
+    <div class="concepts concepts-2">
+      <div class="concept">
+        <h4>Destructuring in the signature</h4>
+        <ul>
+          <li><code>{ name, role }</code> pulls those keys out directly.</li>
+          <li>Cleaner than writing <code>props.name</code> everywhere.</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4>Optional props with <code>?</code></h4>
+        <ul>
+          <li><code>role?: string</code> means the parent doesn't have to pass it.</li>
+          <li>Inside the component, <code>role</code> may be <code>undefined</code> — guard with <code>&amp;&amp;</code>.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout callout-blue">
+      <span class="ci">💡</span>
+      <div><strong>Default values</strong> use destructuring defaults: <code>function Button({ label, variant = "primary" })</code>. If the parent doesn't pass <code>variant</code>, you get <code>"primary"</code>.</div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION: COMPOSITION ===== -->
+  <div id="composition" class="section-hd">
+    <span class="section-pill pill-indigo">Section 07 · Composition</span>
+    <h2 class="section-title">Composition &amp; the children prop</h2>
+    <p class="section-desc">Render a list. Wrap content. Build screens out of small parts.</p>
+  </div>
+
+  <div class="topic topic-indigo">
+    <h3 class="topic-title">🧩 Render a list from data</h3>
+    <p class="explain">The most common React pattern: an array of data, mapped into an array of components.</p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span><span style="margin-left:0.5rem">app.tsx</span></div>
+<div class="code-body"><span class="ck">const</span> <span class="cr">trainees</span> = [
+  { <span class="cp">name</span>: <span class="cs">"Karma"</span>, <span class="cp">role</span>: <span class="cs">"Dev"</span> },
+  { <span class="cp">name</span>: <span class="cs">"Pema"</span>,  <span class="cp">role</span>: <span class="cs">"BA"</span>  },
+  { <span class="cp">name</span>: <span class="cs">"Tashi"</span>, <span class="cp">role</span>: <span class="cs">"QA"</span>  },
+];
+
+<span class="ck">function</span> <span class="ci">App</span>() {
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;div&gt;</span>
+      {<span class="cr">trainees</span>.<span class="ci">map</span>(<span class="cr">t</span> =&gt; (
+        <span class="ctag">&lt;Greet</span> <span class="cattr">key</span>={<span class="cr">t</span>.<span class="cp">name</span>} <span class="cattr">name</span>={<span class="cr">t</span>.<span class="cp">name</span>} <span class="cattr">role</span>={<span class="cr">t</span>.<span class="cp">role</span>} <span class="ctag">/&gt;</span>
+      ))}
+    <span class="ctag">&lt;/div&gt;</span>
+  );
+}</div>
+    </div>
+
+    <div class="callout callout-amber">
+      <span class="ci">🔑</span>
+      <div><strong>The <code>key</code> prop.</strong> When you render a list, give each item a unique <code>key</code>. React uses it to track items efficiently when the list changes. <code>key</code> must be unique among siblings — usually an id from your data. We'll go deeper in Class 07.</div>
+    </div>
+  </div>
+
+  <div class="topic topic-indigo">
+    <h3 class="topic-title">📥 The children prop</h3>
+    <p class="explain">
+      <code>children</code> is a special prop — whatever you put <em>between</em> a component's opening and closing tags is its <code>children</code>. It's how you build wrappers like cards, modals, or layout boxes.
+    </p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span><span style="margin-left:0.5rem">card.tsx</span></div>
+<div class="code-body"><span class="ck">type</span> <span class="ct">CardProps</span> = { <span class="cp">children</span>: <span class="ct">React.ReactNode</span> };
+
+<span class="ck">function</span> <span class="ci">Card</span>({ <span class="cr">children</span> }: <span class="ct">CardProps</span>) {
+  <span class="ck">return</span> <span class="ctag">&lt;div</span> <span class="cattr">className</span>=<span class="cs">"card"</span><span class="ctag">&gt;</span>{<span class="cr">children</span>}<span class="ctag">&lt;/div&gt;</span>;
+}
+
+<span class="cc">// Used like this:</span>
+<span class="ctag">&lt;Card&gt;</span>
+  <span class="ctag">&lt;h2&gt;</span>Hello<span class="ctag">&lt;/h2&gt;</span>
+  <span class="ctag">&lt;p&gt;</span>Anything here becomes the children prop.<span class="ctag">&lt;/p&gt;</span>
+<span class="ctag">&lt;/Card&gt;</span></div>
+    </div>
+  </div>
+
+  <div class="topic topic-indigo">
+    <h3 class="topic-title">🐛 Common props mistakes</h3>
+    <table class="compare-table">
+      <thead>
+        <tr><th>Mistake</th><th>What goes wrong</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>count="3"</code></td><td>Passes the string <code>"3"</code>, not the number. Use <code>count={3}</code>.</td></tr>
+        <tr><td><code>props.name = "X"</code></td><td>Mutating props is a bug. Props are read-only.</td></tr>
+        <tr><td>Forgetting a required prop</td><td>TypeScript error — the editor catches it before run.</td></tr>
+        <tr><td>Reading <code>props.key</code></td><td><code>key</code> is for React's diff algorithm, not accessible inside.</td></tr>
+        <tr><td>Same key twice in a list</td><td>React warning + buggy updates. Each key must be unique among siblings.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="takeaway">
+      <h4>Section takeaways</h4>
+      <ul>
+        <li>Props are arguments to a component. Read-only inside.</li>
+        <li>Type them with <code>type Props = { ... }</code> and destructure in the signature.</li>
+        <li>Use <code>?</code> for optional, <code>=</code> in destructuring for defaults.</li>
+        <li>Lists use <code>.map()</code> + a unique <code>key</code> on each item.</li>
+        <li><code>children</code> is the special prop for whatever's between the tags.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== SECTION: STATE ===== -->
+  <div id="state" class="section-hd">
+    <span class="section-pill pill-purple">Section 08 · State</span>
+    <h2 class="section-title">State with <code>useState</code></h2>
+    <p class="section-desc">Data that changes — and tells React to redraw.</p>
+  </div>
+
+  <div class="topic topic-purple">
+    <h3 class="topic-title">🔁 Why state exists</h3>
+    <p class="explain">
+      Props come from outside and don't change inside the component. But pages aren't static — counters click, forms type, toggles flip. Plain variables won't trigger a redraw, because React doesn't know they changed. <strong>State is data React watches</strong>: when it changes, React runs your component again and updates the screen.
+    </p>
+    <p class="explain">
+      <code>useState</code> is the simplest hook. It gives you a value, and a way to update it.
+    </p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span><span style="margin-left:0.5rem">counter.tsx</span></div>
+<div class="code-body"><span class="ck">import</span> { <span class="ci">useState</span> } <span class="ck">from</span> <span class="cs">"react"</span>;
+
+<span class="ck">function</span> <span class="ci">Counter</span>() {
+  <span class="ck">const</span> [<span class="cr">count</span>, <span class="cr">setCount</span>] = <span class="ci">useState</span>(<span class="cn">0</span>);
+  <span class="cc">//      ↑ value      ↑ setter     ↑ initial value</span>
+
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;button</span> <span class="cattr">onClick</span>={() =&gt; <span class="ci">setCount</span>(<span class="cr">count</span> + <span class="cn">1</span>)}<span class="ctag">&gt;</span>
+      Clicked {<span class="cr">count</span>} times
+    <span class="ctag">&lt;/button&gt;</span>
+  );
+}</div>
+    </div>
+    <p class="explain">
+      <code>useState(0)</code> returns a pair: the current value (<code>count</code>) and a setter (<code>setCount</code>). The names are yours — it's just array destructuring.
+    </p>
+  </div>
+
+  <!-- ===== SECTION: RE-RENDER ===== -->
+  <div id="rerender" class="section-hd">
+    <span class="section-pill pill-purple">Section 09 · Re-renders</span>
+    <h2 class="section-title">The re-render mental model</h2>
+    <p class="section-desc">Understand this and useState stops being magic.</p>
+  </div>
+
+  <div class="topic topic-purple">
+    <h3 class="topic-title">🔄 What happens when you call the setter</h3>
+    <ol style="padding-left: 1.4rem; color: var(--muted); font-size: 0.9rem; line-height: 1.8; margin-bottom: 1.25rem;">
+      <li>You call <code>setCount(1)</code>.</li>
+      <li>React schedules a re-render of <code>Counter</code>.</li>
+      <li>React calls your <code>Counter()</code> function again — top to bottom.</li>
+      <li>This time, <code>useState</code> hands back <code>1</code> instead of <code>0</code>.</li>
+      <li>Your function returns new JSX. React diffs it against the old JSX.</li>
+      <li>Only the parts that actually changed get applied to the real DOM.</li>
+    </ol>
+
+    <div class="callout callout-red">
+      <span class="ci">🛑</span>
+      <div>
+        <strong>Don't mutate state directly.</strong> Writing <code>count++</code> or <code>count = count + 1</code> doesn't tell React anything changed. <em>Always</em> call the setter: <code>setCount(count + 1)</code>.
+      </div>
+    </div>
+
+    <div class="callout callout-amber">
+      <span class="ci">📐</span>
+      <div>
+        <strong>For arrays and objects in state, make a new one.</strong> Don't <code>topics.push("X")</code> — do <code>setTopics([...topics, "X"])</code>. React detects "this is a different array" and re-renders. Mutating in place won't trigger anything.
+      </div>
+    </div>
+  </div>
+
+  <div class="topic topic-purple">
+    <h3 class="topic-title">📌 Three rules for state</h3>
+    <div class="concepts concepts-3">
+      <div class="concept">
+        <h4>Use the setter</h4>
+        <ul>
+          <li>Always go through the setter function.</li>
+          <li><code>count++</code> is a silent bug.</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4>Setting → re-render</h4>
+        <ul>
+          <li>Calling the setter schedules React to re-run the component.</li>
+          <li>You don't need to update the DOM yourself.</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4>Per-instance</h4>
+        <ul>
+          <li>Two <code>&lt;Counter /&gt;</code>s have two separate counts.</li>
+          <li>Each component instance has its own state.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="takeaway">
+      <h4>Section takeaways</h4>
+      <ul>
+        <li><code>useState(initial)</code> returns <code>[value, setter]</code>.</li>
+        <li>Calling the setter triggers a re-render.</li>
+        <li>Never mutate state in place — for arrays/objects, create new ones.</li>
+        <li>Each component instance has its own independent state.</li>
+        <li>We'll do more hooks (<code>useEffect</code>, custom hooks, etc.) in Class 07.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== SECTION: EXERCISES ===== -->
+  <div id="exercises" class="section-hd">
+    <span class="section-pill pill-green">Hands-on · 3 exercises</span>
+    <h2 class="section-title">Exercises to redo at home</h2>
+    <p class="section-desc">Repeat tonight without looking at notes. Muscle memory matters more than understanding here.</p>
+  </div>
+
+  <div class="exercise">
+    <h4><span class="badge">Exercise 1</span> Welcome Card component</h4>
+    <p>Convert this static HTML into a reusable <code>&lt;WelcomeCard /&gt;</code> component:</p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span></div>
+<div class="code-body"><span class="ctag">&lt;div</span> <span class="cattr">class</span>=<span class="cs">"card"</span><span class="ctag">&gt;</span>
+  <span class="ctag">&lt;p</span> <span class="cattr">class</span>=<span class="cs">"eyebrow"</span><span class="ctag">&gt;</span>SELISE × Pelsung<span class="ctag">&lt;/p&gt;</span>
+  <span class="ctag">&lt;h2&gt;</span>Welcome to React<span class="ctag">&lt;/h2&gt;</span>
+  <span class="ctag">&lt;p&gt;</span>Today we build our first component.<span class="ctag">&lt;/p&gt;</span>
+<span class="ctag">&lt;/div&gt;</span></div>
+    </div>
+    <ul>
+      <li>Save it as <code>src/welcome-card.tsx</code>.</li>
+      <li>Fix <code>class</code> → <code>className</code>.</li>
+      <li>Import &amp; render it twice in <code>app.tsx</code>.</li>
+      <li>Add some basic styling (CSS file or inline <code>style</code>).</li>
+    </ul>
+  </div>
+
+  <div class="exercise">
+    <h4><span class="badge">Exercise 2</span> TraineeBadge with props</h4>
+    <p>Build <code>&lt;TraineeBadge /&gt;</code> with this exact prop shape, then render five of them from an array.</p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span></div>
+<div class="code-body"><span class="ck">type</span> <span class="ct">TraineeBadgeProps</span> = {
+  <span class="cp">name</span>: <span class="ct">string</span>;
+  <span class="cp">vertical</span>: <span class="cs">"Dev"</span> | <span class="cs">"BA"</span> | <span class="cs">"QA"</span>;
+  <span class="cp">cohort</span>: <span class="ct">number</span>;
+};</div>
+    </div>
+    <ul>
+      <li>Display: name (bold), vertical (small uppercase eyebrow), cohort (small grey text).</li>
+      <li>In <code>app.tsx</code>, define a <code>trainees</code> array of five entries.</li>
+      <li>Use <code>.map()</code> to render one badge per trainee, with a unique <code>key</code>.</li>
+      <li>Stretch: add a <code>variant?: "compact" | "full"</code> prop with a default.</li>
+    </ul>
+  </div>
+
+  <div class="exercise">
+    <h4><span class="badge">Exercise 3</span> Counter, Toggle, and (stretch) TopicList</h4>
+    <p>Three small components, each using <code>useState</code>:</p>
+    <ul>
+      <li><strong>Counter:</strong> three buttons — <code>+1</code>, <code>−1</code>, <code>Reset</code>. Show count above. Disable <code>−1</code> when count is 0.</li>
+      <li><strong>AttendanceToggle:</strong> takes a <code>name</code> prop. Has a button that flips between <em>Present</em> and <em>Absent</em>. Render five toggles in <code>app.tsx</code> — one per trainee. Confirm each tracks its own state.</li>
+      <li><strong>TopicList (stretch):</strong> input + Add button + a list. Two pieces of state: <code>draft: string</code> and <code>topics: string[]</code>. On Add, append the draft to the list and clear the input. Don't allow empty topics.</li>
+    </ul>
+  </div>
+
+  <!-- ===== SUMMARY ===== -->
+  <div class="summary">
+    <h2>You wrote your first React app today.</h2>
+    <p>Four ideas. They power everything from here on.</p>
+    <div class="summary-grid">
+      <div class="su-card">
+        <h4>🧱 Components</h4>
+        <p>Functions that return JSX. Reusable. Always functional, never class-based.</p>
+      </div>
+      <div class="su-card">
+        <h4>🏷️ JSX</h4>
+        <p>JS that looks like HTML. <code>className</code>, <code>{ }</code>, one parent, self-close empties.</p>
+      </div>
+      <div class="su-card">
+        <h4>📦 Props</h4>
+        <p>Read-only inputs. Typed with <code>type Props = { ... }</code>. Destructured in the signature.</p>
+      </div>
+      <div class="su-card">
+        <h4>🔁 State</h4>
+        <p><code>useState(initial)</code> returns <code>[value, setter]</code>. Setter triggers a re-render.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div class="footer">
+  <strong>SELISE × Pelsung</strong> · Dev Specialization · Class 06 — Intro to React<br/>
+  Open Sans + Bahnschrift · SELISE Brand Colours · Cohort 3 · 2026
+</div>
+
+</body>
+</html>

@@ -24,7 +24,7 @@ Assignment records and per-trainee notes live in `pelsung-c3-vertical-selection.
 ## Class Structure (Cohort 3)
 - **Foundation:** 11 classes (all 45 together)
 - **Core Specialization:** per-vertical counts below
-  - Dev: **22 classes**
+  - Dev: **20 classes**
   - Testing (QA): **26 classes**
   - Business Analysis (BA): **27 classes**
   - Software Design: not running this cohort
