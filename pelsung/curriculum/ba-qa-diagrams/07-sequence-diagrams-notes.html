@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sequence Diagrams — BA Diagrams 07</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#0066B2; --indigo:#001F35; --amber:#247EC1; --green:#7BC950; --purple:#4796D1; --red:#D80032; --text:#1B2021; --muted:#7B7C7F; --faint:#9CA3AF; --surf:#fff; --bg:#F9F9F9; --border:#EDEDED; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Open Sans','Aptos',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; font-size:17px; -webkit-font-smoothing:antialiased; }
+    h1,h2,h3,h4,h5,h6 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:400; letter-spacing:-0.01em; }
+    a { color: var(--blue); }
+    .hero { background:var(--surf); border-bottom:1px solid var(--border); padding:4rem 2rem 3rem; text-align:center; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background: linear-gradient(135deg, #0067A3, #002D72); }
+    .logo-corner { position:absolute; top: 1.25rem; left: 1.5rem; opacity:0.85; }
+    .logo-corner img { height: 34px; }
+    .hero-badge { display:inline-flex; align-items:center; gap:0.5rem; background:var(--bg); border:1px solid var(--border); border-radius:100px; padding:0.35rem 1rem; font-size:0.75rem; font-weight:700; color:var(--muted); letter-spacing:0.07em; text-transform:uppercase; margin-bottom:1.5rem; }
+    .hero-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--amber); }
+    .hero h1 { font-size:clamp(2rem,5vw,3.5rem); line-height:1.15; margin-bottom:0.75rem; }
+    .c-blue{color:var(--blue);} .c-indigo{color:var(--indigo);}
+    .hero-sub { font-size:1rem; color:var(--muted); margin-bottom:2rem; max-width:760px; margin-left:auto; margin-right:auto; }
+    .hero-tags { display:flex; justify-content:center; gap:0.6rem; flex-wrap:wrap; }
+    .hero-tag { padding:0.3rem 0.9rem; border-radius:8px; font-size:0.78rem; font-weight:600; background:#E6F0F8; color:var(--blue); }
+    .container { max-width:1040px; margin:0 auto; padding:0 2rem 6rem; }
+    .toc { background:var(--surf); border:1px solid var(--border); border-radius:16px; padding:1.75rem 2rem; margin:2.5rem 0; }
+    .toc h3 { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); margin-bottom:1.25rem; }
+    .toc ol { list-style: none; counter-reset: step; }
+    .toc li { counter-increment: step; padding:0.45rem 0; border-bottom:1px solid var(--border); }
+    .toc li:last-child { border-bottom:none; }
+    .toc li::before { content: counter(step, decimal-leading-zero); color:var(--faint); font-family:'Bahnschrift','Segoe UI',sans-serif; margin-right:0.8rem; font-size:0.9rem; }
+    .toc a { text-decoration:none; color:var(--text); font-weight:500; }
+    .toc a:hover { color: var(--blue); }
+    section.chapter { margin: 3.5rem 0; }
+    .chapter-head { margin-bottom:1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
+    .chapter-eyebrow { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--blue); margin-bottom:0.3rem; }
+    .chapter-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--indigo); }
+    p { margin: 0.7rem 0; }
+    ul, ol { margin: 0.6rem 0 0.6rem 1.3rem; }
+    li { margin: 0.3rem 0; }
+    strong { color: var(--indigo); }
+    .callout { background:var(--surf); border:1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 10px; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+    .callout.amber { border-left-color: var(--amber); }
+    .callout.green { border-left-color: var(--green); }
+    .callout.red { border-left-color: var(--red); }
+    .callout.indigo { border-left-color: var(--indigo); }
+    .callout h4 { font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--indigo); }
+    .pair { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin:1rem 0; }
+    @media (max-width: 720px) { .pair { grid-template-columns: 1fr; } }
+    .big-tbl { background:var(--surf); border:1px solid var(--border); border-radius:10px; overflow:auto; margin:1rem 0; }
+    .big-tbl table { width:100%; border-collapse:collapse; font-size:0.9rem; }
+    .big-tbl th { background:var(--bg); padding:0.6rem 0.9rem; text-align:left; color:var(--muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; border-bottom:1px solid var(--border); }
+    .big-tbl td { padding:0.6rem 0.9rem; border-bottom:1px solid var(--border); color:var(--text); vertical-align:top; line-height:1.6; }
+    .big-tbl tr:last-child td { border-bottom:none; }
+    .big-tbl td:first-child { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; }
+    .sym-row { display:flex; align-items:center; gap:1rem; padding:0.8rem 0; border-bottom:1px solid var(--border); }
+    .sym-row:last-child { border-bottom:none; }
+    .sym-row .sym-shape { flex-shrink:0; width:120px; display:flex; justify-content:center; align-items:center; }
+    .sym-row .sym-body h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.02rem; margin-bottom:0.2rem; }
+    .sym-row .sym-body p { font-size:0.92rem; color:var(--text); line-height:1.6; margin:0; }
+    .diagram-box { background:var(--surf); border:1px solid var(--border); border-radius:10px; padding:1rem; margin:1.25rem 0; overflow-x:auto; }
+    .diagram-box svg { display:block; margin:0 auto; }
+    .diagram-box .caption { font-size:0.82rem; color:var(--muted); margin-top:0.6rem; text-align:center; font-style:italic; }
+    .summary { background: linear-gradient(135deg, #F9F9F9, #EDEDED); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+    .summary h4 { color: var(--indigo); margin-bottom: 0.5rem; font-size: 0.95rem; }
+    footer { text-align:center; padding: 2rem 1rem 3rem; color: var(--faint); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+    footer img { height: 28px; opacity:0.7; margin-bottom: 0.5rem; display: block; margin-left:auto; margin-right:auto; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="logo-corner"><img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE"></div>
+    <div class="hero-badge"><span class="dot"></span> Diagrams · 07 of 07</div>
+    <h1><span class="c-blue">Sequence</span><br><span class="c-indigo">Diagrams (UML)</span></h1>
+    <p class="hero-sub">The screenplay diagram. Who calls whom, in what order, with what message — and what comes back. The right tool for API contracts, integration design, and use-case realization.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">Lifelines</span>
+      <span class="hero-tag">Messages</span>
+      <span class="hero-tag">Time top-to-bottom</span>
+      <span class="hero-tag">UML 2.x</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="toc">
+      <h3>In this note</h3>
+      <ol>
+        <li><a href="#what">What is a sequence diagram</a></li>
+        <li><a href="#elements">Core elements</a></li>
+        <li><a href="#fragments">Combined fragments · alt · opt · loop</a></li>
+        <li><a href="#example1">Worked example · login flow</a></li>
+        <li><a href="#example2">Worked example · Bhutan e-visa application</a></li>
+        <li><a href="#example3">Worked example · SELISE leave request with branch</a></li>
+        <li><a href="#vs">Sequence vs activity vs use case</a></li>
+        <li><a href="#how">How to draw one from scratch</a></li>
+        <li><a href="#when">When to use a sequence diagram</a></li>
+        <li><a href="#pitfalls">Common mistakes</a></li>
+        <li><a href="#take">Key takeaways</a></li>
+      </ol>
+    </div>
+
+    <section class="chapter" id="what">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 1</div>
+        <h2>What is a sequence diagram</h2>
+      </div>
+      <p>A <strong>sequence diagram</strong> is a UML diagram that shows the messages exchanged between actors and systems for a single scenario, in time order. It is the right diagram when the question is <em>"who calls whom, in what order, with what message?"</em></p>
+      <p>It looks like a screenplay. Participants stand at the top of the page. Time runs downward. Each horizontal arrow is a line of dialogue — sender, receiver, message.</p>
+
+      <div class="callout indigo">
+        <h4>Where it fits among UML diagrams</h4>
+        <p>UML offers three behavioral diagrams that often describe the same scenario from different angles:</p>
+        <ul>
+          <li><strong>Use case diagram</strong> — names the scenario (e.g. "Place Order")</li>
+          <li><strong>Activity diagram</strong> — shows the steps (with branches and parallel work)</li>
+          <li><strong>Sequence diagram</strong> — shows the messages between participants</li>
+        </ul>
+        <p>You don't need all three for every feature. Pick the one that matches the question you're trying to answer.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="elements">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 2</div>
+        <h2>Core elements</h2>
+      </div>
+
+      <div class="callout">
+        <div class="sym-row">
+          <div class="sym-shape"><svg width="60" height="70"><circle cx="30" cy="14" r="6" fill="none" stroke="#001F35" stroke-width="2"/><line x1="30" y1="20" x2="30" y2="44" stroke="#001F35" stroke-width="2"/><line x1="18" y1="30" x2="42" y2="30" stroke="#001F35" stroke-width="2"/><line x1="30" y1="44" x2="22" y2="60" stroke="#001F35" stroke-width="2"/><line x1="30" y1="44" x2="38" y2="60" stroke="#001F35" stroke-width="2"/></svg></div>
+          <div class="sym-body"><h5>Actor / object</h5><p>Stick figure for a human actor. Box for a system, service, or class. Drawn at the top of the diagram. Each one represents a <strong>role</strong>, not a specific person.</p></div>
+        </div>
+        <div class="sym-row">
+          <div class="sym-shape"><svg width="60" height="70"><line x1="30" y1="6" x2="30" y2="64" stroke="#001F35" stroke-width="1.5" stroke-dasharray="5,4"/></svg></div>
+          <div class="sym-body"><h5>Lifeline</h5><p>The dashed vertical line hanging from each actor. Represents the actor's existence over time. Time flows downward.</p></div>
+        </div>
+        <div class="sym-row">
+          <div class="sym-shape"><svg width="60" height="70"><line x1="30" y1="6" x2="30" y2="64" stroke="#001F35" stroke-width="1.5" stroke-dasharray="5,4"/><rect x="24" y="20" width="12" height="36" fill="#E6F0F8" stroke="#0066B2" stroke-width="1"/></svg></div>
+          <div class="sym-body"><h5>Activation bar</h5><p>A thin rectangle on a lifeline. Represents the period when that participant is "busy" handling something. Optional but very useful for showing nesting.</p></div>
+        </div>
+        <div class="sym-row">
+          <div class="sym-shape"><svg width="120" height="40"><line x1="10" y1="20" x2="105" y2="20" stroke="#001F35" stroke-width="1.5"/><polygon points="105,20 97,16 97,24" fill="#001F35"/></svg></div>
+          <div class="sym-body"><h5>Synchronous message</h5><p>Solid arrow with a closed (filled) arrowhead. Means "call this and wait for it to return". The most common arrow in BA-facing diagrams.</p></div>
+        </div>
+        <div class="sym-row">
+          <div class="sym-shape"><svg width="120" height="40"><line x1="10" y1="20" x2="105" y2="20" stroke="#001F35" stroke-width="1.5"/><line x1="105" y1="20" x2="97" y2="16" stroke="#001F35" stroke-width="1.5"/><line x1="105" y1="20" x2="97" y2="24" stroke="#001F35" stroke-width="1.5"/></svg></div>
+          <div class="sym-body"><h5>Asynchronous message</h5><p>Solid arrow with an open V arrowhead. Means "send and don't wait" — fire-and-forget. Used for messaging, queues, events.</p></div>
+        </div>
+        <div class="sym-row">
+          <div class="sym-shape"><svg width="120" height="40"><line x1="10" y1="20" x2="105" y2="20" stroke="#001F35" stroke-width="1.5" stroke-dasharray="4,3"/><polygon points="105,20 97,16 97,24" fill="none" stroke="#001F35" stroke-width="1.5"/></svg></div>
+          <div class="sym-body"><h5>Return message</h5><p>Dashed arrow with an open arrowhead. Means "this is the response coming back". Always travels right-to-left or up-to-down (back to whoever called).</p></div>
+        </div>
+      </div>
+
+      <div class="callout amber">
+        <h4>Message labels</h4>
+        <p>Every message must be labeled with the operation being called (and ideally its arguments). Conventions:</p>
+        <ul>
+          <li><code>1: getOrders()</code> — sequence number plus operation name</li>
+          <li><code>2: charge(amount, currency)</code> — operation with arguments</li>
+          <li><code>3: order data</code> — for a return, just describe what's coming back</li>
+        </ul>
+        <p>If you can't name the message, you don't yet understand the interaction.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="fragments">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 3</div>
+        <h2>Combined fragments · alt · opt · loop</h2>
+      </div>
+      <p>Real interactions branch and repeat. UML wraps those parts of the diagram in a labeled rectangle called a <strong>combined fragment</strong>. The label in the top-left tells you what kind.</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Label</th><th>Meaning</th><th>Common use</th></tr></thead>
+          <tbody>
+            <tr><td>alt</td><td>Alternative — multiple branches separated by dashed lines, only one runs based on the guard</td><td>If/else logic ("if balance &gt; amount" else)</td></tr>
+            <tr><td>opt</td><td>Optional — runs only if the guard is true; nothing happens otherwise</td><td>"If the customer opted into emails, send the receipt"</td></tr>
+            <tr><td>loop</td><td>Loop — runs repeatedly while a guard is true</td><td>"For each item in the cart, reserve inventory"</td></tr>
+            <tr><td>par</td><td>Parallel — multiple regions run concurrently</td><td>Asynchronous messaging, two services contacted at once. Rare in BA work.</td></tr>
+            <tr><td>break</td><td>Break — if condition true, run this and exit the enclosing fragment</td><td>Error handling. Rare.</td></tr>
+            <tr><td>ref</td><td>Reference — placeholder for another sequence diagram (modular reuse)</td><td>"See sequence diagram for Authenticate"</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout red">
+        <h4>Use sparingly</h4>
+        <p>It's tempting to wrap everything in fragments to show every possible variation. Don't. A clean "happy path" sequence diagram with one or two alt fragments at decision points reads beautifully. A diagram with five nested alt/opt/loop blocks is unreadable. When in doubt, split into multiple diagrams — one per scenario.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="example1">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 4</div>
+        <h2>Worked example · login flow</h2>
+      </div>
+      <p>The classic starting example. A user submits credentials, the login service looks up the user, verifies the password, and returns an auth token.</p>
+
+      <div class="diagram-box">
+        <svg width="780" height="400" viewBox="0 0 780 400">
+          <g transform="translate(120,40)">
+            <circle cx="0" cy="0" r="10" fill="none" stroke="#001F35" stroke-width="2"/>
+            <line x1="0" y1="10" x2="0" y2="40" stroke="#001F35" stroke-width="2"/>
+            <line x1="-14" y1="20" x2="14" y2="20" stroke="#001F35" stroke-width="2"/>
+            <line x1="0" y1="40" x2="-12" y2="58" stroke="#001F35" stroke-width="2"/>
+            <line x1="0" y1="40" x2="12" y2="58" stroke="#001F35" stroke-width="2"/>
+            <text x="0" y="78" text-anchor="middle" font-family="Open Sans" font-size="13">User</text>
+          </g>
+          <rect x="320" y="50" width="160" height="50" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+          <text x="400" y="72" text-anchor="middle" font-family="Open Sans" font-size="11" fill="#0066B2">«service»</text>
+          <text x="400" y="90" text-anchor="middle" font-family="Bahnschrift" font-size="13">Login Service</text>
+          <ellipse cx="660" cy="58" rx="60" ry="10" fill="#fff" stroke="#001F35" stroke-width="2"/>
+          <line x1="600" y1="58" x2="600" y2="92" stroke="#001F35" stroke-width="2"/>
+          <line x1="720" y1="58" x2="720" y2="92" stroke="#001F35" stroke-width="2"/>
+          <ellipse cx="660" cy="92" rx="60" ry="10" fill="#fff" stroke="#001F35" stroke-width="2"/>
+          <text x="660" y="115" text-anchor="middle" font-family="Bahnschrift" font-size="13">User DB</text>
+          <line x1="120" y1="120" x2="120" y2="380" stroke="#001F35" stroke-width="1" stroke-dasharray="5,4"/>
+          <line x1="400" y1="120" x2="400" y2="380" stroke="#001F35" stroke-width="1" stroke-dasharray="5,4"/>
+          <line x1="660" y1="120" x2="660" y2="380" stroke="#001F35" stroke-width="1" stroke-dasharray="5,4"/>
+          <rect x="114" y="155" width="12" height="170" fill="#E6F0F8" stroke="#0066B2" stroke-width="1"/>
+          <rect x="394" y="155" width="12" height="170" fill="#E6F0F8" stroke="#0066B2" stroke-width="1"/>
+          <rect x="654" y="200" width="12" height="50" fill="#E6F0F8" stroke="#0066B2" stroke-width="1"/>
+          <line x1="126" y1="155" x2="394" y2="155" stroke="#001F35" stroke-width="1.5"/><polygon points="394,155 386,151 386,159" fill="#001F35"/>
+          <text x="160" y="148" font-family="Open Sans" font-size="12">1: login(email, password)</text>
+          <line x1="406" y1="200" x2="654" y2="200" stroke="#001F35" stroke-width="1.5"/><polygon points="654,200 646,196 646,204" fill="#001F35"/>
+          <text x="430" y="193" font-family="Open Sans" font-size="12">2: findByEmail(email)</text>
+          <line x1="654" y1="245" x2="406" y2="245" stroke="#001F35" stroke-width="1.5" stroke-dasharray="4,3"/><polygon points="406,245 414,241 414,249" fill="none" stroke="#001F35" stroke-width="1.5"/>
+          <text x="430" y="238" font-family="Open Sans" font-size="12" font-style="italic" fill="#247EC1">3: User { passwordHash, ... }</text>
+          <line x1="406" y1="280" x2="450" y2="280" stroke="#001F35" stroke-width="1.5"/>
+          <line x1="450" y1="280" x2="450" y2="295" stroke="#001F35" stroke-width="1.5"/>
+          <line x1="450" y1="295" x2="406" y2="295" stroke="#001F35" stroke-width="1.5"/><polygon points="406,295 414,291 414,299" fill="#001F35"/>
+          <text x="416" y="275" font-family="Open Sans" font-size="12">4: verifyPassword()</text>
+          <line x1="394" y1="320" x2="126" y2="320" stroke="#001F35" stroke-width="1.5" stroke-dasharray="4,3"/><polygon points="126,320 134,316 134,324" fill="none" stroke="#001F35" stroke-width="1.5"/>
+          <text x="170" y="313" font-family="Open Sans" font-size="12" font-style="italic" fill="#247EC1">5: { token, expiresIn }</text>
+        </svg>
+        <div class="caption">Login flow. Note the activation bars: User stays active through the whole call. Login Service is active from message 1 through 5. User DB is active only during messages 2–3 (the lookup).</div>
+      </div>
+
+      <p>Reading this aloud: <em>"User calls login() on Login Service. Login Service calls findByEmail() on User DB. User DB returns a User record. Login Service verifies the password locally. Login Service returns a token to User."</em></p>
+    </section>
+
+    <section class="chapter" id="example2">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 5</div>
+        <h2>Worked example · Bhutan e-visa application</h2>
+      </div>
+      <p>A multi-system interaction. A tourist submits an e-visa application via the portal. The portal calls the Tourism Council Service. The Council Service calls a Background Check system. Each step's response flows back up the chain.</p>
+
+      <div class="diagram-box">
+        <svg width="900" height="450" viewBox="0 0 900 450">
+          <g transform="translate(80,40)">
+            <circle cx="0" cy="0" r="10" fill="none" stroke="#001F35" stroke-width="2"/>
+            <line x1="0" y1="10" x2="0" y2="40" stroke="#001F35" stroke-width="2"/>
+            <line x1="-14" y1="20" x2="14" y2="20" stroke="#001F35" stroke-width="2"/>
+            <line x1="0" y1="40" x2="-12" y2="58" stroke="#001F35" stroke-width="2"/>
+            <line x1="0" y1="40" x2="12" y2="58" stroke="#001F35" stroke-width="2"/>
+            <text x="0" y="78" text-anchor="middle" font-family="Open Sans" font-size="12">Tourist</text>
+          </g>
+          <rect x="240" y="50" width="160" height="50" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+          <text x="320" y="72" text-anchor="middle" font-family="Open Sans" font-size="11" fill="#0066B2">«web»</text>
+          <text x="320" y="90" text-anchor="middle" font-family="Bahnschrift" font-size="13">e-Visa Portal</text>
+          <rect x="480" y="50" width="160" height="50" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+          <text x="560" y="72" text-anchor="middle" font-family="Open Sans" font-size="11" fill="#0066B2">«service»</text>
+          <text x="560" y="90" text-anchor="middle" font-family="Bahnschrift" font-size="13">Council Service</text>
+          <rect x="720" y="50" width="160" height="50" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+          <text x="800" y="72" text-anchor="middle" font-family="Open Sans" font-size="11" fill="#0066B2">«system»</text>
+          <text x="800" y="90" text-anchor="middle" font-family="Bahnschrift" font-size="13">Background Check</text>
+          <line x1="80" y1="120" x2="80" y2="430" stroke="#001F35" stroke-width="1" stroke-dasharray="5,4"/>
+          <line x1="320" y1="120" x2="320" y2="430" stroke="#001F35" stroke-width="1" stroke-dasharray="5,4"/>
+          <line x1="560" y1="120" x2="560" y2="430" stroke="#001F35" stroke-width="1" stroke-dasharray="5,4"/>
+          <line x1="800" y1="120" x2="800" y2="430" stroke="#001F35" stroke-width="1" stroke-dasharray="5,4"/>
+          <rect x="74" y="155" width="12" height="240" fill="#E6F0F8" stroke="#0066B2" stroke-width="1"/>
+          <rect x="314" y="155" width="12" height="240" fill="#E6F0F8" stroke="#0066B2" stroke-width="1"/>
+          <rect x="554" y="200" width="12" height="180" fill="#E6F0F8" stroke="#0066B2" stroke-width="1"/>
+          <rect x="794" y="245" width="12" height="80" fill="#E6F0F8" stroke="#0066B2" stroke-width="1"/>
+          <line x1="86" y1="155" x2="314" y2="155" stroke="#001F35" stroke-width="1.5"/><polygon points="314,155 306,151 306,159" fill="#001F35"/>
+          <text x="100" y="148" font-family="Open Sans" font-size="12">1: submitApplication(passport, dates)</text>
+          <line x1="326" y1="200" x2="554" y2="200" stroke="#001F35" stroke-width="1.5"/><polygon points="554,200 546,196 546,204" fill="#001F35"/>
+          <text x="340" y="193" font-family="Open Sans" font-size="12">2: createApplication(payload)</text>
+          <line x1="566" y1="245" x2="794" y2="245" stroke="#001F35" stroke-width="1.5"/><polygon points="794,245 786,241 786,249" fill="#001F35"/>
+          <text x="580" y="238" font-family="Open Sans" font-size="12">3: checkBackground(passportNo)</text>
+          <line x1="794" y1="320" x2="566" y2="320" stroke="#001F35" stroke-width="1.5" stroke-dasharray="4,3"/><polygon points="566,320 574,316 574,324" fill="none" stroke="#001F35" stroke-width="1.5"/>
+          <text x="580" y="313" font-family="Open Sans" font-size="12" font-style="italic" fill="#247EC1">4: { status: "clear" }</text>
+          <line x1="554" y1="370" x2="326" y2="370" stroke="#001F35" stroke-width="1.5" stroke-dasharray="4,3"/><polygon points="326,370 334,366 334,374" fill="none" stroke="#001F35" stroke-width="1.5"/>
+          <text x="340" y="363" font-family="Open Sans" font-size="12" font-style="italic" fill="#247EC1">5: { visaNo, expiry }</text>
+          <line x1="314" y1="395" x2="86" y2="395" stroke="#001F35" stroke-width="1.5" stroke-dasharray="4,3"/><polygon points="86,395 94,391 94,399" fill="none" stroke="#001F35" stroke-width="1.5"/>
+          <text x="100" y="388" font-family="Open Sans" font-size="12" font-style="italic" fill="#247EC1">6: confirmation page + visa PDF</text>
+        </svg>
+        <div class="caption">Six labeled messages. The diagram doubles as an integration spec — each arrow becomes a method to implement and a test scenario for QA.</div>
+      </div>
+    </section>
+
+    <section class="chapter" id="example3">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 6</div>
+        <h2>Worked example · SELISE leave request with branch</h2>
+      </div>
+      <p>A scenario with a real branch. An employee submits a leave request. HR notifies the manager. The manager either approves or rejects, and HR responds differently. The branch is captured in an <strong>alt</strong> fragment.</p>
+
+      <div class="diagram-box">
+        <svg width="900" height="500" viewBox="0 0 900 500">
+          <g transform="translate(80,40)">
+            <circle cx="0" cy="0" r="10" fill="none" stroke="#001F35" stroke-width="2"/>
+            <line x1="0" y1="10" x2="0" y2="40" stroke="#001F35" stroke-width="2"/>
+            <line x1="-14" y1="20" x2="14" y2="20" stroke="#001F35" stroke-width="2"/>
+            <line x1="0" y1="40" x2="-12" y2="58" stroke="#001F35" stroke-width="2"/>
+            <line x1="0" y1="40" x2="12" y2="58" stroke="#001F35" stroke-width="2"/>
+            <text x="0" y="78" text-anchor="middle" font-family="Open Sans" font-size="12">Employee</text>
+          </g>
+          <rect x="240" y="50" width="160" height="50" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+          <text x="320" y="72" text-anchor="middle" font-family="Open Sans" font-size="11" fill="#0066B2">«service»</text>
+          <text x="320" y="90" text-anchor="middle" font-family="Bahnschrift" font-size="13">HR System</text>
+          <g transform="translate(560,40)">
+            <circle cx="0" cy="0" r="10" fill="none" stroke="#001F35" stroke-width="2"/>
+            <line x1="0" y1="10" x2="0" y2="40" stroke="#001F35" stroke-width="2"/>
+            <line x1="-14" y1="20" x2="14" y2="20" stroke="#001F35" stroke-width="2"/>
+            <line x1="0" y1="40" x2="-12" y2="58" stroke="#001F35" stroke-width="2"/>
+            <line x1="0" y1="40" x2="12" y2="58" stroke="#001F35" stroke-width="2"/>
+            <text x="0" y="78" text-anchor="middle" font-family="Open Sans" font-size="12">Manager</text>
+          </g>
+          <rect x="720" y="50" width="160" height="50" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+          <text x="800" y="72" text-anchor="middle" font-family="Open Sans" font-size="11" fill="#0066B2">«system»</text>
+          <text x="800" y="90" text-anchor="middle" font-family="Bahnschrift" font-size="13">Email Service</text>
+          <line x1="80" y1="120" x2="80" y2="490" stroke="#001F35" stroke-width="1" stroke-dasharray="5,4"/>
+          <line x1="320" y1="120" x2="320" y2="490" stroke="#001F35" stroke-width="1" stroke-dasharray="5,4"/>
+          <line x1="560" y1="120" x2="560" y2="490" stroke="#001F35" stroke-width="1" stroke-dasharray="5,4"/>
+          <line x1="800" y1="120" x2="800" y2="490" stroke="#001F35" stroke-width="1" stroke-dasharray="5,4"/>
+          <line x1="80" y1="155" x2="314" y2="155" stroke="#001F35" stroke-width="1.5"/><polygon points="314,155 306,151 306,159" fill="#001F35"/>
+          <text x="100" y="148" font-family="Open Sans" font-size="12">1: submitLeaveRequest(dates, reason)</text>
+          <line x1="320" y1="190" x2="560" y2="190" stroke="#001F35" stroke-width="1.5"/><polygon points="560,190 552,186 552,194" fill="#001F35"/>
+          <text x="340" y="183" font-family="Open Sans" font-size="12">2: notifyForApproval(request)</text>
+          <rect x="60" y="220" width="820" height="240" fill="none" stroke="#247EC1" stroke-width="1.5"/>
+          <rect x="60" y="220" width="50" height="20" fill="#E6F0F8" stroke="#247EC1" stroke-width="1.5"/>
+          <text x="85" y="234" text-anchor="middle" font-family="Bahnschrift" font-size="11" fill="#247EC1">alt</text>
+          <text x="125" y="234" font-family="Open Sans" font-size="11" fill="#247EC1">[manager approves]</text>
+          <line x1="560" y1="265" x2="320" y2="265" stroke="#001F35" stroke-width="1.5"/><polygon points="320,265 328,261 328,269" fill="#001F35"/>
+          <text x="340" y="258" font-family="Open Sans" font-size="12" fill="#3D7A3D">3: approve(requestId)</text>
+          <line x1="320" y1="295" x2="370" y2="295" stroke="#001F35" stroke-width="1.5"/>
+          <line x1="370" y1="295" x2="370" y2="310" stroke="#001F35" stroke-width="1.5"/>
+          <line x1="370" y1="310" x2="320" y2="310" stroke="#001F35" stroke-width="1.5"/><polygon points="320,310 328,306 328,314" fill="#001F35"/>
+          <text x="340" y="290" font-family="Open Sans" font-size="12">4: deductBalance(days)</text>
+          <line x1="320" y1="335" x2="794" y2="335" stroke="#001F35" stroke-width="1.5"/><polygon points="794,335 786,331 786,339" fill="#001F35"/>
+          <text x="340" y="328" font-family="Open Sans" font-size="12" fill="#3D7A3D">5: sendApprovalEmail(employee, dates)</text>
+          <line x1="60" y1="365" x2="880" y2="365" stroke="#247EC1" stroke-width="1" stroke-dasharray="3,3"/>
+          <text x="125" y="380" font-family="Open Sans" font-size="11" fill="#247EC1">[manager rejects]</text>
+          <line x1="560" y1="405" x2="320" y2="405" stroke="#001F35" stroke-width="1.5"/><polygon points="320,405 328,401 328,409" fill="#001F35"/>
+          <text x="340" y="398" font-family="Open Sans" font-size="12" fill="#D80032">3: reject(requestId, reason)</text>
+          <line x1="320" y1="440" x2="794" y2="440" stroke="#001F35" stroke-width="1.5"/><polygon points="794,440 786,436 786,444" fill="#001F35"/>
+          <text x="340" y="433" font-family="Open Sans" font-size="12" fill="#D80032">4: sendRejectionEmail(employee, reason)</text>
+        </svg>
+        <div class="caption">The blue box is the alt fragment. The dashed line splits it into two regions; one runs based on the guard. Both branches show different message sequences.</div>
+      </div>
+    </section>
+
+    <section class="chapter" id="vs">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 7</div>
+        <h2>Sequence vs activity vs use case</h2>
+      </div>
+      <p>The same scenario described three ways:</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Diagram</th><th>Says…</th><th>Best for</th></tr></thead>
+          <tbody>
+            <tr><td>Use case diagram</td><td>"Customer can Place Order"</td><td>Scoping and stakeholder alignment</td></tr>
+            <tr><td>Activity diagram</td><td>"Select items → enter address → confirm payment → if in stock, ship; else notify, end"</td><td>Showing flow steps with branches and parallels</td></tr>
+            <tr><td>Sequence diagram</td><td>"User → Web.placeOrder() → OrderService.create() → InventoryService.reserve() → PaymentService.charge() → Email.send()"</td><td>Specifying the conversation between participants</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Three lenses, three audiences. A non-technical sponsor reads the use case diagram. A developer reads the activity and sequence. A QA engineer derives test cases from all three.</p>
+    </section>
+
+    <section class="chapter" id="how">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 8</div>
+        <h2>How to draw one from scratch</h2>
+      </div>
+      <ol>
+        <li><strong>Pick one scenario.</strong> Don't try to cover everything. "Successful login" is one diagram; "failed login" is a different one (or an alt fragment if both fit cleanly).</li>
+        <li><strong>List the participants.</strong> Place them across the top, ordered roughly by who calls whom (initiator on the left). Stick figures for humans, boxes for systems / services / classes.</li>
+        <li><strong>Drop their lifelines.</strong> Dashed vertical lines hanging down from each participant.</li>
+        <li><strong>Add the first message at the top.</strong> Then each next message goes below. Solid arrow with closed head for calls, dashed arrow for returns. Always label the message with name + arguments.</li>
+        <li><strong>Add activation bars.</strong> Strips on the lifelines showing when each participant is "busy". Optional but very helpful — they make nesting obvious.</li>
+        <li><strong>Wrap branches in alt / opt fragments</strong> only if the scenario truly branches. Otherwise: one happy-path diagram is much clearer than one diagram trying to cover every case.</li>
+        <li><strong>Walk through it as the receiver of message 1.</strong> Read each message in order — does the diagram make sense? Is anything missing? Are returns to the right caller?</li>
+      </ol>
+    </section>
+
+    <section class="chapter" id="when">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 9</div>
+        <h2>When to use a sequence diagram</h2>
+      </div>
+
+      <div class="pair">
+        <div class="callout green">
+          <h4>✅ Use a sequence diagram when…</h4>
+          <ul>
+            <li>You're specifying an API or integration contract</li>
+            <li>You're realizing a use case ("what messages flow?")</li>
+            <li>QA needs to derive integration test scenarios</li>
+            <li>You're designing or reviewing microservice interactions</li>
+            <li>Order of events matters and must be explicit</li>
+            <li>Sync vs async messaging needs to be visible</li>
+          </ul>
+        </div>
+        <div class="callout indigo">
+          <h4>⚠️ Don't use one for…</h4>
+          <ul>
+            <li>High-level scope — use case diagram</li>
+            <li>Multi-actor business processes — BPMN</li>
+            <li>Decisions / pure logic — flowchart</li>
+            <li>Data movement — DFD</li>
+            <li>Internal data structure — ERD or class diagram</li>
+            <li>"Everything that could happen" — pick one scenario per diagram</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="pitfalls">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 10</div>
+        <h2>Common mistakes</h2>
+      </div>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Mistake</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr><td>One diagram for all branches and edge cases</td><td>Make a happy-path diagram. Cover edge cases in separate diagrams or with one alt fragment per branch point.</td></tr>
+            <tr><td>Unlabeled messages</td><td>Every arrow must have a name. Ideally with arguments and return type.</td></tr>
+            <tr><td>Returns drawn as solid arrows</td><td>Returns are <strong>dashed</strong> arrows with open arrowheads.</td></tr>
+            <tr><td>No activation bars</td><td>Add them. They make nesting obvious and the diagram easier to read.</td></tr>
+            <tr><td>Time going sideways</td><td>UML standard is top-down. Don't flip it.</td></tr>
+            <tr><td>Process flow shapes mixed in (diamonds, rectangles)</td><td>Sequence diagrams have lifelines and messages — that's it. No flowchart shapes.</td></tr>
+            <tr><td>Too many participants on one diagram</td><td>&gt;6 lifelines = unreadable. Split.</td></tr>
+            <tr><td>Specific people as actors</td><td>Use roles. "Customer", "Manager" — not "Sonam", "Pema".</td></tr>
+            <tr><td>Drawing one for a non-technical audience</td><td>Use a use case diagram or BPMN instead.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="chapter" id="take">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Takeaways</div>
+        <h2>Key takeaways</h2>
+      </div>
+      <div class="summary">
+        <h4>What to carry forward</h4>
+        <ul>
+          <li>Sequence diagrams are <strong>screenplays</strong> — actors talking to actors, top to bottom.</li>
+          <li>Six core elements: <strong>actor · lifeline · activation bar · sync message · async message · return</strong>.</li>
+          <li>Reading rule: <strong>top-down · solid arrow = call · dashed arrow = return</strong>.</li>
+          <li><strong>alt / opt / loop</strong> fragments handle branches and repetition. Use sparingly.</li>
+          <li>One scenario per diagram. Don't cram every branch into one.</li>
+          <li>Best for <strong>API contracts, use-case realization, integration test design</strong>.</li>
+          <li>Pair with <strong>use case</strong> (what is possible) and <strong>activity</strong> (steps with branches) — three lenses on the same scenario.</li>
+        </ul>
+      </div>
+      <p style="margin-top:1.2rem">Recommended tools: <strong>PlantUML</strong> (text-based, version-controllable, free), <strong>Mermaid</strong> (works in Markdown, GitHub renders it natively), <strong>draw.io</strong>, <strong>Lucidchart</strong>, <strong>Visual Paradigm</strong>.</p>
+      <p>That's the full diagram toolkit: <strong>Use Case · BPMN · Flowchart · Swimlane · Activity · DFD · Sequence</strong>. Seven diagrams, seven different questions, one BA / QA who can pick the right one every time.</p>
+    </section>
+
+  </div>
+
+  <footer>
+    <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE">
+    SELISE × Pelsung · Diagrams 07<br>
+    UML Sequence Diagrams
+  </footer>
+
+</body>
+</html>
