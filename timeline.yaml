@@ -123,6 +123,21 @@
     Division of labor: Bhuwan owns Dev class prep going forward; Tek owns BA
     and QA class prep.
 
+- date: 2026-04-29
+  title: Self-paced React Practice Day for Dev Cohort
+  category: training
+  program: pelsung-c3
+  tags: [cohort-3, dev, react, self-paced, hands-on, hooks, useEffect]
+  people: []
+  location: Gelephu
+  body: >
+    Dev Specialization Cohort 3 trainees work through a self-paced React
+    practice day (E3) over 4 hours, building two apps using free public APIs.
+    App 1: Posts & Comments Viewer (JSONPlaceholder) — a master/detail layout
+    where clicking a post fetches its comments. App 2: Pokémon Explorer
+    (PokéAPI) — same chained-fetch pattern with image, type badges, and
+    stats. Materials at pelsung/curriculum/extra/e3-react-practice-day-slides.html.
+
 - date: 2026-06-01
   title: Exhibition / Showcase Day
   category: event

@@ -1,0 +1,1219 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React Practice Day — 2 Apps · SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      .code-block {
+        background: #001f35;
+        border-radius: 14px;
+        overflow: hidden;
+        width: 100%;
+        font-family: "Courier New", monospace;
+      }
+      .code-bar {
+        background: #0a2a45;
+        padding: 8px 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-family: "Open Sans", sans-serif;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .code-bar .cb-dot { width: 10px; height: 10px; border-radius: 50%; }
+      .code-body {
+        padding: clamp(0.8rem, 1.5vw, 1.3rem);
+        font-size: clamp(0.7rem, 0.95vw, 0.85rem);
+        line-height: 1.85;
+        color: rgba(255, 255, 255, 0.85);
+        white-space: pre-wrap;
+      }
+      .code-body.scroll {
+        max-height: 62vh;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255,255,255,0.25) transparent;
+      }
+      .code-body.scroll::-webkit-scrollbar { width: 8px; }
+      .code-body.scroll::-webkit-scrollbar-thumb {
+        background: rgba(255,255,255,0.2);
+        border-radius: 4px;
+      }
+      .code-body.scroll::-webkit-scrollbar-track { background: transparent; }
+      .code-body .ck { color: #7dd3fc; }
+      .code-body .cs { color: #86efac; }
+      .code-body .cn { color: #fde68a; }
+      .code-body .cc { color: rgba(255, 255, 255, 0.35); }
+      .code-body .cp { color: #c4b5fd; }
+      .code-body .cr { color: #fca5a5; }
+      .code-body .ci { color: #f0abfc; }
+      .code-body .ct { color: #fdba74; }
+      .code-body .ctag { color: #f472b6; }
+      .code-body .cattr { color: #fde68a; }
+
+      .method-card {
+        background: var(--surf);
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        padding: 1rem 1.2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+      }
+      .method-card .mc-name {
+        font-family: "Courier New", monospace;
+        font-weight: 700;
+        color: var(--blue);
+        font-size: clamp(0.9rem, 1.2vw, 1.05rem);
+      }
+      .method-card .mc-desc {
+        font-size: clamp(0.78rem, 1vw, 0.88rem);
+        color: var(--muted);
+        line-height: 1.4;
+      }
+      .method-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        width: 100%;
+        max-width: 880px;
+      }
+      .method-grid.three { grid-template-columns: repeat(3, 1fr); }
+
+      .analogy-box {
+        background: var(--bg);
+        border: 2px dashed var(--border);
+        border-radius: 14px;
+        padding: clamp(1rem, 1.8vw, 1.4rem);
+        max-width: 760px;
+        width: 100%;
+        text-align: center;
+      }
+      .analogy-box .ab-title {
+        font-size: clamp(0.78rem, 1vw, 0.88rem);
+        font-weight: 700;
+        color: var(--blue);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 0.5rem;
+      }
+      .analogy-box .ab-text {
+        font-size: clamp(0.9rem, 1.25vw, 1.05rem);
+        color: var(--text);
+        line-height: 1.5;
+      }
+
+      .big-emoji {
+        font-size: clamp(3rem, 6vw, 5rem);
+        line-height: 1;
+        margin-bottom: 0.5rem;
+      }
+
+      .break-timer {
+        font-family: "Courier New", monospace;
+        font-size: clamp(3.5rem, 9vw, 6rem);
+        color: white;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+      }
+      .break-btn {
+        padding: 0.6rem 1.4rem;
+        border-radius: 100px;
+        border: 1.5px solid rgba(255, 255, 255, 0.4);
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        cursor: pointer;
+        font-size: clamp(0.82rem, 1.1vw, 0.92rem);
+        font-weight: 600;
+        margin: 0 0.4rem;
+      }
+      .break-btn:hover { background: rgba(255, 255, 255, 0.2); }
+
+      .bullet-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: clamp(0.45rem, 0.9vw, 0.75rem);
+        width: 100%;
+      }
+      .bullet-list li {
+        font-size: clamp(0.85rem, 1.2vw, 1.05rem);
+        color: var(--muted);
+        padding-left: 1.6rem;
+        position: relative;
+        line-height: 1.55;
+      }
+      .bullet-list li::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: var(--faint);
+        font-size: 0.85rem;
+        top: 0.1em;
+      }
+
+      /* Step list */
+      .steps {
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+        width: 100%;
+        max-width: 940px;
+      }
+      .step {
+        display: flex;
+        gap: 0.85rem;
+        align-items: flex-start;
+        background: var(--surf);
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        padding: 0.75rem 0.95rem;
+      }
+      .step .s-num {
+        flex-shrink: 0;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: var(--blue);
+        color: white;
+        font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+        font-size: 0.82rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .step .s-body {
+        font-size: clamp(0.82rem, 1.02vw, 0.94rem);
+        color: var(--text);
+        line-height: 1.5;
+      }
+      .step .s-body code {
+        background: var(--bg);
+        padding: 0.05em 0.35em;
+        border-radius: 4px;
+        color: var(--indigo);
+        font-size: 0.92em;
+      }
+      .step.amber .s-num { background: var(--amber); }
+      .step.green .s-num { background: var(--green); }
+      .step.indigo .s-num { background: var(--indigo); }
+
+      /* Master/detail mockup */
+      .layout-mock {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 0.8rem;
+        max-width: 720px;
+        width: 100%;
+      }
+      .lm-list {
+        background: var(--surf);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 0.6rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+      }
+      .lm-list-item {
+        background: var(--bg);
+        border-radius: 6px;
+        padding: 0.5rem 0.7rem;
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+      .lm-list-item.active {
+        background: #e6f0f8;
+        color: var(--blue);
+        font-weight: 700;
+      }
+      .lm-detail {
+        background: var(--surf);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 0.9rem 1.1rem;
+      }
+      .lm-detail h4 {
+        font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+        font-size: 0.95rem;
+        color: var(--indigo);
+        margin-bottom: 0.4rem;
+      }
+      .lm-detail p {
+        font-size: 0.78rem;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+      .lm-comment {
+        background: var(--bg);
+        border-radius: 6px;
+        padding: 0.45rem 0.6rem;
+        font-size: 0.72rem;
+        color: var(--muted);
+        margin-top: 0.4rem;
+      }
+
+      /* Pokemon mockup */
+      .poke-mock {
+        background: var(--surf);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 1rem 1.2rem;
+        text-align: center;
+        max-width: 280px;
+      }
+      .poke-mock .poke-img {
+        width: 100px;
+        height: 100px;
+        background: var(--bg);
+        border-radius: 50%;
+        margin: 0 auto 0.6rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+      }
+      .poke-mock .poke-name {
+        font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+        font-size: 1.1rem;
+        color: var(--indigo);
+        text-transform: capitalize;
+      }
+      .poke-mock .poke-types {
+        display: flex;
+        gap: 0.3rem;
+        justify-content: center;
+        margin: 0.4rem 0;
+      }
+      .poke-mock .poke-type {
+        background: #e6f0f8;
+        color: var(--blue);
+        padding: 0.15rem 0.55rem;
+        border-radius: 100px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: capitalize;
+      }
+      .poke-mock .poke-stats {
+        font-size: 0.74rem;
+        color: var(--muted);
+        text-align: left;
+        margin-top: 0.5rem;
+      }
+
+      .api-card {
+        background: var(--surf);
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        padding: 0.9rem 1.1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+      }
+      .api-card .api-name {
+        font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+        color: var(--indigo);
+        font-size: 0.95rem;
+      }
+      .api-card .api-url {
+        font-family: 'Courier New', monospace;
+        font-size: 0.74rem;
+        color: var(--blue);
+        word-break: break-all;
+      }
+      .api-card .api-what {
+        font-size: 0.8rem;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+      <!-- ══ S1 TITLE ══ -->
+      <div class="slide accent-gradient bg-dark" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung · Extra</div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem; text-align: center; max-width: 900px;">
+          <div class="date-badge">
+            <span class="db-dot"></span>Self-paced · 9:30 AM – 1:30 PM · 2 apps
+          </div>
+          <h1 class="display" style="color: white">
+            <span style="color: #7dd3fc">React</span><br />
+            <span style="color: white">Practice Day</span>
+          </h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.65)">
+            Build two real apps using free public APIs
+          </p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">Posts &amp; Comments</span>
+            <span class="class-tag tag-amber">Pokémon Explorer</span>
+            <span class="class-tag tag-indigo">Master / Detail</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → or click the right side to advance</div>
+      </div>
+
+      <!-- ══ S2 HOW TODAY WORKS ══ -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> How today works</div>
+        <div class="stack" style="align-items: center; max-width: 980px;">
+          <div class="center">
+            <div class="pill pill-blue">No instructor today</div>
+            <h2 class="heading">You've got this</h2>
+          </div>
+          <div class="method-grid">
+            <div class="method-card">
+              <div class="mc-name">📖 Follow the slides</div>
+              <div class="mc-desc">Each step is numbered. Read carefully, type the code, run it after every few steps.</div>
+            </div>
+            <div class="method-card">
+              <div class="mc-name">👥 Help each other</div>
+              <div class="mc-desc">Stuck? Ask the person next to you. Pair up if you want. Working together is fine.</div>
+            </div>
+            <div class="method-card">
+              <div class="mc-name">🔍 Read the errors</div>
+              <div class="mc-desc">Red text in the terminal or browser console = a clue. Read it before panicking.</div>
+            </div>
+            <div class="method-card">
+              <div class="mc-name">🌐 Open the URL first</div>
+              <div class="mc-desc">Before fetching, paste the API URL in your browser. See the JSON. That's the shape your code will use.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S3 AGENDA ══ -->
+      <div class="slide accent-gradient bg-subtle" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> Today's plan · 9:30 AM – 1:30 PM</div>
+        <div class="stack" style="max-width: 760px; width: 100%">
+          <div class="center" style="margin-bottom: 0.3rem">
+            <h2 class="heading" style="font-size: clamp(1.5rem, 2.8vw, 2.2rem)">Two apps, plenty of time</h2>
+          </div>
+          <div class="agenda-row" onclick="goTo(4)">
+            <span class="ar-time">9:30 – 9:45</span>
+            <span class="ar-dot" style="background: var(--faint)"></span>
+            <span class="ar-label">📌 Today's two apps &amp; the new pattern</span>
+            <span class="ar-badge" style="background: var(--bg); color: var(--muted)">15 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(7)">
+            <span class="ar-time">9:45 – 11:30</span>
+            <span class="ar-dot" style="background: var(--blue)"></span>
+            <span class="ar-label">📰 App 1 — Posts &amp; Comments Viewer</span>
+            <span class="ar-badge" style="background: #e6f0f8; color: var(--blue)">1h 45m</span>
+          </div>
+          <div class="agenda-row break-row" onclick="goTo(17)">
+            <span class="ar-time">11:30 – 11:45</span>
+            <span class="ar-dot" style="background: var(--green)"></span>
+            <span class="ar-label">☕ Break</span>
+            <span class="ar-badge" style="background: #dcfce7; color: var(--green)">15 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(18)">
+            <span class="ar-time">11:45 – 1:30</span>
+            <span class="ar-dot" style="background: var(--amber)"></span>
+            <span class="ar-label">🔮 App 2 — Pokémon Explorer</span>
+            <span class="ar-badge" style="background: #ebf0f7; color: #1c5b8c">1h 45m</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S4 TWO APPS ══ -->
+      <div class="slide" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> What you'll build today</div>
+        <div class="stack" style="align-items: center; max-width: 1000px;">
+          <div class="center">
+            <h2 class="heading">Both apps share one new pattern</h2>
+          </div>
+          <div class="method-grid">
+            <div class="method-card">
+              <div class="mc-name">📰 App 1 — Posts &amp; Comments</div>
+              <div class="mc-desc">A list of posts. Click one → see the full body and all comments below it.<br/><br/>API: <strong>jsonplaceholder.typicode.com</strong></div>
+            </div>
+            <div class="method-card">
+              <div class="mc-name">🔮 App 2 — Pokémon Explorer</div>
+              <div class="mc-desc">A list of Pokémon names. Click one → see their image, types, and stats.<br/><br/>API: <strong>pokeapi.co</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S5 THE NEW PATTERN ══ -->
+      <div class="slide" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span> The new pattern — chained fetching</div>
+        <div class="stack" style="align-items: center; max-width: 1000px;">
+          <div class="center">
+            <h2 class="heading">Fetch one thing → user clicks → fetch another thing</h2>
+          </div>
+          <div class="analogy-box">
+            <div class="ab-title">Two useEffects, working together</div>
+            <div class="ab-text">
+              <strong>First useEffect</strong> — fires once on mount. Loads the list.<br/>
+              <strong>Second useEffect</strong> — fires when the user clicks. Loads the details.
+            </div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 720px;">
+            This is the master/detail pattern. You'll use it a lot in real apps.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S6 LAYOUT IDEA ══ -->
+      <div class="slide" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> The layout — list on the left, details on the right</div>
+        <div class="stack" style="align-items: center; max-width: 1000px;">
+          <div class="layout-mock">
+            <div class="lm-list">
+              <div class="lm-list-item">Item 1</div>
+              <div class="lm-list-item active">Item 2 ← clicked</div>
+              <div class="lm-list-item">Item 3</div>
+              <div class="lm-list-item">Item 4</div>
+            </div>
+            <div class="lm-detail">
+              <h4>Item 2 — full title</h4>
+              <p>The full body text of the selected item appears here.</p>
+              <div class="lm-comment">💬 First comment loaded from another API call</div>
+              <div class="lm-comment">💬 Second comment</div>
+            </div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 720px;">
+            <strong>Style it however you want.</strong> Use Tailwind utilities — be creative.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S7 SECTION DIVIDER — APP 1 ══ -->
+      <div class="slide bg-blue" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span></div>
+        <div class="center" style="position: relative; z-index: 1; max-width: 800px;">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span>App 1 · 9:45 – 11:30 · 1 hour 45 min
+          </div>
+          <h1 class="display" style="color: white">Posts &amp;<br/>Comments</h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.78); margin-top: 1rem">
+            Click a post → see its full body and all its comments.
+          </p>
+        </div>
+        <div class="section-num" style="color: white">📰</div>
+      </div>
+
+      <!-- ══ S8 APP 1 — APIS ══ -->
+      <div class="slide" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> App 1 — the two API endpoints</div>
+        <div class="stack" style="align-items: center; max-width: 1040px;">
+          <div class="center">
+            <div class="pill pill-blue">JSONPlaceholder</div>
+            <h2 class="heading">Two endpoints — open them in your browser first</h2>
+          </div>
+          <div class="method-grid">
+            <div class="api-card">
+              <div class="api-name">📋 List of all posts</div>
+              <div class="api-url">https://jsonplaceholder.typicode.com/posts</div>
+              <div class="api-what">Returns <code>[{ id, title, body, userId }, …]</code> — 100 posts.</div>
+            </div>
+            <div class="api-card">
+              <div class="api-name">💬 Comments for one post</div>
+              <div class="api-url">https://jsonplaceholder.typicode.com/posts/<strong>1</strong>/comments</div>
+              <div class="api-what">Returns <code>[{ id, postId, name, email, body }, …]</code>. Replace <strong>1</strong> with any post id.</div>
+            </div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 720px;">
+            Open both URLs in your browser. Look at the JSON shape — that's what your <code>type</code> will match.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S9 APP 1 — STEPS 1-4 ══ -->
+      <div class="slide accent-blue bg-subtle" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> App 1 — Steps 1 to 4</div>
+        <div class="stack" style="align-items: center;">
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.4rem, 2.5vw, 1.9rem);">File &amp; types</h2>
+          </div>
+          <div class="steps">
+            <div class="step">
+              <div class="s-num">1</div>
+              <div class="s-body">In <code>src/</code>, create <code>posts-viewer.tsx</code>.</div>
+            </div>
+            <div class="step">
+              <div class="s-num">2</div>
+              <div class="s-body">Import: <code>import { useEffect, useState } from "react";</code></div>
+            </div>
+            <div class="step">
+              <div class="s-num">3</div>
+              <div class="s-body">Define the <strong>Post</strong> type: <code>type Post = Readonly&lt;{ id: number; title: string; body: string }&gt;;</code></div>
+            </div>
+            <div class="step">
+              <div class="s-num">4</div>
+              <div class="s-body">Define the <strong>Comment</strong> type: <code>type Comment = Readonly&lt;{ id: number; postId: number; name: string; email: string; body: string }&gt;;</code></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S10 APP 1 — STEPS 5-8 ══ -->
+      <div class="slide accent-blue bg-subtle" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> App 1 — Steps 5 to 8</div>
+        <div class="stack" style="align-items: center;">
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.4rem, 2.5vw, 1.9rem);">The component &amp; three states</h2>
+          </div>
+          <div class="steps">
+            <div class="step">
+              <div class="s-num">5</div>
+              <div class="s-body">Function shell: <code>export function PostsViewer() { … }</code></div>
+            </div>
+            <div class="step">
+              <div class="s-num">6</div>
+              <div class="s-body">State for the list: <code>const [posts, setPosts] = useState&lt;Post[]&gt;([]);</code></div>
+            </div>
+            <div class="step">
+              <div class="s-num">7</div>
+              <div class="s-body">State for what's clicked: <code>const [selectedPost, setSelectedPost] = useState&lt;Post | null&gt;(null);</code></div>
+            </div>
+            <div class="step">
+              <div class="s-num">8</div>
+              <div class="s-body">State for the comments: <code>const [comments, setComments] = useState&lt;Comment[]&gt;([]);</code></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S11 APP 1 — STEPS 9-11 ══ -->
+      <div class="slide accent-blue bg-subtle" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> App 1 — Steps 9 to 11</div>
+        <div class="stack" style="align-items: center;">
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.4rem, 2.5vw, 1.9rem);">First useEffect — load all posts</h2>
+          </div>
+          <div class="steps">
+            <div class="step">
+              <div class="s-num">9</div>
+              <div class="s-body">Add a <code>useEffect</code> with empty deps <code>[]</code> that fetches all posts.</div>
+            </div>
+            <div class="step">
+              <div class="s-num">10</div>
+              <div class="s-body">Inside it: <code>fetch("https://jsonplaceholder.typicode.com/posts").then(r =&gt; r.json()).then(setPosts);</code></div>
+            </div>
+            <div class="step">
+              <div class="s-num">11</div>
+              <div class="s-body">⏸ Stop here, run the dev server, log <code>posts</code> to confirm 100 posts arrived. Don't move on until this works.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S12 APP 1 — STEPS 12-14 ══ -->
+      <div class="slide accent-blue bg-subtle" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> App 1 — Steps 12 to 14</div>
+        <div class="stack" style="align-items: center;">
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.4rem, 2.5vw, 1.9rem);">Render the list with click handlers</h2>
+          </div>
+          <div class="steps">
+            <div class="step">
+              <div class="s-num">12</div>
+              <div class="s-body">Render a <code>&lt;ul&gt;</code> mapping over <code>posts</code> — show only the <code>title</code>.</div>
+            </div>
+            <div class="step">
+              <div class="s-num">13</div>
+              <div class="s-body">On each <code>&lt;li&gt;</code>, add <code>onClick={() =&gt; setSelectedPost(p)}</code>.</div>
+            </div>
+            <div class="step">
+              <div class="s-num">14</div>
+              <div class="s-body">Style each <code>&lt;li&gt;</code> with Tailwind so it looks clickable — <code>cursor-pointer</code>, hover effect, rounded border. Click around: the page should re-render but nothing visible changes yet (the detail pane comes next).</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S13 APP 1 — STEPS 15-17 ══ -->
+      <div class="slide accent-blue bg-subtle" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> App 1 — Steps 15 to 17</div>
+        <div class="stack" style="align-items: center;">
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.4rem, 2.5vw, 1.9rem);">Second useEffect — load comments when selection changes</h2>
+          </div>
+          <div class="steps">
+            <div class="step">
+              <div class="s-num">15</div>
+              <div class="s-body">Add a <strong>second</strong> <code>useEffect</code>. Its dep array is <code>[selectedPost?.id]</code> — runs whenever you click a different post.</div>
+            </div>
+            <div class="step">
+              <div class="s-num">16</div>
+              <div class="s-body">Inside, first guard against null: <code>if (!selectedPost) return;</code>. Then fetch: <code>fetch(`https://jsonplaceholder.typicode.com/posts/${selectedPost.id}/comments`).then(r =&gt; r.json()).then(setComments);</code></div>
+            </div>
+            <div class="step">
+              <div class="s-num">17</div>
+              <div class="s-body">⏸ Click a post, then check the Network tab in DevTools. You should see a request fire to <code>/posts/X/comments</code>. <code>console.log(comments)</code> should show 5 comments.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S14 APP 1 — STEPS 18-20 ══ -->
+      <div class="slide accent-blue bg-subtle" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> App 1 — Steps 18 to 20</div>
+        <div class="stack" style="align-items: center;">
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.4rem, 2.5vw, 1.9rem);">Render the detail panel</h2>
+          </div>
+          <div class="steps">
+            <div class="step">
+              <div class="s-num">18</div>
+              <div class="s-body">Wrap your JSX in a <code>&lt;div className="flex gap-4 p-4"&gt;</code> — list on the left, details on the right.</div>
+            </div>
+            <div class="step">
+              <div class="s-num">19</div>
+              <div class="s-body">Right side — conditional render: if <code>selectedPost</code> is null, show <code>"Click a post to see details"</code>. Otherwise show the title (<code>&lt;h2&gt;</code>), body (<code>&lt;p&gt;</code>), and a list of comments below.</div>
+            </div>
+            <div class="step">
+              <div class="s-num">20</div>
+              <div class="s-body">Each comment shows the commenter's <code>name</code>, <code>email</code>, and <code>body</code>. Style with Tailwind — make it look like a card or a chat bubble, your choice.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S15 APP 1 — FINAL CODE ══ -->
+      <div class="slide bg-subtle" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span> App 1 — final code (reference)</div>
+        <div class="stack" style="align-items: center; max-width: 1100px;">
+          <div class="code-block" style="max-width: 940px;">
+            <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span><span style="margin-left:0.5rem">posts-viewer.tsx</span></div>
+<div class="code-body scroll"><span class="ck">import</span> { <span class="ci">useEffect</span>, <span class="ci">useState</span> } <span class="ck">from</span> <span class="cs">"react"</span>;
+
+<span class="ck">type</span> <span class="ct">Post</span>    = <span class="ct">Readonly</span>&lt;{ <span class="cp">id</span>: <span class="ct">number</span>; <span class="cp">title</span>: <span class="ct">string</span>; <span class="cp">body</span>: <span class="ct">string</span> }&gt;;
+<span class="ck">type</span> <span class="ct">Comment</span> = <span class="ct">Readonly</span>&lt;{ <span class="cp">id</span>: <span class="ct">number</span>; <span class="cp">postId</span>: <span class="ct">number</span>; <span class="cp">name</span>: <span class="ct">string</span>; <span class="cp">email</span>: <span class="ct">string</span>; <span class="cp">body</span>: <span class="ct">string</span> }&gt;;
+
+<span class="ck">export</span> <span class="ck">function</span> <span class="ci">PostsViewer</span>() {
+  <span class="ck">const</span> [<span class="cr">posts</span>, <span class="cr">setPosts</span>] = <span class="ci">useState</span>&lt;<span class="ct">Post</span>[]&gt;([]);
+  <span class="ck">const</span> [<span class="cr">selectedPost</span>, <span class="cr">setSelectedPost</span>] = <span class="ci">useState</span>&lt;<span class="ct">Post</span> | <span class="ck">null</span>&gt;(<span class="ck">null</span>);
+  <span class="ck">const</span> [<span class="cr">comments</span>, <span class="cr">setComments</span>] = <span class="ci">useState</span>&lt;<span class="ct">Comment</span>[]&gt;([]);
+
+  <span class="ci">useEffect</span>(() =&gt; {
+    <span class="ci">fetch</span>(<span class="cs">"https://jsonplaceholder.typicode.com/posts"</span>)
+      .<span class="ci">then</span>(<span class="cr">r</span> =&gt; <span class="cr">r</span>.<span class="ci">json</span>()).<span class="ci">then</span>(<span class="cr">setPosts</span>);
+  }, []);
+
+  <span class="ci">useEffect</span>(() =&gt; {
+    <span class="ck">if</span> (!<span class="cr">selectedPost</span>) <span class="ck">return</span>;
+    <span class="ci">fetch</span>(<span class="cs">`https://jsonplaceholder.typicode.com/posts/${selectedPost.id}/comments`</span>)
+      .<span class="ci">then</span>(<span class="cr">r</span> =&gt; <span class="cr">r</span>.<span class="ci">json</span>()).<span class="ci">then</span>(<span class="cr">setComments</span>);
+  }, [<span class="cr">selectedPost</span>?.<span class="cp">id</span>]);
+
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;div</span> <span class="cattr">className</span>=<span class="cs">"flex gap-4 p-4"</span><span class="ctag">&gt;</span>
+      <span class="ctag">&lt;ul</span> <span class="cattr">className</span>=<span class="cs">"w-1/3 space-y-2"</span><span class="ctag">&gt;</span>
+        {<span class="cr">posts</span>.<span class="ci">map</span>(<span class="cr">p</span> =&gt; (
+          <span class="ctag">&lt;li</span> <span class="cattr">key</span>={<span class="cr">p</span>.<span class="cp">id</span>} <span class="cattr">onClick</span>={() =&gt; <span class="ci">setSelectedPost</span>(<span class="cr">p</span>)}
+              <span class="cattr">className</span>=<span class="cs">"cursor-pointer rounded-md border border-gray-200 bg-white p-3 hover:bg-gray-50"</span><span class="ctag">&gt;</span>
+            {<span class="cr">p</span>.<span class="cp">title</span>}
+          <span class="ctag">&lt;/li&gt;</span>
+        ))}
+      <span class="ctag">&lt;/ul&gt;</span>
+      <span class="ctag">&lt;div</span> <span class="cattr">className</span>=<span class="cs">"flex-1"</span><span class="ctag">&gt;</span>
+        {<span class="cr">selectedPost</span> ? (
+          <span class="ctag">&lt;div</span> <span class="cattr">className</span>=<span class="cs">"space-y-4"</span><span class="ctag">&gt;</span>
+            <span class="ctag">&lt;h2</span> <span class="cattr">className</span>=<span class="cs">"text-xl font-bold"</span><span class="ctag">&gt;</span>{<span class="cr">selectedPost</span>.<span class="cp">title</span>}<span class="ctag">&lt;/h2&gt;</span>
+            <span class="ctag">&lt;p&gt;</span>{<span class="cr">selectedPost</span>.<span class="cp">body</span>}<span class="ctag">&lt;/p&gt;</span>
+            <span class="ctag">&lt;h3</span> <span class="cattr">className</span>=<span class="cs">"font-bold"</span><span class="ctag">&gt;</span>Comments<span class="ctag">&lt;/h3&gt;</span>
+            <span class="ctag">&lt;ul</span> <span class="cattr">className</span>=<span class="cs">"space-y-2"</span><span class="ctag">&gt;</span>
+              {<span class="cr">comments</span>.<span class="ci">map</span>(<span class="cr">c</span> =&gt; (
+                <span class="ctag">&lt;li</span> <span class="cattr">key</span>={<span class="cr">c</span>.<span class="cp">id</span>} <span class="cattr">className</span>=<span class="cs">"rounded-md bg-gray-50 p-3"</span><span class="ctag">&gt;</span>
+                  <span class="ctag">&lt;strong&gt;</span>{<span class="cr">c</span>.<span class="cp">name</span>}<span class="ctag">&lt;/strong&gt;</span> — {<span class="cr">c</span>.<span class="cp">email</span>}
+                  <span class="ctag">&lt;p&gt;</span>{<span class="cr">c</span>.<span class="cp">body</span>}<span class="ctag">&lt;/p&gt;</span>
+                <span class="ctag">&lt;/li&gt;</span>
+              ))}
+            <span class="ctag">&lt;/ul&gt;</span>
+          <span class="ctag">&lt;/div&gt;</span>
+        ) : (
+          <span class="ctag">&lt;p</span> <span class="cattr">className</span>=<span class="cs">"text-gray-500"</span><span class="ctag">&gt;</span>Click a post to see details<span class="ctag">&lt;/p&gt;</span>
+        )}
+      <span class="ctag">&lt;/div&gt;</span>
+    <span class="ctag">&lt;/div&gt;</span>
+  );
+}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S16 APP 1 — STRETCH ══ -->
+      <div class="slide accent-amber bg-subtle" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span> App 1 — if you finish early</div>
+        <div class="stack" style="align-items: center; max-width: 1000px;">
+          <div class="center">
+            <div class="pill pill-amber">Stretch goals</div>
+            <h2 class="heading">Make it more interesting</h2>
+          </div>
+          <ul class="bullet-list" style="max-width: 760px;">
+            <li>Show a "Loading comments…" message while the second fetch is in flight (use another <code>useState</code>).</li>
+            <li>Add a <strong>search box</strong> that filters posts by title — lift the query state into the parent (Class 08 pattern).</li>
+            <li>Add a <strong>"Back to list"</strong> button on the detail panel that clears <code>selectedPost</code>.</li>
+            <li>Show the post author. Hint — fetch <code>https://jsonplaceholder.typicode.com/users/{post.userId}</code> when a post is selected.</li>
+            <li>Highlight the currently-selected post in the list (compare <code>selectedPost?.id === p.id</code> and conditionally add a Tailwind class).</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ══ S17 BREAK ══ -->
+      <div class="slide bg-dark" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span> Break · 11:30 – 11:45</div>
+        <div class="center" style="max-width: 640px;">
+          <div class="big-emoji">☕</div>
+          <h2 class="heading" style="color: white;">Halfway done. Stand up. Walk.</h2>
+          <div class="break-timer" id="break-timer" style="margin: 2rem 0 1rem;">15:00</div>
+          <div>
+            <button class="break-btn" onclick="startTimer('break-timer', 15)">Start</button>
+            <button class="break-btn" onclick="resetTimer('break-timer', 15)">Reset</button>
+          </div>
+          <p style="color: rgba(255,255,255,0.6); margin-top: 1.5rem; font-size: 0.9rem;">
+            Coming up — Pokémon Explorer. Same pattern, more visual.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S18 SECTION DIVIDER — APP 2 ══ -->
+      <div class="slide bg-amber" data-slide="18">
+        <div class="slide-label"><span class="snum">18</span></div>
+        <div class="center" style="position: relative; z-index: 1; max-width: 800px;">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span>App 2 · 11:45 – 1:30 · 1 hour 45 min
+          </div>
+          <h1 class="display" style="color: white">Pokémon<br/>Explorer</h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.78); margin-top: 1rem">
+            Click a name → see image, types, and stats.
+          </p>
+        </div>
+        <div class="section-num" style="color: white">🔮</div>
+      </div>
+
+      <!-- ══ S19 APP 2 — WHAT WE'RE BUILDING ══ -->
+      <div class="slide" data-slide="19">
+        <div class="slide-label"><span class="snum">19</span> App 2 — what we're building</div>
+        <div class="stack" style="align-items: center; max-width: 1000px;">
+          <div class="center">
+            <h2 class="heading">A list + a detail card with image and stats</h2>
+          </div>
+          <div class="poke-mock">
+            <div class="poke-img">⚡</div>
+            <div class="poke-name">pikachu</div>
+            <div class="poke-types">
+              <span class="poke-type">electric</span>
+            </div>
+            <div class="poke-stats">
+              hp: 35<br/>
+              attack: 55<br/>
+              defense: 40<br/>
+              speed: 90
+            </div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 720px;">
+            On the left, a list of 20 Pokémon names. Click one — its detail card appears on the right with a real sprite image.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S20 APP 2 — APIS ══ -->
+      <div class="slide" data-slide="20">
+        <div class="slide-label"><span class="snum">20</span> App 2 — the two API endpoints</div>
+        <div class="stack" style="align-items: center; max-width: 1040px;">
+          <div class="center">
+            <div class="pill pill-blue">PokéAPI</div>
+            <h2 class="heading">Open both URLs in your browser first</h2>
+          </div>
+          <div class="method-grid">
+            <div class="api-card">
+              <div class="api-name">📋 List of Pokémon</div>
+              <div class="api-url">https://pokeapi.co/api/v2/pokemon?limit=20</div>
+              <div class="api-what">Returns <code>{ results: [{ name, url }, …] }</code> — 20 Pokémon names.</div>
+            </div>
+            <div class="api-card">
+              <div class="api-name">🔍 One Pokémon's details</div>
+              <div class="api-url">https://pokeapi.co/api/v2/pokemon/<strong>pikachu</strong></div>
+              <div class="api-what">Returns sprites, types, stats, height, weight. Replace <strong>pikachu</strong> with any name.</div>
+            </div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 720px;">
+            The list returns names. The detail endpoint takes a name. Click the URLs above — see the JSON.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S21 APP 2 — STEPS 1-4 ══ -->
+      <div class="slide accent-amber bg-subtle" data-slide="21">
+        <div class="slide-label"><span class="snum">21</span> App 2 — Steps 1 to 4</div>
+        <div class="stack" style="align-items: center;">
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.4rem, 2.5vw, 1.9rem);">File &amp; types</h2>
+          </div>
+          <div class="steps">
+            <div class="step amber">
+              <div class="s-num">1</div>
+              <div class="s-body">Create <code>src/pokemon-explorer.tsx</code>.</div>
+            </div>
+            <div class="step amber">
+              <div class="s-num">2</div>
+              <div class="s-body">Import: <code>import { useEffect, useState } from "react";</code></div>
+            </div>
+            <div class="step amber">
+              <div class="s-num">3</div>
+              <div class="s-body">Type for the list item: <code>type PokemonListItem = Readonly&lt;{ name: string; url: string }&gt;;</code></div>
+            </div>
+            <div class="step amber">
+              <div class="s-num">4</div>
+              <div class="s-body">Type for the details (use what's in the JSON you saw):
+                <code>type PokemonDetail = Readonly&lt;{ name: string; height: number; weight: number; sprites: { front_default: string }; types: { type: { name: string } }[]; stats: { base_stat: number; stat: { name: string } }[] }&gt;;</code></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S22 APP 2 — STEPS 5-8 ══ -->
+      <div class="slide accent-amber bg-subtle" data-slide="22">
+        <div class="slide-label"><span class="snum">22</span> App 2 — Steps 5 to 8</div>
+        <div class="stack" style="align-items: center;">
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.4rem, 2.5vw, 1.9rem);">Component &amp; state</h2>
+          </div>
+          <div class="steps">
+            <div class="step amber">
+              <div class="s-num">5</div>
+              <div class="s-body">Function shell: <code>export function PokemonExplorer() { … }</code></div>
+            </div>
+            <div class="step amber">
+              <div class="s-num">6</div>
+              <div class="s-body">List state: <code>const [list, setList] = useState&lt;PokemonListItem[]&gt;([]);</code></div>
+            </div>
+            <div class="step amber">
+              <div class="s-num">7</div>
+              <div class="s-body">Selected name: <code>const [selectedName, setSelectedName] = useState&lt;string | null&gt;(null);</code></div>
+            </div>
+            <div class="step amber">
+              <div class="s-num">8</div>
+              <div class="s-body">Detail state: <code>const [detail, setDetail] = useState&lt;PokemonDetail | null&gt;(null);</code></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S23 APP 2 — STEPS 9-11 ══ -->
+      <div class="slide accent-amber bg-subtle" data-slide="23">
+        <div class="slide-label"><span class="snum">23</span> App 2 — Steps 9 to 11</div>
+        <div class="stack" style="align-items: center;">
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.4rem, 2.5vw, 1.9rem);">First useEffect — load the list</h2>
+          </div>
+          <div class="steps">
+            <div class="step amber">
+              <div class="s-num">9</div>
+              <div class="s-body"><code>useEffect</code> with empty deps <code>[]</code>. Inside: <code>fetch("https://pokeapi.co/api/v2/pokemon?limit=20").then(r =&gt; r.json()).then(data =&gt; setList(data.results));</code></div>
+            </div>
+            <div class="step amber">
+              <div class="s-num">10</div>
+              <div class="s-body">⚠️ Note — the response wraps the array in a <code>results</code> key. That's why <code>data.results</code>, not just <code>data</code>.</div>
+            </div>
+            <div class="step amber">
+              <div class="s-num">11</div>
+              <div class="s-body">Render the list as <code>&lt;button&gt;</code> elements (more accessible than clickable <code>&lt;li&gt;</code>): <code>onClick={() =&gt; setSelectedName(p.name)}</code>. Style them as cards.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S24 APP 2 — STEPS 12-14 ══ -->
+      <div class="slide accent-amber bg-subtle" data-slide="24">
+        <div class="slide-label"><span class="snum">24</span> App 2 — Steps 12 to 14</div>
+        <div class="stack" style="align-items: center;">
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.4rem, 2.5vw, 1.9rem);">Second useEffect — load detail on click</h2>
+          </div>
+          <div class="steps">
+            <div class="step amber">
+              <div class="s-num">12</div>
+              <div class="s-body">Add a second <code>useEffect</code> with deps <code>[selectedName]</code>.</div>
+            </div>
+            <div class="step amber">
+              <div class="s-num">13</div>
+              <div class="s-body">Inside, guard: <code>if (!selectedName) return;</code> Then fetch: <code>fetch(`https://pokeapi.co/api/v2/pokemon/${selectedName}`).then(r =&gt; r.json()).then(setDetail);</code></div>
+            </div>
+            <div class="step amber">
+              <div class="s-num">14</div>
+              <div class="s-body">⏸ Click a Pokémon. Open DevTools Network tab. You should see a request to <code>/pokemon/bulbasaur</code> (or whichever name). <code>console.log(detail)</code> shows the data.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S25 APP 2 — STEPS 15-17 ══ -->
+      <div class="slide accent-amber bg-subtle" data-slide="25">
+        <div class="slide-label"><span class="snum">25</span> App 2 — Steps 15 to 17</div>
+        <div class="stack" style="align-items: center;">
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.4rem, 2.5vw, 1.9rem);">Render the detail card</h2>
+          </div>
+          <div class="steps">
+            <div class="step amber">
+              <div class="s-num">15</div>
+              <div class="s-body">Layout: <code>&lt;div className="flex gap-4 p-4"&gt;</code> with the list on the left and detail on the right.</div>
+            </div>
+            <div class="step amber">
+              <div class="s-num">16</div>
+              <div class="s-body">If <code>detail</code> is <code>null</code> → show "Click a Pokémon to see details". Otherwise show: <code>&lt;img src={detail.sprites.front_default} /&gt;</code>, the name, types as pill badges, height, weight, and a list of stats (<code>detail.stats.map</code>).</div>
+            </div>
+            <div class="step amber">
+              <div class="s-num">17</div>
+              <div class="s-body">Use <code>capitalize</code> Tailwind class for names. Use <code>rounded-full bg-blue-100 px-3 py-1</code> for type badges. Style the card with <code>rounded-xl border border-gray-200 bg-white p-6</code>.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S26 APP 2 — FINAL CODE ══ -->
+      <div class="slide bg-subtle" data-slide="26">
+        <div class="slide-label"><span class="snum">26</span> App 2 — final code (reference)</div>
+        <div class="stack" style="align-items: center; max-width: 1100px;">
+          <div class="code-block" style="max-width: 940px;">
+            <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span><span style="margin-left:0.5rem">pokemon-explorer.tsx</span></div>
+<div class="code-body scroll"><span class="ck">import</span> { <span class="ci">useEffect</span>, <span class="ci">useState</span> } <span class="ck">from</span> <span class="cs">"react"</span>;
+
+<span class="ck">type</span> <span class="ct">PokemonListItem</span> = <span class="ct">Readonly</span>&lt;{ <span class="cp">name</span>: <span class="ct">string</span>; <span class="cp">url</span>: <span class="ct">string</span> }&gt;;
+<span class="ck">type</span> <span class="ct">PokemonDetail</span> = <span class="ct">Readonly</span>&lt;{
+  <span class="cp">name</span>: <span class="ct">string</span>; <span class="cp">height</span>: <span class="ct">number</span>; <span class="cp">weight</span>: <span class="ct">number</span>;
+  <span class="cp">sprites</span>: { <span class="cp">front_default</span>: <span class="ct">string</span> };
+  <span class="cp">types</span>: { <span class="cp">type</span>: { <span class="cp">name</span>: <span class="ct">string</span> } }[];
+  <span class="cp">stats</span>: { <span class="cp">base_stat</span>: <span class="ct">number</span>; <span class="cp">stat</span>: { <span class="cp">name</span>: <span class="ct">string</span> } }[];
+}&gt;;
+
+<span class="ck">export</span> <span class="ck">function</span> <span class="ci">PokemonExplorer</span>() {
+  <span class="ck">const</span> [<span class="cr">list</span>, <span class="cr">setList</span>] = <span class="ci">useState</span>&lt;<span class="ct">PokemonListItem</span>[]&gt;([]);
+  <span class="ck">const</span> [<span class="cr">selectedName</span>, <span class="cr">setSelectedName</span>] = <span class="ci">useState</span>&lt;<span class="ct">string</span> | <span class="ck">null</span>&gt;(<span class="ck">null</span>);
+  <span class="ck">const</span> [<span class="cr">detail</span>, <span class="cr">setDetail</span>] = <span class="ci">useState</span>&lt;<span class="ct">PokemonDetail</span> | <span class="ck">null</span>&gt;(<span class="ck">null</span>);
+
+  <span class="ci">useEffect</span>(() =&gt; {
+    <span class="ci">fetch</span>(<span class="cs">"https://pokeapi.co/api/v2/pokemon?limit=20"</span>)
+      .<span class="ci">then</span>(<span class="cr">r</span> =&gt; <span class="cr">r</span>.<span class="ci">json</span>()).<span class="ci">then</span>(<span class="cr">data</span> =&gt; <span class="ci">setList</span>(<span class="cr">data</span>.<span class="cp">results</span>));
+  }, []);
+
+  <span class="ci">useEffect</span>(() =&gt; {
+    <span class="ck">if</span> (!<span class="cr">selectedName</span>) <span class="ck">return</span>;
+    <span class="ci">fetch</span>(<span class="cs">`https://pokeapi.co/api/v2/pokemon/${selectedName}`</span>)
+      .<span class="ci">then</span>(<span class="cr">r</span> =&gt; <span class="cr">r</span>.<span class="ci">json</span>()).<span class="ci">then</span>(<span class="cr">setDetail</span>);
+  }, [<span class="cr">selectedName</span>]);
+
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;div</span> <span class="cattr">className</span>=<span class="cs">"flex gap-4 p-4"</span><span class="ctag">&gt;</span>
+      <span class="ctag">&lt;ul</span> <span class="cattr">className</span>=<span class="cs">"w-1/3 space-y-2"</span><span class="ctag">&gt;</span>
+        {<span class="cr">list</span>.<span class="ci">map</span>(<span class="cr">p</span> =&gt; (
+          <span class="ctag">&lt;li</span> <span class="cattr">key</span>={<span class="cr">p</span>.<span class="cp">name</span>}<span class="ctag">&gt;</span>
+            <span class="ctag">&lt;button</span> <span class="cattr">onClick</span>={() =&gt; <span class="ci">setSelectedName</span>(<span class="cr">p</span>.<span class="cp">name</span>)}
+                    <span class="cattr">className</span>=<span class="cs">"w-full rounded-md border border-gray-200 bg-white p-3 capitalize hover:bg-gray-50"</span><span class="ctag">&gt;</span>
+              {<span class="cr">p</span>.<span class="cp">name</span>}
+            <span class="ctag">&lt;/button&gt;</span>
+          <span class="ctag">&lt;/li&gt;</span>
+        ))}
+      <span class="ctag">&lt;/ul&gt;</span>
+      <span class="ctag">&lt;div</span> <span class="cattr">className</span>=<span class="cs">"flex-1"</span><span class="ctag">&gt;</span>
+        {<span class="cr">detail</span> ? (
+          <span class="ctag">&lt;div</span> <span class="cattr">className</span>=<span class="cs">"rounded-xl border border-gray-200 bg-white p-6 text-center"</span><span class="ctag">&gt;</span>
+            <span class="ctag">&lt;img</span> <span class="cattr">src</span>={<span class="cr">detail</span>.<span class="cp">sprites</span>.<span class="cp">front_default</span>} <span class="cattr">alt</span>={<span class="cr">detail</span>.<span class="cp">name</span>}
+                 <span class="cattr">className</span>=<span class="cs">"mx-auto h-40"</span> <span class="ctag">/&gt;</span>
+            <span class="ctag">&lt;h2</span> <span class="cattr">className</span>=<span class="cs">"text-2xl font-bold capitalize"</span><span class="ctag">&gt;</span>{<span class="cr">detail</span>.<span class="cp">name</span>}<span class="ctag">&lt;/h2&gt;</span>
+            <span class="ctag">&lt;div</span> <span class="cattr">className</span>=<span class="cs">"mt-2 flex justify-center gap-2"</span><span class="ctag">&gt;</span>
+              {<span class="cr">detail</span>.<span class="cp">types</span>.<span class="ci">map</span>(<span class="cr">t</span> =&gt; (
+                <span class="ctag">&lt;span</span> <span class="cattr">key</span>={<span class="cr">t</span>.<span class="cp">type</span>.<span class="cp">name</span>}
+                      <span class="cattr">className</span>=<span class="cs">"rounded-full bg-blue-100 px-3 py-1 text-sm capitalize"</span><span class="ctag">&gt;</span>
+                  {<span class="cr">t</span>.<span class="cp">type</span>.<span class="cp">name</span>}
+                <span class="ctag">&lt;/span&gt;</span>
+              ))}
+            <span class="ctag">&lt;/div&gt;</span>
+            <span class="ctag">&lt;p</span> <span class="cattr">className</span>=<span class="cs">"mt-2 text-sm text-gray-500"</span><span class="ctag">&gt;</span>
+              Height: {<span class="cr">detail</span>.<span class="cp">height</span>} · Weight: {<span class="cr">detail</span>.<span class="cp">weight</span>}
+            <span class="ctag">&lt;/p&gt;</span>
+            <span class="ctag">&lt;ul</span> <span class="cattr">className</span>=<span class="cs">"mt-4 space-y-1 text-left max-w-xs mx-auto"</span><span class="ctag">&gt;</span>
+              {<span class="cr">detail</span>.<span class="cp">stats</span>.<span class="ci">map</span>(<span class="cr">s</span> =&gt; (
+                <span class="ctag">&lt;li</span> <span class="cattr">key</span>={<span class="cr">s</span>.<span class="cp">stat</span>.<span class="cp">name</span>} <span class="cattr">className</span>=<span class="cs">"capitalize"</span><span class="ctag">&gt;</span>
+                  {<span class="cr">s</span>.<span class="cp">stat</span>.<span class="cp">name</span>}: {<span class="cr">s</span>.<span class="cp">base_stat</span>}
+                <span class="ctag">&lt;/li&gt;</span>
+              ))}
+            <span class="ctag">&lt;/ul&gt;</span>
+          <span class="ctag">&lt;/div&gt;</span>
+        ) : (
+          <span class="ctag">&lt;p</span> <span class="cattr">className</span>=<span class="cs">"text-gray-500"</span><span class="ctag">&gt;</span>Click a Pokémon to see details<span class="ctag">&lt;/p&gt;</span>
+        )}
+      <span class="ctag">&lt;/div&gt;</span>
+    <span class="ctag">&lt;/div&gt;</span>
+  );
+}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S27 APP 2 — STRETCH ══ -->
+      <div class="slide accent-amber bg-subtle" data-slide="27">
+        <div class="slide-label"><span class="snum">27</span> App 2 — if you finish early</div>
+        <div class="stack" style="align-items: center; max-width: 1000px;">
+          <div class="center">
+            <div class="pill pill-amber">Stretch goals</div>
+            <h2 class="heading">Push it further</h2>
+          </div>
+          <ul class="bullet-list" style="max-width: 760px;">
+            <li>Show <strong>151 Pokémon</strong> (the original ones) — change <code>limit=20</code> to <code>limit=151</code>.</li>
+            <li>Add a <strong>"Loading…"</strong> state for the detail panel — set it before the fetch, clear it after.</li>
+            <li>Add a <strong>search box</strong> at the top of the list — filter Pokémon by name (case-insensitive).</li>
+            <li>Color-code the type badges — different Tailwind background colors per type (<code>fire</code> red, <code>water</code> blue, <code>grass</code> green, etc).</li>
+            <li>Show a <strong>progress bar</strong> for each stat — width based on <code>base_stat</code> divided by some max (try 200).</li>
+            <li>Add <strong>"Next"</strong> / <strong>"Previous"</strong> buttons on the detail card to step through Pokémon without going back to the list.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ══ S28 WRAP UP ══ -->
+      <div class="slide bg-indigo" data-slide="28">
+        <div class="slide-label"><span class="snum">28</span> Wrap up</div>
+        <div class="stack" style="align-items: center; max-width: 980px;">
+          <div class="center">
+            <div class="pill pill-white"><span class="pill-dot"></span>End of practice day</div>
+            <h2 class="heading" style="color: white;">You built two real apps today</h2>
+          </div>
+          <div class="method-grid">
+            <div class="method-card" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.18);">
+              <div class="mc-name" style="color: #7dd3fc;">📰 Posts &amp; Comments</div>
+              <div class="mc-desc" style="color: rgba(255,255,255,0.7);">Master / detail · two useEffects · click handlers · conditional rendering.</div>
+            </div>
+            <div class="method-card" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.18);">
+              <div class="mc-name" style="color: #fde68a;">🔮 Pokémon Explorer</div>
+              <div class="mc-desc" style="color: rgba(255,255,255,0.7);">Same pattern · nested types · images · type badges · stats.</div>
+            </div>
+          </div>
+          <p class="body-md" style="color: rgba(255,255,255,0.7); text-align: center; max-width: 720px; margin-top: 0.8rem;">
+            <strong style="color: white;">The pattern you learned:</strong> two useEffects working together — one fires once on mount, one fires when the user clicks. <em>This is what real apps look like.</em>
+          </p>
+          <p class="body-md" style="color: rgba(255,255,255,0.7); text-align: center; max-width: 720px; margin-top: 0.4rem;">
+            Save your work — push your branch if you're using git. We'll review next class.
+          </p>
+          <div style="margin-top: 1.5rem;">
+            <img src="../assets/SELISE_Logo_Reversed.png" alt="SELISE" style="height: 40px; opacity: 0.8;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════ PROGRESS + NAV ══════════════ -->
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 28</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      let current = 0;
+
+      function goTo(n) {
+        slides[current].classList.remove("active");
+        slides[current].classList.add("exit");
+        const old = current;
+        setTimeout(() => slides[old].classList.remove("exit"), 380);
+        current = Math.max(0, Math.min(n, total - 1));
+        slides[current].classList.add("active");
+        document.getElementById("slide-counter").textContent = `${current + 1} / ${total}`;
+        document.getElementById("progress").style.width = `${((current + 1) / total) * 100}%`;
+        initReveal(slides[current]);
+      }
+
+      function nextSlide() { if (current < total - 1) goTo(current + 1); }
+      function prevSlide() { if (current > 0) goTo(current - 1); }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+        if (e.key === "ArrowRight" || e.key === " ") { e.preventDefault(); handleForward(); }
+        if (e.key === "ArrowLeft") { e.preventDefault(); prevSlide(); }
+        if (e.key === "f" || e.key === "F") toggleFullscreen();
+      });
+
+      document.getElementById("deck").addEventListener("click", function (e) {
+        if (e.target.closest("button, .quiz-opt, .sl-item, .mq, a, input, select, textarea, .agenda-row, [data-noclick]")) return;
+        const pct = e.clientX / window.innerWidth;
+        if (pct < 0.15) prevSlide();
+        else if (pct > 0.85) handleForward();
+      });
+
+      function handleForward() {
+        const active = slides[current];
+        const list = active.querySelector(".reveal-list");
+        if (list) {
+          const hidden = list.querySelectorAll("li:not(.shown)");
+          if (hidden.length > 0) {
+            hidden[0].classList.add("shown");
+            const hint = active.querySelector(".reveal-hint");
+            if (hint && hidden.length === 1) hint.style.opacity = "0";
+            return;
+          }
+        }
+        nextSlide();
+      }
+
+      function initReveal(slide) {
+        const list = slide.querySelector(".reveal-list");
+        if (!list) return;
+        list.querySelectorAll("li").forEach((li) => li.classList.remove("shown"));
+        const hint = slide.querySelector(".reveal-hint");
+        if (hint) hint.style.opacity = "1";
+      }
+
+      slides[0].classList.add("active");
+      document.getElementById("progress").style.width = `${(1 / total) * 100}%`;
+
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
+        else document.exitFullscreen().catch(() => {});
+      }
+
+      const timerState = {};
+      function startTimer(id, minutes) {
+        if (timerState[id]?.interval) return;
+        if (!timerState[id]) timerState[id] = { remaining: minutes * 60 };
+        timerState[id].interval = setInterval(() => {
+          timerState[id].remaining--;
+          const el = document.getElementById(id);
+          if (!el) return;
+          if (timerState[id].remaining <= 0) {
+            clearInterval(timerState[id].interval);
+            timerState[id].interval = null;
+            el.textContent = "00:00";
+            el.style.color = "#ff5f56";
+            return;
+          }
+          const m = Math.floor(timerState[id].remaining / 60).toString().padStart(2, "0");
+          const s = (timerState[id].remaining % 60).toString().padStart(2, "0");
+          el.textContent = `${m}:${s}`;
+          if (timerState[id].remaining <= 60) el.style.color = "#febc2e";
+        }, 1000);
+      }
+      function resetTimer(id, minutes) {
+        if (timerState[id]?.interval) {
+          clearInterval(timerState[id].interval);
+          timerState[id].interval = null;
+        }
+        timerState[id] = { remaining: minutes * 60 };
+        const el = document.getElementById(id);
+        if (el) {
+          el.textContent = minutes.toString().padStart(2, "0") + ":00";
+          el.style.color = "";
+        }
+      }
+    </script>
+  </body>
+</html>

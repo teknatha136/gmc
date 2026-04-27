@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Class Notes: React Patterns</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue:    #0066B2;
+      --indigo:  #001F35;
+      --amber:   #247EC1;
+      --green:   #7BC950;
+      --purple:  #4796D1;
+      --red:     #D80032;
+      --text:    #1B2021;
+      --muted:   #7B7C7F;
+      --faint:   #9CA3AF;
+      --surf:    #ffffff;
+      --bg:      #F9F9F9;
+      --border:  #EDEDED;
+      --border-l:#F5F5F5;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Open Sans', 'Aptos', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.65;
+      font-size: 17px;
+    }
+    @media (max-width: 640px) { body { font-size: 16px; } }
+
+    .hero {
+      background: var(--surf);
+      border-bottom: 1px solid var(--border);
+      padding: 4rem 2rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 5px;
+      background: linear-gradient(135deg, #0067A3, #002D72);
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 0.35rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); }
+    .hero h1 {
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero h1 .c-blue   { color: var(--blue); }
+    .hero h1 .c-indigo { color: var(--indigo); }
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 2rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero-tags {
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+    .hero-tag {
+      padding: 0.3rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .tag-blue   { background: #E6F0F8; color: var(--blue); }
+    .tag-indigo { background: #E6E9EC; color: var(--indigo); }
+    .tag-green  { background: #F0F7EC; color: var(--green); }
+    .tag-amber  { background: #EBF0F7; color: #1C5B8C; }
+    .tag-purple { background: #ECF2F8; color: var(--purple); }
+
+    .container { max-width: 1040px; margin: 0 auto; padding: 0 2rem 6rem; }
+
+    .toc {
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem 2rem;
+      margin: 2.5rem 0;
+    }
+    .toc h3 {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--faint);
+      margin-bottom: 1.25rem;
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.4rem 2rem;
+    }
+    .toc-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.875rem;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.3rem 0;
+      border-bottom: 1px solid var(--border-l);
+      transition: color 0.15s;
+    }
+    .toc-item:hover { color: var(--indigo); }
+    .toc-item .toc-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+    .section-hd { padding: 3.5rem 0 1.5rem; }
+    .section-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0.9rem;
+      border-radius: 100px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+    .pill-blue   { background: #E6F0F8; color: var(--blue); }
+    .pill-indigo { background: #E6E9EC; color: var(--indigo); }
+    .pill-green  { background: #F0F7EC; color: var(--green); }
+    .pill-amber  { background: #EBF0F7; color: #1C5B8C; }
+    .pill-purple { background: #ECF2F8; color: var(--purple); }
+    .section-title {
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+      font-size: 2rem;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 0.4rem;
+    }
+    .section-desc { font-size: 0.95rem; color: var(--muted); }
+
+    .topic {
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem 2.25rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .topic::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 4px;
+      border-radius: 4px 0 0 4px;
+    }
+    .topic-blue::before   { background: var(--blue); }
+    .topic-indigo::before { background: var(--indigo); }
+    .topic-amber::before  { background: var(--amber); }
+    .topic-green::before  { background: var(--green); }
+    .topic-purple::before { background: var(--purple); }
+    .topic-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .explain {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+    }
+    .explain strong { color: var(--text); }
+
+    .concepts { display: grid; gap: 0.9rem; margin-bottom: 1.25rem; }
+    .concepts-2 { grid-template-columns: repeat(2, 1fr); }
+    .concepts-3 { grid-template-columns: repeat(3, 1fr); }
+    .concept {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.1rem 1.25rem;
+    }
+    .concept h4 {
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .concept ul { list-style: none; display: flex; flex-direction: column; gap: 0.35rem; }
+    .concept ul li {
+      font-size: 0.83rem;
+      color: var(--muted);
+      padding-left: 1rem;
+      position: relative;
+      line-height: 1.5;
+    }
+    .concept ul li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--faint);
+      font-size: 0.72rem;
+      top: 0.15em;
+    }
+
+    .code-block {
+      background: #001F35;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+      font-family: 'Courier New', monospace;
+    }
+    .code-bar {
+      background: #0A2A45;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.4);
+    }
+    .code-bar .cb-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .code-body {
+      padding: 1.1rem 1.25rem;
+      font-size: 0.82rem;
+      line-height: 1.85;
+      color: rgba(255,255,255,0.85);
+      white-space: pre-wrap;
+    }
+    .code-body .ck { color: #7dd3fc; }
+    .code-body .cs { color: #86efac; }
+    .code-body .cn { color: #fde68a; }
+    .code-body .cc { color: rgba(255,255,255,0.35); }
+    .code-body .cp { color: #c4b5fd; }
+    .code-body .cr { color: #fca5a5; }
+    .code-body .ci { color: #f0abfc; }
+    .code-body .ct { color: #fdba74; }
+    .code-body .ctag { color: #f472b6; }
+    .code-body .cattr { color: #fde68a; }
+
+    code { font-family: 'Courier New', monospace; background: var(--bg); padding: 0.1em 0.35em; border-radius: 4px; font-size: 0.9em; color: var(--indigo); }
+
+    .callout {
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      font-size: 0.85rem;
+      display: flex;
+      gap: 0.6rem;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      line-height: 1.55;
+    }
+    .callout .ci { font-size: 1rem; min-width: 1.2rem; flex-shrink: 0; }
+    .callout-blue  { background: #f0f7fc; border: 1px solid #B0D4E9; color: var(--muted); }
+    .callout-amber { background: #FFF8E6; border: 1px solid #F0D890; color: #664A00; }
+    .callout-red   { background: #F2E8EA; border: 1px solid #E0B5B9; color: #8B001E; }
+    .callout strong { color: var(--text); }
+    .callout-amber strong { color: #664A00; }
+    .callout-red strong { color: #8B001E; }
+
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.25rem;
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .compare-table th {
+      background: #E6E9EC;
+      color: var(--indigo);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0.6rem 1rem;
+      text-align: left;
+    }
+    .compare-table td {
+      padding: 0.6rem 1rem;
+      font-size: 0.88rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+
+    .takeaway {
+      background: #F0F7EC;
+      border: 1px solid #B5DBA7;
+      border-radius: 12px;
+      padding: 1.1rem 1.3rem;
+      margin-top: 1.25rem;
+    }
+    .takeaway h4 {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #2A4D14;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 0.6rem;
+    }
+    .takeaway ul { list-style: none; display: flex; flex-direction: column; gap: 0.35rem; }
+    .takeaway ul li {
+      font-size: 0.85rem;
+      color: #3B5A22;
+      padding-left: 1.1rem;
+      position: relative;
+      line-height: 1.55;
+    }
+    .takeaway ul li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--green);
+      font-weight: 700;
+      font-size: 0.9rem;
+      top: 0;
+    }
+
+    .exercise {
+      background: var(--surf);
+      border: 2px dashed var(--border);
+      border-radius: 14px;
+      padding: 1.4rem 1.6rem;
+      margin-bottom: 1.1rem;
+    }
+    .exercise h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+    .exercise h4 .badge {
+      display: inline-block;
+      background: #E6F0F8;
+      color: var(--blue);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.15rem 0.55rem;
+      border-radius: 100px;
+      margin-right: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      vertical-align: middle;
+    }
+    .exercise p { font-size: 0.9rem; color: var(--muted); margin-bottom: 0.7rem; line-height: 1.65; }
+
+    .step-list {
+      list-style: none;
+      counter-reset: step;
+      padding: 0;
+      margin-bottom: 0.8rem;
+    }
+    .step-list li {
+      counter-increment: step;
+      position: relative;
+      padding: 0.6rem 0 0.6rem 2.6rem;
+      font-size: 0.92rem;
+      color: var(--text);
+      line-height: 1.6;
+      border-bottom: 1px solid var(--border-l);
+    }
+    .step-list li:last-child { border-bottom: none; }
+    .step-list li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0.55rem;
+      width: 1.9rem;
+      height: 1.9rem;
+      border-radius: 50%;
+      background: var(--blue);
+      color: white;
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .step-list li code {
+      background: var(--bg);
+      padding: 0.1em 0.4em;
+      border-radius: 4px;
+      color: var(--indigo);
+      font-size: 0.92em;
+    }
+
+    .summary {
+      background: linear-gradient(135deg, var(--indigo) 0%, #000D19 100%);
+      color: white;
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin: 3rem 0;
+      text-align: center;
+    }
+    .summary h2 {
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 400;
+      margin-bottom: 0.4rem;
+    }
+    .summary p { font-size: 0.9rem; opacity: 0.75; margin-bottom: 1.75rem; }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.9rem;
+    }
+    .su-card {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 12px;
+      padding: 1.1rem;
+      text-align: left;
+    }
+    .su-card h4 { font-size: 0.88rem; font-weight: 700; margin-bottom: 0.4rem; opacity: 0.9; }
+    .su-card p  { font-size: 0.78rem; opacity: 0.65; line-height: 1.5; margin-bottom: 0; }
+
+    .footer {
+      background: var(--surf);
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--faint);
+    }
+    .footer strong { color: var(--muted); }
+
+    @media (max-width: 720px) {
+      .hero { padding: 2.5rem 1rem 1.75rem !important; }
+      .hero h1 { font-size: clamp(1.7rem, 7vw, 2.2rem) !important; }
+      .container { padding: 0 1rem 4rem !important; }
+      .toc-grid { grid-template-columns: 1fr !important; }
+      .concepts-2, .concepts-3, .summary-grid { grid-template-columns: 1fr !important; }
+      .section-title { font-size: 1.5rem !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <img src="../assets/SELISE_Logo_Primary.png" alt="SELISE Digital Platforms" style="height: 48px; margin-bottom: 1rem; display: block; margin-left: auto; margin-right: auto;">
+  <div class="hero-badge">
+    <div class="dot"></div>
+    Pelsung · Dev Specialization · Class 08
+  </div>
+  <h1>
+    <span class="c-blue">React</span> <span class="c-indigo">Patterns</span>
+  </h1>
+  <p class="hero-sub">A gentle introduction to <strong>composition</strong>, <strong>lifting state up</strong>, and a peek at <strong>Context</strong> — three patterns for putting components together.</p>
+  <div class="hero-tags">
+    <span class="hero-tag tag-blue">children</span>
+    <span class="hero-tag tag-amber">Lifting state</span>
+    <span class="hero-tag tag-purple">Controlled components</span>
+    <span class="hero-tag tag-indigo">Context</span>
+  </div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div class="container">
+
+  <!-- ===== TOC ===== -->
+  <div class="toc">
+    <h3>What's In These Notes</h3>
+    <div class="toc-grid">
+      <a class="toc-item" href="#three-patterns">
+        <span class="toc-dot" style="background:var(--blue)"></span>
+        🧠 Three patterns for today
+      </a>
+      <a class="toc-item" href="#composition">
+        <span class="toc-dot" style="background:var(--blue)"></span>
+        🧩 Composition with <code>children</code>
+      </a>
+      <a class="toc-item" href="#exercise-1">
+        <span class="toc-dot" style="background:var(--amber)"></span>
+        ⚒️ Hands-on 1 — Card
+      </a>
+      <a class="toc-item" href="#lifting">
+        <span class="toc-dot" style="background:var(--amber)"></span>
+        ⬆️ Lifting state up
+      </a>
+      <a class="toc-item" href="#controlled">
+        <span class="toc-dot" style="background:var(--amber)"></span>
+        🎛️ Controlled components
+      </a>
+      <a class="toc-item" href="#exercise-2">
+        <span class="toc-dot" style="background:var(--purple)"></span>
+        ⚒️ Hands-on 2 — Search filter
+      </a>
+      <a class="toc-item" href="#context">
+        <span class="toc-dot" style="background:var(--indigo)"></span>
+        🌐 Context (a peek)
+      </a>
+      <a class="toc-item" href="#further">
+        <span class="toc-dot" style="background:var(--green)"></span>
+        📚 Going further
+      </a>
+    </div>
+  </div>
+
+  <!-- ===== SECTION: THREE PATTERNS ===== -->
+  <div id="three-patterns" class="section-hd">
+    <span class="section-pill pill-blue">Section 01 · Mindset</span>
+    <h2 class="section-title">Three patterns for today</h2>
+    <p class="section-desc">Three problems show up when components scale — three patterns solve them.</p>
+  </div>
+
+  <div class="topic topic-blue">
+    <div class="concepts concepts-3">
+      <div class="concept">
+        <h4>🧩 Composition</h4>
+        <ul>
+          <li><strong>Problem:</strong> two cards look the same but show different things.</li>
+          <li><strong>Pattern:</strong> the <code>children</code> prop.</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4>⬆️ Lift state up</h4>
+        <ul>
+          <li><strong>Problem:</strong> two siblings need the same value.</li>
+          <li><strong>Pattern:</strong> move the state to their parent.</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4>🌐 Context</h4>
+        <ul>
+          <li><strong>Problem:</strong> a value needs to reach far down the tree.</li>
+          <li><strong>Pattern:</strong> Provider + <code>useContext</code>.</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="explain">
+      <strong>Reach for them in this order:</strong> composition first (it solves the most). Lifting second. Context only when the other two fall short.
+    </p>
+  </div>
+
+  <!-- ===== SECTION: COMPOSITION ===== -->
+  <div id="composition" class="section-hd">
+    <span class="section-pill pill-blue">Section 02 · Composition</span>
+    <h2 class="section-title">Composition with <code>children</code></h2>
+    <p class="section-desc">Same shell, different content.</p>
+  </div>
+
+  <div class="topic topic-blue">
+    <h3 class="topic-title">🧩 The children prop</h3>
+    <p class="explain">
+      Whatever you put between a component's opening and closing tags arrives as a prop named <code>children</code>. It's not magic — just a prop with a reserved name. You can render it wherever you want inside the component.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span><span style="margin-left:0.5rem">card.tsx</span></div>
+<div class="code-body"><span class="ck">type</span> <span class="ct">CardProps</span> = <span class="ct">Readonly</span>&lt;{
+  <span class="cp">children</span>: <span class="ct">React</span>.<span class="ct">ReactNode</span>;
+}&gt;;
+
+<span class="ck">export</span> <span class="ck">function</span> <span class="ci">Card</span>({ <span class="cr">children</span> }: <span class="ct">CardProps</span>) {
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;div</span> <span class="cattr">className</span>=<span class="cs">"rounded-xl border border-gray-200 bg-white p-5 shadow-sm"</span><span class="ctag">&gt;</span>
+      {<span class="cr">children</span>}
+    <span class="ctag">&lt;/div&gt;</span>
+  );
+}</div>
+    </div>
+
+    <p class="explain"><code>React.ReactNode</code> is the type for "anything React can render" — strings, numbers, JSX, arrays of JSX, even <code>null</code>.</p>
+
+    <h3 class="topic-title" style="margin-top: 1.5rem;">🎨 Same Card, three appearances</h3>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span><span style="margin-left:0.5rem">app.tsx</span></div>
+<div class="code-body"><span class="ctag">&lt;Card&gt;</span>
+  <span class="ctag">&lt;h3&gt;</span>Site Tour<span class="ctag">&lt;/h3&gt;</span>
+  <span class="ctag">&lt;p&gt;</span>Tuesday · 9 AM<span class="ctag">&lt;/p&gt;</span>
+<span class="ctag">&lt;/Card&gt;</span>
+
+<span class="ctag">&lt;Card&gt;</span>
+  <span class="ctag">&lt;img</span> <span class="cattr">src</span>=<span class="cs">"/cohort.jpg"</span> <span class="ctag">/&gt;</span>
+<span class="ctag">&lt;/Card&gt;</span>
+
+<span class="ctag">&lt;Card&gt;</span>
+  <span class="ctag">&lt;EventsCounter /&gt;</span>      <span class="cc">// even another component!</span>
+<span class="ctag">&lt;/Card&gt;</span></div>
+    </div>
+
+    <p class="explain">One <code>Card</code> definition, three different appearances. The Card doesn't know — or care — what's inside. That's the point.</p>
+
+    <h3 class="topic-title" style="margin-top: 1.5rem;">🤔 children vs props</h3>
+    <table class="compare-table">
+      <thead>
+        <tr><th>If you need…</th><th>Use</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Different content inside the same shell</td><td>Composition with <code>children</code></td></tr>
+        <tr><td>Different data, same structure (a list of names)</td><td>Regular props</td></tr>
+        <tr><td>Both — text and a custom layout</td><td>Mix them</td></tr>
+      </tbody>
+    </table>
+
+    <p class="explain">Wrappers (Card, Modal, Layout, Page) usually use <code>children</code>. Data components (UserBadge, EventRow) usually use props.</p>
+
+    <div class="takeaway">
+      <h4>Section takeaways</h4>
+      <ul>
+        <li><code>children</code> is just a prop with a special name.</li>
+        <li>Type it as <code>React.ReactNode</code>.</li>
+        <li>Use it for "same shell, different content" components.</li>
+        <li>Wrappers use <code>children</code>; data components use props.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== SECTION: HANDS-ON 1 ===== -->
+  <div id="exercise-1" class="section-hd">
+    <span class="section-pill pill-amber">Section 03 · Hands-on 1</span>
+    <h2 class="section-title">Hands-on 1 — Build a Card (30 min)</h2>
+    <p class="section-desc">A reusable Card with three different appearances.</p>
+  </div>
+
+  <div class="exercise">
+    <h4><span class="badge">Goal</span> Build a Card and use it three times</h4>
+    <p>One <code>Card</code> component. Three usages: an event, a photo, a quote. Each looks different but uses the same shell.</p>
+
+    <ol class="step-list">
+      <li>In <code>src/</code>, create a new file <code>card.tsx</code>.</li>
+      <li>Define the type: <code>type CardProps = Readonly&lt;{ children: React.ReactNode }&gt;;</code></li>
+      <li>Write the function: <code>export function Card({ children }: CardProps) { return &lt;div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm"&gt;{children}&lt;/div&gt;; }</code></li>
+      <li>That's it for styling — Tailwind utilities give it padding, a rounded border, white background, and a soft shadow. No CSS file needed.</li>
+      <li>In <code>app.tsx</code>, import the Card: <code>import { Card } from "./card";</code></li>
+      <li><strong>First Card — event:</strong> put <code>&lt;h3&gt;Site Tour&lt;/h3&gt;&lt;p&gt;Tuesday · 9 AM&lt;/p&gt;</code> inside.</li>
+      <li><strong>Second Card — photo:</strong> put <code>&lt;img src="…" alt="" /&gt;</code> inside (any image URL).</li>
+      <li><strong>Third Card — quote:</strong> put <code>&lt;blockquote&gt;…&lt;/blockquote&gt;&lt;cite&gt;— …&lt;/cite&gt;</code> inside.</li>
+      <li>Run <code>npm run dev</code>. You should see three differently-shaped cards on screen.</li>
+    </ol>
+  </div>
+
+  <div class="topic topic-amber">
+    <h3 class="topic-title">📄 The final code</h3>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span><span style="margin-left:0.5rem">card.tsx</span></div>
+<div class="code-body"><span class="ck">type</span> <span class="ct">CardProps</span> = <span class="ct">Readonly</span>&lt;{ <span class="cp">children</span>: <span class="ct">React</span>.<span class="ct">ReactNode</span> }&gt;;
+
+<span class="ck">export</span> <span class="ck">function</span> <span class="ci">Card</span>({ <span class="cr">children</span> }: <span class="ct">CardProps</span>) {
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;div</span> <span class="cattr">className</span>=<span class="cs">"rounded-xl border border-gray-200 bg-white p-5 shadow-sm"</span><span class="ctag">&gt;</span>
+      {<span class="cr">children</span>}
+    <span class="ctag">&lt;/div&gt;</span>
+  );
+}</div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span><span style="margin-left:0.5rem">app.tsx (excerpt)</span></div>
+<div class="code-body"><span class="ctag">&lt;Card&gt;</span>
+  <span class="ctag">&lt;h3&gt;</span>Site Tour<span class="ctag">&lt;/h3&gt;</span>
+  <span class="ctag">&lt;p&gt;</span>Tuesday · 9 AM<span class="ctag">&lt;/p&gt;</span>
+<span class="ctag">&lt;/Card&gt;</span>
+
+<span class="ctag">&lt;Card&gt;</span>
+  <span class="ctag">&lt;img</span> <span class="cattr">src</span>=<span class="cs">"/cohort.jpg"</span> <span class="cattr">alt</span>=<span class="cs">"Cohort 3"</span> <span class="ctag">/&gt;</span>
+<span class="ctag">&lt;/Card&gt;</span>
+
+<span class="ctag">&lt;Card&gt;</span>
+  <span class="ctag">&lt;blockquote&gt;</span>"Build the future"<span class="ctag">&lt;/blockquote&gt;</span>
+  <span class="ctag">&lt;cite&gt;</span>— H.M. the King<span class="ctag">&lt;/cite&gt;</span>
+<span class="ctag">&lt;/Card&gt;</span></div>
+    </div>
+
+    <h3 class="topic-title" style="margin-top: 1.5rem;">🌟 If you finish early</h3>
+    <ul style="padding-left: 1.2rem; color: var(--muted); font-size: 0.92rem; line-height: 1.8;">
+      <li>Add a fourth Card with a <code>&lt;EventsCounter /&gt;</code> inside (your component from Class 07).</li>
+      <li>Add an optional <code>title</code> prop. If passed, render it as an <code>&lt;h3&gt;</code> at the top of the Card.</li>
+      <li>Make a <code>WarningCard</code> component that wraps <code>Card</code> and adds a yellow border. Use composition — wrap, don't copy the Card code.</li>
+    </ul>
+  </div>
+
+  <!-- ===== SECTION: LIFTING ===== -->
+  <div id="lifting" class="section-hd">
+    <span class="section-pill pill-amber">Section 04 · Lifting state</span>
+    <h2 class="section-title">Lifting state up</h2>
+    <p class="section-desc">When two siblings need the same value, move the state to their parent.</p>
+  </div>
+
+  <div class="topic topic-amber">
+    <h3 class="topic-title">⬆️ The pattern</h3>
+    <p class="explain">
+      Components can pass data <strong>down</strong> via props. They can not talk sideways to siblings. So when two siblings need the same value, you move it <strong>up</strong> to their nearest common parent — and the parent passes it back down to both children.
+    </p>
+
+    <p class="explain">
+      <strong>Concrete example:</strong> a <code>SearchBar</code> with a query, and an <code>EventList</code> that filters events by that query. Both need the query. So we lift it to their parent, <code>EventsTracker</code>.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span><span style="margin-left:0.5rem">events-tracker.tsx</span></div>
+<div class="code-body"><span class="ck">function</span> <span class="ci">EventsTracker</span>() {
+  <span class="cc">// state lives here — in the parent</span>
+  <span class="ck">const</span> [<span class="cr">query</span>, <span class="cr">setQuery</span>] = <span class="ci">useState</span>(<span class="cs">""</span>);
+
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;&gt;</span>
+      <span class="ctag">&lt;SearchBar</span> <span class="cattr">value</span>={<span class="cr">query</span>} <span class="cattr">onChange</span>={<span class="cr">setQuery</span>} <span class="ctag">/&gt;</span>
+      <span class="ctag">&lt;EventList</span> <span class="cattr">query</span>={<span class="cr">query</span>} <span class="ctag">/&gt;</span>
+    <span class="ctag">&lt;/&gt;</span>
+  );
+}</div>
+    </div>
+
+    <h3 class="topic-title" style="margin-top: 1.5rem;">📐 Three steps</h3>
+    <div class="concepts concepts-3">
+      <div class="concept">
+        <h4>1. Notice</h4>
+        <ul>
+          <li>Two siblings need the same value.</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4>2. Move</h4>
+        <ul>
+          <li>Take the <code>useState</code> out of the child.</li>
+          <li>Put it in the parent.</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4>3. Pass</h4>
+        <ul>
+          <li>Pass the value to children that read it.</li>
+          <li>Pass the setter to children that change it.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION: CONTROLLED ===== -->
+  <div id="controlled" class="section-hd">
+    <span class="section-pill pill-amber">Section 05 · Controlled components</span>
+    <h2 class="section-title">Controlled components</h2>
+    <p class="section-desc">When the parent owns the value, the child becomes "controlled".</p>
+  </div>
+
+  <div class="topic topic-amber">
+    <h3 class="topic-title">🎛️ Parent owns the value · child is the view</h3>
+    <p class="explain">
+      Once state is lifted, the children don't have their own <code>useState</code>. They receive <code>value</code> and <code>onChange</code> from the parent and reflect what they're told.
+    </p>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span><span style="margin-left:0.5rem">search-bar.tsx</span></div>
+<div class="code-body"><span class="ck">type</span> <span class="ct">SearchBarProps</span> = <span class="ct">Readonly</span>&lt;{
+  <span class="cp">value</span>: <span class="ct">string</span>;
+  <span class="cp">onChange</span>: (<span class="cr">v</span>: <span class="ct">string</span>) =&gt; <span class="ct">void</span>;
+}&gt;;
+
+<span class="ck">export</span> <span class="ck">function</span> <span class="ci">SearchBar</span>({ <span class="cr">value</span>, <span class="cr">onChange</span> }: <span class="ct">SearchBarProps</span>) {
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;input</span>
+      <span class="cattr">className</span>=<span class="cs">"w-full rounded-md border border-gray-300 px-3 py-2"</span>
+      <span class="cattr">value</span>={<span class="cr">value</span>}
+      <span class="cattr">onChange</span>={<span class="cr">e</span> =&gt; <span class="cr">onChange</span>(<span class="cr">e</span>.<span class="cp">target</span>.<span class="cp">value</span>)}
+      <span class="cattr">placeholder</span>=<span class="cs">"Search GMC events…"</span>
+    <span class="ctag">/&gt;</span>
+  );
+}</div>
+    </div>
+
+    <div class="callout callout-blue">
+      <span class="ci">💡</span>
+      <div><strong>You've seen this shape before.</strong> The native HTML <code>&lt;input&gt;</code> works exactly this way — that's the model. Once you see "parent owns the value, child reflects it," every form in React becomes simpler.</div>
+    </div>
+
+    <div class="takeaway">
+      <h4>Section takeaways</h4>
+      <ul>
+        <li>Siblings can't share state directly — lift to a common parent.</li>
+        <li>The child becomes "controlled" — it has no <code>useState</code> of its own.</li>
+        <li>Pass <code>value</code> for reading and <code>onChange</code> for changing.</li>
+        <li>Same shape as native <code>&lt;input&gt;</code>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== SECTION: HANDS-ON 2 ===== -->
+  <div id="exercise-2" class="section-hd">
+    <span class="section-pill pill-purple">Section 06 · Hands-on 2</span>
+    <h2 class="section-title">Hands-on 2 — Search filter (60 min)</h2>
+    <p class="section-desc">Type in a box → the list filters live. Lifting state in action.</p>
+  </div>
+
+  <div class="exercise">
+    <h4><span class="badge">Goal</span> Search filter for GMC events</h4>
+    <p>Three components: <code>EventsTracker</code> (parent, holds the query), <code>SearchBar</code> (controlled input), <code>EventList</code> (renders the filtered events). Type into the box → matching events show.</p>
+
+    <ol class="step-list">
+      <li>In <code>src/</code>, create <code>events-tracker.tsx</code>.</li>
+      <li>Add the type: <code>type GmcEvent = Readonly&lt;{ id: number; title: string; date: string }&gt;;</code></li>
+      <li>Create another file <code>search-bar.tsx</code>. Type its props: <code>Readonly&lt;{ value: string; onChange: (v: string) =&gt; void }&gt;</code>.</li>
+      <li>Inside <code>SearchBar</code>, return <code>&lt;input className="w-full rounded-md border border-gray-300 px-3 py-2" value={value} onChange={e =&gt; onChange(e.target.value)} /&gt;</code>.</li>
+      <li>Create <code>event-list.tsx</code>. Type its props: <code>Readonly&lt;{ events: GmcEvent[] }&gt;</code>.</li>
+      <li>Inside <code>EventList</code>, return a <code>&lt;ul&gt;</code> mapping over events: <code>{events.map(e =&gt; &lt;li key={e.id}&gt;{e.title} — {e.date}&lt;/li&gt;)}</code></li>
+      <li>Show a friendly message when empty: <code>if (events.length === 0) return &lt;p&gt;No matches&lt;/p&gt;;</code></li>
+      <li>Back in <code>events-tracker.tsx</code>, lift the query: <code>const [query, setQuery] = useState("");</code></li>
+      <li>Make a small array: <code>const allEvents: GmcEvent[] = [{ id: 1, title: "GMC Site Tour", date: "Apr 28" }, …];</code> — at least 4 events.</li>
+      <li>Compute the filtered list: <code>const filtered = allEvents.filter(e =&gt; e.title.toLowerCase().includes(query.toLowerCase()));</code></li>
+      <li>Return: <code>&lt;SearchBar value={query} onChange={setQuery} /&gt;</code> followed by <code>&lt;EventList events={filtered} /&gt;</code>.</li>
+      <li>In <code>app.tsx</code>, render <code>&lt;EventsTracker /&gt;</code>. Run the dev server. Type "tour" → only matching events show.</li>
+    </ol>
+  </div>
+
+  <div class="topic topic-purple">
+    <h3 class="topic-title">📄 The final code (parent)</h3>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span><span style="margin-left:0.5rem">events-tracker.tsx</span></div>
+<div class="code-body"><span class="ck">import</span> { <span class="ci">useState</span> } <span class="ck">from</span> <span class="cs">"react"</span>;
+<span class="ck">import</span> { <span class="ci">SearchBar</span> } <span class="ck">from</span> <span class="cs">"./search-bar"</span>;
+<span class="ck">import</span> { <span class="ci">EventList</span> } <span class="ck">from</span> <span class="cs">"./event-list"</span>;
+
+<span class="ck">export</span> <span class="ck">type</span> <span class="ct">GmcEvent</span> = <span class="ct">Readonly</span>&lt;{ <span class="cp">id</span>: <span class="ct">number</span>; <span class="cp">title</span>: <span class="ct">string</span>; <span class="cp">date</span>: <span class="ct">string</span> }&gt;;
+
+<span class="ck">const</span> <span class="cr">allEvents</span>: <span class="ct">GmcEvent</span>[] = [
+  { <span class="cp">id</span>: <span class="cn">1</span>, <span class="cp">title</span>: <span class="cs">"GMC Site Tour"</span>,        <span class="cp">date</span>: <span class="cs">"Apr 28"</span> },
+  { <span class="cp">id</span>: <span class="cn">2</span>, <span class="cp">title</span>: <span class="cs">"SELISE Open House"</span>,    <span class="cp">date</span>: <span class="cs">"Apr 30"</span> },
+  { <span class="cp">id</span>: <span class="cn">3</span>, <span class="cp">title</span>: <span class="cs">"Cohort 3 Showcase"</span>,    <span class="cp">date</span>: <span class="cs">"May 02"</span> },
+  { <span class="cp">id</span>: <span class="cn">4</span>, <span class="cp">title</span>: <span class="cs">"Pelsung Site Visit"</span>,   <span class="cp">date</span>: <span class="cs">"May 05"</span> },
+];
+
+<span class="ck">export</span> <span class="ck">function</span> <span class="ci">EventsTracker</span>() {
+  <span class="ck">const</span> [<span class="cr">query</span>, <span class="cr">setQuery</span>] = <span class="ci">useState</span>(<span class="cs">""</span>);
+
+  <span class="ck">const</span> <span class="cr">filtered</span> = <span class="cr">allEvents</span>.<span class="ci">filter</span>(<span class="cr">e</span> =&gt;
+    <span class="cr">e</span>.<span class="cp">title</span>.<span class="ci">toLowerCase</span>().<span class="ci">includes</span>(<span class="cr">query</span>.<span class="ci">toLowerCase</span>())
+  );
+
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;&gt;</span>
+      <span class="ctag">&lt;SearchBar</span> <span class="cattr">value</span>={<span class="cr">query</span>} <span class="cattr">onChange</span>={<span class="cr">setQuery</span>} <span class="ctag">/&gt;</span>
+      <span class="ctag">&lt;EventList</span> <span class="cattr">events</span>={<span class="cr">filtered</span>} <span class="ctag">/&gt;</span>
+    <span class="ctag">&lt;/&gt;</span>
+  );
+}</div>
+    </div>
+
+    <h3 class="topic-title" style="margin-top: 1.5rem;">🌟 If you finish early</h3>
+    <ul style="padding-left: 1.2rem; color: var(--muted); font-size: 0.92rem; line-height: 1.8;">
+      <li>Show "<em>3 of 4 events</em>" above the list — count comes from <code>filtered.length</code> and <code>allEvents.length</code>.</li>
+      <li>Add a "Clear" button next to the search box that resets the query to <code>""</code>.</li>
+      <li>Wrap each event in a <code>&lt;Card&gt;</code> from Hands-on 1 — composition + lifting working together.</li>
+      <li>Replace <code>allEvents</code> with data fetched from <code>https://jsonplaceholder.typicode.com/posts</code> (use <code>useEffect</code> from Class 07). Filter on <code>p.title</code>.</li>
+    </ul>
+  </div>
+
+  <!-- ===== SECTION: CONTEXT ===== -->
+  <div id="context" class="section-hd">
+    <span class="section-pill pill-indigo">Section 07 · Context</span>
+    <h2 class="section-title">Context — a peek</h2>
+    <p class="section-desc">For when lifting goes too far and props travel through layers that don't use them.</p>
+  </div>
+
+  <div class="topic topic-indigo">
+    <h3 class="topic-title">🌐 The problem</h3>
+    <p class="explain">
+      Lifting works beautifully when components are close together. But sometimes a value lives at the very top (App), and is needed deep down (Avatar) — five layers below. Every middle layer carries a <code>user</code> prop just to pass it along. That's <strong>prop drilling</strong>, and it's annoying.
+    </p>
+
+    <h3 class="topic-title" style="margin-top: 1.5rem;">📐 Context — three steps</h3>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span><span style="margin-left:0.5rem">user-context.tsx</span></div>
+<div class="code-body"><span class="ck">import</span> { <span class="ci">createContext</span>, <span class="ci">useContext</span> } <span class="ck">from</span> <span class="cs">"react"</span>;
+
+<span class="cc">// 1. Create — once, somewhere central</span>
+<span class="ck">export</span> <span class="ck">const</span> <span class="cr">UserContext</span> = <span class="ci">createContext</span>&lt;<span class="ct">User</span> | <span class="ck">null</span>&gt;(<span class="ck">null</span>);
+
+<span class="cc">// 2. Provide — wrap the part of the tree that needs it</span>
+<span class="ck">function</span> <span class="ci">App</span>() {
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;UserContext.Provider</span> <span class="cattr">value</span>={<span class="cr">currentUser</span>}<span class="ctag">&gt;</span>
+      <span class="ctag">&lt;Layout /&gt;</span>
+    <span class="ctag">&lt;/UserContext.Provider&gt;</span>
+  );
+}
+
+<span class="cc">// 3. Consume — anywhere inside, no prop chain</span>
+<span class="ck">function</span> <span class="ci">Avatar</span>() {
+  <span class="ck">const</span> <span class="cr">user</span> = <span class="ci">useContext</span>(<span class="cr">UserContext</span>);
+  <span class="ck">return</span> <span class="ctag">&lt;img</span> <span class="cattr">src</span>={<span class="cr">user</span>?.<span class="cp">avatar</span>} <span class="ctag">/&gt;</span>;
+}</div>
+    </div>
+
+    <p class="explain">
+      Three pieces — <code>createContext</code>, the <code>Provider</code> with a <code>value</code>, and <code>useContext</code> in any descendant. The middle layers don't have to know about it.
+    </p>
+
+    <h3 class="topic-title" style="margin-top: 1.5rem;">🤔 When to use Context</h3>
+    <table class="compare-table">
+      <thead>
+        <tr><th>Situation</th><th>Use</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Two close siblings need the same value</td><td>Lift to parent (no Context)</td></tr>
+        <tr><td>Value needed 1–2 layers below</td><td>Just pass props</td></tr>
+        <tr><td>Value crosses 3+ layers, used way down</td><td>Context</td></tr>
+        <tr><td>Theme · current user · language</td><td>Context — almost always</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-blue">
+      <span class="ci">💡</span>
+      <div><strong>Don't reach for Context just because you can.</strong> Try lifting first. Only switch to Context when prop drilling actually becomes annoying — usually 3+ layers.</div>
+    </div>
+
+    <div class="takeaway">
+      <h4>Section takeaways</h4>
+      <ul>
+        <li>Context lets you skip the prop chain.</li>
+        <li>Three steps: <code>createContext</code>, wrap with Provider, read with <code>useContext</code>.</li>
+        <li>Use it for things like the current user, theme, or language.</li>
+        <li>Don't use it just to avoid one prop. Lifting is simpler when it works.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== SUMMARY ===== -->
+  <div class="summary">
+    <h2>Recap</h2>
+    <p>What you should be able to do after this class</p>
+    <div class="summary-grid">
+      <div class="su-card">
+        <h4>🧩 Composition</h4>
+        <p>Use <code>children</code> to make flexible "shell" components. Same wrapper, different content.</p>
+      </div>
+      <div class="su-card">
+        <h4>⬆️ Lifting state</h4>
+        <p>When two siblings need the same value, move state to the parent. Children become controlled.</p>
+      </div>
+      <div class="su-card">
+        <h4>🎛️ Controlled components</h4>
+        <p>Pass <code>value</code> and <code>onChange</code>. Same shape as native <code>&lt;input&gt;</code>.</p>
+      </div>
+      <div class="su-card">
+        <h4>🌐 Context</h4>
+        <p>Three steps to skip a long prop chain. Use sparingly.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FURTHER ===== -->
+  <div id="further" class="section-hd">
+    <span class="section-pill pill-green">Going further</span>
+    <h2 class="section-title">If you want more</h2>
+  </div>
+
+  <div class="topic topic-green">
+    <ul style="padding-left: 1.2rem; color: var(--muted); font-size: 0.92rem; line-height: 1.8;">
+      <li><strong>Combine the two hands-on builds.</strong> Use the <code>Card</code> from Hands-on 1 to wrap each event in the search filter from Hands-on 2.</li>
+      <li><strong>React docs — "Sharing state between components"</strong> — the official walkthrough on lifting state.</li>
+      <li><strong>React docs — "Passing data deeply with context"</strong> — when you're ready for a deeper read on Context.</li>
+      <li>In Class 09 you'll learn React Router — and turn your single-page app into multiple pages.</li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div class="footer">
+  <strong>SELISE × Pelsung — Dev Specialization · Class 08</strong><br>
+  React Patterns · Generated for Cohort 3
+</div>
+
+</body>
+</html>

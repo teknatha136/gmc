@@ -1,0 +1,1321 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React Patterns — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      .code-block {
+        background: #001f35;
+        border-radius: 14px;
+        overflow: hidden;
+        width: 100%;
+        font-family: "Courier New", monospace;
+      }
+      .code-bar {
+        background: #0a2a45;
+        padding: 8px 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-family: "Open Sans", sans-serif;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .code-bar .cb-dot { width: 10px; height: 10px; border-radius: 50%; }
+      .code-body {
+        padding: clamp(0.8rem, 1.5vw, 1.3rem);
+        font-size: clamp(0.72rem, 1vw, 0.88rem);
+        line-height: 1.85;
+        color: rgba(255, 255, 255, 0.85);
+        white-space: pre-wrap;
+      }
+      .code-body .ck { color: #7dd3fc; }
+      .code-body .cs { color: #86efac; }
+      .code-body .cn { color: #fde68a; }
+      .code-body .cc { color: rgba(255, 255, 255, 0.35); }
+      .code-body .cp { color: #c4b5fd; }
+      .code-body .cr { color: #fca5a5; }
+      .code-body .ci { color: #f0abfc; }
+      .code-body .ct { color: #fdba74; }
+      .code-body .ctag { color: #f472b6; }
+      .code-body .cattr { color: #fde68a; }
+
+      .method-card {
+        background: var(--surf);
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        padding: 1rem 1.2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+      }
+      .method-card .mc-name {
+        font-family: "Courier New", monospace;
+        font-weight: 700;
+        color: var(--blue);
+        font-size: clamp(0.9rem, 1.2vw, 1.05rem);
+      }
+      .method-card .mc-desc {
+        font-size: clamp(0.78rem, 1vw, 0.88rem);
+        color: var(--muted);
+        line-height: 1.4;
+      }
+      .method-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        width: 100%;
+        max-width: 880px;
+      }
+      .method-grid.three { grid-template-columns: repeat(3, 1fr); }
+
+      .analogy-box {
+        background: var(--bg);
+        border: 2px dashed var(--border);
+        border-radius: 14px;
+        padding: clamp(1rem, 1.8vw, 1.4rem);
+        max-width: 760px;
+        width: 100%;
+        text-align: center;
+      }
+      .analogy-box .ab-title {
+        font-size: clamp(0.78rem, 1vw, 0.88rem);
+        font-weight: 700;
+        color: var(--blue);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 0.5rem;
+      }
+      .analogy-box .ab-text {
+        font-size: clamp(0.9rem, 1.25vw, 1.05rem);
+        color: var(--text);
+        line-height: 1.5;
+      }
+
+      .big-emoji {
+        font-size: clamp(3rem, 6vw, 5rem);
+        line-height: 1;
+        margin-bottom: 0.5rem;
+      }
+
+      .break-timer {
+        font-family: "Courier New", monospace;
+        font-size: clamp(3.5rem, 9vw, 6rem);
+        color: white;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+      }
+      .break-btn {
+        padding: 0.6rem 1.4rem;
+        border-radius: 100px;
+        border: 1.5px solid rgba(255, 255, 255, 0.4);
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        cursor: pointer;
+        font-size: clamp(0.82rem, 1.1vw, 0.92rem);
+        font-weight: 600;
+        margin: 0 0.4rem;
+      }
+      .break-btn:hover { background: rgba(255, 255, 255, 0.2); }
+
+      .compare-table {
+        width: 100%;
+        max-width: 880px;
+        border-collapse: separate;
+        border-spacing: 0;
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surf);
+      }
+      .compare-table th {
+        background: #e6e9ec;
+        color: var(--indigo);
+        font-size: clamp(0.62rem, 0.9vw, 0.78rem);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        padding: clamp(0.5rem, 0.8vw, 0.7rem) clamp(0.6rem, 1vw, 0.9rem);
+        text-align: left;
+      }
+      .compare-table td {
+        padding: clamp(0.45rem, 0.8vw, 0.65rem) clamp(0.6rem, 1vw, 0.9rem);
+        font-size: clamp(0.78rem, 1.05vw, 0.92rem);
+        color: var(--muted);
+        border-top: 1px solid var(--border);
+        vertical-align: top;
+      }
+      .compare-table td:first-child {
+        font-family: "Courier New", monospace;
+        font-weight: 700;
+        color: var(--blue);
+      }
+
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        width: 100%;
+        max-width: 1040px;
+      }
+      .two-col h4 {
+        font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+        font-size: clamp(0.92rem, 1.2vw, 1.1rem);
+        font-weight: 400;
+        color: var(--blue);
+        margin-bottom: 0.4rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .two-col h4.bad { color: var(--red); }
+      .two-col h4.good { color: var(--green); }
+
+      .bullet-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: clamp(0.45rem, 0.9vw, 0.75rem);
+        width: 100%;
+      }
+      .bullet-list li {
+        font-size: clamp(0.85rem, 1.2vw, 1.05rem);
+        color: var(--muted);
+        padding-left: 1.6rem;
+        position: relative;
+        line-height: 1.55;
+      }
+      .bullet-list li::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: var(--faint);
+        font-size: 0.85rem;
+        top: 0.1em;
+      }
+
+      /* Step list for hands-on slides */
+      .steps {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        width: 100%;
+        max-width: 920px;
+      }
+      .step {
+        display: flex;
+        gap: 0.85rem;
+        align-items: flex-start;
+        background: var(--surf);
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        padding: 0.8rem 1rem;
+      }
+      .step .s-num {
+        flex-shrink: 0;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--blue);
+        color: white;
+        font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+        font-size: 0.85rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .step .s-body {
+        font-size: clamp(0.84rem, 1.05vw, 0.96rem);
+        color: var(--text);
+        line-height: 1.5;
+      }
+      .step .s-body code {
+        background: var(--bg);
+        padding: 0.05em 0.35em;
+        border-radius: 4px;
+        color: var(--indigo);
+        font-size: 0.92em;
+      }
+      .step.amber .s-num { background: var(--amber); }
+      .step.green .s-num { background: var(--green); }
+      .step.indigo .s-num { background: var(--indigo); }
+
+      /* Tree diagram */
+      .tree {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.4rem;
+        max-width: 900px;
+      }
+      .tree-row {
+        display: flex;
+        gap: 0.6rem;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .tree-node {
+        background: var(--surf);
+        border: 2px solid var(--border);
+        border-radius: 10px;
+        padding: 0.5rem 0.9rem;
+        font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+        font-size: 0.85rem;
+        color: var(--indigo);
+        position: relative;
+      }
+      .tree-node.has-state { border-color: var(--blue); color: var(--blue); }
+      .tree-node.uses-state { border-color: var(--amber); color: #1c5b8c; }
+      .tree-node .tn-prop {
+        position: absolute;
+        top: -0.45rem;
+        right: -0.4rem;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 0.05rem 0.35rem;
+        font-family: 'Courier New', monospace;
+        font-size: 0.62rem;
+        color: var(--red);
+      }
+      .tree-edge {
+        height: 0.6rem;
+        border-left: 2px solid var(--faint);
+      }
+
+      .gmc-card {
+        background: white;
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        box-shadow: 0 6px 18px rgba(0, 31, 53, 0.06);
+        padding: 1rem 1.2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        min-width: 220px;
+      }
+      .gmc-card .gc-eyebrow {
+        font-size: 0.66rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: var(--blue);
+      }
+      .gmc-card .gc-title {
+        font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+        font-size: 1.05rem;
+        color: var(--indigo);
+      }
+      .gmc-card .gc-meta {
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+      <!-- ══ S1 TITLE ══ -->
+      <div class="slide accent-gradient bg-dark" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem; text-align: center; max-width: 900px;">
+          <div class="date-badge">
+            <span class="db-dot"></span>Dev Specialization · Class 08
+          </div>
+          <h1 class="display" style="color: white">
+            <span style="color: #7dd3fc">React</span><br />
+            <span style="color: white">Patterns</span>
+          </h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.65)">
+            How components fit together
+          </p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">Composition</span>
+            <span class="class-tag tag-amber">Lifting state</span>
+            <span class="class-tag tag-indigo">Context</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → or click the right side to advance</div>
+      </div>
+
+      <!-- ══ S2 AGENDA ══ -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan · 9:30 AM – 1:30 PM</div>
+        <div class="stack" style="max-width: 760px; width: 100%">
+          <div class="center" style="margin-bottom: 0.3rem">
+            <h2 class="heading" style="font-size: clamp(1.5rem, 2.8vw, 2.2rem)">Session Journey</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.3rem">4 hours · 15-min break · two long step-by-step builds</p>
+          </div>
+          <div class="agenda-row" onclick="goTo(3)">
+            <span class="ar-time">9:30 – 9:45</span>
+            <span class="ar-dot" style="background: var(--faint)"></span>
+            <span class="ar-label">👋 Recap &amp; today's three patterns</span>
+            <span class="ar-badge" style="background: var(--bg); color: var(--muted)">15 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(6)">
+            <span class="ar-time">9:45 – 10:30</span>
+            <span class="ar-dot" style="background: var(--blue)"></span>
+            <span class="ar-label">🧩 Composition with <code>children</code></span>
+            <span class="ar-badge" style="background: #e6f0f8; color: var(--blue)">45 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(11)">
+            <span class="ar-time">10:30 – 11:00</span>
+            <span class="ar-dot" style="background: var(--amber)"></span>
+            <span class="ar-label">⚒️ Hands-on 1 — Card with children</span>
+            <span class="ar-badge" style="background: #ebf0f7; color: #1c5b8c">30 min</span>
+          </div>
+          <div class="agenda-row break-row" onclick="goTo(17)">
+            <span class="ar-time">11:00 – 11:15</span>
+            <span class="ar-dot" style="background: var(--green)"></span>
+            <span class="ar-label">☕ Break</span>
+            <span class="ar-badge" style="background: #dcfce7; color: var(--green)">15 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(18)">
+            <span class="ar-time">11:15 – 12:00</span>
+            <span class="ar-dot" style="background: var(--amber)"></span>
+            <span class="ar-label">⬆️ Lifting state up</span>
+            <span class="ar-badge" style="background: #ebf0f7; color: #1c5b8c">45 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(24)">
+            <span class="ar-time">12:00 – 1:00</span>
+            <span class="ar-dot" style="background: var(--purple)"></span>
+            <span class="ar-label">⚒️ Hands-on 2 — Search filter</span>
+            <span class="ar-badge" style="background: #ecf2f8; color: var(--purple)">60 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(31)">
+            <span class="ar-time">1:00 – 1:20</span>
+            <span class="ar-dot" style="background: var(--indigo)"></span>
+            <span class="ar-label">🌐 Context — a quick look</span>
+            <span class="ar-badge" style="background: #e6e9ec; color: var(--indigo)">20 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(35)">
+            <span class="ar-time">1:20 – 1:30</span>
+            <span class="ar-dot" style="background: var(--green)"></span>
+            <span class="ar-label">🎯 Recap &amp; what's next</span>
+            <span class="ar-badge" style="background: #F0F7EC; color: var(--green)">10 min</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S3 RECAP ══ -->
+      <div class="slide accent-gradient bg-subtle" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> Where you are now</div>
+        <div class="stack" style="align-items: center; max-width: 900px; width: 100%">
+          <div class="center">
+            <div class="pill pill-blue">Recap from Class 07</div>
+            <h2 class="heading">You can build any single component</h2>
+          </div>
+          <div class="method-grid three">
+            <div class="method-card">
+              <div class="mc-name">useState</div>
+              <div class="mc-desc">Component memory · numbers · strings · arrays.</div>
+            </div>
+            <div class="method-card">
+              <div class="mc-name">useEffect</div>
+              <div class="mc-desc">Run code after render · fetch data from APIs.</div>
+            </div>
+            <div class="method-card">
+              <div class="mc-name">Custom hooks</div>
+              <div class="mc-desc">Bundle hook logic into a <code>useFoo</code> function.</div>
+            </div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center; margin-top: 1rem; max-width: 680px;">
+            Today: how multiple components <strong>fit together</strong> — sharing layout, sharing state.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S4 THE THREE PATTERNS ══ -->
+      <div class="slide" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> Three patterns for today</div>
+        <div class="stack" style="align-items: center; max-width: 1000px;">
+          <div class="center">
+            <h2 class="heading">Three problems → three patterns</h2>
+          </div>
+          <div class="method-grid three">
+            <div class="method-card">
+              <div class="mc-name">Composition</div>
+              <div class="mc-desc"><strong>Problem:</strong> Two cards look the same but show different things.<br/><strong>Pattern:</strong> <code>children</code> prop.</div>
+            </div>
+            <div class="method-card">
+              <div class="mc-name">Lift state up</div>
+              <div class="mc-desc"><strong>Problem:</strong> Two siblings need the same value.<br/><strong>Pattern:</strong> Move state to parent.</div>
+            </div>
+            <div class="method-card">
+              <div class="mc-name">Context</div>
+              <div class="mc-desc"><strong>Problem:</strong> A value needs to reach far down the tree.<br/><strong>Pattern:</strong> Provider + <code>useContext</code>.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S5 ORDER OF TOOLS ══ -->
+      <div class="slide" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span> Reach for them in this order</div>
+        <div class="stack" style="align-items: center; max-width: 1000px;">
+          <div class="center">
+            <h2 class="heading">Simplest first</h2>
+          </div>
+          <ul class="reveal-list" style="max-width: 780px;">
+            <li><strong>Composition</strong> first — it solves most reuse problems.</li>
+            <li><strong>Lift state up</strong> when two close siblings need to share a value.</li>
+            <li><strong>Context</strong> only when lifting means too many layers in between.</li>
+          </ul>
+          <div class="reveal-hint">↳ Press → to reveal each point</div>
+        </div>
+      </div>
+
+      <!-- ══ S6 SECTION DIVIDER — COMPOSITION ══ -->
+      <div class="slide bg-blue" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span></div>
+        <div class="center" style="position: relative; z-index: 1; max-width: 800px;">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span>Section 02 · 9:45 – 10:30
+          </div>
+          <h1 class="display" style="color: white">Composition</h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.78); margin-top: 1rem">
+            Same shell, different content. Powered by <code>children</code>.
+          </p>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- ══ S7 THE PROBLEM ══ -->
+      <div class="slide" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> The problem composition solves</div>
+        <div class="stack" style="align-items: center; max-width: 1000px;">
+          <div class="center">
+            <h2 class="heading">Three different cards — same shell</h2>
+          </div>
+          <div style="display: flex; gap: 0.6rem; flex-wrap: wrap; justify-content: center;">
+            <div class="gmc-card" style="max-width: 220px;">
+              <div class="gc-eyebrow">EVENT</div>
+              <div class="gc-title">Site Tour</div>
+              <div class="gc-meta">Tuesday · 9 AM</div>
+            </div>
+            <div class="gmc-card" style="max-width: 220px;">
+              <div class="gc-eyebrow">PHOTO</div>
+              <div class="gc-title">Cohort 3</div>
+              <div class="gc-meta">Group photo</div>
+            </div>
+            <div class="gmc-card" style="max-width: 220px;">
+              <div class="gc-eyebrow">RSVP</div>
+              <div class="gc-title">Open House</div>
+              <div class="gc-meta">12 spots left</div>
+            </div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 720px;">
+            Same border, same shadow, same padding — but different content inside. We don't want to copy-paste the styled wrapper three times.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S8 children PROP ══ -->
+      <div class="slide" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> The <code>children</code> prop</div>
+        <div class="stack" style="align-items: center; max-width: 1040px;">
+          <div class="center">
+            <h2 class="heading">Whatever you put between the tags arrives as <code>children</code></h2>
+          </div>
+          <div class="code-block" style="max-width: 880px;">
+            <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span><span style="margin-left:0.5rem">card.tsx</span></div>
+<div class="code-body"><span class="ck">type</span> <span class="ct">CardProps</span> = <span class="ct">Readonly</span>&lt;{
+  <span class="cp">children</span>: <span class="ct">React</span>.<span class="ct">ReactNode</span>;
+}&gt;;
+
+<span class="ck">export</span> <span class="ck">function</span> <span class="ci">Card</span>({ <span class="cr">children</span> }: <span class="ct">CardProps</span>) {
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;div</span> <span class="cattr">className</span>=<span class="cs">"rounded-xl border border-gray-200 bg-white p-5 shadow-sm"</span><span class="ctag">&gt;</span>
+      {<span class="cr">children</span>}
+    <span class="ctag">&lt;/div&gt;</span>
+  );
+}</div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 720px;">
+            <code>children</code> is just a prop with a special name. <code>React.ReactNode</code> means "anything React can render".
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S9 USING CHILDREN ══ -->
+      <div class="slide" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> Using a Card</div>
+        <div class="stack" style="align-items: center; max-width: 1040px;">
+          <div class="center">
+            <h2 class="heading">Same component, three different appearances</h2>
+          </div>
+          <div class="code-block" style="max-width: 880px;">
+            <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span><span style="margin-left:0.5rem">app.tsx</span></div>
+<div class="code-body"><span class="ctag">&lt;Card&gt;</span>
+  <span class="ctag">&lt;h3&gt;</span>Site Tour<span class="ctag">&lt;/h3&gt;</span>
+  <span class="ctag">&lt;p&gt;</span>Tuesday · 9 AM<span class="ctag">&lt;/p&gt;</span>
+<span class="ctag">&lt;/Card&gt;</span>
+
+<span class="ctag">&lt;Card&gt;</span>
+  <span class="ctag">&lt;img</span> <span class="cattr">src</span>=<span class="cs">"/cohort.jpg"</span> <span class="ctag">/&gt;</span>
+<span class="ctag">&lt;/Card&gt;</span>
+
+<span class="ctag">&lt;Card&gt;</span>
+  <span class="ctag">&lt;EventsCounter /&gt;</span>      <span class="cc">// even another component!</span>
+<span class="ctag">&lt;/Card&gt;</span></div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 720px;">
+            One <code>Card</code> definition, used three times. The Card doesn't know or care what's inside.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S10 COMPOSITION VS PROPS ══ -->
+      <div class="slide" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> When to use children vs props</div>
+        <div class="stack" style="align-items: center; max-width: 1040px;">
+          <div class="center">
+            <h2 class="heading">A simple rule</h2>
+          </div>
+          <table class="compare-table">
+            <thead>
+              <tr><th>If you need…</th><th>Use</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Different content inside the same shell</td><td>Composition with <code>children</code></td></tr>
+              <tr><td>Different data, same structure (e.g. a list of names)</td><td>Regular props</td></tr>
+              <tr><td>A bit of both — text and a custom layout inside</td><td>Mix them</td></tr>
+            </tbody>
+          </table>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 720px;">
+            Most "wrapper" components (Card, Modal, Layout, Page) use <code>children</code>. Most "data" components (UserBadge, EventRow) use props.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S11 SECTION DIVIDER — HANDS-ON 1 ══ -->
+      <div class="slide bg-amber" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span></div>
+        <div class="center" style="position: relative; z-index: 1; max-width: 800px;">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span>Hands-on 1 · 10:30 – 11:00 · 30 min
+          </div>
+          <h1 class="display" style="color: white">Build a<br/>Card</h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.78); margin-top: 1rem">
+            Reusable shell, three different uses. Step by step.
+          </p>
+        </div>
+        <div class="section-num" style="color: white">⚒️</div>
+      </div>
+
+      <!-- ══ S12 HANDS-ON 1 — GOAL ══ -->
+      <div class="slide accent-amber bg-subtle" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> Hands-on 1 — what we're building</div>
+        <div class="stack" style="align-items: center; max-width: 1000px;">
+          <div class="center">
+            <div class="pill pill-amber">Goal</div>
+            <h2 class="heading">A reusable Card with three appearances</h2>
+          </div>
+          <div style="display: flex; gap: 0.6rem; flex-wrap: wrap; justify-content: center;">
+            <div class="gmc-card" style="max-width: 220px;">
+              <div class="gc-eyebrow">EVENT</div>
+              <div class="gc-title">Site Tour</div>
+              <div class="gc-meta">Tuesday · 9 AM</div>
+            </div>
+            <div class="gmc-card" style="max-width: 220px;">
+              <div class="gc-eyebrow">PHOTO</div>
+              <div class="gc-title">Cohort 3</div>
+              <div class="gc-meta">Group photo</div>
+            </div>
+            <div class="gmc-card" style="max-width: 220px;">
+              <div class="gc-eyebrow">QUOTE</div>
+              <div class="gc-title">"Build the future"</div>
+              <div class="gc-meta">— H.M. the King</div>
+            </div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 700px;">
+            One <code>Card</code> component. Three usages. Each one looks different but uses the same shell.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S13 HANDS-ON 1 — STEPS 1-4 ══ -->
+      <div class="slide accent-amber bg-subtle" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> Hands-on 1 — Steps 1 to 4</div>
+        <div class="stack" style="align-items: center;">
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.4rem, 2.5vw, 1.9rem);">Build the Card component</h2>
+          </div>
+          <div class="steps">
+            <div class="step amber">
+              <div class="s-num">1</div>
+              <div class="s-body">In <code>src/</code>, create a new file: <code>card.tsx</code>.</div>
+            </div>
+            <div class="step amber">
+              <div class="s-num">2</div>
+              <div class="s-body">Define the props type: <code>type CardProps = Readonly&lt;{ children: React.ReactNode }&gt;;</code></div>
+            </div>
+            <div class="step amber">
+              <div class="s-num">3</div>
+              <div class="s-body">Write the function: <code>export function Card({ children }: CardProps) { return &lt;div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm"&gt;{children}&lt;/div&gt;; }</code></div>
+            </div>
+            <div class="step amber">
+              <div class="s-num">4</div>
+              <div class="s-body">That's it for styling — the Tailwind utilities give it padding, a rounded border, white background, and a soft shadow. No CSS file needed.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S14 HANDS-ON 1 — STEPS 5-8 ══ -->
+      <div class="slide accent-amber bg-subtle" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> Hands-on 1 — Steps 5 to 8</div>
+        <div class="stack" style="align-items: center;">
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.4rem, 2.5vw, 1.9rem);">Use it three times</h2>
+          </div>
+          <div class="steps">
+            <div class="step amber">
+              <div class="s-num">5</div>
+              <div class="s-body">In <code>app.tsx</code>: <code>import { Card } from "./card";</code></div>
+            </div>
+            <div class="step amber">
+              <div class="s-num">6</div>
+              <div class="s-body">First Card — an event. Put a <code>&lt;h3&gt;</code> with a title and a <code>&lt;p&gt;</code> with the date inside <code>&lt;Card&gt;…&lt;/Card&gt;</code>.</div>
+            </div>
+            <div class="step amber">
+              <div class="s-num">7</div>
+              <div class="s-body">Second Card — a photo. Put an <code>&lt;img src="…" /&gt;</code> inside (use any image URL).</div>
+            </div>
+            <div class="step amber">
+              <div class="s-num">8</div>
+              <div class="s-body">Third Card — a quote. Put a <code>&lt;blockquote&gt;</code> and a <code>&lt;cite&gt;</code> with an author name.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S15 HANDS-ON 1 — FINAL CODE ══ -->
+      <div class="slide accent-amber bg-subtle" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span> Hands-on 1 — final code</div>
+        <div class="stack" style="align-items: center; max-width: 1040px;">
+          <div class="code-block" style="max-width: 880px;">
+            <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span><span style="margin-left:0.5rem">card.tsx + app.tsx</span></div>
+<div class="code-body"><span class="cc">// card.tsx</span>
+<span class="ck">type</span> <span class="ct">CardProps</span> = <span class="ct">Readonly</span>&lt;{ <span class="cp">children</span>: <span class="ct">React</span>.<span class="ct">ReactNode</span> }&gt;;
+
+<span class="ck">export</span> <span class="ck">function</span> <span class="ci">Card</span>({ <span class="cr">children</span> }: <span class="ct">CardProps</span>) {
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;div</span> <span class="cattr">className</span>=<span class="cs">"rounded-xl border border-gray-200 bg-white p-5 shadow-sm"</span><span class="ctag">&gt;</span>
+      {<span class="cr">children</span>}
+    <span class="ctag">&lt;/div&gt;</span>
+  );
+}
+
+<span class="cc">// app.tsx</span>
+<span class="ctag">&lt;Card&gt;&lt;h3&gt;</span>Site Tour<span class="ctag">&lt;/h3&gt;&lt;p&gt;</span>Tuesday · 9 AM<span class="ctag">&lt;/p&gt;&lt;/Card&gt;</span>
+<span class="ctag">&lt;Card&gt;&lt;img</span> <span class="cattr">src</span>=<span class="cs">"/cohort.jpg"</span> <span class="ctag">/&gt;&lt;/Card&gt;</span>
+<span class="ctag">&lt;Card&gt;&lt;blockquote&gt;</span>"Build the future"<span class="ctag">&lt;/blockquote&gt;&lt;cite&gt;</span>— H.M. the King<span class="ctag">&lt;/cite&gt;&lt;/Card&gt;</span></div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 700px;">
+            Run the dev server. Three differently-shaped cards on screen — same border, same shadow.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S16 HANDS-ON 1 — STRETCH ══ -->
+      <div class="slide accent-amber bg-subtle" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span> If you finish early</div>
+        <div class="stack" style="align-items: center; max-width: 980px;">
+          <div class="center">
+            <div class="pill pill-amber">Stretch goals</div>
+            <h2 class="heading">Try one or two of these</h2>
+          </div>
+          <ul class="bullet-list" style="max-width: 760px;">
+            <li>Add a fourth Card with a <code>&lt;EventsCounter /&gt;</code> inside (your component from Class 07).</li>
+            <li>Add an optional <code>title</code> prop. If passed, render it as an <code>&lt;h3&gt;</code> at the top of the card.</li>
+            <li>Make a <code>WarningCard</code> component that wraps <code>Card</code> and adds a yellow border. Use composition — wrap, don't copy the Card code.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ══ S17 BREAK ══ -->
+      <div class="slide bg-dark" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span> Break · 11:00 – 11:15</div>
+        <div class="center" style="max-width: 640px;">
+          <div class="big-emoji">☕</div>
+          <h2 class="heading" style="color: white;">Stretch. Hydrate. Reset.</h2>
+          <div class="break-timer" id="break-timer" style="margin: 2rem 0 1rem;">15:00</div>
+          <div>
+            <button class="break-btn" onclick="startTimer('break-timer', 15)">Start</button>
+            <button class="break-btn" onclick="resetTimer('break-timer', 15)">Reset</button>
+          </div>
+          <p style="color: rgba(255,255,255,0.6); margin-top: 1.5rem; font-size: 0.9rem;">
+            After the break — how to share state between components.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S18 SECTION DIVIDER — LIFTING ══ -->
+      <div class="slide bg-amber" data-slide="18">
+        <div class="slide-label"><span class="snum">18</span></div>
+        <div class="center" style="position: relative; z-index: 1; max-width: 800px;">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span>Section 03 · 11:15 – 12:00
+          </div>
+          <h1 class="display" style="color: white">Lifting<br/>State Up</h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.78); margin-top: 1rem">
+            Two siblings, one shared value.
+          </p>
+        </div>
+        <div class="section-num" style="color: white">03</div>
+      </div>
+
+      <!-- ══ S19 THE PROBLEM ══ -->
+      <div class="slide" data-slide="19">
+        <div class="slide-label"><span class="snum">19</span> The problem</div>
+        <div class="stack" style="align-items: center; max-width: 1040px;">
+          <div class="center">
+            <h2 class="heading">Two siblings need the same value</h2>
+          </div>
+          <div class="analogy-box">
+            <div class="ab-title">A real example</div>
+            <div class="ab-text">
+              A <code>SearchBar</code> component types a query.<br/>
+              An <code>EventList</code> component shows the matching events.<br/>
+              <strong>Both need the same query value.</strong> Where does it live?
+            </div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 720px;">
+            Components can pass data <strong>down</strong> to children. They can't talk sideways to siblings.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S20 SOLUTION — LIFT ══ -->
+      <div class="slide" data-slide="20">
+        <div class="slide-label"><span class="snum">20</span> The solution — move state up</div>
+        <div class="stack" style="align-items: center; max-width: 1040px;">
+          <div class="center">
+            <h2 class="heading">Put state in the closest common parent</h2>
+          </div>
+          <div class="tree">
+            <div class="tree-node has-state">EventsTracker
+              <span class="tn-prop">[query]</span>
+            </div>
+            <div class="tree-edge"></div>
+            <div class="tree-row">
+              <div class="tree-node uses-state">SearchBar
+                <span class="tn-prop">value, onChange</span>
+              </div>
+              <div class="tree-node uses-state">EventList
+                <span class="tn-prop">query</span>
+              </div>
+            </div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 720px; margin-top: 0.6rem;">
+            The parent owns <code>query</code>. It passes the value to <code>SearchBar</code> + a setter to update it. It passes the value to <code>EventList</code> for filtering.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S21 LIFTED CODE ══ -->
+      <div class="slide" data-slide="21">
+        <div class="slide-label"><span class="snum">21</span> What it looks like in code</div>
+        <div class="stack" style="align-items: center; max-width: 1040px;">
+          <div class="code-block" style="max-width: 880px;">
+            <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span><span style="margin-left:0.5rem">events-tracker.tsx</span></div>
+<div class="code-body"><span class="ck">function</span> <span class="ci">EventsTracker</span>() {
+  <span class="cc">// state lives HERE — in the parent</span>
+  <span class="ck">const</span> [<span class="cr">query</span>, <span class="cr">setQuery</span>] = <span class="ci">useState</span>(<span class="cs">""</span>);
+
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;&gt;</span>
+      <span class="ctag">&lt;SearchBar</span> <span class="cattr">value</span>={<span class="cr">query</span>} <span class="cattr">onChange</span>={<span class="cr">setQuery</span>} <span class="ctag">/&gt;</span>
+      <span class="ctag">&lt;EventList</span> <span class="cattr">query</span>={<span class="cr">query</span>} <span class="ctag">/&gt;</span>
+    <span class="ctag">&lt;/&gt;</span>
+  );
+}</div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 720px;">
+            Both children now see the same value, owned by the parent.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S22 CONTROLLED COMPONENTS ══ -->
+      <div class="slide" data-slide="22">
+        <div class="slide-label"><span class="snum">22</span> The child becomes "controlled"</div>
+        <div class="stack" style="align-items: center; max-width: 1040px;">
+          <div class="center">
+            <h2 class="heading">Parent owns the value · child is the view</h2>
+          </div>
+          <div class="code-block" style="max-width: 880px;">
+            <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span><span style="margin-left:0.5rem">search-bar.tsx</span></div>
+<div class="code-body"><span class="ck">type</span> <span class="ct">SearchBarProps</span> = <span class="ct">Readonly</span>&lt;{
+  <span class="cp">value</span>: <span class="ct">string</span>;
+  <span class="cp">onChange</span>: (<span class="cr">v</span>: <span class="ct">string</span>) =&gt; <span class="ct">void</span>;
+}&gt;;
+
+<span class="ck">export</span> <span class="ck">function</span> <span class="ci">SearchBar</span>({ <span class="cr">value</span>, <span class="cr">onChange</span> }: <span class="ct">SearchBarProps</span>) {
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;input</span>
+      <span class="cattr">className</span>=<span class="cs">"w-full rounded-md border border-gray-300 px-3 py-2"</span>
+      <span class="cattr">value</span>={<span class="cr">value</span>}
+      <span class="cattr">onChange</span>={<span class="cr">e</span> =&gt; <span class="cr">onChange</span>(<span class="cr">e</span>.<span class="cp">target</span>.<span class="cp">value</span>)}
+    <span class="ctag">/&gt;</span>
+  );
+}</div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 720px;">
+            <code>SearchBar</code> has no <code>useState</code> of its own. The parent decides everything.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S23 RECAP — LIFTING ══ -->
+      <div class="slide" data-slide="23">
+        <div class="slide-label"><span class="snum">23</span> Summary — when to lift</div>
+        <div class="stack" style="align-items: center; max-width: 1000px;">
+          <div class="center">
+            <h2 class="heading">Three steps</h2>
+          </div>
+          <div class="method-grid three">
+            <div class="method-card">
+              <div class="mc-name">1. Notice</div>
+              <div class="mc-desc">Two siblings need the same value.</div>
+            </div>
+            <div class="method-card">
+              <div class="mc-name">2. Move</div>
+              <div class="mc-desc">Take the <code>useState</code> out of the child. Put it in the parent.</div>
+            </div>
+            <div class="method-card">
+              <div class="mc-name">3. Pass</div>
+              <div class="mc-desc">Give value &amp; setter to children as props.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S24 SECTION DIVIDER — HANDS-ON 2 ══ -->
+      <div class="slide" style="background: linear-gradient(135deg, #4796D1 0%, #2A5A8A 100%); color: white;" data-slide="24">
+        <div class="slide-label"><span class="snum">24</span></div>
+        <div class="center" style="position: relative; z-index: 1; max-width: 800px;">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span>Hands-on 2 · 12:00 – 1:00 · 60 min
+          </div>
+          <h1 class="display" style="color: white">Search<br/>Filter</h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.78); margin-top: 1rem">
+            Type in a box → the list filters live. Lifting state in action.
+          </p>
+        </div>
+        <div class="section-num" style="color: white">⚒️</div>
+      </div>
+
+      <!-- ══ S25 HANDS-ON 2 — GOAL ══ -->
+      <div class="slide accent-amber bg-subtle" data-slide="25">
+        <div class="slide-label"><span class="snum">25</span> Hands-on 2 — what we're building</div>
+        <div class="stack" style="align-items: center; max-width: 1040px;">
+          <div class="center">
+            <div class="pill pill-amber">Goal</div>
+            <h2 class="heading">A search box that filters a list of events</h2>
+          </div>
+          <div class="two-col">
+            <div>
+              <h4>Components</h4>
+              <ul class="bullet-list" style="font-size: 0.92rem;">
+                <li><code>EventsTracker</code> — the parent. Holds the query state and the events list.</li>
+                <li><code>SearchBar</code> — controlled input. Receives <code>value</code> and <code>onChange</code>.</li>
+                <li><code>EventList</code> — receives the (filtered) events. Renders them.</li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="good">Behaviour</h4>
+              <ul class="bullet-list" style="font-size: 0.92rem;">
+                <li>Type "tour" → only events with "tour" in the title show.</li>
+                <li>Empty box → all events show.</li>
+                <li>Filter is case-insensitive.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S26 HANDS-ON 2 — STEPS 1-4 ══ -->
+      <div class="slide accent-amber bg-subtle" data-slide="26">
+        <div class="slide-label"><span class="snum">26</span> Hands-on 2 — Steps 1 to 4</div>
+        <div class="stack" style="align-items: center;">
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.4rem, 2.5vw, 1.9rem);">Set up the type &amp; the SearchBar</h2>
+          </div>
+          <div class="steps">
+            <div class="step amber">
+              <div class="s-num">1</div>
+              <div class="s-body">In <code>src/</code>, create <code>events-tracker.tsx</code>.</div>
+            </div>
+            <div class="step amber">
+              <div class="s-num">2</div>
+              <div class="s-body">At the top, add the type: <code>type GmcEvent = Readonly&lt;{ id: number; title: string; date: string }&gt;;</code></div>
+            </div>
+            <div class="step amber">
+              <div class="s-num">3</div>
+              <div class="s-body">Create another file <code>search-bar.tsx</code>. Type its props as <code>Readonly&lt;{ value: string; onChange: (v: string) =&gt; void }&gt;</code>.</div>
+            </div>
+            <div class="step amber">
+              <div class="s-num">4</div>
+              <div class="s-body">Inside <code>SearchBar</code>, return an <code>&lt;input className="w-full rounded-md border border-gray-300 px-3 py-2" value={value} onChange={e =&gt; onChange(e.target.value)} /&gt;</code></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S27 HANDS-ON 2 — STEPS 5-8 ══ -->
+      <div class="slide accent-amber bg-subtle" data-slide="27">
+        <div class="slide-label"><span class="snum">27</span> Hands-on 2 — Steps 5 to 8</div>
+        <div class="stack" style="align-items: center;">
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.4rem, 2.5vw, 1.9rem);">Build the EventList</h2>
+          </div>
+          <div class="steps">
+            <div class="step amber">
+              <div class="s-num">5</div>
+              <div class="s-body">Create <code>event-list.tsx</code>. Type its props: <code>Readonly&lt;{ events: GmcEvent[] }&gt;</code> (import the type from <code>events-tracker.tsx</code> if needed, or duplicate it for now).</div>
+            </div>
+            <div class="step amber">
+              <div class="s-num">6</div>
+              <div class="s-body">Inside <code>EventList</code>, return a <code>&lt;ul&gt;</code> mapping over events: <code>{events.map(e =&gt; &lt;li key={e.id}&gt;{e.title} — {e.date}&lt;/li&gt;)}</code></div>
+            </div>
+            <div class="step amber">
+              <div class="s-num">7</div>
+              <div class="s-body">Show a friendly message when the list is empty: <code>if (events.length === 0) return &lt;p&gt;No matches&lt;/p&gt;;</code></div>
+            </div>
+            <div class="step amber">
+              <div class="s-num">8</div>
+              <div class="s-body">Both children are done. Now back to the parent — <code>events-tracker.tsx</code>.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S28 HANDS-ON 2 — STEPS 9-12 ══ -->
+      <div class="slide accent-amber bg-subtle" data-slide="28">
+        <div class="slide-label"><span class="snum">28</span> Hands-on 2 — Steps 9 to 12</div>
+        <div class="stack" style="align-items: center;">
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.4rem, 2.5vw, 1.9rem);">Wire up the parent</h2>
+          </div>
+          <div class="steps">
+            <div class="step amber">
+              <div class="s-num">9</div>
+              <div class="s-body">In <code>EventsTracker</code>, lift the query: <code>const [query, setQuery] = useState("");</code></div>
+            </div>
+            <div class="step amber">
+              <div class="s-num">10</div>
+              <div class="s-body">Make a small array: <code>const allEvents: GmcEvent[] = [{ id: 1, title: "GMC Site Tour", date: "Apr 28" }, …];</code> — at least 4 events.</div>
+            </div>
+            <div class="step amber">
+              <div class="s-num">11</div>
+              <div class="s-body">Compute the filtered list: <code>const filtered = allEvents.filter(e =&gt; e.title.toLowerCase().includes(query.toLowerCase()));</code></div>
+            </div>
+            <div class="step amber">
+              <div class="s-num">12</div>
+              <div class="s-body">Return: <code>&lt;SearchBar value={query} onChange={setQuery} /&gt;</code> followed by <code>&lt;EventList events={filtered} /&gt;</code>. In <code>app.tsx</code> use <code>&lt;EventsTracker /&gt;</code>.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S29 HANDS-ON 2 — FINAL CODE ══ -->
+      <div class="slide bg-subtle" data-slide="29">
+        <div class="slide-label"><span class="snum">29</span> Hands-on 2 — final code (parent)</div>
+        <div class="stack" style="align-items: center; max-width: 1040px;">
+          <div class="code-block" style="max-width: 880px;">
+            <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span><span style="margin-left:0.5rem">events-tracker.tsx</span></div>
+<div class="code-body"><span class="ck">import</span> { <span class="ci">useState</span> } <span class="ck">from</span> <span class="cs">"react"</span>;
+<span class="ck">import</span> { <span class="ci">SearchBar</span> } <span class="ck">from</span> <span class="cs">"./search-bar"</span>;
+<span class="ck">import</span> { <span class="ci">EventList</span> } <span class="ck">from</span> <span class="cs">"./event-list"</span>;
+
+<span class="ck">export</span> <span class="ck">type</span> <span class="ct">GmcEvent</span> = <span class="ct">Readonly</span>&lt;{ <span class="cp">id</span>: <span class="ct">number</span>; <span class="cp">title</span>: <span class="ct">string</span>; <span class="cp">date</span>: <span class="ct">string</span> }&gt;;
+
+<span class="ck">const</span> <span class="cr">allEvents</span>: <span class="ct">GmcEvent</span>[] = [
+  { <span class="cp">id</span>: <span class="cn">1</span>, <span class="cp">title</span>: <span class="cs">"GMC Site Tour"</span>,        <span class="cp">date</span>: <span class="cs">"Apr 28"</span> },
+  { <span class="cp">id</span>: <span class="cn">2</span>, <span class="cp">title</span>: <span class="cs">"SELISE Open House"</span>,    <span class="cp">date</span>: <span class="cs">"Apr 30"</span> },
+  { <span class="cp">id</span>: <span class="cn">3</span>, <span class="cp">title</span>: <span class="cs">"Cohort 3 Showcase"</span>,    <span class="cp">date</span>: <span class="cs">"May 02"</span> },
+  { <span class="cp">id</span>: <span class="cn">4</span>, <span class="cp">title</span>: <span class="cs">"Pelsung Site Visit"</span>,   <span class="cp">date</span>: <span class="cs">"May 05"</span> },
+];
+
+<span class="ck">export</span> <span class="ck">function</span> <span class="ci">EventsTracker</span>() {
+  <span class="ck">const</span> [<span class="cr">query</span>, <span class="cr">setQuery</span>] = <span class="ci">useState</span>(<span class="cs">""</span>);
+
+  <span class="ck">const</span> <span class="cr">filtered</span> = <span class="cr">allEvents</span>.<span class="ci">filter</span>(<span class="cr">e</span> =&gt;
+    <span class="cr">e</span>.<span class="cp">title</span>.<span class="ci">toLowerCase</span>().<span class="ci">includes</span>(<span class="cr">query</span>.<span class="ci">toLowerCase</span>())
+  );
+
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;&gt;</span>
+      <span class="ctag">&lt;SearchBar</span> <span class="cattr">value</span>={<span class="cr">query</span>} <span class="cattr">onChange</span>={<span class="cr">setQuery</span>} <span class="ctag">/&gt;</span>
+      <span class="ctag">&lt;EventList</span> <span class="cattr">events</span>={<span class="cr">filtered</span>} <span class="ctag">/&gt;</span>
+    <span class="ctag">&lt;/&gt;</span>
+  );
+}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S30 HANDS-ON 2 — STRETCH ══ -->
+      <div class="slide accent-amber bg-subtle" data-slide="30">
+        <div class="slide-label"><span class="snum">30</span> If you finish early</div>
+        <div class="stack" style="align-items: center; max-width: 1000px;">
+          <div class="center">
+            <div class="pill pill-amber">Stretch goals</div>
+            <h2 class="heading">Try one or two of these</h2>
+          </div>
+          <ul class="bullet-list" style="max-width: 760px;">
+            <li>Show "<em>3 of 4 events</em>" above the list — the count comes from <code>filtered.length</code> and <code>allEvents.length</code>.</li>
+            <li>Add a "Clear" button next to the search box that resets the query to <code>""</code>.</li>
+            <li>Wrap each event in a <code>&lt;Card&gt;</code> from Hands-on 1 — composition + lifting working together.</li>
+            <li>Replace <code>allEvents</code> with data fetched from <code>https://jsonplaceholder.typicode.com/posts</code> (use <code>useEffect</code> from Class 07). Filter on <code>p.title</code>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ══ S31 SECTION DIVIDER — CONTEXT ══ -->
+      <div class="slide bg-indigo" data-slide="31">
+        <div class="slide-label"><span class="snum">31</span></div>
+        <div class="center" style="position: relative; z-index: 1; max-width: 800px;">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span>Section 04 · 1:00 – 1:20
+          </div>
+          <h1 class="display" style="color: white">Context</h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.78); margin-top: 1rem">
+            A quick look — for when lifting goes too far.
+          </p>
+        </div>
+        <div class="section-num" style="color: white">04</div>
+      </div>
+
+      <!-- ══ S32 WHY CONTEXT ══ -->
+      <div class="slide" data-slide="32">
+        <div class="slide-label"><span class="snum">32</span> Why we need Context</div>
+        <div class="stack" style="align-items: center; max-width: 1040px;">
+          <div class="center">
+            <h2 class="heading">Sometimes lifting means too many layers</h2>
+          </div>
+          <div class="tree">
+            <div class="tree-node has-state">App
+              <span class="tn-prop">[user]</span>
+            </div>
+            <div class="tree-edge"></div>
+            <div class="tree-node">Layout
+              <span class="tn-prop">user</span>
+            </div>
+            <div class="tree-edge"></div>
+            <div class="tree-node">Header
+              <span class="tn-prop">user</span>
+            </div>
+            <div class="tree-edge"></div>
+            <div class="tree-node uses-state">Avatar
+              <span class="tn-prop">user</span>
+            </div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 720px; margin-top: 0.6rem;">
+            <strong>Prop drilling:</strong> middle components carry props they don't use. Annoying, repetitive.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S33 CONTEXT BASICS ══ -->
+      <div class="slide" data-slide="33">
+        <div class="slide-label"><span class="snum">33</span> Context — three steps</div>
+        <div class="stack" style="align-items: center; max-width: 1040px;">
+          <div class="code-block" style="max-width: 880px;">
+            <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span class="cb-dot" style="background:#febc2e"></span><span class="cb-dot" style="background:#28c93f"></span><span style="margin-left:0.5rem">user-context.tsx</span></div>
+<div class="code-body"><span class="cc">// 1. Create — once, somewhere central</span>
+<span class="ck">const</span> <span class="cr">UserContext</span> = <span class="ci">createContext</span>&lt;<span class="ct">User</span> | <span class="ck">null</span>&gt;(<span class="ck">null</span>);
+
+<span class="cc">// 2. Provide — wrap the part of the tree that needs it</span>
+<span class="ck">function</span> <span class="ci">App</span>() {
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;UserContext.Provider</span> <span class="cattr">value</span>={<span class="cr">currentUser</span>}<span class="ctag">&gt;</span>
+      <span class="ctag">&lt;Layout /&gt;</span>
+    <span class="ctag">&lt;/UserContext.Provider&gt;</span>
+  );
+}
+
+<span class="cc">// 3. Consume — anywhere inside, no prop chain</span>
+<span class="ck">function</span> <span class="ci">Avatar</span>() {
+  <span class="ck">const</span> <span class="cr">user</span> = <span class="ci">useContext</span>(<span class="cr">UserContext</span>);
+  <span class="ck">return</span> <span class="ctag">&lt;img</span> <span class="cattr">src</span>={<span class="cr">user</span>?.<span class="cp">avatar</span>} <span class="ctag">/&gt;</span>;
+}</div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 720px;">
+            Three pieces: <code>createContext</code>, <code>&lt;Provider value=…&gt;</code>, and <code>useContext</code> in any descendant.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S34 WHEN TO USE CONTEXT ══ -->
+      <div class="slide" data-slide="34">
+        <div class="slide-label"><span class="snum">34</span> When to use Context</div>
+        <div class="stack" style="align-items: center; max-width: 1040px;">
+          <table class="compare-table">
+            <thead>
+              <tr><th>Situation</th><th>Use</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Two close siblings need the same value</td><td>Lift to parent (no Context)</td></tr>
+              <tr><td>Value is needed 1–2 layers below</td><td>Just pass props</td></tr>
+              <tr><td>Value crosses 3+ layers, used way down deep</td><td>Context</td></tr>
+              <tr><td>Theme · current user · language</td><td>Context — almost always</td></tr>
+            </tbody>
+          </table>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 720px;">
+            Don't reach for Context just because you can. Try lifting first.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S35 RECAP ══ -->
+      <div class="slide bg-indigo" data-slide="35">
+        <div class="slide-label"><span class="snum">35</span> Recap · 1:20 – 1:30</div>
+        <div class="stack" style="align-items: center; max-width: 980px;">
+          <div class="center">
+            <div class="pill pill-white"><span class="pill-dot"></span>What you learned</div>
+            <h2 class="heading" style="color: white;">Three patterns to glue components together</h2>
+          </div>
+          <div class="method-grid three">
+            <div class="method-card" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.18);">
+              <div class="mc-name" style="color: #7dd3fc;">Composition</div>
+              <div class="mc-desc" style="color: rgba(255,255,255,0.7);"><code>children</code> · same shell, different content.</div>
+            </div>
+            <div class="method-card" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.18);">
+              <div class="mc-name" style="color: #fde68a;">Lifting state</div>
+              <div class="mc-desc" style="color: rgba(255,255,255,0.7);">State in parent · pass <code>value</code> + <code>onChange</code>.</div>
+            </div>
+            <div class="method-card" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.18);">
+              <div class="mc-name" style="color: #c4b5fd;">Context</div>
+              <div class="mc-desc" style="color: rgba(255,255,255,0.7);">Skip the prop chain · use sparingly.</div>
+            </div>
+          </div>
+          <p class="body-md" style="color: rgba(255,255,255,0.7); text-align: center; max-width: 720px; margin-top: 0.8rem;">
+            <strong style="color: white;">Next class:</strong> Routing &amp; Navigation — give your app multiple pages with React Router.
+          </p>
+          <div style="margin-top: 1.5rem;">
+            <img src="../assets/SELISE_Logo_Reversed.png" alt="SELISE" style="height: 40px; opacity: 0.8;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════ PROGRESS + NAV ══════════════ -->
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 35</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      let current = 0;
+
+      function goTo(n) {
+        slides[current].classList.remove("active");
+        slides[current].classList.add("exit");
+        const old = current;
+        setTimeout(() => slides[old].classList.remove("exit"), 380);
+        current = Math.max(0, Math.min(n, total - 1));
+        slides[current].classList.add("active");
+        document.getElementById("slide-counter").textContent = `${current + 1} / ${total}`;
+        document.getElementById("progress").style.width = `${((current + 1) / total) * 100}%`;
+        initReveal(slides[current]);
+      }
+
+      function nextSlide() { if (current < total - 1) goTo(current + 1); }
+      function prevSlide() { if (current > 0) goTo(current - 1); }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+        if (e.key === "ArrowRight" || e.key === " ") { e.preventDefault(); handleForward(); }
+        if (e.key === "ArrowLeft") { e.preventDefault(); prevSlide(); }
+        if (e.key === "f" || e.key === "F") toggleFullscreen();
+      });
+
+      document.getElementById("deck").addEventListener("click", function (e) {
+        if (e.target.closest("button, .quiz-opt, .sl-item, .mq, a, input, select, textarea, .agenda-row, [data-noclick]")) return;
+        const pct = e.clientX / window.innerWidth;
+        if (pct < 0.15) prevSlide();
+        else if (pct > 0.85) handleForward();
+      });
+
+      function handleForward() {
+        const active = slides[current];
+        const list = active.querySelector(".reveal-list");
+        if (list) {
+          const hidden = list.querySelectorAll("li:not(.shown)");
+          if (hidden.length > 0) {
+            hidden[0].classList.add("shown");
+            const hint = active.querySelector(".reveal-hint");
+            if (hint && hidden.length === 1) hint.style.opacity = "0";
+            return;
+          }
+        }
+        nextSlide();
+      }
+
+      function initReveal(slide) {
+        const list = slide.querySelector(".reveal-list");
+        if (!list) return;
+        list.querySelectorAll("li").forEach((li) => li.classList.remove("shown"));
+        const hint = slide.querySelector(".reveal-hint");
+        if (hint) hint.style.opacity = "1";
+      }
+
+      slides[0].classList.add("active");
+      document.getElementById("progress").style.width = `${(1 / total) * 100}%`;
+
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
+        else document.exitFullscreen().catch(() => {});
+      }
+
+      const timerState = {};
+      function startTimer(id, minutes) {
+        if (timerState[id]?.interval) return;
+        if (!timerState[id]) timerState[id] = { remaining: minutes * 60 };
+        timerState[id].interval = setInterval(() => {
+          timerState[id].remaining--;
+          const el = document.getElementById(id);
+          if (!el) return;
+          if (timerState[id].remaining <= 0) {
+            clearInterval(timerState[id].interval);
+            timerState[id].interval = null;
+            el.textContent = "00:00";
+            el.style.color = "#ff5f56";
+            return;
+          }
+          const m = Math.floor(timerState[id].remaining / 60).toString().padStart(2, "0");
+          const s = (timerState[id].remaining % 60).toString().padStart(2, "0");
+          el.textContent = `${m}:${s}`;
+          if (timerState[id].remaining <= 60) el.style.color = "#febc2e";
+        }, 1000);
+      }
+      function resetTimer(id, minutes) {
+        if (timerState[id]?.interval) {
+          clearInterval(timerState[id].interval);
+          timerState[id].interval = null;
+        }
+        timerState[id] = { remaining: minutes * 60 };
+        const el = document.getElementById(id);
+        if (el) {
+          el.textContent = minutes.toString().padStart(2, "0") + ":00";
+          el.style.color = "";
+        }
+      }
+    </script>
+  </body>
+</html>
