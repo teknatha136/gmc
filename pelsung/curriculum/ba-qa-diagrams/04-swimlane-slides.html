@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Swimlane Diagrams — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      .big-card { background:white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.3rem; max-width:1050px; width:100%; }
+      .big-card h4 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-bottom:0.45rem; }
+      .big-card ul { padding-left:1.2rem; margin:0.4rem 0; }
+      .big-card li { font-size:0.92rem; line-height:1.7; color:var(--text); margin:0.2rem 0; }
+
+      .diagram { background:white; border:1px solid var(--border); border-radius:10px; padding:1rem; max-width:1100px; width:100%; overflow-x:auto; }
+      .diagram svg { display:block; margin:0 auto; }
+      .diagram .caption { font-size:0.82rem; color:var(--muted); margin-top:0.6rem; text-align:center; font-style:italic; }
+
+      .dual { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px) { .dual { grid-template-columns: 1fr; } }
+      .dual-bad { background:#FFF5F7; border:1px solid #FADCE3; border-radius:10px; padding:0.9rem 1.1rem; }
+      .dual-good { background:#F3FAE9; border:1px solid #D4E8BD; border-radius:10px; padding:0.9rem 1.1rem; }
+      .dual-bad h5 { color:var(--red); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.4rem; }
+      .dual-good h5 { color:#3D7A3D; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.4rem; }
+      .dual ul { padding-left:1.1rem; margin:0; }
+      .dual li { font-size:0.85rem; line-height:1.65; color:var(--text); margin:0.2rem 0; }
+
+      .step-row { display:flex; gap:0.9rem; padding:0.55rem 0; border-bottom:1px solid var(--border); align-items:flex-start; }
+      .step-row:last-child { border-bottom:none; }
+      .step-num { background:var(--blue); color:white; font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; min-width:32px; height:32px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:0.85rem; }
+      .step-body { flex:1; font-size:0.92rem; line-height:1.65; color:var(--text); }
+      .step-body strong { color:var(--indigo); }
+
+      .reveal-grid { display:grid; grid-template-columns: 1fr 1fr; gap:0.8rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px) { .reveal-grid { grid-template-columns: 1fr; } }
+      .reveal-card { background:white; border:1px solid var(--border); border-left:4px solid var(--blue); border-radius:10px; padding:0.9rem 1.1rem; }
+      .reveal-card h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.3rem; }
+      .reveal-card p { font-size:0.9rem; line-height:1.65; color:var(--text); }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient bg-dark" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>Diagrams · 04 of 06</div></div>
+          <h1 class="display" style="color:white">
+            <span style="color: var(--amber)">Swimlane</span><br />
+            <span style="color: white">Diagrams</span>
+          </h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85)">A flowchart that knows <em>who does what</em>. Every lane crossing is a handoff, and handoffs are where processes go to die.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">Actors in lanes</span>
+            <span class="class-tag tag-blue">Handoffs visible</span>
+            <span class="class-tag tag-blue">Bottleneck-finder</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 WHY -->
+      <div class="slide bg-indigo" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span></div>
+        <div class="center" style="max-width:900px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Why swimlanes exist</div>
+          <h1 class="display" style="color:white; font-size:2.3rem; line-height:1.25">"Why does this take 5 days when the actual work is 90 minutes?"</h1>
+          <p style="color: rgba(255,255,255,0.85); font-size: 1.05rem; margin-top:1.5rem; line-height:1.85">
+            Because the rest of the time, the work is <strong>waiting in someone else's queue</strong>.<br><br>
+            A flowchart hides that. It shows the steps but not who's doing them — so you can't see the handoffs, can't see the queues, can't see the bottlenecks.
+          </p>
+          <p style="color: var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.15rem; margin-top:1.5rem">A swimlane diagram makes those invisible delays visible.</p>
+        </div>
+      </div>
+
+      <!-- 3 SIMPLEST -->
+      <div class="slide accent-blue bg-subtle" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> The simplest possible swimlane</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Pizza ordering · two lanes · two handoffs</h2></div>
+          <div class="diagram">
+            <svg width="820" height="220" viewBox="0 0 820 220">
+              <rect x="10" y="10" width="800" height="200" fill="#fff" stroke="#001F35" stroke-width="2"/>
+              <rect x="10" y="10" width="40" height="100" fill="#F9F9F9" stroke="#001F35" stroke-width="2"/>
+              <text x="30" y="60" text-anchor="middle" transform="rotate(-90 30 60)" font-family="Bahnschrift" font-size="13" fill="#001F35">Customer</text>
+              <line x1="50" y1="110" x2="810" y2="110" stroke="#001F35" stroke-width="1.5"/>
+              <rect x="10" y="110" width="40" height="100" fill="#F9F9F9" stroke="#001F35" stroke-width="2"/>
+              <text x="30" y="160" text-anchor="middle" transform="rotate(-90 30 160)" font-family="Bahnschrift" font-size="13" fill="#001F35">Pizza Shop</text>
+
+              <circle cx="100" cy="60" r="13" fill="#fff" stroke="#3D7A3D" stroke-width="2"/>
+              <rect x="140" y="44" width="120" height="32" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="200" y="64" text-anchor="middle" font-family="Open Sans" font-size="11">Order pizza</text>
+
+              <rect x="320" y="124" width="120" height="32" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="380" y="144" text-anchor="middle" font-family="Open Sans" font-size="11">Take order</text>
+              <rect x="470" y="124" width="120" height="32" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="530" y="144" text-anchor="middle" font-family="Open Sans" font-size="11">Make pizza</text>
+              <rect x="620" y="124" width="130" height="32" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="685" y="144" text-anchor="middle" font-family="Open Sans" font-size="11">Hand to customer</text>
+
+              <rect x="640" y="44" width="100" height="32" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="690" y="64" text-anchor="middle" font-family="Open Sans" font-size="11">Eat pizza</text>
+              <circle cx="785" cy="60" r="13" fill="#fff" stroke="#1B2021" stroke-width="3"/>
+
+              <line x1="113" y1="60" x2="140" y2="60" stroke="#001F35" stroke-width="1.5"/><polygon points="140,60 132,56 132,64" fill="#001F35"/>
+              <line x1="200" y1="76" x2="320" y2="140" stroke="#D80032" stroke-width="1.5" stroke-dasharray="3,3"/><polygon points="320,140 312,138 314,131" fill="#D80032"/>
+              <line x1="440" y1="140" x2="470" y2="140" stroke="#001F35" stroke-width="1.5"/><polygon points="470,140 462,136 462,144" fill="#001F35"/>
+              <line x1="590" y1="140" x2="620" y2="140" stroke="#001F35" stroke-width="1.5"/><polygon points="620,140 612,136 612,144" fill="#001F35"/>
+              <line x1="685" y1="124" x2="690" y2="76" stroke="#D80032" stroke-width="1.5" stroke-dasharray="3,3"/><polygon points="690,76 685,82 693,84" fill="#D80032"/>
+              <line x1="740" y1="60" x2="772" y2="60" stroke="#001F35" stroke-width="1.5"/><polygon points="772,60 764,56 764,64" fill="#001F35"/>
+            </svg>
+            <div class="caption">Two lanes (Customer · Pizza Shop). Red dashed arrows are <strong>handoffs</strong> — work crossing from one actor to another. Two handoffs visible at a glance.</div>
+          </div>
+          <div class="big-card">
+            <ul>
+              <li><strong>Two horizontal lanes</strong> = two actors. Each step sits in the lane of whoever does it.</li>
+              <li><strong>Same shapes as flowchart</strong> — just organized into rows by actor.</li>
+              <li><strong>Lane crossing = handoff.</strong> Watch for these — they are where time and information get lost.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 READING RULE -->
+      <div class="slide accent-blue" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> Reading rule · trace the path · count the handoffs</h2></div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Same as flowchart · plus pay attention to lane changes</h2></div>
+          <div class="big-card">
+            <ol style="padding-left:1.3rem; margin:0.4rem 0; font-size:0.94rem; line-height:1.85; color:var(--text)">
+              <li><strong>Find the start.</strong> Usually top-left, in the lane of whoever initiates.</li>
+              <li><strong>Follow the arrows</strong>, doing each step.</li>
+              <li><strong>Each time the arrow crosses a lane boundary</strong> — work has been handed to someone else. Count these.</li>
+              <li><strong>Long arrows between lanes</strong> often mean long waits in real life. Add timing labels for evidence.</li>
+              <li><strong>Stop at the End</strong>, usually in the lane of whoever closes the loop.</li>
+            </ol>
+            <p style="font-size:0.92rem; margin-top:0.6rem"><strong>Key intuition:</strong> the lanes themselves are just labels. The information is in the <em>shape of the path</em> across them — that's where the process truth lives.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 STRUCTURE -->
+      <div class="slide accent-blue bg-subtle" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span> Structure · lanes &amp; orientation</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Two layout choices · same content</h2></div>
+          <div class="dual">
+            <div class="reveal-card">
+              <h5>Horizontal · most common</h5>
+              <p>Lanes are horizontal stripes stacked top-to-bottom. Process flows <strong>left to right</strong>. Best for long, linear processes.</p>
+              <p style="color:var(--muted); font-size:0.82rem; margin-top:0.4rem; font-style:italic">Reads like a timeline.</p>
+            </div>
+            <div class="reveal-card" style="border-left-color:var(--amber)">
+              <h5>Vertical</h5>
+              <p>Lanes are vertical stripes side-by-side. Process flows <strong>top to bottom</strong>. Better when activity labels are long.</p>
+              <p style="color:var(--muted); font-size:0.82rem; margin-top:0.4rem; font-style:italic">Reads like a checklist with assignment.</p>
+            </div>
+          </div>
+          <div class="big-card">
+            <h4>Lane rules</h4>
+            <ul>
+              <li><strong>2–5 lanes is the sweet spot.</strong> Beyond 5 → unreadable.</li>
+              <li><strong>Use roles, not names.</strong> "Manager", not "Sonam".</li>
+              <li><strong>Add a "System" lane</strong> if anything is automated. Don't attribute system work to a human.</li>
+              <li><strong>Order lanes intentionally.</strong> Adjacent lanes should usually exchange the most handoffs.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 EXAMPLE 1: LOAN -->
+      <div class="slide accent-blue" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> Example 1 · loan application</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Four lanes · five handoffs</h2></div>
+          <div class="diagram">
+            <svg width="960" height="340" viewBox="0 0 960 340">
+              <rect x="10" y="10" width="940" height="80" fill="#fff" stroke="#001F35" stroke-width="2"/>
+              <rect x="10" y="10" width="130" height="80" fill="#F9F9F9" stroke="#001F35" stroke-width="2"/>
+              <text x="75" y="55" text-anchor="middle" font-family="Bahnschrift" font-size="13" fill="#001F35">Customer</text>
+              <rect x="10" y="90" width="940" height="80" fill="#fff" stroke="#001F35" stroke-width="2"/>
+              <rect x="10" y="90" width="130" height="80" fill="#F9F9F9" stroke="#001F35" stroke-width="2"/>
+              <text x="75" y="135" text-anchor="middle" font-family="Bahnschrift" font-size="13" fill="#001F35">Branch Officer</text>
+              <rect x="10" y="170" width="940" height="80" fill="#fff" stroke="#001F35" stroke-width="2"/>
+              <rect x="10" y="170" width="130" height="80" fill="#F9F9F9" stroke="#001F35" stroke-width="2"/>
+              <text x="75" y="215" text-anchor="middle" font-family="Bahnschrift" font-size="13" fill="#001F35">Credit Officer</text>
+              <rect x="10" y="250" width="940" height="80" fill="#fff" stroke="#001F35" stroke-width="2"/>
+              <rect x="10" y="250" width="130" height="80" fill="#F9F9F9" stroke="#001F35" stroke-width="2"/>
+              <text x="75" y="295" text-anchor="middle" font-family="Bahnschrift" font-size="13" fill="#001F35">Loan System</text>
+              <circle cx="170" cy="50" r="12" fill="#fff" stroke="#3D7A3D" stroke-width="2"/>
+              <rect x="210" y="35" width="120" height="30" rx="5" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="270" y="54" text-anchor="middle" font-family="Open Sans" font-size="11">Submit application</text>
+              <rect x="370" y="115" width="120" height="30" rx="5" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="430" y="134" text-anchor="middle" font-family="Open Sans" font-size="11">Verify documents</text>
+              <rect x="530" y="195" width="120" height="30" rx="5" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="590" y="214" text-anchor="middle" font-family="Open Sans" font-size="11">Assess risk</text>
+              <polygon points="690,210 710,190 730,210 710,230" fill="#fff" stroke="#247EC1" stroke-width="2"/>
+              <text x="710" y="215" text-anchor="middle" font-family="Bahnschrift" font-size="14" fill="#247EC1">×</text>
+              <rect x="760" y="275" width="120" height="30" rx="5" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="820" y="294" text-anchor="middle" font-family="Open Sans" font-size="11">Disburse loan</text>
+              <circle cx="905" cy="50" r="12" fill="#fff" stroke="#1B2021" stroke-width="3"/>
+              <rect x="760" y="35" width="120" height="30" rx="5" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="820" y="54" text-anchor="middle" font-family="Open Sans" font-size="11">Receive funds</text>
+              <line x1="182" y1="50" x2="210" y2="50" stroke="#001F35" stroke-width="1.5"/><polygon points="210,50 203,46 203,54" fill="#001F35"/>
+              <line x1="330" y1="50" x2="430" y2="115" stroke="#D80032" stroke-width="1.5" stroke-dasharray="3,3"/><polygon points="430,115 422,112 427,107" fill="#D80032"/>
+              <line x1="490" y1="130" x2="590" y2="195" stroke="#D80032" stroke-width="1.5" stroke-dasharray="3,3"/><polygon points="590,195 582,192 587,187" fill="#D80032"/>
+              <line x1="650" y1="210" x2="690" y2="210" stroke="#001F35" stroke-width="1.5"/><polygon points="690,210 683,206 683,214" fill="#001F35"/>
+              <line x1="710" y1="230" x2="820" y2="275" stroke="#D80032" stroke-width="1.5" stroke-dasharray="3,3"/><polygon points="820,275 812,272 817,267" fill="#D80032"/>
+              <line x1="820" y1="275" x2="820" y2="65" stroke="#D80032" stroke-width="1.5" stroke-dasharray="3,3"/><polygon points="820,65 816,73 824,73" fill="#D80032"/>
+              <line x1="880" y1="50" x2="893" y2="50" stroke="#001F35" stroke-width="1.5"/><polygon points="893,50 886,46 886,54" fill="#001F35"/>
+            </svg>
+            <div class="caption">Five red dashed arrows = five handoffs. Customer's only steps are the very first and very last — everything in between is the bank passing the work around. Each red arrow could be a 1–2 day wait.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7 EXAMPLE 2: SELISE EXPENSE REIMBURSEMENT -->
+      <div class="slide accent-blue bg-subtle" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> Example 2 · SELISE expense reimbursement</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Three lanes · annotate the waiting time</h2></div>
+          <div class="diagram">
+            <svg width="960" height="280" viewBox="0 0 960 280">
+              <rect x="10" y="10" width="940" height="80" fill="#fff" stroke="#001F35" stroke-width="2"/>
+              <rect x="10" y="10" width="130" height="80" fill="#F9F9F9" stroke="#001F35" stroke-width="2"/>
+              <text x="75" y="55" text-anchor="middle" font-family="Bahnschrift" font-size="13" fill="#001F35">Employee</text>
+              <rect x="10" y="90" width="940" height="80" fill="#fff" stroke="#001F35" stroke-width="2"/>
+              <rect x="10" y="90" width="130" height="80" fill="#F9F9F9" stroke="#001F35" stroke-width="2"/>
+              <text x="75" y="135" text-anchor="middle" font-family="Bahnschrift" font-size="13" fill="#001F35">Manager</text>
+              <rect x="10" y="170" width="940" height="80" fill="#fff" stroke="#001F35" stroke-width="2"/>
+              <rect x="10" y="170" width="130" height="80" fill="#F9F9F9" stroke="#001F35" stroke-width="2"/>
+              <text x="75" y="215" text-anchor="middle" font-family="Bahnschrift" font-size="13" fill="#001F35">Finance</text>
+
+              <circle cx="170" cy="50" r="12" fill="#fff" stroke="#3D7A3D" stroke-width="2"/>
+              <rect x="210" y="35" width="140" height="30" rx="5" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="280" y="54" text-anchor="middle" font-family="Open Sans" font-size="11">Submit expense form</text>
+
+              <rect x="380" y="115" width="140" height="30" rx="5" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="450" y="134" text-anchor="middle" font-family="Open Sans" font-size="11">Review &amp; approve</text>
+
+              <rect x="540" y="195" width="140" height="30" rx="5" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="610" y="214" text-anchor="middle" font-family="Open Sans" font-size="11">Verify receipts</text>
+              <rect x="700" y="195" width="140" height="30" rx="5" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="770" y="214" text-anchor="middle" font-family="Open Sans" font-size="11">Pay to bank account</text>
+
+              <rect x="780" y="35" width="120" height="30" rx="5" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="840" y="54" text-anchor="middle" font-family="Open Sans" font-size="11">Receive payment</text>
+              <circle cx="930" cy="50" r="12" fill="#fff" stroke="#1B2021" stroke-width="3"/>
+
+              <line x1="182" y1="50" x2="210" y2="50" stroke="#001F35" stroke-width="1.5"/><polygon points="210,50 203,46 203,54" fill="#001F35"/>
+              <line x1="350" y1="50" x2="450" y2="115" stroke="#D80032" stroke-width="1.5" stroke-dasharray="3,3"/><polygon points="450,115 442,112 447,107" fill="#D80032"/>
+              <text x="356" y="85" font-family="Open Sans" font-size="9" fill="#D80032">1–2 days</text>
+              <line x1="520" y1="130" x2="610" y2="195" stroke="#D80032" stroke-width="1.5" stroke-dasharray="3,3"/><polygon points="610,195 602,192 607,187" fill="#D80032"/>
+              <text x="528" y="165" font-family="Open Sans" font-size="9" fill="#D80032">2–3 days</text>
+              <line x1="680" y1="210" x2="700" y2="210" stroke="#001F35" stroke-width="1.5"/><polygon points="700,210 692,206 692,214" fill="#001F35"/>
+              <line x1="840" y1="195" x2="840" y2="65" stroke="#D80032" stroke-width="1.5" stroke-dasharray="3,3"/><polygon points="840,65 836,73 844,73" fill="#D80032"/>
+              <text x="845" y="135" font-family="Open Sans" font-size="9" fill="#D80032">batched · weekly</text>
+              <line x1="900" y1="50" x2="918" y2="50" stroke="#001F35" stroke-width="1.5"/><polygon points="918,50 911,46 911,54" fill="#001F35"/>
+            </svg>
+            <div class="caption">With timing annotations on the handoffs: <strong>1–2 days</strong> waiting on Manager, <strong>2–3 days</strong> on Finance verification, weekly batched payment. Total: ~7 working days. Active work: ~30 minutes.</div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:840px"><strong>The improvement question:</strong> can manager approval and finance verification run in parallel? Could the weekly batch run daily? Each timing label is a place to attack the cycle time.</p>
+        </div>
+      </div>
+
+      <!-- 8 WHAT IT REVEALS -->
+      <div class="slide accent-blue" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> What swimlanes reveal at a glance</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Four questions answered without calculation</h2></div>
+          <div class="big-card">
+            <ul>
+              <li><strong>Who is overloaded?</strong> The lane with the most boxes.</li>
+              <li><strong>Where do things wait?</strong> Long arrows between lanes = waiting time.</li>
+              <li><strong>Is anyone idle?</strong> A lane with almost nothing means under-use or missed responsibility.</li>
+              <li><strong>Where can we automate?</strong> A step always in the System lane is already automated; one repeatedly in a human lane is a candidate.</li>
+            </ul>
+            <p style="margin-top:0.6rem; color:var(--text); font-style:italic">Add <strong>per-step duration</strong> and <strong>per-handoff waiting time</strong> and a swimlane becomes a bottleneck-finder.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9 SWIMLANE VS BPMN -->
+      <div class="slide accent-blue bg-subtle" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> Swimlane vs. BPMN · when to upgrade</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Same family · BPMN is the formal cousin</h2></div>
+          <div class="big-card">
+            <h4>Stay with simple swimlane when…</h4>
+            <ul>
+              <li>Process is mostly linear · no parallel/inclusive gateways needed</li>
+              <li>One organization · multiple roles within</li>
+              <li>Audience is internal / non-technical</li>
+              <li>You're sketching for understanding, not automation</li>
+            </ul>
+            <h4 style="margin-top:0.6rem">Upgrade to BPMN when…</h4>
+            <ul>
+              <li>Process crosses organizations · need pools + message flow</li>
+              <li>You need parallel work, inclusive gateways, timer events</li>
+              <li>The process will be automated by a workflow engine</li>
+              <li>Regulators or auditors require formal notation</li>
+            </ul>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">A swimlane is BPMN with the volume turned down. BPMN is a swimlane with all the dials at 11.</p>
+        </div>
+      </div>
+
+      <!-- 10 HOW TO DRAW -->
+      <div class="slide accent-blue" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> How to draw one from scratch</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Five steps · 20 minutes start to finish</h2></div>
+          <div class="big-card">
+            <div class="step-row">
+              <div class="step-num">1</div>
+              <div class="step-body"><strong>List the actors.</strong> Roles, not names. Add a System lane if anything is automated. Order them so adjacent lanes exchange the most work.</div>
+            </div>
+            <div class="step-row">
+              <div class="step-num">2</div>
+              <div class="step-body"><strong>Draw the lanes.</strong> Stack them horizontally, label each on the left. The boundary between lanes is where handoffs happen.</div>
+            </div>
+            <div class="step-row">
+              <div class="step-num">3</div>
+              <div class="step-body"><strong>Walk through the happy path.</strong> Each step goes in the lane of whoever does it. Connect with arrows — short within a lane, long crossing lanes.</div>
+            </div>
+            <div class="step-row">
+              <div class="step-num">4</div>
+              <div class="step-body"><strong>Annotate timings.</strong> Per step: typical duration. Per handoff: typical waiting time. This is where the diagram becomes powerful.</div>
+            </div>
+            <div class="step-row">
+              <div class="step-num">5</div>
+              <div class="step-body"><strong>Review with the people in the lanes.</strong> "Is this what actually happens?" Watch them point at the missing step or the secret handoff. Update.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11 WHEN -->
+      <div class="slide accent-blue bg-subtle" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> When to reach for a swimlane</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Sweet spot: 2–5 actors · mostly linear</h2></div>
+          <div class="dual">
+            <div class="dual-good">
+              <h5>✅ Use a swimlane when…</h5>
+              <ul>
+                <li>2–5 distinct actors are involved</li>
+                <li>Handoffs are the thing you want to highlight</li>
+                <li>You want to spot bottlenecks &amp; waiting time</li>
+                <li>You're doing a "current-state" analysis</li>
+                <li>Audience is non-technical managers</li>
+                <li>Process is mostly linear, few parallel branches</li>
+              </ul>
+            </div>
+            <div class="dual-bad">
+              <h5>⚠️ Prefer something else when…</h5>
+              <ul>
+                <li>Single actor → flowchart</li>
+                <li>Need parallel gateways, message flow → BPMN</li>
+                <li>Cross-organization process → BPMN with pools</li>
+                <li>Diagram will drive an automation engine → BPMN</li>
+                <li>Regulated / formal documentation → BPMN</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12 PITFALLS -->
+      <div class="slide accent-blue" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> Common swimlane mistakes</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Same flowchart traps · plus a few new ones</h2></div>
+          <div class="big-card">
+            <ul>
+              <li><strong>More than 5 lanes</strong> — group related roles or split into multiple diagrams.</li>
+              <li><strong>Activity in the wrong lane</strong> — put a step in the lane of whoever <em>actually does</em> it, not whoever asked for it.</li>
+              <li><strong>No System lane for automated steps</strong> — automation gets attributed to the human clicking a button.</li>
+              <li><strong>Specific people as labels</strong> — use roles. "Manager", not "Sonam".</li>
+              <li><strong>No timing annotations</strong> — for process improvement, this is the whole point.</li>
+              <li><strong>Single-actor swimlane</strong> — if only one lane is busy, just use a flowchart.</li>
+              <li><strong>Ignoring failure paths</strong> — what happens when manager rejects? When verification fails?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 13 WRAP -->
+      <div class="slide bg-indigo" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> Wrap-up</div>
+        <div class="center" style="max-width:880px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key Takeaways</div>
+          <h2 class="heading" style="color:white">Swimlanes · what to carry forward</h2>
+          <ul class="reveal-list" style="color:rgba(255,255,255,0.9); text-align:left; max-width:780px; margin:1.5rem auto; font-size:0.98rem; line-height:1.9;">
+            <li>✅ A <strong>flowchart with actor lanes</strong> — one lane per role / system</li>
+            <li>✅ <strong>Lane crossing = handoff</strong>, and handoffs are where processes fail</li>
+            <li>✅ Sweet spot: <strong>2–5 actors</strong>, mostly linear</li>
+            <li>✅ Reveals <strong>who's overloaded · where things wait · who's idle · what can be automated</strong></li>
+            <li>✅ Add <strong>timing annotations</strong> to turn it into a bottleneck-finder</li>
+            <li>✅ Upgrade to <strong>BPMN</strong> for parallel work / multi-org / automation</li>
+            <li>✅ Most useful diagram for <strong>process-improvement work</strong></li>
+          </ul>
+          <p style="color:var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-top:1.5rem">Reducing handoffs usually beats optimizing any single step.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 13</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>

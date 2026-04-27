@@ -11,7 +11,7 @@ This directory will grow over multiple cohorts and years (minimum 2-year engagem
 
 ### Phases
 1. **Foundation (~11 classes):** All trainees together — professional skills, AI basics, internet/APIs, dev tools, SDLC (hourglass/spec-driven model), product thinking, team roles, personal site build, aptitude assessment, vertical assignment.
-2. **Core Specialization (~20–25 classes per vertical):** Verticals train independently. Exact class counts evolve per cohort — see the active cohort's CLAUDE.md and `curriculum/index.html`. BA and QA typically share a short combined opener before splitting.
+2. **Core Specialization:** Verticals train independently. Exact class counts evolve per cohort — see the active cohort's CLAUDE.md and `curriculum/index.html`. **BA and QA share three consecutive blocks before splitting:** (1) a short *Combined Opener* (~5 classes covering role reality, spec-reading, FR/NFR, acceptance criteria, estimation); (2) a *Spec Stack* block (~6 classes — Anatomy, BRD, SRS, HLD/LLD, Writing Mechanics, Spec Teardown); (3) a *Diagrams* block (~6 classes — Use Case, BPMN, Flowchart, Swimlane, Activity, DFD). After all three shared blocks, BA (~15 classes) and QA (~19 classes) split into vertical-specific work.
 3. **Capstone (~10 classes):** Cross-vertical work culminating in an exhibition. Structure (single project vs. tiered real-build + docs-only) depends on cohort assessment and is defined in the cohort's CLAUDE.md.
 4. **Extra / Supplementary (self-paced):** Optional deep-dives that every role benefits from but don't fit neatly into foundation or vertical tracks (e.g. `E1 — UX & HCI Basics`). Stored under `curriculum/extra/`. Accessible from the curriculum landing page as Phase 04.
 
@@ -35,7 +35,9 @@ pelsung/
 │   ├── index.html                        #   Structured landing page · source of truth for classes
 │   ├── shared/                           #   Shared CSS/JS across lesson HTML (e.g. slides.css)
 │   ├── foundation/                       #   Phase 1 materials (all verticals together)
-│   ├── ba-qa-combined/                   #   Combined BA+QA opener classes
+│   ├── ba-qa-combined/                   #   BA+QA shared block 1 — opener (role/spec-reading/FR-NFR/AC/estimation)
+│   ├── ba-qa-specs/                      #   BA+QA shared block 2 — spec stack (Anatomy/BRD/SRS/HLD-LLD/...), with templates/
+│   ├── ba-qa-diagrams/                   #   BA+QA shared block 3 — diagrams (Use Case/BPMN/Flowchart/Swimlane/Activity/DFD)
 │   ├── dev/                              #   Software Development — slides, exercises, handouts
 │   ├── design/                           #   Software Design materials
 │   ├── testing/                          #   Software Testing materials

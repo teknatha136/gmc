@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Activity Diagrams — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      .big-card { background:white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.3rem; max-width:1050px; width:100%; }
+      .big-card h4 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-bottom:0.45rem; }
+      .big-card ul { padding-left:1.2rem; margin:0.4rem 0; }
+      .big-card li { font-size:0.92rem; line-height:1.7; color:var(--text); margin:0.2rem 0; }
+
+      .sym-grid { display:grid; grid-template-columns: repeat(5, 1fr); gap:0.6rem; max-width:1180px; width:100%; }
+      @media (max-width: 900px) { .sym-grid { grid-template-columns: repeat(2, 1fr); } }
+      .sym-card { background:white; border:1px solid var(--border); border-radius:10px; padding:0.8rem 0.7rem; display:flex; flex-direction:column; align-items:center; text-align:center; }
+      .sym-card .shape { height:60px; display:flex; align-items:center; justify-content:center; margin-bottom:0.45rem; }
+      .sym-card h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.9rem; margin-bottom:0.2rem; }
+      .sym-card p { font-size:0.73rem; color:var(--muted); line-height:1.45; }
+
+      .diagram { background:white; border:1px solid var(--border); border-radius:10px; padding:1rem; max-width:1100px; width:100%; overflow-x:auto; }
+      .diagram svg { display:block; margin:0 auto; }
+      .diagram .caption { font-size:0.82rem; color:var(--muted); margin-top:0.6rem; text-align:center; font-style:italic; }
+
+      .dual { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px) { .dual { grid-template-columns: 1fr; } }
+      .dual-bad { background:#FFF5F7; border:1px solid #FADCE3; border-radius:10px; padding:0.9rem 1.1rem; }
+      .dual-good { background:#F3FAE9; border:1px solid #D4E8BD; border-radius:10px; padding:0.9rem 1.1rem; }
+      .dual-bad h5 { color:var(--red); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.4rem; }
+      .dual-good h5 { color:#3D7A3D; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.4rem; }
+      .dual ul { padding-left:1.1rem; margin:0; }
+      .dual li { font-size:0.85rem; line-height:1.65; color:var(--text); margin:0.2rem 0; }
+
+      .step-row { display:flex; gap:0.9rem; padding:0.55rem 0; border-bottom:1px solid var(--border); align-items:flex-start; }
+      .step-row:last-child { border-bottom:none; }
+      .step-num { background:var(--blue); color:white; font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; min-width:32px; height:32px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:0.85rem; }
+      .step-body { flex:1; font-size:0.92rem; line-height:1.65; color:var(--text); }
+      .step-body strong { color:var(--indigo); }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient bg-dark" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>Diagrams · 05 of 06</div></div>
+          <h1 class="display" style="color:white">
+            <span style="color: var(--amber)">Activity</span><br />
+            <span style="color: white">Diagrams (UML)</span>
+          </h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85)">UML's answer to flowcharts — with proper support for parallel work, forks, joins, and object flow. The diagram for software workflows.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">UML standard</span>
+            <span class="class-tag tag-blue">Parallel flows</span>
+            <span class="class-tag tag-blue">Fork · Join</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 WHY -->
+      <div class="slide bg-indigo" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span></div>
+        <div class="center" style="max-width:900px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Why activity diagrams exist</div>
+          <h1 class="display" style="color:white; font-size:2.3rem; line-height:1.25">"Three things happen at once. Then we wait for all three."</h1>
+          <p style="color: rgba(255,255,255,0.85); font-size: 1.05rem; margin-top:1.5rem; line-height:1.85">
+            A flowchart can't show that. Its arrows are strictly sequential — one thing, then the next.<br><br>
+            But real software workflows fork: charge the card AND reserve inventory AND email the customer — at the same time, then re-sync.
+          </p>
+          <p style="color: var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.15rem; margin-top:1.5rem">Activity diagrams are flowcharts that handle parallelism properly.</p>
+        </div>
+      </div>
+
+      <!-- 3 SIMPLEST -->
+      <div class="slide accent-blue bg-subtle" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> The simplest possible activity diagram</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Same as flowchart · just rounder rectangles</h2></div>
+          <div class="diagram">
+            <svg width="780" height="120" viewBox="0 0 780 120">
+              <circle cx="50" cy="60" r="11" fill="#001F35"/>
+              <rect x="110" y="42" width="160" height="36" rx="18" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="190" y="64" text-anchor="middle" font-family="Open Sans" font-size="13">Receive request</text>
+              <rect x="320" y="42" width="160" height="36" rx="18" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="400" y="64" text-anchor="middle" font-family="Open Sans" font-size="13">Validate input</text>
+              <rect x="530" y="42" width="160" height="36" rx="18" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="610" y="64" text-anchor="middle" font-family="Open Sans" font-size="13">Send response</text>
+              <circle cx="730" cy="60" r="13" fill="#fff" stroke="#001F35" stroke-width="2"/>
+              <circle cx="730" cy="60" r="7" fill="#001F35"/>
+              <line x1="61" y1="60" x2="110" y2="60" stroke="#001F35" stroke-width="1.5"/><polygon points="110,60 102,56 102,64" fill="#001F35"/>
+              <line x1="270" y1="60" x2="320" y2="60" stroke="#001F35" stroke-width="1.5"/><polygon points="320,60 312,56 312,64" fill="#001F35"/>
+              <line x1="480" y1="60" x2="530" y2="60" stroke="#001F35" stroke-width="1.5"/><polygon points="530,60 522,56 522,64" fill="#001F35"/>
+              <line x1="690" y1="60" x2="717" y2="60" stroke="#001F35" stroke-width="1.5"/><polygon points="717,60 709,56 709,64" fill="#001F35"/>
+            </svg>
+            <div class="caption">A complete activity diagram. Filled black dot = start. Bullseye = end. Pill-shaped rectangles = actions.</div>
+          </div>
+          <div class="big-card">
+            <ul>
+              <li><strong>Filled dot</strong> = initial node (start). Always exactly one per diagram.</li>
+              <li><strong>Bullseye</strong> = activity final node (end). Can have multiple — one per outcome.</li>
+              <li><strong>Pill rectangles</strong> = actions. More rounded than BPMN/flowchart rectangles — that's the visual signal "this is UML".</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 READING RULE -->
+      <div class="slide accent-blue" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> Reading rule · same as flowchart, plus one twist</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Find the dot · follow arrows · respect the bars</h2></div>
+          <div class="big-card">
+            <ol style="padding-left:1.3rem; margin:0.4rem 0; font-size:0.94rem; line-height:1.85; color:var(--text)">
+              <li><strong>Find the filled dot</strong> — that's where you start.</li>
+              <li><strong>Follow the arrows</strong> through actions, doing each one.</li>
+              <li><strong>If you hit a diamond</strong> — answer the guard condition, take that exit.</li>
+              <li><strong>If you hit a thick bar with multiple arrows out</strong> — all those things happen <em>at the same time</em>. (This is the new shape.)</li>
+              <li><strong>If you hit a thick bar with multiple arrows in</strong> — wait for ALL of them to finish before continuing.</li>
+              <li><strong>Stop at a bullseye.</strong> Done.</li>
+            </ol>
+            <p style="font-size:0.92rem; margin-top:0.6rem"><strong>The big idea:</strong> diamonds = "pick one path", bars = "do all paths". That distinction is what activity diagrams add over flowcharts.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 SHAPES -->
+      <div class="slide accent-blue bg-subtle" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span> Core shapes · five plus an object</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Master five · meet object node sometimes</h2></div>
+          <div class="sym-grid">
+            <div class="sym-card">
+              <div class="shape"><svg width="60" height="50"><circle cx="30" cy="25" r="10" fill="#001F35"/></svg></div>
+              <h6>Initial node</h6>
+              <p>Filled dot. Start. Exactly one.</p>
+            </div>
+            <div class="sym-card">
+              <div class="shape"><svg width="60" height="50"><circle cx="30" cy="25" r="13" fill="#fff" stroke="#001F35" stroke-width="2"/><circle cx="30" cy="25" r="7" fill="#001F35"/></svg></div>
+              <h6>Final node</h6>
+              <p>Bullseye. End. Can be several.</p>
+            </div>
+            <div class="sym-card">
+              <div class="shape"><svg width="100" height="44"><rect x="6" y="10" width="88" height="28" rx="14" fill="#fff" stroke="#0066B2" stroke-width="2"/></svg></div>
+              <h6>Action</h6>
+              <p>Pill. A single step.</p>
+            </div>
+            <div class="sym-card">
+              <div class="shape"><svg width="60" height="56"><polygon points="30,6 54,30 30,54 6,30" fill="#fff" stroke="#247EC1" stroke-width="2"/></svg></div>
+              <h6>Decision</h6>
+              <p>Diamond. Pick one path.</p>
+            </div>
+            <div class="sym-card">
+              <div class="shape"><svg width="80" height="40"><rect x="4" y="17" width="62" height="6" fill="#001F35"/></svg></div>
+              <h6>Fork / Join bar</h6>
+              <p>Thick bar. Parallel split / re-sync.</p>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:900px; font-style:italic">There's also <strong>Object node</strong> (sharp-cornered rectangle) for showing data flowing between actions. Useful sometimes; skip it when you don't need it.</p>
+        </div>
+      </div>
+
+      <!-- 6 DIAMOND VS BAR -->
+      <div class="slide accent-blue" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> Diamond vs. bar · the crucial distinction</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Choice flow vs. parallel flow</h2></div>
+          <div class="dual">
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--amber); padding:1rem 1.2rem;">
+              <div style="text-align:center; margin-bottom:0.5rem"><svg width="200" height="120"><polygon points="100,10 140,55 100,100 60,55" fill="#fff" stroke="#247EC1" stroke-width="2"/><line x1="60" y1="55" x2="20" y2="55" stroke="#001F35" stroke-width="1.5"/><polygon points="20,55 28,51 28,59" fill="#001F35"/><line x1="140" y1="55" x2="180" y2="55" stroke="#001F35" stroke-width="1.5"/><polygon points="180,55 172,51 172,59" fill="#001F35"/><text x="40" y="48" font-family="Open Sans" font-size="9" fill="#D80032">[no]</text><text x="155" y="48" font-family="Open Sans" font-size="9" fill="#3D7A3D">[yes]</text></svg></div>
+              <h4 style="color:var(--indigo); font-size:1rem; margin-bottom:0.4rem;">Diamond · choice flow</h4>
+              <p style="font-size:0.92rem; line-height:1.65; color:var(--text)">Exactly one outgoing arrow is followed. Each arrow has a <strong>guard condition</strong> in square brackets: <code>[yes]</code>, <code>[score &gt; 700]</code>.</p>
+              <p style="font-size:0.85rem; color:var(--muted); margin-top:0.4rem">"Is the user premium or free?" — only one branch.</p>
+            </div>
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--blue); padding:1rem 1.2rem;">
+              <div style="text-align:center; margin-bottom:0.5rem"><svg width="200" height="120"><rect x="20" y="55" width="160" height="6" fill="#001F35"/><line x1="60" y1="61" x2="60" y2="100" stroke="#001F35" stroke-width="1.5"/><polygon points="60,100 56,93 64,93" fill="#001F35"/><line x1="100" y1="61" x2="100" y2="100" stroke="#001F35" stroke-width="1.5"/><polygon points="100,100 96,93 104,93" fill="#001F35"/><line x1="140" y1="61" x2="140" y2="100" stroke="#001F35" stroke-width="1.5"/><polygon points="140,100 136,93 144,93" fill="#001F35"/><line x1="100" y1="20" x2="100" y2="55" stroke="#001F35" stroke-width="1.5"/><polygon points="100,55 96,48 104,48" fill="#001F35"/></svg></div>
+              <h4 style="color:var(--indigo); font-size:1rem; margin-bottom:0.4rem;">Fork bar · parallel flow</h4>
+              <p style="font-size:0.92rem; line-height:1.65; color:var(--text)">All outgoing arrows are followed <strong>simultaneously</strong>. No conditions. They re-sync at a matching <strong>join</strong> bar downstream.</p>
+              <p style="font-size:0.85rem; color:var(--muted); margin-top:0.4rem">"Charge AND reserve AND email" — all three at once.</p>
+            </div>
+          </div>
+          <div class="big-card" style="max-width:1000px">
+            <h4>Iron rule · forks need joins</h4>
+            <p style="font-size:0.92rem; line-height:1.7">Every fork bar must have a matching join bar downstream where the parallel branches re-sync. Without the join, the diagram is incorrect — the main flow continues without waiting for parallel branches to finish.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7 EXAMPLE 1: ORDER FULFILLMENT -->
+      <div class="slide accent-blue bg-subtle" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> Example 1 · online order fulfillment</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">One choice + one parallel block</h2></div>
+          <div class="diagram">
+            <svg width="760" height="380" viewBox="0 0 760 380">
+              <circle cx="380" cy="25" r="10" fill="#001F35"/>
+              <rect x="320" y="55" width="120" height="34" rx="16" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="380" y="77" text-anchor="middle" font-family="Open Sans" font-size="12">Place order</text>
+              <polygon points="380,105 410,135 380,165 350,135" fill="#fff" stroke="#247EC1" stroke-width="2"/>
+              <text x="380" y="133" text-anchor="middle" font-family="Open Sans" font-size="11">In</text>
+              <text x="380" y="147" text-anchor="middle" font-family="Open Sans" font-size="11">stock?</text>
+              <rect x="540" y="120" width="160" height="34" rx="16" fill="#fff" stroke="#D80032" stroke-width="2"/>
+              <text x="620" y="142" text-anchor="middle" font-family="Open Sans" font-size="12" fill="#D80032">Notify out-of-stock</text>
+              <circle cx="630" cy="180" r="13" fill="#fff" stroke="#001F35" stroke-width="2"/>
+              <circle cx="630" cy="180" r="7" fill="#001F35"/>
+              <rect x="240" y="188" width="280" height="6" fill="#001F35"/>
+              <rect x="140" y="220" width="140" height="34" rx="16" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="210" y="242" text-anchor="middle" font-family="Open Sans" font-size="12">Charge payment</text>
+              <rect x="310" y="220" width="140" height="34" rx="16" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="380" y="242" text-anchor="middle" font-family="Open Sans" font-size="12">Pick from warehouse</text>
+              <rect x="480" y="220" width="140" height="34" rx="16" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="550" y="242" text-anchor="middle" font-family="Open Sans" font-size="12">Send confirmation</text>
+              <rect x="240" y="284" width="280" height="6" fill="#001F35"/>
+              <rect x="320" y="308" width="120" height="34" rx="16" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="380" y="330" text-anchor="middle" font-family="Open Sans" font-size="12">Ship order</text>
+              <circle cx="380" cy="360" r="13" fill="#fff" stroke="#001F35" stroke-width="2"/>
+              <circle cx="380" cy="360" r="7" fill="#001F35"/>
+              <line x1="380" y1="35" x2="380" y2="55" stroke="#001F35" stroke-width="1.5"/><polygon points="380,55 376,48 384,48" fill="#001F35"/>
+              <line x1="380" y1="89" x2="380" y2="105" stroke="#001F35" stroke-width="1.5"/><polygon points="380,105 376,98 384,98" fill="#001F35"/>
+              <line x1="380" y1="165" x2="380" y2="188" stroke="#001F35" stroke-width="1.5"/><polygon points="380,188 376,181 384,181" fill="#001F35"/>
+              <text x="388" y="180" font-family="Open Sans" font-size="10" fill="#3D7A3D">[yes]</text>
+              <line x1="410" y1="135" x2="540" y2="135" stroke="#001F35" stroke-width="1.5"/><polygon points="540,135 533,131 533,139" fill="#001F35"/>
+              <text x="455" y="129" font-family="Open Sans" font-size="10" fill="#D80032">[no]</text>
+              <line x1="620" y1="154" x2="625" y2="168" stroke="#001F35" stroke-width="1.5"/><polygon points="625,168 619,162 626,160" fill="#001F35"/>
+              <line x1="210" y1="194" x2="210" y2="220" stroke="#001F35" stroke-width="1.5"/><polygon points="210,220 206,213 214,213" fill="#001F35"/>
+              <line x1="380" y1="194" x2="380" y2="220" stroke="#001F35" stroke-width="1.5"/><polygon points="380,220 376,213 384,213" fill="#001F35"/>
+              <line x1="550" y1="194" x2="550" y2="220" stroke="#001F35" stroke-width="1.5"/><polygon points="550,220 546,213 554,213" fill="#001F35"/>
+              <line x1="210" y1="254" x2="210" y2="284" stroke="#001F35" stroke-width="1.5"/><polygon points="210,284 206,277 214,277" fill="#001F35"/>
+              <line x1="380" y1="254" x2="380" y2="284" stroke="#001F35" stroke-width="1.5"/><polygon points="380,284 376,277 384,277" fill="#001F35"/>
+              <line x1="550" y1="254" x2="550" y2="284" stroke="#001F35" stroke-width="1.5"/><polygon points="550,284 546,277 554,277" fill="#001F35"/>
+              <line x1="380" y1="290" x2="380" y2="308" stroke="#001F35" stroke-width="1.5"/><polygon points="380,308 376,301 384,301" fill="#001F35"/>
+              <line x1="380" y1="342" x2="380" y2="347" stroke="#001F35" stroke-width="1.5"/><polygon points="380,347 376,340 384,340" fill="#001F35"/>
+            </svg>
+            <div class="caption">Diamond at top = choice (in stock yes/no). Top fork bar splits into 3 parallel actions; bottom join bar waits for all 3 to finish before shipping.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8 EXAMPLE 2: ATM WITH PARALLEL -->
+      <div class="slide accent-blue" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> Example 2 · ATM withdrawal · parallel finishing tasks</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Same ATM as flowchart · but with parallel "finishing" steps</h2></div>
+          <div class="diagram">
+            <svg width="800" height="380" viewBox="0 0 800 380">
+              <circle cx="400" cy="20" r="10" fill="#001F35"/>
+              <rect x="320" y="46" width="160" height="34" rx="16" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="400" y="68" text-anchor="middle" font-family="Open Sans" font-size="12">Authenticate user</text>
+              <rect x="320" y="100" width="160" height="34" rx="16" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="400" y="122" text-anchor="middle" font-family="Open Sans" font-size="12">Enter amount</text>
+              <polygon points="400,150 430,180 400,210 370,180" fill="#fff" stroke="#247EC1" stroke-width="2"/>
+              <text x="400" y="178" text-anchor="middle" font-family="Open Sans" font-size="11">Funds</text>
+              <text x="400" y="192" text-anchor="middle" font-family="Open Sans" font-size="11">enough?</text>
+              <rect x="560" y="165" width="160" height="34" rx="16" fill="#fff" stroke="#D80032" stroke-width="2"/>
+              <text x="640" y="187" text-anchor="middle" font-family="Open Sans" font-size="12" fill="#D80032">Show insufficient funds</text>
+              <circle cx="650" cy="225" r="13" fill="#fff" stroke="#001F35" stroke-width="2"/>
+              <circle cx="650" cy="225" r="7" fill="#001F35"/>
+              <!-- Fork after funds check -->
+              <rect x="240" y="232" width="320" height="6" fill="#001F35"/>
+              <rect x="120" y="265" width="140" height="34" rx="16" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="190" y="287" text-anchor="middle" font-family="Open Sans" font-size="12">Dispense cash</text>
+              <rect x="330" y="265" width="140" height="34" rx="16" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="400" y="287" text-anchor="middle" font-family="Open Sans" font-size="12">Print receipt</text>
+              <rect x="540" y="265" width="160" height="34" rx="16" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="620" y="287" text-anchor="middle" font-family="Open Sans" font-size="12">Log transaction</text>
+              <rect x="240" y="325" width="320" height="6" fill="#001F35"/>
+              <rect x="320" y="345" width="160" height="0" fill="none"/>
+              <circle cx="400" cy="365" r="13" fill="#fff" stroke="#001F35" stroke-width="2"/>
+              <circle cx="400" cy="365" r="7" fill="#001F35"/>
+              <line x1="400" y1="30" x2="400" y2="46" stroke="#001F35" stroke-width="1.5"/><polygon points="400,46 396,39 404,39" fill="#001F35"/>
+              <line x1="400" y1="80" x2="400" y2="100" stroke="#001F35" stroke-width="1.5"/><polygon points="400,100 396,93 404,93" fill="#001F35"/>
+              <line x1="400" y1="134" x2="400" y2="150" stroke="#001F35" stroke-width="1.5"/><polygon points="400,150 396,143 404,143" fill="#001F35"/>
+              <line x1="430" y1="180" x2="560" y2="180" stroke="#001F35" stroke-width="1.5"/><polygon points="560,180 553,176 553,184" fill="#001F35"/>
+              <text x="475" y="174" font-family="Open Sans" font-size="10" fill="#D80032">[no]</text>
+              <line x1="640" y1="199" x2="648" y2="213" stroke="#001F35" stroke-width="1.5"/><polygon points="648,213 642,208 649,206" fill="#001F35"/>
+              <line x1="400" y1="210" x2="400" y2="232" stroke="#001F35" stroke-width="1.5"/><polygon points="400,232 396,225 404,225" fill="#001F35"/>
+              <text x="408" y="225" font-family="Open Sans" font-size="10" fill="#3D7A3D">[yes]</text>
+              <line x1="190" y1="238" x2="190" y2="265" stroke="#001F35" stroke-width="1.5"/><polygon points="190,265 186,258 194,258" fill="#001F35"/>
+              <line x1="400" y1="238" x2="400" y2="265" stroke="#001F35" stroke-width="1.5"/><polygon points="400,265 396,258 404,258" fill="#001F35"/>
+              <line x1="620" y1="238" x2="620" y2="265" stroke="#001F35" stroke-width="1.5"/><polygon points="620,265 616,258 624,258" fill="#001F35"/>
+              <line x1="190" y1="299" x2="190" y2="325" stroke="#001F35" stroke-width="1.5"/><polygon points="190,325 186,318 194,318" fill="#001F35"/>
+              <line x1="400" y1="299" x2="400" y2="325" stroke="#001F35" stroke-width="1.5"/><polygon points="400,325 396,318 404,318" fill="#001F35"/>
+              <line x1="620" y1="299" x2="620" y2="325" stroke="#001F35" stroke-width="1.5"/><polygon points="620,325 616,318 624,318" fill="#001F35"/>
+              <line x1="400" y1="331" x2="400" y2="352" stroke="#001F35" stroke-width="1.5"/><polygon points="400,352 396,345 404,345" fill="#001F35"/>
+            </svg>
+            <div class="caption">After "funds enough?" passes, the ATM does three things in parallel: dispenses cash, prints receipt, logs the transaction. Only when ALL three finish does the session end. Flowchart can't show this — activity diagram can.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9 EXAMPLE 3: BUILD PIPELINE -->
+      <div class="slide accent-blue bg-subtle" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> Example 3 · CI build pipeline</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Three checks in parallel · merge result · deploy or fail</h2></div>
+          <div class="diagram">
+            <svg width="820" height="380" viewBox="0 0 820 380">
+              <circle cx="410" cy="20" r="10" fill="#001F35"/>
+              <rect x="330" y="46" width="160" height="34" rx="16" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="410" y="68" text-anchor="middle" font-family="Open Sans" font-size="12">Push to main branch</text>
+              <rect x="330" y="100" width="160" height="34" rx="16" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="410" y="122" text-anchor="middle" font-family="Open Sans" font-size="12">Build artifact</text>
+              <rect x="220" y="158" width="380" height="6" fill="#001F35"/>
+              <rect x="100" y="190" width="160" height="34" rx="16" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="180" y="212" text-anchor="middle" font-family="Open Sans" font-size="12">Run unit tests</text>
+              <rect x="320" y="190" width="180" height="34" rx="16" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="410" y="212" text-anchor="middle" font-family="Open Sans" font-size="12">Run security scan</text>
+              <rect x="560" y="190" width="180" height="34" rx="16" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="650" y="212" text-anchor="middle" font-family="Open Sans" font-size="12">Run lint &amp; typecheck</text>
+              <rect x="220" y="248" width="380" height="6" fill="#001F35"/>
+              <polygon points="410,275 440,305 410,335 380,305" fill="#fff" stroke="#247EC1" stroke-width="2"/>
+              <text x="410" y="303" text-anchor="middle" font-family="Open Sans" font-size="11">All</text>
+              <text x="410" y="316" text-anchor="middle" font-family="Open Sans" font-size="11">pass?</text>
+              <rect x="500" y="287" width="180" height="34" rx="16" fill="#fff" stroke="#3D7A3D" stroke-width="2"/>
+              <text x="590" y="309" text-anchor="middle" font-family="Open Sans" font-size="12" fill="#3D7A3D">Deploy to staging</text>
+              <rect x="140" y="287" width="180" height="34" rx="16" fill="#fff" stroke="#D80032" stroke-width="2"/>
+              <text x="230" y="309" text-anchor="middle" font-family="Open Sans" font-size="12" fill="#D80032">Notify · block deploy</text>
+              <circle cx="590" cy="350" r="13" fill="#fff" stroke="#001F35" stroke-width="2"/>
+              <circle cx="590" cy="350" r="7" fill="#001F35"/>
+              <circle cx="230" cy="350" r="13" fill="#fff" stroke="#001F35" stroke-width="2"/>
+              <circle cx="230" cy="350" r="7" fill="#001F35"/>
+              <line x1="410" y1="30" x2="410" y2="46" stroke="#001F35" stroke-width="1.5"/><polygon points="410,46 406,39 414,39" fill="#001F35"/>
+              <line x1="410" y1="80" x2="410" y2="100" stroke="#001F35" stroke-width="1.5"/><polygon points="410,100 406,93 414,93" fill="#001F35"/>
+              <line x1="410" y1="134" x2="410" y2="158" stroke="#001F35" stroke-width="1.5"/><polygon points="410,158 406,151 414,151" fill="#001F35"/>
+              <line x1="180" y1="164" x2="180" y2="190" stroke="#001F35" stroke-width="1.5"/><polygon points="180,190 176,183 184,183" fill="#001F35"/>
+              <line x1="410" y1="164" x2="410" y2="190" stroke="#001F35" stroke-width="1.5"/><polygon points="410,190 406,183 414,183" fill="#001F35"/>
+              <line x1="650" y1="164" x2="650" y2="190" stroke="#001F35" stroke-width="1.5"/><polygon points="650,190 646,183 654,183" fill="#001F35"/>
+              <line x1="180" y1="224" x2="180" y2="248" stroke="#001F35" stroke-width="1.5"/><polygon points="180,248 176,241 184,241" fill="#001F35"/>
+              <line x1="410" y1="224" x2="410" y2="248" stroke="#001F35" stroke-width="1.5"/><polygon points="410,248 406,241 414,241" fill="#001F35"/>
+              <line x1="650" y1="224" x2="650" y2="248" stroke="#001F35" stroke-width="1.5"/><polygon points="650,248 646,241 654,241" fill="#001F35"/>
+              <line x1="410" y1="254" x2="410" y2="275" stroke="#001F35" stroke-width="1.5"/><polygon points="410,275 406,268 414,268" fill="#001F35"/>
+              <line x1="440" y1="305" x2="500" y2="305" stroke="#001F35" stroke-width="1.5"/><polygon points="500,305 492,301 492,309" fill="#001F35"/>
+              <text x="455" y="299" font-family="Open Sans" font-size="10" fill="#3D7A3D">[yes]</text>
+              <line x1="380" y1="305" x2="320" y2="305" stroke="#001F35" stroke-width="1.5"/><polygon points="320,305 328,301 328,309" fill="#001F35"/>
+              <text x="335" y="299" font-family="Open Sans" font-size="10" fill="#D80032">[no]</text>
+              <line x1="590" y1="321" x2="590" y2="337" stroke="#001F35" stroke-width="1.5"/><polygon points="590,337 586,330 594,330" fill="#001F35"/>
+              <line x1="230" y1="321" x2="230" y2="337" stroke="#001F35" stroke-width="1.5"/><polygon points="230,337 226,330 234,330" fill="#001F35"/>
+            </svg>
+            <div class="caption">A modern CI/CD pipeline. Three quality gates run in parallel after the build. The diamond waits for all three results, then deploys or fails. Two final nodes — one for success, one for failure.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10 PARTITIONS -->
+      <div class="slide accent-blue" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> Partitions · UML's name for swimlanes</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">When parallelism AND actor responsibility both matter</h2></div>
+          <div class="big-card">
+            <p style="font-size:0.95rem; line-height:1.7">An activity diagram can be divided into <strong>partitions</strong> — UML's term for swimlanes. Each partition represents an actor or subsystem. Every action sits in the partition of whoever does it.</p>
+            <p style="font-size:0.92rem; margin-top:0.5rem">Use partitions when:</p>
+            <ul>
+              <li>You need to show parallel work AND who is doing each parallel branch</li>
+              <li>You're modeling a software workflow with UI / service / database layers, and some of the work is concurrent</li>
+              <li>Your team is already in UML — partitions read naturally to UML-fluent readers</li>
+            </ul>
+            <p style="margin-top:0.6rem; font-style:italic; color:var(--muted); font-size:0.88rem">If you don't need both, prefer a plain swimlane diagram (no partitions) or a plain activity diagram (no swimlanes). Keep it simple.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11 HOW TO DRAW -->
+      <div class="slide accent-blue bg-subtle" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> How to draw one from scratch</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Five steps · adapt as the workflow grows</h2></div>
+          <div class="big-card">
+            <div class="step-row">
+              <div class="step-num">1</div>
+              <div class="step-body"><strong>Pick the trigger.</strong> The dot. What kicks this off? "API receives request", "User clicks Submit".</div>
+            </div>
+            <div class="step-row">
+              <div class="step-num">2</div>
+              <div class="step-body"><strong>Sketch the happy path</strong> as a sequence of actions. Pill rectangles, verb + object, one per atomic step.</div>
+            </div>
+            <div class="step-row">
+              <div class="step-num">3</div>
+              <div class="step-body"><strong>Mark the choices.</strong> Anywhere the path branches based on a value — diamond. Label each exit with a guard <code>[condition]</code>.</div>
+            </div>
+            <div class="step-row">
+              <div class="step-num">4</div>
+              <div class="step-body"><strong>Mark the parallels.</strong> Anywhere multiple things run at once — fork bar. Anywhere they re-sync — join bar. Forks must have joins.</div>
+            </div>
+            <div class="step-row">
+              <div class="step-num">5</div>
+              <div class="step-body"><strong>Add ends.</strong> Each terminating path needs a bullseye. A failed path can have its own bullseye distinct from the success bullseye.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12 WHEN -->
+      <div class="slide accent-blue" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> When to reach for activity diagrams</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Software workflows for technical readers</h2></div>
+          <div class="dual">
+            <div class="dual-good">
+              <h5>✅ Use an activity diagram when…</h5>
+              <ul>
+                <li>You're modeling a software workflow for developers</li>
+                <li>Parallel steps exist and must be shown</li>
+                <li>Your team already uses UML</li>
+                <li>You're "realizing" a use case — its detailed flow</li>
+                <li>Object flow matters (what data moves between actions)</li>
+              </ul>
+            </div>
+            <div class="dual-bad">
+              <h5>⚠️ Pick something else when…</h5>
+              <ul>
+                <li>Audience is business-side → BPMN or swimlane</li>
+                <li>Process crosses organizations → BPMN with pools</li>
+                <li>No parallelism, no object flow → flowchart</li>
+                <li>You need to drive automation → BPMN 2.0</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 13 PITFALLS -->
+      <div class="slide accent-blue bg-subtle" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> Common mistakes</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Mostly fork/join discipline</h2></div>
+          <div class="big-card">
+            <ul>
+              <li><strong>Diamond used for parallel</strong> — diamond = pick one, fork bar = do all. Not interchangeable.</li>
+              <li><strong>Fork without matching join</strong> — main flow continues without waiting for parallel branches.</li>
+              <li><strong>Unlabeled guard conditions on diamonds</strong> — every outgoing arrow needs <code>[condition]</code>.</li>
+              <li><strong>Multiple initial nodes</strong> — only one filled dot. Single start.</li>
+              <li><strong>Mixing notations</strong> — don't put a BPMN circle event on a UML activity diagram. Pick one.</li>
+              <li><strong>Using it for non-technical readers</strong> — convert to BPMN or plain swimlane.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 14 WRAP -->
+      <div class="slide bg-indigo" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> Wrap-up</div>
+        <div class="center" style="max-width:880px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key Takeaways</div>
+          <h2 class="heading" style="color:white">Activity diagrams · what to carry forward</h2>
+          <ul class="reveal-list" style="color:rgba(255,255,255,0.9); text-align:left; max-width:780px; margin:1.5rem auto; font-size:0.98rem; line-height:1.9;">
+            <li>✅ <strong>UML's flowchart</strong> · adds parallelism and object flow</li>
+            <li>✅ <strong>Initial node · action · decision · fork/join · final node</strong></li>
+            <li>✅ Diamond = <strong>pick one</strong>. Fork bar = <strong>do all</strong>.</li>
+            <li>✅ Every <strong>fork needs a join</strong>. Every diamond exit needs a <code>[guard]</code>.</li>
+            <li>✅ Best audience: <strong>developers and architects</strong></li>
+            <li>✅ For business audiences, prefer <strong>BPMN or swimlane</strong></li>
+          </ul>
+          <p style="color:var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-top:1.5rem">Right tool when parallelism and object flow matter and the reader is technical.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 14</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>

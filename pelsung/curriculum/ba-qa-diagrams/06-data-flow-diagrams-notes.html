@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Flow Diagrams — BA Diagrams 06</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#0066B2; --indigo:#001F35; --amber:#247EC1; --green:#7BC950; --purple:#4796D1; --red:#D80032; --text:#1B2021; --muted:#7B7C7F; --faint:#9CA3AF; --surf:#fff; --bg:#F9F9F9; --border:#EDEDED; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Open Sans','Aptos',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; font-size:17px; -webkit-font-smoothing:antialiased; }
+    h1,h2,h3,h4,h5,h6 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:400; letter-spacing:-0.01em; }
+    a { color: var(--blue); }
+    .hero { background:var(--surf); border-bottom:1px solid var(--border); padding:4rem 2rem 3rem; text-align:center; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background: linear-gradient(135deg, #0067A3, #002D72); }
+    .logo-corner { position:absolute; top: 1.25rem; left: 1.5rem; opacity:0.85; }
+    .logo-corner img { height: 34px; }
+    .hero-badge { display:inline-flex; align-items:center; gap:0.5rem; background:var(--bg); border:1px solid var(--border); border-radius:100px; padding:0.35rem 1rem; font-size:0.75rem; font-weight:700; color:var(--muted); letter-spacing:0.07em; text-transform:uppercase; margin-bottom:1.5rem; }
+    .hero-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--amber); }
+    .hero h1 { font-size:clamp(2rem,5vw,3.5rem); line-height:1.15; margin-bottom:0.75rem; }
+    .c-blue{color:var(--blue);} .c-indigo{color:var(--indigo);}
+    .hero-sub { font-size:1rem; color:var(--muted); margin-bottom:2rem; max-width:760px; margin-left:auto; margin-right:auto; }
+    .hero-tags { display:flex; justify-content:center; gap:0.6rem; flex-wrap:wrap; }
+    .hero-tag { padding:0.3rem 0.9rem; border-radius:8px; font-size:0.78rem; font-weight:600; background:#E6F0F8; color:var(--blue); }
+    .container { max-width:1040px; margin:0 auto; padding:0 2rem 6rem; }
+    .toc { background:var(--surf); border:1px solid var(--border); border-radius:16px; padding:1.75rem 2rem; margin:2.5rem 0; }
+    .toc h3 { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); margin-bottom:1.25rem; }
+    .toc ol { list-style: none; counter-reset: step; }
+    .toc li { counter-increment: step; padding:0.45rem 0; border-bottom:1px solid var(--border); }
+    .toc li:last-child { border-bottom:none; }
+    .toc li::before { content: counter(step, decimal-leading-zero); color:var(--faint); font-family:'Bahnschrift','Segoe UI',sans-serif; margin-right:0.8rem; font-size:0.9rem; }
+    .toc a { text-decoration:none; color:var(--text); font-weight:500; }
+    .toc a:hover { color: var(--blue); }
+    section.chapter { margin: 3.5rem 0; }
+    .chapter-head { margin-bottom:1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
+    .chapter-eyebrow { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--blue); margin-bottom:0.3rem; }
+    .chapter-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--indigo); }
+    p { margin: 0.7rem 0; }
+    ul, ol { margin: 0.6rem 0 0.6rem 1.3rem; }
+    li { margin: 0.3rem 0; }
+    strong { color: var(--indigo); }
+    .callout { background:var(--surf); border:1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 10px; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+    .callout.amber { border-left-color: var(--amber); }
+    .callout.green { border-left-color: var(--green); }
+    .callout.red { border-left-color: var(--red); }
+    .callout.indigo { border-left-color: var(--indigo); }
+    .callout h4 { font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--indigo); }
+    .pair { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin:1rem 0; }
+    @media (max-width: 720px) { .pair { grid-template-columns: 1fr; } }
+    .big-tbl { background:var(--surf); border:1px solid var(--border); border-radius:10px; overflow:auto; margin:1rem 0; }
+    .big-tbl table { width:100%; border-collapse:collapse; font-size:0.9rem; }
+    .big-tbl th { background:var(--bg); padding:0.6rem 0.9rem; text-align:left; color:var(--muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; border-bottom:1px solid var(--border); }
+    .big-tbl td { padding:0.6rem 0.9rem; border-bottom:1px solid var(--border); color:var(--text); vertical-align:top; line-height:1.6; }
+    .big-tbl tr:last-child td { border-bottom:none; }
+    .big-tbl td:first-child { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; }
+    .sym-row { display:flex; align-items:center; gap:1rem; padding:0.8rem 0; border-bottom:1px solid var(--border); }
+    .sym-row:last-child { border-bottom:none; }
+    .sym-row .sym-shape { flex-shrink:0; width:120px; display:flex; justify-content:center; align-items:center; }
+    .sym-row .sym-body h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.02rem; margin-bottom:0.2rem; }
+    .sym-row .sym-body p { font-size:0.92rem; color:var(--text); line-height:1.6; margin:0; }
+    .diagram-box { background:var(--surf); border:1px solid var(--border); border-radius:10px; padding:1rem; margin:1.25rem 0; overflow-x:auto; }
+    .diagram-box svg { display:block; margin:0 auto; }
+    .diagram-box .caption { font-size:0.82rem; color:var(--muted); margin-top:0.6rem; text-align:center; font-style:italic; }
+    .summary { background: linear-gradient(135deg, #F9F9F9, #EDEDED); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+    .summary h4 { color: var(--indigo); margin-bottom: 0.5rem; font-size: 0.95rem; }
+    .compare-tbl { background:#FAFBFC; border:1px solid var(--border); border-radius:10px; padding:1rem 1.2rem; margin:1rem 0; font-size:0.92rem; }
+    footer { text-align:center; padding: 2rem 1rem 3rem; color: var(--faint); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+    footer img { height: 28px; opacity:0.7; margin-bottom: 0.5rem; display: block; margin-left:auto; margin-right:auto; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="logo-corner"><img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE"></div>
+    <div class="hero-badge"><span class="dot"></span> BA · Diagrams · 06 of 06</div>
+    <h1><span class="c-blue">Data Flow</span><br><span class="c-indigo">Diagrams (DFD)</span></h1>
+    <p class="hero-sub">The diagram that answers "where does the data come from, where does it go, and where does it live?" No sequence, no decisions — just data movement. The last essential diagram in the BA toolkit.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">Context diagram</span>
+      <span class="hero-tag">Processes</span>
+      <span class="hero-tag">Data stores</span>
+      <span class="hero-tag">Yourdon / Gane-Sarson</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="toc">
+      <h3>In this note</h3>
+      <ol>
+        <li><a href="#what">What is a data flow diagram</a></li>
+        <li><a href="#symbols">The four symbols</a></li>
+        <li><a href="#levels">Levels · decomposition</a></li>
+        <li><a href="#example">Worked example · payroll system</a></li>
+        <li><a href="#vsflow">DFD vs. flowchart · the confusing cousin</a></li>
+        <li><a href="#when">When to use a DFD</a></li>
+        <li><a href="#pitfalls">Common mistakes</a></li>
+        <li><a href="#take">Key takeaways</a></li>
+      </ol>
+    </div>
+
+    <section class="chapter" id="what">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 1</div>
+        <h2>What is a data flow diagram</h2>
+      </div>
+      <p>A <strong>Data Flow Diagram (DFD)</strong> is a diagram that models how data moves through a system: where it comes from, what processes it flows through, where it's stored, and where it ends up. DFDs were introduced in the 1970s by <strong>Larry Constantine</strong> and <strong>Tom DeMarco</strong>, then popularized by <strong>Ed Yourdon</strong>. A parallel notation was developed around the same time by <strong>Chris Gane</strong> and <strong>Trish Sarson</strong>. Both are still in use.</p>
+
+      <div class="callout indigo">
+        <h4>The DFD mindset</h4>
+        <p>A DFD is not about <em>what happens</em>. It's about <em>what data moves</em>. There are no decisions, no sequence, no branching. An arrow on a DFD means "this data moves from here to there" — not "this step happens next". Mixing this up is the most common mistake.</p>
+      </div>
+
+      <p>DFDs remain highly relevant today — especially for <strong>data privacy compliance</strong> (GDPR, Bhutan's Data Protection Act, HIPAA), <strong>integration design</strong>, <strong>legacy system analysis</strong>, and as the foundation for <strong>STRIDE threat modeling</strong>.</p>
+    </section>
+
+    <section class="chapter" id="symbols">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 2</div>
+        <h2>The four symbols</h2>
+      </div>
+      <p>We'll use the Gane/Sarson notation (rounded-rectangle processes) in this note — it's the more common one in modern BA tools. Yourdon/DeMarco uses circles for processes; everything else is the same.</p>
+
+      <div class="callout">
+        <div class="sym-row">
+          <div class="sym-shape"><svg width="110" height="50"><rect x="5" y="8" width="100" height="34" fill="#fff" stroke="#001F35" stroke-width="2"/></svg></div>
+          <div class="sym-body"><h5>External entity</h5><p>A source or destination of data that lives <em>outside</em> the system. A customer, a supplier, a government agency, a partner system. Drawn as a plain rectangle (Gane/Sarson) or a shadowed square (Yourdon).</p></div>
+        </div>
+        <div class="sym-row">
+          <div class="sym-shape"><svg width="110" height="60"><rect x="5" y="8" width="100" height="44" rx="10" fill="#fff" stroke="#0066B2" stroke-width="2"/><text x="55" y="22" text-anchor="middle" font-family="Open Sans" font-size="10" fill="#0066B2">2.1</text><text x="55" y="40" text-anchor="middle" font-family="Open Sans" font-size="11">Process</text></svg></div>
+          <div class="sym-body"><h5>Process</h5><p>A function or procedure that transforms incoming data into outgoing data. Named with a verb phrase. <strong>Numbered hierarchically</strong> (1.0, 1.1, 1.2, 2.0 …) so you can refer to them from the level above.</p></div>
+        </div>
+        <div class="sym-row">
+          <div class="sym-shape"><svg width="120" height="36"><rect x="0" y="8" width="120" height="20" fill="#fff" stroke="#001F35" stroke-width="2"/><line x1="15" y1="8" x2="15" y2="28" stroke="#001F35" stroke-width="2"/><text x="55" y="22" font-family="Open Sans" font-size="11">D1  Orders</text></svg></div>
+          <div class="sym-body"><h5>Data store</h5><p>A repository of data. A database, a file, a spreadsheet, a paper folder. Open-ended rectangle (Gane/Sarson) or parallel lines (Yourdon/DeMarco). Labeled D1, D2, D3 … with a name.</p></div>
+        </div>
+        <div class="sym-row">
+          <div class="sym-shape"><svg width="120" height="34"><line x1="5" y1="18" x2="110" y2="18" stroke="#001F35" stroke-width="2"/><polygon points="110,18 102,14 102,22" fill="#001F35"/><text x="55" y="12" text-anchor="middle" font-family="Open Sans" font-size="11" fill="#247EC1">Order data</text></svg></div>
+          <div class="sym-body"><h5>Data flow</h5><p>Arrow showing data moving from one element to another. <strong>Always labeled</strong> with the name of the data being moved. Never unlabeled.</p></div>
+        </div>
+      </div>
+
+      <div class="callout red">
+        <h4>Connection rules</h4>
+        <ul>
+          <li>Data flows go: <strong>entity ↔ process</strong>, <strong>process ↔ process</strong>, <strong>process ↔ store</strong>.</li>
+          <li><strong>Never</strong>: entity ↔ entity (external parties don't talk on your DFD — your system must mediate).</li>
+          <li><strong>Never</strong>: store ↔ store (data stores can't talk directly — a process must read from one and write to the other).</li>
+          <li><strong>Never</strong>: entity ↔ store (an external party doesn't touch your store directly — it goes through a process).</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="chapter" id="levels">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 3</div>
+        <h2>Levels · decomposition</h2>
+      </div>
+      <p>DFDs are hierarchical. You start broad and drill in.</p>
+
+      <ol>
+        <li><strong>Level 0 · Context diagram.</strong> The entire system is a single process. External entities surround it. High-level data flows go in and out. One page, one picture — the 10-second-elevator view.</li>
+        <li><strong>Level 1.</strong> The single process is decomposed into its major sub-processes (typically 3–7). Data stores appear. External entities stay on the edges. All the inputs/outputs that crossed the boundary at Level 0 must still cross it here (that's the <strong>balancing rule</strong>).</li>
+        <li><strong>Level 2.</strong> Any Level 1 process that's still too complex gets its own Level 2 diagram. Its external interface again balances with the Level 1 view.</li>
+        <li><strong>Levels 3, 4, …</strong> Only if needed. Most BA work stops at Level 1 or 2.</li>
+      </ol>
+
+      <div class="callout amber">
+        <h4>The balancing rule</h4>
+        <p>When you explode a process into a child diagram, the inputs and outputs of the child <em>must</em> exactly match the inputs and outputs of the parent process. No new data appears from nowhere; no parent data disappears. This is a strict rule — it's what makes DFD decomposition reliable.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="example">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 4</div>
+        <h2>Worked example · payroll system</h2>
+      </div>
+
+      <h3 style="color:var(--indigo); font-size:1.15rem; margin:1.25rem 0 0.4rem;">Level 0 · Context diagram</h3>
+      <p>One process (the whole payroll system). Three external entities: employees submit timesheets and receive payslips; HR managers configure pay rates and receive reports; the bank receives salary transfers.</p>
+
+      <div class="diagram-box">
+        <svg width="720" height="320" viewBox="0 0 720 320">
+          <rect x="280" y="130" width="180" height="70" rx="18" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+          <text x="370" y="148" text-anchor="middle" font-family="Open Sans" font-size="11" fill="#0066B2">0</text>
+          <text x="370" y="172" text-anchor="middle" font-family="Bahnschrift" font-size="14">Payroll System</text>
+          <rect x="40" y="40" width="130" height="44" fill="#fff" stroke="#001F35" stroke-width="2"/>
+          <text x="105" y="66" text-anchor="middle" font-family="Open Sans" font-size="13">Employee</text>
+          <rect x="550" y="40" width="130" height="44" fill="#fff" stroke="#001F35" stroke-width="2"/>
+          <text x="615" y="66" text-anchor="middle" font-family="Open Sans" font-size="13">HR Manager</text>
+          <rect x="280" y="260" width="180" height="44" fill="#fff" stroke="#001F35" stroke-width="2"/>
+          <text x="370" y="286" text-anchor="middle" font-family="Open Sans" font-size="13">Bank</text>
+          <line x1="170" y1="70" x2="290" y2="140" stroke="#001F35" stroke-width="1.5"/><polygon points="290,140 282,138 286,132" fill="#001F35"/>
+          <text x="175" y="100" font-family="Open Sans" font-size="11" fill="#247EC1">Timesheet</text>
+          <line x1="290" y1="155" x2="170" y2="82" stroke="#001F35" stroke-width="1.5"/><polygon points="170,82 178,82 176,89" fill="#001F35"/>
+          <text x="180" y="130" font-family="Open Sans" font-size="11" fill="#247EC1">Payslip</text>
+          <line x1="550" y1="70" x2="450" y2="140" stroke="#001F35" stroke-width="1.5"/><polygon points="450,140 458,137 454,131" fill="#001F35"/>
+          <text x="478" y="100" font-family="Open Sans" font-size="11" fill="#247EC1">Pay rates</text>
+          <line x1="450" y1="165" x2="555" y2="82" stroke="#001F35" stroke-width="1.5"/><polygon points="555,82 547,84 549,77" fill="#001F35"/>
+          <text x="470" y="130" font-family="Open Sans" font-size="11" fill="#247EC1">Reports</text>
+          <line x1="370" y1="200" x2="370" y2="258" stroke="#001F35" stroke-width="1.5"/><polygon points="370,258 366,251 374,251" fill="#001F35"/>
+          <text x="378" y="232" font-family="Open Sans" font-size="11" fill="#247EC1">Salary transfers</text>
+        </svg>
+        <div class="caption">Level 0. One process. Three entities. Five labeled data flows. No stores at this level.</div>
+      </div>
+
+      <h3 style="color:var(--indigo); font-size:1.15rem; margin:1.75rem 0 0.4rem;">Level 1 · Decomposed</h3>
+      <p>The single "Payroll System" process becomes three: Capture timesheets, Calculate payroll, Disburse salaries. Three data stores appear. All the Level 0 external flows still cross the boundary — the diagram balances.</p>
+
+      <div class="diagram-box">
+        <svg width="880" height="360" viewBox="0 0 880 360">
+          <rect x="20" y="150" width="110" height="44" fill="#fff" stroke="#001F35" stroke-width="2"/>
+          <text x="75" y="176" text-anchor="middle" font-family="Open Sans" font-size="12">Employee</text>
+          <rect x="750" y="60" width="110" height="44" fill="#fff" stroke="#001F35" stroke-width="2"/>
+          <text x="805" y="86" text-anchor="middle" font-family="Open Sans" font-size="12">HR Manager</text>
+          <rect x="750" y="280" width="110" height="44" fill="#fff" stroke="#001F35" stroke-width="2"/>
+          <text x="805" y="306" text-anchor="middle" font-family="Open Sans" font-size="12">Bank</text>
+          <rect x="200" y="60" width="140" height="60" rx="16" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+          <text x="270" y="78" text-anchor="middle" font-family="Open Sans" font-size="10" fill="#0066B2">1.0</text>
+          <text x="270" y="102" text-anchor="middle" font-family="Open Sans" font-size="12">Capture timesheets</text>
+          <rect x="400" y="140" width="140" height="60" rx="16" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+          <text x="470" y="158" text-anchor="middle" font-family="Open Sans" font-size="10" fill="#0066B2">2.0</text>
+          <text x="470" y="182" text-anchor="middle" font-family="Open Sans" font-size="12">Calculate payroll</text>
+          <rect x="600" y="240" width="140" height="60" rx="16" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+          <text x="670" y="258" text-anchor="middle" font-family="Open Sans" font-size="10" fill="#0066B2">3.0</text>
+          <text x="670" y="282" text-anchor="middle" font-family="Open Sans" font-size="12">Disburse salaries</text>
+          <g><rect x="200" y="220" width="140" height="24" fill="#fff" stroke="#001F35" stroke-width="2"/><line x1="214" y1="220" x2="214" y2="244" stroke="#001F35" stroke-width="2"/><text x="220" y="237" font-family="Open Sans" font-size="11">D1 Timesheets</text></g>
+          <g><rect x="200" y="280" width="140" height="24" fill="#fff" stroke="#001F35" stroke-width="2"/><line x1="214" y1="280" x2="214" y2="304" stroke="#001F35" stroke-width="2"/><text x="220" y="297" font-family="Open Sans" font-size="11">D2 Pay rates</text></g>
+          <g><rect x="420" y="230" width="140" height="24" fill="#fff" stroke="#001F35" stroke-width="2"/><line x1="434" y1="230" x2="434" y2="254" stroke="#001F35" stroke-width="2"/><text x="440" y="247" font-family="Open Sans" font-size="11">D3 Payslip log</text></g>
+          <line x1="130" y1="168" x2="200" y2="90" stroke="#001F35" stroke-width="1.5"/><polygon points="200,90 194,94 196,87" fill="#001F35"/>
+          <text x="140" y="128" font-family="Open Sans" font-size="10" fill="#247EC1">Timesheet</text>
+          <line x1="270" y1="120" x2="270" y2="220" stroke="#001F35" stroke-width="1.5"/><polygon points="270,220 266,213 274,213" fill="#001F35"/>
+          <line x1="340" y1="232" x2="400" y2="170" stroke="#001F35" stroke-width="1.5"/><polygon points="400,170 393,170 394,177" fill="#001F35"/>
+          <line x1="340" y1="292" x2="400" y2="185" stroke="#001F35" stroke-width="1.5"/><polygon points="400,185 394,189 395,182" fill="#001F35"/>
+          <line x1="750" y1="82" x2="540" y2="160" stroke="#001F35" stroke-width="1.5"/><polygon points="540,160 547,158 545,165" fill="#001F35"/>
+          <text x="570" y="108" font-family="Open Sans" font-size="10" fill="#247EC1">Pay rates</text>
+          <line x1="540" y1="190" x2="600" y2="260" stroke="#001F35" stroke-width="1.5"/><polygon points="600,260 593,259 597,252" fill="#001F35"/>
+          <text x="552" y="224" font-family="Open Sans" font-size="10" fill="#247EC1">Net pay</text>
+          <line x1="470" y1="200" x2="470" y2="230" stroke="#001F35" stroke-width="1.5"/><polygon points="470,230 466,223 474,223" fill="#001F35"/>
+          <line x1="740" y1="270" x2="750" y2="300" stroke="#001F35" stroke-width="1.5"/><polygon points="750,300 743,298 747,292" fill="#001F35"/>
+          <text x="688" y="294" font-family="Open Sans" font-size="10" fill="#247EC1">Transfer</text>
+          <line x1="340" y1="80" x2="75" y2="150" stroke="#001F35" stroke-width="1.5" stroke-dasharray="3,3"/><polygon points="75,150 83,148 82,155" fill="#001F35"/>
+          <text x="170" y="70" font-family="Open Sans" font-size="10" fill="#247EC1">Payslip</text>
+        </svg>
+        <div class="caption">Level 1. External inputs/outputs balance Level 0. Three internal processes, three stores.</div>
+      </div>
+
+      <p>If needed, each Level 1 process could explode further. For example, "Calculate payroll" (2.0) might get a Level 2 with sub-processes 2.1 Compute gross, 2.2 Apply tax, 2.3 Apply deductions. The balancing rule applies again: the inputs and outputs of the Level 2 diagram must match process 2.0's interface on Level 1.</p>
+    </section>
+
+    <section class="chapter" id="vsflow">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 5</div>
+        <h2>DFD vs. flowchart · the confusing cousin</h2>
+      </div>
+      <p>DFDs are often confused with flowcharts. They look similar but answer completely different questions.</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Aspect</th><th>Flowchart</th><th>Data Flow Diagram</th></tr></thead>
+          <tbody>
+            <tr><td>Arrows show</td><td>Control flow ("then do this")</td><td>Data movement ("this data moves")</td></tr>
+            <tr><td>Has decisions?</td><td>Yes (diamonds)</td><td>No</td></tr>
+            <tr><td>Has sequence?</td><td>Yes</td><td>No</td></tr>
+            <tr><td>Stores / persistence?</td><td>Not modeled</td><td>Explicit data stores</td></tr>
+            <tr><td>Levels of abstraction?</td><td>Single level (usually)</td><td>Multiple — Level 0, 1, 2 …</td></tr>
+            <tr><td>Best for</td><td>Algorithms, eligibility, troubleshooting</td><td>Data movement, integration, compliance</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="chapter" id="when">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 6</div>
+        <h2>When to use a DFD</h2>
+      </div>
+
+      <div class="pair">
+        <div class="callout green">
+          <h4>✅ Use a DFD when…</h4>
+          <ul>
+            <li>You need to know <strong>what data</strong> moves and where it's stored</li>
+            <li>You're doing <strong>privacy / compliance analysis</strong> (GDPR, Bhutan DPA, HIPAA) — "where does PII live and flow?"</li>
+            <li>You're documenting <strong>integrations</strong> — which systems exchange what data</li>
+            <li>You're analyzing a <strong>legacy system</strong> — where does the data live today?</li>
+            <li>You're doing <strong>threat modeling</strong> (STRIDE) — DFDs are the starting point</li>
+            <li>You want a diagram that's <strong>stable across process changes</strong> — data flows change slower than process flow</li>
+          </ul>
+        </div>
+        <div class="callout indigo">
+          <h4>⚠️ Don't use a DFD for…</h4>
+          <ul>
+            <li>Step-by-step process — use flowchart, BPMN, or activity</li>
+            <li>Decisions / branching — DFDs don't model decisions</li>
+            <li>Scoping features — use a use case diagram</li>
+            <li>Data schema / relationships — use an ER diagram</li>
+            <li>Concurrent / parallel behavior — use an activity diagram</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="pitfalls">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 7</div>
+        <h2>Common mistakes</h2>
+      </div>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Mistake</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr><td>Unlabeled data flow arrows</td><td>Every arrow says what data it carries — no exceptions</td></tr>
+            <tr><td>Treating DFD like a flowchart</td><td>No sequence, no decisions. If you're tempted to add a diamond, you want a flowchart or BPMN</td></tr>
+            <tr><td>Flow directly between two external entities</td><td>External entities don't talk to each other on your DFD — your system mediates</td></tr>
+            <tr><td>Flow directly between two data stores</td><td>Stores don't talk to each other — a process must read from one and write to the other</td></tr>
+            <tr><td>External entity writes to store directly</td><td>An external entity always goes through a process</td></tr>
+            <tr><td>"Miracle" process (output with no input, or input with no output)</td><td>Every process transforms something — check for missing data flows</td></tr>
+            <tr><td>Unbalanced levels</td><td>The external interface of a parent process must exactly match its child diagram</td></tr>
+            <tr><td>Decomposing everything to Level 3+</td><td>Stop when further detail no longer adds value — most work stops at Level 1 or 2</td></tr>
+            <tr><td>Confusing data flows with message flows</td><td>A DFD flow is raw data (e.g. "timesheet"), not a message event</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="chapter" id="take">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Takeaways</div>
+        <h2>Key takeaways</h2>
+      </div>
+      <div class="summary">
+        <h4>What to carry forward</h4>
+        <ul>
+          <li>DFDs show <strong>data movement</strong>, not process flow and not decisions.</li>
+          <li>Four symbols: <strong>external entity · process · data store · data flow</strong>.</li>
+          <li>Every data flow is <strong>labeled</strong>. No exceptions.</li>
+          <li>Decomposed by level — <strong>Level 0 (context) · Level 1 · Level 2</strong>, with a <strong>balancing rule</strong> between them.</li>
+          <li>Never entity ↔ entity. Never store ↔ store. Never entity ↔ store. A process must mediate.</li>
+          <li>Excellent for <strong>compliance, integration mapping, legacy analysis, and threat modeling</strong>.</li>
+        </ul>
+      </div>
+
+      <div class="callout indigo" style="margin-top:1.8rem">
+        <h4>Six diagrams · six different questions</h4>
+        <p>You've now covered the six diagrams every BA should know. A quick lookup guide:</p>
+        <ul>
+          <li><strong>BPMN</strong> — multi-actor business process, especially for automation</li>
+          <li><strong>Flowchart</strong> — algorithm, decision tree, eligibility logic</li>
+          <li><strong>Swimlane</strong> — process improvement, handoffs, bottleneck analysis</li>
+          <li><strong>Activity diagram</strong> — software workflow with parallelism, for developers</li>
+          <li><strong>Use case diagram</strong> — scope and actors, one-page system summary</li>
+          <li><strong>Data Flow Diagram</strong> — data movement, compliance, integration mapping</li>
+        </ul>
+        <p>Pick the diagram that answers the question you're trying to answer. The tool follows the question — never the other way around.</p>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE">
+    SELISE × Pelsung · BA · Diagrams 06<br>
+    Data Flow Diagrams (DFD)
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BPMN — BA Diagrams 01</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#0066B2; --indigo:#001F35; --amber:#247EC1; --green:#7BC950; --purple:#4796D1; --red:#D80032; --text:#1B2021; --muted:#7B7C7F; --faint:#9CA3AF; --surf:#fff; --bg:#F9F9F9; --border:#EDEDED; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Open Sans','Aptos',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; font-size:17px; -webkit-font-smoothing:antialiased; }
+    h1,h2,h3,h4,h5,h6 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:400; letter-spacing:-0.01em; }
+    a { color: var(--blue); }
+
+    .hero { background:var(--surf); border-bottom:1px solid var(--border); padding:4rem 2rem 3rem; text-align:center; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background: linear-gradient(135deg, #0067A3, #002D72); }
+    .logo-corner { position:absolute; top: 1.25rem; left: 1.5rem; opacity:0.85; }
+    .logo-corner img { height: 34px; }
+    .hero-badge { display:inline-flex; align-items:center; gap:0.5rem; background:var(--bg); border:1px solid var(--border); border-radius:100px; padding:0.35rem 1rem; font-size:0.75rem; font-weight:700; color:var(--muted); letter-spacing:0.07em; text-transform:uppercase; margin-bottom:1.5rem; }
+    .hero-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--amber); }
+    .hero h1 { font-size:clamp(2rem,5vw,3.5rem); line-height:1.15; margin-bottom:0.75rem; }
+    .c-blue{color:var(--blue);} .c-indigo{color:var(--indigo);}
+    .hero-sub { font-size:1rem; color:var(--muted); margin-bottom:2rem; max-width:760px; margin-left:auto; margin-right:auto; }
+    .hero-tags { display:flex; justify-content:center; gap:0.6rem; flex-wrap:wrap; }
+    .hero-tag { padding:0.3rem 0.9rem; border-radius:8px; font-size:0.78rem; font-weight:600; background:#E6F0F8; color:var(--blue); }
+
+    .container { max-width:1040px; margin:0 auto; padding:0 2rem 6rem; }
+
+    .toc { background:var(--surf); border:1px solid var(--border); border-radius:16px; padding:1.75rem 2rem; margin:2.5rem 0; }
+    .toc h3 { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); margin-bottom:1.25rem; }
+    .toc ol { list-style: none; counter-reset: step; }
+    .toc li { counter-increment: step; padding:0.45rem 0; border-bottom:1px solid var(--border); }
+    .toc li:last-child { border-bottom:none; }
+    .toc li::before { content: counter(step, decimal-leading-zero); color:var(--faint); font-family:'Bahnschrift','Segoe UI',sans-serif; margin-right:0.8rem; font-size:0.9rem; }
+    .toc a { text-decoration:none; color:var(--text); font-weight:500; }
+    .toc a:hover { color: var(--blue); }
+
+    section.chapter { margin: 3.5rem 0; }
+    .chapter-head { margin-bottom:1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
+    .chapter-eyebrow { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--blue); margin-bottom:0.3rem; }
+    .chapter-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--indigo); }
+
+    p { margin: 0.7rem 0; }
+    ul, ol { margin: 0.6rem 0 0.6rem 1.3rem; }
+    li { margin: 0.3rem 0; }
+    strong { color: var(--indigo); }
+
+    .callout { background:var(--surf); border:1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 10px; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+    .callout.amber { border-left-color: var(--amber); }
+    .callout.green { border-left-color: var(--green); }
+    .callout.red { border-left-color: var(--red); }
+    .callout.indigo { border-left-color: var(--indigo); }
+    .callout h4 { font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--indigo); }
+
+    .pair { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin:1rem 0; }
+    @media (max-width: 720px) { .pair { grid-template-columns: 1fr; } }
+
+    .big-tbl { background:var(--surf); border:1px solid var(--border); border-radius:10px; overflow:auto; margin:1rem 0; }
+    .big-tbl table { width:100%; border-collapse:collapse; font-size:0.9rem; }
+    .big-tbl th { background:var(--bg); padding:0.6rem 0.9rem; text-align:left; color:var(--muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; border-bottom:1px solid var(--border); }
+    .big-tbl td { padding:0.6rem 0.9rem; border-bottom:1px solid var(--border); color:var(--text); vertical-align:top; line-height:1.6; }
+    .big-tbl tr:last-child td { border-bottom:none; }
+    .big-tbl td:first-child { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; }
+
+    .sym-row { display:flex; align-items:center; gap:1rem; padding:0.8rem 0; border-bottom:1px solid var(--border); }
+    .sym-row:last-child { border-bottom:none; }
+    .sym-row .sym-shape { flex-shrink:0; width:90px; display:flex; justify-content:center; align-items:center; }
+    .sym-row .sym-body { flex:1; }
+    .sym-row .sym-body h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.02rem; margin-bottom:0.2rem; }
+    .sym-row .sym-body p { font-size:0.92rem; color:var(--text); line-height:1.6; margin:0; }
+
+    .diagram-box { background:var(--surf); border:1px solid var(--border); border-radius:10px; padding:1rem; margin:1.25rem 0; overflow-x:auto; }
+    .diagram-box svg { display:block; margin:0 auto; }
+    .diagram-box .caption { font-size:0.82rem; color:var(--muted); margin-top:0.6rem; text-align:center; font-style:italic; }
+
+    .summary { background: linear-gradient(135deg, #F9F9F9, #EDEDED); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+    .summary h4 { color: var(--indigo); margin-bottom: 0.5rem; font-size: 0.95rem; }
+
+    footer { text-align:center; padding: 2rem 1rem 3rem; color: var(--faint); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+    footer img { height: 28px; opacity:0.7; margin-bottom: 0.5rem; display: block; margin-left:auto; margin-right:auto; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="logo-corner"><img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE"></div>
+    <div class="hero-badge"><span class="dot"></span> BA · Diagrams · 01 of 06</div>
+    <h1><span class="c-blue">BPMN</span><br><span class="c-indigo">Business Process Model &amp; Notation</span></h1>
+    <p class="hero-sub">The industry-standard visual language for documenting how work flows across people, systems, and organizations. If you only learn one diagram as a Business Analyst, learn this one.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">OMG standard</span>
+      <span class="hero-tag">Pools &amp; lanes</span>
+      <span class="hero-tag">Events</span>
+      <span class="hero-tag">Activities</span>
+      <span class="hero-tag">Gateways</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="toc">
+      <h3>In this note</h3>
+      <ol>
+        <li><a href="#what">What is BPMN (and why it exists)</a></li>
+        <li><a href="#elements">The four element families</a></li>
+        <li><a href="#pools">Pools &amp; lanes — who does what</a></li>
+        <li><a href="#gateways">Gateways in detail</a></li>
+        <li><a href="#example">Worked example · e-visa application</a></li>
+        <li><a href="#when">When to use BPMN (and when not)</a></li>
+        <li><a href="#pitfalls">Common BPMN mistakes</a></li>
+        <li><a href="#take">Key takeaways</a></li>
+      </ol>
+    </div>
+
+    <section class="chapter" id="what">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 1</div>
+        <h2>What is BPMN (and why it exists)</h2>
+      </div>
+      <p><strong>BPMN — Business Process Model and Notation</strong> — is an internationally recognized graphical language for describing business processes. It was created by the <strong>Business Process Management Initiative</strong> in 2004 and is now maintained by the <strong>OMG (Object Management Group)</strong>. The current widely-used version is <strong>BPMN 2.0</strong>.</p>
+      <p>Before BPMN, every company drew processes differently. One team used flowcharts, another used "swimlane diagrams", another used proprietary BPM-tool notations. A BA who moved between projects had to relearn the shapes every time. BPMN fixed that.</p>
+
+      <div class="callout indigo">
+        <h4>Three audiences, one diagram</h4>
+        <p>BPMN is designed to serve three audiences from the same drawing:</p>
+        <ul>
+          <li><strong>Business people</strong> — see the flow at a glance.</li>
+          <li><strong>Analysts and managers</strong> — use it to spot bottlenecks and redesign.</li>
+          <li><strong>Developers</strong> — read the same diagram and build automation (many BPMN 2.0 diagrams can be executed directly by workflow engines like Camunda, Flowable, or Bonita).</li>
+        </ul>
+      </div>
+
+      <p>As a Business Analyst, BPMN is your <strong>default tool for documenting any multi-step, multi-actor process</strong>. It becomes part of your BRD's "as-is" and "to-be" sections, part of your requirements elicitation, and part of your hand-off to developers.</p>
+    </section>
+
+    <section class="chapter" id="elements">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 2</div>
+        <h2>The four element families</h2>
+      </div>
+      <p>BPMN 2.0 has over 100 distinct shapes. You don't need all of them. Four families cover the vast majority of real-world BA work.</p>
+
+      <div class="callout">
+        <h4>1 · Events (circles)</h4>
+        <div class="sym-row">
+          <div class="sym-shape"><svg width="60" height="50"><circle cx="30" cy="25" r="18" fill="#fff" stroke="#3D7A3D" stroke-width="2"/></svg></div>
+          <div class="sym-body"><h5>Start event</h5><p>Thin single-line circle. Where the process begins. There is <em>exactly one</em> per pool, in most cases.</p></div>
+        </div>
+        <div class="sym-row">
+          <div class="sym-shape"><svg width="60" height="50"><circle cx="30" cy="25" r="18" fill="#fff" stroke="#247EC1" stroke-width="2"/><circle cx="30" cy="25" r="13" fill="none" stroke="#247EC1" stroke-width="2"/></svg></div>
+          <div class="sym-body"><h5>Intermediate event</h5><p>Double-line circle. Something happens in the middle — a timer, a received message, a signal. Common: "wait 2 business days", "receive payment confirmation".</p></div>
+        </div>
+        <div class="sym-row">
+          <div class="sym-shape"><svg width="60" height="50"><circle cx="30" cy="25" r="18" fill="#fff" stroke="#001F35" stroke-width="3.5"/></svg></div>
+          <div class="sym-body"><h5>End event</h5><p>Thick single-line circle. A path terminates here. A process can have multiple end events — one per distinct outcome.</p></div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <h4>2 · Activities (rounded rectangles)</h4>
+        <div class="sym-row">
+          <div class="sym-shape"><svg width="90" height="50"><rect x="5" y="10" width="80" height="30" rx="6" fill="#fff" stroke="#0066B2" stroke-width="2"/></svg></div>
+          <div class="sym-body"><h5>Task</h5><p>A single unit of work that cannot be broken down further in this diagram. Name it with a <strong>verb + object</strong>: "Review application", "Send confirmation email", "Print receipt".</p></div>
+        </div>
+        <div class="sym-row">
+          <div class="sym-shape"><svg width="90" height="50"><rect x="5" y="10" width="80" height="30" rx="6" fill="#fff" stroke="#0066B2" stroke-width="2"/><text x="45" y="35" text-anchor="middle" font-family="monospace" font-size="14" fill="#0066B2">+</text></svg></div>
+          <div class="sym-body"><h5>Subprocess</h5><p>A collapsed group of activities — hides complexity. The <strong>+ marker</strong> means you can "drill into" it for a detailed sub-diagram. Essential for keeping big processes readable.</p></div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <h4>3 · Gateways (diamonds)</h4>
+        <p>A diamond is a <strong>decision point</strong>. It doesn't do work itself — it <em>routes</em> work. A gateway always asks a question, never performs an action. See Part 4 for the three types.</p>
+      </div>
+
+      <div class="callout">
+        <h4>4 · Flows (arrows)</h4>
+        <div class="sym-row">
+          <div class="sym-shape"><svg width="90" height="30"><line x1="5" y1="15" x2="80" y2="15" stroke="#001F35" stroke-width="2"/><polygon points="80,15 72,11 72,19" fill="#001F35"/></svg></div>
+          <div class="sym-body"><h5>Sequence flow (solid)</h5><p>"Then do this next." Stays <em>within one pool</em>. Cannot cross a pool boundary.</p></div>
+        </div>
+        <div class="sym-row">
+          <div class="sym-shape"><svg width="90" height="30"><line x1="5" y1="15" x2="80" y2="15" stroke="#247EC1" stroke-width="2" stroke-dasharray="4,3"/><polygon points="80,15 72,11 72,19" fill="none" stroke="#247EC1" stroke-width="2"/></svg></div>
+          <div class="sym-body"><h5>Message flow (dashed)</h5><p>"I am sending a message to another organization." Used <em>between</em> pools. This is how a customer "talks to" a company in the diagram.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="pools">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 3</div>
+        <h2>Pools &amp; lanes — who does what</h2>
+      </div>
+      <p>A <strong>pool</strong> is a container representing a single organization or participant. A <strong>lane</strong> is a subdivision of a pool representing a specific role, department, or system within that organization.</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Concept</th><th>Represents</th><th>Rule</th></tr></thead>
+          <tbody>
+            <tr><td>Pool</td><td>An independent organization (Tourist, Hospital, Bank)</td><td>Sequence flow cannot cross pool boundaries. Use message flow.</td></tr>
+            <tr><td>Lane</td><td>A role or system inside an organization (Nurse, Doctor, EMR)</td><td>Sequence flow can cross lane boundaries freely.</td></tr>
+            <tr><td>Black-box pool</td><td>An external participant whose internal process you don't care about (e.g. "Payment Gateway")</td><td>Drawn empty — only message-flow endpoints show.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout amber">
+        <h4>The three-question test for pools and lanes</h4>
+        <ol>
+          <li><strong>Who starts this?</strong> → that's your first lane, probably.</li>
+          <li><strong>Does anyone else have a legal/organizational boundary?</strong> → separate pool.</li>
+          <li><strong>Are any steps done by a system, not a person?</strong> → dedicated "System" lane.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="chapter" id="gateways">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 4</div>
+        <h2>Gateways in detail</h2>
+      </div>
+      <p>Gateways are where beginners go wrong most often. A gateway represents a <em>decision or convergence</em>. It must not have a verb inside. It asks a question; it never does work.</p>
+
+      <div class="callout">
+        <h4>Exclusive gateway · × (XOR)</h4>
+        <p><strong>Exactly one</strong> outgoing path is taken. All paths must be mutually exclusive. Every outgoing arrow must be labeled with its condition (yes / no / other).</p>
+        <p><em>Example:</em> "Application complete?" → yes / no. Only one wins.</p>
+      </div>
+
+      <div class="callout">
+        <h4>Parallel gateway · + (AND)</h4>
+        <p><strong>All</strong> outgoing paths are taken simultaneously. Used when independent work can happen in parallel and must all complete before moving on.</p>
+        <p><em>Example:</em> Application received → run background check AND verify ID documents AND check financial status — all at the same time, then merge.</p>
+      </div>
+
+      <div class="callout">
+        <h4>Inclusive gateway · ○ (OR)</h4>
+        <p><strong>One or more</strong> outgoing paths are taken, based on conditions. Think of it as multiple independent decisions happening at one point.</p>
+        <p><em>Example:</em> Notify customer → by SMS (if they opted in) OR by email (if they opted in) OR both. At least one path must be taken.</p>
+      </div>
+
+      <div class="callout red">
+        <h4>Important — split and merge must match</h4>
+        <p>If you split with a parallel gateway, you must merge with a parallel gateway. Same for exclusive and inclusive. Mixing them creates deadlocks where tokens (work items) get stuck.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="example">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 5</div>
+        <h2>Worked example · Bhutan e-visa application</h2>
+      </div>
+      <p>Let's diagram a common Bhutan process: a foreign tourist applies for an electronic visa online. The Tourism Council receives the application, an officer reviews it, and a system either issues the visa or sends a rejection.</p>
+
+      <div class="diagram-box">
+        <svg width="980" height="360" viewBox="0 0 980 360">
+          <!-- Tourist Pool -->
+          <rect x="10" y="10" width="960" height="90" fill="#fff" stroke="#001F35" stroke-width="2"/>
+          <rect x="10" y="10" width="40" height="90" fill="#F9F9F9" stroke="#001F35" stroke-width="2"/>
+          <text x="30" y="55" text-anchor="middle" transform="rotate(-90 30 55)" font-family="Bahnschrift" font-size="13" fill="#001F35">Tourist</text>
+          <circle cx="110" cy="55" r="12" fill="#fff" stroke="#3D7A3D" stroke-width="2"/>
+          <rect x="160" y="40" width="120" height="30" rx="5" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+          <text x="220" y="59" text-anchor="middle" font-family="Open Sans" font-size="11">Submit e-visa form</text>
+          <rect x="780" y="40" width="140" height="30" rx="5" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+          <text x="850" y="59" text-anchor="middle" font-family="Open Sans" font-size="11">Receive result email</text>
+          <circle cx="940" cy="55" r="12" fill="#fff" stroke="#1B2021" stroke-width="3.5"/>
+          <line x1="122" y1="55" x2="160" y2="55" stroke="#001F35" stroke-width="1.5"/><polygon points="160,55 153,51 153,59" fill="#001F35"/>
+          <line x1="920" y1="55" x2="928" y2="55" stroke="#001F35" stroke-width="1.5"/><polygon points="928,55 921,51 921,59" fill="#001F35"/>
+
+          <!-- Council Pool -->
+          <rect x="10" y="130" width="960" height="220" fill="#fff" stroke="#001F35" stroke-width="2"/>
+          <rect x="10" y="130" width="40" height="220" fill="#F9F9F9" stroke="#001F35" stroke-width="2"/>
+          <text x="30" y="240" text-anchor="middle" transform="rotate(-90 30 240)" font-family="Bahnschrift" font-size="13" fill="#001F35">Tourism Council</text>
+          <line x1="50" y1="200" x2="970" y2="200" stroke="#001F35" stroke-width="1"/>
+          <line x1="50" y1="275" x2="970" y2="275" stroke="#001F35" stroke-width="1"/>
+          <rect x="50" y="130" width="30" height="70" fill="#F9F9F9" stroke="#001F35" stroke-width="1"/>
+          <text x="65" y="165" text-anchor="middle" transform="rotate(-90 65 165)" font-family="Bahnschrift" font-size="11">Officer</text>
+          <rect x="50" y="200" width="30" height="75" fill="#F9F9F9" stroke="#001F35" stroke-width="1"/>
+          <text x="65" y="237" text-anchor="middle" transform="rotate(-90 65 237)" font-family="Bahnschrift" font-size="11">System</text>
+          <rect x="50" y="275" width="30" height="75" fill="#F9F9F9" stroke="#001F35" stroke-width="1"/>
+          <text x="65" y="312" text-anchor="middle" transform="rotate(-90 65 312)" font-family="Bahnschrift" font-size="11">Interpol</text>
+
+          <!-- System: receive -->
+          <circle cx="110" cy="237" r="12" fill="#fff" stroke="#3D7A3D" stroke-width="2"/>
+          <!-- Parallel split -->
+          <polygon points="170,237 190,217 210,237 190,257" fill="#fff" stroke="#247EC1" stroke-width="2"/>
+          <text x="190" y="243" text-anchor="middle" font-family="Bahnschrift" font-size="16" fill="#247EC1">+</text>
+          <line x1="122" y1="237" x2="170" y2="237" stroke="#001F35" stroke-width="1.5"/><polygon points="170,237 163,233 163,241" fill="#001F35"/>
+          <!-- Officer review -->
+          <rect x="240" y="150" width="110" height="30" rx="5" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+          <text x="295" y="169" text-anchor="middle" font-family="Open Sans" font-size="11">Review application</text>
+          <line x1="200" y1="227" x2="200" y2="165" stroke="#001F35" stroke-width="1.5"/>
+          <line x1="200" y1="165" x2="240" y2="165" stroke="#001F35" stroke-width="1.5"/><polygon points="240,165 233,161 233,169" fill="#001F35"/>
+          <!-- Background check (Interpol lane) -->
+          <rect x="240" y="300" width="120" height="30" rx="5" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+          <text x="300" y="319" text-anchor="middle" font-family="Open Sans" font-size="11">Background check</text>
+          <line x1="200" y1="248" x2="200" y2="315" stroke="#001F35" stroke-width="1.5"/>
+          <line x1="200" y1="315" x2="240" y2="315" stroke="#001F35" stroke-width="1.5"/><polygon points="240,315 233,311 233,319" fill="#001F35"/>
+
+          <!-- Parallel merge -->
+          <polygon points="400,237 420,217 440,237 420,257" fill="#fff" stroke="#247EC1" stroke-width="2"/>
+          <text x="420" y="243" text-anchor="middle" font-family="Bahnschrift" font-size="16" fill="#247EC1">+</text>
+          <line x1="350" y1="165" x2="420" y2="217" stroke="#001F35" stroke-width="1.5"/><polygon points="420,217 413,215 418,209" fill="#001F35"/>
+          <line x1="360" y1="315" x2="420" y2="257" stroke="#001F35" stroke-width="1.5"/><polygon points="420,257 418,265 413,260" fill="#001F35"/>
+
+          <!-- Exclusive gateway -->
+          <polygon points="480,237 500,217 520,237 500,257" fill="#fff" stroke="#247EC1" stroke-width="2"/>
+          <text x="500" y="243" text-anchor="middle" font-family="Bahnschrift" font-size="16" fill="#247EC1">×</text>
+          <line x1="440" y1="237" x2="480" y2="237" stroke="#001F35" stroke-width="1.5"/><polygon points="480,237 473,233 473,241" fill="#001F35"/>
+
+          <!-- Approve path -->
+          <rect x="560" y="150" width="110" height="30" rx="5" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+          <text x="615" y="169" text-anchor="middle" font-family="Open Sans" font-size="11">Issue visa</text>
+          <line x1="500" y1="217" x2="500" y2="165" stroke="#001F35" stroke-width="1.5"/>
+          <line x1="500" y1="165" x2="560" y2="165" stroke="#001F35" stroke-width="1.5"/><polygon points="560,165 553,161 553,169" fill="#001F35"/>
+          <text x="530" y="200" font-family="Open Sans" font-size="10" fill="#3D7A3D">approved</text>
+
+          <!-- Reject path -->
+          <rect x="560" y="300" width="110" height="30" rx="5" fill="#fff" stroke="#D80032" stroke-width="2"/>
+          <text x="615" y="319" text-anchor="middle" font-family="Open Sans" font-size="11" fill="#D80032">Send rejection</text>
+          <line x1="500" y1="257" x2="500" y2="315" stroke="#001F35" stroke-width="1.5"/>
+          <line x1="500" y1="315" x2="560" y2="315" stroke="#001F35" stroke-width="1.5"/><polygon points="560,315 553,311 553,319" fill="#001F35"/>
+          <text x="530" y="295" font-family="Open Sans" font-size="10" fill="#D80032">rejected</text>
+
+          <!-- End events in System lane -->
+          <circle cx="720" cy="237" r="12" fill="#fff" stroke="#1B2021" stroke-width="3.5"/>
+          <line x1="670" y1="165" x2="715" y2="228" stroke="#001F35" stroke-width="1.5"/><polygon points="715,228 709,226 713,221" fill="#001F35"/>
+          <line x1="670" y1="315" x2="715" y2="247" stroke="#001F35" stroke-width="1.5"/><polygon points="715,247 713,254 709,249" fill="#001F35"/>
+
+          <!-- Message flow to Tourist -->
+          <line x1="720" y1="225" x2="720" y2="100" stroke="#247EC1" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <line x1="720" y1="100" x2="780" y2="65" stroke="#247EC1" stroke-width="1.5" stroke-dasharray="4,3"/><polygon points="780,65 773,61 776,70" fill="none" stroke="#247EC1" stroke-width="1.5"/>
+
+          <!-- Message flow from Tourist to Council -->
+          <line x1="220" y1="70" x2="110" y2="225" stroke="#247EC1" stroke-width="1.5" stroke-dasharray="4,3"/><polygon points="110,225 111,216 117,221" fill="none" stroke="#247EC1" stroke-width="1.5"/>
+        </svg>
+        <div class="caption">Two pools, three lanes in Council. Parallel split runs Officer review in parallel with Interpol background check, merges, then exclusive gateway routes to approve or reject. Dashed = message flow between pools.</div>
+      </div>
+
+      <p>Reading this diagram, anyone — a sponsor, a developer, an auditor — can answer in seconds: "what starts this? what runs in parallel? what's the decision? who sends what to whom?"</p>
+    </section>
+
+    <section class="chapter" id="when">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 6</div>
+        <h2>When to use BPMN (and when not)</h2>
+      </div>
+
+      <div class="pair">
+        <div class="callout green">
+          <h4>✅ Use BPMN when…</h4>
+          <ul>
+            <li>Multiple actors or departments are involved</li>
+            <li>There are clear hand-offs between humans and systems</li>
+            <li>You're documenting as-is / to-be for a BRD</li>
+            <li>The process will be automated by a workflow engine</li>
+            <li>Regulators or auditors need an unambiguous flow</li>
+            <li>The process will be maintained and updated over years</li>
+          </ul>
+        </div>
+        <div class="callout indigo">
+          <h4>⚠️ Prefer something else when…</h4>
+          <ul>
+            <li>You're sketching an algorithm — use a flowchart</li>
+            <li>One actor, three steps — a simple bullet list wins</li>
+            <li>You're showing data movement — use a Data Flow Diagram</li>
+            <li>You're scoping features — use a use case diagram</li>
+            <li>You're modeling concurrent software behavior — use an activity diagram or sequence diagram</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="pitfalls">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 7</div>
+        <h2>Common BPMN mistakes</h2>
+      </div>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Mistake</th><th>Why it hurts</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr><td>Sequence flow crossing pools</td><td>Breaks BPMN rules; validators reject it</td><td>Use dashed <strong>message flow</strong> between pools</td></tr>
+            <tr><td>Verb inside a gateway</td><td>Gateways don't do work — they route</td><td>Put the verb in a task before the gateway; ask a question in the gateway label</td></tr>
+            <tr><td>Mismatched split / merge</td><td>Tokens get stuck; process never completes</td><td>Parallel split ⇒ parallel merge; exclusive ⇒ exclusive</td></tr>
+            <tr><td>No end events</td><td>Process has no clear terminator</td><td>Every path must end in a thick circle</td></tr>
+            <tr><td>20+ tasks on one page</td><td>Nobody will read it</td><td>Collapse repeatable blocks into <strong>subprocesses</strong></td></tr>
+            <tr><td>Mixing abstraction levels</td><td>"Receive email" next to "update DB index" = confusing</td><td>Pick one altitude per diagram; drill down in child diagrams</td></tr>
+            <tr><td>Unlabeled gateway branches</td><td>Reader can't tell which condition leads where</td><td>Label every outgoing arrow on a gateway</td></tr>
+            <tr><td>Black-box pool for a human</td><td>BPMN black-box is for external <em>systems</em> whose internals you don't own</td><td>If humans are involved, show at least one lane</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="chapter" id="take">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Takeaways</div>
+        <h2>Key takeaways</h2>
+      </div>
+      <div class="summary">
+        <h4>What to carry forward</h4>
+        <ul>
+          <li>BPMN is an <strong>OMG-maintained industry standard</strong>. Learn it once, use it anywhere.</li>
+          <li>Four element families: <strong>events · activities · gateways · flows</strong>.</li>
+          <li><strong>Pools = organizations, lanes = roles.</strong> Handoffs become visible and gaps become obvious.</li>
+          <li>Gateways: <strong>× exclusive</strong>, <strong>+ parallel</strong>, <strong>○ inclusive</strong>. Match splits to merges.</li>
+          <li>Use <strong>sequence flow</strong> inside a pool and <strong>message flow</strong> between pools.</li>
+          <li>BPMN shines on multi-actor processes, BRD as-is/to-be, and automation-ready flows.</li>
+          <li>Skip it for pure algorithms, single-actor steps, or pure data-movement diagrams.</li>
+          <li>Collapse repeatable blocks into <strong>subprocesses</strong> to keep diagrams readable.</li>
+        </ul>
+      </div>
+      <p style="margin-top:1.2rem">Recommended tools to practice: <strong>Lucidchart</strong>, <strong>draw.io</strong> (free, has BPMN stencil), <strong>bpmn.io</strong>, <strong>Camunda Modeler</strong> (free desktop app — validates your diagram against BPMN 2.0).</p>
+      <p style="margin-top:0.6rem">Next diagram: <strong>Flowcharts</strong> — BPMN's simpler ancestor, still the right tool when you want to show an algorithm rather than a business process.</p>
+    </section>
+
+  </div>
+
+  <footer>
+    <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE">
+    SELISE × Pelsung · BA · Diagrams 01<br>
+    BPMN — Business Process Model &amp; Notation
+  </footer>
+
+</body>
+</html>

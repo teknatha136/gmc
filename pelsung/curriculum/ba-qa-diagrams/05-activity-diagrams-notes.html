@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activity Diagrams — BA Diagrams 04</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#0066B2; --indigo:#001F35; --amber:#247EC1; --green:#7BC950; --purple:#4796D1; --red:#D80032; --text:#1B2021; --muted:#7B7C7F; --faint:#9CA3AF; --surf:#fff; --bg:#F9F9F9; --border:#EDEDED; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Open Sans','Aptos',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; font-size:17px; -webkit-font-smoothing:antialiased; }
+    h1,h2,h3,h4,h5,h6 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:400; letter-spacing:-0.01em; }
+    a { color: var(--blue); }
+    .hero { background:var(--surf); border-bottom:1px solid var(--border); padding:4rem 2rem 3rem; text-align:center; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background: linear-gradient(135deg, #0067A3, #002D72); }
+    .logo-corner { position:absolute; top: 1.25rem; left: 1.5rem; opacity:0.85; }
+    .logo-corner img { height: 34px; }
+    .hero-badge { display:inline-flex; align-items:center; gap:0.5rem; background:var(--bg); border:1px solid var(--border); border-radius:100px; padding:0.35rem 1rem; font-size:0.75rem; font-weight:700; color:var(--muted); letter-spacing:0.07em; text-transform:uppercase; margin-bottom:1.5rem; }
+    .hero-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--amber); }
+    .hero h1 { font-size:clamp(2rem,5vw,3.5rem); line-height:1.15; margin-bottom:0.75rem; }
+    .c-blue{color:var(--blue);} .c-indigo{color:var(--indigo);}
+    .hero-sub { font-size:1rem; color:var(--muted); margin-bottom:2rem; max-width:760px; margin-left:auto; margin-right:auto; }
+    .hero-tags { display:flex; justify-content:center; gap:0.6rem; flex-wrap:wrap; }
+    .hero-tag { padding:0.3rem 0.9rem; border-radius:8px; font-size:0.78rem; font-weight:600; background:#E6F0F8; color:var(--blue); }
+    .container { max-width:1040px; margin:0 auto; padding:0 2rem 6rem; }
+    .toc { background:var(--surf); border:1px solid var(--border); border-radius:16px; padding:1.75rem 2rem; margin:2.5rem 0; }
+    .toc h3 { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); margin-bottom:1.25rem; }
+    .toc ol { list-style: none; counter-reset: step; }
+    .toc li { counter-increment: step; padding:0.45rem 0; border-bottom:1px solid var(--border); }
+    .toc li:last-child { border-bottom:none; }
+    .toc li::before { content: counter(step, decimal-leading-zero); color:var(--faint); font-family:'Bahnschrift','Segoe UI',sans-serif; margin-right:0.8rem; font-size:0.9rem; }
+    .toc a { text-decoration:none; color:var(--text); font-weight:500; }
+    .toc a:hover { color: var(--blue); }
+    section.chapter { margin: 3.5rem 0; }
+    .chapter-head { margin-bottom:1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
+    .chapter-eyebrow { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--blue); margin-bottom:0.3rem; }
+    .chapter-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--indigo); }
+    p { margin: 0.7rem 0; }
+    ul, ol { margin: 0.6rem 0 0.6rem 1.3rem; }
+    li { margin: 0.3rem 0; }
+    strong { color: var(--indigo); }
+    .callout { background:var(--surf); border:1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 10px; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+    .callout.amber { border-left-color: var(--amber); }
+    .callout.green { border-left-color: var(--green); }
+    .callout.red { border-left-color: var(--red); }
+    .callout.indigo { border-left-color: var(--indigo); }
+    .callout h4 { font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--indigo); }
+    .pair { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin:1rem 0; }
+    @media (max-width: 720px) { .pair { grid-template-columns: 1fr; } }
+    .big-tbl { background:var(--surf); border:1px solid var(--border); border-radius:10px; overflow:auto; margin:1rem 0; }
+    .big-tbl table { width:100%; border-collapse:collapse; font-size:0.9rem; }
+    .big-tbl th { background:var(--bg); padding:0.6rem 0.9rem; text-align:left; color:var(--muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; border-bottom:1px solid var(--border); }
+    .big-tbl td { padding:0.6rem 0.9rem; border-bottom:1px solid var(--border); color:var(--text); vertical-align:top; line-height:1.6; }
+    .big-tbl tr:last-child td { border-bottom:none; }
+    .big-tbl td:first-child { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; }
+    .sym-row { display:flex; align-items:center; gap:1rem; padding:0.8rem 0; border-bottom:1px solid var(--border); }
+    .sym-row:last-child { border-bottom:none; }
+    .sym-row .sym-shape { flex-shrink:0; width:100px; display:flex; justify-content:center; align-items:center; }
+    .sym-row .sym-body h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.02rem; margin-bottom:0.2rem; }
+    .sym-row .sym-body p { font-size:0.92rem; color:var(--text); line-height:1.6; margin:0; }
+    .diagram-box { background:var(--surf); border:1px solid var(--border); border-radius:10px; padding:1rem; margin:1.25rem 0; overflow-x:auto; }
+    .diagram-box svg { display:block; margin:0 auto; }
+    .diagram-box .caption { font-size:0.82rem; color:var(--muted); margin-top:0.6rem; text-align:center; font-style:italic; }
+    .summary { background: linear-gradient(135deg, #F9F9F9, #EDEDED); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+    .summary h4 { color: var(--indigo); margin-bottom: 0.5rem; font-size: 0.95rem; }
+    footer { text-align:center; padding: 2rem 1rem 3rem; color: var(--faint); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+    footer img { height: 28px; opacity:0.7; margin-bottom: 0.5rem; display: block; margin-left:auto; margin-right:auto; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="logo-corner"><img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE"></div>
+    <div class="hero-badge"><span class="dot"></span> BA · Diagrams · 04 of 06</div>
+    <h1><span class="c-blue">UML Activity</span><br><span class="c-indigo">Diagrams</span></h1>
+    <p class="hero-sub">UML's workflow diagram — a flowchart that knows about parallelism, object flow, and partitions. The right tool when the reader is technical and parallel execution matters.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">UML 2.x</span>
+      <span class="hero-tag">Fork &amp; join</span>
+      <span class="hero-tag">Partitions</span>
+      <span class="hero-tag">Object flow</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="toc">
+      <h3>In this note</h3>
+      <ol>
+        <li><a href="#what">What is a UML activity diagram</a></li>
+        <li><a href="#shapes">Core shapes</a></li>
+        <li><a href="#choice-vs-parallel">Choice vs. parallel — the crucial distinction</a></li>
+        <li><a href="#example">Worked example · order fulfillment</a></li>
+        <li><a href="#partitions">Partitions (UML swimlanes)</a></li>
+        <li><a href="#when">When to use activity diagrams</a></li>
+        <li><a href="#pitfalls">Common mistakes</a></li>
+        <li><a href="#take">Key takeaways</a></li>
+      </ol>
+    </div>
+
+    <section class="chapter" id="what">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 1</div>
+        <h2>What is a UML activity diagram</h2>
+      </div>
+      <p>A <strong>UML activity diagram</strong> is a diagram type from the Unified Modeling Language (UML), an OMG-maintained standard used widely in software engineering. It's a flowchart's big sibling: same core idea (steps + decisions + flow), but with formal extensions that make it better for modeling software workflows.</p>
+      <p>Key differences from a plain flowchart:</p>
+      <ul>
+        <li><strong>Explicit parallelism</strong> via <em>fork</em> and <em>join</em> bars — things that happen at the same time, not just one after another.</li>
+        <li><strong>Object flow</strong> — data or artifacts flowing from one action to another (e.g., an "Order" object flowing from "Validate" to "Process").</li>
+        <li><strong>Partitions (swimlanes)</strong> — you can still show actor / system boundaries.</li>
+        <li><strong>Formal semantics</strong> — UML specifies exactly what each shape means, so a tool can check correctness.</li>
+      </ul>
+
+      <div class="callout indigo">
+        <h4>Who is the audience?</h4>
+        <p>Activity diagrams are most useful when <strong>software engineers</strong> are the primary readers. If your audience is business-side (sponsors, business owners, operations managers), prefer BPMN or a plain swimlane — both are easier for non-technical readers to scan.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="shapes">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 2</div>
+        <h2>Core shapes</h2>
+      </div>
+
+      <div class="callout">
+        <div class="sym-row">
+          <div class="sym-shape"><svg width="60" height="50"><circle cx="30" cy="25" r="10" fill="#001F35"/></svg></div>
+          <div class="sym-body"><h5>Initial node</h5><p>Solid filled circle. Where the flow begins. A diagram has <strong>exactly one</strong>.</p></div>
+        </div>
+        <div class="sym-row">
+          <div class="sym-shape"><svg width="60" height="50"><circle cx="30" cy="25" r="12" fill="#fff" stroke="#001F35" stroke-width="2"/><circle cx="30" cy="25" r="6" fill="#001F35"/></svg></div>
+          <div class="sym-body"><h5>Activity final node</h5><p>Bullseye. Flow terminates. A diagram <strong>may have several</strong>, one per distinct outcome.</p></div>
+        </div>
+        <div class="sym-row">
+          <div class="sym-shape"><svg width="100" height="44"><rect x="8" y="10" width="84" height="28" rx="14" fill="#fff" stroke="#0066B2" stroke-width="2"/></svg></div>
+          <div class="sym-body"><h5>Action</h5><p>Rounded rectangle (more rounded than BPMN — almost pill-shaped). A single step. Named with verb + object.</p></div>
+        </div>
+        <div class="sym-row">
+          <div class="sym-shape"><svg width="70" height="56"><polygon points="35,6 60,30 35,54 10,30" fill="#fff" stroke="#247EC1" stroke-width="2"/></svg></div>
+          <div class="sym-body"><h5>Decision / Merge</h5><p>Diamond. A <strong>choice</strong> split (one path taken) or the matching merge point. Outgoing arrows have guard conditions like <code>[approved]</code> or <code>[score &gt; 700]</code>.</p></div>
+        </div>
+        <div class="sym-row">
+          <div class="sym-shape"><svg width="80" height="40"><rect x="6" y="17" width="68" height="6" fill="#001F35"/></svg></div>
+          <div class="sym-body"><h5>Fork / Join bar</h5><p>Thick horizontal (or vertical) bar. A <strong>parallel</strong> split (all outgoing paths run concurrently) or the matching rejoin.</p></div>
+        </div>
+        <div class="sym-row">
+          <div class="sym-shape"><svg width="100" height="44"><rect x="12" y="10" width="76" height="28" fill="#fff" stroke="#4796D1" stroke-width="2"/></svg></div>
+          <div class="sym-body"><h5>Object node</h5><p>Sharp-cornered rectangle. Represents a data object flowing between actions (e.g. "Order[pending]", "Invoice[signed]").</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="choice-vs-parallel">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 3</div>
+        <h2>Choice vs. parallel — the crucial distinction</h2>
+      </div>
+      <p>This is the one thing people mix up when moving from flowcharts to activity diagrams. A <strong>diamond</strong> represents a choice: exactly one branch is taken based on a guard condition. A <strong>fork bar</strong> represents parallelism: all branches run at once.</p>
+
+      <div class="pair">
+        <div class="callout amber">
+          <h4>Diamond · choice flow</h4>
+          <p>Exactly one outgoing arrow is followed. Each arrow is labeled with a guard condition in square brackets: <code>[yes]</code>, <code>[no]</code>, <code>[order total &gt; 1000]</code>.</p>
+          <p>Matches BPMN <strong>exclusive gateway (×)</strong>.</p>
+        </div>
+        <div class="callout">
+          <h4>Fork bar · parallel flow</h4>
+          <p>All outgoing arrows are followed simultaneously. No conditions needed. All the parallel paths eventually merge at a matching <strong>join</strong> bar before the flow continues.</p>
+          <p>Matches BPMN <strong>parallel gateway (+)</strong>.</p>
+        </div>
+      </div>
+
+      <div class="callout red">
+        <h4>Rule: every fork needs a join</h4>
+        <p>A fork splits one flow into N parallel flows. They must all reach a join bar before the main flow continues. Forget the join, and the diagram is incorrect (different parallel branches might reach a final node independently — which is a legitimate special case but rarely what you mean).</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="example">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 4</div>
+        <h2>Worked example · online order fulfillment</h2>
+      </div>
+      <p>A customer places an online order. The system checks stock. If out of stock, it notifies the customer and ends. If in stock, three things happen in parallel: charging payment, picking the item from the warehouse, and sending an order-confirmation email. All three must complete before the order is shipped.</p>
+
+      <div class="diagram-box">
+        <svg width="760" height="380" viewBox="0 0 760 380">
+          <circle cx="380" cy="25" r="10" fill="#001F35"/>
+          <rect x="320" y="55" width="120" height="34" rx="16" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+          <text x="380" y="77" text-anchor="middle" font-family="Open Sans" font-size="12">Place order</text>
+          <polygon points="380,105 410,135 380,165 350,135" fill="#fff" stroke="#247EC1" stroke-width="2"/>
+          <text x="380" y="133" text-anchor="middle" font-family="Open Sans" font-size="11">In</text>
+          <text x="380" y="147" text-anchor="middle" font-family="Open Sans" font-size="11">stock?</text>
+          <rect x="540" y="120" width="160" height="34" rx="16" fill="#fff" stroke="#D80032" stroke-width="2"/>
+          <text x="620" y="142" text-anchor="middle" font-family="Open Sans" font-size="12" fill="#D80032">Notify out-of-stock</text>
+          <circle cx="630" cy="180" r="13" fill="#fff" stroke="#001F35" stroke-width="2"/>
+          <circle cx="630" cy="180" r="7" fill="#001F35"/>
+          <rect x="240" y="188" width="280" height="6" fill="#001F35"/>
+          <rect x="140" y="220" width="140" height="34" rx="16" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+          <text x="210" y="242" text-anchor="middle" font-family="Open Sans" font-size="12">Charge payment</text>
+          <rect x="310" y="220" width="140" height="34" rx="16" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+          <text x="380" y="242" text-anchor="middle" font-family="Open Sans" font-size="12">Pick from warehouse</text>
+          <rect x="480" y="220" width="140" height="34" rx="16" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+          <text x="550" y="242" text-anchor="middle" font-family="Open Sans" font-size="12">Send confirmation</text>
+          <rect x="240" y="284" width="280" height="6" fill="#001F35"/>
+          <rect x="320" y="308" width="120" height="34" rx="16" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+          <text x="380" y="330" text-anchor="middle" font-family="Open Sans" font-size="12">Ship order</text>
+          <circle cx="380" cy="360" r="13" fill="#fff" stroke="#001F35" stroke-width="2"/>
+          <circle cx="380" cy="360" r="7" fill="#001F35"/>
+          <line x1="380" y1="35" x2="380" y2="55" stroke="#001F35" stroke-width="1.5"/><polygon points="380,55 376,48 384,48" fill="#001F35"/>
+          <line x1="380" y1="89" x2="380" y2="105" stroke="#001F35" stroke-width="1.5"/><polygon points="380,105 376,98 384,98" fill="#001F35"/>
+          <line x1="380" y1="165" x2="380" y2="188" stroke="#001F35" stroke-width="1.5"/><polygon points="380,188 376,181 384,181" fill="#001F35"/>
+          <text x="388" y="180" font-family="Open Sans" font-size="10" fill="#3D7A3D">[yes]</text>
+          <line x1="410" y1="135" x2="540" y2="135" stroke="#001F35" stroke-width="1.5"/><polygon points="540,135 533,131 533,139" fill="#001F35"/>
+          <text x="455" y="129" font-family="Open Sans" font-size="10" fill="#D80032">[no]</text>
+          <line x1="620" y1="154" x2="625" y2="168" stroke="#001F35" stroke-width="1.5"/><polygon points="625,168 619,162 626,160" fill="#001F35"/>
+          <line x1="210" y1="194" x2="210" y2="220" stroke="#001F35" stroke-width="1.5"/><polygon points="210,220 206,213 214,213" fill="#001F35"/>
+          <line x1="380" y1="194" x2="380" y2="220" stroke="#001F35" stroke-width="1.5"/><polygon points="380,220 376,213 384,213" fill="#001F35"/>
+          <line x1="550" y1="194" x2="550" y2="220" stroke="#001F35" stroke-width="1.5"/><polygon points="550,220 546,213 554,213" fill="#001F35"/>
+          <line x1="210" y1="254" x2="210" y2="284" stroke="#001F35" stroke-width="1.5"/><polygon points="210,284 206,277 214,277" fill="#001F35"/>
+          <line x1="380" y1="254" x2="380" y2="284" stroke="#001F35" stroke-width="1.5"/><polygon points="380,284 376,277 384,277" fill="#001F35"/>
+          <line x1="550" y1="254" x2="550" y2="284" stroke="#001F35" stroke-width="1.5"/><polygon points="550,284 546,277 554,277" fill="#001F35"/>
+          <line x1="380" y1="290" x2="380" y2="308" stroke="#001F35" stroke-width="1.5"/><polygon points="380,308 376,301 384,301" fill="#001F35"/>
+          <line x1="380" y1="342" x2="380" y2="347" stroke="#001F35" stroke-width="1.5"/><polygon points="380,347 376,340 384,340" fill="#001F35"/>
+        </svg>
+        <div class="caption">Order fulfillment. The diamond handles choice (stock yes/no). The fork bars handle parallel execution of three activities before ship.</div>
+      </div>
+    </section>
+
+    <section class="chapter" id="partitions">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 5</div>
+        <h2>Partitions (UML swimlanes)</h2>
+      </div>
+      <p>An activity diagram can be divided into <strong>partitions</strong> — UML's term for swimlanes. Each partition represents an actor, role, or subsystem. Every action sits in the partition responsible for it. Crossing a partition = a handoff, exactly like in a regular swimlane diagram.</p>
+      <p>Use partitions when both parallelism <em>and</em> actor-responsibility matter — for example, modeling a software workflow where the UI, the service layer, and the database each have their own activities, and some happen in parallel.</p>
+    </section>
+
+    <section class="chapter" id="when">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 6</div>
+        <h2>When to use activity diagrams</h2>
+      </div>
+
+      <div class="pair">
+        <div class="callout green">
+          <h4>✅ Use an activity diagram when…</h4>
+          <ul>
+            <li>You're modeling a software workflow for developers</li>
+            <li>Parallel steps exist and must be shown</li>
+            <li>Your team already uses UML (sequence, class, use case)</li>
+            <li>You're "realizing" a use case — showing its step-by-step flow</li>
+            <li>Object flow matters (what data moves between actions)</li>
+          </ul>
+        </div>
+        <div class="callout indigo">
+          <h4>⚠️ Prefer another diagram when…</h4>
+          <ul>
+            <li>Audience is business-side — BPMN or swimlane reads better</li>
+            <li>Process crosses organizations — BPMN pools handle this properly</li>
+            <li>No parallelism and no object flow — a flowchart is simpler</li>
+            <li>You need a diagram that will drive automation — BPMN 2.0 is the right choice</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="pitfalls">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 7</div>
+        <h2>Common mistakes</h2>
+      </div>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Mistake</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr><td>Using a diamond to mean parallel flow</td><td>Parallel = fork bar. Diamond = choice.</td></tr>
+            <tr><td>Fork without matching join</td><td>Every fork must have a join downstream (or be an intentional parallel termination)</td></tr>
+            <tr><td>Unlabeled guard conditions on diamonds</td><td>Every outgoing arrow from a diamond needs a guard like <code>[condition]</code></td></tr>
+            <tr><td>Multiple initial nodes</td><td>Only one solid dot. Flow has a single start.</td></tr>
+            <tr><td>Mixing activity-diagram notation with BPMN notation</td><td>Pick one. Don't put a BPMN circle event on a UML activity diagram (or vice versa)</td></tr>
+            <tr><td>Using it for non-technical readers</td><td>Convert to BPMN or plain swimlane for business audiences</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="chapter" id="take">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Takeaways</div>
+        <h2>Key takeaways</h2>
+      </div>
+      <div class="summary">
+        <h4>What to carry forward</h4>
+        <ul>
+          <li>Activity diagrams are <strong>UML's workflow diagram</strong> — a flowchart with parallelism and object flow.</li>
+          <li><strong>Initial node · action · decision · fork/join · final node</strong> are the core shapes.</li>
+          <li>Diamond = <strong>choice</strong> (one path). Fork bar = <strong>parallel</strong> (all paths).</li>
+          <li>Every fork needs a matching <strong>join</strong>. Every decision branch needs a <strong>guard condition</strong>.</li>
+          <li>Partitions (UML swimlanes) show actor responsibility while keeping parallelism visible.</li>
+          <li>Best audience: <strong>developers and architects</strong>. For business audiences, use BPMN or a plain swimlane.</li>
+        </ul>
+      </div>
+      <p style="margin-top:1.2rem">Recommended tools: <strong>PlantUML</strong> (text-based, version-controllable), <strong>draw.io</strong>, <strong>Lucidchart</strong>, <strong>Enterprise Architect</strong>, <strong>Visual Paradigm</strong>.</p>
+      <p>Next diagram: <strong>Use case diagrams</strong> — UML's scoping tool showing what a system does and who uses it.</p>
+    </section>
+
+  </div>
+
+  <footer>
+    <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE">
+    SELISE × Pelsung · BA · Diagrams 04<br>
+    UML Activity Diagrams
+  </footer>
+
+</body>
+</html>

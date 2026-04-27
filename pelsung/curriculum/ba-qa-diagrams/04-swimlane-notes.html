@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swimlane Diagrams — BA Diagrams 03</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#0066B2; --indigo:#001F35; --amber:#247EC1; --green:#7BC950; --purple:#4796D1; --red:#D80032; --text:#1B2021; --muted:#7B7C7F; --faint:#9CA3AF; --surf:#fff; --bg:#F9F9F9; --border:#EDEDED; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Open Sans','Aptos',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; font-size:17px; -webkit-font-smoothing:antialiased; }
+    h1,h2,h3,h4,h5,h6 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:400; letter-spacing:-0.01em; }
+    a { color: var(--blue); }
+    .hero { background:var(--surf); border-bottom:1px solid var(--border); padding:4rem 2rem 3rem; text-align:center; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background: linear-gradient(135deg, #0067A3, #002D72); }
+    .logo-corner { position:absolute; top: 1.25rem; left: 1.5rem; opacity:0.85; }
+    .logo-corner img { height: 34px; }
+    .hero-badge { display:inline-flex; align-items:center; gap:0.5rem; background:var(--bg); border:1px solid var(--border); border-radius:100px; padding:0.35rem 1rem; font-size:0.75rem; font-weight:700; color:var(--muted); letter-spacing:0.07em; text-transform:uppercase; margin-bottom:1.5rem; }
+    .hero-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--amber); }
+    .hero h1 { font-size:clamp(2rem,5vw,3.5rem); line-height:1.15; margin-bottom:0.75rem; }
+    .c-blue{color:var(--blue);} .c-indigo{color:var(--indigo);}
+    .hero-sub { font-size:1rem; color:var(--muted); margin-bottom:2rem; max-width:760px; margin-left:auto; margin-right:auto; }
+    .hero-tags { display:flex; justify-content:center; gap:0.6rem; flex-wrap:wrap; }
+    .hero-tag { padding:0.3rem 0.9rem; border-radius:8px; font-size:0.78rem; font-weight:600; background:#E6F0F8; color:var(--blue); }
+    .container { max-width:1040px; margin:0 auto; padding:0 2rem 6rem; }
+    .toc { background:var(--surf); border:1px solid var(--border); border-radius:16px; padding:1.75rem 2rem; margin:2.5rem 0; }
+    .toc h3 { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); margin-bottom:1.25rem; }
+    .toc ol { list-style: none; counter-reset: step; }
+    .toc li { counter-increment: step; padding:0.45rem 0; border-bottom:1px solid var(--border); }
+    .toc li:last-child { border-bottom:none; }
+    .toc li::before { content: counter(step, decimal-leading-zero); color:var(--faint); font-family:'Bahnschrift','Segoe UI',sans-serif; margin-right:0.8rem; font-size:0.9rem; }
+    .toc a { text-decoration:none; color:var(--text); font-weight:500; }
+    .toc a:hover { color: var(--blue); }
+    section.chapter { margin: 3.5rem 0; }
+    .chapter-head { margin-bottom:1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
+    .chapter-eyebrow { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--blue); margin-bottom:0.3rem; }
+    .chapter-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--indigo); }
+    p { margin: 0.7rem 0; }
+    ul, ol { margin: 0.6rem 0 0.6rem 1.3rem; }
+    li { margin: 0.3rem 0; }
+    strong { color: var(--indigo); }
+    .callout { background:var(--surf); border:1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 10px; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+    .callout.amber { border-left-color: var(--amber); }
+    .callout.green { border-left-color: var(--green); }
+    .callout.red { border-left-color: var(--red); }
+    .callout.indigo { border-left-color: var(--indigo); }
+    .callout h4 { font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--indigo); }
+    .pair { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin:1rem 0; }
+    @media (max-width: 720px) { .pair { grid-template-columns: 1fr; } }
+    .big-tbl { background:var(--surf); border:1px solid var(--border); border-radius:10px; overflow:auto; margin:1rem 0; }
+    .big-tbl table { width:100%; border-collapse:collapse; font-size:0.9rem; }
+    .big-tbl th { background:var(--bg); padding:0.6rem 0.9rem; text-align:left; color:var(--muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; border-bottom:1px solid var(--border); }
+    .big-tbl td { padding:0.6rem 0.9rem; border-bottom:1px solid var(--border); color:var(--text); vertical-align:top; line-height:1.6; }
+    .big-tbl tr:last-child td { border-bottom:none; }
+    .big-tbl td:first-child { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; }
+    .diagram-box { background:var(--surf); border:1px solid var(--border); border-radius:10px; padding:1rem; margin:1.25rem 0; overflow-x:auto; }
+    .diagram-box svg { display:block; margin:0 auto; }
+    .diagram-box .caption { font-size:0.82rem; color:var(--muted); margin-top:0.6rem; text-align:center; font-style:italic; }
+    .summary { background: linear-gradient(135deg, #F9F9F9, #EDEDED); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+    .summary h4 { color: var(--indigo); margin-bottom: 0.5rem; font-size: 0.95rem; }
+    footer { text-align:center; padding: 2rem 1rem 3rem; color: var(--faint); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+    footer img { height: 28px; opacity:0.7; margin-bottom: 0.5rem; display: block; margin-left:auto; margin-right:auto; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="logo-corner"><img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE"></div>
+    <div class="hero-badge"><span class="dot"></span> BA · Diagrams · 03 of 06</div>
+    <h1><span class="c-blue">Swimlane</span><br><span class="c-indigo">Diagrams</span></h1>
+    <p class="hero-sub">A flowchart divided into lanes — one per actor. Every lane crossing is a handoff, and every handoff is where processes either accelerate or fall apart. The process-improvement BA's favorite tool.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">Actors in lanes</span>
+      <span class="hero-tag">Handoffs</span>
+      <span class="hero-tag">Bottleneck-finder</span>
+      <span class="hero-tag">Rummler-Brache</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="toc">
+      <h3>In this note</h3>
+      <ol>
+        <li><a href="#what">What is a swimlane diagram</a></li>
+        <li><a href="#why">Why handoffs matter</a></li>
+        <li><a href="#example">Worked example · loan application</a></li>
+        <li><a href="#timing">Swimlanes + timing = bottleneck-finder</a></li>
+        <li><a href="#when">When to use a swimlane (vs. BPMN or flowchart)</a></li>
+        <li><a href="#pitfalls">Common mistakes</a></li>
+        <li><a href="#take">Key takeaways</a></li>
+      </ol>
+    </div>
+
+    <section class="chapter" id="what">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 1</div>
+        <h2>What is a swimlane diagram</h2>
+      </div>
+      <p>A <strong>swimlane diagram</strong> (sometimes "cross-functional flowchart" or "Rummler-Brache diagram") is a process diagram divided into parallel lanes. Each lane belongs to one actor — a person, a role, a department, or a system. Every step sits in the lane of whoever <em>does</em> it. When the flow crosses lane boundaries, work has been <strong>handed off</strong>.</p>
+      <p>The technique was popularized by <strong>Geary Rummler</strong> and <strong>Alan Brache</strong> in their 1990 book <em>Improving Performance: How to Manage the White Space on the Organization Chart</em>. The "white space" is the space between org-chart boxes — where the company's processes actually live and fail.</p>
+
+      <div class="callout indigo">
+        <h4>Two orientations</h4>
+        <ul>
+          <li><strong>Horizontal</strong> (most common) — lanes are horizontal stripes; process flows left to right.</li>
+          <li><strong>Vertical</strong> — lanes are vertical stripes; process flows top to bottom.</li>
+        </ul>
+        <p>Pick one based on which reads better for your content. Long processes usually work better horizontally; few-step processes with long activity labels sometimes read better vertically.</p>
+      </div>
+
+      <p>Swimlane diagrams use the same core shapes as flowcharts (rectangles for activities, diamonds for decisions, ovals for start/end) — they just add the <strong>lane structure on top</strong>. BPMN is a more formal cousin that adds additional shape semantics (events, gateways, message flow).</p>
+    </section>
+
+    <section class="chapter" id="why">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 2</div>
+        <h2>Why handoffs matter</h2>
+      </div>
+      <p>Every time work crosses a lane boundary, three things can go wrong:</p>
+      <ol>
+        <li><strong>It waits.</strong> The receiving party might not be ready. Work sits in a queue.</li>
+        <li><strong>Context is lost.</strong> The sender knew things the receiver doesn't. Information has to be re-elicited.</li>
+        <li><strong>Ownership becomes fuzzy.</strong> "I thought you were doing that" — the phrase every project manager has heard.</li>
+      </ol>
+
+      <div class="callout amber">
+        <h4>A good rule of thumb</h4>
+        <p>If a customer-facing process takes a long time, count the handoffs. Most of the elapsed time is in the gaps between lanes, not in the lanes themselves. <em>Reducing handoffs usually improves cycle time more than optimizing any single step.</em></p>
+      </div>
+
+      <p>A well-drawn swimlane lets you <strong>see</strong> this without calculating anything. Long arrows crossing lanes = long delays. Many crossings = fragile process. One lane with twenty boxes = an overloaded role.</p>
+    </section>
+
+    <section class="chapter" id="example">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 3</div>
+        <h2>Worked example · loan application</h2>
+      </div>
+      <p>A retail customer walks into a branch in Thimphu and applies for a small personal loan. Four actors are involved: the customer, a branch officer, a credit officer, and the loan system. Here's the as-is flow.</p>
+
+      <div class="diagram-box">
+        <svg width="960" height="340" viewBox="0 0 960 340">
+          <rect x="10" y="10" width="940" height="80" fill="#fff" stroke="#001F35" stroke-width="2"/>
+          <rect x="10" y="10" width="130" height="80" fill="#F9F9F9" stroke="#001F35" stroke-width="2"/>
+          <text x="75" y="55" text-anchor="middle" font-family="Bahnschrift" font-size="13" fill="#001F35">Customer</text>
+
+          <rect x="10" y="90" width="940" height="80" fill="#fff" stroke="#001F35" stroke-width="2"/>
+          <rect x="10" y="90" width="130" height="80" fill="#F9F9F9" stroke="#001F35" stroke-width="2"/>
+          <text x="75" y="135" text-anchor="middle" font-family="Bahnschrift" font-size="13" fill="#001F35">Branch Officer</text>
+
+          <rect x="10" y="170" width="940" height="80" fill="#fff" stroke="#001F35" stroke-width="2"/>
+          <rect x="10" y="170" width="130" height="80" fill="#F9F9F9" stroke="#001F35" stroke-width="2"/>
+          <text x="75" y="215" text-anchor="middle" font-family="Bahnschrift" font-size="13" fill="#001F35">Credit Officer</text>
+
+          <rect x="10" y="250" width="940" height="80" fill="#fff" stroke="#001F35" stroke-width="2"/>
+          <rect x="10" y="250" width="130" height="80" fill="#F9F9F9" stroke="#001F35" stroke-width="2"/>
+          <text x="75" y="295" text-anchor="middle" font-family="Bahnschrift" font-size="13" fill="#001F35">Loan System</text>
+
+          <circle cx="170" cy="50" r="12" fill="#fff" stroke="#3D7A3D" stroke-width="2"/>
+          <rect x="210" y="35" width="120" height="30" rx="5" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+          <text x="270" y="54" text-anchor="middle" font-family="Open Sans" font-size="11">Submit application</text>
+
+          <rect x="370" y="115" width="120" height="30" rx="5" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+          <text x="430" y="134" text-anchor="middle" font-family="Open Sans" font-size="11">Verify documents</text>
+
+          <rect x="530" y="195" width="120" height="30" rx="5" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+          <text x="590" y="214" text-anchor="middle" font-family="Open Sans" font-size="11">Assess risk</text>
+          <polygon points="690,210 710,190 730,210 710,230" fill="#fff" stroke="#247EC1" stroke-width="2"/>
+          <text x="710" y="215" text-anchor="middle" font-family="Bahnschrift" font-size="14" fill="#247EC1">×</text>
+
+          <rect x="760" y="275" width="120" height="30" rx="5" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+          <text x="820" y="294" text-anchor="middle" font-family="Open Sans" font-size="11">Disburse loan</text>
+
+          <circle cx="905" cy="50" r="12" fill="#fff" stroke="#1B2021" stroke-width="3"/>
+          <rect x="760" y="35" width="120" height="30" rx="5" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+          <text x="820" y="54" text-anchor="middle" font-family="Open Sans" font-size="11">Receive funds</text>
+
+          <line x1="182" y1="50" x2="210" y2="50" stroke="#001F35" stroke-width="1.5"/><polygon points="210,50 203,46 203,54" fill="#001F35"/>
+          <line x1="330" y1="50" x2="430" y2="115" stroke="#D80032" stroke-width="1.5" stroke-dasharray="3,3"/><polygon points="430,115 422,112 427,107" fill="#D80032"/>
+          <line x1="490" y1="130" x2="590" y2="195" stroke="#D80032" stroke-width="1.5" stroke-dasharray="3,3"/><polygon points="590,195 582,192 587,187" fill="#D80032"/>
+          <line x1="650" y1="210" x2="690" y2="210" stroke="#001F35" stroke-width="1.5"/><polygon points="690,210 683,206 683,214" fill="#001F35"/>
+          <line x1="710" y1="230" x2="820" y2="275" stroke="#D80032" stroke-width="1.5" stroke-dasharray="3,3"/><polygon points="820,275 812,272 817,267" fill="#D80032"/>
+          <line x1="820" y1="275" x2="820" y2="65" stroke="#D80032" stroke-width="1.5" stroke-dasharray="3,3"/><polygon points="820,65 816,73 824,73" fill="#D80032"/>
+          <line x1="880" y1="50" x2="893" y2="50" stroke="#001F35" stroke-width="1.5"/><polygon points="893,50 886,46 886,54" fill="#001F35"/>
+        </svg>
+        <div class="caption">Loan application — red dashed lines are handoffs. Five handoffs in this flow.</div>
+      </div>
+
+      <p>Questions the diagram answers at a glance:</p>
+      <ul>
+        <li>The <strong>customer</strong> does one thing and then waits — everything else is on the bank.</li>
+        <li>The <strong>branch officer</strong> and <strong>credit officer</strong> are sequential, not parallel — verification has to finish before risk assessment starts. Is that necessary?</li>
+        <li>The <strong>system</strong> lane only has disbursement — could earlier steps (document verification, credit bureau check) be partially automated?</li>
+        <li>The return to the customer lane is one long arrow — the customer hears nothing until disbursement.</li>
+      </ul>
+    </section>
+
+    <section class="chapter" id="timing">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 4</div>
+        <h2>Swimlanes + timing = bottleneck-finder</h2>
+      </div>
+      <p>A swimlane by itself tells you <em>who</em> does <em>what</em>. Add time annotations and it tells you <em>where the time goes</em>. Two formats work well:</p>
+
+      <ol>
+        <li><strong>Annotate each box</strong> with its typical duration (e.g. "Verify documents · 25 min").</li>
+        <li><strong>Annotate each arrow between lanes</strong> with waiting time (e.g. "2–3 business days").</li>
+      </ol>
+
+      <div class="callout green">
+        <h4>Typical pattern</h4>
+        <p>When you add timings to a real-world process diagram, you almost always discover the same thing: <strong>active work is a small fraction of elapsed time.</strong> A loan that "takes 5 days" might involve 90 minutes of actual work and 4.5 days of waiting in queues between handoffs. Reducing those waits is the biggest lever.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="when">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 5</div>
+        <h2>When to use a swimlane (vs. BPMN or flowchart)</h2>
+      </div>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Situation</th><th>Best diagram</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td>One actor, algorithmic logic</td><td>Flowchart</td><td>No handoffs to show</td></tr>
+            <tr><td>2–5 actors, mostly linear flow</td><td>Swimlane</td><td>Shows handoffs without full BPMN overhead</td></tr>
+            <tr><td>2+ organizations, message flow matters</td><td>BPMN (pools + lanes)</td><td>BPMN has formal semantics for cross-org messaging</td></tr>
+            <tr><td>Parallel work, fork/join semantics</td><td>BPMN or UML activity diagram</td><td>Needs gateways / fork bars</td></tr>
+            <tr><td>Process will be automated</td><td>BPMN</td><td>Executable by workflow engines</td></tr>
+            <tr><td>Regulated / audited process</td><td>BPMN</td><td>Formal standard</td></tr>
+            <tr><td>Process improvement analysis</td><td>Swimlane + timings</td><td>Fastest way to find bottlenecks</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="chapter" id="pitfalls">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 6</div>
+        <h2>Common mistakes</h2>
+      </div>
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Mistake</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr><td>More than 5 lanes</td><td>Group related roles, or split into two diagrams</td></tr>
+            <tr><td>Activity in the wrong lane (the lane of the person who asked for it, not the person who does it)</td><td>Always place the box in the lane of the <em>doer</em></td></tr>
+            <tr><td>No dedicated "System" lane for automated steps</td><td>Add one — otherwise automation gets attributed to humans</td></tr>
+            <tr><td>No timing annotations on a process-improvement swimlane</td><td>Add per-step duration and per-handoff waiting time</td></tr>
+            <tr><td>Only one lane has activities</td><td>Use a flowchart instead — you don't need lanes</td></tr>
+            <tr><td>Sequence flow crossing what should be a pool boundary</td><td>If it's actually a different organization, upgrade to BPMN with pools and message flow</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="chapter" id="take">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Takeaways</div>
+        <h2>Key takeaways</h2>
+      </div>
+      <div class="summary">
+        <h4>What to carry forward</h4>
+        <ul>
+          <li>Swimlane diagrams are <strong>flowcharts with actor lanes</strong> — one lane per actor, role, or system.</li>
+          <li>Every <strong>lane crossing = a handoff</strong>, and handoffs are where processes usually fail.</li>
+          <li>Good for <strong>2–5 actors</strong> and mostly linear flow. More than that, upgrade to BPMN.</li>
+          <li>Swimlanes answer at a glance: <strong>who's overloaded, where things wait, who's idle, what can be automated</strong>.</li>
+          <li>Add <strong>timing annotations</strong> to turn them into a bottleneck-finder.</li>
+          <li>They're the most useful diagram in the BA's toolkit for <strong>process-improvement work</strong>.</li>
+        </ul>
+      </div>
+      <p style="margin-top:1.2rem">Recommended tools: <strong>Lucidchart</strong>, <strong>draw.io</strong>, <strong>Miro</strong>. All of them have swimlane templates out of the box.</p>
+      <p>Next diagram: <strong>Activity diagrams</strong> — UML's answer to flowcharts, with real support for parallel flows.</p>
+    </section>
+
+  </div>
+
+  <footer>
+    <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE">
+    SELISE × Pelsung · BA · Diagrams 03<br>
+    Swimlane Diagrams
+  </footer>
+
+</body>
+</html>

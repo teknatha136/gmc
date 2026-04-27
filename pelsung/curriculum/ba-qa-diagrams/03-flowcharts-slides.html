@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flowcharts — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      .big-card { background:white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.3rem; max-width:1050px; width:100%; }
+      .big-card h4 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-bottom:0.45rem; }
+      .big-card ul { padding-left:1.2rem; margin:0.4rem 0; }
+      .big-card li { font-size:0.92rem; line-height:1.7; color:var(--text); margin:0.2rem 0; }
+
+      .sym-grid { display:grid; grid-template-columns: repeat(5, 1fr); gap:0.6rem; max-width:1180px; width:100%; }
+      @media (max-width: 900px) { .sym-grid { grid-template-columns: repeat(2, 1fr); } }
+      .sym-card { background:white; border:1px solid var(--border); border-radius:10px; padding:0.8rem 0.7rem; display:flex; flex-direction:column; align-items:center; text-align:center; }
+      .sym-card .shape { height:58px; display:flex; align-items:center; justify-content:center; margin-bottom:0.45rem; }
+      .sym-card h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.9rem; margin-bottom:0.2rem; }
+      .sym-card p { font-size:0.73rem; color:var(--muted); line-height:1.45; }
+
+      .diagram { background:white; border:1px solid var(--border); border-radius:10px; padding:1rem; max-width:1100px; width:100%; overflow-x:auto; }
+      .diagram svg { display:block; margin:0 auto; }
+      .diagram .caption { font-size:0.82rem; color:var(--muted); margin-top:0.6rem; text-align:center; font-style:italic; }
+
+      .dual { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px) { .dual { grid-template-columns: 1fr; } }
+      .dual-bad { background:#FFF5F7; border:1px solid #FADCE3; border-radius:10px; padding:0.9rem 1.1rem; }
+      .dual-good { background:#F3FAE9; border:1px solid #D4E8BD; border-radius:10px; padding:0.9rem 1.1rem; }
+      .dual-bad h5 { color:var(--red); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.4rem; }
+      .dual-good h5 { color:#3D7A3D; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.4rem; }
+      .dual ul { padding-left:1.1rem; margin:0; }
+      .dual li { font-size:0.85rem; line-height:1.65; color:var(--text); margin:0.2rem 0; }
+
+      .step-row { display:flex; gap:0.9rem; padding:0.55rem 0; border-bottom:1px solid var(--border); align-items:flex-start; }
+      .step-row:last-child { border-bottom:none; }
+      .step-num { background:var(--blue); color:white; font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; min-width:32px; height:32px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:0.85rem; }
+      .step-body { flex:1; font-size:0.92rem; line-height:1.65; color:var(--text); }
+      .step-body strong { color:var(--indigo); }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient bg-dark" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>Diagrams · 03 of 06</div></div>
+          <h1 class="display" style="color:white">
+            <span style="color: var(--amber)">Flowcharts</span><br />
+            <span style="color: white">The original process diagram</span>
+          </h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85)">Five shapes. A hundred years of continuous use. Still the right tool when you need to describe an algorithm or a decision tree.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">Process · decision</span>
+            <span class="class-tag tag-blue">Algorithmic thinking</span>
+            <span class="class-tag tag-blue">Universal</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 WHY -->
+      <div class="slide bg-indigo" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span></div>
+        <div class="center" style="max-width:900px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Why flowcharts exist</div>
+          <h1 class="display" style="color:white; font-size:2.3rem; line-height:1.25">"Walk me through how this works."</h1>
+          <p style="color: rgba(255,255,255,0.85); font-size: 1.05rem; margin-top:1.5rem; line-height:1.85">
+            The simplest universal diagram for "if-this-then-that" thinking.<br>
+            Invented in 1921, standardized by ISO/ANSI in the 1960s, used everywhere from kindergarten classrooms to airline manuals.<br><br>
+            Anyone, anywhere, in any field, will read a flowchart correctly the first time.
+          </p>
+          <p style="color: var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.15rem; margin-top:1.5rem">If you can't draw a flowchart for it, you don't understand it yet.</p>
+        </div>
+      </div>
+
+      <!-- 3 SIMPLEST -->
+      <div class="slide accent-blue bg-subtle" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> The simplest possible flowchart</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Boil water · 4 shapes · you can already read it</h2></div>
+          <div class="diagram">
+            <svg width="780" height="120" viewBox="0 0 780 120">
+              <ellipse cx="60" cy="60" rx="46" ry="20" fill="#fff" stroke="#3D7A3D" stroke-width="2"/>
+              <text x="60" y="65" text-anchor="middle" font-family="Open Sans" font-size="13">Start</text>
+              <rect x="160" y="40" width="160" height="40" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="240" y="64" text-anchor="middle" font-family="Open Sans" font-size="13">Fill kettle with water</text>
+              <rect x="370" y="40" width="160" height="40" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="450" y="64" text-anchor="middle" font-family="Open Sans" font-size="13">Switch on kettle</text>
+              <rect x="580" y="40" width="120" height="40" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="640" y="64" text-anchor="middle" font-family="Open Sans" font-size="13">Wait for boil</text>
+              <ellipse cx="755" cy="60" rx="20" ry="20" fill="#fff" stroke="#001F35" stroke-width="2"/>
+              <text x="755" y="65" text-anchor="middle" font-family="Open Sans" font-size="11">End</text>
+              <line x1="106" y1="60" x2="160" y2="60" stroke="#001F35" stroke-width="1.5"/><polygon points="160,60 152,56 152,64" fill="#001F35"/>
+              <line x1="320" y1="60" x2="370" y2="60" stroke="#001F35" stroke-width="1.5"/><polygon points="370,60 362,56 362,64" fill="#001F35"/>
+              <line x1="530" y1="60" x2="580" y2="60" stroke="#001F35" stroke-width="1.5"/><polygon points="580,60 572,56 572,64" fill="#001F35"/>
+              <line x1="700" y1="60" x2="735" y2="60" stroke="#001F35" stroke-width="1.5"/><polygon points="735,60 727,56 727,64" fill="#001F35"/>
+            </svg>
+            <div class="caption">A complete, valid flowchart. Nothing missing. The shapes mean exactly what they look like.</div>
+          </div>
+          <div class="big-card">
+            <ul>
+              <li><strong>Oval = start / end.</strong> Always.</li>
+              <li><strong>Rectangle = a step.</strong> Something gets done.</li>
+              <li><strong>Arrow = then.</strong> Direction of flow.</li>
+            </ul>
+            <p style="margin-top:0.4rem; font-size:0.88rem; color:var(--muted); font-style:italic">No legend. No vocabulary. No notation cheat-sheet. That's the whole point of flowcharts.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 READING RULE -->
+      <div class="slide accent-blue" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> Reading any flowchart · the rule</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Find Start · follow the arrows · stop at End</h2></div>
+          <div class="big-card">
+            <ol style="padding-left:1.3rem; margin:0.4rem 0; font-size:0.94rem; line-height:1.85; color:var(--text)">
+              <li><strong>Find the oval labeled "Start"</strong> — that's where you begin.</li>
+              <li><strong>Follow the arrow</strong> to the next shape and do whatever it says.</li>
+              <li><strong>If you hit a diamond</strong> — answer the question, take the matching exit.</li>
+              <li><strong>If you hit a parallelogram</strong> — read or write data (depending on direction).</li>
+              <li><strong>Stop when you reach an oval labeled "End".</strong></li>
+            </ol>
+            <p style="font-size:0.92rem; margin-top:0.6rem"><strong>Trick:</strong> if a path doesn't end in End, the chart is broken. Every path must terminate.</p>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">A flowchart is not a multi-actor process. It describes <em>what</em> happens, not <em>who</em> does it. (For "who does it" we use swimlanes — next class.)</p>
+        </div>
+      </div>
+
+      <!-- 5 THE FIVE SHAPES -->
+      <div class="slide accent-blue bg-subtle" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span> The five shapes</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Master these five · cover 95% of real work</h2></div>
+          <div class="sym-grid">
+            <div class="sym-card">
+              <div class="shape"><svg width="70" height="44"><ellipse cx="35" cy="22" rx="30" ry="16" fill="#fff" stroke="#3D7A3D" stroke-width="2"/></svg></div>
+              <h6>Terminator</h6>
+              <p>Start / End. Oval / pill.</p>
+            </div>
+            <div class="sym-card">
+              <div class="shape"><svg width="80" height="44"><rect x="6" y="8" width="68" height="28" fill="#fff" stroke="#0066B2" stroke-width="2"/></svg></div>
+              <h6>Process</h6>
+              <p>A single step. Rectangle.</p>
+            </div>
+            <div class="sym-card">
+              <div class="shape"><svg width="70" height="58"><polygon points="35,6 62,30 35,54 8,30" fill="#fff" stroke="#247EC1" stroke-width="2"/></svg></div>
+              <h6>Decision</h6>
+              <p>Yes / No branch. Diamond.</p>
+            </div>
+            <div class="sym-card">
+              <div class="shape"><svg width="84" height="44"><polygon points="14,8 82,8 72,36 4,36" fill="#fff" stroke="#4796D1" stroke-width="2"/></svg></div>
+              <h6>Input / Output</h6>
+              <p>Data in / out. Parallelogram.</p>
+            </div>
+            <div class="sym-card">
+              <div class="shape"><svg width="80" height="40"><line x1="6" y1="20" x2="72" y2="20" stroke="#001F35" stroke-width="2"/><polygon points="72,20 64,16 64,24" fill="#001F35"/></svg></div>
+              <h6>Arrow</h6>
+              <p>Flow direction. Always labeled on decisions.</p>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:900px; font-style:italic">Extras (subroutine, document, on-page connector) exist. You'll rarely need them. When you reach for shape number 6, ask whether a different diagram type would serve better.</p>
+        </div>
+      </div>
+
+      <!-- 6 DECISIONS DEEP-DIVE -->
+      <div class="slide accent-blue" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> Decisions · the diamond rules</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Always ask · always label · always merge</h2></div>
+          <div class="big-card">
+            <ul>
+              <li><strong>Always a question.</strong> "PIN correct?" "Stock available?" "Age &gt; 18?". Never a verb.</li>
+              <li><strong>Always exactly two paths</strong> (Yes / No). For more options, chain multiple diamonds — don't try to fit 5 branches onto one.</li>
+              <li><strong>Both arrows labeled.</strong> Reader shouldn't guess which way "yes" goes.</li>
+              <li><strong>Eventually merge.</strong> Branches usually rejoin downstream. If they truly never meet, both must reach an End.</li>
+            </ul>
+          </div>
+          <div class="diagram">
+            <svg width="540" height="200" viewBox="0 0 540 200">
+              <polygon points="270,20 330,80 270,140 210,80" fill="#fff" stroke="#247EC1" stroke-width="2"/>
+              <text x="270" y="76" text-anchor="middle" font-family="Open Sans" font-size="12">Funds</text>
+              <text x="270" y="92" text-anchor="middle" font-family="Open Sans" font-size="12">enough?</text>
+              <rect x="40" y="65" width="160" height="32" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="120" y="85" text-anchor="middle" font-family="Open Sans" font-size="12" fill="#D80032">Show error</text>
+              <rect x="340" y="65" width="160" height="32" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="420" y="85" text-anchor="middle" font-family="Open Sans" font-size="12">Dispense cash</text>
+              <line x1="210" y1="80" x2="200" y2="80" stroke="#001F35" stroke-width="1.5"/><polygon points="200,80 207,76 207,84" fill="#001F35"/>
+              <text x="195" y="70" text-anchor="end" font-family="Open Sans" font-size="10" fill="#D80032">no</text>
+              <line x1="330" y1="80" x2="340" y2="80" stroke="#001F35" stroke-width="1.5"/><polygon points="340,80 332,76 332,84" fill="#001F35"/>
+              <text x="335" y="70" font-family="Open Sans" font-size="10" fill="#3D7A3D">yes</text>
+            </svg>
+            <div class="caption">Both arrows labeled. Both paths lead somewhere. Reader has zero ambiguity.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7 EXAMPLE 1: ATM -->
+      <div class="slide accent-blue bg-subtle" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> Example 1 · ATM withdrawal</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Two decisions · two failure paths · one happy path</h2></div>
+          <div class="diagram">
+            <svg width="760" height="440" viewBox="0 0 760 440">
+              <ellipse cx="380" cy="30" rx="70" ry="20" fill="#fff" stroke="#3D7A3D" stroke-width="2"/>
+              <text x="380" y="35" text-anchor="middle" font-family="Open Sans" font-size="12">Start</text>
+              <polygon points="320,80 440,80 430,108 310,108" fill="#fff" stroke="#4796D1" stroke-width="2"/>
+              <text x="375" y="98" text-anchor="middle" font-family="Open Sans" font-size="12">Insert card</text>
+              <polygon points="320,125 440,125 430,153 310,153" fill="#fff" stroke="#4796D1" stroke-width="2"/>
+              <text x="375" y="143" text-anchor="middle" font-family="Open Sans" font-size="12">Enter PIN</text>
+              <polygon points="380,170 450,210 380,250 310,210" fill="#fff" stroke="#247EC1" stroke-width="2"/>
+              <text x="380" y="207" text-anchor="middle" font-family="Open Sans" font-size="11">PIN</text>
+              <text x="380" y="220" text-anchor="middle" font-family="Open Sans" font-size="11">correct?</text>
+              <rect x="520" y="190" width="140" height="40" fill="#fff" stroke="#D80032" stroke-width="2"/>
+              <text x="590" y="215" text-anchor="middle" font-family="Open Sans" font-size="12" fill="#D80032">Show error · eject card</text>
+              <polygon points="320,270 440,270 430,298 310,298" fill="#fff" stroke="#4796D1" stroke-width="2"/>
+              <text x="375" y="288" text-anchor="middle" font-family="Open Sans" font-size="12">Enter amount</text>
+              <polygon points="380,315 450,355 380,395 310,355" fill="#fff" stroke="#247EC1" stroke-width="2"/>
+              <text x="380" y="352" text-anchor="middle" font-family="Open Sans" font-size="11">Funds</text>
+              <text x="380" y="365" text-anchor="middle" font-family="Open Sans" font-size="11">available?</text>
+              <rect x="520" y="340" width="140" height="40" fill="#fff" stroke="#D80032" stroke-width="2"/>
+              <text x="590" y="365" text-anchor="middle" font-family="Open Sans" font-size="12" fill="#D80032">Insufficient balance</text>
+              <rect x="300" y="405" width="160" height="32" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="380" y="425" text-anchor="middle" font-family="Open Sans" font-size="12">Dispense cash · eject</text>
+              <line x1="380" y1="50" x2="380" y2="80" stroke="#001F35" stroke-width="1.5"/><polygon points="380,80 376,73 384,73" fill="#001F35"/>
+              <line x1="375" y1="108" x2="375" y2="125" stroke="#001F35" stroke-width="1.5"/><polygon points="375,125 371,118 379,118" fill="#001F35"/>
+              <line x1="375" y1="153" x2="380" y2="170" stroke="#001F35" stroke-width="1.5"/><polygon points="380,170 373,167 380,163" fill="#001F35"/>
+              <line x1="450" y1="210" x2="520" y2="210" stroke="#001F35" stroke-width="1.5"/><polygon points="520,210 513,206 513,214" fill="#001F35"/>
+              <text x="465" y="204" font-family="Open Sans" font-size="10" fill="#D80032">no</text>
+              <line x1="380" y1="250" x2="375" y2="270" stroke="#001F35" stroke-width="1.5"/><polygon points="375,270 372,262 379,264" fill="#001F35"/>
+              <text x="388" y="262" font-family="Open Sans" font-size="10" fill="#3D7A3D">yes</text>
+              <line x1="375" y1="298" x2="380" y2="315" stroke="#001F35" stroke-width="1.5"/><polygon points="380,315 373,312 380,308" fill="#001F35"/>
+              <line x1="450" y1="355" x2="520" y2="360" stroke="#001F35" stroke-width="1.5"/><polygon points="520,360 513,356 513,364" fill="#001F35"/>
+              <text x="465" y="352" font-family="Open Sans" font-size="10" fill="#D80032">no</text>
+              <line x1="380" y1="395" x2="380" y2="405" stroke="#001F35" stroke-width="1.5"/><polygon points="380,405 376,398 384,398" fill="#001F35"/>
+              <text x="388" y="408" font-family="Open Sans" font-size="10" fill="#3D7A3D">yes</text>
+            </svg>
+            <div class="caption">Three input/output ovals (insert, PIN, amount), two decisions, three terminals. The "no" paths peel off to the right and end there. Both decision branches are labeled.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8 EXAMPLE 2: VISA-FREE -->
+      <div class="slide accent-blue" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> Example 2 · visa-free entry to Bhutan</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">A pure decision tree · cascade of yes/no</h2></div>
+          <div class="diagram">
+            <svg width="720" height="460" viewBox="0 0 720 460">
+              <ellipse cx="360" cy="25" rx="80" ry="18" fill="#fff" stroke="#3D7A3D" stroke-width="2"/>
+              <text x="360" y="30" text-anchor="middle" font-family="Open Sans" font-size="12">Passport presented</text>
+              <polygon points="360,60 460,110 360,160 260,110" fill="#fff" stroke="#247EC1" stroke-width="2"/>
+              <text x="360" y="107" text-anchor="middle" font-family="Open Sans" font-size="11">Nationality =</text>
+              <text x="360" y="122" text-anchor="middle" font-family="Open Sans" font-size="11">IN / BD / MV?</text>
+              <rect x="500" y="92" width="180" height="36" fill="#fff" stroke="#3D7A3D" stroke-width="2"/>
+              <text x="590" y="115" text-anchor="middle" font-family="Open Sans" font-size="12" fill="#3D7A3D">Visa-free entry · 14 days</text>
+              <polygon points="360,180 460,225 360,270 260,225" fill="#fff" stroke="#247EC1" stroke-width="2"/>
+              <text x="360" y="222" text-anchor="middle" font-family="Open Sans" font-size="11">Valid e-visa</text>
+              <text x="360" y="237" text-anchor="middle" font-family="Open Sans" font-size="11">issued?</text>
+              <rect x="500" y="207" width="180" height="36" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="590" y="230" text-anchor="middle" font-family="Open Sans" font-size="12">Admit · stamp duration</text>
+              <polygon points="360,290 460,335 360,380 260,335" fill="#fff" stroke="#247EC1" stroke-width="2"/>
+              <text x="360" y="332" text-anchor="middle" font-family="Open Sans" font-size="11">Eligible for</text>
+              <text x="360" y="347" text-anchor="middle" font-family="Open Sans" font-size="11">visa-on-arrival?</text>
+              <rect x="500" y="317" width="180" height="36" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="590" y="340" text-anchor="middle" font-family="Open Sans" font-size="12">Process arrival visa</text>
+              <rect x="300" y="410" width="180" height="36" fill="#fff" stroke="#D80032" stroke-width="2"/>
+              <text x="390" y="433" text-anchor="middle" font-family="Open Sans" font-size="12" fill="#D80032">Deny entry · return to origin</text>
+              <line x1="360" y1="43" x2="360" y2="60" stroke="#001F35" stroke-width="1.5"/><polygon points="360,60 356,53 364,53" fill="#001F35"/>
+              <line x1="460" y1="110" x2="500" y2="110" stroke="#001F35" stroke-width="1.5"/><polygon points="500,110 493,106 493,114" fill="#001F35"/>
+              <text x="472" y="104" font-family="Open Sans" font-size="10" fill="#3D7A3D">yes</text>
+              <line x1="360" y1="160" x2="360" y2="180" stroke="#001F35" stroke-width="1.5"/><polygon points="360,180 356,173 364,173" fill="#001F35"/>
+              <text x="368" y="172" font-family="Open Sans" font-size="10" fill="#D80032">no</text>
+              <line x1="460" y1="225" x2="500" y2="225" stroke="#001F35" stroke-width="1.5"/><polygon points="500,225 493,221 493,229" fill="#001F35"/>
+              <text x="472" y="219" font-family="Open Sans" font-size="10" fill="#3D7A3D">yes</text>
+              <line x1="360" y1="270" x2="360" y2="290" stroke="#001F35" stroke-width="1.5"/><polygon points="360,290 356,283 364,283" fill="#001F35"/>
+              <text x="368" y="282" font-family="Open Sans" font-size="10" fill="#D80032">no</text>
+              <line x1="460" y1="335" x2="500" y2="335" stroke="#001F35" stroke-width="1.5"/><polygon points="500,335 493,331 493,339" fill="#001F35"/>
+              <text x="472" y="329" font-family="Open Sans" font-size="10" fill="#3D7A3D">yes</text>
+              <line x1="360" y1="380" x2="390" y2="410" stroke="#001F35" stroke-width="1.5"/><polygon points="390,410 383,406 388,402" fill="#001F35"/>
+              <text x="368" y="395" font-family="Open Sans" font-size="10" fill="#D80032">no</text>
+            </svg>
+            <div class="caption">Cascade of three yes/no questions. First "yes" wins. If all three are "no", entry is denied. Pure eligibility logic — no actors, no parallel work, perfect fit for a flowchart.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9 EXAMPLE 3: BUG TRIAGE -->
+      <div class="slide accent-blue bg-subtle" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> Example 3 · bug triage routing</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">A QA routing rule · classification logic</h2></div>
+          <div class="diagram">
+            <svg width="800" height="430" viewBox="0 0 800 430">
+              <ellipse cx="400" cy="25" rx="80" ry="18" fill="#fff" stroke="#3D7A3D" stroke-width="2"/>
+              <text x="400" y="30" text-anchor="middle" font-family="Open Sans" font-size="12">Bug reported</text>
+              <rect x="320" y="60" width="160" height="34" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="400" y="82" text-anchor="middle" font-family="Open Sans" font-size="12">Reproduce locally</text>
+              <polygon points="400,110 480,150 400,190 320,150" fill="#fff" stroke="#247EC1" stroke-width="2"/>
+              <text x="400" y="148" text-anchor="middle" font-family="Open Sans" font-size="11">Can</text>
+              <text x="400" y="162" text-anchor="middle" font-family="Open Sans" font-size="11">reproduce?</text>
+              <rect x="560" y="135" width="200" height="34" fill="#fff" stroke="#D80032" stroke-width="2"/>
+              <text x="660" y="157" text-anchor="middle" font-family="Open Sans" font-size="12" fill="#D80032">Mark "needs more info"</text>
+              <polygon points="400,210 480,250 400,290 320,250" fill="#fff" stroke="#247EC1" stroke-width="2"/>
+              <text x="400" y="248" text-anchor="middle" font-family="Open Sans" font-size="11">Severity</text>
+              <text x="400" y="262" text-anchor="middle" font-family="Open Sans" font-size="11">= P0?</text>
+              <rect x="560" y="232" width="200" height="34" fill="#fff" stroke="#D80032" stroke-width="2"/>
+              <text x="660" y="254" text-anchor="middle" font-family="Open Sans" font-size="12" fill="#D80032">Page on-call · within 15min</text>
+              <polygon points="400,310 480,350 400,390 320,350" fill="#fff" stroke="#247EC1" stroke-width="2"/>
+              <text x="400" y="348" text-anchor="middle" font-family="Open Sans" font-size="11">Severity</text>
+              <text x="400" y="362" text-anchor="middle" font-family="Open Sans" font-size="11">= P1?</text>
+              <rect x="560" y="332" width="200" height="34" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="660" y="354" text-anchor="middle" font-family="Open Sans" font-size="12">Assign to current sprint</text>
+              <rect x="40" y="332" width="200" height="34" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="140" y="354" text-anchor="middle" font-family="Open Sans" font-size="12">Add to backlog</text>
+              <line x1="400" y1="43" x2="400" y2="60" stroke="#001F35" stroke-width="1.5"/><polygon points="400,60 396,53 404,53" fill="#001F35"/>
+              <line x1="400" y1="94" x2="400" y2="110" stroke="#001F35" stroke-width="1.5"/><polygon points="400,110 396,103 404,103" fill="#001F35"/>
+              <line x1="480" y1="150" x2="560" y2="150" stroke="#001F35" stroke-width="1.5"/><polygon points="560,150 552,146 552,154" fill="#001F35"/>
+              <text x="500" y="144" font-family="Open Sans" font-size="10" fill="#D80032">no</text>
+              <line x1="400" y1="190" x2="400" y2="210" stroke="#001F35" stroke-width="1.5"/><polygon points="400,210 396,203 404,203" fill="#001F35"/>
+              <text x="408" y="202" font-family="Open Sans" font-size="10" fill="#3D7A3D">yes</text>
+              <line x1="480" y1="250" x2="560" y2="250" stroke="#001F35" stroke-width="1.5"/><polygon points="560,250 552,246 552,254" fill="#001F35"/>
+              <text x="500" y="244" font-family="Open Sans" font-size="10" fill="#3D7A3D">yes</text>
+              <line x1="400" y1="290" x2="400" y2="310" stroke="#001F35" stroke-width="1.5"/><polygon points="400,310 396,303 404,303" fill="#001F35"/>
+              <text x="408" y="302" font-family="Open Sans" font-size="10" fill="#D80032">no</text>
+              <line x1="480" y1="350" x2="560" y2="350" stroke="#001F35" stroke-width="1.5"/><polygon points="560,350 552,346 552,354" fill="#001F35"/>
+              <text x="500" y="344" font-family="Open Sans" font-size="10" fill="#3D7A3D">yes</text>
+              <line x1="320" y1="350" x2="240" y2="350" stroke="#001F35" stroke-width="1.5"/><polygon points="240,350 248,346 248,354" fill="#001F35"/>
+              <text x="285" y="344" font-family="Open Sans" font-size="10" fill="#D80032">no</text>
+            </svg>
+            <div class="caption">A QA team's bug triage rule, captured on one page. New tester onboards in 5 minutes by reading this. Same rule, same outcome, every time.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10 HOW TO DRAW -->
+      <div class="slide accent-blue" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> How to draw one from scratch</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">A six-step recipe</h2></div>
+          <div class="big-card">
+            <div class="step-row">
+              <div class="step-num">1</div>
+              <div class="step-body"><strong>Write the trigger.</strong> What makes this start? "Customer presents card" — that's your Start oval. One per chart.</div>
+            </div>
+            <div class="step-row">
+              <div class="step-num">2</div>
+              <div class="step-body"><strong>List the steps in order.</strong> One per rectangle. Verb + object. "Insert card", "Enter PIN".</div>
+            </div>
+            <div class="step-row">
+              <div class="step-num">3</div>
+              <div class="step-body"><strong>Insert decisions where they belong.</strong> Anywhere the path can go differently — diamond. Always a question. Always two arrows out.</div>
+            </div>
+            <div class="step-row">
+              <div class="step-num">4</div>
+              <div class="step-body"><strong>Trace the failure paths.</strong> Each "no" must go somewhere. Either rejoin the main flow or terminate in End. Don't leave dangling arrows.</div>
+            </div>
+            <div class="step-row">
+              <div class="step-num">5</div>
+              <div class="step-body"><strong>Add I/O parallelograms only if data flow matters.</strong> "Read card data" or "Print receipt". Optional — don't force it.</div>
+            </div>
+            <div class="step-row">
+              <div class="step-num">6</div>
+              <div class="step-body"><strong>Walk through it as the user.</strong> Read your own diagram, doing each step. Stuck? Confused? Fix it now — it's about to confuse a stranger.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11 WHEN TO USE -->
+      <div class="slide accent-blue bg-subtle" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> When a flowchart beats other diagrams</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Simple wins · until it doesn't</h2></div>
+          <div class="dual">
+            <div class="dual-good">
+              <h5>✅ Flowchart is the right tool</h5>
+              <ul>
+                <li>Algorithms, decisions, validation logic</li>
+                <li>One-page quick reference for a single role</li>
+                <li>Troubleshooting guides ("is it plugged in?")</li>
+                <li>Eligibility / qualification rules</li>
+                <li>Whiteboarding with non-technical people</li>
+                <li>Specifying small piece of software logic</li>
+              </ul>
+            </div>
+            <div class="dual-bad">
+              <h5>⚠️ Reach for something else when…</h5>
+              <ul>
+                <li>Multiple actors involved → swimlane or BPMN</li>
+                <li>Parallel work that re-syncs → activity diagram</li>
+                <li>Cross-organization messaging → BPMN</li>
+                <li>You're modeling data movement → DFD</li>
+                <li>Process will be automated by an engine → BPMN</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12 PITFALLS -->
+      <div class="slide accent-blue" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> Common flowchart mistakes</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Easy to draw · easy to draw badly</h2></div>
+          <div class="big-card">
+            <ul>
+              <li><strong>Arrows without arrowheads</strong> — direction must always be unambiguous.</li>
+              <li><strong>Unlabeled decision branches</strong> — every diamond exit needs Yes / No / specific condition.</li>
+              <li><strong>No Start or no End</strong> — every flow starts with a terminator and ends with at least one.</li>
+              <li><strong>Dead-end shapes</strong> — a step that leads nowhere = reader is stuck.</li>
+              <li><strong>Loops without exits</strong> — "go back and try again" must have a way out (retry count, escape hatch).</li>
+              <li><strong>Mixing shape meanings</strong> — if rectangle = process once, rectangle = process always.</li>
+              <li><strong>Three branches from one diamond</strong> — chain diamonds instead.</li>
+              <li><strong>"Who does this?" sneaking in</strong> — if actor matters, upgrade to swimlane.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 13 WRAP -->
+      <div class="slide bg-indigo" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> Wrap-up</div>
+        <div class="center" style="max-width:880px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key Takeaways</div>
+          <h2 class="heading" style="color:white">Flowcharts · what to carry forward</h2>
+          <ul class="reveal-list" style="color:rgba(255,255,255,0.9); text-align:left; max-width:780px; margin:1.5rem auto; font-size:0.98rem; line-height:1.9;">
+            <li>✅ The <strong>oldest, simplest, most universally read</strong> diagram in software</li>
+            <li>✅ Five shapes: <strong>oval · rectangle · diamond · parallelogram · arrow</strong></li>
+            <li>✅ Reading rule: <strong>find Start, follow arrows, stop at End</strong></li>
+            <li>✅ Best for <strong>algorithms, decisions, eligibility</strong> — not multi-actor processes</li>
+            <li>✅ Decisions are <strong>questions</strong>, with <strong>both branches labeled</strong></li>
+            <li>✅ Every path reaches an End. No dangling arrows.</li>
+            <li>✅ If "who does it" matters — upgrade to <strong>swimlane</strong> (next class)</li>
+          </ul>
+          <p style="color:var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-top:1.5rem">When in doubt, sketch a flowchart first. Upgrade only if you actually need more.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 13</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>
