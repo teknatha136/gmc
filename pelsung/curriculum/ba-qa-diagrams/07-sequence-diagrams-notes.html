@@ -93,6 +93,7 @@
         <li><a href="#elements">Core elements</a></li>
         <li><a href="#fragments">Combined fragments · alt · opt · loop</a></li>
         <li><a href="#example1">Worked example · login flow</a></li>
+        <li><a href="#example-mbob">Worked example · mBoB bill payment</a></li>
         <li><a href="#example2">Worked example · Bhutan e-visa application</a></li>
         <li><a href="#example3">Worked example · SELISE leave request with branch</a></li>
         <li><a href="#vs">Sequence vs activity vs use case</a></li>
@@ -245,9 +246,71 @@
       <p>Reading this aloud: <em>"User calls login() on Login Service. Login Service calls findByEmail() on User DB. User DB returns a User record. Login Service verifies the password locally. Login Service returns a token to User."</em></p>
     </section>
 
-    <section class="chapter" id="example2">
+    <section class="chapter" id="example-mbob">
       <div class="chapter-head">
         <div class="chapter-eyebrow">Part 5</div>
+        <h2>Worked example · mBoB bill payment</h2>
+      </div>
+      <p>A more realistic Bhutanese-context scenario. A customer pays a recurring bill from the mBoB mobile app. The app talks to a backend Payment Service, which validates the bill against the external Biller (e.g. Bhutan Power Corporation), deducts the amount from the customer's balance, and returns success.</p>
+
+      <div class="diagram-box">
+        <svg width="940" height="440" viewBox="0 0 940 440">
+          <g transform="translate(80,40)">
+            <circle cx="0" cy="0" r="10" fill="none" stroke="#001F35" stroke-width="2"/>
+            <line x1="0" y1="10" x2="0" y2="40" stroke="#001F35" stroke-width="2"/>
+            <line x1="-14" y1="20" x2="14" y2="20" stroke="#001F35" stroke-width="2"/>
+            <line x1="0" y1="40" x2="-12" y2="58" stroke="#001F35" stroke-width="2"/>
+            <line x1="0" y1="40" x2="12" y2="58" stroke="#001F35" stroke-width="2"/>
+            <text x="0" y="78" text-anchor="middle" font-family="Open Sans" font-size="12">Customer</text>
+          </g>
+          <rect x="220" y="50" width="160" height="50" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+          <text x="300" y="72" text-anchor="middle" font-family="Open Sans" font-size="11" fill="#0066B2">«mobile»</text>
+          <text x="300" y="90" text-anchor="middle" font-family="Bahnschrift" font-size="13">mBoB App</text>
+          <rect x="480" y="50" width="160" height="50" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+          <text x="560" y="72" text-anchor="middle" font-family="Open Sans" font-size="11" fill="#0066B2">«service»</text>
+          <text x="560" y="90" text-anchor="middle" font-family="Bahnschrift" font-size="13">Payment Service</text>
+          <rect x="740" y="50" width="160" height="50" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+          <text x="820" y="72" text-anchor="middle" font-family="Open Sans" font-size="11" fill="#0066B2">«system»</text>
+          <text x="820" y="90" text-anchor="middle" font-family="Bahnschrift" font-size="13">Biller (BPC)</text>
+          <line x1="80" y1="120" x2="80" y2="420" stroke="#001F35" stroke-width="1" stroke-dasharray="5,4"/>
+          <line x1="300" y1="120" x2="300" y2="420" stroke="#001F35" stroke-width="1" stroke-dasharray="5,4"/>
+          <line x1="560" y1="120" x2="560" y2="420" stroke="#001F35" stroke-width="1" stroke-dasharray="5,4"/>
+          <line x1="820" y1="120" x2="820" y2="420" stroke="#001F35" stroke-width="1" stroke-dasharray="5,4"/>
+          <rect x="74" y="155" width="12" height="245" fill="#E6F0F8" stroke="#0066B2" stroke-width="1"/>
+          <rect x="294" y="155" width="12" height="245" fill="#E6F0F8" stroke="#0066B2" stroke-width="1"/>
+          <rect x="554" y="200" width="12" height="170" fill="#E6F0F8" stroke="#0066B2" stroke-width="1"/>
+          <rect x="814" y="245" width="12" height="50" fill="#E6F0F8" stroke="#0066B2" stroke-width="1"/>
+          <line x1="86" y1="155" x2="294" y2="155" stroke="#001F35" stroke-width="1.5"/><polygon points="294,155 286,151 286,159" fill="#001F35"/>
+          <text x="100" y="148" font-family="Open Sans" font-size="12">1: payBill(billerId, amount, mPin)</text>
+          <line x1="306" y1="200" x2="554" y2="200" stroke="#001F35" stroke-width="1.5"/><polygon points="554,200 546,196 546,204" fill="#001F35"/>
+          <text x="320" y="193" font-family="Open Sans" font-size="12">2: processPayment(payload)</text>
+          <line x1="566" y1="245" x2="814" y2="245" stroke="#001F35" stroke-width="1.5"/><polygon points="814,245 806,241 806,249" fill="#001F35"/>
+          <text x="580" y="238" font-family="Open Sans" font-size="12">3: validateBill(billerId)</text>
+          <line x1="814" y1="290" x2="566" y2="290" stroke="#001F35" stroke-width="1.5" stroke-dasharray="4,3"/><polygon points="566,290 574,286 574,294" fill="none" stroke="#001F35" stroke-width="1.5"/>
+          <text x="580" y="283" font-family="Open Sans" font-size="12" font-style="italic" fill="#247EC1">4: { amount, dueDate }</text>
+          <line x1="566" y1="320" x2="615" y2="320" stroke="#001F35" stroke-width="1.5"/>
+          <line x1="615" y1="320" x2="615" y2="338" stroke="#001F35" stroke-width="1.5"/>
+          <line x1="615" y1="338" x2="566" y2="338" stroke="#001F35" stroke-width="1.5"/><polygon points="566,338 574,334 574,342" fill="#001F35"/>
+          <text x="580" y="315" font-family="Open Sans" font-size="12">5: deductBalance(amount)</text>
+          <line x1="554" y1="370" x2="306" y2="370" stroke="#001F35" stroke-width="1.5" stroke-dasharray="4,3"/><polygon points="306,370 314,366 314,374" fill="none" stroke="#001F35" stroke-width="1.5"/>
+          <text x="320" y="363" font-family="Open Sans" font-size="12" font-style="italic" fill="#247EC1">6: { txId, status: "success" }</text>
+          <line x1="294" y1="400" x2="86" y2="400" stroke="#001F35" stroke-width="1.5" stroke-dasharray="4,3"/><polygon points="86,400 94,396 94,404" fill="none" stroke="#001F35" stroke-width="1.5"/>
+          <text x="100" y="393" font-family="Open Sans" font-size="12" font-style="italic" fill="#247EC1">7: success screen + receipt</text>
+        </svg>
+        <div class="caption">Four participants. Notice the <strong>self-call on Payment Service (message 5)</strong> — the same service calling itself for an internal step. Drawn as an arrow that loops back to its own lifeline.</div>
+      </div>
+
+      <p>This diagram doubles as an API spec. Each arrow becomes:</p>
+      <ul>
+        <li>A method to implement (<code>processPayment</code>, <code>validateBill</code>, <code>deductBalance</code>)</li>
+        <li>A test case for QA (happy path; insufficient balance; biller down; wrong mPin)</li>
+        <li>A piece of the Payment Service contract (input parameters + return shape)</li>
+      </ul>
+    </section>
+
+    <section class="chapter" id="example2">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 6</div>
         <h2>Worked example · Bhutan e-visa application</h2>
       </div>
       <p>A multi-system interaction. A tourist submits an e-visa application via the portal. The portal calls the Tourism Council Service. The Council Service calls a Background Check system. Each step's response flows back up the chain.</p>
@@ -298,7 +361,7 @@
 
     <section class="chapter" id="example3">
       <div class="chapter-head">
-        <div class="chapter-eyebrow">Part 6</div>
+        <div class="chapter-eyebrow">Part 7</div>
         <h2>Worked example · SELISE leave request with branch</h2>
       </div>
       <p>A scenario with a real branch. An employee submits a leave request. HR notifies the manager. The manager either approves or rejects, and HR responds differently. The branch is captured in an <strong>alt</strong> fragment.</p>
@@ -360,7 +423,7 @@
 
     <section class="chapter" id="vs">
       <div class="chapter-head">
-        <div class="chapter-eyebrow">Part 7</div>
+        <div class="chapter-eyebrow">Part 8</div>
         <h2>Sequence vs activity vs use case</h2>
       </div>
       <p>The same scenario described three ways:</p>
@@ -381,7 +444,7 @@
 
     <section class="chapter" id="how">
       <div class="chapter-head">
-        <div class="chapter-eyebrow">Part 8</div>
+        <div class="chapter-eyebrow">Part 9</div>
         <h2>How to draw one from scratch</h2>
       </div>
       <ol>
@@ -397,7 +460,7 @@
 
     <section class="chapter" id="when">
       <div class="chapter-head">
-        <div class="chapter-eyebrow">Part 9</div>
+        <div class="chapter-eyebrow">Part 10</div>
         <h2>When to use a sequence diagram</h2>
       </div>
 
@@ -429,7 +492,7 @@
 
     <section class="chapter" id="pitfalls">
       <div class="chapter-head">
-        <div class="chapter-eyebrow">Part 10</div>
+        <div class="chapter-eyebrow">Part 11</div>
         <h2>Common mistakes</h2>
       </div>
 
