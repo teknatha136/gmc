@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Testing Fundamentals — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      .big-card { background:white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.3rem; max-width:1050px; width:100%; }
+      .big-card h4 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-bottom:0.45rem; }
+      .big-card ul { padding-left:1.2rem; margin:0.4rem 0; }
+      .big-card li { font-size:0.92rem; line-height:1.7; color:var(--text); margin:0.2rem 0; }
+
+      .dual { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px) { .dual { grid-template-columns: 1fr; } }
+      .dual-bad { background:#FFF5F7; border:1px solid #FADCE3; border-radius:10px; padding:0.9rem 1.1rem; }
+      .dual-good { background:#F3FAE9; border:1px solid #D4E8BD; border-radius:10px; padding:0.9rem 1.1rem; }
+      .dual-bad h5 { color:var(--red); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.4rem; }
+      .dual-good h5 { color:#3D7A3D; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.4rem; }
+      .dual ul { padding-left:1.1rem; margin:0; }
+      .dual li { font-size:0.85rem; line-height:1.65; color:var(--text); margin:0.2rem 0; }
+
+      .diagram { background:white; border:1px solid var(--border); border-radius:10px; padding:1rem; max-width:1100px; width:100%; overflow-x:auto; }
+      .diagram svg { display:block; margin:0 auto; }
+      .diagram .caption { font-size:0.82rem; color:var(--muted); margin-top:0.6rem; text-align:center; font-style:italic; }
+
+      .level-grid { display:grid; grid-template-columns: 1fr 1fr; gap:0.8rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px) { .level-grid { grid-template-columns: 1fr; } }
+      .level-card { background:white; border:1px solid var(--border); border-left:4px solid var(--blue); border-radius:10px; padding:0.9rem 1.1rem; }
+      .level-card h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.3rem; }
+      .level-card p { font-size:0.88rem; line-height:1.65; color:var(--text); margin:0.3rem 0; }
+      .level-card .who { color:var(--muted); font-size:0.78rem; font-style:italic; margin-top:0.4rem; }
+
+      .qa-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:0.7rem; max-width:1100px; width:100%; }
+      @media (max-width: 900px) { .qa-grid { grid-template-columns: 1fr 1fr; } }
+      .qa-card { background:white; border:1px solid var(--border); border-radius:10px; padding:0.7rem 0.9rem; border-top:4px solid var(--blue); }
+      .qa-card h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.92rem; margin-bottom:0.2rem; }
+      .qa-card p { font-size:0.78rem; color:var(--muted); line-height:1.5; }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient bg-dark" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>Quality &amp; Compliance · 01 of 05</div></div>
+          <h1 class="display" style="color:white">
+            <span style="color: var(--amber)">Software Testing</span><br />
+            <span style="color: white">Fundamentals</span>
+          </h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85)">What testing is · what we test for · the levels and types · the quality attributes that define "good". The mental model both BAs and QAs need.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">V vs V</span>
+            <span class="class-tag tag-blue">Test levels</span>
+            <span class="class-tag tag-blue">Test types</span>
+            <span class="class-tag tag-blue">ISO 25010</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 WHY -->
+      <div class="slide bg-indigo" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span></div>
+        <div class="center" style="max-width:900px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Why testing exists</div>
+          <h1 class="display" style="color:white; font-size:2.3rem; line-height:1.25">A bug found in production costs 100× more than one found in a spec review</h1>
+          <p style="color: rgba(255,255,255,0.85); font-size: 1.05rem; margin-top:1.5rem; line-height:1.85">
+            Testing isn't a phase at the end. It's a <strong>discipline that runs alongside development</strong>, catching mistakes as early and cheaply as possible.<br><br>
+            BAs catch them in spec review. Devs catch them in unit tests. QAs catch them in integration and system tests. Users find what slipped through.
+          </p>
+          <p style="color: var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.15rem; margin-top:1.5rem">Every role is part of testing. Today: shared vocabulary.</p>
+        </div>
+      </div>
+
+      <!-- 3 V vs V -->
+      <div class="slide accent-blue bg-subtle" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> Verification vs Validation · the two questions</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">"Did we build it right?" vs "Did we build the right thing?"</h2></div>
+          <div class="dual">
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--blue); padding:1rem 1.2rem;">
+              <h4 style="color:var(--indigo); font-size:1.1rem; margin-bottom:0.4rem;">Verification</h4>
+              <p style="font-size:0.95rem; line-height:1.7; color:var(--text)"><strong>"Does the software match the spec?"</strong></p>
+              <p style="font-size:0.88rem; color:var(--muted); margin-top:0.4rem">A check against documents and requirements. Static reviews, walkthroughs, inspections, unit tests against contracts.</p>
+              <p style="font-size:0.85rem; color:var(--text); margin-top:0.6rem"><strong>Example:</strong> "The spec says password must be 8+ characters. Does the code reject 7-char passwords?"</p>
+            </div>
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--amber); padding:1rem 1.2rem;">
+              <h4 style="color:var(--indigo); font-size:1.1rem; margin-bottom:0.4rem;">Validation</h4>
+              <p style="font-size:0.95rem; line-height:1.7; color:var(--text)"><strong>"Does the software solve the user's problem?"</strong></p>
+              <p style="font-size:0.88rem; color:var(--muted); margin-top:0.4rem">A check against real-world need. UAT, beta tests, observation, usability sessions.</p>
+              <p style="font-size:0.85rem; color:var(--text); margin-top:0.6rem"><strong>Example:</strong> "The 8-char rule meets the spec — but real users still write passwords on sticky notes. Did we solve the security problem?"</p>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:840px"><strong>The trap:</strong> teams that only verify ship technically-correct products that fail in the real world. Teams that only validate ship products that work in demos but break under load. <strong>Both matter.</strong></p>
+        </div>
+      </div>
+
+      <!-- 4 TEST PYRAMID -->
+      <div class="slide accent-blue" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> The test pyramid · where tests live</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Many cheap tests at the bottom · few expensive ones at top</h2></div>
+          <div class="diagram">
+            <svg width="700" height="380" viewBox="0 0 700 380">
+              <!-- Pyramid -->
+              <polygon points="280,40 420,40 480,120 220,120" fill="#FEE9EC" stroke="#D80032" stroke-width="2"/>
+              <text x="350" y="85" text-anchor="middle" font-family="Bahnschrift" font-size="14" fill="#D80032">UAT / Manual</text>
+              <text x="350" y="103" text-anchor="middle" font-family="Open Sans" font-size="11" fill="#D80032">slow · expensive · few</text>
+
+              <polygon points="220,120 480,120 540,200 160,200" fill="#FFF4E3" stroke="#247EC1" stroke-width="2"/>
+              <text x="350" y="155" text-anchor="middle" font-family="Bahnschrift" font-size="14" fill="#247EC1">System / E2E</text>
+              <text x="350" y="173" text-anchor="middle" font-family="Open Sans" font-size="11" fill="#247EC1">whole app · UI driven</text>
+
+              <polygon points="160,200 540,200 600,280 100,280" fill="#E6F0F8" stroke="#0066B2" stroke-width="2"/>
+              <text x="350" y="235" text-anchor="middle" font-family="Bahnschrift" font-size="14" fill="#0066B2">Integration</text>
+              <text x="350" y="253" text-anchor="middle" font-family="Open Sans" font-size="11" fill="#0066B2">API · DB · service-to-service</text>
+
+              <polygon points="100,280 600,280 660,360 40,360" fill="#F3FAE9" stroke="#3D7A3D" stroke-width="2"/>
+              <text x="350" y="315" text-anchor="middle" font-family="Bahnschrift" font-size="14" fill="#3D7A3D">Unit</text>
+              <text x="350" y="333" text-anchor="middle" font-family="Open Sans" font-size="11" fill="#3D7A3D">single function · fast · many</text>
+
+              <!-- Side annotations -->
+              <text x="20" y="83" font-family="Open Sans" font-size="11" fill="#D80032">slowest</text>
+              <text x="20" y="320" font-family="Open Sans" font-size="11" fill="#3D7A3D">fastest</text>
+              <line x1="50" y1="90" x2="50" y2="310" stroke="#001F35" stroke-width="1" marker-end="url(#arrow)"/>
+              <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><polygon points="0,0 0,6 9,3" fill="#001F35"/></marker></defs>
+            </svg>
+            <div class="caption">More tests at the bottom (cheap, fast, many — runs in seconds). Fewer at the top (slow, brittle, expensive — runs in hours). When the pyramid inverts, the test suite becomes a bottleneck.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 TEST LEVELS -->
+      <div class="slide accent-blue bg-subtle" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span> Test levels in detail</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Each level catches different bugs</h2></div>
+          <div class="level-grid">
+            <div class="level-card" style="border-left-color:#3D7A3D">
+              <h5>Unit testing</h5>
+              <p>One function or one class, in isolation. Tests a single behavior. Runs in milliseconds. Mocks the rest of the world.</p>
+              <p class="who">Owner: Developer · catches: logic bugs, edge cases in single functions</p>
+            </div>
+            <div class="level-card">
+              <h5>Integration testing</h5>
+              <p>Two or more components working together. Real DB, real API calls, real file system. Catches contracts that don't match.</p>
+              <p class="who">Owner: Developer + QA · catches: API mismatches, DB schema drift, broken integrations</p>
+            </div>
+            <div class="level-card" style="border-left-color:var(--amber)">
+              <h5>System testing</h5>
+              <p>The whole assembled application as one. End-to-end flows tested through the UI or top API. Often slow.</p>
+              <p class="who">Owner: QA · catches: full-flow regressions, UI bugs, deployment-config issues</p>
+            </div>
+            <div class="level-card" style="border-left-color:var(--red)">
+              <h5>Acceptance / UAT</h5>
+              <p>Business users (or proxies) run real-world scenarios. Confirms the system <em>solves the problem</em>, not just passes specs.</p>
+              <p class="who">Owner: BA + business stakeholder · catches: spec gaps, "this isn't what we asked for"</p>
+            </div>
+            <div class="level-card" style="border-left-color:var(--purple)">
+              <h5>Regression testing</h5>
+              <p>Re-running prior tests to confirm nothing that worked before is now broken. Cuts across all levels.</p>
+              <p class="who">Owner: QA · catches: unintended breakage from new changes</p>
+            </div>
+            <div class="level-card" style="border-left-color:#D80032">
+              <h5>Smoke / sanity testing</h5>
+              <p>Quick "is this build basically alive?" check before running deeper tests. Five minutes, not five hours.</p>
+              <p class="who">Owner: QA · catches: broken builds before wasting time on detailed tests</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 FUNCTIONAL VS NON-FUNCTIONAL -->
+      <div class="slide accent-blue" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> Test types · functional vs non-functional</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Two big families · both matter</h2></div>
+          <div class="dual">
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--blue); padding:1rem 1.2rem;">
+              <h4 style="color:var(--indigo); font-size:1.05rem; margin-bottom:0.4rem;">Functional testing</h4>
+              <p style="font-size:0.92rem; line-height:1.7"><strong>"Does it do what it should?"</strong></p>
+              <ul style="padding-left:1.2rem; font-size:0.88rem; line-height:1.7; margin-top:0.4rem">
+                <li>Login with correct credentials → success</li>
+                <li>Transfer 1000 BTN → balance reduced by 1000</li>
+                <li>Submit blank form → validation error</li>
+                <li>Reject expired card</li>
+              </ul>
+              <p style="font-size:0.85rem; color:var(--muted); margin-top:0.4rem; font-style:italic">Most acceptance criteria are functional tests in disguise.</p>
+            </div>
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--amber); padding:1rem 1.2rem;">
+              <h4 style="color:var(--indigo); font-size:1.05rem; margin-bottom:0.4rem;">Non-functional testing</h4>
+              <p style="font-size:0.92rem; line-height:1.7"><strong>"How well does it do it?"</strong></p>
+              <ul style="padding-left:1.2rem; font-size:0.88rem; line-height:1.7; margin-top:0.4rem">
+                <li><strong>Performance</strong> — response time under load</li>
+                <li><strong>Security</strong> — resistant to common attacks</li>
+                <li><strong>Usability</strong> — can a real user get through it</li>
+                <li><strong>Accessibility</strong> — keyboard / screen reader access</li>
+                <li><strong>Reliability</strong> — uptime, error rate, recovery</li>
+                <li><strong>Compatibility</strong> — works on the browsers/devices we promised</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:840px"><strong>BA hint:</strong> if every AC starts with "the user can…", you've only specified functional. Add at least one non-functional ("response within 2 seconds at 100 concurrent users").</p>
+        </div>
+      </div>
+
+      <!-- 7 BLACK-BOX VS WHITE-BOX -->
+      <div class="slide accent-blue bg-subtle" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> Black-box vs white-box thinking</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Two ways to think about what to test</h2></div>
+          <div class="dual">
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--indigo); padding:1rem 1.2rem;">
+              <h4 style="color:var(--indigo); font-size:1.05rem; margin-bottom:0.4rem;">Black-box testing</h4>
+              <p style="font-size:0.92rem; line-height:1.65; color:var(--text)">Tester treats the system as a sealed box. Inputs go in, outputs come out. No knowledge of internals required.</p>
+              <p style="font-size:0.85rem; color:var(--muted); margin-top:0.4rem; font-style:italic">"What should happen if I do X?"</p>
+              <p style="font-size:0.85rem; color:var(--text); margin-top:0.4rem"><strong>Used for:</strong> System / UAT / acceptance tests · most QA testing · all BA validation</p>
+            </div>
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--blue); padding:1rem 1.2rem;">
+              <h4 style="color:var(--indigo); font-size:1.05rem; margin-bottom:0.4rem;">White-box testing</h4>
+              <p style="font-size:0.92rem; line-height:1.65; color:var(--text)">Tester sees inside. Tests specific code paths, branches, conditions. Requires knowing the implementation.</p>
+              <p style="font-size:0.85rem; color:var(--muted); margin-top:0.4rem; font-style:italic">"Have I exercised this if-branch?"</p>
+              <p style="font-size:0.85rem; color:var(--text); margin-top:0.4rem"><strong>Used for:</strong> Unit tests · code coverage analysis · reviews</p>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:840px">Most BA/QA work is <strong>black-box</strong>. White-box belongs to developers. Knowing both terms means you can talk to your dev team without confusion.</p>
+        </div>
+      </div>
+
+      <!-- 8 ISO 25010 -->
+      <div class="slide accent-blue" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> What "good" looks like · ISO 25010</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Eight quality characteristics that define software quality</h2></div>
+          <div class="qa-grid">
+            <div class="qa-card"><h6>1 · Functional Suitability</h6><p>Does it do what it claims? Completeness, correctness, appropriateness.</p></div>
+            <div class="qa-card" style="border-top-color:var(--amber)"><h6>2 · Performance Efficiency</h6><p>Time, resources, capacity. Fast enough? Doesn't melt the server?</p></div>
+            <div class="qa-card" style="border-top-color:var(--purple)"><h6>3 · Compatibility</h6><p>Co-existence with other software. Browser, OS, device.</p></div>
+            <div class="qa-card" style="border-top-color:#3D7A3D"><h6>4 · Usability</h6><p>Learnability, operability, accessibility, error protection, aesthetics.</p></div>
+            <div class="qa-card" style="border-top-color:var(--indigo)"><h6>5 · Reliability</h6><p>Availability, fault tolerance, recoverability. Uptime + error rate.</p></div>
+            <div class="qa-card" style="border-top-color:var(--red)"><h6>6 · Security</h6><p>Confidentiality, integrity, non-repudiation, accountability, authenticity.</p></div>
+            <div class="qa-card"><h6>7 · Maintainability</h6><p>Modular, reusable, analyzable, modifiable, testable.</p></div>
+            <div class="qa-card" style="border-top-color:var(--amber)"><h6>8 · Portability</h6><p>Adaptable, installable, replaceable across environments.</p></div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:880px"><strong>BA's role:</strong> spec which of these 8 dimensions matter most for the feature, and to what level. <strong>QA's role:</strong> verify each one with the appropriate test type. The 8 categories ARE the checklist for non-functional requirements.</p>
+        </div>
+      </div>
+
+      <!-- 9 ACCESSIBILITY MENTION -->
+      <div class="slide accent-blue bg-subtle" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> Accessibility · usability with teeth</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Accessibility lives inside Usability — but it's also law</h2></div>
+          <div class="big-card">
+            <p style="font-size:0.95rem; line-height:1.7"><strong>WCAG (Web Content Accessibility Guidelines)</strong> is the de-facto standard. Three levels: A (basic), AA (standard), AAA (gold). Most laws require AA.</p>
+            <h4 style="margin-top:0.6rem">Four POUR principles</h4>
+            <ul>
+              <li><strong>Perceivable</strong> — alt text on images, captions on videos, sufficient contrast</li>
+              <li><strong>Operable</strong> — keyboard-only navigation, no time traps, skip links</li>
+              <li><strong>Understandable</strong> — predictable behavior, error messages that help, plain language</li>
+              <li><strong>Robust</strong> — works with screen readers (proper semantic HTML, ARIA where needed)</li>
+            </ul>
+            <h4 style="margin-top:0.6rem">Where it shows up legally</h4>
+            <ul>
+              <li><strong>EU</strong> — European Accessibility Act (mandatory June 2025 for many products)</li>
+              <li><strong>US</strong> — Section 508 (federal procurement); ADA (private sector via lawsuits)</li>
+              <li><strong>Global trend</strong> — accessibility lawsuits doubled 2018→2023</li>
+            </ul>
+            <p style="margin-top:0.5rem; color:var(--text); font-style:italic">BA spec'ing "the form should be accessible" without saying "WCAG 2.1 AA" is meaningless. Spec the level. QA tests against it.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10 BHUTAN EXAMPLE -->
+      <div class="slide accent-blue" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> Worked example · mBoB bill payment</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">One feature · all the test types</h2></div>
+          <div class="big-card">
+            <h4>Feature: pay a recurring bill from mBoB</h4>
+            <ul>
+              <li><strong>Unit test</strong> · the <code>calculateFee()</code> function returns 0.5% of amount, rounded to 2 decimals</li>
+              <li><strong>Integration test</strong> · Payment Service correctly calls Biller API and parses response</li>
+              <li><strong>System test</strong> · end-to-end: user opens app → selects bill → pays → sees confirmation</li>
+              <li><strong>Acceptance test</strong> · a real customer pays a real BPC bill and sees correct deduction in her balance the next day</li>
+              <li><strong>Regression test</strong> · all of the above run again every time the team changes anything</li>
+              <li><strong>Performance test</strong> · 1000 concurrent payments, p99 response &lt; 3 seconds</li>
+              <li><strong>Security test</strong> · MPIN brute-force lockout works after 3 attempts; injection inputs sanitized</li>
+              <li><strong>Accessibility test</strong> · the entire flow operable with screen reader, keyboard-only</li>
+              <li><strong>Compatibility test</strong> · works on iOS 14+, Android 9+, low-end devices common in rural Bhutan</li>
+            </ul>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">Same feature, nine test types. The BA's job is to spec which ones matter. The QA's job is to design tests for each.</p>
+        </div>
+      </div>
+
+      <!-- 11 BA AND QA ROLES -->
+      <div class="slide accent-blue bg-subtle" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> Where BA and QA fit in testing</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Different points of the lifecycle · same goal</h2></div>
+          <div class="dual">
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--blue); padding:1rem 1.2rem;">
+              <h4 style="color:var(--indigo); font-size:1.05rem; margin-bottom:0.4rem;">BA's testing contributions</h4>
+              <ul style="padding-left:1.2rem; font-size:0.88rem; line-height:1.7;">
+                <li>Spec testable AC (Given/When/Then)</li>
+                <li>Spec which quality attributes matter and to what level</li>
+                <li>Define what UAT looks like</li>
+                <li>Review test coverage with QA</li>
+                <li>Sign off on go-live based on test results</li>
+                <li>Validate the right thing got built</li>
+              </ul>
+            </div>
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--amber); padding:1rem 1.2rem;">
+              <h4 style="color:var(--indigo); font-size:1.05rem; margin-bottom:0.4rem;">QA's testing contributions</h4>
+              <ul style="padding-left:1.2rem; font-size:0.88rem; line-height:1.7;">
+                <li>Design test cases from AC</li>
+                <li>Cover all levels (smoke, integration, system, regression)</li>
+                <li>Cover non-functional types (perf, security, a11y, etc.)</li>
+                <li>Identify edge cases and risks</li>
+                <li>Maintain regression suite</li>
+                <li>Verify the thing got built right</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px"><strong>The handoff:</strong> BA's AC becomes QA's test cases. If the AC is sloppy, the test cases are sloppy. <strong>If the BA can't write a test for it, the AC isn't done.</strong></p>
+        </div>
+      </div>
+
+      <!-- 12 COMMON MISTAKES -->
+      <div class="slide accent-blue" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> Common testing mistakes (everyone makes these)</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Avoid these and you're ahead of most teams</h2></div>
+          <div class="big-card">
+            <ul>
+              <li><strong>Testing only the happy path</strong> — easy to demo, dangerous in production. Always test rejection, error, edge.</li>
+              <li><strong>"It works on my machine"</strong> — that's not testing, that's wishful thinking. Test in the actual deployed environment.</li>
+              <li><strong>No regression strategy</strong> — every fix introduces a new bug somewhere. Without regression, you're patching with one hand and breaking with the other.</li>
+              <li><strong>Manual-only testing</strong> — fine at first; suicidal at scale. The pyramid inverts and the suite becomes the bottleneck.</li>
+              <li><strong>Functional-only testing</strong> — system passes all functional tests, falls over at 100 users. NFRs matter.</li>
+              <li><strong>Inverted pyramid</strong> — too many slow E2E tests, too few unit tests. CI takes hours, no one trusts the suite.</li>
+              <li><strong>"QA will catch it"</strong> — testing is everyone's job. Devs writing only happy-path code = bugs that QA can't catch.</li>
+              <li><strong>Skipping accessibility</strong> — it's law in many places, and the lawsuit risk grows yearly.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 13 WRAP -->
+      <div class="slide bg-indigo" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> Wrap-up</div>
+        <div class="center" style="max-width:880px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key Takeaways</div>
+          <h2 class="heading" style="color:white">Testing fundamentals · what to carry forward</h2>
+          <ul class="reveal-list" style="color:rgba(255,255,255,0.9); text-align:left; max-width:780px; margin:1.5rem auto; font-size:0.97rem; line-height:1.85;">
+            <li>✅ Two questions: <strong>verification ("built right?")</strong> · <strong>validation ("right thing?")</strong></li>
+            <li>✅ The <strong>test pyramid</strong> — many fast unit tests, fewer expensive E2E tests</li>
+            <li>✅ Six levels: <strong>unit · integration · system · acceptance · regression · smoke</strong></li>
+            <li>✅ Two type families: <strong>functional</strong> (does it work?) · <strong>non-functional</strong> (how well?)</li>
+            <li>✅ <strong>ISO 25010 · 8 quality attributes</strong> — the framework for what "good" means</li>
+            <li>✅ <strong>Accessibility</strong> is part of usability and increasingly part of the law (WCAG 2.1 AA)</li>
+            <li>✅ <strong>BA</strong> specifies what to test; <strong>QA</strong> designs how — same artifact, two views</li>
+            <li>✅ Next class: <strong>Bug Reporting &amp; Defect Lifecycle</strong></li>
+          </ul>
+          <p style="color:var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-top:1.5rem">If you can't write a test for an AC, the AC isn't done.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 13</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>

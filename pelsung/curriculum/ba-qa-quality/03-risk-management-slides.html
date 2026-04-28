@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Risk Management — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      .big-card { background:white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.3rem; max-width:1050px; width:100%; }
+      .big-card h4 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-bottom:0.45rem; }
+      .big-card ul { padding-left:1.2rem; margin:0.4rem 0; }
+      .big-card li { font-size:0.92rem; line-height:1.7; color:var(--text); margin:0.2rem 0; }
+
+      .dual { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px) { .dual { grid-template-columns: 1fr; } }
+      .dual-bad { background:#FFF5F7; border:1px solid #FADCE3; border-radius:10px; padding:0.9rem 1.1rem; }
+      .dual-good { background:#F3FAE9; border:1px solid #D4E8BD; border-radius:10px; padding:0.9rem 1.1rem; }
+      .dual-bad h5 { color:var(--red); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.4rem; }
+      .dual-good h5 { color:#3D7A3D; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.4rem; }
+      .dual ul { padding-left:1.1rem; margin:0; }
+      .dual li { font-size:0.85rem; line-height:1.65; color:var(--text); margin:0.2rem 0; }
+
+      .diagram { background:white; border:1px solid var(--border); border-radius:10px; padding:1rem; max-width:1100px; width:100%; overflow-x:auto; }
+      .diagram svg { display:block; margin:0 auto; }
+      .diagram .caption { font-size:0.82rem; color:var(--muted); margin-top:0.6rem; text-align:center; font-style:italic; }
+
+      .matrix-grid { display:grid; grid-template-columns: 110px repeat(3, 1fr); grid-template-rows: 50px repeat(3, 90px); gap:6px; max-width:760px; width:100%; }
+      .mh { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--muted); font-size:0.85rem; display:flex; align-items:center; justify-content:center; text-align:center; }
+      .mc { padding:0.5rem; border-radius:6px; font-size:0.78rem; line-height:1.3; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
+      .mc strong { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.85rem; }
+      .mc.high { background:#FEE9EC; color:#9e0022; border:2px solid #D80032; }
+      .mc.med { background:#FFF4E3; color:#8a6d0c; border:2px solid #F4B942; }
+      .mc.low { background:#F3FAE9; color:#3D7A3D; border:2px solid #7BC950; }
+
+      .reg-tbl { background:white; border:1px solid var(--border); border-radius:10px; max-width:1150px; width:100%; overflow:auto; }
+      .reg-tbl table { width:100%; border-collapse:collapse; font-size:0.82rem; }
+      .reg-tbl th { background:var(--bg); padding:0.5rem 0.7rem; text-align:left; color:var(--muted); font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; border-bottom:1px solid var(--border); }
+      .reg-tbl td { padding:0.5rem 0.7rem; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+      .reg-tbl tr:last-child td { border-bottom:none; }
+      .reg-tbl td.id { color:var(--indigo); font-family:'Courier New',monospace; font-weight:600; }
+      .reg-tbl .pill { display:inline-block; padding:0.1rem 0.5rem; border-radius:4px; font-size:0.7rem; font-weight:700; }
+      .reg-tbl .pill.h { background:#FEE9EC; color:#9e0022; }
+      .reg-tbl .pill.m { background:#FFF4E3; color:#8a6d0c; }
+      .reg-tbl .pill.l { background:#F3FAE9; color:#3D7A3D; }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient bg-dark" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>Quality &amp; Compliance · 03 of 05</div></div>
+          <h1 class="display" style="color:white">
+            <span style="color: var(--amber)">Risk Management</span><br />
+            <span style="color: white">&amp; Risk-Based Thinking</span>
+          </h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85)">Not all features are equal · not all bugs are equal · not all tests are equal. Risk thinking helps you focus where it matters.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">Risk register</span>
+            <span class="class-tag tag-blue">Likelihood × impact</span>
+            <span class="class-tag tag-blue">Risk-based testing</span>
+            <span class="class-tag tag-blue">Mitigation</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 WHY -->
+      <div class="slide bg-indigo" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span></div>
+        <div class="center" style="max-width:900px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Why risk thinking</div>
+          <h1 class="display" style="color:white; font-size:2.3rem; line-height:1.25">"We can't test everything. So what should we test?"</h1>
+          <p style="color: rgba(255,255,255,0.85); font-size: 1.05rem; margin-top:1.5rem; line-height:1.85">
+            Test budget is finite. Time is finite. Attention is finite.<br><br>
+            Risk thinking gives you a framework: <strong>spend more on the things where being wrong hurts most</strong>. Spend less where it doesn't.
+          </p>
+          <p style="color: var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.15rem; margin-top:1.5rem">Risk = likelihood × impact. Two numbers. Most decisions fall out from there.</p>
+        </div>
+      </div>
+
+      <!-- 3 THE EQUATION -->
+      <div class="slide accent-blue bg-subtle" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> The risk equation · two numbers, one decision</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Risk = Likelihood × Impact</h2></div>
+          <div class="big-card">
+            <ul>
+              <li><strong>Likelihood</strong> — how probable is this bad thing? (0–100% or Low/Med/High)</li>
+              <li><strong>Impact</strong> — if it happens, how bad? (BTN, hours, customers affected, reputation, lives)</li>
+              <li><strong>Risk score</strong> — multiply them. Or plot on a 3×3 / 5×5 grid. Higher = scarier.</li>
+            </ul>
+            <h4 style="margin-top:0.6rem">Examples in different units</h4>
+            <ul>
+              <li>Server crash on Black Friday: <strong>Likelihood</strong> 30%, <strong>Impact</strong> $2M lost sales = expected loss $600k</li>
+              <li>SMS gateway typo in confirmation: <strong>Likelihood</strong> 90% (typo exists), <strong>Impact</strong> minor confusion = low risk</li>
+              <li>Wrong tax calculation: <strong>Likelihood</strong> 5%, <strong>Impact</strong> regulatory fine + reputation = high risk despite low likelihood</li>
+            </ul>
+            <p style="margin-top:0.5rem; color:var(--muted); font-style:italic">You won't always have numbers. High/Med/Low works for most BA/QA decisions.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 RISK MATRIX -->
+      <div class="slide accent-blue" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> The risk matrix · the BA's everyday tool</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">3 × 3 grid · plot the risks · color-code the response</h2></div>
+          <div class="matrix-grid">
+            <div class="mh"></div>
+            <div class="mh">Impact: Low</div>
+            <div class="mh">Impact: Medium</div>
+            <div class="mh">Impact: High</div>
+
+            <div class="mh">Likelihood: High</div>
+            <div class="mc med"><strong>Medium</strong> Watch &amp; mitigate cheaply</div>
+            <div class="mc high"><strong>High</strong> Mitigate or avoid</div>
+            <div class="mc high"><strong>Critical</strong> Stop · plan around</div>
+
+            <div class="mh">Likelihood: Medium</div>
+            <div class="mc low"><strong>Low</strong> Accept, monitor</div>
+            <div class="mc med"><strong>Medium</strong> Plan mitigation</div>
+            <div class="mc high"><strong>High</strong> Mitigate or transfer</div>
+
+            <div class="mh">Likelihood: Low</div>
+            <div class="mc low"><strong>Trivial</strong> Accept · move on</div>
+            <div class="mc low"><strong>Low</strong> Accept</div>
+            <div class="mc med"><strong>Medium</strong> Plan response · don't ignore</div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:840px"><strong>Reading rule:</strong> top-right cell = drop everything. Bottom-left = ignore. The middle band needs judgement and planning.</p>
+        </div>
+      </div>
+
+      <!-- 5 FOUR RESPONSES -->
+      <div class="slide accent-blue bg-subtle" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span> The four risk responses</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Avoid · Mitigate · Transfer · Accept</h2></div>
+          <div class="dual" style="grid-template-columns: 1fr 1fr; max-width:1100px;">
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--red); padding:0.9rem 1.1rem;">
+              <h4 style="color:var(--indigo); font-size:1rem; margin-bottom:0.3rem;">Avoid</h4>
+              <p style="font-size:0.88rem; line-height:1.65;">Change the plan so the risk doesn't apply. <em>"Don't store credit cards" eliminates the credit-card-breach risk.</em></p>
+            </div>
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--amber); padding:0.9rem 1.1rem;">
+              <h4 style="color:var(--indigo); font-size:1rem; margin-bottom:0.3rem;">Mitigate</h4>
+              <p style="font-size:0.88rem; line-height:1.65;">Reduce likelihood or impact. <em>"Add monitoring + auto-failover" reduces likelihood and impact of outages.</em></p>
+            </div>
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--blue); padding:0.9rem 1.1rem;">
+              <h4 style="color:var(--indigo); font-size:1rem; margin-bottom:0.3rem;">Transfer</h4>
+              <p style="font-size:0.88rem; line-height:1.65;">Push the risk to someone else. <em>"Use Stripe for payments" transfers PCI-DSS compliance burden to Stripe.</em></p>
+            </div>
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--purple); padding:0.9rem 1.1rem;">
+              <h4 style="color:var(--indigo); font-size:1rem; margin-bottom:0.3rem;">Accept</h4>
+              <p style="font-size:0.88rem; line-height:1.65;">Live with the risk. Document the decision. <em>"We accept the 0.1% chance of brief downtime during deploys" — done.</em></p>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px"><strong>Mantra:</strong> not every risk needs a fix. Sometimes the right answer is to accept and move on. The wrong answer is to ignore.</p>
+        </div>
+      </div>
+
+      <!-- 6 RISK REGISTER -->
+      <div class="slide accent-blue" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> The risk register · the artifact</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">A living spreadsheet of every known risk</h2></div>
+          <div class="reg-tbl">
+            <table>
+              <thead><tr><th>ID</th><th>Risk</th><th>Cat</th><th>Likelihood</th><th>Impact</th><th>Score</th><th>Response</th><th>Owner</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td class="id">R-01</td><td>Payment gateway outage during peak hours</td><td>Tech</td><td>Med</td><td>High</td><td><span class="pill h">High</span></td><td>Mitigate · add fallback gateway</td><td>Eng Lead</td><td>Open</td></tr>
+                <tr><td class="id">R-02</td><td>MPIN brute-force attack</td><td>Security</td><td>High</td><td>High</td><td><span class="pill h">Critical</span></td><td>Mitigate · 3-attempt lockout + rate limit</td><td>Security</td><td>Mitigated</td></tr>
+                <tr><td class="id">R-03</td><td>Customer PII leaked via logs</td><td>Compliance</td><td>Med</td><td>High</td><td><span class="pill h">High</span></td><td>Mitigate · log scrubbing + audit</td><td>Platform</td><td>In progress</td></tr>
+                <tr><td class="id">R-04</td><td>Slow load on rural 3G connections</td><td>Performance</td><td>High</td><td>Med</td><td><span class="pill m">Medium</span></td><td>Mitigate · image compression, lazy load</td><td>Frontend</td><td>Open</td></tr>
+                <tr><td class="id">R-05</td><td>Bhutan DPPA non-compliance</td><td>Compliance</td><td>Low</td><td>High</td><td><span class="pill m">Medium</span></td><td>Mitigate · DPIA + consent flows</td><td>Legal</td><td>Open</td></tr>
+                <tr><td class="id">R-06</td><td>Build server runs out of disk</td><td>Tech</td><td>Med</td><td>Low</td><td><span class="pill l">Low</span></td><td>Accept + monitor</td><td>DevOps</td><td>Accepted</td></tr>
+                <tr><td class="id">R-07</td><td>Trainer attrition mid-cohort</td><td>People</td><td>Low</td><td>High</td><td><span class="pill m">Medium</span></td><td>Mitigate · cross-train assistant</td><td>Tek</td><td>Open</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">Live document. Updated weekly. Reviewed at every milestone. Risks aren't filed and forgotten — they're tracked until closed.</p>
+        </div>
+      </div>
+
+      <!-- 7 RISK CATEGORIES -->
+      <div class="slide accent-blue bg-subtle" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> Risk categories · don't miss any</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Six families of risk — sweep through them all</h2></div>
+          <div class="big-card">
+            <ul>
+              <li><strong>Technical</strong> — outages, latency, capacity, integration failures, deprecations</li>
+              <li><strong>Security</strong> — breaches, attacks, leaks, broken auth, vulnerable dependencies</li>
+              <li><strong>Compliance / Regulatory</strong> — Bhutan DPPA, GDPR, PCI-DSS, accessibility law (WCAG/EAA), industry-specific rules</li>
+              <li><strong>Operational</strong> — vendor failures, deployment problems, runbook gaps, on-call coverage</li>
+              <li><strong>People</strong> — key-person dependency, attrition, knowledge silos, ramp-up time</li>
+              <li><strong>Business</strong> — competitor moves, market change, funding, scope creep, schedule slip</li>
+            </ul>
+            <p style="margin-top:0.5rem; color:var(--text); font-style:italic">When building a risk register, walk through these six explicitly. Most teams over-index on technical and miss compliance / people / operational.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8 RISK-BASED TESTING -->
+      <div class="slide accent-blue" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> Risk-based testing · QA's lens</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Same risk register · different question · "where do I test most?"</h2></div>
+          <div class="big-card">
+            <h4>The mapping</h4>
+            <ul>
+              <li><strong>High-risk feature</strong> → deep functional + non-functional tests, edge cases, automation, regression every build</li>
+              <li><strong>Medium-risk feature</strong> → solid functional, basic non-functional, regression on release</li>
+              <li><strong>Low-risk feature</strong> → smoke tests, sanity checks, regression occasionally</li>
+              <li><strong>Trivial</strong> → exploratory if time permits</li>
+            </ul>
+            <h4 style="margin-top:0.6rem">Concrete example · mBoB</h4>
+            <ul>
+              <li><strong>Money transfer</strong> = critical risk · test every level · automate every scenario · every build</li>
+              <li><strong>View transaction history</strong> = medium · functional + perf at scale · regression each release</li>
+              <li><strong>Update profile photo</strong> = low · happy-path + 1 edge case · smoke test in CI</li>
+              <li><strong>Customer service phone number page</strong> = trivial · check it loads in smoke test</li>
+            </ul>
+            <p style="margin-top:0.5rem; color:var(--text); font-style:italic">Without risk-based prioritization, QA tests "everything equally" and runs out of time before testing what really matters. With it, the highest-risk features get the deepest coverage.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9 BA AND QA OWN DIFFERENT VIEWS -->
+      <div class="slide accent-blue bg-subtle" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> Same artifact · two roles · two lenses</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">BA owns the register · QA reads it for test priority</h2></div>
+          <div class="dual">
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--blue); padding:1rem 1.2rem;">
+              <h4 style="color:var(--indigo); font-size:1.05rem; margin-bottom:0.4rem;">BA's risk work</h4>
+              <ul style="padding-left:1.2rem; font-size:0.88rem; line-height:1.7;">
+                <li>Identify risks during requirements elicitation</li>
+                <li>Score them with stakeholders (likelihood × impact)</li>
+                <li>Maintain the risk register through the project</li>
+                <li>Choose mitigation responses with stakeholders</li>
+                <li>Surface risks at every milestone review</li>
+                <li>Trigger the §12 (Risks) section of the BRD</li>
+              </ul>
+            </div>
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--amber); padding:1rem 1.2rem;">
+              <h4 style="color:var(--indigo); font-size:1.05rem; margin-bottom:0.4rem;">QA's risk work</h4>
+              <ul style="padding-left:1.2rem; font-size:0.88rem; line-height:1.7;">
+                <li>Read the risk register before designing tests</li>
+                <li>Map test depth to risk score</li>
+                <li>Identify <em>quality risks</em> the BA might miss (perf, a11y, data integrity)</li>
+                <li>Push back if a high-risk feature has thin AC</li>
+                <li>Track which risks are still uncovered by tests</li>
+                <li>Surface "we found this in testing" risks back to BA</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:840px"><strong>Sync point:</strong> a quick risk review at sprint planning. BA presents the register, QA confirms test coverage matches the priorities, dev confirms mitigation work is in scope.</p>
+        </div>
+      </div>
+
+      <!-- 10 WORKED EXAMPLE -->
+      <div class="slide accent-blue" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> Worked example · risk register for an mBoB v4 release</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="diagram">
+            <svg width="900" height="280" viewBox="0 0 900 280">
+              <!-- Risk matrix as a chart -->
+              <line x1="80" y1="40" x2="80" y2="240" stroke="#001F35" stroke-width="1.5"/>
+              <line x1="80" y1="240" x2="850" y2="240" stroke="#001F35" stroke-width="1.5"/>
+              <text x="80" y="30" font-family="Bahnschrift" font-size="11" fill="#001F35">Likelihood ↑</text>
+              <text x="850" y="260" text-anchor="end" font-family="Bahnschrift" font-size="11" fill="#001F35">Impact →</text>
+
+              <!-- Quadrant backgrounds -->
+              <rect x="80" y="40" width="385" height="100" fill="#FFF4E3" opacity="0.4"/>
+              <rect x="465" y="40" width="385" height="100" fill="#FEE9EC" opacity="0.4"/>
+              <rect x="80" y="140" width="385" height="100" fill="#F3FAE9" opacity="0.4"/>
+              <rect x="465" y="140" width="385" height="100" fill="#FFF4E3" opacity="0.4"/>
+
+              <text x="270" y="80" text-anchor="middle" font-family="Bahnschrift" font-size="10" fill="#8a6d0c" opacity="0.7">High likelihood / Low impact</text>
+              <text x="660" y="80" text-anchor="middle" font-family="Bahnschrift" font-size="10" fill="#9e0022" opacity="0.7">High likelihood / High impact</text>
+              <text x="270" y="180" text-anchor="middle" font-family="Bahnschrift" font-size="10" fill="#3D7A3D" opacity="0.7">Low likelihood / Low impact</text>
+              <text x="660" y="180" text-anchor="middle" font-family="Bahnschrift" font-size="10" fill="#8a6d0c" opacity="0.7">Low likelihood / High impact</text>
+
+              <!-- Risks plotted -->
+              <circle cx="700" cy="60" r="14" fill="#D80032" opacity="0.85"/>
+              <text x="700" y="64" text-anchor="middle" font-family="Bahnschrift" font-size="11" fill="white">R2</text>
+              <text x="720" y="64" font-family="Open Sans" font-size="10" fill="#001F35">MPIN brute-force</text>
+
+              <circle cx="630" cy="100" r="14" fill="#D80032" opacity="0.85"/>
+              <text x="630" y="104" text-anchor="middle" font-family="Bahnschrift" font-size="11" fill="white">R1</text>
+              <text x="650" y="104" font-family="Open Sans" font-size="10" fill="#001F35">Gateway outage</text>
+
+              <circle cx="600" cy="115" r="14" fill="#D80032" opacity="0.85"/>
+              <text x="600" y="119" text-anchor="middle" font-family="Bahnschrift" font-size="11" fill="white">R3</text>
+              <text x="620" y="125" font-family="Open Sans" font-size="10" fill="#001F35">PII in logs</text>
+
+              <circle cx="280" cy="80" r="14" fill="#F4B942" opacity="0.85"/>
+              <text x="280" y="84" text-anchor="middle" font-family="Bahnschrift" font-size="11" fill="white">R4</text>
+              <text x="300" y="84" font-family="Open Sans" font-size="10" fill="#001F35">Slow on 3G</text>
+
+              <circle cx="660" cy="190" r="14" fill="#F4B942" opacity="0.85"/>
+              <text x="660" y="194" text-anchor="middle" font-family="Bahnschrift" font-size="11" fill="white">R5</text>
+              <text x="680" y="194" font-family="Open Sans" font-size="10" fill="#001F35">DPPA non-compliance</text>
+
+              <circle cx="280" cy="200" r="14" fill="#7BC950" opacity="0.85"/>
+              <text x="280" y="204" text-anchor="middle" font-family="Bahnschrift" font-size="11" fill="white">R6</text>
+              <text x="300" y="204" font-family="Open Sans" font-size="10" fill="#001F35">Build disk full</text>
+
+              <circle cx="700" cy="200" r="14" fill="#F4B942" opacity="0.85"/>
+              <text x="700" y="204" text-anchor="middle" font-family="Bahnschrift" font-size="11" fill="white">R7</text>
+              <text x="720" y="204" font-family="Open Sans" font-size="10" fill="#001F35">Trainer attrition</text>
+
+              <text x="80" y="55" font-family="Open Sans" font-size="9" fill="#7B7C7F">High</text>
+              <text x="80" y="155" font-family="Open Sans" font-size="9" fill="#7B7C7F">Med</text>
+              <text x="80" y="235" font-family="Open Sans" font-size="9" fill="#7B7C7F">Low</text>
+              <text x="200" y="255" font-family="Open Sans" font-size="9" fill="#7B7C7F">Low</text>
+              <text x="450" y="255" font-family="Open Sans" font-size="9" fill="#7B7C7F">Med</text>
+              <text x="800" y="255" font-family="Open Sans" font-size="9" fill="#7B7C7F">High</text>
+            </svg>
+            <div class="caption">Same 7 risks plotted on the matrix. <strong>Top-right cluster</strong> (R1, R2, R3) = mitigate aggressively. <strong>Bottom-left</strong> (R6) = accept. <strong>R5</strong> low likelihood / high impact = don't ignore — needs a plan.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11 PROCESS -->
+      <div class="slide accent-blue bg-subtle" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> The process · how to actually do this</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Five steps · run it as a workshop, not a solo exercise</h2></div>
+          <div class="big-card">
+            <ul>
+              <li><strong>1 · Identify</strong> — gather the team, sweep the six categories, brainstorm risks. Use BRD assumptions, past incidents, OWASP, ISO 25010 as prompts.</li>
+              <li><strong>2 · Assess</strong> — score each one (likelihood × impact). Doesn't need to be precise — "Low/Med/High" works.</li>
+              <li><strong>3 · Prioritize</strong> — plot on the matrix. The top-right corner gets attention first.</li>
+              <li><strong>4 · Respond</strong> — pick one of the four (avoid · mitigate · transfer · accept). Document the decision.</li>
+              <li><strong>5 · Monitor</strong> — review the register at sprint planning, milestone reviews, and after every incident. Update scores. Close mitigated risks.</li>
+            </ul>
+            <p style="margin-top:0.5rem; color:var(--text); font-style:italic"><strong>Cadence:</strong> create at project start. Update weekly during active development. Quarterly review for mature systems.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12 PITFALLS -->
+      <div class="slide accent-blue" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> Common risk-management mistakes</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Avoid these · most teams fall into at least three</h2></div>
+          <div class="big-card">
+            <ul>
+              <li><strong>Risk register as compliance theater</strong> — created at project start, never updated. Useless. Update it.</li>
+              <li><strong>Only technical risks</strong> — missing compliance, people, business risks. Sweep all six categories.</li>
+              <li><strong>Vague risks</strong> — "things could go wrong with security." Specific: "MPIN brute-force attack succeeds via missing rate limit."</li>
+              <li><strong>No owner per risk</strong> — orphaned risks die unmitigated. Every risk needs a name beside it.</li>
+              <li><strong>"Mitigated" without verification</strong> — mitigation is a claim until QA / audit confirms. Don't close on the dev's word.</li>
+              <li><strong>QA tests without reading the register</strong> — same priorities should drive both BA's plan and QA's tests. Walk through together.</li>
+              <li><strong>Ignoring low-likelihood / high-impact risks</strong> — the rare-but-catastrophic ones (data loss, security breach). They need a plan even if rare.</li>
+              <li><strong>Treating risks as static</strong> — likelihoods and impacts change as the project evolves. Re-score regularly.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 13 WRAP -->
+      <div class="slide bg-indigo" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> Wrap-up</div>
+        <div class="center" style="max-width:880px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key Takeaways</div>
+          <h2 class="heading" style="color:white">Risk management · what to carry forward</h2>
+          <ul class="reveal-list" style="color:rgba(255,255,255,0.9); text-align:left; max-width:780px; margin:1.5rem auto; font-size:0.97rem; line-height:1.85;">
+            <li>✅ <strong>Risk = likelihood × impact</strong> — two numbers drive most decisions</li>
+            <li>✅ The 3×3 matrix · top-right = critical · bottom-left = trivial · diagonal = judgement</li>
+            <li>✅ Four responses: <strong>avoid · mitigate · transfer · accept</strong></li>
+            <li>✅ <strong>Risk register</strong> · live document · ID, risk, category, scores, response, owner, status</li>
+            <li>✅ Six categories: <strong>technical · security · compliance · operational · people · business</strong></li>
+            <li>✅ <strong>BA owns the register · QA reads it for test priority</strong> — same artifact, two views</li>
+            <li>✅ Process: identify → assess → prioritize → respond → monitor</li>
+            <li>✅ Next class: <strong>Data Protection &amp; Compliance</strong></li>
+          </ul>
+          <p style="color:var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-top:1.5rem">You can't test everything. Test what matters most.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 13</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>

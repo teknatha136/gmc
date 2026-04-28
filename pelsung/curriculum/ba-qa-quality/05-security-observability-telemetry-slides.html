@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Security, Observability &amp; Telemetry — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      .big-card { background:white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.3rem; max-width:1050px; width:100%; }
+      .big-card h4 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-bottom:0.45rem; }
+      .big-card ul { padding-left:1.2rem; margin:0.4rem 0; }
+      .big-card li { font-size:0.92rem; line-height:1.7; color:var(--text); margin:0.2rem 0; }
+
+      .owasp-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:0.6rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px) { .owasp-grid { grid-template-columns: 1fr; } }
+      .owasp-card { background:white; border:1px solid var(--border); border-left:4px solid var(--red); border-radius:8px; padding:0.7rem 0.9rem; }
+      .owasp-card .num { font-family:'Courier New',monospace; font-size:0.72rem; color:var(--muted); }
+      .owasp-card h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.92rem; margin:0.1rem 0 0.2rem; }
+      .owasp-card p { font-size:0.78rem; color:var(--text); line-height:1.5; }
+
+      .pillars-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:0.8rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px) { .pillars-grid { grid-template-columns: 1fr; } }
+      .pillar-card { background:white; border:1px solid var(--border); border-top:4px solid var(--blue); border-radius:10px; padding:0.95rem 1.1rem; }
+      .pillar-card.logs { border-top-color:var(--blue); }
+      .pillar-card.metrics { border-top-color:var(--amber); }
+      .pillar-card.traces { border-top-color:var(--purple); }
+      .pillar-card h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; margin-bottom:0.3rem; }
+      .pillar-card p { font-size:0.88rem; line-height:1.65; color:var(--text); margin:0.3rem 0; }
+      .pillar-card .ans { color:var(--muted); font-style:italic; font-size:0.82rem; }
+
+      .dual { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px) { .dual { grid-template-columns: 1fr; } }
+
+      .funnel { background:white; border:1px solid var(--border); border-radius:10px; padding:1rem; max-width:1100px; width:100%; overflow-x:auto; }
+      .funnel svg { display:block; margin:0 auto; }
+      .funnel .caption { font-size:0.82rem; color:var(--muted); margin-top:0.6rem; text-align:center; font-style:italic; }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient bg-dark" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>Quality &amp; Compliance · 05 of 05</div></div>
+          <h1 class="display" style="color:white">
+            <span style="color: var(--amber)">Security · Observability</span><br />
+            <span style="color: white">&amp; Telemetry</span>
+          </h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85)">After launch · how do you know the system is safe, working, and useful? OWASP Top 10. Three pillars. Telemetry that earns its keep.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">OWASP Top 10</span>
+            <span class="class-tag tag-blue">Logs · Metrics · Traces</span>
+            <span class="class-tag tag-blue">Telemetry &amp; KPIs</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 WHY -->
+      <div class="slide bg-indigo" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span></div>
+        <div class="center" style="max-width:900px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Why these three together</div>
+          <h1 class="display" style="color:white; font-size:2.2rem; line-height:1.25">"Is the system being attacked? Is it working? Is anyone using it?"</h1>
+          <p style="color: rgba(255,255,255,0.85); font-size: 1.05rem; margin-top:1.5rem; line-height:1.85">
+            Three different post-launch questions. They share one answer: <strong>you must instrument the system to be able to see inside it</strong>.<br><br>
+            Security needs visibility into attempted attacks. Observability needs visibility into errors and latency. Telemetry needs visibility into what users actually do.
+          </p>
+          <p style="color: var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.15rem; margin-top:1.5rem">If you can't see it, you can't defend it, fix it, or improve it.</p>
+        </div>
+      </div>
+
+      <!-- 3 SECURITY INTRO -->
+      <div class="slide bg-blue" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part One</div>
+          <h1 class="display" style="color:white">Security awareness for BA &amp; QA</h1>
+          <p class="body-lg" style="color:rgba(255,255,255,0.85); margin-top:1rem; max-width:760px">You won't write the defenses. But you must spec them, verify them, and recognize when they're missing.</p>
+        </div>
+      </div>
+
+      <!-- 4 OWASP TOP 10 -->
+      <div class="slide accent-blue bg-subtle" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> OWASP Top 10 · the application security canon</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Updated every few years · the most common web app vulnerabilities</h2></div>
+          <div class="owasp-grid">
+            <div class="owasp-card"><div class="num">A01:2021</div><h6>Broken Access Control</h6><p>Users can act outside their permissions. The most common category.</p></div>
+            <div class="owasp-card"><div class="num">A02:2021</div><h6>Cryptographic Failures</h6><p>Sensitive data exposed via weak or missing encryption.</p></div>
+            <div class="owasp-card"><div class="num">A03:2021</div><h6>Injection</h6><p>SQL injection, XSS, command injection. User input treated as code.</p></div>
+            <div class="owasp-card"><div class="num">A04:2021</div><h6>Insecure Design</h6><p>Vulnerabilities baked into the architecture from the start.</p></div>
+            <div class="owasp-card"><div class="num">A05:2021</div><h6>Security Misconfiguration</h6><p>Default passwords, exposed admin interfaces, debug mode in production.</p></div>
+            <div class="owasp-card"><div class="num">A06:2021</div><h6>Vulnerable Components</h6><p>Outdated libraries with known exploits. (Log4Shell, anyone?)</p></div>
+            <div class="owasp-card"><div class="num">A07:2021</div><h6>Identification &amp; Auth Failures</h6><p>Weak passwords, broken session management, no MFA.</p></div>
+            <div class="owasp-card"><div class="num">A08:2021</div><h6>Software &amp; Data Integrity Failures</h6><p>Unsigned updates, untrusted CI/CD pipelines, supply chain attacks.</p></div>
+            <div class="owasp-card"><div class="num">A09:2021</div><h6>Security Logging &amp; Monitoring Failures</h6><p>Can't detect attacks because nothing is logged or watched.</p></div>
+            <div class="owasp-card"><div class="num">A10:2021</div><h6>Server-Side Request Forgery</h6><p>App can be tricked into making requests on the attacker's behalf.</p></div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:840px; font-style:italic">You don't need to memorize the list. You need to know it exists, walk through it during BRD review, and verify your team has covered each item.</p>
+        </div>
+      </div>
+
+      <!-- 5 BA QA SECURITY ROLE -->
+      <div class="slide accent-blue" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span> What BAs and QAs do about security</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">You're not pen-testers · you are first defenders</h2></div>
+          <div class="dual">
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--blue); padding:1rem 1.2rem;">
+              <h4 style="color:var(--indigo); font-size:1.05rem; margin-bottom:0.4rem;">BA's security spec work</h4>
+              <ul style="padding-left:1.2rem; font-size:0.88rem; line-height:1.7;">
+                <li>Spec authentication: MFA, session timeout, password policy</li>
+                <li>Spec authorization: who can do what (use a role-based matrix)</li>
+                <li>Spec rate limiting: how many attempts before lockout</li>
+                <li>Spec input validation: format, length, allowed characters</li>
+                <li>Spec what happens on failure (helpful but not too helpful)</li>
+                <li>Spec audit logging: who did what when</li>
+                <li>Spec encryption requirements: in transit, at rest, end-to-end</li>
+              </ul>
+            </div>
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--amber); padding:1rem 1.2rem;">
+              <h4 style="color:var(--indigo); font-size:1.05rem; margin-bottom:0.4rem;">QA's security verify work</h4>
+              <ul style="padding-left:1.2rem; font-size:0.88rem; line-height:1.7;">
+                <li>Try injection inputs: <code>'; DROP TABLE users;--</code> etc.</li>
+                <li>Try logging in as one user, accessing another's data</li>
+                <li>Try the auth flow with empty / wrong / expired tokens</li>
+                <li>Verify rate limiting actually triggers</li>
+                <li>Verify error messages don't leak system internals</li>
+                <li>Verify logs capture security events without leaking PII</li>
+                <li>Run automated scans (OWASP ZAP, etc.) on staging</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:840px"><strong>The deeper testing</strong> (penetration testing, red team) is for security specialists. But the everyday discipline of "did we think about each OWASP category?" is BA/QA's job.</p>
+        </div>
+      </div>
+
+      <!-- 6 OBSERVABILITY INTRO -->
+      <div class="slide bg-blue" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Two</div>
+          <h1 class="display" style="color:white">Observability · the three pillars</h1>
+          <p class="body-lg" style="color:rgba(255,255,255,0.85); margin-top:1rem; max-width:760px">If you can't see what's happening inside the system in production, you can't fix it.</p>
+        </div>
+      </div>
+
+      <!-- 7 THREE PILLARS -->
+      <div class="slide accent-blue bg-subtle" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> The three pillars · logs, metrics, traces</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Different questions · different tools · all three matter</h2></div>
+          <div class="pillars-grid">
+            <div class="pillar-card logs">
+              <h5>Logs</h5>
+              <p><strong>"What happened?"</strong></p>
+              <p>Discrete events recorded as text or JSON. Most detailed but most volume.</p>
+              <p class="ans">Best for: debugging specific incidents, audit trails, compliance evidence.</p>
+              <p class="ans">Tools: ELK, Loki, Datadog, Splunk.</p>
+            </div>
+            <div class="pillar-card metrics">
+              <h5>Metrics</h5>
+              <p><strong>"How much / how often / how fast?"</strong></p>
+              <p>Aggregated numbers over time. Cheap to store, fast to query.</p>
+              <p class="ans">Best for: dashboards, alerts, SLAs ("p95 latency &lt; 500ms").</p>
+              <p class="ans">Tools: Prometheus, Datadog, Grafana, CloudWatch.</p>
+            </div>
+            <div class="pillar-card traces">
+              <h5>Traces</h5>
+              <p><strong>"How did this one request flow through the system?"</strong></p>
+              <p>End-to-end view of a single request across services.</p>
+              <p class="ans">Best for: distributed systems, finding the slow service, understanding cascades.</p>
+              <p class="ans">Tools: Jaeger, Tempo, Datadog APM, Honeycomb.</p>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:880px"><strong>Together:</strong> a metric tells you something is broken (alert fires). Traces show you which service. Logs show you the exact error in that service. The pipeline.</p>
+        </div>
+      </div>
+
+      <!-- 8 GOOD LOGS -->
+      <div class="slide accent-blue" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> What makes a log line useful</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Structured · contextual · safe</h2></div>
+          <div class="big-card">
+            <h4>The fields every log line should have</h4>
+            <ul>
+              <li><strong>Timestamp</strong> — ISO 8601, with timezone</li>
+              <li><strong>Severity</strong> — DEBUG · INFO · WARN · ERROR · FATAL</li>
+              <li><strong>Service / module</strong> — payment-service, login-handler</li>
+              <li><strong>Trace ID / request ID</strong> — to correlate across services</li>
+              <li><strong>User context</strong> — user ID (NOT name/email), tenant ID, session ID</li>
+              <li><strong>Event</strong> — what happened, in structured form (JSON preferred)</li>
+              <li><strong>Outcome</strong> — success / failure + reason</li>
+            </ul>
+            <h4 style="margin-top:0.6rem">What never goes in a log</h4>
+            <ul>
+              <li>Passwords, MPINs, OTPs, session tokens (PCI/DPPA/GDPR violation)</li>
+              <li>Full credit card numbers (PCI violation)</li>
+              <li>Sensitive PII unless absolutely needed (and then encrypted)</li>
+              <li>Large blobs (request bodies in full) — they fill disk and capture leaks</li>
+              <li>Unstructured free text where you'll need to parse later</li>
+            </ul>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">QA: when verifying a feature, check the logs. If you can't tell what happened from the log line, the dev didn't log enough. If you see PII you shouldn't, the dev logged too much. Both are bugs.</p>
+        </div>
+      </div>
+
+      <!-- 9 USEFUL METRICS -->
+      <div class="slide accent-blue bg-subtle" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> The metrics every system needs</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Four golden signals · plus business metrics</h2></div>
+          <div class="big-card">
+            <h4>Google's "four golden signals" (SRE book)</h4>
+            <ul>
+              <li><strong>Latency</strong> — how long requests take. Watch p50, p95, p99 (the tails matter most).</li>
+              <li><strong>Traffic</strong> — how many requests per second / minute</li>
+              <li><strong>Errors</strong> — % of requests that fail (4xx user errors, 5xx server errors)</li>
+              <li><strong>Saturation</strong> — how "full" the system is (CPU, memory, connection pools)</li>
+            </ul>
+            <h4 style="margin-top:0.6rem">Plus business metrics (the ones BAs care about)</h4>
+            <ul>
+              <li><strong>Active users</strong> — DAU, WAU, MAU</li>
+              <li><strong>Conversion rate</strong> — % completing the funnel</li>
+              <li><strong>Feature adoption</strong> — % using a new feature</li>
+              <li><strong>Revenue per user</strong></li>
+              <li><strong>Customer satisfaction</strong> (NPS, CSAT) — gathered separately</li>
+            </ul>
+            <p style="margin-top:0.5rem; color:var(--text); font-style:italic">If a feature ships without metrics, you don't know if it worked. The BA's job is to spec which metrics matter <em>before</em> launch.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10 ALERTS AND SLOs -->
+      <div class="slide accent-blue" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> Alerts, SLIs, SLOs · turning metrics into action</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Three terms that separate "data" from "operations"</h2></div>
+          <div class="big-card">
+            <ul>
+              <li><strong>SLI · Service Level Indicator</strong> — a specific measured thing. "p95 latency on /payments endpoint."</li>
+              <li><strong>SLO · Service Level Objective</strong> — the target value for an SLI. "p95 latency &lt; 500ms, 99.9% of the time, measured monthly."</li>
+              <li><strong>SLA · Service Level Agreement</strong> — an SLO codified in a contract with consequences (refunds, etc.) if violated.</li>
+              <li><strong>Alert</strong> — a rule that fires when an SLI breaches its threshold. "Page on-call if error rate &gt; 1% for 5 minutes."</li>
+              <li><strong>Error budget</strong> — the inverse of an SLO. If 99.9% uptime is the SLO, you have 0.1% (~43 min/month) of error budget. When it's exhausted, no new releases.</li>
+            </ul>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:840px"><strong>BA implication:</strong> for any new feature with non-trivial user impact, spec the SLI(s) and SLO(s) it should hit. <strong>QA implication:</strong> verify the SLI is actually measured before launch.</p>
+        </div>
+      </div>
+
+      <!-- 11 TELEMETRY INTRO -->
+      <div class="slide bg-blue" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Three</div>
+          <h1 class="display" style="color:white">Telemetry · what users actually do</h1>
+          <p class="body-lg" style="color:rgba(255,255,255,0.85); margin-top:1rem; max-width:760px">Observability tells you the system works. Telemetry tells you whether it matters.</p>
+        </div>
+      </div>
+
+      <!-- 12 TELEMETRY -->
+      <div class="slide accent-blue bg-subtle" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> Telemetry · usage, funnels, KPIs</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Beyond uptime · is the feature actually being used?</h2></div>
+          <div class="big-card">
+            <h4>What telemetry captures</h4>
+            <ul>
+              <li><strong>Page views / screen views</strong> — which screens are seen</li>
+              <li><strong>Events</strong> — clicks, form submissions, completions</li>
+              <li><strong>User properties</strong> — segment, plan, tenure</li>
+              <li><strong>Funnels</strong> — step 1 → step 2 → step 3 — where do users drop off?</li>
+              <li><strong>Cohorts</strong> — group users by signup week and track behavior over time</li>
+              <li><strong>A/B test outcomes</strong> — which variant performed better</li>
+            </ul>
+            <h4 style="margin-top:0.6rem">Common tools</h4>
+            <ul>
+              <li>Mixpanel · Amplitude · PostHog · Heap (product analytics)</li>
+              <li>Google Analytics · Plausible (web analytics)</li>
+              <li>Segment (event routing)</li>
+              <li>LaunchDarkly · GrowthBook (feature flags + experiments)</li>
+            </ul>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">Telemetry events are like log events — they need a schema, they need to be consistent across the codebase, and they need to be safe (no PII).</p>
+        </div>
+      </div>
+
+      <!-- 13 FUNNEL EXAMPLE -->
+      <div class="slide accent-blue" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> Funnel example · mBoB bill payment</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Where do users drop off · and what does it tell us</h2></div>
+          <div class="funnel">
+            <svg width="800" height="280" viewBox="0 0 800 280">
+              <!-- Funnel bars -->
+              <rect x="100" y="40" width="600" height="40" fill="#0066B2" opacity="0.85"/>
+              <text x="400" y="65" text-anchor="middle" font-family="Bahnschrift" font-size="14" fill="white">1 · Open Bill Pay screen · 10,000 users</text>
+
+              <rect x="160" y="90" width="480" height="40" fill="#247EC1" opacity="0.85"/>
+              <text x="400" y="115" text-anchor="middle" font-family="Bahnschrift" font-size="14" fill="white">2 · Select biller · 8,200 (-18%)</text>
+
+              <rect x="220" y="140" width="360" height="40" fill="#4796D1" opacity="0.85"/>
+              <text x="400" y="165" text-anchor="middle" font-family="Bahnschrift" font-size="14" fill="white">3 · Enter amount · 7,400 (-10%)</text>
+
+              <rect x="280" y="190" width="240" height="40" fill="#7DBAE8" opacity="0.85"/>
+              <text x="400" y="215" text-anchor="middle" font-family="Bahnschrift" font-size="14" fill="#001F35">4 · Enter MPIN · 5,100 (-31%)</text>
+
+              <rect x="320" y="240" width="160" height="40" fill="#3D7A3D"/>
+              <text x="400" y="265" text-anchor="middle" font-family="Bahnschrift" font-size="14" fill="white">5 · Success · 4,800 (-6%)</text>
+
+              <text x="720" y="65" font-family="Open Sans" font-size="11" fill="#7B7C7F">100%</text>
+              <text x="720" y="115" font-family="Open Sans" font-size="11" fill="#7B7C7F">82%</text>
+              <text x="720" y="165" font-family="Open Sans" font-size="11" fill="#7B7C7F">74%</text>
+              <text x="720" y="215" font-family="Open Sans" font-size="11" fill="#D80032">51%</text>
+              <text x="720" y="265" font-family="Open Sans" font-size="11" fill="#3D7A3D">48%</text>
+            </svg>
+            <div class="caption">Biggest drop is at step 4 (MPIN entry) — 31% of users abandon there. Without telemetry, you'd never know. With it, you know exactly where to focus UX research.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 14 BA AND QA TELEMETRY ROLES -->
+      <div class="slide accent-blue bg-subtle" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> BA spec · QA verifies events fire correctly</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Telemetry has its own QA discipline</h2></div>
+          <div class="dual">
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--blue); padding:1rem 1.2rem;">
+              <h4 style="color:var(--indigo); font-size:1.05rem; margin-bottom:0.4rem;">BA's telemetry work</h4>
+              <ul style="padding-left:1.2rem; font-size:0.88rem; line-height:1.7;">
+                <li>Spec the success metrics for the feature (per BRD §13)</li>
+                <li>Spec which events to capture and their schema</li>
+                <li>Spec the funnel definition (steps 1-N)</li>
+                <li>Spec what segments / cohorts matter</li>
+                <li>Spec privacy: no PII in event payloads</li>
+                <li>Define "done" in terms of metrics (e.g. "10% adoption in 60 days")</li>
+                <li>Review post-launch metrics; iterate</li>
+              </ul>
+            </div>
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--amber); padding:1rem 1.2rem;">
+              <h4 style="color:var(--indigo); font-size:1.05rem; margin-bottom:0.4rem;">QA's telemetry work</h4>
+              <ul style="padding-left:1.2rem; font-size:0.88rem; line-height:1.7;">
+                <li>Verify each spec'd event actually fires</li>
+                <li>Verify event schemas match spec (correct field names / types)</li>
+                <li>Verify event timing (fires when expected, not before/after)</li>
+                <li>Verify no PII leaks into event payloads</li>
+                <li>Verify dashboards show events correctly</li>
+                <li>Catch missing events before they're noticed in production</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:840px"><strong>The trap:</strong> features ship with broken telemetry. Two months later someone wants to know "how is the feature doing?" and the answer is "we don't know — the events never fired." Verify before launch.</p>
+        </div>
+      </div>
+
+      <!-- 15 PITFALLS -->
+      <div class="slide accent-blue" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span> Common mistakes</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Across all three areas</h2></div>
+          <div class="big-card">
+            <h4>Security</h4>
+            <ul>
+              <li><strong>"It's behind a login, so it's secure"</strong> — broken access control is #1 OWASP issue. Test inside-the-fence too.</li>
+              <li><strong>Helpful error messages</strong> — "Username doesn't exist" tells attackers which usernames are valid. Use generic "Invalid credentials."</li>
+              <li><strong>No rate limiting</strong> — endpoint can be hammered. Brute force becomes practical.</li>
+              <li><strong>Outdated dependencies</strong> — Log4Shell-style attacks via libraries you depend on. Run dependency scans.</li>
+            </ul>
+            <h4 style="margin-top:0.5rem">Observability</h4>
+            <ul>
+              <li><strong>Logs without trace IDs</strong> — can't correlate across services. Useless for distributed debugging.</li>
+              <li><strong>Alerts on everything</strong> — alert fatigue. On-call ignores everything because of false positives. Alert on SLO breach, not raw metrics.</li>
+              <li><strong>Logs leak PII</strong> — compliance violation. Sanitize before logging.</li>
+              <li><strong>No metrics on new features</strong> — can't tell if they work. Spec metrics in the BRD.</li>
+            </ul>
+            <h4 style="margin-top:0.5rem">Telemetry</h4>
+            <ul>
+              <li><strong>Tracking everything</strong> — overwhelm; no one looks at 90% of events. Spec the few that matter.</li>
+              <li><strong>Inconsistent event names</strong> — <code>btn_click</code>, <code>buttonClicked</code>, <code>button_click</code> — same event, three names. Pick one schema.</li>
+              <li><strong>Events fire incorrectly</strong> — fire twice, miss the conversion, fire on hover. Verify before launch.</li>
+              <li><strong>No segmentation</strong> — averaged-across-everyone metrics hide the truth. Look at cohorts.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 16 WRAP -->
+      <div class="slide bg-indigo" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span> Wrap-up · the block is complete</div>
+        <div class="center" style="max-width:880px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key Takeaways</div>
+          <h2 class="heading" style="color:white">Security · observability · telemetry · what to carry forward</h2>
+          <ul class="reveal-list" style="color:rgba(255,255,255,0.9); text-align:left; max-width:780px; margin:1.5rem auto; font-size:0.96rem; line-height:1.85;">
+            <li>✅ <strong>Security</strong> · OWASP Top 10 is your mental checklist · BAs spec defenses, QAs verify them</li>
+            <li>✅ <strong>Three pillars of observability</strong>: logs (what?) · metrics (how much?) · traces (how did this request flow?)</li>
+            <li>✅ Logs need <strong>structured fields, trace IDs, no PII</strong></li>
+            <li>✅ Four golden signals: <strong>latency · traffic · errors · saturation</strong></li>
+            <li>✅ <strong>SLI / SLO / SLA</strong> · spec the targets, monitor against them, alert on breaches</li>
+            <li>✅ <strong>Telemetry</strong> · usage, funnels, KPIs · the answer to "did the feature work?"</li>
+            <li>✅ Telemetry events need their own QA — verify they fire correctly before launch</li>
+            <li>✅ <strong>Block 4 complete</strong> — quality and compliance is now part of every artifact you produce</li>
+          </ul>
+          <p style="color:var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-top:1.5rem">If you can't see it, you can't defend it, fix it, or improve it.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 16</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>

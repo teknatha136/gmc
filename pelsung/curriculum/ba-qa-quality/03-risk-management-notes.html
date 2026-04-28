@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Risk Management — Quality 03</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#0066B2; --indigo:#001F35; --amber:#247EC1; --green:#7BC950; --purple:#4796D1; --red:#D80032; --text:#1B2021; --muted:#7B7C7F; --faint:#9CA3AF; --surf:#fff; --bg:#F9F9F9; --border:#EDEDED; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Open Sans','Aptos',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; font-size:17px; -webkit-font-smoothing:antialiased; }
+    h1,h2,h3,h4,h5,h6 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:400; letter-spacing:-0.01em; }
+    a { color: var(--blue); }
+    .hero { background:var(--surf); border-bottom:1px solid var(--border); padding:4rem 2rem 3rem; text-align:center; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background: linear-gradient(135deg, #0067A3, #002D72); }
+    .logo-corner { position:absolute; top: 1.25rem; left: 1.5rem; opacity:0.85; }
+    .logo-corner img { height: 34px; }
+    .hero-badge { display:inline-flex; align-items:center; gap:0.5rem; background:var(--bg); border:1px solid var(--border); border-radius:100px; padding:0.35rem 1rem; font-size:0.75rem; font-weight:700; color:var(--muted); letter-spacing:0.07em; text-transform:uppercase; margin-bottom:1.5rem; }
+    .hero-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--amber); }
+    .hero h1 { font-size:clamp(2rem,5vw,3.5rem); line-height:1.15; margin-bottom:0.75rem; }
+    .c-blue{color:var(--blue);} .c-indigo{color:var(--indigo);}
+    .hero-sub { font-size:1rem; color:var(--muted); margin-bottom:2rem; max-width:760px; margin-left:auto; margin-right:auto; }
+    .hero-tags { display:flex; justify-content:center; gap:0.6rem; flex-wrap:wrap; }
+    .hero-tag { padding:0.3rem 0.9rem; border-radius:8px; font-size:0.78rem; font-weight:600; background:#E6F0F8; color:var(--blue); }
+    .container { max-width:1040px; margin:0 auto; padding:0 2rem 6rem; }
+    .toc { background:var(--surf); border:1px solid var(--border); border-radius:16px; padding:1.75rem 2rem; margin:2.5rem 0; }
+    .toc h3 { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); margin-bottom:1.25rem; }
+    .toc ol { list-style: none; counter-reset: step; }
+    .toc li { counter-increment: step; padding:0.45rem 0; border-bottom:1px solid var(--border); }
+    .toc li:last-child { border-bottom:none; }
+    .toc li::before { content: counter(step, decimal-leading-zero); color:var(--faint); font-family:'Bahnschrift','Segoe UI',sans-serif; margin-right:0.8rem; font-size:0.9rem; }
+    .toc a { text-decoration:none; color:var(--text); font-weight:500; }
+    .toc a:hover { color: var(--blue); }
+    section.chapter { margin: 3.5rem 0; }
+    .chapter-head { margin-bottom:1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
+    .chapter-eyebrow { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--blue); margin-bottom:0.3rem; }
+    .chapter-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--indigo); }
+    p { margin: 0.7rem 0; }
+    ul, ol { margin: 0.6rem 0 0.6rem 1.3rem; }
+    li { margin: 0.3rem 0; }
+    strong { color: var(--indigo); }
+    .callout { background:var(--surf); border:1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 10px; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+    .callout.amber { border-left-color: var(--amber); }
+    .callout.green { border-left-color: var(--green); }
+    .callout.red { border-left-color: var(--red); }
+    .callout.indigo { border-left-color: var(--indigo); }
+    .callout h4 { font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--indigo); }
+    .pair { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin:1rem 0; }
+    @media (max-width: 720px) { .pair { grid-template-columns: 1fr; } }
+    .big-tbl { background:var(--surf); border:1px solid var(--border); border-radius:10px; overflow:auto; margin:1rem 0; }
+    .big-tbl table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+    .big-tbl th { background:var(--bg); padding:0.6rem 0.9rem; text-align:left; color:var(--muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; border-bottom:1px solid var(--border); }
+    .big-tbl td { padding:0.6rem 0.9rem; border-bottom:1px solid var(--border); color:var(--text); vertical-align:top; line-height:1.6; }
+    .big-tbl tr:last-child td { border-bottom:none; }
+    .big-tbl td:first-child { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; }
+    .pill-h { background:#FEE9EC; color:#9e0022; padding:0.1rem 0.5rem; border-radius:4px; font-size:0.75rem; font-weight:700; }
+    .pill-m { background:#FFF4E3; color:#8a6d0c; padding:0.1rem 0.5rem; border-radius:4px; font-size:0.75rem; font-weight:700; }
+    .pill-l { background:#F3FAE9; color:#3D7A3D; padding:0.1rem 0.5rem; border-radius:4px; font-size:0.75rem; font-weight:700; }
+    .summary { background: linear-gradient(135deg, #F9F9F9, #EDEDED); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+    .summary h4 { color: var(--indigo); margin-bottom: 0.5rem; font-size: 0.95rem; }
+    footer { text-align:center; padding: 2rem 1rem 3rem; color: var(--faint); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+    footer img { height: 28px; opacity:0.7; margin-bottom: 0.5rem; display: block; margin-left:auto; margin-right:auto; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="logo-corner"><img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE"></div>
+    <div class="hero-badge"><span class="dot"></span> Quality &amp; Compliance · 03 of 05</div>
+    <h1><span class="c-blue">Risk Management</span><br><span class="c-indigo">&amp; Risk-Based Thinking</span></h1>
+    <p class="hero-sub">Test budget is finite. Time is finite. Attention is finite. Risk thinking gives you a framework for spending each one where it matters most.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">Risk register</span>
+      <span class="hero-tag">Likelihood × impact</span>
+      <span class="hero-tag">Risk-based testing</span>
+      <span class="hero-tag">Mitigation</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="toc">
+      <h3>In this note</h3>
+      <ol>
+        <li><a href="#why">Why risk thinking matters</a></li>
+        <li><a href="#equation">The risk equation</a></li>
+        <li><a href="#matrix">The risk matrix</a></li>
+        <li><a href="#responses">Four risk responses</a></li>
+        <li><a href="#register">The risk register</a></li>
+        <li><a href="#categories">The six risk categories</a></li>
+        <li><a href="#testing">Risk-based testing</a></li>
+        <li><a href="#roles">BA and QA roles in risk</a></li>
+        <li><a href="#example">Worked example · mBoB v4 release</a></li>
+        <li><a href="#process">The five-step process</a></li>
+        <li><a href="#mistakes">Common mistakes</a></li>
+        <li><a href="#take">Key takeaways</a></li>
+      </ol>
+    </div>
+
+    <section class="chapter" id="why">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 1</div>
+        <h2>Why risk thinking matters</h2>
+      </div>
+      <p>Software projects can never test everything, build everything, or guard against every possible failure. Time, budget, and attention are finite. Risk management is the discipline that helps you decide <strong>where to spend each of those</strong> — and where to deliberately not spend.</p>
+      <p>Without risk thinking, teams default to one of two failure modes:</p>
+      <ul>
+        <li><strong>Test everything equally</strong> — and run out of time before the most important features get covered. The truly critical bugs ship.</li>
+        <li><strong>Test by gut feel</strong> — coverage depends on whoever's loudest in the room. The same bugs surface again and again because no one tracked the risks.</li>
+      </ul>
+      <p>Risk thinking replaces both with a simple discipline: <strong>name the risks, score them, decide a response, monitor.</strong></p>
+    </section>
+
+    <section class="chapter" id="equation">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 2</div>
+        <h2>The risk equation</h2>
+      </div>
+      <p>The simplest, most useful framework in software project work:</p>
+
+      <div class="callout indigo">
+        <h4>Risk = Likelihood × Impact</h4>
+        <p><strong>Likelihood:</strong> how probable is this bad thing? (0–100%, or Low / Med / High)</p>
+        <p><strong>Impact:</strong> if it happens, how bad? (BTN, hours, customers affected, reputation, lives, regulatory fines)</p>
+        <p><strong>Risk score:</strong> multiply them. Or plot on a 3×3 / 5×5 grid. Higher score = scarier.</p>
+      </div>
+
+      <p>You won't always have precise numbers. High / Medium / Low is enough for most BA/QA decisions. The point is to be <em>explicit</em> rather than to be precise.</p>
+
+      <div class="callout amber">
+        <h4>Examples in different units</h4>
+        <ul>
+          <li><strong>Server crash on Black Friday</strong> — likelihood 30%, impact $2M lost sales = expected loss $600k. High risk.</li>
+          <li><strong>Typo in SMS confirmation</strong> — likelihood 90% (typo exists), impact minor confusion = low risk despite high likelihood.</li>
+          <li><strong>Wrong tax calculation</strong> — likelihood 5%, impact regulatory fine + reputation damage = high risk despite low likelihood.</li>
+        </ul>
+        <p>Notice how the third example shows why <em>low likelihood doesn't mean low risk</em>. A rare event with catastrophic consequences is still scary.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="matrix">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 3</div>
+        <h2>The risk matrix</h2>
+      </div>
+      <p>The most common visualization is a 3×3 (sometimes 5×5) grid plotting likelihood against impact.</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th></th><th>Impact: Low</th><th>Impact: Medium</th><th>Impact: High</th></tr></thead>
+          <tbody>
+            <tr><td>Likelihood: High</td><td><span class="pill-m">Medium</span> Watch &amp; mitigate cheaply</td><td><span class="pill-h">High</span> Mitigate or avoid</td><td><span class="pill-h">Critical</span> Stop · plan around</td></tr>
+            <tr><td>Likelihood: Medium</td><td><span class="pill-l">Low</span> Accept, monitor</td><td><span class="pill-m">Medium</span> Plan mitigation</td><td><span class="pill-h">High</span> Mitigate or transfer</td></tr>
+            <tr><td>Likelihood: Low</td><td><span class="pill-l">Trivial</span> Accept · move on</td><td><span class="pill-l">Low</span> Accept</td><td><span class="pill-m">Medium</span> Plan response · don't ignore</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Reading rule: <strong>top-right = drop everything, bottom-left = ignore, the diagonal middle band is where most decisions need judgement and planning</strong>.</p>
+
+      <div class="callout">
+        <h4>Why a matrix beats a flat list</h4>
+        <p>A flat list of "100 risks" all looks equally scary. The matrix instantly shows you which 5 to focus on. Visual ranking creates better discussions than spreadsheets do.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="responses">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 4</div>
+        <h2>The four risk responses</h2>
+      </div>
+      <p>For every risk, you must pick one of four responses. Document the choice. The worst response is "no decision".</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Response</th><th>What it means</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Avoid</td><td>Change the plan so the risk doesn't apply</td><td>"Don't store credit cards" eliminates the credit-card-breach risk entirely</td></tr>
+            <tr><td>Mitigate</td><td>Reduce likelihood or impact (or both)</td><td>"Add monitoring + auto-failover" reduces likelihood and impact of outages</td></tr>
+            <tr><td>Transfer</td><td>Push the risk to someone else</td><td>"Use Stripe" transfers PCI-DSS compliance burden from us to Stripe</td></tr>
+            <tr><td>Accept</td><td>Live with the risk; document the decision</td><td>"We accept the 0.1% chance of brief downtime during deploys"</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout indigo">
+        <h4>Mantra</h4>
+        <p>Not every risk needs a fix. Sometimes the right answer is to <strong>accept and move on</strong>. The wrong answer is to <strong>ignore</strong>. The difference: an accepted risk is documented, named, owned, and visible. An ignored risk is a surprise waiting to happen.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="register">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 5</div>
+        <h2>The risk register</h2>
+      </div>
+      <p>The risk register is the artifact — a living spreadsheet of every known risk on the project. It becomes part of the BRD (§12 Risks). It's reviewed weekly during active development and at every milestone.</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>ID</th><th>Risk</th><th>Cat</th><th>L</th><th>I</th><th>Score</th><th>Response</th><th>Owner</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>R-01</td><td>Payment gateway outage during peak hours</td><td>Tech</td><td>M</td><td>H</td><td><span class="pill-h">High</span></td><td>Mitigate · fallback gateway</td><td>Eng Lead</td><td>Open</td></tr>
+            <tr><td>R-02</td><td>MPIN brute-force attack</td><td>Sec</td><td>H</td><td>H</td><td><span class="pill-h">Critical</span></td><td>Mitigate · 3-attempt lockout + rate limit</td><td>Security</td><td>Mitigated</td></tr>
+            <tr><td>R-03</td><td>Customer PII leaked via logs</td><td>Comp</td><td>M</td><td>H</td><td><span class="pill-h">High</span></td><td>Mitigate · log scrubbing + audit</td><td>Platform</td><td>In progress</td></tr>
+            <tr><td>R-04</td><td>Slow load on rural 3G connections</td><td>Perf</td><td>H</td><td>M</td><td><span class="pill-m">Medium</span></td><td>Mitigate · image compression, lazy load</td><td>Frontend</td><td>Open</td></tr>
+            <tr><td>R-05</td><td>Bhutan DPPA non-compliance</td><td>Comp</td><td>L</td><td>H</td><td><span class="pill-m">Medium</span></td><td>Mitigate · DPIA + consent flows</td><td>Legal</td><td>Open</td></tr>
+            <tr><td>R-06</td><td>Build server runs out of disk</td><td>Ops</td><td>M</td><td>L</td><td><span class="pill-l">Low</span></td><td>Accept + monitor</td><td>DevOps</td><td>Accepted</td></tr>
+            <tr><td>R-07</td><td>Trainer attrition mid-cohort</td><td>People</td><td>L</td><td>H</td><td><span class="pill-m">Medium</span></td><td>Mitigate · cross-train assistant</td><td>Tek</td><td>Open</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout amber">
+        <h4>Required columns</h4>
+        <ul>
+          <li><strong>ID</strong> — short reference (R-01, R-02…) so you can talk about it in meetings</li>
+          <li><strong>Risk description</strong> — specific, not vague. "MPIN brute-force attack via missing rate limit" not "security risk"</li>
+          <li><strong>Category</strong> — see Part 6</li>
+          <li><strong>Likelihood</strong> · <strong>Impact</strong> · <strong>Score</strong></li>
+          <li><strong>Response</strong> — avoid / mitigate / transfer / accept + the action</li>
+          <li><strong>Owner</strong> — a person, not a team. Single point of accountability.</li>
+          <li><strong>Status</strong> — Open · In Progress · Mitigated · Accepted · Closed</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="chapter" id="categories">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 6</div>
+        <h2>The six risk categories</h2>
+      </div>
+      <p>When building a register from scratch, walk through these six explicitly. Most teams over-index on technical risks and miss the rest.</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Category</th><th>What's in it</th><th>Common omissions</th></tr></thead>
+          <tbody>
+            <tr><td>Technical</td><td>Outages, latency, capacity, integration failures, deprecations, tech debt</td><td>Often the only category teams remember</td></tr>
+            <tr><td>Security</td><td>Breaches, attacks, leaks, broken auth, vulnerable dependencies</td><td>Sometimes lumped under "technical" — keep it separate, the response patterns differ</td></tr>
+            <tr><td>Compliance / Regulatory</td><td>Bhutan DPPA, GDPR, PCI-DSS, accessibility law (WCAG/EAA), industry-specific (HIPAA, etc.)</td><td>Often missed entirely until an audit</td></tr>
+            <tr><td>Operational</td><td>Vendor failures, deployment problems, runbook gaps, on-call coverage</td><td>"It worked in dev" — operational risks bite at deploy</td></tr>
+            <tr><td>People</td><td>Key-person dependency, attrition, knowledge silos, ramp-up time</td><td>Almost always forgotten — until someone resigns mid-sprint</td></tr>
+            <tr><td>Business</td><td>Competitor moves, market change, funding, scope creep, schedule slip</td><td>Treated as separate from "project risk" — but it isn't</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="chapter" id="testing">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 7</div>
+        <h2>Risk-based testing · QA's lens on the same register</h2>
+      </div>
+      <p>QAs read the BA's risk register from a different angle: <em>"where do I test most? where do I test least?"</em></p>
+
+      <div class="callout">
+        <h4>The mapping from risk score to test depth</h4>
+        <ul>
+          <li><strong>Critical risk</strong> → deep functional + non-functional tests · all edge cases · automation · regression every build</li>
+          <li><strong>High risk</strong> → solid functional + most relevant non-functional · key edge cases · automation · regression each release</li>
+          <li><strong>Medium risk</strong> → standard functional · basic non-functional · regression on release</li>
+          <li><strong>Low risk</strong> → smoke tests + 1-2 happy-path scenarios · regression occasionally</li>
+          <li><strong>Trivial</strong> → exploratory if time permits · skip otherwise</li>
+        </ul>
+      </div>
+
+      <div class="callout amber">
+        <h4>Concrete example · mBoB</h4>
+        <ul>
+          <li><strong>Money transfer</strong> = critical · test every level · automate every scenario · run every build</li>
+          <li><strong>View transaction history</strong> = medium · functional + perf at scale · regression each release</li>
+          <li><strong>Update profile photo</strong> = low · happy path + 1 edge case · smoke test in CI</li>
+          <li><strong>Customer service phone-number page</strong> = trivial · check it loads in smoke test</li>
+        </ul>
+      </div>
+
+      <div class="callout indigo">
+        <h4>The payoff</h4>
+        <p>Without risk-based prioritization, QA tests "everything equally" and runs out of time before testing what really matters. With it, the highest-risk features get the deepest coverage and the lowest-risk get just enough.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="roles">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 8</div>
+        <h2>BA and QA roles in risk</h2>
+      </div>
+
+      <div class="pair">
+        <div class="callout">
+          <h4>BA's risk work</h4>
+          <ul>
+            <li>Identify risks during requirements elicitation</li>
+            <li>Score them with stakeholders (likelihood × impact)</li>
+            <li>Maintain the risk register through the project</li>
+            <li>Choose mitigation responses with stakeholders</li>
+            <li>Surface risks at every milestone review</li>
+            <li>Populate §12 (Risks) of the BRD</li>
+          </ul>
+        </div>
+        <div class="callout amber">
+          <h4>QA's risk work</h4>
+          <ul>
+            <li>Read the risk register before designing tests</li>
+            <li>Map test depth to risk score</li>
+            <li>Identify <em>quality risks</em> the BA might miss (perf, a11y, data integrity)</li>
+            <li>Push back if a high-risk feature has thin AC</li>
+            <li>Track which risks are still uncovered by tests</li>
+            <li>Surface "we found this in testing" risks back to BA</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout indigo">
+        <h4>Sync point</h4>
+        <p>Run a quick risk review at sprint planning. BA presents the register, QA confirms test coverage matches the priorities, dev confirms mitigation work is in scope. 15 minutes saves weeks.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="example">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 9</div>
+        <h2>Worked example · mBoB v4 release</h2>
+      </div>
+      <p>Take the seven risks from the table above and walk through them as a team would in a planning session.</p>
+
+      <div class="callout red">
+        <h4>R-02 · MPIN brute-force attack — Critical</h4>
+        <p><strong>Likelihood:</strong> High (mobile banking is a known target). <strong>Impact:</strong> High (account compromise + reputation damage + regulatory).</p>
+        <p><strong>Response:</strong> Mitigate. Implement 3-attempt lockout, rate limiting, and exponential backoff. Add audit logging.</p>
+        <p><strong>QA implication:</strong> Test all attack scenarios (10 wrong attempts, race conditions on the lockout, rapid retries). Automate as part of CI.</p>
+      </div>
+
+      <div class="callout">
+        <h4>R-01 · Payment gateway outage — High</h4>
+        <p><strong>Likelihood:</strong> Medium (third-party dependency). <strong>Impact:</strong> High (no payments = service down).</p>
+        <p><strong>Response:</strong> Mitigate. Add fallback gateway. Add circuit breaker. Add user-visible "try again" with retry counter.</p>
+        <p><strong>QA implication:</strong> Chaos test the gateway. Verify graceful degradation. Confirm no double-charges on retry.</p>
+      </div>
+
+      <div class="callout amber">
+        <h4>R-05 · Bhutan DPPA non-compliance — Medium (low likelihood, high impact)</h4>
+        <p><strong>Likelihood:</strong> Low (we're not actively non-compliant). <strong>Impact:</strong> High (fines, license risk).</p>
+        <p><strong>Response:</strong> Mitigate. Run a Data Protection Impact Assessment. Implement consent flows. Document the data lifecycle.</p>
+        <p><strong>QA implication:</strong> Test consent UX. Verify data deletion requests work. Verify access logs.</p>
+      </div>
+
+      <div class="callout green">
+        <h4>R-06 · Build server runs out of disk — Low</h4>
+        <p><strong>Likelihood:</strong> Medium. <strong>Impact:</strong> Low (CI fails, we get alerted, we add disk).</p>
+        <p><strong>Response:</strong> Accept + monitor. Configure disk-space alerts at 80%.</p>
+        <p><strong>QA implication:</strong> None. Not a feature to test.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="process">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 10</div>
+        <h2>The five-step process</h2>
+      </div>
+      <ol>
+        <li><strong>Identify.</strong> Gather the team, sweep the six categories, brainstorm risks. Use BRD assumptions, past incidents, OWASP, ISO 25010 as prompts.</li>
+        <li><strong>Assess.</strong> Score each one (likelihood × impact). Doesn't need to be precise — Low/Med/High works.</li>
+        <li><strong>Prioritize.</strong> Plot on the matrix. The top-right corner gets attention first.</li>
+        <li><strong>Respond.</strong> Pick one of the four (avoid · mitigate · transfer · accept). Document the decision.</li>
+        <li><strong>Monitor.</strong> Review the register at sprint planning, milestone reviews, and after every incident. Update scores. Close mitigated risks. Add new ones.</li>
+      </ol>
+
+      <div class="callout amber">
+        <h4>Cadence</h4>
+        <ul>
+          <li>Create at project start (workshop with BA + Eng Lead + key stakeholders)</li>
+          <li>Update weekly during active development</li>
+          <li>Review at every milestone / release</li>
+          <li>Quarterly review for mature systems</li>
+          <li>After every incident: did we have this in the register? If not, add it.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="chapter" id="mistakes">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 11</div>
+        <h2>Common mistakes</h2>
+      </div>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Mistake</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr><td>Risk register as compliance theater — created at start, never updated</td><td>Make it a weekly artifact. Review in standup or sprint planning.</td></tr>
+            <tr><td>Only technical risks — missing compliance, people, business</td><td>Sweep all six categories every time</td></tr>
+            <tr><td>Vague risks ("things could go wrong with security")</td><td>Be specific: "MPIN brute-force succeeds via missing rate limit"</td></tr>
+            <tr><td>No owner per risk — orphans die unmitigated</td><td>Every risk has a named person beside it</td></tr>
+            <tr><td>"Mitigated" without verification</td><td>Mitigation is a claim until QA / audit confirms; don't close on dev's word</td></tr>
+            <tr><td>QA tests without reading the register</td><td>Same priorities should drive both BA's plan and QA's tests</td></tr>
+            <tr><td>Ignoring low-likelihood / high-impact risks</td><td>The rare-but-catastrophic ones (data loss, breach) need a plan even if rare</td></tr>
+            <tr><td>Treating risks as static</td><td>Likelihoods and impacts change as the project evolves; re-score regularly</td></tr>
+            <tr><td>Confusing risk register with bug tracker</td><td>Risks are <em>potential</em> problems. Bugs are <em>actual</em> problems. Keep them separate.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="chapter" id="take">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Takeaways</div>
+        <h2>Key takeaways</h2>
+      </div>
+      <div class="summary">
+        <h4>What to carry forward</h4>
+        <ul>
+          <li><strong>Risk = Likelihood × Impact.</strong> Two numbers drive most decisions.</li>
+          <li>Use the <strong>3×3 matrix</strong>. Top-right = critical. Bottom-left = trivial. Diagonal = judgement.</li>
+          <li>Four responses: <strong>avoid · mitigate · transfer · accept</strong>. Document the choice.</li>
+          <li>The <strong>risk register</strong> is the artifact: ID, risk, category, scores, response, owner, status.</li>
+          <li>Six categories: <strong>technical · security · compliance · operational · people · business</strong>. Sweep all six.</li>
+          <li><strong>BA owns the register · QA reads it for test priority.</strong> Same artifact, two views.</li>
+          <li>Process: identify → assess → prioritize → respond → monitor.</li>
+          <li>You can't test everything. Test what matters most.</li>
+        </ul>
+      </div>
+      <p style="margin-top:1.2rem">Next class: <strong>Data Protection &amp; Compliance</strong> — Bhutan DPPA, GDPR, PCI-DSS, what BAs spec, what QAs verify.</p>
+    </section>
+
+  </div>
+
+  <footer>
+    <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE">
+    SELISE × Pelsung · Quality &amp; Compliance 03<br>
+    Risk Management &amp; Risk-Based Thinking
+  </footer>
+
+</body>
+</html>

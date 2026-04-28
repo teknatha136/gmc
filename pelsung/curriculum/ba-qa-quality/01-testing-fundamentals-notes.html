@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Testing Fundamentals — Quality 01</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#0066B2; --indigo:#001F35; --amber:#247EC1; --green:#7BC950; --purple:#4796D1; --red:#D80032; --text:#1B2021; --muted:#7B7C7F; --faint:#9CA3AF; --surf:#fff; --bg:#F9F9F9; --border:#EDEDED; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Open Sans','Aptos',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; font-size:17px; -webkit-font-smoothing:antialiased; }
+    h1,h2,h3,h4,h5,h6 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:400; letter-spacing:-0.01em; }
+    a { color: var(--blue); }
+    .hero { background:var(--surf); border-bottom:1px solid var(--border); padding:4rem 2rem 3rem; text-align:center; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background: linear-gradient(135deg, #0067A3, #002D72); }
+    .logo-corner { position:absolute; top: 1.25rem; left: 1.5rem; opacity:0.85; }
+    .logo-corner img { height: 34px; }
+    .hero-badge { display:inline-flex; align-items:center; gap:0.5rem; background:var(--bg); border:1px solid var(--border); border-radius:100px; padding:0.35rem 1rem; font-size:0.75rem; font-weight:700; color:var(--muted); letter-spacing:0.07em; text-transform:uppercase; margin-bottom:1.5rem; }
+    .hero-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--amber); }
+    .hero h1 { font-size:clamp(2rem,5vw,3.5rem); line-height:1.15; margin-bottom:0.75rem; }
+    .c-blue{color:var(--blue);} .c-indigo{color:var(--indigo);}
+    .hero-sub { font-size:1rem; color:var(--muted); margin-bottom:2rem; max-width:760px; margin-left:auto; margin-right:auto; }
+    .hero-tags { display:flex; justify-content:center; gap:0.6rem; flex-wrap:wrap; }
+    .hero-tag { padding:0.3rem 0.9rem; border-radius:8px; font-size:0.78rem; font-weight:600; background:#E6F0F8; color:var(--blue); }
+    .container { max-width:1040px; margin:0 auto; padding:0 2rem 6rem; }
+    .toc { background:var(--surf); border:1px solid var(--border); border-radius:16px; padding:1.75rem 2rem; margin:2.5rem 0; }
+    .toc h3 { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); margin-bottom:1.25rem; }
+    .toc ol { list-style: none; counter-reset: step; }
+    .toc li { counter-increment: step; padding:0.45rem 0; border-bottom:1px solid var(--border); }
+    .toc li:last-child { border-bottom:none; }
+    .toc li::before { content: counter(step, decimal-leading-zero); color:var(--faint); font-family:'Bahnschrift','Segoe UI',sans-serif; margin-right:0.8rem; font-size:0.9rem; }
+    .toc a { text-decoration:none; color:var(--text); font-weight:500; }
+    .toc a:hover { color: var(--blue); }
+    section.chapter { margin: 3.5rem 0; }
+    .chapter-head { margin-bottom:1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
+    .chapter-eyebrow { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--blue); margin-bottom:0.3rem; }
+    .chapter-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--indigo); }
+    p { margin: 0.7rem 0; }
+    ul, ol { margin: 0.6rem 0 0.6rem 1.3rem; }
+    li { margin: 0.3rem 0; }
+    strong { color: var(--indigo); }
+    .callout { background:var(--surf); border:1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 10px; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+    .callout.amber { border-left-color: var(--amber); }
+    .callout.green { border-left-color: var(--green); }
+    .callout.red { border-left-color: var(--red); }
+    .callout.indigo { border-left-color: var(--indigo); }
+    .callout h4 { font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--indigo); }
+    .pair { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin:1rem 0; }
+    @media (max-width: 720px) { .pair { grid-template-columns: 1fr; } }
+    .big-tbl { background:var(--surf); border:1px solid var(--border); border-radius:10px; overflow:auto; margin:1rem 0; }
+    .big-tbl table { width:100%; border-collapse:collapse; font-size:0.9rem; }
+    .big-tbl th { background:var(--bg); padding:0.6rem 0.9rem; text-align:left; color:var(--muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; border-bottom:1px solid var(--border); }
+    .big-tbl td { padding:0.6rem 0.9rem; border-bottom:1px solid var(--border); color:var(--text); vertical-align:top; line-height:1.6; }
+    .big-tbl tr:last-child td { border-bottom:none; }
+    .big-tbl td:first-child { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; }
+    .summary { background: linear-gradient(135deg, #F9F9F9, #EDEDED); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+    .summary h4 { color: var(--indigo); margin-bottom: 0.5rem; font-size: 0.95rem; }
+    footer { text-align:center; padding: 2rem 1rem 3rem; color: var(--faint); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+    footer img { height: 28px; opacity:0.7; margin-bottom: 0.5rem; display: block; margin-left:auto; margin-right:auto; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="logo-corner"><img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE"></div>
+    <div class="hero-badge"><span class="dot"></span> Quality &amp; Compliance · 01 of 05</div>
+    <h1><span class="c-blue">Software Testing</span><br><span class="c-indigo">Fundamentals</span></h1>
+    <p class="hero-sub">What testing means, what we test for, the levels and types you need to know, and the quality framework (ISO 25010) that defines what "good" software actually is.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">Verification vs Validation</span>
+      <span class="hero-tag">Test pyramid</span>
+      <span class="hero-tag">ISO 25010</span>
+      <span class="hero-tag">WCAG</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="toc">
+      <h3>In this note</h3>
+      <ol>
+        <li><a href="#why">Why testing exists — the cost curve</a></li>
+        <li><a href="#vv">Verification vs validation</a></li>
+        <li><a href="#pyramid">The test pyramid</a></li>
+        <li><a href="#levels">Test levels in detail</a></li>
+        <li><a href="#types">Test types · functional vs non-functional</a></li>
+        <li><a href="#bw">Black-box vs white-box thinking</a></li>
+        <li><a href="#iso">ISO 25010 · the 8 quality characteristics</a></li>
+        <li><a href="#a11y">Accessibility · WCAG and the law</a></li>
+        <li><a href="#example">Worked example · mBoB bill payment</a></li>
+        <li><a href="#roles">BA and QA roles in testing</a></li>
+        <li><a href="#mistakes">Common testing mistakes</a></li>
+        <li><a href="#take">Key takeaways</a></li>
+      </ol>
+    </div>
+
+    <section class="chapter" id="why">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 1</div>
+        <h2>Why testing exists — the cost curve</h2>
+      </div>
+      <p>Software testing isn't an end-of-project activity. It's a discipline that runs alongside development from the first spec review to the last production hotfix. The reason is simple: <strong>the later a defect is caught, the more it costs to fix.</strong></p>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Caught at…</th><th>Approximate cost</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td>Spec review</td><td>1×</td><td>Just edit the document. Minutes of work.</td></tr>
+            <tr><td>Development</td><td>5×</td><td>Rework code that's already partly written.</td></tr>
+            <tr><td>QA / system testing</td><td>10×</td><td>Bug filed, dev fixes, QA re-tests, regression runs.</td></tr>
+            <tr><td>UAT</td><td>30×</td><td>Stakeholders involved, decisions revisited, schedule pressure.</td></tr>
+            <tr><td>Production</td><td>100×+</td><td>Hotfixes, customer support tickets, lost trust, possible compliance fines.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout indigo">
+        <h4>The mindset shift</h4>
+        <p>Testing is not "QA's job." It's a layered defense where <strong>BAs catch defects in spec reviews</strong>, <strong>devs catch them in unit tests</strong>, <strong>QAs catch them in integration and system testing</strong>, and <strong>users find what slipped through</strong>. The earlier the layer, the cheaper the catch.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="vv">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 2</div>
+        <h2>Verification vs Validation</h2>
+      </div>
+      <p>Two questions, often confused, both essential.</p>
+
+      <div class="pair">
+        <div class="callout">
+          <h4>Verification — "Did we build it right?"</h4>
+          <p>A check against the <strong>spec</strong>. Does the software match the documented requirements?</p>
+          <p>Methods: code review, static analysis, unit tests, contract tests, walkthroughs, inspections.</p>
+          <p><em>Example:</em> the spec says "password must be at least 8 characters." Verification asks: <em>does the code reject 7-character passwords?</em></p>
+        </div>
+        <div class="callout amber">
+          <h4>Validation — "Did we build the right thing?"</h4>
+          <p>A check against the <strong>real-world need</strong>. Does the software actually solve the user's problem?</p>
+          <p>Methods: UAT, beta tests, field observation, usability testing, customer interviews.</p>
+          <p><em>Example:</em> the 8-character rule was met. Validation asks: <em>did this actually make accounts more secure, or are users still writing passwords on sticky notes?</em></p>
+        </div>
+      </div>
+
+      <div class="callout red">
+        <h4>The trap teams fall into</h4>
+        <p>Teams that only verify ship technically-correct products that fail in the real world ("we built exactly what was specified"). Teams that only validate ship products that work in demos but break under real load ("looked great in user testing, fell over at 100 users"). <strong>Both verification and validation must happen for software to be truly tested.</strong></p>
+      </div>
+    </section>
+
+    <section class="chapter" id="pyramid">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 3</div>
+        <h2>The test pyramid</h2>
+      </div>
+      <p>Mike Cohn's 2009 model that became the industry default. It describes how a healthy test suite should be shaped:</p>
+
+      <ul>
+        <li><strong>Wide base of unit tests</strong> — fast, cheap, many. Run in milliseconds. Cover individual functions in isolation. The team should have hundreds or thousands.</li>
+        <li><strong>Middle layer of integration tests</strong> — slower, fewer. Real database, real API. Cover how components fit together. The team should have dozens to hundreds.</li>
+        <li><strong>Narrow top of system / E2E tests</strong> — slow, expensive, brittle. Run through the UI or top API. The team should have a handful — only the most critical user journeys.</li>
+        <li><strong>Tip of UAT / manual</strong> — humans involved. Slowest. Most expensive. Reserved for what humans must judge.</li>
+      </ul>
+
+      <div class="callout amber">
+        <h4>When the pyramid inverts</h4>
+        <p>Some teams accumulate hundreds of slow E2E tests and almost no unit tests. The CI pipeline takes hours, tests are flaky, no one trusts them, and feedback to developers takes days. This is "the ice cream cone anti-pattern" — fix it by pushing tests downward (replace E2E with integration where possible, replace integration with unit tests where possible).</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="levels">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 4</div>
+        <h2>Test levels in detail</h2>
+      </div>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Level</th><th>What's tested</th><th>Speed</th><th>Owner</th><th>Catches</th></tr></thead>
+          <tbody>
+            <tr><td>Unit</td><td>One function or class, in isolation</td><td>Milliseconds</td><td>Developer</td><td>Logic bugs, edge cases in single functions</td></tr>
+            <tr><td>Integration</td><td>Two or more components together (real DB, real API)</td><td>Seconds</td><td>Dev + QA</td><td>API mismatches, schema drift, broken integrations</td></tr>
+            <tr><td>System (E2E)</td><td>The whole assembled app, end-to-end</td><td>Minutes</td><td>QA</td><td>Full-flow regressions, UI bugs, deployment / config issues</td></tr>
+            <tr><td>Acceptance / UAT</td><td>Real-world scenarios run by business users</td><td>Hours / days</td><td>BA + business</td><td>Spec gaps, "this isn't what we asked for"</td></tr>
+            <tr><td>Regression</td><td>Re-running prior tests to confirm nothing broke</td><td>Whatever the suite takes</td><td>QA (often automated)</td><td>Unintended breakage from new changes</td></tr>
+            <tr><td>Smoke / sanity</td><td>"Is this build basically alive?"</td><td>1–5 minutes</td><td>QA</td><td>Broken builds before deeper testing</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="chapter" id="types">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 5</div>
+        <h2>Test types · functional vs non-functional</h2>
+      </div>
+      <p>Levels describe <em>where</em> a test runs. Types describe <em>what</em> a test verifies. Two big families:</p>
+
+      <div class="callout">
+        <h4>Functional testing — "Does it do what it should?"</h4>
+        <p>Direct check of features against acceptance criteria.</p>
+        <ul>
+          <li>Login with correct credentials succeeds</li>
+          <li>Transfer of 1000 BTN reduces balance by 1000</li>
+          <li>Submitting a blank form shows the right validation error</li>
+          <li>An expired card is rejected</li>
+        </ul>
+        <p><em>Most of QA's daily work and most of BA's acceptance criteria live here.</em></p>
+      </div>
+
+      <div class="callout amber">
+        <h4>Non-functional testing — "How well does it do it?"</h4>
+        <p>The system might pass every functional test but still be unusable in production. Non-functional tests check the dimensions that determine that.</p>
+        <ul>
+          <li><strong>Performance</strong> — response time under load (p50, p95, p99 latency, throughput)</li>
+          <li><strong>Security</strong> — resistant to common attacks (OWASP Top 10)</li>
+          <li><strong>Usability</strong> — can a real user actually complete the task</li>
+          <li><strong>Accessibility</strong> — keyboard navigation, screen reader, color contrast</li>
+          <li><strong>Reliability</strong> — uptime SLA, error rate, recovery from failures</li>
+          <li><strong>Compatibility</strong> — works on the browsers, OS versions, devices we promised</li>
+          <li><strong>Localization</strong> — works in target languages, character sets, formats</li>
+        </ul>
+      </div>
+
+      <div class="callout indigo">
+        <h4>BA hint</h4>
+        <p>If every acceptance criterion in your story starts with "the user can…", you've only specified functional behavior. <strong>Add at least one non-functional criterion</strong> for any feature that matters: "Response within 2 seconds at 100 concurrent users." "Operable with keyboard alone." "Form data not logged in plain text."</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="bw">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 6</div>
+        <h2>Black-box vs white-box thinking</h2>
+      </div>
+      <p>Two perspectives on what to test:</p>
+
+      <div class="pair">
+        <div class="callout indigo">
+          <h4>Black-box</h4>
+          <p>Treat the system as a sealed box. Inputs go in, outputs come out. Tester needs no knowledge of internals.</p>
+          <p><em>Question:</em> "What should happen if I do X?"</p>
+          <p><em>Used for:</em> system / acceptance / UAT testing, most QA testing, all BA validation.</p>
+        </div>
+        <div class="callout">
+          <h4>White-box</h4>
+          <p>Tester sees inside. Tests specific code paths, branches, conditions. Requires knowing the implementation.</p>
+          <p><em>Question:</em> "Have I exercised this if-branch? Is this loop covered?"</p>
+          <p><em>Used for:</em> unit testing, code coverage analysis, code review.</p>
+        </div>
+      </div>
+
+      <p>Most BA/QA work is <strong>black-box</strong>. White-box belongs to developers. Knowing both terms means you can talk to your dev team without confusion when a code coverage report shows up in a meeting.</p>
+    </section>
+
+    <section class="chapter" id="iso">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 7</div>
+        <h2>ISO 25010 · the 8 quality characteristics</h2>
+      </div>
+      <p>ISO/IEC 25010 (2011) is the international standard for software quality. It defines <strong>8 high-level characteristics</strong> that together describe what "good" software is. Each one breaks down into sub-characteristics. As BAs and QAs, this is your complete checklist for non-functional requirements — every feature should be examined through these lenses.</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Characteristic</th><th>What it means</th><th>Sub-characteristics</th></tr></thead>
+          <tbody>
+            <tr><td>1 · Functional Suitability</td><td>Does it do what it claims?</td><td>Completeness, correctness, appropriateness</td></tr>
+            <tr><td>2 · Performance Efficiency</td><td>Is it fast enough? Resource-efficient?</td><td>Time behaviour, resource utilization, capacity</td></tr>
+            <tr><td>3 · Compatibility</td><td>Works with other software / systems?</td><td>Co-existence, interoperability</td></tr>
+            <tr><td>4 · Usability</td><td>Can humans actually use it?</td><td>Learnability, operability, user-error protection, accessibility, aesthetics</td></tr>
+            <tr><td>5 · Reliability</td><td>Stays up and recovers?</td><td>Maturity, availability, fault tolerance, recoverability</td></tr>
+            <tr><td>6 · Security</td><td>Protects data and users?</td><td>Confidentiality, integrity, non-repudiation, accountability, authenticity</td></tr>
+            <tr><td>7 · Maintainability</td><td>Can it evolve?</td><td>Modularity, reusability, analysability, modifiability, testability</td></tr>
+            <tr><td>8 · Portability</td><td>Adaptable to environments?</td><td>Adaptability, installability, replaceability</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout amber">
+        <h4>How to use this as a BA</h4>
+        <p>For every feature you spec, walk through the 8 characteristics and ask: <em>does this matter here, and to what level?</em> Most features need 2-4 of them explicitly specified. Capture the answers as non-functional requirements. Don't say "must be fast" — say "p95 response under 500ms at 100 concurrent users" (Performance Efficiency · Time behaviour).</p>
+      </div>
+
+      <div class="callout green">
+        <h4>How to use this as a QA</h4>
+        <p>For every test plan, ensure all 8 characteristics that the BA marked as relevant have test coverage. If the spec only addresses Functional Suitability, push back — that's a half-tested feature.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="a11y">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 8</div>
+        <h2>Accessibility · WCAG and the law</h2>
+      </div>
+      <p>Accessibility lives inside Usability (ISO 25010 #4) — but unlike most other quality attributes, it's increasingly enforceable by law. As a BA or QA in 2026, you cannot treat it as optional.</p>
+
+      <div class="callout indigo">
+        <h4>WCAG · Web Content Accessibility Guidelines</h4>
+        <p>The de-facto international standard, maintained by W3C. Three conformance levels:</p>
+        <ul>
+          <li><strong>Level A</strong> — bare minimum. Critical issues only.</li>
+          <li><strong>Level AA</strong> — the standard most laws require. Sufficient for "broadly accessible."</li>
+          <li><strong>Level AAA</strong> — gold standard. Often impossible for entire products; achievable for specific content.</li>
+        </ul>
+        <p><strong>Default expectation: WCAG 2.1 AA</strong> (or 2.2 AA, the latest version).</p>
+      </div>
+
+      <div class="callout">
+        <h4>The four POUR principles</h4>
+        <ul>
+          <li><strong>Perceivable</strong> — alt text on images, captions on videos, sufficient color contrast (4.5:1 for normal text)</li>
+          <li><strong>Operable</strong> — fully usable by keyboard alone, no time traps, skip-to-main-content links</li>
+          <li><strong>Understandable</strong> — predictable navigation, error messages that explain how to fix the error, plain language</li>
+          <li><strong>Robust</strong> — works with screen readers (proper semantic HTML, ARIA where genuinely needed)</li>
+        </ul>
+      </div>
+
+      <div class="callout red">
+        <h4>Legal landscape</h4>
+        <ul>
+          <li><strong>European Union</strong> — European Accessibility Act (EAA) became fully enforceable June 2025. Many products must comply.</li>
+          <li><strong>United States</strong> — Section 508 covers federal procurement. The ADA covers private sector via lawsuits — over 4,000 web accessibility lawsuits filed in 2023 alone.</li>
+          <li><strong>United Kingdom</strong> — Public Sector Bodies Accessibility Regulations 2018.</li>
+          <li><strong>Bhutan</strong> — Persons with Disabilities Bill (in development); follows WCAG implicitly via international agreements.</li>
+        </ul>
+        <p><strong>SELISE-relevant:</strong> any product touching EU users must consider the EAA. Any product procured by a US federal agency must hit Section 508. Cost of retrofitting is far higher than cost of building accessible from the start.</p>
+      </div>
+
+      <div class="callout amber">
+        <h4>Spec hint</h4>
+        <p>Specifying "the form should be accessible" is meaningless. <strong>Spec the level: "Conforms to WCAG 2.1 AA."</strong> QA tests against that target with tools like axe, WAVE, and keyboard / screen-reader walkthroughs.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="example">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 9</div>
+        <h2>Worked example · mBoB bill payment</h2>
+      </div>
+      <p>One feature, all the test types in action.</p>
+
+      <p><strong>Feature:</strong> Pay a recurring bill (e.g., to BPC for electricity) from the mBoB mobile app. Customer selects biller, enters amount, authenticates with mPin, sees confirmation.</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Test type</th><th>Example test</th></tr></thead>
+          <tbody>
+            <tr><td>Unit</td><td><code>calculateFee(amount)</code> returns 0.5% of amount, rounded to 2 decimals</td></tr>
+            <tr><td>Integration</td><td>Payment Service correctly calls Biller API and parses the response when amount and biller ID are valid</td></tr>
+            <tr><td>System / E2E</td><td>Customer opens app → selects bill → enters amount → enters mPin → sees confirmation. End-to-end through real backend.</td></tr>
+            <tr><td>UAT / Acceptance</td><td>A real customer pays a real BPC bill and confirms the deduction is correct in her statement the next day</td></tr>
+            <tr><td>Regression</td><td>All of the above run again every time a new build is released</td></tr>
+            <tr><td>Performance</td><td>1,000 concurrent payment requests, p99 response time under 3 seconds</td></tr>
+            <tr><td>Security</td><td>mPin lockout triggers after 3 wrong attempts; SQL injection inputs sanitized; rate-limiting on the payment endpoint</td></tr>
+            <tr><td>Usability</td><td>5 customers can complete the payment without assistance in under 2 minutes</td></tr>
+            <tr><td>Accessibility</td><td>Entire flow operable with screen reader (TalkBack on Android, VoiceOver on iOS); usable with keyboard alone for desktop</td></tr>
+            <tr><td>Compatibility</td><td>Works on Android 9+ and iOS 14+, including the low-end devices common in rural Bhutan (e.g., 2GB RAM)</td></tr>
+            <tr><td>Localization</td><td>Currency formats correctly in BTN; date formats follow Bhutan convention; UI strings translate to Dzongkha</td></tr>
+            <tr><td>Reliability</td><td>Recovers gracefully if Biller API is down — shows clear error, doesn't double-deduct, doesn't lose the request</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Same feature, twelve distinct test approaches. The BA's job is to spec which ones matter (probably all of them for a payment feature in a regulated industry). The QA's job is to design specific test cases for each.</p>
+    </section>
+
+    <section class="chapter" id="roles">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 10</div>
+        <h2>BA and QA roles in testing</h2>
+      </div>
+
+      <div class="pair">
+        <div class="callout">
+          <h4>What BAs do for testing</h4>
+          <ul>
+            <li>Write testable acceptance criteria (Given/When/Then)</li>
+            <li>Spec which ISO 25010 attributes matter and to what level</li>
+            <li>Define what UAT looks like and who runs it</li>
+            <li>Review test coverage with QA before sign-off</li>
+            <li>Sign off on go-live decisions based on test evidence</li>
+            <li>Catch validation issues — "we built the right thing" checks</li>
+          </ul>
+        </div>
+        <div class="callout amber">
+          <h4>What QAs do for testing</h4>
+          <ul>
+            <li>Design test cases from acceptance criteria</li>
+            <li>Cover all relevant levels (unit awareness, integration, system, regression, smoke)</li>
+            <li>Cover all relevant non-functional types (perf, security, a11y, etc.)</li>
+            <li>Identify edge cases the BA missed</li>
+            <li>Maintain the regression suite</li>
+            <li>Catch verification issues — "built right" checks</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout indigo">
+        <h4>The BA→QA handoff</h4>
+        <p>A BA's acceptance criteria become the QA's test cases. If the AC is sloppy or missing edge cases, the test cases are too. The fundamental rule: <strong>if you can't write a clear test for an AC, the AC isn't done.</strong> Either tighten the AC or have an explicit "Three Amigos" conversation with the dev to figure out what's missing.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="mistakes">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 11</div>
+        <h2>Common testing mistakes</h2>
+      </div>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Mistake</th><th>Why it hurts</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr><td>Testing only the happy path</td><td>Easy to demo; falls over in production at the first edge case</td><td>For every positive test, write at least one negative and one boundary test</td></tr>
+            <tr><td>"Works on my machine"</td><td>Not testing — wishful thinking. Different env breaks things.</td><td>Test in actual deployed environments, not just dev laptops</td></tr>
+            <tr><td>No regression strategy</td><td>Every fix introduces a new bug somewhere</td><td>Maintain a regression suite that runs on every PR</td></tr>
+            <tr><td>Manual-only testing</td><td>Fine at first, suicidal at scale; suite becomes the bottleneck</td><td>Automate the high-frequency low-judgement tests; reserve manual for exploratory and UAT</td></tr>
+            <tr><td>Functional-only testing</td><td>Passes all functional tests, dies at 100 users</td><td>Always include relevant non-functional tests (perf, security, a11y)</td></tr>
+            <tr><td>Inverted pyramid</td><td>Many slow E2E tests, few unit tests; CI takes hours, no one trusts it</td><td>Push tests downward where possible — unit > integration > E2E</td></tr>
+            <tr><td>"QA will catch it"</td><td>Devs writing only happy-path code creates bugs QA can't catch</td><td>Testing is everyone's job — devs write unit tests, BAs review specs critically</td></tr>
+            <tr><td>Skipping accessibility</td><td>Increasingly illegal; lawsuit risk grows yearly</td><td>Bake WCAG 2.1 AA into every spec from day one</td></tr>
+            <tr><td>"Test data is fake data"</td><td>Test passes with clean data, prod fails with messy real data</td><td>Use anonymized samples of real production data when possible</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="chapter" id="take">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Takeaways</div>
+        <h2>Key takeaways</h2>
+      </div>
+      <div class="summary">
+        <h4>What to carry forward</h4>
+        <ul>
+          <li>Testing isn't a phase — it's a discipline that runs alongside development from spec to production.</li>
+          <li><strong>Verification</strong> = built right (against the spec). <strong>Validation</strong> = right thing built (against the user need). Both matter.</li>
+          <li>The <strong>test pyramid</strong>: many fast unit tests, fewer integration, very few E2E. Inverted pyramid = slow CI = no one trusts the suite.</li>
+          <li>Six levels: <strong>unit, integration, system, acceptance/UAT, regression, smoke</strong>.</li>
+          <li>Two type families: <strong>functional</strong> (does it work?) and <strong>non-functional</strong> (how well?).</li>
+          <li><strong>ISO 25010</strong> defines the 8 characteristics that make software "good." Use it as your NFR checklist.</li>
+          <li><strong>Accessibility (WCAG 2.1 AA)</strong> is increasingly law. Spec the level explicitly.</li>
+          <li>BA writes testable AC; QA designs test cases from them. Same artifact, two views.</li>
+          <li>If you can't write a test for an AC, the AC isn't done.</li>
+        </ul>
+      </div>
+      <p style="margin-top:1.2rem">Next class: <strong>Bug Reporting &amp; Defect Lifecycle</strong> — how to file a bug that gets fixed fast, and how bugs travel through their lifecycle.</p>
+    </section>
+
+  </div>
+
+  <footer>
+    <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE">
+    SELISE × Pelsung · Quality &amp; Compliance 01<br>
+    Software Testing Fundamentals
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bug Reporting &amp; Defect Lifecycle — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      .big-card { background:white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.3rem; max-width:1050px; width:100%; }
+      .big-card h4 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-bottom:0.45rem; }
+      .big-card ul { padding-left:1.2rem; margin:0.4rem 0; }
+      .big-card li { font-size:0.92rem; line-height:1.7; color:var(--text); margin:0.2rem 0; }
+
+      .dual { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px) { .dual { grid-template-columns: 1fr; } }
+      .dual-bad { background:#FFF5F7; border:1px solid #FADCE3; border-radius:10px; padding:0.9rem 1.1rem; }
+      .dual-good { background:#F3FAE9; border:1px solid #D4E8BD; border-radius:10px; padding:0.9rem 1.1rem; }
+      .dual-bad h5 { color:var(--red); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.4rem; }
+      .dual-good h5 { color:#3D7A3D; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.4rem; }
+      .dual ul { padding-left:1.1rem; margin:0; }
+      .dual li { font-size:0.85rem; line-height:1.65; color:var(--text); margin:0.2rem 0; }
+
+      .diagram { background:white; border:1px solid var(--border); border-radius:10px; padding:1rem; max-width:1100px; width:100%; overflow-x:auto; }
+      .diagram svg { display:block; margin:0 auto; }
+      .diagram .caption { font-size:0.82rem; color:var(--muted); margin-top:0.6rem; text-align:center; font-style:italic; }
+
+      .bug-template { background:#FAFBFC; border:1px solid var(--border); border-radius:10px; padding:1rem 1.2rem; max-width:1000px; width:100%; font-family:'Courier New',monospace; font-size:0.85rem; line-height:1.65; color:var(--text); }
+      .bug-template .field { margin:0.3rem 0; }
+      .bug-template .field strong { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; }
+
+      .matrix { display:grid; grid-template-columns: 80px repeat(3, 1fr); gap:0.4rem; max-width:900px; width:100%; }
+      .matrix .h { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.8rem; text-align:center; padding:0.5rem; color:var(--muted); }
+      .matrix .row-h { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.78rem; text-align:right; padding:0.5rem; color:var(--muted); }
+      .matrix .cell { padding:0.7rem; border-radius:6px; font-size:0.8rem; text-align:center; line-height:1.4; }
+      .matrix .high { background:#FEE9EC; color:#9e0022; border:1px solid #FADCE3; }
+      .matrix .med { background:#FFF4E3; color:#8a6d0c; border:1px solid #F4E0A8; }
+      .matrix .low { background:#F3FAE9; color:#3D7A3D; border:1px solid #D4E8BD; }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient bg-dark" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>Quality &amp; Compliance · 02 of 05</div></div>
+          <h1 class="display" style="color:white">
+            <span style="color: var(--amber)">Bug Reporting</span><br />
+            <span style="color: white">&amp; Defect Lifecycle</span>
+          </h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85)">How to file a bug that gets fixed fast. Severity vs priority. The lifecycle every defect travels through. Triage rules.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">Anatomy of a bug</span>
+            <span class="class-tag tag-blue">Severity vs priority</span>
+            <span class="class-tag tag-blue">Lifecycle</span>
+            <span class="class-tag tag-blue">Triage</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 WHY -->
+      <div class="slide bg-indigo" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span></div>
+        <div class="center" style="max-width:900px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Why this matters</div>
+          <h1 class="display" style="color:white; font-size:2.3rem; line-height:1.25">"Login is broken" wastes 4 hours of dev time. A good report wastes 10 minutes.</h1>
+          <p style="color: rgba(255,255,255,0.85); font-size: 1.05rem; margin-top:1.5rem; line-height:1.85">
+            A bug report is a tiny spec.<br>
+            It tells a developer <strong>exactly what's wrong, exactly how to reproduce it, and exactly what should happen instead</strong>.<br><br>
+            A bad bug report triggers ping-pong messages, missed releases, and "can't reproduce → reopened" cycles.
+          </p>
+          <p style="color: var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.15rem; margin-top:1.5rem">Bug reporting is a writing skill. Today: how to do it well.</p>
+        </div>
+      </div>
+
+      <!-- 3 BAD VS GOOD -->
+      <div class="slide accent-blue bg-subtle" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> Bad bug vs good bug</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Same defect · two reports · totally different outcomes</h2></div>
+          <div class="dual">
+            <div class="dual-bad">
+              <h5>❌ Bad bug</h5>
+              <p style="font-family:'Courier New',monospace; font-size:0.85rem; margin:0.3rem 0;">Title: <em>Login is broken</em></p>
+              <p style="font-family:'Courier New',monospace; font-size:0.85rem; margin:0.3rem 0;">Desc: <em>Can't log in. Please fix urgently!</em></p>
+              <p style="font-size:0.82rem; color:var(--muted); margin-top:0.6rem; font-style:italic">Dev's reaction: "Login? Which form? Which user? What error? What browser? What did you click? When did this start?" Result: 6 messages back and forth before any fixing happens.</p>
+            </div>
+            <div class="dual-good">
+              <h5>✅ Good bug</h5>
+              <p style="font-family:'Courier New',monospace; font-size:0.85rem; margin:0.3rem 0;">Title: <em>Login button unresponsive on mBoB v3.4 (Android 13) when MPIN starts with 0</em></p>
+              <p style="font-family:'Courier New',monospace; font-size:0.78rem; margin:0.3rem 0;">Steps: 1) Open mBoB v3.4 on Pixel 7 (Android 13). 2) Enter username. 3) Enter MPIN starting with 0 (e.g. 0123). 4) Tap Login. <strong>Expected:</strong> dashboard appears. <strong>Actual:</strong> button greys out, no error, no progress. Reproduces 5/5.</p>
+              <p style="font-size:0.82rem; color:var(--muted); margin-top:0.4rem; font-style:italic">Dev's reaction: opens code, finds where MPIN is validated, sees the bug in 10 minutes.</p>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:840px"><strong>The difference:</strong> the second report tells the dev exactly where to look. The first triggers a chain of messages.</p>
+        </div>
+      </div>
+
+      <!-- 4 ANATOMY -->
+      <div class="slide accent-blue" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> Anatomy of a great bug report</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Eight fields · use the same template every time</h2></div>
+          <div class="bug-template">
+            <div class="field"><strong>Title:</strong> [What's wrong] [where] [under what condition] · short, scannable, searchable</div>
+            <div class="field"><strong>Environment:</strong> app version · OS · browser · device · build number · server / staging / prod</div>
+            <div class="field"><strong>Steps to reproduce:</strong> numbered list · short verbs · exact inputs · "click" not "interact"</div>
+            <div class="field"><strong>Expected result:</strong> what should happen, per spec or common sense</div>
+            <div class="field"><strong>Actual result:</strong> what happened instead · screenshots / video / logs</div>
+            <div class="field"><strong>Reproducibility:</strong> always · sometimes · once · how many times of how many tries (e.g. 5/5, 1/10)</div>
+            <div class="field"><strong>Severity:</strong> how bad is it for the user (Critical · High · Medium · Low)</div>
+            <div class="field"><strong>Priority:</strong> how soon must we fix (P0 · P1 · P2 · P3)</div>
+            <div class="field" style="margin-top:0.5rem"><strong>Optional but valuable:</strong> attachments (screenshot, video, HAR file, logs) · related bugs · workaround if known · regressed-since-build</div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">Most bug trackers (Jira, Linear, GitHub) let you save this as a template. Use it. Consistency saves hours per week.</p>
+        </div>
+      </div>
+
+      <!-- 5 SEVERITY VS PRIORITY -->
+      <div class="slide accent-blue bg-subtle" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span> Severity vs Priority · the eternal confusion</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">They're independent · stop using them as synonyms</h2></div>
+          <div class="dual">
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--red); padding:1rem 1.2rem;">
+              <h4 style="color:var(--indigo); font-size:1.05rem; margin-bottom:0.4rem;">Severity</h4>
+              <p style="font-size:0.92rem; line-height:1.7;"><strong>How bad is it for the user?</strong></p>
+              <ul style="padding-left:1.2rem; font-size:0.86rem; line-height:1.65; margin-top:0.4rem">
+                <li><strong>Critical</strong> — system unusable, data loss, security breach</li>
+                <li><strong>High</strong> — major function broken, no workaround</li>
+                <li><strong>Medium</strong> — function broken with workaround, or minor function fully broken</li>
+                <li><strong>Low</strong> — cosmetic, typo, edge case nobody hits</li>
+              </ul>
+              <p style="font-size:0.83rem; color:var(--muted); margin-top:0.4rem; font-style:italic">Set by QA / reporter. Objective.</p>
+            </div>
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--amber); padding:1rem 1.2rem;">
+              <h4 style="color:var(--indigo); font-size:1.05rem; margin-bottom:0.4rem;">Priority</h4>
+              <p style="font-size:0.92rem; line-height:1.7;"><strong>How soon must we fix it?</strong></p>
+              <ul style="padding-left:1.2rem; font-size:0.86rem; line-height:1.65; margin-top:0.4rem">
+                <li><strong>P0</strong> — drop everything · fix today</li>
+                <li><strong>P1</strong> — fix this sprint</li>
+                <li><strong>P2</strong> — fix next sprint or two</li>
+                <li><strong>P3</strong> — backlog · maybe never</li>
+              </ul>
+              <p style="font-size:0.83rem; color:var(--muted); margin-top:0.4rem; font-style:italic">Set by PM / business / triage. Subjective. Reflects business priority.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 SEV VS PRI MATRIX -->
+      <div class="slide accent-blue" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> Why they're different · concrete examples</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Severity ≠ priority · the four corners</h2></div>
+          <div class="big-card">
+            <ul>
+              <li><strong>High severity · High priority</strong> — Login completely broken. Users locked out. Drop everything. <em>(Critical / P0)</em></li>
+              <li><strong>High severity · Low priority</strong> — Bug crashes the app, but only triggers on a date in the year 2099. <em>(Critical / P3)</em></li>
+              <li><strong>Low severity · High priority</strong> — Typo in the legal disclaimer on the homepage during a regulator inspection tomorrow. <em>(Low / P0)</em></li>
+              <li><strong>Low severity · Low priority</strong> — Footer copyright says 2024 instead of 2025. <em>(Low / P3)</em></li>
+            </ul>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px"><strong>The lesson:</strong> a critical-severity bug isn't always urgent. A trivial bug can be urgent. <strong>Set them independently.</strong> The combination drives the fix order.</p>
+        </div>
+      </div>
+
+      <!-- 7 LIFECYCLE -->
+      <div class="slide accent-blue bg-subtle" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> The defect lifecycle · a state machine</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Every bug travels through these states</h2></div>
+          <div class="diagram">
+            <svg width="900" height="300" viewBox="0 0 900 300">
+              <!-- States -->
+              <rect x="20" y="120" width="100" height="50" rx="8" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="70" y="150" text-anchor="middle" font-family="Bahnschrift" font-size="13" fill="#0066B2">New</text>
+              <rect x="160" y="120" width="100" height="50" rx="8" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="210" y="150" text-anchor="middle" font-family="Bahnschrift" font-size="13" fill="#0066B2">Triaged</text>
+              <rect x="300" y="120" width="120" height="50" rx="8" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="360" y="150" text-anchor="middle" font-family="Bahnschrift" font-size="13" fill="#0066B2">In Progress</text>
+              <rect x="460" y="120" width="100" height="50" rx="8" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="510" y="150" text-anchor="middle" font-family="Bahnschrift" font-size="13" fill="#0066B2">Fixed</text>
+              <rect x="600" y="120" width="100" height="50" rx="8" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+              <text x="650" y="150" text-anchor="middle" font-family="Bahnschrift" font-size="13" fill="#0066B2">Verified</text>
+              <rect x="740" y="120" width="100" height="50" rx="8" fill="#fff" stroke="#3D7A3D" stroke-width="2.5"/>
+              <text x="790" y="150" text-anchor="middle" font-family="Bahnschrift" font-size="13" fill="#3D7A3D">Closed</text>
+
+              <!-- Reopened branch -->
+              <rect x="540" y="220" width="120" height="50" rx="8" fill="#fff" stroke="#D80032" stroke-width="2"/>
+              <text x="600" y="250" text-anchor="middle" font-family="Bahnschrift" font-size="13" fill="#D80032">Reopened</text>
+
+              <!-- Rejected / WontFix -->
+              <rect x="200" y="40" width="160" height="40" rx="8" fill="#fff" stroke="#7B7C7F" stroke-width="2"/>
+              <text x="280" y="65" text-anchor="middle" font-family="Bahnschrift" font-size="12" fill="#7B7C7F">Rejected / Won't Fix</text>
+
+              <!-- Arrows -->
+              <line x1="120" y1="145" x2="160" y2="145" stroke="#001F35" stroke-width="1.5"/><polygon points="160,145 152,141 152,149" fill="#001F35"/>
+              <line x1="260" y1="145" x2="300" y2="145" stroke="#001F35" stroke-width="1.5"/><polygon points="300,145 292,141 292,149" fill="#001F35"/>
+              <line x1="420" y1="145" x2="460" y2="145" stroke="#001F35" stroke-width="1.5"/><polygon points="460,145 452,141 452,149" fill="#001F35"/>
+              <line x1="560" y1="145" x2="600" y2="145" stroke="#001F35" stroke-width="1.5"/><polygon points="600,145 592,141 592,149" fill="#001F35"/>
+              <line x1="700" y1="145" x2="740" y2="145" stroke="#001F35" stroke-width="1.5"/><polygon points="740,145 732,141 732,149" fill="#001F35"/>
+
+              <!-- Verified back to In Progress (if doesn't pass) -->
+              <line x1="650" y1="170" x2="600" y2="220" stroke="#D80032" stroke-width="1.5" stroke-dasharray="4,3"/><polygon points="600,220 605,213 600,212" fill="#D80032"/>
+              <text x="660" y="200" font-family="Open Sans" font-size="10" fill="#D80032">fix didn't pass</text>
+              <line x1="540" y1="245" x2="360" y2="170" stroke="#D80032" stroke-width="1.5" stroke-dasharray="4,3"/><polygon points="360,170 367,170 365,177" fill="#D80032"/>
+              <text x="395" y="220" font-family="Open Sans" font-size="10" fill="#D80032">back to dev</text>
+
+              <!-- Closed → Reopened (production regression) -->
+              <line x1="790" y1="170" x2="660" y2="245" stroke="#D80032" stroke-width="1.5" stroke-dasharray="4,3"/><polygon points="660,245 668,243 665,250" fill="#D80032"/>
+              <text x="690" y="260" font-family="Open Sans" font-size="10" fill="#D80032">regressed</text>
+
+              <!-- Triaged → Rejected -->
+              <line x1="210" y1="120" x2="280" y2="80" stroke="#7B7C7F" stroke-width="1.5"/><polygon points="280,80 273,82 274,89" fill="#7B7C7F"/>
+              <text x="225" y="105" font-family="Open Sans" font-size="10" fill="#7B7C7F">not a bug / dup</text>
+            </svg>
+            <div class="caption">Forward path (blue): New → Triaged → In Progress → Fixed → Verified → Closed. Backward paths (red) when something fails: re-opened, sent back to dev, or regressed in production. <strong>Rejected/Won't Fix</strong> is the dead-end for invalid or out-of-scope reports.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8 STATES IN DETAIL -->
+      <div class="slide accent-blue" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> What each state means</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="big-card">
+            <ul>
+              <li><strong>New / Open</strong> — just filed. Awaits triage. The reporter (often QA or BA) wrote it; nobody has yet decided what happens.</li>
+              <li><strong>Triaged</strong> — reviewed by the triage team. Severity confirmed, priority set, owner assigned. Now it's "real work."</li>
+              <li><strong>In Progress</strong> — a developer is actively fixing it.</li>
+              <li><strong>Fixed</strong> — code changed, dev believes it's resolved, ready for QA to verify.</li>
+              <li><strong>Verified</strong> — QA confirmed the fix works in the staging / test environment. Did NOT regress anything.</li>
+              <li><strong>Closed</strong> — done. Bug ticket archived. Often only happens after the fix ships to production.</li>
+              <li><strong>Reopened</strong> — bug came back. Either QA's verification failed, OR the bug regressed after closure (rare but happens).</li>
+              <li><strong>Rejected / Won't Fix / Duplicate</strong> — terminal states for invalid reports. <em>Not a bug, by design, won't fix this version, duplicate of #1234.</em></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9 TRIAGE -->
+      <div class="slide accent-blue bg-subtle" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> Triage · the meeting that decides</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Who's in the room · what gets decided</h2></div>
+          <div class="big-card">
+            <h4>Who attends triage</h4>
+            <ul>
+              <li><strong>QA lead</strong> — represents the reported bugs, advocates for severity</li>
+              <li><strong>Product / BA</strong> — represents user impact and roadmap, owns priority</li>
+              <li><strong>Engineering lead</strong> — represents capacity, owns assignment</li>
+              <li><em>Optional:</em> support lead (if customer-reported), security lead (if security-flagged)</li>
+            </ul>
+            <h4 style="margin-top:0.6rem">What gets decided per bug</h4>
+            <ul>
+              <li><strong>Is this a bug?</strong> Reject / dedupe if not. Often 20–40% of reports get rejected here.</li>
+              <li><strong>Severity:</strong> objectively, how bad is the user impact?</li>
+              <li><strong>Priority:</strong> when must this be fixed? (P0/P1 → this sprint, P2/P3 → backlog)</li>
+              <li><strong>Owner:</strong> which dev / team takes it?</li>
+              <li><strong>Target release:</strong> ship in current build, hotfix, or next release?</li>
+            </ul>
+            <h4 style="margin-top:0.6rem">Cadence</h4>
+            <ul>
+              <li><strong>P0 bugs:</strong> triaged immediately on filing (within an hour)</li>
+              <li><strong>Daily triage:</strong> for active sprints, 15–30 minutes</li>
+              <li><strong>Weekly triage:</strong> for backlog grooming, 1 hour</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10 BUG CATEGORIES -->
+      <div class="slide accent-blue" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> Bug categories · not all bugs are created equal</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Tag bugs by category — different categories, different handling</h2></div>
+          <div class="big-card">
+            <ul>
+              <li><strong>Functional</strong> — feature doesn't work as specified · most common · usually owned by feature team</li>
+              <li><strong>Performance</strong> — slow, timeouts, high resource use · often surfaces under load · owned by perf or platform team</li>
+              <li><strong>Security</strong> — vulnerabilities, leaks, broken auth · ALWAYS high priority · often confidential · special handling rules</li>
+              <li><strong>Accessibility</strong> — fails WCAG, screen reader broken, keyboard trap · increasingly tracked separately for compliance</li>
+              <li><strong>Usability / UX</strong> — works but is confusing or frustrating · "not technically a bug" but real impact</li>
+              <li><strong>Data</strong> — wrong calculation, corrupted record, lost data · often urgent because data loss compounds</li>
+              <li><strong>Localization</strong> — wrong language, wrong format, broken layout in target locale</li>
+              <li><strong>Regression</strong> — something that worked before is now broken · special priority because trust is at stake</li>
+            </ul>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px"><strong>Tagging matters because:</strong> security bugs may follow a separate disclosure process. Accessibility bugs feed into compliance reports. Performance bugs may trigger SLA reviews. Don't lose this signal by tagging everything "bug".</p>
+        </div>
+      </div>
+
+      <!-- 11 ACCESSIBILITY BUGS -->
+      <div class="slide accent-blue bg-subtle" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> Accessibility bugs · special handling</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Two reasons to tag and track them separately</h2></div>
+          <div class="big-card">
+            <ul>
+              <li><strong>1 · Compliance reporting.</strong> WCAG conformance is increasingly audited. You need to be able to answer "how many WCAG AA violations are open?" without scanning every bug.</li>
+              <li><strong>2 · Different remediation approach.</strong> Accessibility bugs often need design + dev collaboration (semantic HTML, focus order, ARIA). Pure dev fix often misses the accessibility goal.</li>
+            </ul>
+            <h4 style="margin-top:0.6rem">Severity guidance for a11y bugs</h4>
+            <ul>
+              <li><strong>Critical</strong> — feature completely unusable for users with assistive tech (e.g., login form not navigable by keyboard)</li>
+              <li><strong>High</strong> — feature usable but with significant friction (e.g., screen reader announces button as "button" with no label)</li>
+              <li><strong>Medium</strong> — minor friction (e.g., contrast slightly below WCAG AA on a label)</li>
+              <li><strong>Low</strong> — best-practice violations, level AAA failures</li>
+            </ul>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">Tools like axe DevTools, WAVE, and Lighthouse generate accessibility violations as JSON. You can pipe them straight into your bug tracker tagged "accessibility-wcag-AA".</p>
+        </div>
+      </div>
+
+      <!-- 12 BA AND QA ROLES -->
+      <div class="slide accent-blue" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> Who files bugs and how BAs fit in</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Anyone can file. BAs file too.</h2></div>
+          <div class="dual">
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--blue); padding:1rem 1.2rem;">
+              <h4 style="color:var(--indigo); font-size:1.05rem; margin-bottom:0.4rem;">QA's bug-reporting work</h4>
+              <ul style="padding-left:1.2rem; font-size:0.88rem; line-height:1.65;">
+                <li>File bugs found in test execution</li>
+                <li>Confirm reproducibility before filing</li>
+                <li>Assign initial severity</li>
+                <li>Verify fixes</li>
+                <li>Maintain regression test for any "Closed" bug</li>
+                <li>Track defect metrics (escape rate, age, density)</li>
+              </ul>
+            </div>
+            <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--amber); padding:1rem 1.2rem;">
+              <h4 style="color:var(--indigo); font-size:1.05rem; margin-bottom:0.4rem;">BA's bug-reporting work</h4>
+              <ul style="padding-left:1.2rem; font-size:0.88rem; line-height:1.65;">
+                <li>File bugs found in spec review or UAT</li>
+                <li>Translate user complaints into well-formed reports</li>
+                <li>Set priority during triage (business impact lens)</li>
+                <li>Decide if a bug → spec change or pure fix</li>
+                <li>Communicate fix status to stakeholders</li>
+                <li>Watch for "bugs that are really missed requirements"</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:840px"><strong>The hidden category:</strong> some "bugs" are actually missed requirements — the system does what was specified, but the spec was wrong. The BA owns sorting these from real defects.</p>
+        </div>
+      </div>
+
+      <!-- 13 PITFALLS -->
+      <div class="slide accent-blue bg-subtle" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> Common bug-reporting mistakes</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Avoid these · save hours per week</h2></div>
+          <div class="big-card">
+            <ul>
+              <li><strong>Vague title</strong> — "Login broken" tells nobody anything. Title should make it scannable in a list of 200.</li>
+              <li><strong>No environment</strong> — same code, different OS = different result. Always specify.</li>
+              <li><strong>"Sometimes happens"</strong> with no reproduction count — useless. State exact frequency (5/5, 2/10, 1/100).</li>
+              <li><strong>Severity = priority</strong> — they're independent. Stop using them as synonyms.</li>
+              <li><strong>Multiple bugs in one ticket</strong> — splits attention, hard to close. One bug per ticket.</li>
+              <li><strong>Not attaching evidence</strong> — screenshots cost 5 seconds and save 30 minutes of "what do you mean by that?"</li>
+              <li><strong>Filing without first searching for duplicates</strong> — wastes triage time and dilutes signal</li>
+              <li><strong>Closing without verifying</strong> — "fixed" by the dev means nothing until QA verifies</li>
+              <li><strong>"Won't fix" without explanation</strong> — the next person hitting this bug needs to understand why it stays open</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 14 WRAP -->
+      <div class="slide bg-indigo" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> Wrap-up</div>
+        <div class="center" style="max-width:880px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key Takeaways</div>
+          <h2 class="heading" style="color:white">Bug reporting · what to carry forward</h2>
+          <ul class="reveal-list" style="color:rgba(255,255,255,0.9); text-align:left; max-width:780px; margin:1.5rem auto; font-size:0.97rem; line-height:1.85;">
+            <li>✅ A bug report is a tiny spec — title · env · steps · expected · actual · repro rate · sev · pri</li>
+            <li>✅ <strong>Severity</strong> = how bad. <strong>Priority</strong> = how soon. They're independent.</li>
+            <li>✅ The lifecycle: <strong>New → Triaged → In Progress → Fixed → Verified → Closed</strong> · backward paths when things fail</li>
+            <li>✅ Triage decides: is it a bug · severity · priority · owner · target release</li>
+            <li>✅ Tag categories: <strong>functional · perf · security · a11y · UX · data · localization · regression</strong></li>
+            <li>✅ Accessibility bugs need separate tracking for compliance</li>
+            <li>✅ BAs file bugs too — and watch for "bugs that are really missed requirements"</li>
+            <li>✅ Next class: <strong>Risk Management &amp; Risk-Based Thinking</strong></li>
+          </ul>
+          <p style="color:var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-top:1.5rem">A clear bug report is a gift to your dev team. A vague one is an unpaid invoice for their time.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 14</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>

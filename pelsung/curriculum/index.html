@@ -731,6 +731,24 @@
         ]
       },
       {
+        id: 'ba-qa-quality', name: 'Quality & Compliance', short: 'Quality',
+        tag: '5 classes · cross-vertical', active: true,
+        sub: 'Cross-cutting fundamentals every software professional needs — testing basics, bug reporting, risk thinking, data protection law, and post-launch instrumentation. ISO 25010 quality attributes and WCAG accessibility are folded across the block.',
+        topics: 'Testing · bugs · risk · compliance · security · observability · telemetry',
+        classes: [
+          { num:'01', title:'Software Testing Fundamentals', topics:'Verification vs validation · test pyramid · levels · functional vs non-functional · ISO 25010 · WCAG basics',
+            status: 'today', files: { slides: 'ba-qa-quality/01-testing-fundamentals-slides.html', notes: 'ba-qa-quality/01-testing-fundamentals-notes.html' } },
+          { num:'02', title:'Bug Reporting & Defect Lifecycle', topics:'Bug anatomy · severity vs priority · lifecycle state machine · triage · accessibility bugs',
+            status: 'upcoming', files: { slides: 'ba-qa-quality/02-bug-reporting-slides.html', notes: 'ba-qa-quality/02-bug-reporting-notes.html' } },
+          { num:'03', title:'Risk Management & Risk-Based Thinking', topics:'Likelihood × impact · risk register · 4 responses · 6 categories · risk-based testing',
+            status: 'upcoming', files: { slides: 'ba-qa-quality/03-risk-management-slides.html', notes: 'ba-qa-quality/03-risk-management-notes.html' } },
+          { num:'04', title:'Data Protection & Compliance', topics:'Bhutan DPPA · GDPR · PCI-DSS · 7 principles · valid consent · 72-hour breach · WCAG/EAA',
+            status: 'upcoming', files: { slides: 'ba-qa-quality/04-data-protection-compliance-slides.html', notes: 'ba-qa-quality/04-data-protection-compliance-notes.html' } },
+          { num:'05', title:'Security, Observability & Telemetry', topics:'OWASP Top 10 · logs/metrics/traces · SLI/SLO · funnels · KPIs',
+            status: 'upcoming', files: { slides: 'ba-qa-quality/05-security-observability-telemetry-slides.html', notes: 'ba-qa-quality/05-security-observability-telemetry-notes.html' } },
+        ]
+      },
+      {
         id: 'ba', name: 'Business Analysis', short: 'BA',
         tag: '15 classes', active: true,
         sub: 'BA trainees focus on the BA-specific craft — elicitation, modeling, agile collaboration, validation, and BA-only deliverables.',

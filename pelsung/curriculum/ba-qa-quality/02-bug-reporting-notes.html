@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bug Reporting &amp; Defect Lifecycle — Quality 02</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#0066B2; --indigo:#001F35; --amber:#247EC1; --green:#7BC950; --purple:#4796D1; --red:#D80032; --text:#1B2021; --muted:#7B7C7F; --faint:#9CA3AF; --surf:#fff; --bg:#F9F9F9; --border:#EDEDED; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Open Sans','Aptos',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; font-size:17px; -webkit-font-smoothing:antialiased; }
+    h1,h2,h3,h4,h5,h6 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:400; letter-spacing:-0.01em; }
+    a { color: var(--blue); }
+    .hero { background:var(--surf); border-bottom:1px solid var(--border); padding:4rem 2rem 3rem; text-align:center; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background: linear-gradient(135deg, #0067A3, #002D72); }
+    .logo-corner { position:absolute; top: 1.25rem; left: 1.5rem; opacity:0.85; }
+    .logo-corner img { height: 34px; }
+    .hero-badge { display:inline-flex; align-items:center; gap:0.5rem; background:var(--bg); border:1px solid var(--border); border-radius:100px; padding:0.35rem 1rem; font-size:0.75rem; font-weight:700; color:var(--muted); letter-spacing:0.07em; text-transform:uppercase; margin-bottom:1.5rem; }
+    .hero-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--amber); }
+    .hero h1 { font-size:clamp(2rem,5vw,3.5rem); line-height:1.15; margin-bottom:0.75rem; }
+    .c-blue{color:var(--blue);} .c-indigo{color:var(--indigo);}
+    .hero-sub { font-size:1rem; color:var(--muted); margin-bottom:2rem; max-width:760px; margin-left:auto; margin-right:auto; }
+    .hero-tags { display:flex; justify-content:center; gap:0.6rem; flex-wrap:wrap; }
+    .hero-tag { padding:0.3rem 0.9rem; border-radius:8px; font-size:0.78rem; font-weight:600; background:#E6F0F8; color:var(--blue); }
+    .container { max-width:1040px; margin:0 auto; padding:0 2rem 6rem; }
+    .toc { background:var(--surf); border:1px solid var(--border); border-radius:16px; padding:1.75rem 2rem; margin:2.5rem 0; }
+    .toc h3 { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); margin-bottom:1.25rem; }
+    .toc ol { list-style: none; counter-reset: step; }
+    .toc li { counter-increment: step; padding:0.45rem 0; border-bottom:1px solid var(--border); }
+    .toc li:last-child { border-bottom:none; }
+    .toc li::before { content: counter(step, decimal-leading-zero); color:var(--faint); font-family:'Bahnschrift','Segoe UI',sans-serif; margin-right:0.8rem; font-size:0.9rem; }
+    .toc a { text-decoration:none; color:var(--text); font-weight:500; }
+    .toc a:hover { color: var(--blue); }
+    section.chapter { margin: 3.5rem 0; }
+    .chapter-head { margin-bottom:1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
+    .chapter-eyebrow { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--blue); margin-bottom:0.3rem; }
+    .chapter-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--indigo); }
+    p { margin: 0.7rem 0; }
+    ul, ol { margin: 0.6rem 0 0.6rem 1.3rem; }
+    li { margin: 0.3rem 0; }
+    strong { color: var(--indigo); }
+    .callout { background:var(--surf); border:1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 10px; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+    .callout.amber { border-left-color: var(--amber); }
+    .callout.green { border-left-color: var(--green); }
+    .callout.red { border-left-color: var(--red); }
+    .callout.indigo { border-left-color: var(--indigo); }
+    .callout h4 { font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--indigo); }
+    .pair { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin:1rem 0; }
+    @media (max-width: 720px) { .pair { grid-template-columns: 1fr; } }
+    .big-tbl { background:var(--surf); border:1px solid var(--border); border-radius:10px; overflow:auto; margin:1rem 0; }
+    .big-tbl table { width:100%; border-collapse:collapse; font-size:0.9rem; }
+    .big-tbl th { background:var(--bg); padding:0.6rem 0.9rem; text-align:left; color:var(--muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; border-bottom:1px solid var(--border); }
+    .big-tbl td { padding:0.6rem 0.9rem; border-bottom:1px solid var(--border); color:var(--text); vertical-align:top; line-height:1.6; }
+    .big-tbl tr:last-child td { border-bottom:none; }
+    .big-tbl td:first-child { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; }
+    .bug-template { background:#FAFBFC; border:1px solid var(--border); border-radius:10px; padding:1rem 1.2rem; margin:1.25rem 0; font-family:'Courier New',monospace; font-size:0.88rem; line-height:1.7; }
+    .bug-template strong { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; }
+    .summary { background: linear-gradient(135deg, #F9F9F9, #EDEDED); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+    .summary h4 { color: var(--indigo); margin-bottom: 0.5rem; font-size: 0.95rem; }
+    footer { text-align:center; padding: 2rem 1rem 3rem; color: var(--faint); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+    footer img { height: 28px; opacity:0.7; margin-bottom: 0.5rem; display: block; margin-left:auto; margin-right:auto; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="logo-corner"><img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE"></div>
+    <div class="hero-badge"><span class="dot"></span> Quality &amp; Compliance · 02 of 05</div>
+    <h1><span class="c-blue">Bug Reporting</span><br><span class="c-indigo">&amp; Defect Lifecycle</span></h1>
+    <p class="hero-sub">A bug report is a tiny spec. This note covers how to write one that gets fixed fast, the difference between severity and priority, and the lifecycle every bug travels through.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">Anatomy</span>
+      <span class="hero-tag">Severity vs Priority</span>
+      <span class="hero-tag">Lifecycle</span>
+      <span class="hero-tag">Triage</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="toc">
+      <h3>In this note</h3>
+      <ol>
+        <li><a href="#why">Why bug reports matter</a></li>
+        <li><a href="#anatomy">Anatomy of a great bug report</a></li>
+        <li><a href="#sevpri">Severity vs Priority</a></li>
+        <li><a href="#lifecycle">The defect lifecycle</a></li>
+        <li><a href="#triage">Triage · the meeting that decides</a></li>
+        <li><a href="#categories">Bug categories</a></li>
+        <li><a href="#a11y">Accessibility bugs · special handling</a></li>
+        <li><a href="#roles">Who files bugs · BAs file too</a></li>
+        <li><a href="#metrics">Useful metrics for QA leads</a></li>
+        <li><a href="#mistakes">Common mistakes</a></li>
+        <li><a href="#take">Key takeaways</a></li>
+      </ol>
+    </div>
+
+    <section class="chapter" id="why">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 1</div>
+        <h2>Why bug reports matter</h2>
+      </div>
+      <p>A vague bug report — <em>"login is broken, please fix urgently"</em> — triggers a chain of clarifying messages between QA, dev, support, and PM that can take days to resolve before any actual fixing happens. A clear bug report gets a developer straight to the problem.</p>
+      <p>The math is simple: a developer's time is expensive. A 5-minute investment in writing a clear report saves 30+ minutes on the receiving end and avoids the "can't reproduce → reopened" cycle that wastes everyone's day.</p>
+
+      <div class="callout indigo">
+        <h4>Mental model</h4>
+        <p>Treat a bug report like a tiny specification. It has the same goal: <strong>tell the reader exactly what's wrong, exactly how to recreate it, and exactly what should happen instead</strong>. Anything less and you're outsourcing your own thinking to the developer.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="anatomy">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 2</div>
+        <h2>Anatomy of a great bug report</h2>
+      </div>
+
+      <p>Every bug report should have these eight fields. Most bug trackers (Jira, Linear, GitHub Issues, Azure DevOps) let you save this as a template — use it.</p>
+
+      <div class="bug-template">
+<strong>Title:</strong> [What's wrong] [where] [under what condition]
+<em>Example: "Login button unresponsive on mBoB v3.4 (Android 13) when MPIN starts with 0"</em>
+
+<strong>Environment:</strong>
+- App / build version
+- OS + version
+- Browser + version (if web)
+- Device model
+- Server tier (dev / staging / prod)
+
+<strong>Steps to reproduce:</strong>
+1. Numbered list
+2. Short verbs
+3. Exact inputs (e.g. "Enter MPIN: 0123" not "Enter some MPIN")
+4. "Click Login button" not "interact with the form"
+
+<strong>Expected result:</strong>
+What should happen, per spec or common sense.
+
+<strong>Actual result:</strong>
+What happened instead. Attach screenshot / video / logs.
+
+<strong>Reproducibility:</strong>
+- Always (5/5)
+- Sometimes (e.g. 3/10)
+- Rarely (e.g. 1/50)
+
+<strong>Severity:</strong> Critical · High · Medium · Low
+
+<strong>Priority:</strong> P0 · P1 · P2 · P3
+
+<strong>Optional but valuable:</strong>
+- Screenshot / video / HAR file / logs
+- Workaround if any
+- Related bugs (#)
+- Regressed-since-build (which build first showed it)
+      </div>
+
+      <div class="callout amber">
+        <h4>Title-writing rule</h4>
+        <p>Imagine 200 bugs in a list. Your title should be enough to:</p>
+        <ul>
+          <li>Tell a triage person whether to read the body</li>
+          <li>Help someone search for "is this already filed?"</li>
+          <li>Give a sense of severity at a glance</li>
+        </ul>
+        <p>Bad: "Login broken." Good: "Login fails with 500 error when email contains apostrophe (Chrome 122, prod)."</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="sevpri">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 3</div>
+        <h2>Severity vs Priority — the eternal confusion</h2>
+      </div>
+      <p>The single most-misused pair of words in bug tracking. They are <strong>independent dimensions</strong> and you should set them separately.</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Dimension</th><th>Question</th><th>Set by</th><th>Reflects</th></tr></thead>
+          <tbody>
+            <tr><td>Severity</td><td>How bad is the user impact?</td><td>QA / reporter</td><td>Objective technical impact</td></tr>
+            <tr><td>Priority</td><td>How soon must we fix it?</td><td>PM / BA / triage</td><td>Subjective business decision</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout">
+        <h4>Severity scale (typical 4-level)</h4>
+        <ul>
+          <li><strong>Critical (S1)</strong> — system unusable, data loss, security breach, complete outage</li>
+          <li><strong>High (S2)</strong> — major function broken with no workaround</li>
+          <li><strong>Medium (S3)</strong> — function broken with workaround, or minor function fully broken</li>
+          <li><strong>Low (S4)</strong> — cosmetic issue, typo, edge case nobody hits, minor inconvenience</li>
+        </ul>
+      </div>
+
+      <div class="callout amber">
+        <h4>Priority scale (typical P0-P3)</h4>
+        <ul>
+          <li><strong>P0</strong> — drop everything, fix today (production outage, security, regulatory)</li>
+          <li><strong>P1</strong> — fix this sprint</li>
+          <li><strong>P2</strong> — fix next sprint or two</li>
+          <li><strong>P3</strong> — backlog, fix when convenient (or never)</li>
+        </ul>
+      </div>
+
+      <div class="callout indigo">
+        <h4>Why they're different — the four corners</h4>
+        <ul>
+          <li><strong>High sev · High pri</strong> — Login broken, users locked out. Drop everything. (S1/P0)</li>
+          <li><strong>High sev · Low pri</strong> — Crash that only happens in the year 2099. (S1/P3)</li>
+          <li><strong>Low sev · High pri</strong> — Typo in legal disclaimer during a regulator inspection tomorrow. (S4/P0)</li>
+          <li><strong>Low sev · Low pri</strong> — Footer copyright shows 2024 instead of 2025. (S4/P3)</li>
+        </ul>
+        <p>The lesson: a critical-severity bug isn't always urgent, and a trivial bug can be urgent. Set them independently. Their <em>combination</em> drives the fix order.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="lifecycle">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 4</div>
+        <h2>The defect lifecycle</h2>
+      </div>
+      <p>Every bug travels through a state machine. Most teams use a variation of this:</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>State</th><th>Meaning</th><th>Who advances it</th></tr></thead>
+          <tbody>
+            <tr><td>New / Open</td><td>Just filed. Awaits triage.</td><td>Reporter (QA / BA / support)</td></tr>
+            <tr><td>Triaged</td><td>Reviewed. Severity confirmed, priority set, owner assigned.</td><td>Triage team</td></tr>
+            <tr><td>In Progress</td><td>A developer is actively fixing it.</td><td>Developer</td></tr>
+            <tr><td>Fixed</td><td>Code changed, dev believes resolved, awaits QA verification.</td><td>Developer</td></tr>
+            <tr><td>Verified</td><td>QA confirmed the fix works in staging / test env. No regression caused.</td><td>QA</td></tr>
+            <tr><td>Closed</td><td>Done. Often only happens after the fix ships to production.</td><td>QA / release manager</td></tr>
+            <tr><td>Reopened</td><td>Bug came back. Either verification failed, or regressed in production.</td><td>QA / support</td></tr>
+            <tr><td>Rejected / Won't Fix / Duplicate</td><td>Terminal states for invalid reports.</td><td>Triage team</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout red">
+        <h4>The reopened cycle</h4>
+        <p>A bug going from <strong>Fixed → Reopened</strong> twice is a sign of one of these problems:</p>
+        <ul>
+          <li>The original report was vague — dev fixed something different</li>
+          <li>The fix only addresses the symptom, not the root cause</li>
+          <li>The bug has multiple triggers and only some are fixed</li>
+          <li>The verification environment doesn't match production</li>
+        </ul>
+        <p>If a bug reopens twice, escalate. Don't just fix-and-close again.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="triage">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 5</div>
+        <h2>Triage · the meeting that decides</h2>
+      </div>
+      <p>Triage is the regular ceremony where new bugs get classified, prioritized, and assigned. Without it, bugs pile up unread, severity drifts, and important issues get lost.</p>
+
+      <div class="callout">
+        <h4>Who's in the room</h4>
+        <ul>
+          <li><strong>QA lead</strong> — represents reported bugs, advocates for severity</li>
+          <li><strong>Product / BA</strong> — represents user impact and roadmap, owns priority</li>
+          <li><strong>Engineering lead</strong> — represents capacity, owns assignment</li>
+          <li><em>Optional:</em> support lead (if customer-reported), security lead (if security-flagged)</li>
+        </ul>
+      </div>
+
+      <div class="callout amber">
+        <h4>What gets decided per bug</h4>
+        <ul>
+          <li><strong>Is this actually a bug?</strong> Reject / dedupe / mark as feature request if not. ~20-40% of incoming reports get rejected here in well-run teams.</li>
+          <li><strong>Severity</strong> — objectively, how bad is the user impact?</li>
+          <li><strong>Priority</strong> — when must this be fixed? P0/P1 → this sprint; P2/P3 → backlog</li>
+          <li><strong>Owner</strong> — which dev / team takes it</li>
+          <li><strong>Target release</strong> — current build, hotfix, or next release?</li>
+        </ul>
+      </div>
+
+      <div class="callout indigo">
+        <h4>Cadence</h4>
+        <ul>
+          <li><strong>P0 bugs</strong> — triaged immediately on filing (within an hour of report)</li>
+          <li><strong>Daily triage</strong> — for active sprints, 15–30 minutes each morning</li>
+          <li><strong>Weekly triage</strong> — for backlog grooming, ~1 hour</li>
+        </ul>
+        <p>Skip a triage cycle and the backlog becomes unreviewable. It's compounding debt.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="categories">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 6</div>
+        <h2>Bug categories</h2>
+      </div>
+      <p>Tag every bug by category. Different categories often need different handling — and metrics filtered by category give you valuable signals.</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Category</th><th>Examples</th><th>Special handling</th></tr></thead>
+          <tbody>
+            <tr><td>Functional</td><td>Wrong behavior vs spec, missing validation, wrong output</td><td>Standard flow. Most common type.</td></tr>
+            <tr><td>Performance</td><td>Slow, timeouts, memory leak, high CPU</td><td>Often surfaces under load. Owned by perf or platform team.</td></tr>
+            <tr><td>Security</td><td>Vulnerabilities, leaks, broken auth, injection</td><td><strong>Always P0 or P1.</strong> Often confidential — separate disclosure process.</td></tr>
+            <tr><td>Accessibility</td><td>WCAG failures, broken keyboard nav, no alt text, low contrast</td><td>Tracked separately for compliance reporting (WCAG AA).</td></tr>
+            <tr><td>Usability / UX</td><td>Works but confusing, hard to find, frustrating</td><td>"Not technically a bug" but real user impact. Often becomes a feature request.</td></tr>
+            <tr><td>Data</td><td>Wrong calculation, corrupted record, lost data, double-entry</td><td>Often urgent because data loss compounds. Recovery plan needed.</td></tr>
+            <tr><td>Localization</td><td>Wrong language, wrong format, broken layout in target locale</td><td>Affects only specific markets — flag those markets explicitly.</td></tr>
+            <tr><td>Regression</td><td>Something that worked before is now broken</td><td>Special priority — trust is at stake. Often P0/P1 even for low severity.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="chapter" id="a11y">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 7</div>
+        <h2>Accessibility bugs · special handling</h2>
+      </div>
+      <p>Accessibility bugs deserve separate tracking for two reasons:</p>
+      <ol>
+        <li><strong>Compliance reporting.</strong> WCAG conformance is increasingly audited (EAA in EU, Section 508 in US, etc.). You need to be able to answer "how many WCAG 2.1 AA violations are open?" without scanning every bug.</li>
+        <li><strong>Different remediation approach.</strong> Accessibility bugs often need design + dev collaboration: semantic HTML, focus order, ARIA labels, contrast adjustments. Pure dev fixes often miss the accessibility goal.</li>
+      </ol>
+
+      <div class="callout amber">
+        <h4>Severity guidance for accessibility bugs</h4>
+        <ul>
+          <li><strong>Critical</strong> — feature completely unusable for users with assistive tech (e.g., login form not navigable by keyboard)</li>
+          <li><strong>High</strong> — feature usable but with significant friction (e.g., screen reader announces button as "button" with no label)</li>
+          <li><strong>Medium</strong> — minor friction (e.g., contrast slightly below WCAG AA on a label)</li>
+          <li><strong>Low</strong> — best-practice violations or AAA-level failures</li>
+        </ul>
+      </div>
+
+      <div class="callout green">
+        <h4>Tools that auto-generate accessibility bugs</h4>
+        <ul>
+          <li><strong>axe DevTools</strong> (Deque) — browser extension; outputs JSON</li>
+          <li><strong>WAVE</strong> (WebAIM) — visual inspection</li>
+          <li><strong>Lighthouse</strong> — built into Chrome DevTools</li>
+          <li><strong>Pa11y</strong> — CLI for CI integration</li>
+        </ul>
+        <p>These tools generate violations in structured form. Pipe them into your tracker tagged "accessibility-wcag-AA" for trend visibility.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="roles">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 8</div>
+        <h2>Who files bugs · BAs file too</h2>
+      </div>
+
+      <div class="pair">
+        <div class="callout">
+          <h4>QA's bug-reporting work</h4>
+          <ul>
+            <li>File bugs found in test execution</li>
+            <li>Confirm reproducibility before filing</li>
+            <li>Assign initial severity</li>
+            <li>Verify fixes after dev marks Fixed</li>
+            <li>Maintain regression test for any Closed bug</li>
+            <li>Track defect metrics</li>
+          </ul>
+        </div>
+        <div class="callout amber">
+          <h4>BA's bug-reporting work</h4>
+          <ul>
+            <li>File bugs found in spec review or UAT</li>
+            <li>Translate user complaints into well-formed reports</li>
+            <li>Set priority during triage (business impact lens)</li>
+            <li>Decide if a bug → spec change or pure fix</li>
+            <li>Communicate fix status to stakeholders</li>
+            <li>Watch for "bugs that are actually missed requirements"</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout indigo">
+        <h4>The hidden category — missed requirements</h4>
+        <p>Some "bugs" aren't defects at all — they're missed requirements. The system does what was specified, but the spec was wrong or incomplete. Examples:</p>
+        <ul>
+          <li>"The form lets you submit without filling the phone number" — but the spec didn't say phone was required</li>
+          <li>"It uses the wrong date format" — but the spec didn't specify a format</li>
+          <li>"It doesn't work on Internet Explorer" — but the spec said browsers, not which ones</li>
+        </ul>
+        <p>The BA owns sorting these from real defects. Real bug → fix it. Missed requirement → update the spec, then either build it or backlog it. Don't blame QA for "filing a non-bug" — they reported a real user problem; the system's response just happens to require a spec update rather than code.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="metrics">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 9</div>
+        <h2>Useful metrics for QA leads</h2>
+      </div>
+      <p>Bug data is signal. A few metrics worth watching:</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Metric</th><th>Definition</th><th>What it tells you</th></tr></thead>
+          <tbody>
+            <tr><td>Defect escape rate</td><td>% of bugs found in production vs caught before release</td><td>Quality of pre-release testing. Aim &lt; 5%.</td></tr>
+            <tr><td>Mean time to fix (MTTF)</td><td>Average days from Open → Closed</td><td>Team velocity on fixes. Watch trends.</td></tr>
+            <tr><td>Reopen rate</td><td>% of bugs that get reopened after Fixed</td><td>Quality of fixes. High reopen = root-cause not addressed.</td></tr>
+            <tr><td>Defect density</td><td>Bugs per 1000 lines of code (or per feature)</td><td>Hot spots — which modules are bug-prone</td></tr>
+            <tr><td>Severity distribution</td><td>Count by severity level</td><td>Early warning: rising critical bugs = quality crisis</td></tr>
+            <tr><td>Age of open bugs</td><td>Days each open bug has been open</td><td>Backlog health. Bugs older than 6 months should be closed or fixed.</td></tr>
+            <tr><td>Bug categories trend</td><td>Bugs by category over time</td><td>Where to invest — rising perf bugs = need perf testing</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="chapter" id="mistakes">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 10</div>
+        <h2>Common mistakes</h2>
+      </div>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Mistake</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr><td>Vague title ("Login broken")</td><td>Title should be scannable in a list of 200 — what, where, when</td></tr>
+            <tr><td>No environment</td><td>Always specify app version, OS, browser, device, server tier</td></tr>
+            <tr><td>"Sometimes happens" with no count</td><td>State exact frequency: 5/5 (always), 3/10 (sometimes), 1/100 (rare)</td></tr>
+            <tr><td>Severity = Priority</td><td>They're independent. Set them separately.</td></tr>
+            <tr><td>Multiple bugs in one ticket</td><td>One bug per ticket. Splits attention, hard to close.</td></tr>
+            <tr><td>No screenshot / video / log</td><td>Attach evidence. Saves 30 minutes of "what do you mean?"</td></tr>
+            <tr><td>Filing without searching for duplicates</td><td>Search first. Wastes triage time and dilutes signal.</td></tr>
+            <tr><td>Closing without verifying</td><td>"Fixed" means nothing until QA verifies in staging / prod</td></tr>
+            <tr><td>"Won't fix" without explanation</td><td>Document why. The next person hitting this needs context.</td></tr>
+            <tr><td>Mixing technical jargon with user impact</td><td>Lead with user impact ("users locked out"); details follow</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="chapter" id="take">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Takeaways</div>
+        <h2>Key takeaways</h2>
+      </div>
+      <div class="summary">
+        <h4>What to carry forward</h4>
+        <ul>
+          <li>A bug report is a tiny spec — eight fields: <strong>title · env · steps · expected · actual · repro rate · severity · priority</strong>.</li>
+          <li><strong>Severity</strong> = how bad the impact is. <strong>Priority</strong> = how soon to fix. They're independent dimensions.</li>
+          <li>The lifecycle: <strong>New → Triaged → In Progress → Fixed → Verified → Closed</strong>, with backward paths when things fail.</li>
+          <li>Triage is a regular ceremony — daily for active sprints, weekly for backlog. Without it, bugs rot.</li>
+          <li>Tag categories: <strong>functional · performance · security · accessibility · UX · data · localization · regression</strong>.</li>
+          <li>Accessibility bugs need separate tracking for compliance reporting.</li>
+          <li>BAs file bugs too — and watch for "bugs that are really missed requirements."</li>
+          <li>Useful metrics: <strong>escape rate · MTTF · reopen rate · defect density · severity distribution · age</strong>.</li>
+          <li>A clear bug report is a gift to your dev team. A vague one is an unpaid invoice for their time.</li>
+        </ul>
+      </div>
+      <p style="margin-top:1.2rem">Next class: <strong>Risk Management &amp; Risk-Based Thinking</strong> — how BAs build risk registers, how QAs use risk to prioritize testing, and how the same artifact serves both.</p>
+    </section>
+
+  </div>
+
+  <footer>
+    <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE">
+    SELISE × Pelsung · Quality &amp; Compliance 02<br>
+    Bug Reporting &amp; Defect Lifecycle
+  </footer>
+
+</body>
+</html>

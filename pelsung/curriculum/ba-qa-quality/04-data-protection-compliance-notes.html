@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Protection &amp; Compliance — Quality 04</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#0066B2; --indigo:#001F35; --amber:#247EC1; --green:#7BC950; --purple:#4796D1; --red:#D80032; --text:#1B2021; --muted:#7B7C7F; --faint:#9CA3AF; --surf:#fff; --bg:#F9F9F9; --border:#EDEDED; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Open Sans','Aptos',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; font-size:17px; -webkit-font-smoothing:antialiased; }
+    h1,h2,h3,h4,h5,h6 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:400; letter-spacing:-0.01em; }
+    a { color: var(--blue); }
+    .hero { background:var(--surf); border-bottom:1px solid var(--border); padding:4rem 2rem 3rem; text-align:center; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background: linear-gradient(135deg, #0067A3, #002D72); }
+    .logo-corner { position:absolute; top: 1.25rem; left: 1.5rem; opacity:0.85; }
+    .logo-corner img { height: 34px; }
+    .hero-badge { display:inline-flex; align-items:center; gap:0.5rem; background:var(--bg); border:1px solid var(--border); border-radius:100px; padding:0.35rem 1rem; font-size:0.75rem; font-weight:700; color:var(--muted); letter-spacing:0.07em; text-transform:uppercase; margin-bottom:1.5rem; }
+    .hero-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--amber); }
+    .hero h1 { font-size:clamp(2rem,5vw,3.5rem); line-height:1.15; margin-bottom:0.75rem; }
+    .c-blue{color:var(--blue);} .c-indigo{color:var(--indigo);}
+    .hero-sub { font-size:1rem; color:var(--muted); margin-bottom:2rem; max-width:760px; margin-left:auto; margin-right:auto; }
+    .hero-tags { display:flex; justify-content:center; gap:0.6rem; flex-wrap:wrap; }
+    .hero-tag { padding:0.3rem 0.9rem; border-radius:8px; font-size:0.78rem; font-weight:600; background:#E6F0F8; color:var(--blue); }
+    .container { max-width:1040px; margin:0 auto; padding:0 2rem 6rem; }
+    .toc { background:var(--surf); border:1px solid var(--border); border-radius:16px; padding:1.75rem 2rem; margin:2.5rem 0; }
+    .toc h3 { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); margin-bottom:1.25rem; }
+    .toc ol { list-style: none; counter-reset: step; }
+    .toc li { counter-increment: step; padding:0.45rem 0; border-bottom:1px solid var(--border); }
+    .toc li:last-child { border-bottom:none; }
+    .toc li::before { content: counter(step, decimal-leading-zero); color:var(--faint); font-family:'Bahnschrift','Segoe UI',sans-serif; margin-right:0.8rem; font-size:0.9rem; }
+    .toc a { text-decoration:none; color:var(--text); font-weight:500; }
+    .toc a:hover { color: var(--blue); }
+    section.chapter { margin: 3.5rem 0; }
+    .chapter-head { margin-bottom:1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
+    .chapter-eyebrow { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--blue); margin-bottom:0.3rem; }
+    .chapter-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--indigo); }
+    p { margin: 0.7rem 0; }
+    ul, ol { margin: 0.6rem 0 0.6rem 1.3rem; }
+    li { margin: 0.3rem 0; }
+    strong { color: var(--indigo); }
+    .callout { background:var(--surf); border:1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 10px; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+    .callout.amber { border-left-color: var(--amber); }
+    .callout.green { border-left-color: var(--green); }
+    .callout.red { border-left-color: var(--red); }
+    .callout.indigo { border-left-color: var(--indigo); }
+    .callout h4 { font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--indigo); }
+    .pair { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin:1rem 0; }
+    @media (max-width: 720px) { .pair { grid-template-columns: 1fr; } }
+    .big-tbl { background:var(--surf); border:1px solid var(--border); border-radius:10px; overflow:auto; margin:1rem 0; }
+    .big-tbl table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+    .big-tbl th { background:var(--bg); padding:0.6rem 0.9rem; text-align:left; color:var(--muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; border-bottom:1px solid var(--border); }
+    .big-tbl td { padding:0.6rem 0.9rem; border-bottom:1px solid var(--border); color:var(--text); vertical-align:top; line-height:1.6; }
+    .big-tbl tr:last-child td { border-bottom:none; }
+    .big-tbl td:first-child { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; }
+    .summary { background: linear-gradient(135deg, #F9F9F9, #EDEDED); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+    .summary h4 { color: var(--indigo); margin-bottom: 0.5rem; font-size: 0.95rem; }
+    footer { text-align:center; padding: 2rem 1rem 3rem; color: var(--faint); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+    footer img { height: 28px; opacity:0.7; margin-bottom: 0.5rem; display: block; margin-left:auto; margin-right:auto; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="logo-corner"><img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE"></div>
+    <div class="hero-badge"><span class="dot"></span> Quality &amp; Compliance · 04 of 05</div>
+    <h1><span class="c-blue">Data Protection</span><br><span class="c-indigo">&amp; Compliance</span></h1>
+    <p class="hero-sub">Bhutan DPPA. GDPR. PCI-DSS. WCAG/EAA. The laws that govern what you can collect, how you must protect it, and what happens when things go wrong. Ignorance is not a defense.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">Bhutan DPPA</span>
+      <span class="hero-tag">GDPR</span>
+      <span class="hero-tag">PCI-DSS</span>
+      <span class="hero-tag">PII</span>
+      <span class="hero-tag">Consent</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="toc">
+      <h3>In this note</h3>
+      <ol>
+        <li><a href="#why">Why compliance has teeth</a></li>
+        <li><a href="#landscape">The compliance landscape · six laws</a></li>
+        <li><a href="#dppa">Bhutan DPPA · the local law</a></li>
+        <li><a href="#gdpr">GDPR · the global benchmark</a></li>
+        <li><a href="#pci">PCI-DSS · for card data</a></li>
+        <li><a href="#pii">PII classification · three sensitivity tiers</a></li>
+        <li><a href="#principles">The seven principles · GDPR-aligned</a></li>
+        <li><a href="#consent">Consent · what makes it valid</a></li>
+        <li><a href="#breach">Breach response · the 72-hour clock</a></li>
+        <li><a href="#a11y">Accessibility · WCAG, EAA, lawsuits</a></li>
+        <li><a href="#roles">BA spec · QA verifies</a></li>
+        <li><a href="#mistakes">Common compliance mistakes</a></li>
+        <li><a href="#take">Key takeaways</a></li>
+      </ol>
+    </div>
+
+    <section class="chapter" id="why">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 1</div>
+        <h2>Why compliance has teeth</h2>
+      </div>
+      <p>Twenty years ago, "data protection" was a polite suggestion. Today it's enforceable law in most major jurisdictions, with fines that can be a meaningful percentage of a company's annual revenue. As a BA or QA touching any product that handles personal data, you cannot opt out of knowing this material.</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Law / Regulation</th><th>Maximum penalty</th></tr></thead>
+          <tbody>
+            <tr><td>GDPR (EU)</td><td>€20M or 4% of global annual turnover, whichever is higher</td></tr>
+            <tr><td>Bhutan DPPA (2023)</td><td>BTN 5 million and/or imprisonment for serious violations</td></tr>
+            <tr><td>PCI-DSS (industry)</td><td>$5,000–$100,000 per month + class-action exposure on breach</td></tr>
+            <tr><td>HIPAA (US health)</td><td>$100–$50,000 per violation, capped at $1.9M/year per type</td></tr>
+            <tr><td>EAA (EU accessibility)</td><td>Varies by member state; €1M+ in some countries</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout red">
+        <h4>Beyond fines</h4>
+        <p>The financial penalties are the headline, but the real cost is often elsewhere:</p>
+        <ul>
+          <li><strong>Reputation</strong> — breach headlines destroy customer trust; recovery takes years</li>
+          <li><strong>License revocation</strong> — financial regulators can pull your license to operate</li>
+          <li><strong>Personal liability</strong> — directors and DPOs can be personally fined or imprisoned</li>
+          <li><strong>Class actions</strong> — affected users sue collectively for damages</li>
+          <li><strong>Customer attrition</strong> — major contracts have compliance clauses; one breach can lose the contract</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="chapter" id="landscape">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 2</div>
+        <h2>The compliance landscape · six laws</h2>
+      </div>
+      <p>SELISE Group AG is Swiss-based, with EU clients and Bhutanese operations. Multiple regimes apply simultaneously. As a rule: <strong>the strictest applicable law wins.</strong> Build for the strictest and you cover the rest.</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Law</th><th>Where</th><th>What it covers</th><th>Why it matters at SELISE</th></tr></thead>
+          <tbody>
+            <tr><td>Bhutan DPPA</td><td>🇧🇹 Bhutan (2023)</td><td>All processing of Bhutanese personal data</td><td>Direct local applicability for any product serving Bhutan</td></tr>
+            <tr><td>GDPR</td><td>🇪🇺 EU (2018)</td><td>Any processing of EU residents' data, anywhere</td><td>SELISE Group serves EU clients; products often touch EU users</td></tr>
+            <tr><td>nFADP</td><td>🇨🇭 Switzerland (2023)</td><td>Personal data processed in Switzerland</td><td>SELISE Group AG is Swiss; mirrors GDPR closely</td></tr>
+            <tr><td>PCI-DSS</td><td>🌐 Global (industry)</td><td>Storing, processing, or transmitting card data</td><td>Any product with card payments — fintech, e-commerce</td></tr>
+            <tr><td>EAA</td><td>🇪🇺 EU (June 2025)</td><td>Accessibility of digital products</td><td>Mandatory for many products serving EU consumers</td></tr>
+            <tr><td>HIPAA</td><td>🇺🇸 US (sector)</td><td>Health information privacy and security</td><td>Relevant if SELISE handles US medical data</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="chapter" id="dppa">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 3</div>
+        <h2>Bhutan DPPA · the local law</h2>
+      </div>
+      <p>The <strong>Data Protection and Privacy Act 2023</strong> is Bhutan's first comprehensive privacy law. Closely modeled on GDPR. Establishes the National Data Protection Authority (NDPA) under the Ministry of Information and Transport.</p>
+
+      <div class="callout">
+        <h4>Scope</h4>
+        <p>Applies to any person or organization, in Bhutan or abroad, processing personal data of Bhutanese residents. "Processing" is defined broadly — collecting, storing, using, sharing, deleting all count.</p>
+      </div>
+
+      <div class="callout">
+        <h4>Lawful basis required</h4>
+        <p>You can't process personal data on a whim. You need one of six lawful bases:</p>
+        <ol>
+          <li><strong>Consent</strong> — freely given, specific, informed, unambiguous</li>
+          <li><strong>Contract</strong> — necessary to fulfill a contract with the data subject</li>
+          <li><strong>Legal obligation</strong> — required by law (e.g. tax records)</li>
+          <li><strong>Vital interest</strong> — to protect someone's life</li>
+          <li><strong>Public task</strong> — government / public authority duties</li>
+          <li><strong>Legitimate interest</strong> — business need that doesn't override the data subject's rights</li>
+        </ol>
+      </div>
+
+      <div class="callout">
+        <h4>Data subject rights</h4>
+        <ul>
+          <li><strong>Right to access</strong> — "what data do you have on me?"</li>
+          <li><strong>Right to rectification</strong> — "fix this incorrect data"</li>
+          <li><strong>Right to erasure</strong> — "delete my data" (right to be forgotten)</li>
+          <li><strong>Right to data portability</strong> — "give me my data in a usable format"</li>
+          <li><strong>Right to object</strong> — to processing for marketing, profiling, etc.</li>
+          <li><strong>Right to withdraw consent</strong> — must be as easy as giving it</li>
+        </ul>
+      </div>
+
+      <div class="callout amber">
+        <h4>Sensitive data</h4>
+        <p>Health, biometric, financial, religious, political, sexual data require <strong>explicit consent</strong> (not just any lawful basis) and additional safeguards.</p>
+      </div>
+
+      <div class="callout red">
+        <h4>72-hour breach notification</h4>
+        <p>If a breach occurs, you must notify the NDPA within 72 hours of becoming aware, and notify affected individuals without undue delay if there's high risk to their rights.</p>
+      </div>
+
+      <div class="callout indigo">
+        <h4>BA implication</h4>
+        <p>For any feature that collects, stores, or shares Bhutanese personal data, you must spec:</p>
+        <ul>
+          <li>The lawful basis for each piece of data</li>
+          <li>The retention period and deletion process</li>
+          <li>The rights mechanism (how does a user request erasure?)</li>
+          <li>The breach response (who's notified, how, by when?)</li>
+          <li>Cross-border transfer controls if data leaves Bhutan</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="chapter" id="gdpr">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 4</div>
+        <h2>GDPR · the global benchmark</h2>
+      </div>
+      <p>The <strong>General Data Protection Regulation</strong> came into force in 2018 and immediately became the global benchmark. Most modern privacy laws (including Bhutan DPPA) are modeled on it. If you build to GDPR, you're broadly compliant elsewhere.</p>
+
+      <div class="callout">
+        <h4>Extra-territoriality</h4>
+        <p>GDPR applies if you process EU residents' data, <em>even if your company isn't in the EU</em>. A Bhutanese fintech serving even one EU resident is subject to GDPR.</p>
+      </div>
+
+      <div class="callout">
+        <h4>Eight rights for data subjects</h4>
+        <p>Same six as DPPA, plus:</p>
+        <ul>
+          <li><strong>Right to information</strong> — to know what's happening with your data, in plain language</li>
+          <li><strong>Right to restriction</strong> — pause processing while disputes are resolved</li>
+          <li><strong>Right not to be subject to automated decision-making</strong> — a real human must be involved in significant decisions</li>
+        </ul>
+      </div>
+
+      <div class="callout amber">
+        <h4>Privacy by design and by default</h4>
+        <p>Enshrined in Article 25. Privacy must be <strong>built into the product from day one</strong>, not bolted on later. Default settings must be the most privacy-protective option.</p>
+      </div>
+
+      <div class="callout">
+        <h4>DPIA required for high-risk processing</h4>
+        <p>A Data Protection Impact Assessment must be done before:</p>
+        <ul>
+          <li>Large-scale profiling</li>
+          <li>Processing sensitive data at scale</li>
+          <li>Public-space monitoring</li>
+          <li>New technologies with privacy implications</li>
+        </ul>
+        <p>BAs typically own the DPIA, with input from security and legal.</p>
+      </div>
+
+      <div class="callout red">
+        <h4>Enforcement</h4>
+        <p>Maximum fine: <strong>€20M or 4% of global annual turnover</strong>, whichever is higher. British Airways was fined £20M in 2020. Meta was fined €1.2 billion in 2023. The fines are real.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="pci">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 5</div>
+        <h2>PCI-DSS · for card data</h2>
+      </div>
+      <p>The <strong>Payment Card Industry Data Security Standard</strong> is not a law — it's a contractual standard imposed by the card networks (Visa, Mastercard, Amex, Discover, JCB). But violating it can mean fines, lost ability to process cards, and class-action lawsuits.</p>
+
+      <div class="callout">
+        <h4>Scope</h4>
+        <p>Applies to anyone storing, processing, or transmitting cardholder data — even if just briefly.</p>
+      </div>
+
+      <div class="callout">
+        <h4>Six goals · 12 requirements</h4>
+        <ol>
+          <li>Build and maintain a secure network</li>
+          <li>Protect cardholder data</li>
+          <li>Maintain a vulnerability management program</li>
+          <li>Implement strong access control measures</li>
+          <li>Regularly monitor and test networks</li>
+          <li>Maintain an information security policy</li>
+        </ol>
+      </div>
+
+      <div class="callout green">
+        <h4>The pragmatic strategy: tokenize</h4>
+        <p>Use a PCI-compliant payment gateway (Stripe, Paddle, Adyen, Razorpay) that handles cards on your behalf. They give you a <strong>token</strong> instead of the card number; you store the token. Most of the PCI burden transfers to them.</p>
+      </div>
+
+      <div class="callout red">
+        <h4>What you must NEVER do</h4>
+        <ul>
+          <li><strong>Never log</strong> the full card number (PAN), the CVV/CVC, or the magnetic stripe data. Anywhere. Ever.</li>
+          <li><strong>Never store</strong> the CVV after authorization. Period.</li>
+          <li><strong>Never email or message</strong> card data over insecure channels</li>
+          <li><strong>Never display</strong> more than the last 4 digits of a card to anyone after entry</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="chapter" id="pii">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 6</div>
+        <h2>PII classification · three sensitivity tiers</h2>
+      </div>
+      <p>Not all personal data is equally sensitive. Classify what you hold so you can apply appropriate safeguards.</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Tier</th><th>Examples</th><th>Required handling</th></tr></thead>
+          <tbody>
+            <tr><td>Identifiers (low)</td><td>Name, email, phone, mailing address, username</td><td>Encrypt in transit (TLS); standard access control; don't expose unnecessarily</td></tr>
+            <tr><td>Quasi-identifiers (medium)</td><td>Date of birth, national ID/CID, IP, device IDs, geolocation, browsing history</td><td>Encrypt at rest; limit access by role; log who reads what</td></tr>
+            <tr><td>Sensitive PII (high)</td><td>Health, biometric, financial, religious, political, sexual orientation, children's data</td><td>Explicit consent required; strong encryption; full audit trail; DPIA mandatory; minimum-necessary principle strictly applied</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout amber">
+        <h4>Quasi-identifiers can re-identify</h4>
+        <p>Three quasi-identifiers can often re-identify someone in a "anonymized" dataset. Famous study: 87% of Americans can be identified from just <strong>ZIP code + birth date + sex</strong>. Treat the combination, not just individual fields.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="principles">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 7</div>
+        <h2>The seven principles · GDPR-aligned, mirrored everywhere</h2>
+      </div>
+      <p>These seven principles appear (in some form) in GDPR, Bhutan DPPA, nFADP, and most modern privacy laws. Memorize them and walk through each one for every feature you spec.</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Principle</th><th>What it means</th><th>BA spec implication</th></tr></thead>
+          <tbody>
+            <tr><td>1 · Lawfulness, fairness, transparency</td><td>Have a lawful basis · users know what's happening · no dark patterns</td><td>Document the lawful basis · write a clear privacy notice · avoid manipulative UX</td></tr>
+            <tr><td>2 · Purpose limitation</td><td>Collect for a specific stated purpose · don't reuse later for unrelated purposes</td><td>Spec the purpose explicitly · re-consent if purpose changes</td></tr>
+            <tr><td>3 · Data minimization</td><td>Collect only what you actually need · "we might want it later" is not a reason</td><td>Audit every form field · justify each one</td></tr>
+            <tr><td>4 · Accuracy</td><td>Data must be correct and up-to-date · provide a way to correct it</td><td>Build user-facing edit flows · review records on a schedule</td></tr>
+            <tr><td>5 · Storage limitation</td><td>Keep only as long as needed · then delete or anonymize</td><td>Spec retention periods explicitly · automate deletion / anonymization</td></tr>
+            <tr><td>6 · Integrity &amp; confidentiality (security)</td><td>Encrypt at rest and in transit · access control · audit logs</td><td>Spec encryption requirements · spec access control · spec logging</td></tr>
+            <tr><td>7 · Accountability</td><td>Be able to demonstrate compliance · documentation, audits, DPIAs</td><td>Document every decision · keep DPIA records · maintain compliance log</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="chapter" id="consent">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 8</div>
+        <h2>Consent · what makes it valid</h2>
+      </div>
+      <p>Consent is one of the six lawful bases — but it's the most fragile. To be valid, it must meet all four of these requirements:</p>
+
+      <div class="callout">
+        <h4>The four requirements</h4>
+        <ul>
+          <li><strong>Freely given</strong> — no coercion. "Agree or you can't use the app" for non-essential processing makes the consent invalid.</li>
+          <li><strong>Specific</strong> — about a particular purpose. Not bundled. "I consent to marketing emails" is separate from "I consent to processing my payment."</li>
+          <li><strong>Informed</strong> — user knows what they're agreeing to. Plain language, no buried legalese, no jargon-only privacy policies.</li>
+          <li><strong>Unambiguous</strong> — clear affirmative action. <strong>Pre-ticked boxes are NOT consent.</strong> Silence is not consent. Continuing to use the site is not consent.</li>
+        </ul>
+      </div>
+
+      <div class="callout amber">
+        <h4>Plus three operational requirements</h4>
+        <ul>
+          <li><strong>Withdrawable</strong> — must be as easy to withdraw as to give</li>
+          <li><strong>Documented</strong> — when consent was given, what version of the policy, what the user was shown, IP/device for audit</li>
+          <li><strong>Granular</strong> — separate consent for separate purposes (analytics ≠ marketing ≠ personalization ≠ third-party sharing)</li>
+        </ul>
+      </div>
+
+      <div class="callout red">
+        <h4>Dark pattern alert</h4>
+        <p>The classic "Accept all" giant green button next to a small grey "Manage preferences" link is increasingly being ruled invalid by EU regulators. The choices must be <strong>equally prominent</strong>. Reject and accept buttons should be the same size, color, and visual weight.</p>
+      </div>
+
+      <div class="callout green">
+        <h4>What good consent looks like</h4>
+        <ul>
+          <li>"We'd like to use cookies for: <em>[ ] Required (always on) [ ] Analytics [ ] Marketing</em>"</li>
+          <li>"Manage preferences" and "Accept selected" buttons equal in prominence</li>
+          <li>"Withdraw consent" link in account settings, one click away</li>
+          <li>Audit log: "User X consented to analytics on 2026-04-15, policy v3.2, IP 203.0.113.4"</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="chapter" id="breach">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 9</div>
+        <h2>Breach response · the 72-hour clock</h2>
+      </div>
+      <p>The 72-hour notification window appears in GDPR, DPPA, and most modern laws. It starts when the team becomes aware of the breach — not when they finish investigating. You're expected to notify the regulator with what you know, even if incomplete.</p>
+
+      <ol>
+        <li><strong>Contain.</strong> Stop the bleeding. Disable the leak. Rotate credentials. Lock down access.</li>
+        <li><strong>Assess.</strong> What data, how many people, how serious, who has it now? Engage legal + security + DPO.</li>
+        <li><strong>Notify regulator.</strong> Within 72 hours of awareness. GDPR: supervisory authority. Bhutan: NDPA. With facts you have.</li>
+        <li><strong>Notify affected individuals.</strong> Without undue delay if high risk to their rights and freedoms. Plain language: what happened, what data, what they should do.</li>
+        <li><strong>Investigate root cause.</strong> How did this happen? What allowed it? What process change prevents recurrence?</li>
+        <li><strong>Document everything.</strong> Timeline, decisions, communications. The regulator will ask. Auditors will ask.</li>
+      </ol>
+
+      <div class="callout red">
+        <h4>Cost of slow notification</h4>
+        <p>British Airways' 2018 breach drew a £20M fine partly because they took 8+ weeks to confirm scope. The 72-hour clock matters. Better to notify with incomplete information and follow up than to wait for a complete picture.</p>
+      </div>
+
+      <div class="callout amber">
+        <h4>What to spec in advance</h4>
+        <p>Don't wait for a breach to figure out the response. Spec it as part of every product:</p>
+        <ul>
+          <li>Who is the incident commander?</li>
+          <li>What's the chain of decisions (legal? CEO? regulator?)</li>
+          <li>What are the notification templates?</li>
+          <li>How do we know what data was affected? (Audit logs must answer this)</li>
+          <li>Who handles the press?</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="chapter" id="a11y">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 10</div>
+        <h2>Accessibility · WCAG, EAA, and lawsuits</h2>
+      </div>
+      <p>Accessibility lives at the intersection of usability and compliance. WCAG 2.1 AA is the de-facto target for most accessibility laws.</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Jurisdiction</th><th>Requirement</th></tr></thead>
+          <tbody>
+            <tr><td>European Union</td><td>European Accessibility Act (EAA) — fully enforceable June 2025. Covers many products serving EU consumers.</td></tr>
+            <tr><td>United States</td><td>Section 508 (federal procurement) requires WCAG 2.0 AA. ADA exposure via private lawsuits — over 4,000 web accessibility lawsuits in 2023.</td></tr>
+            <tr><td>United Kingdom</td><td>Public Sector Bodies Accessibility Regulations 2018 (post-Brexit, still aligned with EU)</td></tr>
+            <tr><td>Bhutan</td><td>Persons with Disabilities Bill in development; international agreements imply WCAG conformance</td></tr>
+            <tr><td>Global</td><td>UN Convention on Rights of Persons with Disabilities — most countries are signatories</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout amber">
+        <h4>Spec the level explicitly</h4>
+        <p>"The form should be accessible" is meaningless. Spec the level:</p>
+        <ul>
+          <li>Required: <strong>WCAG 2.1 AA</strong> (or 2.2 AA, the latest)</li>
+          <li>Required where: every user-facing flow, including error states, modals, and emails</li>
+          <li>Required how: tested with axe / WAVE + manual keyboard + screen reader (NVDA/VoiceOver)</li>
+        </ul>
+      </div>
+
+      <div class="callout green">
+        <h4>Cost of building it in vs retrofitting</h4>
+        <p>Industry estimates: building accessibility in from day one adds ~5% to development cost. Retrofitting an existing product can cost <strong>5–10×</strong> that — sometimes requiring a full rewrite. Bake it into AC from day one, every project.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="roles">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 11</div>
+        <h2>BA spec · QA verifies</h2>
+      </div>
+
+      <div class="pair">
+        <div class="callout">
+          <h4>BA's compliance work</h4>
+          <ul>
+            <li>Identify what data the feature collects (PII inventory)</li>
+            <li>Define the lawful basis for each piece of data</li>
+            <li>Spec the consent flow (granular, withdrawable, documented)</li>
+            <li>Spec retention period and deletion process</li>
+            <li>Spec the data subject rights mechanism (access, erasure, portability)</li>
+            <li>Run a DPIA for high-risk processing</li>
+            <li>Spec WCAG 2.1 AA explicitly for any UI</li>
+            <li>Document compliance choices in the BRD</li>
+          </ul>
+        </div>
+        <div class="callout amber">
+          <h4>QA's compliance work</h4>
+          <ul>
+            <li>Verify PII isn't logged in plain text (search server logs, error reports, dev tools)</li>
+            <li>Test consent flows: granular, withdrawable, documented</li>
+            <li>Test data deletion: erased everywhere, not just hidden — including backups, caches, search indexes</li>
+            <li>Test data export: complete, machine-readable</li>
+            <li>Verify access controls + audit logs</li>
+            <li>Run accessibility tests against WCAG 2.1 AA</li>
+            <li>Test breach scenarios (e.g. credential rotation, audit-log integrity)</li>
+            <li>Review error messages — don't leak PII or system internals</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="mistakes">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 12</div>
+        <h2>Common compliance mistakes</h2>
+      </div>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Mistake</th><th>Why it's a problem</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr><td>"We don't have EU users"</td><td>Until you do — and GDPR applies retroactively</td><td>Build for GDPR by default; you'll grow into it</td></tr>
+            <tr><td>Logging full request bodies</td><td>Captures passwords, MPINs, card data in plain text — massive leak risk</td><td>Sanitize logs; never log auth credentials or PAN/CVV</td></tr>
+            <tr><td>Pre-ticked consent boxes</td><td>Invalid under GDPR, DPPA, and most modern laws</td><td>Always opt-in by user's affirmative action</td></tr>
+            <tr><td>"We'll add deletion later"</td><td>Without delete-flow, can't honor data-subject rights — non-compliant from day one</td><td>Build erasure into the data model from the start</td></tr>
+            <tr><td>Storing more data than needed</td><td>Every extra field is extra liability if breached</td><td>Justify each field; remove what you don't use</td></tr>
+            <tr><td>Treating accessibility as nice-to-have</td><td>Increasingly law; lawsuit risk grows yearly</td><td>Spec WCAG 2.1 AA from day one</td></tr>
+            <tr><td>Sharing PII with vendors without DPAs</td><td>Data Processing Agreements are required by law</td><td>DPA on file before any vendor touches PII</td></tr>
+            <tr><td>"It's encrypted" without specifying when</td><td>In transit only? At rest only? End-to-end?</td><td>Spec encryption explicitly, all three states</td></tr>
+            <tr><td>Cross-border transfer without adequacy</td><td>Moving Bhutanese data to a non-adequate country requires safeguards</td><td>Use Standard Contractual Clauses or get adequacy decisions</td></tr>
+            <tr><td>"Dark pattern" consent UX</td><td>Equal-prominence rule under enforcement; invalid consent</td><td>Accept and reject buttons same size, color, prominence</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="chapter" id="take">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Takeaways</div>
+        <h2>Key takeaways</h2>
+      </div>
+      <div class="summary">
+        <h4>What to carry forward</h4>
+        <ul>
+          <li>Six laws to know: <strong>Bhutan DPPA · GDPR · PCI-DSS · EAA · HIPAA · nFADP</strong>. The strictest applicable one wins.</li>
+          <li><strong>72-hour breach notification</strong> is the global default. Clock starts on awareness, not on full investigation.</li>
+          <li>Three PII tiers: <strong>identifiers · quasi-identifiers · sensitive</strong>. Different handling per tier.</li>
+          <li>Seven principles: <strong>lawful · specific · minimal · accurate · time-limited · secure · accountable</strong>.</li>
+          <li>Valid consent: <strong>freely given · specific · informed · unambiguous</strong> — and withdrawable, documented, granular.</li>
+          <li>PCI-DSS: <strong>tokenize via a gateway</strong>. Never log card data. Never store CVV.</li>
+          <li>Accessibility (WCAG 2.1 AA) is increasingly compliance, not just nice-to-have. Spec the level.</li>
+          <li><strong>BA specs · QA verifies.</strong> Both must understand the law.</li>
+          <li>Privacy by design and by default: build it in, don't bolt it on.</li>
+          <li>"We didn't know" is not a defense.</li>
+        </ul>
+      </div>
+      <p style="margin-top:1.2rem">Next class: <strong>Security, Observability &amp; Telemetry</strong> — OWASP Top 10 awareness, the three pillars of observability, and how telemetry connects business outcomes to user behavior.</p>
+    </section>
+
+  </div>
+
+  <footer>
+    <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE">
+    SELISE × Pelsung · Quality &amp; Compliance 04<br>
+    Data Protection &amp; Compliance
+  </footer>
+
+</body>
+</html>

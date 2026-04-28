@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security, Observability &amp; Telemetry — Quality 05</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#0066B2; --indigo:#001F35; --amber:#247EC1; --green:#7BC950; --purple:#4796D1; --red:#D80032; --text:#1B2021; --muted:#7B7C7F; --faint:#9CA3AF; --surf:#fff; --bg:#F9F9F9; --border:#EDEDED; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Open Sans','Aptos',sans-serif; background:var(--bg); color:var(--text); line-height:1.75; font-size:17px; -webkit-font-smoothing:antialiased; }
+    h1,h2,h3,h4,h5,h6 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:400; letter-spacing:-0.01em; }
+    a { color: var(--blue); }
+    .hero { background:var(--surf); border-bottom:1px solid var(--border); padding:4rem 2rem 3rem; text-align:center; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background: linear-gradient(135deg, #0067A3, #002D72); }
+    .logo-corner { position:absolute; top: 1.25rem; left: 1.5rem; opacity:0.85; }
+    .logo-corner img { height: 34px; }
+    .hero-badge { display:inline-flex; align-items:center; gap:0.5rem; background:var(--bg); border:1px solid var(--border); border-radius:100px; padding:0.35rem 1rem; font-size:0.75rem; font-weight:700; color:var(--muted); letter-spacing:0.07em; text-transform:uppercase; margin-bottom:1.5rem; }
+    .hero-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--amber); }
+    .hero h1 { font-size:clamp(2rem,5vw,3.5rem); line-height:1.15; margin-bottom:0.75rem; }
+    .c-blue{color:var(--blue);} .c-indigo{color:var(--indigo);}
+    .hero-sub { font-size:1rem; color:var(--muted); margin-bottom:2rem; max-width:760px; margin-left:auto; margin-right:auto; }
+    .hero-tags { display:flex; justify-content:center; gap:0.6rem; flex-wrap:wrap; }
+    .hero-tag { padding:0.3rem 0.9rem; border-radius:8px; font-size:0.78rem; font-weight:600; background:#E6F0F8; color:var(--blue); }
+    .container { max-width:1040px; margin:0 auto; padding:0 2rem 6rem; }
+    .toc { background:var(--surf); border:1px solid var(--border); border-radius:16px; padding:1.75rem 2rem; margin:2.5rem 0; }
+    .toc h3 { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); margin-bottom:1.25rem; }
+    .toc ol { list-style: none; counter-reset: step; }
+    .toc li { counter-increment: step; padding:0.45rem 0; border-bottom:1px solid var(--border); }
+    .toc li:last-child { border-bottom:none; }
+    .toc li::before { content: counter(step, decimal-leading-zero); color:var(--faint); font-family:'Bahnschrift','Segoe UI',sans-serif; margin-right:0.8rem; font-size:0.9rem; }
+    .toc a { text-decoration:none; color:var(--text); font-weight:500; }
+    .toc a:hover { color: var(--blue); }
+    section.chapter { margin: 3.5rem 0; }
+    .chapter-head { margin-bottom:1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
+    .chapter-eyebrow { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--blue); margin-bottom:0.3rem; }
+    .chapter-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--indigo); }
+    p { margin: 0.7rem 0; }
+    ul, ol { margin: 0.6rem 0 0.6rem 1.3rem; }
+    li { margin: 0.3rem 0; }
+    strong { color: var(--indigo); }
+    code { font-family:'Courier New',monospace; background:#F2F4F6; padding:0.1rem 0.4rem; border-radius:4px; font-size:0.85em; }
+    .callout { background:var(--surf); border:1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 10px; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+    .callout.amber { border-left-color: var(--amber); }
+    .callout.green { border-left-color: var(--green); }
+    .callout.red { border-left-color: var(--red); }
+    .callout.indigo { border-left-color: var(--indigo); }
+    .callout h4 { font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--indigo); }
+    .pair { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin:1rem 0; }
+    @media (max-width: 720px) { .pair { grid-template-columns: 1fr; } }
+    .big-tbl { background:var(--surf); border:1px solid var(--border); border-radius:10px; overflow:auto; margin:1rem 0; }
+    .big-tbl table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+    .big-tbl th { background:var(--bg); padding:0.6rem 0.9rem; text-align:left; color:var(--muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; border-bottom:1px solid var(--border); }
+    .big-tbl td { padding:0.6rem 0.9rem; border-bottom:1px solid var(--border); color:var(--text); vertical-align:top; line-height:1.6; }
+    .big-tbl tr:last-child td { border-bottom:none; }
+    .big-tbl td:first-child { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; }
+    .summary { background: linear-gradient(135deg, #F9F9F9, #EDEDED); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+    .summary h4 { color: var(--indigo); margin-bottom: 0.5rem; font-size: 0.95rem; }
+    footer { text-align:center; padding: 2rem 1rem 3rem; color: var(--faint); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+    footer img { height: 28px; opacity:0.7; margin-bottom: 0.5rem; display: block; margin-left:auto; margin-right:auto; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="logo-corner"><img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE"></div>
+    <div class="hero-badge"><span class="dot"></span> Quality &amp; Compliance · 05 of 05</div>
+    <h1><span class="c-blue">Security · Observability</span><br><span class="c-indigo">&amp; Telemetry</span></h1>
+    <p class="hero-sub">Three different post-launch questions: is the system being attacked? is it working? is anyone using it? They share one answer — you must instrument the system to see inside it.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">OWASP Top 10</span>
+      <span class="hero-tag">Logs · Metrics · Traces</span>
+      <span class="hero-tag">SLI / SLO</span>
+      <span class="hero-tag">Funnels</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="toc">
+      <h3>In this note</h3>
+      <ol>
+        <li><a href="#why">Why these three together</a></li>
+        <li><a href="#owasp">Security · OWASP Top 10</a></li>
+        <li><a href="#sec-roles">BA / QA roles in security</a></li>
+        <li><a href="#pillars">Observability · the three pillars</a></li>
+        <li><a href="#logs">Good logs vs bad logs</a></li>
+        <li><a href="#metrics">The metrics every system needs</a></li>
+        <li><a href="#sli-slo">SLI · SLO · SLA · alerts</a></li>
+        <li><a href="#telemetry">Telemetry · funnels and KPIs</a></li>
+        <li><a href="#tel-roles">BA / QA roles in telemetry</a></li>
+        <li><a href="#mistakes">Common mistakes</a></li>
+        <li><a href="#take">Key takeaways</a></li>
+      </ol>
+    </div>
+
+    <section class="chapter" id="why">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 1</div>
+        <h2>Why these three together</h2>
+      </div>
+      <p>Once a system is in production, three different questions matter. They sound separate but share one prerequisite — you must <strong>instrument the system</strong> to see inside it.</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Question</th><th>Discipline</th><th>Tools</th></tr></thead>
+          <tbody>
+            <tr><td>Is the system being attacked?</td><td>Security monitoring</td><td>OWASP scanners, SIEM, intrusion detection</td></tr>
+            <tr><td>Is the system working correctly?</td><td>Observability</td><td>Logs, metrics, traces, alerts</td></tr>
+            <tr><td>Is anyone using it, and how?</td><td>Telemetry / product analytics</td><td>Mixpanel, Amplitude, PostHog, GA</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout indigo">
+        <h4>The unifying principle</h4>
+        <p>Software that you can't see inside is software you can't defend, fix, or improve. As a BA, you must spec the instrumentation. As a QA, you must verify it works before launch.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="owasp">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 2</div>
+        <h2>Security · OWASP Top 10</h2>
+      </div>
+      <p>The <strong>Open Web Application Security Project (OWASP) Top 10</strong> is the most widely recognized list of web application security risks. It's updated every few years; the 2021 list is the current standard. You don't need to memorize the list — but you need to know it exists, walk through it during BRD review, and verify your team has covered each item.</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Code</th><th>Category</th><th>What it means</th><th>Common mitigation</th></tr></thead>
+          <tbody>
+            <tr><td>A01</td><td>Broken Access Control</td><td>Users can act outside their permissions</td><td>Role-based access control · deny by default · test inside-the-fence</td></tr>
+            <tr><td>A02</td><td>Cryptographic Failures</td><td>Sensitive data exposed via weak/missing encryption</td><td>TLS everywhere · encrypt PII at rest · use modern algorithms</td></tr>
+            <tr><td>A03</td><td>Injection</td><td>SQL, XSS, command injection — user input treated as code</td><td>Parameterized queries · input validation · output encoding</td></tr>
+            <tr><td>A04</td><td>Insecure Design</td><td>Vulnerabilities baked into architecture</td><td>Threat modeling · security review at design phase</td></tr>
+            <tr><td>A05</td><td>Security Misconfiguration</td><td>Default passwords, exposed admin, debug in prod</td><td>Hardened defaults · automated config checks · least privilege</td></tr>
+            <tr><td>A06</td><td>Vulnerable Components</td><td>Outdated libraries with known exploits (Log4Shell)</td><td>SCA tools (Snyk, Dependabot) · regular updates</td></tr>
+            <tr><td>A07</td><td>Identification &amp; Auth Failures</td><td>Weak passwords, broken sessions, no MFA</td><td>MFA · session timeout · password policy · rate limiting</td></tr>
+            <tr><td>A08</td><td>Software &amp; Data Integrity Failures</td><td>Unsigned updates, untrusted CI/CD, supply chain attacks</td><td>Signed artifacts · SBOM · code-signing</td></tr>
+            <tr><td>A09</td><td>Security Logging &amp; Monitoring Failures</td><td>Can't detect attacks because nothing is logged or watched</td><td>Audit logs · SIEM · alerts on auth failures</td></tr>
+            <tr><td>A10</td><td>Server-Side Request Forgery</td><td>App tricked into making requests on attacker's behalf</td><td>Allowlist destinations · validate URLs</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout amber">
+        <h4>How to use the Top 10 as a BA/QA</h4>
+        <p>Walk through the 10 categories during spec review. For each one ask: <em>"Does this feature have any exposure here? If yes, what's the spec'd mitigation?"</em> Most features won't apply to most categories — but the 2-3 that do apply are now visible and addressed.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="sec-roles">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 3</div>
+        <h2>BA / QA roles in security</h2>
+      </div>
+      <p>You're not penetration testers. But you are first-line defenders — your spec quality and verification rigor shapes whether the right defenses get built and tested.</p>
+
+      <div class="pair">
+        <div class="callout">
+          <h4>BA's security spec work</h4>
+          <ul>
+            <li><strong>Authentication</strong> — MFA, session timeout, password policy, lockout rules</li>
+            <li><strong>Authorization</strong> — who can do what (role-based matrix)</li>
+            <li><strong>Rate limiting</strong> — how many attempts before lockout / throttle</li>
+            <li><strong>Input validation</strong> — format, length, allowed characters per field</li>
+            <li><strong>Failure behavior</strong> — error messages helpful but not too helpful</li>
+            <li><strong>Audit logging</strong> — who did what when (without leaking PII)</li>
+            <li><strong>Encryption</strong> — in transit, at rest, end-to-end (be explicit)</li>
+          </ul>
+        </div>
+        <div class="callout amber">
+          <h4>QA's security verify work</h4>
+          <ul>
+            <li>Try injection inputs: <code>'; DROP TABLE users;--</code>, <code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+            <li>Log in as user A, try to access user B's data</li>
+            <li>Test auth flow with empty / wrong / expired tokens</li>
+            <li>Verify rate limiting actually triggers (bombard the endpoint)</li>
+            <li>Verify error messages don't leak system internals (stack traces, table names)</li>
+            <li>Verify logs capture security events without leaking secrets</li>
+            <li>Run automated scans: OWASP ZAP, Burp Suite Community, Nikto on staging</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout indigo">
+        <h4>What's NOT your job</h4>
+        <p>Deep penetration testing, red team exercises, exploit development, code-level security review — these belong to security specialists. But the everyday discipline of "did we think about each OWASP category?" is BA/QA territory.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="pillars">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 4</div>
+        <h2>Observability · the three pillars</h2>
+      </div>
+      <p>Observability is your ability to understand what's happening inside the system from outside it. Three different signal types, three different questions, all three needed.</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Pillar</th><th>Question</th><th>Volume</th><th>Best for</th><th>Tools</th></tr></thead>
+          <tbody>
+            <tr><td>Logs</td><td>What happened?</td><td>High (one event per action)</td><td>Debugging incidents, audit trails, compliance evidence</td><td>ELK, Loki, Datadog, Splunk</td></tr>
+            <tr><td>Metrics</td><td>How much / how often / how fast?</td><td>Low (aggregated)</td><td>Dashboards, alerts, SLAs</td><td>Prometheus, Datadog, Grafana, CloudWatch</td></tr>
+            <tr><td>Traces</td><td>How did this one request flow?</td><td>Sampled (1-10% typically)</td><td>Distributed systems, finding the slow service</td><td>Jaeger, Tempo, Datadog APM, Honeycomb</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout green">
+        <h4>How they work together</h4>
+        <p>A typical incident response uses all three:</p>
+        <ol>
+          <li><strong>A metric alert fires.</strong> Error rate on /payments crossed 1% threshold.</li>
+          <li><strong>Open a trace.</strong> A failing request shows the chain — Web → API → Payment Service → Biller. Latency jumps in Payment Service.</li>
+          <li><strong>Read the logs from Payment Service</strong> at that timestamp. See the actual exception.</li>
+          <li><strong>Fix → verify the metric returns to baseline.</strong></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="chapter" id="logs">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 5</div>
+        <h2>Good logs vs bad logs</h2>
+      </div>
+
+      <div class="callout">
+        <h4>Fields every log line should have</h4>
+        <ul>
+          <li><strong>Timestamp</strong> — ISO 8601, with timezone (e.g. <code>2026-04-28T14:32:01.234+06:00</code>)</li>
+          <li><strong>Severity</strong> — DEBUG · INFO · WARN · ERROR · FATAL</li>
+          <li><strong>Service / module</strong> — <code>payment-service</code>, <code>login-handler</code></li>
+          <li><strong>Trace ID / request ID</strong> — to correlate across services</li>
+          <li><strong>User context</strong> — user ID (NOT name/email), tenant ID, session ID</li>
+          <li><strong>Event</strong> — what happened, in structured form (JSON preferred)</li>
+          <li><strong>Outcome</strong> — success/failure + reason</li>
+        </ul>
+      </div>
+
+      <div class="callout red">
+        <h4>What never goes in a log</h4>
+        <ul>
+          <li><strong>Passwords, MPINs, OTPs, session tokens</strong> — PCI/DPPA/GDPR violation</li>
+          <li><strong>Full credit card numbers (PAN)</strong> — PCI violation</li>
+          <li><strong>Sensitive PII</strong> unless absolutely needed (and then encrypted)</li>
+          <li><strong>Large blobs</strong> (full request bodies) — fill disk and capture leaks</li>
+          <li><strong>Unstructured free text</strong> where you'll need to parse later — use structured fields</li>
+        </ul>
+      </div>
+
+      <div class="callout amber">
+        <h4>QA's log-review check</h4>
+        <p>When verifying a feature, also check the logs:</p>
+        <ul>
+          <li>Can you tell what happened from the log line alone? If not, dev didn't log enough.</li>
+          <li>Do you see PII you shouldn't? Dev logged too much.</li>
+          <li>Both are bugs. File them.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="chapter" id="metrics">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 6</div>
+        <h2>The metrics every system needs</h2>
+      </div>
+
+      <div class="callout">
+        <h4>Google's "four golden signals" (from the SRE book)</h4>
+        <ul>
+          <li><strong>Latency</strong> — how long requests take. Watch <strong>p50, p95, p99</strong> (the tails matter most — the average lies).</li>
+          <li><strong>Traffic</strong> — how many requests per second / minute</li>
+          <li><strong>Errors</strong> — % of requests that fail (4xx user errors, 5xx server errors — distinguish)</li>
+          <li><strong>Saturation</strong> — how "full" the system is (CPU, memory, connection pools, queue depth)</li>
+        </ul>
+      </div>
+
+      <div class="callout amber">
+        <h4>Plus business metrics — the ones BAs care about</h4>
+        <ul>
+          <li><strong>Active users</strong> — DAU (daily), WAU (weekly), MAU (monthly)</li>
+          <li><strong>Conversion rate</strong> — % completing the funnel</li>
+          <li><strong>Feature adoption</strong> — % using a new feature</li>
+          <li><strong>Revenue per user</strong></li>
+          <li><strong>Customer satisfaction</strong> (NPS, CSAT) — gathered separately, not from app metrics</li>
+        </ul>
+      </div>
+
+      <div class="callout indigo">
+        <h4>The "p" numbers explained</h4>
+        <p><strong>p50</strong> = the value 50% of requests are below (the median). <strong>p95</strong> = 95% are below. <strong>p99</strong> = 99% are below.</p>
+        <p>Why not just use the average? Because averages hide the bad experiences. If most requests take 100ms but 5% take 10 seconds, the average looks fine but 5% of users are angry. p95 / p99 tell that story.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="sli-slo">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 7</div>
+        <h2>SLI · SLO · SLA · alerts</h2>
+      </div>
+      <p>Three terms that turn metrics into operational discipline.</p>
+
+      <div class="big-tbl">
+        <table>
+          <thead><tr><th>Term</th><th>Meaning</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>SLI · Service Level Indicator</td><td>A specific measured thing</td><td>"p95 latency on /payments endpoint"</td></tr>
+            <tr><td>SLO · Service Level Objective</td><td>The target value for an SLI</td><td>"p95 latency &lt; 500ms, 99.9% of the time, measured monthly"</td></tr>
+            <tr><td>SLA · Service Level Agreement</td><td>An SLO codified in a contract with consequences</td><td>"99.9% uptime; 10% credit if missed"</td></tr>
+            <tr><td>Alert</td><td>A rule that fires when an SLI breaches its threshold</td><td>"Page on-call if error rate &gt; 1% for 5 minutes"</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout amber">
+        <h4>Error budget</h4>
+        <p>The inverse of an SLO. If 99.9% uptime is the SLO, you have 0.1% (~43 minutes per month) of "error budget" — time the system can be down before violating the SLO. When the budget is exhausted, no new releases until reliability is restored. This forces a tradeoff between feature velocity and reliability.</p>
+      </div>
+
+      <div class="callout indigo">
+        <h4>BA / QA implications</h4>
+        <ul>
+          <li><strong>BA:</strong> for any new feature with non-trivial user impact, spec the SLI(s) and SLO(s) it should hit. Without them, "fast enough" is undefined.</li>
+          <li><strong>QA:</strong> verify the SLI is actually measured before launch. If it's not instrumented, it doesn't exist.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="chapter" id="telemetry">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 8</div>
+        <h2>Telemetry · funnels and KPIs</h2>
+      </div>
+      <p>Observability tells you the system works. Telemetry tells you whether it matters — whether anyone uses the feature you built and whether it solved their problem.</p>
+
+      <div class="callout">
+        <h4>What telemetry captures</h4>
+        <ul>
+          <li><strong>Page views / screen views</strong> — which screens are seen</li>
+          <li><strong>Events</strong> — clicks, form submissions, completions</li>
+          <li><strong>User properties</strong> — segment, plan, tenure (for grouping)</li>
+          <li><strong>Funnels</strong> — step 1 → step 2 → step 3 — where do users drop off?</li>
+          <li><strong>Cohorts</strong> — group users by signup week and track behavior over time</li>
+          <li><strong>A/B test outcomes</strong> — which variant performed better</li>
+        </ul>
+      </div>
+
+      <div class="callout amber">
+        <h4>Common tools</h4>
+        <ul>
+          <li><strong>Product analytics:</strong> Mixpanel, Amplitude, PostHog, Heap</li>
+          <li><strong>Web analytics:</strong> Google Analytics, Plausible, Fathom</li>
+          <li><strong>Event routing:</strong> Segment</li>
+          <li><strong>Feature flags + experiments:</strong> LaunchDarkly, GrowthBook, Unleash</li>
+        </ul>
+      </div>
+
+      <div class="callout indigo">
+        <h4>The funnel example · mBoB bill payment</h4>
+        <ol>
+          <li>Open Bill Pay screen — 10,000 users</li>
+          <li>Select biller — 8,200 (-18%)</li>
+          <li>Enter amount — 7,400 (-10%)</li>
+          <li>Enter MPIN — 5,100 (-31%)</li>
+          <li>Success — 4,800 (-6%)</li>
+        </ol>
+        <p>Biggest drop is at step 4 (MPIN entry). Without telemetry, you'd never know. With it, you know exactly where to focus UX research and improvement.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="tel-roles">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 9</div>
+        <h2>BA / QA roles in telemetry</h2>
+      </div>
+
+      <div class="pair">
+        <div class="callout">
+          <h4>BA's telemetry work</h4>
+          <ul>
+            <li>Spec the success metrics for the feature (per BRD §13)</li>
+            <li>Spec which events to capture and their schema</li>
+            <li>Spec the funnel definition (steps 1-N)</li>
+            <li>Spec what segments / cohorts matter for analysis</li>
+            <li>Spec privacy: no PII in event payloads</li>
+            <li>Define "done" in measurable terms (e.g. "10% adoption in 60 days")</li>
+            <li>Review post-launch metrics; iterate or kill features that don't perform</li>
+          </ul>
+        </div>
+        <div class="callout amber">
+          <h4>QA's telemetry work</h4>
+          <ul>
+            <li>Verify each spec'd event actually fires</li>
+            <li>Verify event schemas match spec (correct field names, types, values)</li>
+            <li>Verify event timing — fires when expected, not before, not after</li>
+            <li>Verify no PII leaks into event payloads</li>
+            <li>Verify dashboards show events correctly end-to-end</li>
+            <li>Catch missing events before they're noticed in production</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout red">
+        <h4>The trap</h4>
+        <p>Features ship with broken telemetry. Two months later someone wants to know "how is the feature doing?" and the answer is <em>"we don't know — the events never fired."</em> Verify before launch. Fix telemetry bugs the same priority as functional bugs.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="mistakes">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Part 10</div>
+        <h2>Common mistakes</h2>
+      </div>
+
+      <div class="callout">
+        <h4>Security</h4>
+        <ul>
+          <li><strong>"It's behind a login, so it's secure"</strong> — broken access control is the #1 OWASP issue. Test inside-the-fence too.</li>
+          <li><strong>Helpful error messages</strong> — "Username doesn't exist" tells attackers which usernames are valid. Use generic "Invalid credentials".</li>
+          <li><strong>No rate limiting</strong> — endpoint can be hammered; brute force becomes practical.</li>
+          <li><strong>Outdated dependencies</strong> — Log4Shell-style attacks via libraries you depend on. Run dependency scans (Snyk, Dependabot).</li>
+        </ul>
+      </div>
+
+      <div class="callout amber">
+        <h4>Observability</h4>
+        <ul>
+          <li><strong>Logs without trace IDs</strong> — can't correlate across services. Useless for distributed debugging.</li>
+          <li><strong>Alerts on everything</strong> — alert fatigue. On-call ignores everything because of false positives. Alert on SLO breach, not raw metric noise.</li>
+          <li><strong>Logs leak PII</strong> — compliance violation. Sanitize before logging.</li>
+          <li><strong>No metrics on new features</strong> — can't tell if they work. Spec metrics in the BRD.</li>
+          <li><strong>Average-only metrics</strong> — averages lie. Always look at percentiles.</li>
+        </ul>
+      </div>
+
+      <div class="callout green">
+        <h4>Telemetry</h4>
+        <ul>
+          <li><strong>Tracking everything</strong> — overwhelm; no one looks at 90% of events. Spec the few that matter.</li>
+          <li><strong>Inconsistent event names</strong> — <code>btn_click</code>, <code>buttonClicked</code>, <code>button_click</code> — same event, three names. Pick a schema.</li>
+          <li><strong>Events fire incorrectly</strong> — fire twice, miss the conversion, fire on hover. Verify before launch.</li>
+          <li><strong>No segmentation</strong> — averaged-across-everyone metrics hide the truth. Always look at cohorts.</li>
+          <li><strong>Vanity metrics</strong> — "10,000 page views!" tells you nothing about whether anyone got value. Track outcomes, not raw counts.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="chapter" id="take">
+      <div class="chapter-head">
+        <div class="chapter-eyebrow">Takeaways</div>
+        <h2>Key takeaways</h2>
+      </div>
+      <div class="summary">
+        <h4>What to carry forward</h4>
+        <ul>
+          <li><strong>Security · OWASP Top 10</strong> is your mental checklist. Walk through it during BRD review.</li>
+          <li>BAs spec defenses; QAs verify them. Not pen-testers — first-line defenders.</li>
+          <li><strong>Three pillars of observability</strong>: logs (what?) · metrics (how much?) · traces (how did this request flow?)</li>
+          <li>Logs need <strong>structured fields, trace IDs, no PII</strong>.</li>
+          <li>Four golden signals: <strong>latency · traffic · errors · saturation</strong>. Watch p95/p99, not averages.</li>
+          <li><strong>SLI / SLO / SLA</strong> · spec the targets, monitor against them, alert on breaches.</li>
+          <li>Error budget gives a real currency for the velocity-vs-reliability tradeoff.</li>
+          <li><strong>Telemetry</strong> · usage, funnels, KPIs · the answer to "did the feature work?"</li>
+          <li>Telemetry events need their own QA — verify they fire correctly before launch.</li>
+          <li>If you can't see it, you can't defend it, fix it, or improve it.</li>
+        </ul>
+      </div>
+      <p style="margin-top:1.2rem"><strong>Block 4 is now complete.</strong> You have the testing fundamentals (Class 1), bug-reporting discipline (Class 2), risk thinking (Class 3), compliance frameworks (Class 4), and post-launch instrumentation (this class). Quality and compliance is now baked into every artifact you produce.</p>
+      <p>Next: BA and QA split into vertical-specific specialization. The shared vocabulary you've built across these four blocks travels with you.</p>
+    </section>
+
+  </div>
+
+  <footer>
+    <img src="../../../selise-brand/assets/SELISE_Logo_Primary_Small.png" alt="SELISE">
+    SELISE × Pelsung · Quality &amp; Compliance 05<br>
+    Security, Observability &amp; Telemetry
+  </footer>
+
+</body>
+</html>
