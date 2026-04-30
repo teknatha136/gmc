@@ -1,0 +1,1613 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Routing · APIs · Forms — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      .code-block {
+        background: #001f35;
+        border-radius: 14px;
+        overflow: hidden;
+        width: 100%;
+        font-family: "Courier New", monospace;
+      }
+      .code-bar {
+        background: #0a2a45;
+        padding: 8px 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-family: "Open Sans", sans-serif;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .code-bar .cb-dot { width: 10px; height: 10px; border-radius: 50%; }
+      .code-body {
+        padding: clamp(0.8rem, 1.5vw, 1.3rem);
+        font-size: clamp(0.7rem, 0.95vw, 0.85rem);
+        line-height: 1.8;
+        color: rgba(255, 255, 255, 0.85);
+        white-space: pre-wrap;
+      }
+      .code-body .ck { color: #7dd3fc; }
+      .code-body .cs { color: #86efac; }
+      .code-body .cn { color: #fde68a; }
+      .code-body .cc { color: rgba(255, 255, 255, 0.35); font-style: italic; }
+      .code-body .cp { color: #c4b5fd; }
+      .code-body .cr { color: #fca5a5; }
+      .code-body .ci { color: #f0abfc; }
+      .code-body .ct { color: #fdba74; }
+      .code-body .ctag { color: #f472b6; }
+      .code-body .cattr { color: #fde68a; }
+
+      .method-card {
+        background: var(--surf);
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        padding: 1rem 1.2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+      }
+      .method-card .mc-name {
+        font-family: "Courier New", monospace;
+        font-weight: 700;
+        color: var(--blue);
+        font-size: clamp(0.9rem, 1.2vw, 1.05rem);
+      }
+      .method-card .mc-desc {
+        font-size: clamp(0.78rem, 1vw, 0.88rem);
+        color: var(--muted);
+        line-height: 1.4;
+      }
+      .method-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        width: 100%;
+        max-width: 880px;
+      }
+      .method-grid.three { grid-template-columns: repeat(3, 1fr); }
+
+      /* Mini-app diagram */
+      .mini-app {
+        display: flex;
+        gap: 1rem;
+        width: 100%;
+        max-width: 920px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .ma-route {
+        background: var(--surf);
+        border: 2px solid var(--border);
+        border-radius: 14px;
+        padding: clamp(0.9rem, 1.3vw, 1.15rem);
+        text-align: center;
+        flex: 1;
+        min-width: 220px;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+      }
+      .ma-path {
+        font-family: "Courier New", monospace;
+        font-size: clamp(0.85rem, 1.1vw, 0.95rem);
+        font-weight: 700;
+      }
+      .ma-title {
+        font-size: clamp(0.95rem, 1.3vw, 1.1rem);
+        font-weight: 700;
+      }
+      .ma-sub {
+        font-size: clamp(0.72rem, 0.95vw, 0.82rem);
+        color: var(--muted);
+        line-height: 1.4;
+      }
+      .ma-route.r1 { border-color: var(--blue); }
+      .ma-route.r1 .ma-path { color: var(--blue); }
+      .ma-route.r2 { border-color: var(--amber); }
+      .ma-route.r2 .ma-path { color: #1C5B8C; }
+      .ma-route.r3 { border-color: var(--green); }
+      .ma-route.r3 .ma-path { color: var(--green); }
+
+      /* 3-state pattern */
+      .state-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.9rem;
+        width: 100%;
+        max-width: 880px;
+      }
+      .state-card {
+        border-radius: 14px;
+        padding: clamp(0.9rem, 1.4vw, 1.2rem);
+        text-align: center;
+        border: 2px solid transparent;
+      }
+      .state-loading { background: #ECF2F8; border-color: var(--purple); }
+      .state-error { background: #F2E8EA; border-color: var(--red); }
+      .state-data { background: #F0F7EC; border-color: var(--green); }
+      .state-icon {
+        font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+        display: block;
+        margin-bottom: 0.4rem;
+      }
+      .state-name {
+        font-family: "Bahnschrift", "Segoe UI", sans-serif;
+        font-size: clamp(1rem, 1.5vw, 1.25rem);
+        font-weight: 400;
+        margin-bottom: 0.25rem;
+      }
+      .state-desc {
+        font-size: clamp(0.72rem, 0.95vw, 0.82rem);
+        color: var(--muted);
+        line-height: 1.4;
+      }
+      .state-loading .state-name { color: var(--purple); }
+      .state-error .state-name { color: var(--red); }
+      .state-data .state-name { color: var(--green); }
+
+      /* Pain card */
+      .pain-card {
+        background: rgba(216, 0, 50, 0.05);
+        border: 1.5px solid rgba(216, 0, 50, 0.25);
+        border-radius: 14px;
+        padding: clamp(0.9rem, 1.5vw, 1.3rem);
+        max-width: 720px;
+      }
+      .pain-card h4 {
+        color: var(--red);
+        font-size: clamp(0.85rem, 1.2vw, 1rem);
+        margin-bottom: 0.6rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .pain-card p {
+        font-size: clamp(0.85rem, 1.2vw, 0.98rem);
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      /* compare side by side */
+      .compare-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        width: 100%;
+        max-width: 960px;
+      }
+      .cg-card {
+        border-radius: 14px;
+        padding: clamp(0.9rem, 1.4vw, 1.2rem);
+        border: 2px solid transparent;
+      }
+      .cg-bad { background: rgba(216, 0, 50, 0.05); border-color: rgba(216, 0, 50, 0.25); }
+      .cg-good { background: rgba(123, 201, 80, 0.08); border-color: rgba(123, 201, 80, 0.35); }
+      .cg-label {
+        font-size: clamp(0.65rem, 0.9vw, 0.75rem);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 0.5rem;
+      }
+      .cg-bad .cg-label { color: var(--red); }
+      .cg-good .cg-label { color: var(--green); }
+
+      /* Big number callout */
+      .big-num {
+        font-family: "Bahnschrift", "Segoe UI", sans-serif;
+        font-size: clamp(4rem, 8vw, 6rem);
+        line-height: 1;
+        font-weight: 400;
+      }
+
+      /* Stack pill row */
+      .stack-row {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 1rem;
+      }
+      .sp {
+        padding: 0.4rem 0.95rem;
+        border-radius: 100px;
+        font-family: "Courier New", monospace;
+        font-size: clamp(0.72rem, 1vw, 0.85rem);
+        font-weight: 600;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        color: var(--indigo);
+      }
+
+      /* HTTP method table */
+      .verb-table {
+        width: 100%;
+        max-width: 900px;
+        border-collapse: separate;
+        border-spacing: 0 8px;
+      }
+      .verb-table th {
+        font-size: clamp(0.6rem, 0.85vw, 0.72rem);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--faint);
+        text-align: left;
+        padding: 0 clamp(0.75rem, 1.2vw, 1rem) 0.5rem;
+      }
+      .verb-table td {
+        font-size: clamp(0.82rem, 1.15vw, 0.95rem);
+        padding: clamp(0.6rem, 1vw, 0.8rem) clamp(0.75rem, 1.2vw, 1rem);
+        background: var(--bg);
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
+      .verb-table tr td:first-child { border-radius: 10px 0 0 10px; border-left: 1px solid var(--border); }
+      .verb-table tr td:last-child  { border-radius: 0 10px 10px 0; border-right: 1px solid var(--border); }
+      .vb {
+        font-family: "Courier New", monospace;
+        font-size: clamp(0.78rem, 1.1vw, 0.92rem);
+        font-weight: 700;
+        padding: 0.25rem 0.65rem;
+        border-radius: 6px;
+        display: inline-block;
+      }
+      .vb-get { background: #E6F0F8; color: var(--blue); }
+      .vb-post { background: #F0F7EC; color: var(--green); }
+      .vb-put { background: #EBF0F7; color: #1C5B8C; }
+      .vb-del { background: #F2E8EA; color: var(--red); }
+
+      .url-pill {
+        font-family: "Courier New", monospace;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        padding: 0.2rem 0.55rem;
+        border-radius: 6px;
+        font-size: 0.85em;
+        color: var(--indigo);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- ══ S1 TITLE ══ -->
+      <div class="slide accent-gradient bg-dark" data-slide="1">
+        <div class="slide-label">
+          <span class="snum">01</span> SELISE × Pelsung · Cohort 3
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:1.5rem;text-align:center;max-width:960px;">
+          <img src="../assets/SELISE_Logo_Reversed.png" alt="SELISE Digital Platforms" style="height: 56px; margin-bottom: 1.2rem;">
+          <div class="date-badge">
+            <span class="db-dot"></span>May 1, 2026 · Dev Specialization · 9:30 – 13:30
+          </div>
+          <h1 class="display" style="color: white">
+            <span style="color:#7dd3fc">Routing</span>
+            <span style="color: var(--amber); font-style: italic"> · </span>
+            <span style="color:#86efac">APIs</span>
+            <span style="color: var(--amber); font-style: italic"> · </span>
+            <span style="color:#fde68a">Forms</span>
+          </h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.7); max-width: 720px;">
+            One mini-app · three pieces · the working triangle of every modern web app.
+          </p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">09 · Routing &amp; Navigation</span>
+            <span class="class-tag tag-indigo">10 · Working with APIs</span>
+            <span class="class-tag" style="background:#FFF8E6;color:#664A00;">11 · Forms &amp; Validation</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → or click right side to advance</div>
+      </div>
+
+      <!-- ══ S2 AGENDA ══ -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 760px; width: 100%">
+          <div class="center" style="margin-bottom: 0.4rem">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">A 4-hour app-building tour</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem;">We'll build the <strong>same notes app</strong> together, three slices at a time.</p>
+          </div>
+          <div class="agenda-row" onclick="goTo(4)">
+            <span class="ar-time">9:30 – 9:45</span>
+            <span class="ar-dot" style="background: var(--indigo)"></span>
+            <span class="ar-label">👋 Opener · the app we'll tour</span>
+            <span class="ar-badge" style="background: #E6E9EC; color: var(--indigo)">15 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(6)">
+            <span class="ar-time">9:45 – 10:35</span>
+            <span class="ar-dot" style="background: var(--blue)"></span>
+            <span class="ar-label">🧭 Routing &amp; Navigation</span>
+            <span class="ar-badge" style="background: #E6F0F8; color: var(--blue)">50 min</span>
+          </div>
+          <div class="agenda-row break-row" onclick="goTo(17)">
+            <span class="ar-time">10:35 – 10:50</span>
+            <span class="ar-dot" style="background: var(--green)"></span>
+            <span class="ar-label">☕ Break</span>
+            <span class="ar-badge" style="background: #dcfce7; color: var(--green)">15 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(18)">
+            <span class="ar-time">10:50 – 12:00</span>
+            <span class="ar-dot" style="background: var(--amber)"></span>
+            <span class="ar-label">🔌 Working with APIs</span>
+            <span class="ar-badge" style="background: #EBF0F7; color: #1C5B8C">70 min</span>
+          </div>
+          <div class="agenda-row break-row" onclick="goTo(31)">
+            <span class="ar-time">12:00 – 12:10</span>
+            <span class="ar-dot" style="background: var(--green)"></span>
+            <span class="ar-label">☕ Break</span>
+            <span class="ar-badge" style="background: #dcfce7; color: var(--green)">10 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(32)">
+            <span class="ar-time">12:10 – 1:20</span>
+            <span class="ar-dot" style="background: var(--purple)"></span>
+            <span class="ar-label">📝 Forms &amp; Validation</span>
+            <span class="ar-badge" style="background: #ECF2F8; color: var(--purple)">70 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(43)">
+            <span class="ar-time">1:20 – 1:30</span>
+            <span class="ar-dot" style="background: var(--indigo)"></span>
+            <span class="ar-label">🎯 Wrap-up · what to practice</span>
+            <span class="ar-badge" style="background: #E6E9EC; color: var(--indigo)">10 min</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S3 MIND-FRAME ══ -->
+      <div class="slide accent-blue bg-subtle" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> The mindset for today</div>
+        <div class="stack" style="align-items:center; max-width: 880px;">
+          <div class="center">
+            <div class="pill pill-blue"><span class="pill-dot"></span>How to listen today</div>
+            <h2 class="heading">Aware today · fluent later</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.6rem; max-width: 640px; margin-left:auto; margin-right:auto;">
+              We're covering three big topics in one day. Don't try to memorise the syntax. Aim to <strong>recognise the patterns</strong> — then use AI &amp; the docs to fill in the syntax later.
+            </p>
+          </div>
+          <div class="cols-3" style="margin-top: 1.2rem;">
+            <div class="card" style="border-top: 3px solid var(--blue); text-align:center;">
+              <div style="font-size: clamp(1.8rem, 3vw, 2.4rem); margin-bottom: 0.4rem;">🧭</div>
+              <h4 style="color: var(--blue); justify-content:center;">Routing</h4>
+              <p style="font-size: clamp(0.78rem,1.1vw,0.9rem); color: var(--muted); line-height:1.5;">URLs map to screens. <code>react-router-dom</code>.</p>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--amber); text-align:center;">
+              <div style="font-size: clamp(1.8rem, 3vw, 2.4rem); margin-bottom: 0.4rem;">🔌</div>
+              <h4 style="color: #1C5B8C; justify-content:center;">APIs</h4>
+              <p style="font-size: clamp(0.78rem,1.1vw,0.9rem); color: var(--muted); line-height:1.5;">Talk to a server. <code>fetch</code> + 3-state pattern.</p>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--purple); text-align:center;">
+              <div style="font-size: clamp(1.8rem, 3vw, 2.4rem); margin-bottom: 0.4rem;">📝</div>
+              <h4 style="color: var(--purple); justify-content:center;">Forms</h4>
+              <p style="font-size: clamp(0.78rem,1.1vw,0.9rem); color: var(--muted); line-height:1.5;">Take user input. <code>react-hook-form</code> + <code>zod</code>.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S4 THE APP ══ -->
+      <div class="slide accent-indigo" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> The app we'll build</div>
+        <div class="stack" style="align-items:center; max-width: 1000px;">
+          <div class="center">
+            <div class="pill pill-indigo"><span class="pill-dot"></span>One thread for the whole day</div>
+            <h2 class="heading">The Notes App</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem;">Three routes · uses a public API · has a form to create notes.</p>
+          </div>
+          <div class="mini-app">
+            <div class="ma-route r1">
+              <div class="ma-path">/notes</div>
+              <div class="ma-title">List of notes</div>
+              <div class="ma-sub">GET all notes from API. Loading + error + data.</div>
+            </div>
+            <div class="ma-route r2">
+              <div class="ma-path">/notes/:id</div>
+              <div class="ma-title">Note detail</div>
+              <div class="ma-sub">GET one note by id from URL. <code>useParams()</code>.</div>
+            </div>
+            <div class="ma-route r3">
+              <div class="ma-path">/notes/new</div>
+              <div class="ma-title">Create note</div>
+              <div class="ma-sub">Form → POST → redirect. Validation with zod.</div>
+            </div>
+          </div>
+          <div class="stack-row">
+            <span class="sp">React 19</span>
+            <span class="sp">Vite</span>
+            <span class="sp">TypeScript</span>
+            <span class="sp">Tailwind</span>
+            <span class="sp">react-router-dom</span>
+            <span class="sp">react-hook-form</span>
+            <span class="sp">zod</span>
+            <span class="sp">JSONPlaceholder API</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S5 CONNECT THE DOTS ══ -->
+      <div class="slide bg-subtle accent-gradient" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span> How the three pieces fit</div>
+        <div class="stack" style="align-items:center; max-width: 920px;">
+          <div class="center">
+            <h2 class="heading">Each block plugs into the next</h2>
+          </div>
+          <ul class="reveal-list" style="max-width: 780px;">
+            <li><strong>Routing</strong> gives us multiple URLs and reads the <code>:id</code> from <code>/notes/123</code></li>
+            <li><strong>APIs</strong> use that <code>:id</code> to fetch the right note &mdash; loading, error, data</li>
+            <li><strong>Forms</strong> let the user <em>create</em> a new note &mdash; then we <code>POST</code> it &mdash; then we <em>navigate</em> to the new detail page</li>
+            <li>All three are stitched together by the end of the session</li>
+          </ul>
+          <p class="reveal-hint">→ Click to reveal each line</p>
+        </div>
+      </div>
+
+      <!-- ════════ BLOCK 1 · ROUTING ════════ -->
+
+      <!-- ══ S6 SECTION ROUTING ══ -->
+      <div class="slide bg-blue" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span>Block 1 · 9:45 – 10:35</div>
+          <h1 class="display" style="color: white">Routing &amp;<br/>Navigation</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.75); margin-top: 1rem">
+            Multiple pages · one bundle · clean URLs.
+          </p>
+        </div>
+        <div class="section-num" style="color: white">09</div>
+      </div>
+
+      <!-- ══ S7 WHY ══ -->
+      <div class="slide accent-blue" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> Why we need routing · 9:47</div>
+        <div class="stack" style="align-items:center; max-width: 920px;">
+          <div class="center">
+            <div class="pill pill-blue"><span class="pill-dot"></span>The problem</div>
+            <h2 class="heading">React apps are <em>single-page</em></h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem;">One HTML file. The server gives you JS. JS draws everything.</p>
+          </div>
+          <div class="cols-2" style="margin-top: 0.6rem;">
+            <div class="card">
+              <h4 style="color: var(--red);">😩 Without routing</h4>
+              <ul>
+                <li>One giant component with <code>useState('list' | 'detail' | 'new')</code></li>
+                <li>Clicking the back button reloads the page</li>
+                <li>You can't share a link to a specific note</li>
+                <li>Everything renders on one URL</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h4 style="color: var(--green);">😎 With routing</h4>
+              <ul>
+                <li>URL is the source of truth for what's on screen</li>
+                <li>Back / forward / refresh just work</li>
+                <li>Links are shareable</li>
+                <li>Each "page" is its own component</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S8 INSTALL ══ -->
+      <div class="slide" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> Install · 9:50</div>
+        <div class="stack" style="align-items:center; max-width: 880px;">
+          <div class="center">
+            <div class="pill pill-blue"><span class="pill-dot"></span>One library</div>
+            <h2 class="heading">react-router-dom</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem;">The official routing library for React. Industry standard.</p>
+          </div>
+          <div class="code-block" style="max-width: 720px;">
+            <div class="code-bar">
+              <span class="cb-dot" style="background:#ff5f56"></span>
+              <span class="cb-dot" style="background:#febc2e"></span>
+              <span class="cb-dot" style="background:#28c840"></span>
+              <span style="margin-left:auto;">Terminal</span>
+            </div>
+<div class="code-body"><span class="cc"># inside your Vite + React project</span>
+<span class="ck">npm</span> install react-router-dom</div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align:center; max-width: 700px;">
+            That's it. No config file. Three components and three hooks &mdash; we'll see them all today.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S9 SETUP ══ -->
+      <div class="slide" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> The 3 building blocks · 9:53</div>
+        <div class="stack" style="align-items:center; max-width: 940px;">
+          <div class="center">
+            <div class="pill pill-blue"><span class="pill-dot"></span>BrowserRouter · Routes · Route</div>
+            <h2 class="heading" style="font-size: clamp(1.4rem,2.6vw,2rem);">Wrap your app, list your routes</h2>
+          </div>
+          <div class="code-block">
+            <div class="code-bar">
+              <span class="cb-dot" style="background:#ff5f56"></span>
+              <span class="cb-dot" style="background:#febc2e"></span>
+              <span class="cb-dot" style="background:#28c840"></span>
+              <span style="margin-left:auto;">main.tsx</span>
+            </div>
+<div class="code-body"><span class="cp">import</span> { <span class="cr">BrowserRouter</span>, <span class="cr">Routes</span>, <span class="cr">Route</span> } <span class="cp">from</span> <span class="cs">"react-router-dom"</span>;
+<span class="cp">import</span> <span class="cr">NotesList</span> <span class="cp">from</span> <span class="cs">"./pages/notes-list"</span>;
+<span class="cp">import</span> <span class="cr">NoteDetail</span> <span class="cp">from</span> <span class="cs">"./pages/note-detail"</span>;
+<span class="cp">import</span> <span class="cr">NoteNew</span> <span class="cp">from</span> <span class="cs">"./pages/note-new"</span>;
+
+<span class="ck">createRoot</span>(<span class="cr">document</span>.<span class="ci">getElementById</span>(<span class="cs">"root"</span>)!).<span class="ci">render</span>(
+  <span class="ctag">&lt;BrowserRouter&gt;</span>
+    <span class="ctag">&lt;Routes&gt;</span>
+      <span class="ctag">&lt;Route</span> <span class="cattr">path</span>=<span class="cs">"/notes"</span> <span class="cattr">element</span>={<span class="ctag">&lt;NotesList /&gt;</span>} <span class="ctag">/&gt;</span>
+      <span class="ctag">&lt;Route</span> <span class="cattr">path</span>=<span class="cs">"/notes/new"</span> <span class="cattr">element</span>={<span class="ctag">&lt;NoteNew /&gt;</span>} <span class="ctag">/&gt;</span>
+      <span class="ctag">&lt;Route</span> <span class="cattr">path</span>=<span class="cs">"/notes/:id"</span> <span class="cattr">element</span>={<span class="ctag">&lt;NoteDetail /&gt;</span>} <span class="ctag">/&gt;</span>
+    <span class="ctag">&lt;/Routes&gt;</span>
+  <span class="ctag">&lt;/BrowserRouter&gt;</span>
+);</div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align:center; max-width: 760px; margin-top: 0.4rem;">
+            <strong style="color: var(--text);">BrowserRouter</strong> wraps once · <strong style="color: var(--text);">Routes</strong> is the switch · <strong style="color: var(--text);">Route</strong> is one URL → one component.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S10 LINK VS A ══ -->
+      <div class="slide" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> &lt;Link&gt; vs &lt;a&gt; · 9:58</div>
+        <div class="stack" style="align-items:center; max-width: 980px;">
+          <div class="center">
+            <div class="pill pill-blue"><span class="pill-dot"></span>The most common bug in week one</div>
+            <h2 class="heading" style="font-size: clamp(1.4rem,2.6vw,2rem);">Never use <code>&lt;a href&gt;</code> inside your app</h2>
+          </div>
+          <div class="compare-grid">
+            <div class="cg-card cg-bad">
+              <div class="cg-label">❌ Wrong</div>
+              <div class="code-block">
+                <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span style="margin-left:auto;">App.tsx</span></div>
+<div class="code-body"><span class="ctag">&lt;a</span> <span class="cattr">href</span>=<span class="cs">"/notes/42"</span><span class="ctag">&gt;</span>Open<span class="ctag">&lt;/a&gt;</span>
+<span class="cc">// 💥 reloads the whole page
+// loses your state
+// breaks the SPA</span></div>
+              </div>
+            </div>
+            <div class="cg-card cg-good">
+              <div class="cg-label">✓ Right</div>
+              <div class="code-block">
+                <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">App.tsx</span></div>
+<div class="code-body"><span class="cp">import</span> { <span class="cr">Link</span> } <span class="cp">from</span> <span class="cs">"react-router-dom"</span>;
+
+<span class="ctag">&lt;Link</span> <span class="cattr">to</span>=<span class="cs">"/notes/42"</span><span class="ctag">&gt;</span>Open<span class="ctag">&lt;/Link&gt;</span>
+<span class="cc">// ✓ no reload
+// ✓ keeps state
+// ✓ updates the URL</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S11 NAVLINK ══ -->
+      <div class="slide" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> NavLink · 10:02</div>
+        <div class="stack" style="align-items:center; max-width: 920px;">
+          <div class="center">
+            <div class="pill pill-blue"><span class="pill-dot"></span>For navigation menus</div>
+            <h2 class="heading">NavLink knows when it's "active"</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem;">Same as <code>Link</code>, but adds an <code>active</code> class when the URL matches.</p>
+          </div>
+          <div class="code-block" style="max-width: 760px;">
+            <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">NavBar.tsx</span></div>
+<div class="code-body"><span class="cp">import</span> { <span class="cr">NavLink</span> } <span class="cp">from</span> <span class="cs">"react-router-dom"</span>;
+
+<span class="ctag">&lt;nav</span> <span class="cattr">className</span>=<span class="cs">"flex gap-4"</span><span class="ctag">&gt;</span>
+  <span class="ctag">&lt;NavLink</span>
+    <span class="cattr">to</span>=<span class="cs">"/notes"</span>
+    <span class="cattr">className</span>={({ <span class="cr">isActive</span> }) =&gt;
+      <span class="cr">isActive</span> ? <span class="cs">"text-blue-600 font-bold"</span> : <span class="cs">"text-gray-600"</span>
+    }
+  <span class="ctag">&gt;</span>All Notes<span class="ctag">&lt;/NavLink&gt;</span>
+  <span class="ctag">&lt;NavLink</span> <span class="cattr">to</span>=<span class="cs">"/notes/new"</span><span class="ctag">&gt;</span>+ New<span class="ctag">&lt;/NavLink&gt;</span>
+<span class="ctag">&lt;/nav&gt;</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S12 PARAMS ══ -->
+      <div class="slide" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> Dynamic routes · 10:08</div>
+        <div class="stack" style="align-items:center; max-width: 940px;">
+          <div class="center">
+            <div class="pill pill-blue"><span class="pill-dot"></span>The <code>:id</code> in the path</div>
+            <h2 class="heading" style="font-size: clamp(1.4rem,2.6vw,2rem);">URLs can carry data &mdash; <code>useParams()</code></h2>
+          </div>
+          <div class="code-block">
+            <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">pages/note-detail.tsx</span></div>
+<div class="code-body"><span class="cp">import</span> { <span class="cr">useParams</span> } <span class="cp">from</span> <span class="cs">"react-router-dom"</span>;
+
+<span class="cp">export default function</span> <span class="ci">NoteDetail</span>() {
+  <span class="ck">const</span> { <span class="cr">id</span> } = <span class="ci">useParams</span>();
+  <span class="cc">// id is "42" if URL is /notes/42</span>
+
+  <span class="ck">return</span> <span class="ctag">&lt;div&gt;</span>You're looking at note #{<span class="cr">id</span>}<span class="ctag">&lt;/div&gt;</span>;
+}</div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align:center; max-width: 720px;">
+            The <code>:id</code> in the route path becomes a key on the params object. <strong style="color: var(--text);">This is what we'll feed into the API call</strong> in the next block.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S13 OUTLET ══ -->
+      <div class="slide" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> Layouts with &lt;Outlet/&gt; · 10:14</div>
+        <div class="stack" style="align-items:center; max-width: 980px;">
+          <div class="center">
+            <div class="pill pill-blue"><span class="pill-dot"></span>Shared shell, different content</div>
+            <h2 class="heading" style="font-size: clamp(1.4rem,2.6vw,2rem);">A header on every page, written once</h2>
+          </div>
+          <div class="cols-2">
+            <div class="code-block">
+              <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">layout.tsx</span></div>
+<div class="code-body"><span class="cp">import</span> { <span class="cr">Outlet</span>, <span class="cr">NavLink</span> } <span class="cp">from</span> <span class="cs">"react-router-dom"</span>;
+
+<span class="cp">export default function</span> <span class="ci">Layout</span>() {
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;div&gt;</span>
+      <span class="ctag">&lt;header&gt;</span>
+        <span class="ctag">&lt;NavLink</span> <span class="cattr">to</span>=<span class="cs">"/notes"</span><span class="ctag">&gt;</span>Notes<span class="ctag">&lt;/NavLink&gt;</span>
+      <span class="ctag">&lt;/header&gt;</span>
+      <span class="ctag">&lt;main&gt;</span><span class="ctag">&lt;Outlet</span> <span class="ctag">/&gt;</span><span class="ctag">&lt;/main&gt;</span>
+    <span class="ctag">&lt;/div&gt;</span>
+  );
+}</div>
+            </div>
+            <div class="code-block">
+              <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">main.tsx</span></div>
+<div class="code-body"><span class="ctag">&lt;Routes&gt;</span>
+  <span class="ctag">&lt;Route</span> <span class="cattr">element</span>={<span class="ctag">&lt;Layout /&gt;</span>}<span class="ctag">&gt;</span>
+    <span class="ctag">&lt;Route</span> <span class="cattr">path</span>=<span class="cs">"/notes"</span>      <span class="cattr">element</span>={<span class="ctag">&lt;NotesList/&gt;</span>}<span class="ctag">/&gt;</span>
+    <span class="ctag">&lt;Route</span> <span class="cattr">path</span>=<span class="cs">"/notes/:id"</span>  <span class="cattr">element</span>={<span class="ctag">&lt;NoteDetail/&gt;</span>}<span class="ctag">/&gt;</span>
+    <span class="ctag">&lt;Route</span> <span class="cattr">path</span>=<span class="cs">"/notes/new"</span>  <span class="cattr">element</span>={<span class="ctag">&lt;NoteNew/&gt;</span>}<span class="ctag">/&gt;</span>
+  <span class="ctag">&lt;/Route&gt;</span>
+<span class="ctag">&lt;/Routes&gt;</span></div>
+            </div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align:center;">
+            <code>&lt;Outlet/&gt;</code> is where the matching child route renders. Header is written <em>once</em>, used <em>everywhere</em>.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S14 NAVIGATE ══ -->
+      <div class="slide" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> useNavigate() · 10:21</div>
+        <div class="stack" style="align-items:center; max-width: 920px;">
+          <div class="center">
+            <div class="pill pill-blue"><span class="pill-dot"></span>Redirects from code</div>
+            <h2 class="heading">Programmatic navigation</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem; max-width: 720px;">
+              <code>Link</code> handles clicks. But after a successful form submit, you want to redirect from <em>JavaScript</em>. That's <code>useNavigate()</code>.
+            </p>
+          </div>
+          <div class="code-block" style="max-width: 760px;">
+            <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">pages/note-new.tsx</span></div>
+<div class="code-body"><span class="cp">import</span> { <span class="cr">useNavigate</span> } <span class="cp">from</span> <span class="cs">"react-router-dom"</span>;
+
+<span class="ck">const</span> <span class="cr">navigate</span> = <span class="ci">useNavigate</span>();
+
+<span class="ck">async function</span> <span class="ci">handleSubmit</span>(<span class="cr">data</span>) {
+  <span class="ck">const</span> <span class="cr">res</span> = <span class="cp">await</span> <span class="ci">fetch</span>(<span class="cs">"/api/notes"</span>, { ... });
+  <span class="ck">const</span> <span class="cr">created</span> = <span class="cp">await</span> <span class="cr">res</span>.<span class="ci">json</span>();
+  <span class="cr">navigate</span>(<span class="cs">`/notes/${</span><span class="cr">created</span>.<span class="cp">id</span><span class="cs">}`</span>);
+  <span class="cc">// ✓ user lands on the new note's page</span>
+}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S15 GUARDS ══ -->
+      <div class="slide" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span> Route guards · 10:27</div>
+        <div class="stack" style="align-items:center; max-width: 940px;">
+          <div class="center">
+            <div class="pill pill-blue"><span class="pill-dot"></span>Just the pattern</div>
+            <h2 class="heading" style="font-size: clamp(1.4rem,2.6vw,2rem);">Protected routes</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem; max-width: 760px;">
+              "If not logged in → send to <code>/login</code>". Wrap it in a tiny component.
+            </p>
+          </div>
+          <div class="code-block" style="max-width: 780px;">
+            <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">routes/protected.tsx</span></div>
+<div class="code-body"><span class="cp">import</span> { <span class="cr">Navigate</span> } <span class="cp">from</span> <span class="cs">"react-router-dom"</span>;
+
+<span class="cp">export function</span> <span class="ci">Protected</span>({ <span class="cr">children</span> }) {
+  <span class="ck">const</span> <span class="cr">user</span> = <span class="ci">useCurrentUser</span>(); <span class="cc">// some hook you write</span>
+  <span class="ck">if</span> (!<span class="cr">user</span>) <span class="ck">return</span> <span class="ctag">&lt;Navigate</span> <span class="cattr">to</span>=<span class="cs">"/login"</span> <span class="cattr">replace</span> <span class="ctag">/&gt;</span>;
+  <span class="ck">return</span> <span class="cr">children</span>;
+}
+
+<span class="cc">// Use it like this in your routes:</span>
+<span class="ctag">&lt;Route</span> <span class="cattr">path</span>=<span class="cs">"/notes"</span>
+  <span class="cattr">element</span>={<span class="ctag">&lt;Protected&gt;</span><span class="ctag">&lt;NotesList/&gt;</span><span class="ctag">&lt;/Protected&gt;</span>}<span class="ctag">/&gt;</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S16 ROUTING RECAP ══ -->
+      <div class="slide bg-blue" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span> Block 1 recap</div>
+        <div class="stack" style="align-items:center; max-width: 980px;">
+          <div class="center">
+            <div class="pill pill-white"><span class="pill-dot"></span>Routing — what you saw</div>
+            <h2 class="heading" style="color: white;">5 things to remember</h2>
+          </div>
+          <ul class="reveal-list dark" style="max-width: 800px;">
+            <li><strong style="color:white;"><code>BrowserRouter</code> + <code>Routes</code> + <code>Route</code></strong> &mdash; wrap, switch, map</li>
+            <li><strong style="color:white;"><code>&lt;Link&gt;</code>, never <code>&lt;a&gt;</code></strong> &mdash; or your SPA reloads</li>
+            <li><strong style="color:white;"><code>useParams()</code></strong> &mdash; reads <code>:id</code> from the URL</li>
+            <li><strong style="color:white;"><code>&lt;Outlet/&gt;</code> in a layout</strong> &mdash; one shell, many pages</li>
+            <li><strong style="color:white;"><code>useNavigate()</code></strong> &mdash; redirect from code, after a submit</li>
+          </ul>
+          <p class="reveal-hint" style="color: rgba(255,255,255,0.5);">→ Click to reveal</p>
+        </div>
+      </div>
+
+      <!-- ══ S17 BREAK 1 ══ -->
+      <div class="slide bg-indigo" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span> Break · 10:35 – 10:50</div>
+        <div class="center" style="max-width: 720px;">
+          <div class="pill pill-white"><span class="pill-dot"></span>15 minute break</div>
+          <div class="timer-display" id="break1-timer">15:00</div>
+          <p class="body-md" style="color: rgba(255,255,255,0.65); margin-top: 1rem;">
+            Stretch · water · come back ready for APIs
+          </p>
+          <div class="timer-controls">
+            <button class="timer-btn tbtn-start" onclick="startTimer('break1-timer', 15)">Start</button>
+            <button class="timer-btn tbtn-reset" onclick="resetTimer('break1-timer', 15)">Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════ BLOCK 2 · APIS ════════ -->
+
+      <!-- ══ S18 SECTION APIS ══ -->
+      <div class="slide bg-amber" data-slide="18">
+        <div class="slide-label"><span class="snum">18</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span>Block 2 · 10:50 – 12:00</div>
+          <h1 class="display" style="color: white">Working with<br/>APIs</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.8); margin-top: 1rem">
+            Past basic <code style="background:rgba(255,255,255,0.15);color:#fde68a;padding:0.1em 0.4em;border-radius:4px;">fetch</code> &mdash; into production patterns.
+          </p>
+        </div>
+        <div class="section-num" style="color: white">10</div>
+      </div>
+
+      <!-- ══ S19 RECAP FETCH ══ -->
+      <div class="slide accent-amber" data-slide="19">
+        <div class="slide-label"><span class="snum">19</span> Recap · 10:52</div>
+        <div class="stack" style="align-items:center; max-width: 920px;">
+          <div class="center">
+            <div class="pill pill-amber"><span class="pill-dot"></span>You already know this part</div>
+            <h2 class="heading" style="font-size: clamp(1.4rem,2.6vw,2rem);">fetch + JSON</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem;">From class 04 (DOM &amp; async) and your React Practice Day.</p>
+          </div>
+          <div class="code-block" style="max-width: 720px;">
+            <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">familiar code</span></div>
+<div class="code-body"><span class="ck">const</span> <span class="cr">res</span> = <span class="cp">await</span> <span class="ci">fetch</span>(<span class="cs">"https://jsonplaceholder.typicode.com/posts"</span>);
+<span class="ck">const</span> <span class="cr">data</span> = <span class="cp">await</span> <span class="cr">res</span>.<span class="ci">json</span>();
+<span class="cr">console</span>.<span class="ci">log</span>(<span class="cr">data</span>);</div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align:center;">Today: how this works <em>inside React</em>, with users watching.</p>
+        </div>
+      </div>
+
+      <!-- ══ S20 THE TRAP ══ -->
+      <div class="slide bg-subtle" data-slide="20">
+        <div class="slide-label"><span class="snum">20</span> The "fire-and-forget" trap · 10:55</div>
+        <div class="stack" style="align-items:center; max-width: 980px;">
+          <div class="center">
+            <div class="pill" style="background: rgba(216,0,50,0.1); color: var(--red);"><span class="pill-dot"></span>Common bug</div>
+            <h2 class="heading" style="font-size: clamp(1.4rem,2.6vw,2rem);">What's wrong with this code?</h2>
+          </div>
+          <div class="code-block" style="max-width: 760px;">
+            <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span style="margin-left:auto;">notes-list.tsx · 🚩</span></div>
+<div class="code-body"><span class="cp">function</span> <span class="ci">NotesList</span>() {
+  <span class="ck">const</span> [<span class="cr">notes</span>, <span class="ci">setNotes</span>] = <span class="ci">useState</span>([]);
+
+  <span class="ci">useEffect</span>(() =&gt; {
+    <span class="ci">fetch</span>(<span class="cs">"/api/notes"</span>)
+      .<span class="ci">then</span>(<span class="cr">r</span> =&gt; <span class="cr">r</span>.<span class="ci">json</span>())
+      .<span class="ci">then</span>(<span class="ci">setNotes</span>);
+  }, []);
+
+  <span class="ck">return</span> <span class="cr">notes</span>.<span class="ci">map</span>(<span class="cr">n</span> =&gt; <span class="ctag">&lt;li&gt;</span>{<span class="cr">n</span>.<span class="cp">title</span>}<span class="ctag">&lt;/li&gt;</span>);
+}</div>
+          </div>
+          <ul class="reveal-list" style="max-width: 760px;">
+            <li>Empty page for the first 200ms — looks broken</li>
+            <li>If the network fails, user sees an empty list with no message</li>
+            <li>If the API is slow, no spinner — user clicks again, again, again</li>
+            <li>If the response is a 404 or 500, your <code>.json()</code> may explode silently</li>
+          </ul>
+          <p class="reveal-hint">→ Click to reveal each issue</p>
+        </div>
+      </div>
+
+      <!-- ══ S21 THREE STATES ══ -->
+      <div class="slide accent-amber" data-slide="21">
+        <div class="slide-label"><span class="snum">21</span> The 3-state pattern · 11:00</div>
+        <div class="stack" style="align-items:center; max-width: 1000px;">
+          <div class="center">
+            <div class="pill pill-amber"><span class="pill-dot"></span>The mental model</div>
+            <h2 class="heading">Every fetch has 3 states</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem;">Render <em>all three</em> &mdash; never just the happy path.</p>
+          </div>
+          <div class="state-grid">
+            <div class="state-card state-loading">
+              <div class="state-icon">⏳</div>
+              <div class="state-name">Loading</div>
+              <div class="state-desc">Show a spinner or skeleton while we wait</div>
+            </div>
+            <div class="state-card state-error">
+              <div class="state-icon">⚠️</div>
+              <div class="state-name">Error</div>
+              <div class="state-desc">Network failed or server returned a bad code</div>
+            </div>
+            <div class="state-card state-data">
+              <div class="state-icon">✅</div>
+              <div class="state-name">Data</div>
+              <div class="state-desc">Render the actual list / detail / whatever</div>
+            </div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align:center; max-width: 760px;">
+            Three <code>useState</code>s, three early returns. <strong style="color: var(--text);">This is 80% of working with APIs in React.</strong>
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S22 3-STATE CODE ══ -->
+      <div class="slide" data-slide="22">
+        <div class="slide-label"><span class="snum">22</span> The pattern in code · 11:05</div>
+        <div class="stack" style="align-items:center; max-width: 980px;">
+          <div class="code-block">
+            <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">notes-list.tsx · ✓</span></div>
+<div class="code-body"><span class="cp">function</span> <span class="ci">NotesList</span>() {
+  <span class="ck">const</span> [<span class="cr">notes</span>, <span class="ci">setNotes</span>]       = <span class="ci">useState</span>&lt;<span class="ct">Note</span>[]&gt;([]);
+  <span class="ck">const</span> [<span class="cr">loading</span>, <span class="ci">setLoading</span>]   = <span class="ci">useState</span>(<span class="cp">true</span>);
+  <span class="ck">const</span> [<span class="cr">error</span>, <span class="ci">setError</span>]       = <span class="ci">useState</span>&lt;<span class="ct">string</span> | <span class="cp">null</span>&gt;(<span class="cp">null</span>);
+
+  <span class="ci">useEffect</span>(() =&gt; {
+    <span class="ci">fetch</span>(<span class="cs">"/api/notes"</span>)
+      .<span class="ci">then</span>(<span class="cr">r</span> =&gt; { <span class="ck">if</span> (!<span class="cr">r</span>.<span class="cp">ok</span>) <span class="ck">throw</span> <span class="ck">new</span> <span class="ct">Error</span>(<span class="cs">"Failed"</span>); <span class="ck">return</span> <span class="cr">r</span>.<span class="ci">json</span>(); })
+      .<span class="ci">then</span>(<span class="ci">setNotes</span>)
+      .<span class="ci">catch</span>(<span class="cr">e</span> =&gt; <span class="ci">setError</span>(<span class="cr">e</span>.<span class="cp">message</span>))
+      .<span class="ci">finally</span>(() =&gt; <span class="ci">setLoading</span>(<span class="cp">false</span>));
+  }, []);
+
+  <span class="ck">if</span> (<span class="cr">loading</span>) <span class="ck">return</span> <span class="ctag">&lt;p&gt;</span>Loading…<span class="ctag">&lt;/p&gt;</span>;
+  <span class="ck">if</span> (<span class="cr">error</span>)   <span class="ck">return</span> <span class="ctag">&lt;p</span> <span class="cattr">className</span>=<span class="cs">"text-red-600"</span><span class="ctag">&gt;</span>{<span class="cr">error</span>}<span class="ctag">&lt;/p&gt;</span>;
+  <span class="ck">return</span> <span class="ctag">&lt;ul&gt;</span>{<span class="cr">notes</span>.<span class="ci">map</span>(<span class="cr">n</span> =&gt; <span class="ctag">&lt;li</span> <span class="cattr">key</span>={<span class="cr">n</span>.<span class="cp">id</span>}<span class="ctag">&gt;</span>{<span class="cr">n</span>.<span class="cp">title</span>}<span class="ctag">&lt;/li&gt;</span>)}<span class="ctag">&lt;/ul&gt;</span>;
+}</div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align:center;">
+            Three states · three returns · one <code>useEffect</code>. Memorise the <em>shape</em>, not the syntax.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S23 VERBS TABLE ══ -->
+      <div class="slide accent-amber" data-slide="23">
+        <div class="slide-label"><span class="snum">23</span> HTTP verbs beyond GET · 11:14</div>
+        <div class="stack" style="align-items:center; max-width: 980px;">
+          <div class="center">
+            <div class="pill pill-amber"><span class="pill-dot"></span>The four you'll actually use</div>
+            <h2 class="heading">REST verbs &mdash; same fetch, different method</h2>
+          </div>
+          <table class="verb-table">
+            <thead>
+              <tr><th>Method</th><th>What it means</th><th>Used for</th><th>Body?</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="vb vb-get">GET</span></td><td>Read</td><td>Load notes list, load one note</td><td class="td-muted">No</td></tr>
+              <tr><td><span class="vb vb-post">POST</span></td><td>Create</td><td>Submit a new note</td><td class="td-muted">Yes (JSON)</td></tr>
+              <tr><td><span class="vb vb-put">PUT</span></td><td>Update</td><td>Edit an existing note</td><td class="td-muted">Yes (JSON)</td></tr>
+              <tr><td><span class="vb vb-del">DELETE</span></td><td>Remove</td><td>Delete a note</td><td class="td-muted">No</td></tr>
+            </tbody>
+          </table>
+          <p class="body-md" style="color: var(--muted); text-align:center; max-width: 720px;">
+            <code>fetch</code> defaults to <code>GET</code>. For everything else, you pass an options object.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S24 POST CODE ══ -->
+      <div class="slide" data-slide="24">
+        <div class="slide-label"><span class="snum">24</span> POST in fetch · 11:20</div>
+        <div class="stack" style="align-items:center; max-width: 980px;">
+          <div class="center">
+            <div class="pill" style="background:#F0F7EC; color: var(--green);"><span class="pill-dot"></span>Sending data</div>
+            <h2 class="heading" style="font-size: clamp(1.4rem,2.6vw,2rem);">Three things to remember</h2>
+          </div>
+          <div class="code-block">
+            <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">create-note.ts</span></div>
+<div class="code-body"><span class="ck">const</span> <span class="cr">res</span> = <span class="cp">await</span> <span class="ci">fetch</span>(<span class="cs">"/api/notes"</span>, {
+  <span class="cp">method</span>: <span class="cs">"POST"</span>,                              <span class="cc">// 1. set the verb</span>
+  <span class="cp">headers</span>: { <span class="cs">"Content-Type"</span>: <span class="cs">"application/json"</span> }, <span class="cc">// 2. tell the server it's JSON</span>
+  <span class="cp">body</span>: <span class="cr">JSON</span>.<span class="ci">stringify</span>({                       <span class="cc">// 3. body must be a STRING</span>
+    <span class="cp">title</span>: <span class="cs">"Class 09 notes"</span>,
+    <span class="cp">body</span>: <span class="cs">"Routing, APIs, forms…"</span>,
+  }),
+});
+
+<span class="ck">const</span> <span class="cr">created</span> = <span class="cp">await</span> <span class="cr">res</span>.<span class="ci">json</span>();
+<span class="cc">// → { id: 101, title: "Class 09 notes", body: "..." }</span></div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align:center; max-width: 760px;">
+            <strong style="color: var(--text);">PUT</strong> works the same way (different URL like <code>/api/notes/42</code>). <strong style="color: var(--text);">DELETE</strong> usually has no body.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S25 AUTH ══ -->
+      <div class="slide accent-amber" data-slide="25">
+        <div class="slide-label"><span class="snum">25</span> Auth · 11:28</div>
+        <div class="stack" style="align-items:center; max-width: 980px;">
+          <div class="center">
+            <div class="pill pill-amber"><span class="pill-dot"></span>Telling the server who you are</div>
+            <h2 class="heading">Authorization: Bearer &lt;token&gt;</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem; max-width: 720px;">
+              Most modern APIs hand you a <em>token</em> after login. You attach it to every request as a header.
+            </p>
+          </div>
+          <div class="code-block" style="max-width: 780px;">
+            <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">authed-fetch.ts</span></div>
+<div class="code-body"><span class="ck">const</span> <span class="cr">token</span> = <span class="ci">localStorage</span>.<span class="ci">getItem</span>(<span class="cs">"auth_token"</span>);
+
+<span class="ck">const</span> <span class="cr">res</span> = <span class="cp">await</span> <span class="ci">fetch</span>(<span class="cs">"/api/notes"</span>, {
+  <span class="cp">headers</span>: {
+    <span class="cs">"Content-Type"</span>:  <span class="cs">"application/json"</span>,
+    <span class="cs">"Authorization"</span>: <span class="cs">`Bearer ${</span><span class="cr">token</span><span class="cs">}`</span>, <span class="cc">// ← the magic string</span>
+  },
+});
+
+<span class="ck">if</span> (<span class="cr">res</span>.<span class="cp">status</span> === <span class="cn">401</span>) {
+  <span class="cc">// token is missing or expired → send to /login</span>
+}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S26 ENV VARS ══ -->
+      <div class="slide" data-slide="26">
+        <div class="slide-label"><span class="snum">26</span> Where API keys live · 11:34</div>
+        <div class="stack" style="align-items:center; max-width: 940px;">
+          <div class="center">
+            <div class="pill pill-amber"><span class="pill-dot"></span>.env files exist for a reason</div>
+            <h2 class="heading" style="font-size: clamp(1.4rem,2.6vw,2rem);">Never hard-code secrets in your code</h2>
+          </div>
+          <div class="compare-grid">
+            <div class="cg-card cg-bad">
+              <div class="cg-label">❌ Wrong</div>
+<div class="code-block">
+<div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span style="margin-left:auto;">api.ts</span></div>
+<div class="code-body"><span class="ck">const</span> <span class="cr">API_KEY</span> = <span class="cs">"sk_live_abc123_secret"</span>;
+<span class="cc">// 💥 anyone reading the code sees it
+// 💥 it ends up on GitHub
+// 💥 you can't change it per environment</span></div>
+</div>
+            </div>
+            <div class="cg-card cg-good">
+              <div class="cg-label">✓ Right</div>
+<div class="code-block">
+<div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">api.ts</span></div>
+<div class="code-body"><span class="cc">// .env.local (NOT committed to git)</span>
+<span class="cc">// VITE_API_KEY=sk_live_abc123</span>
+
+<span class="ck">const</span> <span class="cr">key</span> = <span class="cp">import</span>.<span class="cp">meta</span>.<span class="cp">env</span>.<span class="cr">VITE_API_KEY</span>;</div>
+</div>
+            </div>
+          </div>
+          <div class="callout callout-amber" style="max-width: 760px; background:#FFF8E6;border:1px solid #F0D890;color:#664A00;padding: 0.9rem 1.1rem; border-radius:10px; font-size: clamp(0.78rem, 1.1vw, 0.9rem); display:flex; gap:0.6rem;">
+            <span style="font-size: 1rem;">⚠️</span>
+            <div><strong>Frontend env vars are still visible in the browser.</strong> Anything in the bundle can be read by users. Only put <em>public</em> keys in frontend env. Real secrets stay on the server.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S27 RES.OK TRAP ══ -->
+      <div class="slide bg-subtle" data-slide="27">
+        <div class="slide-label"><span class="snum">27</span> The fetch trap · 11:40</div>
+        <div class="stack" style="align-items:center; max-width: 980px;">
+          <div class="center">
+            <div class="pill" style="background: rgba(216,0,50,0.1); color: var(--red);"><span class="pill-dot"></span>The most surprising fact about fetch</div>
+            <h2 class="heading" style="font-size: clamp(1.4rem,2.6vw,2rem);">fetch() does NOT throw on 404 or 500</h2>
+          </div>
+          <div class="cols-2">
+            <div class="pain-card">
+              <h4>😱 What you expect</h4>
+              <p>Server returns 500. <code>fetch</code> throws. Your <code>catch</code> handles it. ❌ <strong style="color: var(--red);">It doesn't.</strong></p>
+            </div>
+            <div class="pain-card" style="background: rgba(123,201,80,0.08); border-color: rgba(123,201,80,0.35);">
+              <h4 style="color: var(--green);">✓ What actually happens</h4>
+              <p style="color: var(--muted);">fetch only throws on <em>network</em> errors (no DNS, no connection). For 4xx/5xx, the promise <em>resolves</em> &mdash; you have to check <code>res.ok</code> yourself.</p>
+            </div>
+          </div>
+          <div class="code-block" style="max-width: 760px;">
+            <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">safe-fetch.ts</span></div>
+<div class="code-body"><span class="ck">const</span> <span class="cr">res</span> = <span class="cp">await</span> <span class="ci">fetch</span>(<span class="cs">"/api/notes"</span>);
+
+<span class="ck">if</span> (!<span class="cr">res</span>.<span class="cp">ok</span>) {
+  <span class="ck">throw</span> <span class="ck">new</span> <span class="ct">Error</span>(<span class="cs">`API error: ${</span><span class="cr">res</span>.<span class="cp">status</span><span class="cs">}`</span>);
+}
+<span class="ck">const</span> <span class="cr">data</span> = <span class="cp">await</span> <span class="cr">res</span>.<span class="ci">json</span>();</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S28 USEFETCH ══ -->
+      <div class="slide" data-slide="28">
+        <div class="slide-label"><span class="snum">28</span> Custom hook: useFetch · 11:46</div>
+        <div class="stack" style="align-items:center; max-width: 980px;">
+          <div class="center">
+            <div class="pill pill-amber"><span class="pill-dot"></span>Stop repeating yourself</div>
+            <h2 class="heading" style="font-size: clamp(1.4rem,2.6vw,2rem);">Wrap the pattern in one hook</h2>
+          </div>
+          <div class="code-block">
+            <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">hooks/use-fetch.ts</span></div>
+<div class="code-body"><span class="cp">export function</span> <span class="ci">useFetch</span>&lt;<span class="ct">T</span>&gt;(<span class="cr">url</span>: <span class="ct">string</span>) {
+  <span class="ck">const</span> [<span class="cr">data</span>, <span class="ci">setData</span>]       = <span class="ci">useState</span>&lt;<span class="ct">T</span> | <span class="cp">null</span>&gt;(<span class="cp">null</span>);
+  <span class="ck">const</span> [<span class="cr">loading</span>, <span class="ci">setLoading</span>] = <span class="ci">useState</span>(<span class="cp">true</span>);
+  <span class="ck">const</span> [<span class="cr">error</span>, <span class="ci">setError</span>]     = <span class="ci">useState</span>&lt;<span class="ct">string</span> | <span class="cp">null</span>&gt;(<span class="cp">null</span>);
+
+  <span class="ci">useEffect</span>(() =&gt; {
+    <span class="ci">fetch</span>(<span class="cr">url</span>)
+      .<span class="ci">then</span>(<span class="cr">r</span> =&gt; { <span class="ck">if</span> (!<span class="cr">r</span>.<span class="cp">ok</span>) <span class="ck">throw</span> <span class="ck">new</span> <span class="ct">Error</span>(<span class="cr">r</span>.<span class="cp">statusText</span>); <span class="ck">return</span> <span class="cr">r</span>.<span class="ci">json</span>(); })
+      .<span class="ci">then</span>(<span class="ci">setData</span>)
+      .<span class="ci">catch</span>(<span class="cr">e</span> =&gt; <span class="ci">setError</span>(<span class="cr">e</span>.<span class="cp">message</span>))
+      .<span class="ci">finally</span>(() =&gt; <span class="ci">setLoading</span>(<span class="cp">false</span>));
+  }, [<span class="cr">url</span>]);
+
+  <span class="ck">return</span> { <span class="cr">data</span>, <span class="cr">loading</span>, <span class="cr">error</span> };
+}
+
+<span class="cc">// In a component:</span>
+<span class="ck">const</span> { <span class="cr">data</span>, <span class="cr">loading</span>, <span class="cr">error</span> } = <span class="ci">useFetch</span>&lt;<span class="ct">Note</span>[]&gt;(<span class="cs">"/api/notes"</span>);</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S29 TANSTACK PEEK ══ -->
+      <div class="slide bg-subtle" data-slide="29">
+        <div class="slide-label"><span class="snum">29</span> A peek at production · 11:54</div>
+        <div class="stack" style="align-items:center; max-width: 980px;">
+          <div class="center">
+            <div class="pill pill-blue"><span class="pill-dot"></span>What real teams use</div>
+            <h2 class="heading">TanStack Query (a.k.a. React Query)</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem; max-width: 760px;">
+              <code>useFetch</code> works, but real apps need caching, refetching on focus, retries, optimistic updates. Don't build all that — use a library.
+            </p>
+          </div>
+          <div class="code-block" style="max-width: 760px;">
+            <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">notes-list.tsx · with TanStack Query</span></div>
+<div class="code-body"><span class="cp">import</span> { <span class="cr">useQuery</span> } <span class="cp">from</span> <span class="cs">"@tanstack/react-query"</span>;
+
+<span class="cp">function</span> <span class="ci">NotesList</span>() {
+  <span class="ck">const</span> { <span class="cr">data</span>, <span class="cr">isLoading</span>, <span class="cr">error</span> } = <span class="ci">useQuery</span>({
+    <span class="cp">queryKey</span>: [<span class="cs">"notes"</span>],
+    <span class="cp">queryFn</span>:  () =&gt; <span class="ci">fetch</span>(<span class="cs">"/api/notes"</span>).<span class="ci">then</span>(<span class="cr">r</span> =&gt; <span class="cr">r</span>.<span class="ci">json</span>()),
+  });
+  <span class="cc">// ✓ caches automatically
+  // ✓ refetches when tab regains focus
+  // ✓ shares the same data across components
+  // ✓ retries on error</span>
+}</div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align:center;">
+            <strong style="color: var(--text);">Today: see it. Later: learn it.</strong> When your <code>useFetch</code> isn't enough, this is what to reach for.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S30 APIS RECAP ══ -->
+      <div class="slide bg-amber" data-slide="30">
+        <div class="slide-label"><span class="snum">30</span> Block 2 recap</div>
+        <div class="stack" style="align-items:center; max-width: 980px;">
+          <div class="center">
+            <div class="pill pill-white"><span class="pill-dot"></span>APIs — what you saw</div>
+            <h2 class="heading" style="color: white;">6 things to remember</h2>
+          </div>
+          <ul class="reveal-list dark" style="max-width: 820px;">
+            <li><strong style="color:white;">Always render 3 states</strong> &mdash; loading, error, data</li>
+            <li><strong style="color:white;"><code>res.ok</code> &mdash; check it</strong>, fetch doesn't throw on 4xx/5xx</li>
+            <li><strong style="color:white;">POST/PUT need <code>Content-Type</code> + <code>JSON.stringify</code></strong></li>
+            <li><strong style="color:white;">Auth = a header</strong>, not magic</li>
+            <li><strong style="color:white;">Secrets live in <code>.env</code></strong>, never hard-coded</li>
+            <li><strong style="color:white;">Custom hooks deduplicate</strong> &mdash; or use TanStack Query</li>
+          </ul>
+          <p class="reveal-hint" style="color: rgba(255,255,255,0.5);">→ Click to reveal</p>
+        </div>
+      </div>
+
+      <!-- ══ S31 BREAK 2 ══ -->
+      <div class="slide bg-indigo" data-slide="31">
+        <div class="slide-label"><span class="snum">31</span> Break · 12:00 – 12:10</div>
+        <div class="center" style="max-width: 720px;">
+          <div class="pill pill-white"><span class="pill-dot"></span>10 minute break</div>
+          <div class="timer-display" id="break2-timer">10:00</div>
+          <p class="body-md" style="color: rgba(255,255,255,0.65); margin-top: 1rem;">
+            Last block coming up · forms &amp; validation
+          </p>
+          <div class="timer-controls">
+            <button class="timer-btn tbtn-start" onclick="startTimer('break2-timer', 10)">Start</button>
+            <button class="timer-btn tbtn-reset" onclick="resetTimer('break2-timer', 10)">Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════ BLOCK 3 · FORMS ════════ -->
+
+      <!-- ══ S32 SECTION FORMS ══ -->
+      <div class="slide bg-indigo" data-slide="32">
+        <div class="slide-label"><span class="snum">32</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span>Block 3 · 12:10 – 1:20</div>
+          <h1 class="display" style="color: white">Forms &amp;<br/>Validation</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.75); margin-top: 1rem">
+            Get input from users · trust nothing.
+          </p>
+        </div>
+        <div class="section-num" style="color: white">11</div>
+      </div>
+
+      <!-- ══ S33 CONTROLLED RECAP ══ -->
+      <div class="slide accent-indigo" data-slide="33">
+        <div class="slide-label"><span class="snum">33</span> Controlled inputs · 12:12</div>
+        <div class="stack" style="align-items:center; max-width: 980px;">
+          <div class="center">
+            <div class="pill pill-indigo"><span class="pill-dot"></span>Quick recap</div>
+            <h2 class="heading" style="font-size: clamp(1.4rem,2.6vw,2rem);">React owns the input value</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem;">You saw this in classes 06 &amp; 08. <code>value</code> + <code>onChange</code> + <code>useState</code>.</p>
+          </div>
+          <div class="code-block" style="max-width: 780px;">
+            <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">controlled-input.tsx</span></div>
+<div class="code-body"><span class="ck">const</span> [<span class="cr">title</span>, <span class="ci">setTitle</span>] = <span class="ci">useState</span>(<span class="cs">""</span>);
+
+<span class="ctag">&lt;input</span>
+  <span class="cattr">value</span>={<span class="cr">title</span>}
+  <span class="cattr">onChange</span>={<span class="cr">e</span> =&gt; <span class="ci">setTitle</span>(<span class="cr">e</span>.<span class="cp">target</span>.<span class="cp">value</span>)}
+<span class="ctag">/&gt;</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S34 PAIN ══ -->
+      <div class="slide bg-subtle" data-slide="34">
+        <div class="slide-label"><span class="snum">34</span> Why hand-rolled forms hurt · 12:18</div>
+        <div class="stack" style="align-items:center; max-width: 980px;">
+          <div class="center">
+            <div class="pill" style="background: rgba(216,0,50,0.1); color: var(--red);"><span class="pill-dot"></span>The boilerplate problem</div>
+            <h2 class="heading" style="font-size: clamp(1.4rem,2.6vw,2rem);">Imagine a form with 5 fields…</h2>
+          </div>
+          <div class="code-block" style="max-width: 780px;">
+            <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span style="margin-left:auto;">register-form.tsx · 🚩</span></div>
+<div class="code-body"><span class="ck">const</span> [<span class="cr">name</span>, <span class="ci">setName</span>]         = <span class="ci">useState</span>(<span class="cs">""</span>);
+<span class="ck">const</span> [<span class="cr">email</span>, <span class="ci">setEmail</span>]       = <span class="ci">useState</span>(<span class="cs">""</span>);
+<span class="ck">const</span> [<span class="cr">password</span>, <span class="ci">setPassword</span>] = <span class="ci">useState</span>(<span class="cs">""</span>);
+<span class="ck">const</span> [<span class="cr">phone</span>, <span class="ci">setPhone</span>]       = <span class="ci">useState</span>(<span class="cs">""</span>);
+<span class="ck">const</span> [<span class="cr">cid</span>, <span class="ci">setCid</span>]           = <span class="ci">useState</span>(<span class="cs">""</span>);
+
+<span class="ck">const</span> [<span class="cr">errors</span>, <span class="ci">setErrors</span>]     = <span class="ci">useState</span>({});
+<span class="ck">const</span> [<span class="cr">touched</span>, <span class="ci">setTouched</span>]   = <span class="ci">useState</span>({});
+
+<span class="cc">// + a validate() function with 5 if-statements
+// + onBlur handlers for "touched"
+// + a submit handler that re-validates everything
+// + reset logic</span></div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align:center; max-width: 720px;">
+            Multiply by 10 forms in your app. <strong style="color: var(--red);">This is why libraries exist.</strong>
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S35 RHF INTRO ══ -->
+      <div class="slide accent-indigo" data-slide="35">
+        <div class="slide-label"><span class="snum">35</span> react-hook-form · 12:24</div>
+        <div class="stack" style="align-items:center; max-width: 980px;">
+          <div class="center">
+            <div class="pill pill-indigo"><span class="pill-dot"></span>The form library most teams use</div>
+            <h2 class="heading">3 things: <code>useForm</code>, <code>register</code>, <code>handleSubmit</code></h2>
+          </div>
+          <div class="code-block">
+            <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">note-new.tsx · with react-hook-form</span></div>
+<div class="code-body"><span class="cp">import</span> { <span class="cr">useForm</span> } <span class="cp">from</span> <span class="cs">"react-hook-form"</span>;
+
+<span class="cp">function</span> <span class="ci">NoteNew</span>() {
+  <span class="ck">const</span> { <span class="cr">register</span>, <span class="cr">handleSubmit</span> } = <span class="ci">useForm</span>();
+
+  <span class="ck">const</span> <span class="cr">onSubmit</span> = (<span class="cr">data</span>) =&gt; <span class="cr">console</span>.<span class="ci">log</span>(<span class="cr">data</span>);
+
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;form</span> <span class="cattr">onSubmit</span>={<span class="ci">handleSubmit</span>(<span class="cr">onSubmit</span>)}<span class="ctag">&gt;</span>
+      <span class="ctag">&lt;input</span> {...<span class="ci">register</span>(<span class="cs">"title"</span>)} <span class="cattr">placeholder</span>=<span class="cs">"Title"</span> <span class="ctag">/&gt;</span>
+      <span class="ctag">&lt;textarea</span> {...<span class="ci">register</span>(<span class="cs">"body"</span>)} <span class="ctag">/&gt;</span>
+      <span class="ctag">&lt;button</span> <span class="cattr">type</span>=<span class="cs">"submit"</span><span class="ctag">&gt;</span>Save<span class="ctag">&lt;/button&gt;</span>
+    <span class="ctag">&lt;/form&gt;</span>
+  );
+}</div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align:center;">
+            No <code>useState</code>. No <code>onChange</code>. The library wires the inputs for you.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S36 RHF ERRORS ══ -->
+      <div class="slide" data-slide="36">
+        <div class="slide-label"><span class="snum">36</span> Errors with RHF · 12:32</div>
+        <div class="stack" style="align-items:center; max-width: 980px;">
+          <div class="center">
+            <div class="pill pill-indigo"><span class="pill-dot"></span>The fourth thing: <code>formState.errors</code></div>
+            <h2 class="heading" style="font-size: clamp(1.4rem,2.6vw,2rem);">Validation rules at registration</h2>
+          </div>
+          <div class="code-block">
+            <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">with-errors.tsx</span></div>
+<div class="code-body"><span class="ck">const</span> {
+  <span class="cr">register</span>,
+  <span class="cr">handleSubmit</span>,
+  <span class="cp">formState</span>: { <span class="cr">errors</span> },
+} = <span class="ci">useForm</span>();
+
+<span class="ctag">&lt;input</span>
+  {...<span class="ci">register</span>(<span class="cs">"title"</span>, {
+    <span class="cp">required</span>: <span class="cs">"Title is required"</span>,
+    <span class="cp">minLength</span>: { <span class="cp">value</span>: <span class="cn">3</span>, <span class="cp">message</span>: <span class="cs">"Min 3 characters"</span> },
+  })}
+<span class="ctag">/&gt;</span>
+{<span class="cr">errors</span>.<span class="cp">title</span> &amp;&amp; <span class="ctag">&lt;p</span> <span class="cattr">className</span>=<span class="cs">"text-red-600"</span><span class="ctag">&gt;</span>{<span class="cr">errors</span>.<span class="cp">title</span>.<span class="cp">message</span>}<span class="ctag">&lt;/p&gt;</span>}</div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align:center; max-width: 720px;">
+            This works for simple cases. But your validation rules end up scattered across every input. <strong style="color: var(--text);">Enter zod.</strong>
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S37 ZOD INTRO ══ -->
+      <div class="slide accent-indigo" data-slide="37">
+        <div class="slide-label"><span class="snum">37</span> zod · 12:42</div>
+        <div class="stack" style="align-items:center; max-width: 980px;">
+          <div class="center">
+            <div class="pill pill-purple"><span class="pill-dot"></span>Schema-first validation</div>
+            <h2 class="heading">One schema · all your rules in one place</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem; max-width: 720px;">
+              <code>zod</code> describes the <em>shape</em> of valid data. The schema is the single source of truth for validation.
+            </p>
+          </div>
+          <div class="code-block" style="max-width: 780px;">
+            <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">schemas/note.ts</span></div>
+<div class="code-body"><span class="cp">import</span> { <span class="cr">z</span> } <span class="cp">from</span> <span class="cs">"zod"</span>;
+
+<span class="cp">export const</span> <span class="cr">noteSchema</span> = <span class="cr">z</span>.<span class="ci">object</span>({
+  <span class="cp">title</span>: <span class="cr">z</span>.<span class="ci">string</span>().<span class="ci">min</span>(<span class="cn">3</span>, <span class="cs">"Min 3 characters"</span>).<span class="ci">max</span>(<span class="cn">100</span>),
+  <span class="cp">body</span>:  <span class="cr">z</span>.<span class="ci">string</span>().<span class="ci">min</span>(<span class="cn">10</span>, <span class="cs">"Body is too short"</span>),
+  <span class="cp">tags</span>:  <span class="cr">z</span>.<span class="ci">array</span>(<span class="cr">z</span>.<span class="ci">string</span>()).<span class="ci">optional</span>(),
+});
+
+<span class="cp">export type</span> <span class="ct">Note</span> = <span class="cr">z</span>.<span class="ci">infer</span>&lt;<span class="cp">typeof</span> <span class="cr">noteSchema</span>&gt;;
+<span class="cc">// ↑ Note is { title: string; body: string; tags?: string[] }
+//   — one schema gives you both validation AND types</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S38 ZOD + RHF ══ -->
+      <div class="slide" data-slide="38">
+        <div class="slide-label"><span class="snum">38</span> zod + react-hook-form · 12:50</div>
+        <div class="stack" style="align-items:center; max-width: 980px;">
+          <div class="center">
+            <div class="pill pill-purple"><span class="pill-dot"></span>The bridge</div>
+            <h2 class="heading" style="font-size: clamp(1.4rem,2.6vw,2rem);">@hookform/resolvers/zod</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem;">One line connects them.</p>
+          </div>
+          <div class="code-block">
+            <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">note-new.tsx · the real version</span></div>
+<div class="code-body"><span class="cp">import</span> { <span class="cr">useForm</span> } <span class="cp">from</span> <span class="cs">"react-hook-form"</span>;
+<span class="cp">import</span> { <span class="cr">zodResolver</span> } <span class="cp">from</span> <span class="cs">"@hookform/resolvers/zod"</span>;
+<span class="cp">import</span> { <span class="cr">noteSchema</span>, <span class="ct">Note</span> } <span class="cp">from</span> <span class="cs">"./schemas/note"</span>;
+
+<span class="ck">const</span> {
+  <span class="cr">register</span>, <span class="cr">handleSubmit</span>,
+  <span class="cp">formState</span>: { <span class="cr">errors</span>, <span class="cr">isSubmitting</span> },
+} = <span class="ci">useForm</span>&lt;<span class="ct">Note</span>&gt;({
+  <span class="cp">resolver</span>: <span class="ci">zodResolver</span>(<span class="cr">noteSchema</span>),
+});
+
+<span class="ctag">&lt;input</span> {...<span class="ci">register</span>(<span class="cs">"title"</span>)} <span class="ctag">/&gt;</span>
+{<span class="cr">errors</span>.<span class="cp">title</span> &amp;&amp; <span class="ctag">&lt;p&gt;</span>{<span class="cr">errors</span>.<span class="cp">title</span>.<span class="cp">message</span>}<span class="ctag">&lt;/p&gt;</span>}</div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align:center;">
+            Now your form gets type safety + validation + error messages, all from <em>one schema</em>.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S39 TIE TOGETHER ══ -->
+      <div class="slide accent-gradient bg-subtle" data-slide="39">
+        <div class="slide-label"><span class="snum">39</span> Tying it all together · 1:00</div>
+        <div class="stack" style="align-items:center; max-width: 980px;">
+          <div class="center">
+            <div class="pill pill-indigo"><span class="pill-dot"></span>The whole loop</div>
+            <h2 class="heading" style="font-size: clamp(1.4rem,2.6vw,2rem);">Form → POST → navigate</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem;">All three blocks meet here.</p>
+          </div>
+          <div class="code-block">
+            <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">note-new.tsx · final</span></div>
+<div class="code-body"><span class="cp">function</span> <span class="ci">NoteNew</span>() {
+  <span class="ck">const</span> <span class="cr">navigate</span> = <span class="ci">useNavigate</span>();              <span class="cc">// ← from Block 1</span>
+
+  <span class="ck">const</span> { <span class="cr">register</span>, <span class="cr">handleSubmit</span>, <span class="cp">formState</span>: { <span class="cr">errors</span> } } =
+    <span class="ci">useForm</span>&lt;<span class="ct">Note</span>&gt;({ <span class="cp">resolver</span>: <span class="ci">zodResolver</span>(<span class="cr">noteSchema</span>) });
+
+  <span class="ck">const</span> <span class="cr">onSubmit</span> = <span class="cp">async</span> (<span class="cr">data</span>: <span class="ct">Note</span>) =&gt; {        <span class="cc">// data is type-checked by zod</span>
+    <span class="ck">const</span> <span class="cr">res</span> = <span class="cp">await</span> <span class="ci">fetch</span>(<span class="cs">"/api/notes"</span>, {        <span class="cc">// ← from Block 2</span>
+      <span class="cp">method</span>: <span class="cs">"POST"</span>,
+      <span class="cp">headers</span>: { <span class="cs">"Content-Type"</span>: <span class="cs">"application/json"</span> },
+      <span class="cp">body</span>: <span class="cr">JSON</span>.<span class="ci">stringify</span>(<span class="cr">data</span>),
+    });
+    <span class="ck">if</span> (!<span class="cr">res</span>.<span class="cp">ok</span>) <span class="ck">return</span> <span class="ci">alert</span>(<span class="cs">"Save failed"</span>);
+
+    <span class="ck">const</span> <span class="cr">created</span> = <span class="cp">await</span> <span class="cr">res</span>.<span class="ci">json</span>();
+    <span class="cr">navigate</span>(<span class="cs">`/notes/${</span><span class="cr">created</span>.<span class="cp">id</span><span class="cs">}`</span>);            <span class="cc">// ← Block 1 again — go to the new note</span>
+  };
+
+  <span class="cc">// …form JSX…</span>
+}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S40 LIVE BUILD ══ -->
+      <div class="slide bg-blue" data-slide="40">
+        <div class="slide-label"><span class="snum">40</span> Live walkthrough · 1:08</div>
+        <div class="center" style="max-width: 820px;">
+          <div class="pill pill-white"><span class="pill-dot"></span>Watch &amp; follow along</div>
+          <h2 class="heading" style="color: white; font-size: clamp(1.6rem, 3vw, 2.4rem);">I'll run the app · you'll watch the network tab</h2>
+          <ul class="reveal-list dark" style="max-width: 720px; margin-top: 1.2rem;">
+            <li>Visit <code>/notes</code> &mdash; watch the loading flash, then the list appear</li>
+            <li>Click into <code>/notes/1</code> &mdash; URL changes, no page reload</li>
+            <li>Hit <code>/notes/new</code> &mdash; submit empty &mdash; see zod errors</li>
+            <li>Submit valid data &mdash; watch POST in DevTools &mdash; redirect happens</li>
+          </ul>
+          <p class="reveal-hint" style="color: rgba(255,255,255,0.5);">→ Click to reveal each step</p>
+        </div>
+      </div>
+
+      <!-- ══ S41 FORMS RECAP ══ -->
+      <div class="slide bg-indigo" data-slide="41">
+        <div class="slide-label"><span class="snum">41</span> Block 3 recap</div>
+        <div class="stack" style="align-items:center; max-width: 980px;">
+          <div class="center">
+            <div class="pill pill-white"><span class="pill-dot"></span>Forms — what you saw</div>
+            <h2 class="heading" style="color: white;">5 things to remember</h2>
+          </div>
+          <ul class="reveal-list dark" style="max-width: 820px;">
+            <li><strong style="color:white;">Hand-rolled forms = boilerplate explosion</strong></li>
+            <li><strong style="color:white;">react-hook-form: <code>useForm</code>, <code>register</code>, <code>handleSubmit</code></strong></li>
+            <li><strong style="color:white;">zod = one schema, validation + types</strong></li>
+            <li><strong style="color:white;"><code>zodResolver</code></strong> bridges them in one line</li>
+            <li><strong style="color:white;">After POST, <code>useNavigate()</code></strong> &mdash; closes the loop</li>
+          </ul>
+          <p class="reveal-hint" style="color: rgba(255,255,255,0.5);">→ Click to reveal</p>
+        </div>
+      </div>
+
+      <!-- ══ S42 BIG PICTURE ══ -->
+      <div class="slide accent-gradient bg-subtle" data-slide="42">
+        <div class="slide-label"><span class="snum">42</span> The whole picture</div>
+        <div class="stack" style="align-items:center; max-width: 1000px;">
+          <div class="center">
+            <div class="pill pill-blue"><span class="pill-dot"></span>What you can build now</div>
+            <h2 class="heading">Routing + APIs + Forms = a real app</h2>
+          </div>
+          <div class="cols-3" style="margin-top: 0.6rem;">
+            <div class="card" style="border-top: 3px solid var(--blue);">
+              <h4 style="color: var(--blue);">🧭 Pages</h4>
+              <ul>
+                <li>List view at <code>/notes</code></li>
+                <li>Detail at <code>/notes/:id</code></li>
+                <li>Form at <code>/notes/new</code></li>
+                <li>Layout shell with <code>&lt;Outlet/&gt;</code></li>
+              </ul>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--amber);">
+              <h4 style="color: #1C5B8C;">🔌 Data</h4>
+              <ul>
+                <li>3-state pattern everywhere</li>
+                <li><code>res.ok</code> defended</li>
+                <li>POST to create</li>
+                <li>Auth header ready</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--purple);">
+              <h4 style="color: var(--purple);">📝 Input</h4>
+              <ul>
+                <li>One zod schema</li>
+                <li>RHF for the form</li>
+                <li>Errors shown per field</li>
+                <li>Redirect on success</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S43 PRACTICE ══ -->
+      <div class="slide" data-slide="43">
+        <div class="slide-label"><span class="snum">43</span> What to practice tonight · 1:22</div>
+        <div class="stack" style="align-items:center; max-width: 980px;">
+          <div class="center">
+            <div class="pill pill-amber"><span class="pill-dot"></span>Self-paced &mdash; 60 minutes</div>
+            <h2 class="heading">Fork the notes app, change one thing</h2>
+          </div>
+          <div class="cols-2" style="margin-top: 0.4rem;">
+            <div class="card" style="border-top: 3px solid var(--blue);">
+              <h4 style="color: var(--blue);">🎯 Easier</h4>
+              <ul>
+                <li>Add a <code>/about</code> page with static content</li>
+                <li>Add a <code>NavLink</code> for it in the layout</li>
+                <li>Make the loading spinner a Tailwind animation</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--purple);">
+              <h4 style="color: var(--purple);">🔥 Stretch</h4>
+              <ul>
+                <li>Add a <code>tags</code> field to the form (zod array)</li>
+                <li>Show note's tags as Tailwind chips on detail page</li>
+                <li>Add a "delete" button on detail (DELETE call → navigate to /notes)</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align:center; max-width: 720px;">
+            <strong style="color: var(--text);">Use Claude Code.</strong> Don't memorise &mdash; recognise the patterns and let AI fill in the syntax.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S44 NEXT CLASS ══ -->
+      <div class="slide bg-dark" data-slide="44">
+        <div class="slide-label"><span class="snum">44</span> Coming up</div>
+        <div class="stack" style="align-items:center; max-width: 880px;">
+          <div class="center">
+            <div class="pill pill-white"><span class="pill-dot"></span>Next class · Dev 12</div>
+            <h2 class="heading" style="color: white; font-size: clamp(1.6rem, 3vw, 2.4rem);">State Management</h2>
+            <p class="body-md" style="color: rgba(255,255,255,0.65); margin-top: 0.6rem; max-width: 700px;">
+              When component-level state isn't enough &mdash; Context vs libraries (Zustand, Redux), and how to know when you've outgrown a simple <code>useState</code>.
+            </p>
+          </div>
+          <div style="margin-top: 1.5rem;">
+            <img src="../assets/SELISE_Logo_Reversed.png" alt="SELISE" style="height: 40px; opacity: 0.85;">
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══════════════ PROGRESS + NAV ══════════════ -->
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 44</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      let current = 0;
+
+      function goTo(n) {
+        slides[current].classList.remove("active");
+        slides[current].classList.add("exit");
+        const old = current;
+        setTimeout(() => slides[old].classList.remove("exit"), 380);
+        current = Math.max(0, Math.min(n, total - 1));
+        slides[current].classList.add("active");
+        document.getElementById("slide-counter").textContent = `${current + 1} / ${total}`;
+        document.getElementById("progress").style.width = `${((current + 1) / total) * 100}%`;
+        initReveal(slides[current]);
+      }
+
+      function nextSlide() { if (current < total - 1) goTo(current + 1); }
+      function prevSlide() { if (current > 0) goTo(current - 1); }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+        if (e.key === "ArrowRight" || e.key === " ") { e.preventDefault(); handleForward(); }
+        if (e.key === "ArrowLeft") { e.preventDefault(); prevSlide(); }
+        if (e.key === "f" || e.key === "F") toggleFullscreen();
+      });
+
+      document.getElementById("deck").addEventListener("click", function (e) {
+        if (e.target.closest("button, .quiz-opt, a, input, select, textarea, .agenda-row, [data-noclick]")) return;
+        const pct = e.clientX / window.innerWidth;
+        if (pct < 0.15) prevSlide();
+        else if (pct > 0.85) handleForward();
+      });
+
+      function handleForward() {
+        const active = slides[current];
+        const list = active.querySelector(".reveal-list");
+        if (list) {
+          const hidden = list.querySelectorAll("li:not(.shown)");
+          if (hidden.length > 0) {
+            hidden[0].classList.add("shown");
+            const hint = active.querySelector(".reveal-hint");
+            if (hint && hidden.length === 1) hint.style.opacity = "0";
+            return;
+          }
+        }
+        nextSlide();
+      }
+
+      function initReveal(slide) {
+        const list = slide.querySelector(".reveal-list");
+        if (!list) return;
+        list.querySelectorAll("li").forEach((li) => li.classList.remove("shown"));
+        const hint = slide.querySelector(".reveal-hint");
+        if (hint) hint.style.opacity = "1";
+      }
+
+      slides[0].classList.add("active");
+      document.getElementById("progress").style.width = `${(1 / total) * 100}%`;
+
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
+        else document.exitFullscreen().catch(() => {});
+      }
+
+      const timerState = {};
+      function startTimer(id, minutes) {
+        if (timerState[id]?.interval) return;
+        if (!timerState[id]) timerState[id] = { remaining: minutes * 60 };
+        timerState[id].interval = setInterval(() => {
+          timerState[id].remaining--;
+          const el = document.getElementById(id);
+          if (!el) return;
+          if (timerState[id].remaining <= 0) {
+            clearInterval(timerState[id].interval);
+            timerState[id].interval = null;
+            el.textContent = "00:00";
+            el.style.color = "#ff5f56";
+            return;
+          }
+          const m = Math.floor(timerState[id].remaining / 60).toString().padStart(2, "0");
+          const s = (timerState[id].remaining % 60).toString().padStart(2, "0");
+          el.textContent = `${m}:${s}`;
+          if (timerState[id].remaining <= 60) el.style.color = "#febc2e";
+        }, 1000);
+      }
+      function resetTimer(id, minutes) {
+        if (timerState[id]?.interval) {
+          clearInterval(timerState[id].interval);
+          timerState[id].interval = null;
+        }
+        timerState[id] = { remaining: minutes * 60 };
+        const el = document.getElementById(id);
+        if (el) {
+          el.textContent = minutes.toString().padStart(2, "0") + ":00";
+          el.style.color = "";
+        }
+      }
+    </script>
+  </body>
+</html>

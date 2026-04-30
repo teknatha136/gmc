@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Class Notes: Routing · APIs · Forms</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue:    #0066B2;
+      --indigo:  #001F35;
+      --amber:   #247EC1;
+      --green:   #7BC950;
+      --purple:  #4796D1;
+      --red:     #D80032;
+      --text:    #1B2021;
+      --muted:   #7B7C7F;
+      --faint:   #9CA3AF;
+      --surf:    #ffffff;
+      --bg:      #F9F9F9;
+      --border:  #EDEDED;
+      --border-l:#F5F5F5;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Open Sans', 'Aptos', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.65;
+      font-size: 17px;
+    }
+    @media (max-width: 640px) { body { font-size: 16px; } }
+
+    .hero {
+      background: var(--surf);
+      border-bottom: 1px solid var(--border);
+      padding: 4rem 2rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 5px;
+      background: linear-gradient(135deg, #0067A3, #002D72);
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 0.35rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); }
+    .hero h1 {
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero h1 .c-blue   { color: var(--blue); }
+    .hero h1 .c-indigo { color: var(--indigo); }
+    .hero h1 .c-amber  { color: #1C5B8C; }
+    .hero h1 .c-purple { color: var(--purple); }
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 2rem;
+      max-width: 640px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero-tags {
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+    .hero-tag {
+      padding: 0.3rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .tag-blue   { background: #E6F0F8; color: var(--blue); }
+    .tag-indigo { background: #E6E9EC; color: var(--indigo); }
+    .tag-green  { background: #F0F7EC; color: var(--green); }
+    .tag-amber  { background: #EBF0F7; color: #1C5B8C; }
+    .tag-purple { background: #ECF2F8; color: var(--purple); }
+
+    .container { max-width: 1040px; margin: 0 auto; padding: 0 2rem 6rem; }
+
+    .toc {
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem 2rem;
+      margin: 2.5rem 0;
+    }
+    .toc h3 {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--faint);
+      margin-bottom: 1.25rem;
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.4rem 2rem;
+    }
+    .toc-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.875rem;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.3rem 0;
+      border-bottom: 1px solid var(--border-l);
+      transition: color 0.15s;
+    }
+    .toc-item:hover { color: var(--indigo); }
+    .toc-item .toc-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+    .section-hd { padding: 3.5rem 0 1.5rem; }
+    .section-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0.9rem;
+      border-radius: 100px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+    .pill-blue   { background: #E6F0F8; color: var(--blue); }
+    .pill-indigo { background: #E6E9EC; color: var(--indigo); }
+    .pill-green  { background: #F0F7EC; color: var(--green); }
+    .pill-amber  { background: #EBF0F7; color: #1C5B8C; }
+    .pill-purple { background: #ECF2F8; color: var(--purple); }
+    .pill-red    { background: #F2E8EA; color: var(--red); }
+    .section-title {
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+      font-size: 2rem;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 0.4rem;
+    }
+    .section-desc { font-size: 0.95rem; color: var(--muted); }
+
+    .topic {
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem 2.25rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .topic::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 4px;
+      border-radius: 4px 0 0 4px;
+    }
+    .topic-blue::before   { background: var(--blue); }
+    .topic-indigo::before { background: var(--indigo); }
+    .topic-amber::before  { background: var(--amber); }
+    .topic-green::before  { background: var(--green); }
+    .topic-purple::before { background: var(--purple); }
+    .topic-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .explain {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+    }
+    .explain strong { color: var(--text); }
+    .explain a { color: var(--blue); }
+
+    .concepts { display: grid; gap: 0.9rem; margin-bottom: 1.25rem; }
+    .concepts-2 { grid-template-columns: repeat(2, 1fr); }
+    .concepts-3 { grid-template-columns: repeat(3, 1fr); }
+    .concept {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.1rem 1.25rem;
+    }
+    .concept h4 {
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .concept ul { list-style: none; display: flex; flex-direction: column; gap: 0.35rem; }
+    .concept ul li {
+      font-size: 0.83rem;
+      color: var(--muted);
+      padding-left: 1rem;
+      position: relative;
+      line-height: 1.5;
+    }
+    .concept ul li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--faint);
+      font-size: 0.72rem;
+      top: 0.15em;
+    }
+
+    .code-block {
+      background: #001F35;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+      font-family: 'Courier New', monospace;
+    }
+    .code-bar {
+      background: #0A2A45;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.4);
+    }
+    .code-bar .cb-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .code-body {
+      padding: 1.1rem 1.25rem;
+      font-size: 0.82rem;
+      line-height: 1.85;
+      color: rgba(255,255,255,0.85);
+      white-space: pre-wrap;
+      overflow-x: auto;
+    }
+    .code-body .ck { color: #7dd3fc; }
+    .code-body .cs { color: #86efac; }
+    .code-body .cn { color: #fde68a; }
+    .code-body .cc { color: rgba(255,255,255,0.35); font-style: italic; }
+    .code-body .cp { color: #c4b5fd; }
+    .code-body .cr { color: #fca5a5; }
+    .code-body .ci { color: #f0abfc; }
+    .code-body .ct { color: #fdba74; }
+    .code-body .ctag { color: #f472b6; }
+    .code-body .cattr { color: #fde68a; }
+
+    code { font-family: 'Courier New', monospace; background: var(--bg); padding: 0.1em 0.35em; border-radius: 4px; font-size: 0.9em; color: var(--indigo); }
+
+    .callout {
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      font-size: 0.85rem;
+      display: flex;
+      gap: 0.6rem;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      line-height: 1.55;
+    }
+    .callout .ci { font-size: 1rem; min-width: 1.2rem; flex-shrink: 0; }
+    .callout-blue  { background: #f0f7fc; border: 1px solid #B0D4E9; color: var(--muted); }
+    .callout-amber { background: #FFF8E6; border: 1px solid #F0D890; color: #664A00; }
+    .callout-red   { background: #F2E8EA; border: 1px solid #E0B5B9; color: #8B001E; }
+    .callout-green { background: #F0F7EC; border: 1px solid #B5DBA7; color: #2A4D14; }
+    .callout strong { color: var(--text); }
+    .callout-amber strong { color: #664A00; }
+    .callout-red strong { color: #8B001E; }
+    .callout-green strong { color: #2A4D14; }
+
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.25rem;
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .compare-table th {
+      background: #E6E9EC;
+      color: var(--indigo);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0.6rem 1rem;
+      text-align: left;
+    }
+    .compare-table td {
+      padding: 0.6rem 1rem;
+      font-size: 0.88rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+    .vbadge {
+      font-family: 'Courier New', monospace;
+      font-weight: 700;
+      padding: 0.15rem 0.55rem;
+      border-radius: 5px;
+      font-size: 0.78rem;
+      display: inline-block;
+    }
+    .vbadge.get  { background: #E6F0F8; color: var(--blue); }
+    .vbadge.post { background: #F0F7EC; color: var(--green); }
+    .vbadge.put  { background: #EBF0F7; color: #1C5B8C; }
+    .vbadge.del  { background: #F2E8EA; color: var(--red); }
+
+    .takeaway {
+      background: #F0F7EC;
+      border: 1px solid #B5DBA7;
+      border-radius: 12px;
+      padding: 1.1rem 1.3rem;
+      margin-top: 1.25rem;
+    }
+    .takeaway h4 {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #2A4D14;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 0.6rem;
+    }
+    .takeaway ul { list-style: none; display: flex; flex-direction: column; gap: 0.35rem; }
+    .takeaway ul li {
+      font-size: 0.85rem;
+      color: #3B5A22;
+      padding-left: 1.1rem;
+      position: relative;
+      line-height: 1.55;
+    }
+    .takeaway ul li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--green);
+      font-weight: 700;
+      font-size: 0.9rem;
+      top: 0;
+    }
+
+    .exercise {
+      background: var(--surf);
+      border: 2px dashed var(--border);
+      border-radius: 14px;
+      padding: 1.4rem 1.6rem;
+      margin-bottom: 1.1rem;
+    }
+    .exercise h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+    .exercise h4 .badge {
+      display: inline-block;
+      background: #E6F0F8;
+      color: var(--blue);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.15rem 0.55rem;
+      border-radius: 100px;
+      margin-right: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      vertical-align: middle;
+    }
+    .exercise p { font-size: 0.9rem; color: var(--muted); margin-bottom: 0.7rem; line-height: 1.65; }
+
+    .step-list {
+      list-style: none;
+      counter-reset: step;
+      padding: 0;
+      margin-bottom: 0.8rem;
+    }
+    .step-list li {
+      counter-increment: step;
+      position: relative;
+      padding: 0.6rem 0 0.6rem 2.6rem;
+      font-size: 0.92rem;
+      color: var(--text);
+      line-height: 1.6;
+      border-bottom: 1px solid var(--border-l);
+    }
+    .step-list li:last-child { border-bottom: none; }
+    .step-list li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0.55rem;
+      width: 1.9rem;
+      height: 1.9rem;
+      border-radius: 50%;
+      background: var(--blue);
+      color: white;
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .step-list li code {
+      background: var(--bg);
+      padding: 0.1em 0.4em;
+      border-radius: 4px;
+      color: var(--indigo);
+      font-size: 0.92em;
+    }
+
+    .summary {
+      background: linear-gradient(135deg, var(--indigo) 0%, #000D19 100%);
+      color: white;
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin: 3rem 0;
+      text-align: center;
+    }
+    .summary h2 {
+      font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 400;
+      margin-bottom: 0.4rem;
+    }
+    .summary p { font-size: 0.9rem; opacity: 0.75; margin-bottom: 1.75rem; }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.9rem;
+    }
+    .su-card {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 12px;
+      padding: 1.1rem;
+      text-align: left;
+    }
+    .su-card h4 { font-size: 0.88rem; font-weight: 700; margin-bottom: 0.4rem; opacity: 0.9; }
+    .su-card p  { font-size: 0.78rem; opacity: 0.65; line-height: 1.5; margin-bottom: 0; }
+
+    .footer {
+      background: var(--surf);
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--faint);
+    }
+    .footer strong { color: var(--muted); }
+
+    .map-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.9rem;
+      margin: 1.25rem 0;
+    }
+    .map-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.1rem;
+      text-align: center;
+    }
+    .map-card .mc-route {
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+    .map-card .mc-name { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .map-card .mc-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.4; }
+    .map-card.r1 { border-color: var(--blue); }
+    .map-card.r1 .mc-route { color: var(--blue); }
+    .map-card.r2 { border-color: var(--amber); }
+    .map-card.r2 .mc-route { color: #1C5B8C; }
+    .map-card.r3 { border-color: var(--green); }
+    .map-card.r3 .mc-route { color: var(--green); }
+
+    @media (max-width: 720px) {
+      .hero { padding: 2.5rem 1rem 1.75rem !important; }
+      .hero h1 { font-size: clamp(1.7rem, 7vw, 2.2rem) !important; }
+      .container { padding: 0 1rem 4rem !important; }
+      .toc-grid { grid-template-columns: 1fr !important; }
+      .concepts-2, .concepts-3, .summary-grid, .map-row { grid-template-columns: 1fr !important; }
+      .section-title { font-size: 1.5rem !important; }
+      .topic { padding: 1.4rem 1.25rem !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <img src="../assets/SELISE_Logo_Primary.png" alt="SELISE Digital Platforms" style="height: 48px; margin-bottom: 1rem; display: block; margin-left: auto; margin-right: auto;">
+  <div class="hero-badge">
+    <div class="dot"></div>
+    Pelsung · Dev Specialization · Classes 09 · 10 · 11
+  </div>
+  <h1>
+    <span class="c-blue">Routing</span> <span style="color: var(--faint); font-style:italic;">·</span>
+    <span class="c-amber">APIs</span> <span style="color: var(--faint); font-style:italic;">·</span>
+    <span class="c-purple">Forms</span>
+  </h1>
+  <p class="hero-sub">A 4-hour tour across the three pieces every modern web app needs. We build <strong>one notes app</strong> &mdash; three slices at a time &mdash; so you can <em>recognise the patterns</em> and use AI to fill in the syntax later.</p>
+  <div class="hero-tags">
+    <span class="hero-tag tag-blue">react-router-dom</span>
+    <span class="hero-tag tag-amber">3-state pattern</span>
+    <span class="hero-tag tag-amber">REST verbs</span>
+    <span class="hero-tag tag-purple">react-hook-form</span>
+    <span class="hero-tag tag-purple">zod</span>
+  </div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div class="container">
+
+  <!-- ===== TOC ===== -->
+  <div class="toc">
+    <h3>What's In These Notes</h3>
+    <div class="toc-grid">
+      <a class="toc-item" href="#mindset">
+        <span class="toc-dot" style="background:var(--indigo)"></span>
+        🧠 The mindset for today
+      </a>
+      <a class="toc-item" href="#the-app">
+        <span class="toc-dot" style="background:var(--indigo)"></span>
+        🗂️ The notes app we'll build
+      </a>
+      <a class="toc-item" href="#routing">
+        <span class="toc-dot" style="background:var(--blue)"></span>
+        🧭 Block 1 · Routing &amp; Navigation
+      </a>
+      <a class="toc-item" href="#apis">
+        <span class="toc-dot" style="background:var(--amber)"></span>
+        🔌 Block 2 · Working with APIs
+      </a>
+      <a class="toc-item" href="#forms">
+        <span class="toc-dot" style="background:var(--purple)"></span>
+        📝 Block 3 · Forms &amp; Validation
+      </a>
+      <a class="toc-item" href="#tying-together">
+        <span class="toc-dot" style="background:var(--indigo)"></span>
+        🪢 Tying it all together
+      </a>
+      <a class="toc-item" href="#practice">
+        <span class="toc-dot" style="background:var(--green)"></span>
+        🛠️ At-home practice
+      </a>
+      <a class="toc-item" href="#further">
+        <span class="toc-dot" style="background:var(--green)"></span>
+        📚 Going further
+      </a>
+    </div>
+  </div>
+
+  <!-- ===== MINDSET ===== -->
+  <div id="mindset" class="section-hd">
+    <span class="section-pill pill-indigo">Section 00 · Mindset</span>
+    <h2 class="section-title">Aware today · fluent later</h2>
+    <p class="section-desc">Three big topics in one day. Aim to recognise the patterns &mdash; not memorise the syntax.</p>
+  </div>
+
+  <div class="topic topic-indigo">
+    <p class="explain">
+      We're touring three different topics, and any one of them could be a full week of training. The plan today is different: <strong>we just want you to know what's possible and what to reach for.</strong>
+    </p>
+    <p class="explain">
+      In your own time &mdash; with the homework prompts at the end and Claude Code as a partner &mdash; you'll get fluent. Today, focus on understanding what each tool <em>does</em> and <em>why</em> it exists. The exact syntax is one search away.
+    </p>
+    <div class="callout callout-blue">
+      <span class="ci">💡</span>
+      <div><strong>How to read these notes:</strong> Read once today after class to fix the patterns in your head. Re-read tomorrow when you start practising. The code blocks are copy-paste-ready.</div>
+    </div>
+  </div>
+
+  <!-- ===== THE APP ===== -->
+  <div id="the-app" class="section-hd">
+    <span class="section-pill pill-indigo">Section 0.5 · The app</span>
+    <h2 class="section-title">The notes app we'll build</h2>
+    <p class="section-desc">One app. Three routes. Public API. Real form. All three blocks plug into each other.</p>
+  </div>
+
+  <div class="topic topic-indigo">
+    <p class="explain">
+      Throughout the session we build the same simple app &mdash; a <strong>notes app</strong> with three pages. We use <a href="https://jsonplaceholder.typicode.com/" target="_blank" rel="noopener">JSONPlaceholder</a> as a free public API (you've seen it before in the React Practice Day).
+    </p>
+    <div class="map-row">
+      <div class="map-card r1">
+        <div class="mc-route">/notes</div>
+        <div class="mc-name">List of notes</div>
+        <div class="mc-desc">GET all notes. Loading + error + data states.</div>
+      </div>
+      <div class="map-card r2">
+        <div class="mc-route">/notes/:id</div>
+        <div class="mc-name">Note detail</div>
+        <div class="mc-desc">GET one note by id from the URL. <code>useParams()</code>.</div>
+      </div>
+      <div class="map-card r3">
+        <div class="mc-route">/notes/new</div>
+        <div class="mc-name">Create note</div>
+        <div class="mc-desc">Form → POST → redirect to detail. zod-validated.</div>
+      </div>
+    </div>
+    <p class="explain">
+      <strong>Stack:</strong> React + Vite + TypeScript, Tailwind, <code>react-router-dom</code>, <code>react-hook-form</code>, <code>zod</code>, <code>@hookform/resolvers</code>.
+    </p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- ===== BLOCK 1 · ROUTING ===== -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div id="routing" class="section-hd">
+    <span class="section-pill pill-blue">Block 1 · 50 minutes</span>
+    <h2 class="section-title">🧭 Routing &amp; Navigation</h2>
+    <p class="section-desc">Multiple URLs in a single-page app. The library: <code>react-router-dom</code>.</p>
+  </div>
+
+  <!-- WHY -->
+  <div class="topic topic-blue">
+    <h3 class="topic-title">🤔 Why routing exists</h3>
+    <p class="explain">
+      A React app is a <strong>single-page application (SPA)</strong>. The server hands the browser one HTML file and a bundle of JavaScript. JS then draws everything on screen. There's no "second page" the way there was in old PHP / multi-page sites.
+    </p>
+    <p class="explain">
+      So how do we get multiple "pages" with different URLs &mdash; a list page, a detail page, a settings page? We <strong>fake it</strong>. JavaScript watches the URL and swaps which component is rendered. That's all routing is.
+    </p>
+    <div class="concepts concepts-2">
+      <div class="concept">
+        <h4 style="color: var(--red);">😩 Without routing</h4>
+        <ul>
+          <li>One giant component with <code>useState('list' | 'detail' | 'new')</code></li>
+          <li>Browser back / forward buttons reload the whole app</li>
+          <li>You can't share a link to a specific note</li>
+          <li>Refreshing the page sends you back to the start</li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4 style="color: var(--green);">😎 With routing</h4>
+        <ul>
+          <li>The URL <em>is</em> the source of truth for what's on screen</li>
+          <li>Back / forward / refresh just work</li>
+          <li>Links are shareable &mdash; <code>/notes/42</code> opens note 42</li>
+          <li>Each "page" is its own component file</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSTALL & SHELL -->
+  <div class="topic topic-blue">
+    <h3 class="topic-title">📦 Install &amp; the 3 building blocks</h3>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">Terminal</span></div>
+<div class="code-body"><span class="ck">npm</span> install react-router-dom</div>
+    </div>
+    <p class="explain">
+      Three things from the library, used together:
+    </p>
+    <div class="concepts concepts-3">
+      <div class="concept">
+        <h4>🌍 BrowserRouter</h4>
+        <ul>
+          <li>Wraps your whole app once</li>
+          <li>Watches the URL bar</li>
+          <li>Goes near the root, in <code>main.tsx</code></li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4>🔀 Routes</h4>
+        <ul>
+          <li>Like a giant switch statement</li>
+          <li>Picks the first matching <code>&lt;Route&gt;</code></li>
+        </ul>
+      </div>
+      <div class="concept">
+        <h4>🎯 Route</h4>
+        <ul>
+          <li>One path → one component</li>
+          <li><code>path="/notes/:id"</code> with the colon for params</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">main.tsx</span></div>
+<div class="code-body"><span class="cp">import</span> { <span class="cr">BrowserRouter</span>, <span class="cr">Routes</span>, <span class="cr">Route</span> } <span class="cp">from</span> <span class="cs">"react-router-dom"</span>;
+<span class="cp">import</span> <span class="cr">NotesList</span>  <span class="cp">from</span> <span class="cs">"./pages/notes-list"</span>;
+<span class="cp">import</span> <span class="cr">NoteDetail</span> <span class="cp">from</span> <span class="cs">"./pages/note-detail"</span>;
+<span class="cp">import</span> <span class="cr">NoteNew</span>    <span class="cp">from</span> <span class="cs">"./pages/note-new"</span>;
+
+<span class="ck">createRoot</span>(<span class="cr">document</span>.<span class="ci">getElementById</span>(<span class="cs">"root"</span>)!).<span class="ci">render</span>(
+  <span class="ctag">&lt;BrowserRouter&gt;</span>
+    <span class="ctag">&lt;Routes&gt;</span>
+      <span class="ctag">&lt;Route</span> <span class="cattr">path</span>=<span class="cs">"/notes"</span>      <span class="cattr">element</span>={<span class="ctag">&lt;NotesList /&gt;</span>}  <span class="ctag">/&gt;</span>
+      <span class="ctag">&lt;Route</span> <span class="cattr">path</span>=<span class="cs">"/notes/new"</span>  <span class="cattr">element</span>={<span class="ctag">&lt;NoteNew /&gt;</span>}    <span class="ctag">/&gt;</span>
+      <span class="ctag">&lt;Route</span> <span class="cattr">path</span>=<span class="cs">"/notes/:id"</span>  <span class="cattr">element</span>={<span class="ctag">&lt;NoteDetail /&gt;</span>} <span class="ctag">/&gt;</span>
+    <span class="ctag">&lt;/Routes&gt;</span>
+  <span class="ctag">&lt;/BrowserRouter&gt;</span>
+);</div>
+    </div>
+    <div class="callout callout-amber">
+      <span class="ci">⚠️</span>
+      <div><strong>Order matters.</strong> List <code>/notes/new</code> <em>before</em> <code>/notes/:id</code>, otherwise React Router thinks "new" is an id. (Modern versions are smarter, but it's still a habit worth keeping.)</div>
+    </div>
+  </div>
+
+  <!-- LINK VS A -->
+  <div class="topic topic-blue">
+    <h3 class="topic-title">🔗 &lt;Link&gt;, never &lt;a&gt;</h3>
+    <p class="explain">
+      The browser's native <code>&lt;a href&gt;</code> reloads the page. That kills your SPA &mdash; React unmounts everything, the bundle reloads, your state is gone. Always use <code>&lt;Link&gt;</code> from <code>react-router-dom</code> inside your app.
+    </p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">links.tsx</span></div>
+<div class="code-body"><span class="cp">import</span> { <span class="cr">Link</span> } <span class="cp">from</span> <span class="cs">"react-router-dom"</span>;
+
+<span class="cc">// ❌ Wrong — full page reload</span>
+<span class="ctag">&lt;a</span> <span class="cattr">href</span>=<span class="cs">"/notes/42"</span><span class="ctag">&gt;</span>Open<span class="ctag">&lt;/a&gt;</span>
+
+<span class="cc">// ✓ Right — SPA navigation</span>
+<span class="ctag">&lt;Link</span> <span class="cattr">to</span>=<span class="cs">"/notes/42"</span><span class="ctag">&gt;</span>Open<span class="ctag">&lt;/Link&gt;</span></div>
+    </div>
+    <p class="explain">
+      For navigation menus where you want to highlight the current page, use <code>NavLink</code>:
+    </p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">nav-bar.tsx</span></div>
+<div class="code-body"><span class="cp">import</span> { <span class="cr">NavLink</span> } <span class="cp">from</span> <span class="cs">"react-router-dom"</span>;
+
+<span class="ctag">&lt;NavLink</span>
+  <span class="cattr">to</span>=<span class="cs">"/notes"</span>
+  <span class="cattr">className</span>={({ <span class="cr">isActive</span> }) =&gt;
+    <span class="cr">isActive</span> ? <span class="cs">"text-blue-600 font-bold"</span> : <span class="cs">"text-gray-600"</span>
+  }
+<span class="ctag">&gt;</span>All Notes<span class="ctag">&lt;/NavLink&gt;</span></div>
+    </div>
+    <div class="callout callout-blue">
+      <span class="ci">💡</span>
+      <div>You <em>can</em> still use <code>&lt;a href&gt;</code> for links to other websites (<code>https://...</code>). Just not for routes inside your own app.</div>
+    </div>
+  </div>
+
+  <!-- DYNAMIC ROUTES -->
+  <div class="topic topic-blue">
+    <h3 class="topic-title">🔢 Dynamic routes &amp; <code>useParams()</code></h3>
+    <p class="explain">
+      Real apps have URLs like <code>/notes/42</code>, <code>/users/bhuwan</code>, <code>/products/laptop-x1</code>. The variable bit (<code>:id</code>) is called a <strong>route parameter</strong>. You read it with the <code>useParams()</code> hook.
+    </p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">pages/note-detail.tsx</span></div>
+<div class="code-body"><span class="cp">import</span> { <span class="cr">useParams</span> } <span class="cp">from</span> <span class="cs">"react-router-dom"</span>;
+
+<span class="cp">export default function</span> <span class="ci">NoteDetail</span>() {
+  <span class="ck">const</span> { <span class="cr">id</span> } = <span class="ci">useParams</span>();
+  <span class="cc">// If URL is /notes/42, then id === "42" (always a string)</span>
+
+  <span class="ck">return</span> <span class="ctag">&lt;div&gt;</span>You're looking at note #{<span class="cr">id</span>}<span class="ctag">&lt;/div&gt;</span>;
+}</div>
+    </div>
+    <div class="callout callout-amber">
+      <span class="ci">⚠️</span>
+      <div><strong>Params are always strings.</strong> Even if your URL says <code>/notes/42</code>, <code>id</code> is the string <code>"42"</code>, not the number. If you need a number, do <code>Number(id)</code>.</div>
+    </div>
+    <p class="explain">
+      <strong>Why this matters today:</strong> in Block 2, we use this <code>id</code> as the input to our API call &mdash; <code>fetch(`/api/notes/${id}`)</code>. The URL feeds the data layer.
+    </p>
+  </div>
+
+  <!-- LAYOUTS -->
+  <div class="topic topic-blue">
+    <h3 class="topic-title">🪟 Layouts with <code>&lt;Outlet/&gt;</code></h3>
+    <p class="explain">
+      Most apps share a header / sidebar / footer across pages. You don't want to copy-paste the header into every page. The pattern: a <em>layout</em> component with a placeholder slot called <code>&lt;Outlet/&gt;</code>, and child routes that render into it.
+    </p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">layout.tsx</span></div>
+<div class="code-body"><span class="cp">import</span> { <span class="cr">Outlet</span>, <span class="cr">NavLink</span> } <span class="cp">from</span> <span class="cs">"react-router-dom"</span>;
+
+<span class="cp">export default function</span> <span class="ci">Layout</span>() {
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;div</span> <span class="cattr">className</span>=<span class="cs">"min-h-screen bg-gray-50"</span><span class="ctag">&gt;</span>
+      <span class="ctag">&lt;header</span> <span class="cattr">className</span>=<span class="cs">"border-b p-4 flex gap-4"</span><span class="ctag">&gt;</span>
+        <span class="ctag">&lt;NavLink</span> <span class="cattr">to</span>=<span class="cs">"/notes"</span><span class="ctag">&gt;</span>All notes<span class="ctag">&lt;/NavLink&gt;</span>
+        <span class="ctag">&lt;NavLink</span> <span class="cattr">to</span>=<span class="cs">"/notes/new"</span><span class="ctag">&gt;</span>+ New<span class="ctag">&lt;/NavLink&gt;</span>
+      <span class="ctag">&lt;/header&gt;</span>
+      <span class="ctag">&lt;main</span> <span class="cattr">className</span>=<span class="cs">"p-6 max-w-3xl mx-auto"</span><span class="ctag">&gt;</span>
+        <span class="ctag">&lt;Outlet</span> <span class="ctag">/&gt;</span>  <span class="cc">{/* child routes render here */}</span>
+      <span class="ctag">&lt;/main&gt;</span>
+    <span class="ctag">&lt;/div&gt;</span>
+  );
+}</div>
+    </div>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">main.tsx · using nested routes</span></div>
+<div class="code-body"><span class="ctag">&lt;Routes&gt;</span>
+  <span class="ctag">&lt;Route</span> <span class="cattr">element</span>={<span class="ctag">&lt;Layout /&gt;</span>}<span class="ctag">&gt;</span>
+    <span class="ctag">&lt;Route</span> <span class="cattr">path</span>=<span class="cs">"/notes"</span>      <span class="cattr">element</span>={<span class="ctag">&lt;NotesList/&gt;</span>}  <span class="ctag">/&gt;</span>
+    <span class="ctag">&lt;Route</span> <span class="cattr">path</span>=<span class="cs">"/notes/new"</span>  <span class="cattr">element</span>={<span class="ctag">&lt;NoteNew/&gt;</span>}    <span class="ctag">/&gt;</span>
+    <span class="ctag">&lt;Route</span> <span class="cattr">path</span>=<span class="cs">"/notes/:id"</span>  <span class="cattr">element</span>={<span class="ctag">&lt;NoteDetail/&gt;</span>} <span class="ctag">/&gt;</span>
+  <span class="ctag">&lt;/Route&gt;</span>
+<span class="ctag">&lt;/Routes&gt;</span></div>
+    </div>
+  </div>
+
+  <!-- USENAVIGATE -->
+  <div class="topic topic-blue">
+    <h3 class="topic-title">🚀 <code>useNavigate()</code> &mdash; redirect from code</h3>
+    <p class="explain">
+      <code>&lt;Link&gt;</code> handles user clicks. But sometimes you want to navigate from JavaScript &mdash; for example, after a form submits successfully, send the user to the new note's detail page. That's <code>useNavigate()</code>.
+    </p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">pages/note-new.tsx</span></div>
+<div class="code-body"><span class="cp">import</span> { <span class="cr">useNavigate</span> } <span class="cp">from</span> <span class="cs">"react-router-dom"</span>;
+
+<span class="cp">function</span> <span class="ci">NoteNew</span>() {
+  <span class="ck">const</span> <span class="cr">navigate</span> = <span class="ci">useNavigate</span>();
+
+  <span class="ck">async function</span> <span class="ci">handleSubmit</span>(<span class="cr">data</span>) {
+    <span class="ck">const</span> <span class="cr">res</span>     = <span class="cp">await</span> <span class="ci">fetch</span>(<span class="cs">"/api/notes"</span>, { ... });
+    <span class="ck">const</span> <span class="cr">created</span> = <span class="cp">await</span> <span class="cr">res</span>.<span class="ci">json</span>();
+    <span class="cr">navigate</span>(<span class="cs">`/notes/${</span><span class="cr">created</span>.<span class="cp">id</span><span class="cs">}`</span>);
+    <span class="cc">// User is now on the new note's detail page</span>
+  }
+}</div>
+    </div>
+    <p class="explain">
+      You can also pass <code>navigate(-1)</code> to go back, or <code>navigate('/login', { replace: true })</code> to replace the current entry in browser history (so back doesn't return to the protected page).
+    </p>
+  </div>
+
+  <!-- GUARDS -->
+  <div class="topic topic-blue">
+    <h3 class="topic-title">🛡️ Protected routes (route guards)</h3>
+    <p class="explain">
+      "If the user isn't logged in, send them to <code>/login</code>". The pattern is just a tiny wrapper component that checks auth and either renders its children or redirects.
+    </p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">routes/protected.tsx</span></div>
+<div class="code-body"><span class="cp">import</span> { <span class="cr">Navigate</span> } <span class="cp">from</span> <span class="cs">"react-router-dom"</span>;
+
+<span class="cp">export function</span> <span class="ci">Protected</span>({ <span class="cr">children</span> }) {
+  <span class="ck">const</span> <span class="cr">user</span> = <span class="ci">useCurrentUser</span>();        <span class="cc">// some auth hook you write</span>
+  <span class="ck">if</span> (!<span class="cr">user</span>) {
+    <span class="ck">return</span> <span class="ctag">&lt;Navigate</span> <span class="cattr">to</span>=<span class="cs">"/login"</span> <span class="cattr">replace</span> <span class="ctag">/&gt;</span>;
+  }
+  <span class="ck">return</span> <span class="cr">children</span>;
+}
+
+<span class="cc">// In your routes:</span>
+<span class="ctag">&lt;Route</span>
+  <span class="cattr">path</span>=<span class="cs">"/notes"</span>
+  <span class="cattr">element</span>={<span class="ctag">&lt;Protected&gt;</span><span class="ctag">&lt;NotesList/&gt;</span><span class="ctag">&lt;/Protected&gt;</span>}
+<span class="ctag">/&gt;</span></div>
+    </div>
+    <div class="callout callout-red">
+      <span class="ci">🚨</span>
+      <div><strong>Important:</strong> route guards on the <em>client</em> only hide the UI. They are not security. The actual data still must be protected by the API server &mdash; otherwise anyone can call the API directly. Frontend guards = good UX. Backend guards = real security.</div>
+    </div>
+  </div>
+
+  <div class="takeaway">
+    <h4>Block 1 takeaways</h4>
+    <ul>
+      <li><code>BrowserRouter</code> wraps once · <code>Routes</code> is the switch · <code>Route</code> is one URL → one component.</li>
+      <li>Use <code>&lt;Link&gt;</code>, never <code>&lt;a href&gt;</code>, inside the app &mdash; otherwise the page reloads.</li>
+      <li><code>useParams()</code> reads route params like <code>:id</code>. Always returns strings.</li>
+      <li>A layout with <code>&lt;Outlet/&gt;</code> lets you write the header / nav once.</li>
+      <li><code>useNavigate()</code> redirects from code. Use it after a successful action.</li>
+    </ul>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- ===== BLOCK 2 · APIS ===== -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div id="apis" class="section-hd">
+    <span class="section-pill pill-amber">Block 2 · 70 minutes</span>
+    <h2 class="section-title">🔌 Working with APIs</h2>
+    <p class="section-desc">Past basic <code>fetch</code> &mdash; into the production patterns.</p>
+  </div>
+
+  <!-- THE TRAP -->
+  <div class="topic topic-amber">
+    <h3 class="topic-title">😱 The "fire-and-forget" trap</h3>
+    <p class="explain">
+      You already know <code>fetch</code>. The naive way to use it in React looks like this:
+    </p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span style="margin-left:auto;">notes-list.tsx · 🚩 the bug everyone writes</span></div>
+<div class="code-body"><span class="cp">function</span> <span class="ci">NotesList</span>() {
+  <span class="ck">const</span> [<span class="cr">notes</span>, <span class="ci">setNotes</span>] = <span class="ci">useState</span>([]);
+
+  <span class="ci">useEffect</span>(() =&gt; {
+    <span class="ci">fetch</span>(<span class="cs">"/api/notes"</span>)
+      .<span class="ci">then</span>(<span class="cr">r</span> =&gt; <span class="cr">r</span>.<span class="ci">json</span>())
+      .<span class="ci">then</span>(<span class="ci">setNotes</span>);
+  }, []);
+
+  <span class="ck">return</span> <span class="cr">notes</span>.<span class="ci">map</span>(<span class="cr">n</span> =&gt; <span class="ctag">&lt;li&gt;</span>{<span class="cr">n</span>.<span class="cp">title</span>}<span class="ctag">&lt;/li&gt;</span>);
+}</div>
+    </div>
+    <p class="explain">What's wrong here?</p>
+    <ul style="padding-left: 1.4rem; color: var(--muted); line-height: 1.85; margin-bottom: 1rem;">
+      <li>The first 200ms shows an empty page &mdash; users think it's broken.</li>
+      <li>If the network fails, the user sees an empty list with no message.</li>
+      <li>If the API is slow, no spinner &mdash; users click again and again.</li>
+      <li>If the API returns a 404 or 500, <code>.json()</code> may explode silently with a confusing console error.</li>
+    </ul>
+  </div>
+
+  <!-- THREE STATES -->
+  <div class="topic topic-amber">
+    <h3 class="topic-title">🎯 The 3-state pattern</h3>
+    <p class="explain">
+      Every fetch in a UI has three possible states. You should render <em>all three</em> &mdash; never just the happy path.
+    </p>
+    <div class="concepts concepts-3">
+      <div class="concept" style="border-left: 3px solid var(--purple);">
+        <h4 style="color: var(--purple);">⏳ Loading</h4>
+        <ul>
+          <li>Initial state, while the request is in flight</li>
+          <li>Show a spinner, skeleton, or "Loading…" text</li>
+        </ul>
+      </div>
+      <div class="concept" style="border-left: 3px solid var(--red);">
+        <h4 style="color: var(--red);">⚠️ Error</h4>
+        <ul>
+          <li>Network failed or the server returned a bad code</li>
+          <li>Show a user-facing message; offer a retry</li>
+        </ul>
+      </div>
+      <div class="concept" style="border-left: 3px solid var(--green);">
+        <h4 style="color: var(--green);">✅ Data</h4>
+        <ul>
+          <li>The happy path &mdash; render the real list / detail</li>
+          <li>Always handle the empty-list case here</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">notes-list.tsx · ✓</span></div>
+<div class="code-body"><span class="cp">function</span> <span class="ci">NotesList</span>() {
+  <span class="ck">const</span> [<span class="cr">notes</span>, <span class="ci">setNotes</span>]       = <span class="ci">useState</span>&lt;<span class="ct">Note</span>[]&gt;([]);
+  <span class="ck">const</span> [<span class="cr">loading</span>, <span class="ci">setLoading</span>]   = <span class="ci">useState</span>(<span class="cp">true</span>);
+  <span class="ck">const</span> [<span class="cr">error</span>, <span class="ci">setError</span>]       = <span class="ci">useState</span>&lt;<span class="ct">string</span> | <span class="cp">null</span>&gt;(<span class="cp">null</span>);
+
+  <span class="ci">useEffect</span>(() =&gt; {
+    <span class="ci">fetch</span>(<span class="cs">"/api/notes"</span>)
+      .<span class="ci">then</span>(<span class="cr">r</span> =&gt; {
+        <span class="ck">if</span> (!<span class="cr">r</span>.<span class="cp">ok</span>) <span class="ck">throw</span> <span class="ck">new</span> <span class="ct">Error</span>(<span class="cs">"Failed to load notes"</span>);
+        <span class="ck">return</span> <span class="cr">r</span>.<span class="ci">json</span>();
+      })
+      .<span class="ci">then</span>(<span class="ci">setNotes</span>)
+      .<span class="ci">catch</span>(<span class="cr">e</span> =&gt; <span class="ci">setError</span>(<span class="cr">e</span>.<span class="cp">message</span>))
+      .<span class="ci">finally</span>(() =&gt; <span class="ci">setLoading</span>(<span class="cp">false</span>));
+  }, []);
+
+  <span class="ck">if</span> (<span class="cr">loading</span>) <span class="ck">return</span> <span class="ctag">&lt;p&gt;</span>Loading notes…<span class="ctag">&lt;/p&gt;</span>;
+  <span class="ck">if</span> (<span class="cr">error</span>)   <span class="ck">return</span> <span class="ctag">&lt;p</span> <span class="cattr">className</span>=<span class="cs">"text-red-600"</span><span class="ctag">&gt;</span>{<span class="cr">error</span>}<span class="ctag">&lt;/p&gt;</span>;
+  <span class="ck">if</span> (<span class="cr">notes</span>.<span class="cp">length</span> === <span class="cn">0</span>) <span class="ck">return</span> <span class="ctag">&lt;p&gt;</span>No notes yet.<span class="ctag">&lt;/p&gt;</span>;
+
+  <span class="ck">return</span> <span class="ctag">&lt;ul&gt;</span>{<span class="cr">notes</span>.<span class="ci">map</span>(<span class="cr">n</span> =&gt; <span class="ctag">&lt;li</span> <span class="cattr">key</span>={<span class="cr">n</span>.<span class="cp">id</span>}<span class="ctag">&gt;</span>{<span class="cr">n</span>.<span class="cp">title</span>}<span class="ctag">&lt;/li&gt;</span>)}<span class="ctag">&lt;/ul&gt;</span>;
+}</div>
+    </div>
+    <p class="explain">
+      Memorise the <em>shape</em>: three <code>useState</code>s, three early returns. <strong>This is 80% of working with APIs in React.</strong>
+    </p>
+  </div>
+
+  <!-- VERBS -->
+  <div class="topic topic-amber">
+    <h3 class="topic-title">🔤 HTTP verbs &mdash; same fetch, different method</h3>
+    <p class="explain">
+      <code>fetch</code> defaults to <code>GET</code>. For <code>POST</code>, <code>PUT</code>, or <code>DELETE</code> you pass an options object as the second argument.
+    </p>
+    <table class="compare-table">
+      <thead><tr><th>Method</th><th>What it does</th><th>Used for</th><th>Body?</th></tr></thead>
+      <tbody>
+        <tr><td><span class="vbadge get">GET</span></td><td>Read</td><td>Load notes list, load one note</td><td>No</td></tr>
+        <tr><td><span class="vbadge post">POST</span></td><td>Create</td><td>Submit a new note</td><td>Yes (JSON)</td></tr>
+        <tr><td><span class="vbadge put">PUT</span></td><td>Update (replace)</td><td>Edit an existing note</td><td>Yes (JSON)</td></tr>
+        <tr><td><span class="vbadge del">DELETE</span></td><td>Remove</td><td>Delete a note</td><td>No</td></tr>
+      </tbody>
+    </table>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">create-note.ts · POST in fetch</span></div>
+<div class="code-body"><span class="ck">const</span> <span class="cr">res</span> = <span class="cp">await</span> <span class="ci">fetch</span>(<span class="cs">"/api/notes"</span>, {
+  <span class="cp">method</span>: <span class="cs">"POST"</span>,                              <span class="cc">// 1. set the verb</span>
+  <span class="cp">headers</span>: { <span class="cs">"Content-Type"</span>: <span class="cs">"application/json"</span> }, <span class="cc">// 2. tell the server it's JSON</span>
+  <span class="cp">body</span>: <span class="cr">JSON</span>.<span class="ci">stringify</span>({                       <span class="cc">// 3. body must be a STRING</span>
+    <span class="cp">title</span>: <span class="cs">"Class 09 notes"</span>,
+    <span class="cp">body</span>:  <span class="cs">"Routing, APIs, forms…"</span>,
+  }),
+});
+
+<span class="ck">const</span> <span class="cr">created</span> = <span class="cp">await</span> <span class="cr">res</span>.<span class="ci">json</span>();
+<span class="cc">// → { id: 101, title: "Class 09 notes", body: "..." }</span></div>
+    </div>
+    <div class="callout callout-amber">
+      <span class="ci">⚠️</span>
+      <div><strong>Body must be a string.</strong> Never pass a JS object directly. Always wrap it in <code>JSON.stringify(...)</code>. And the matching <code>Content-Type: application/json</code> header tells the server how to parse it.</div>
+    </div>
+  </div>
+
+  <!-- AUTH -->
+  <div class="topic topic-amber">
+    <h3 class="topic-title">🔐 Auth &mdash; just a header</h3>
+    <p class="explain">
+      Modern APIs hand you a <strong>token</strong> after a successful login (often a long random-looking string called a JWT). You attach it to every request as the <code>Authorization</code> header.
+    </p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">authed-fetch.ts</span></div>
+<div class="code-body"><span class="ck">const</span> <span class="cr">token</span> = <span class="ci">localStorage</span>.<span class="ci">getItem</span>(<span class="cs">"auth_token"</span>);
+
+<span class="ck">const</span> <span class="cr">res</span> = <span class="cp">await</span> <span class="ci">fetch</span>(<span class="cs">"/api/notes"</span>, {
+  <span class="cp">headers</span>: {
+    <span class="cs">"Content-Type"</span>:  <span class="cs">"application/json"</span>,
+    <span class="cs">"Authorization"</span>: <span class="cs">`Bearer ${</span><span class="cr">token</span><span class="cs">}`</span>,  <span class="cc">// ← the magic string</span>
+  },
+});
+
+<span class="ck">if</span> (<span class="cr">res</span>.<span class="cp">status</span> === <span class="cn">401</span>) {
+  <span class="cc">// token is missing or expired → send to /login</span>
+}
+<span class="ck">if</span> (<span class="cr">res</span>.<span class="cp">status</span> === <span class="cn">403</span>) {
+  <span class="cc">// authenticated, but not allowed → show "no permission"</span>
+}</div>
+    </div>
+  </div>
+
+  <!-- ENV VARS -->
+  <div class="topic topic-amber">
+    <h3 class="topic-title">🗝️ Where API keys live</h3>
+    <p class="explain">
+      Hard-coding API keys in your code is a classic mistake. They end up in your git history, on GitHub, and in your shipped JS bundle. Use environment variables instead.
+    </p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">.env.local · NOT committed to git</span></div>
+<div class="code-body"><span class="cr">VITE_API_URL</span>=https://api.example.com
+<span class="cr">VITE_PUBLIC_KEY</span>=pk_live_abc123</div>
+    </div>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">api.ts · using env vars</span></div>
+<div class="code-body"><span class="ck">const</span> <span class="cr">apiUrl</span> = <span class="cp">import</span>.<span class="cp">meta</span>.<span class="cp">env</span>.<span class="cr">VITE_API_URL</span>;
+<span class="ck">const</span> <span class="cr">res</span>    = <span class="cp">await</span> <span class="ci">fetch</span>(<span class="cs">`${</span><span class="cr">apiUrl</span><span class="cs">}/notes`</span>);</div>
+    </div>
+    <div class="callout callout-red">
+      <span class="ci">🚨</span>
+      <div><strong>Frontend env vars are NOT secret.</strong> Anything in your bundle ships to the browser, where any user can read it. Only put <em>public</em> keys (like Stripe publishable keys, public API endpoints) in frontend env. Real secrets &mdash; database passwords, private API keys &mdash; live on the server.</div>
+    </div>
+    <p class="explain">
+      Make sure <code>.env.local</code> is in your <code>.gitignore</code>. Vite already does this by default. In Vite, frontend env vars must start with <code>VITE_</code> to be exposed to your code.
+    </p>
+  </div>
+
+  <!-- FETCH TRAP -->
+  <div class="topic topic-amber">
+    <h3 class="topic-title">🪤 The fetch trap &mdash; <code>res.ok</code></h3>
+    <p class="explain">
+      The most surprising fact about <code>fetch</code>: <strong>it does not throw on 4xx or 5xx responses.</strong> The promise <em>resolves</em>, even if the server returned 404 or 500. Only true network errors (no DNS, no connection) throw.
+    </p>
+    <p class="explain">You have to check <code>res.ok</code> yourself:</p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">safe-fetch.ts</span></div>
+<div class="code-body"><span class="ck">const</span> <span class="cr">res</span> = <span class="cp">await</span> <span class="ci">fetch</span>(<span class="cs">"/api/notes"</span>);
+
+<span class="ck">if</span> (!<span class="cr">res</span>.<span class="cp">ok</span>) {
+  <span class="cc">// Status is 4xx or 5xx — treat as an error</span>
+  <span class="ck">throw</span> <span class="ck">new</span> <span class="ct">Error</span>(<span class="cs">`API error: ${</span><span class="cr">res</span>.<span class="cp">status</span><span class="cs">} ${</span><span class="cr">res</span>.<span class="cp">statusText</span><span class="cs">}`</span>);
+}
+
+<span class="ck">const</span> <span class="cr">data</span> = <span class="cp">await</span> <span class="cr">res</span>.<span class="ci">json</span>();</div>
+    </div>
+    <p class="explain">
+      <code>res.ok</code> is <code>true</code> when the status is in the 200&ndash;299 range. For everything else, you need to throw or handle it explicitly.
+    </p>
+  </div>
+
+  <!-- USEFETCH -->
+  <div class="topic topic-amber">
+    <h3 class="topic-title">🪝 A custom hook: <code>useFetch</code></h3>
+    <p class="explain">
+      You'll write the 3-state pattern dozens of times. The DRY (don't-repeat-yourself) move is to wrap it in a custom hook.
+    </p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">hooks/use-fetch.ts</span></div>
+<div class="code-body"><span class="cp">import</span> { <span class="cr">useEffect</span>, <span class="cr">useState</span> } <span class="cp">from</span> <span class="cs">"react"</span>;
+
+<span class="cp">export function</span> <span class="ci">useFetch</span>&lt;<span class="ct">T</span>&gt;(<span class="cr">url</span>: <span class="ct">string</span>) {
+  <span class="ck">const</span> [<span class="cr">data</span>, <span class="ci">setData</span>]       = <span class="ci">useState</span>&lt;<span class="ct">T</span> | <span class="cp">null</span>&gt;(<span class="cp">null</span>);
+  <span class="ck">const</span> [<span class="cr">loading</span>, <span class="ci">setLoading</span>] = <span class="ci">useState</span>(<span class="cp">true</span>);
+  <span class="ck">const</span> [<span class="cr">error</span>, <span class="ci">setError</span>]     = <span class="ci">useState</span>&lt;<span class="ct">string</span> | <span class="cp">null</span>&gt;(<span class="cp">null</span>);
+
+  <span class="ci">useEffect</span>(() =&gt; {
+    <span class="ci">setLoading</span>(<span class="cp">true</span>);
+    <span class="ci">fetch</span>(<span class="cr">url</span>)
+      .<span class="ci">then</span>(<span class="cr">r</span> =&gt; {
+        <span class="ck">if</span> (!<span class="cr">r</span>.<span class="cp">ok</span>) <span class="ck">throw</span> <span class="ck">new</span> <span class="ct">Error</span>(<span class="cr">r</span>.<span class="cp">statusText</span>);
+        <span class="ck">return</span> <span class="cr">r</span>.<span class="ci">json</span>();
+      })
+      .<span class="ci">then</span>(<span class="ci">setData</span>)
+      .<span class="ci">catch</span>(<span class="cr">e</span> =&gt; <span class="ci">setError</span>(<span class="cr">e</span>.<span class="cp">message</span>))
+      .<span class="ci">finally</span>(() =&gt; <span class="ci">setLoading</span>(<span class="cp">false</span>));
+  }, [<span class="cr">url</span>]);
+
+  <span class="ck">return</span> { <span class="cr">data</span>, <span class="cr">loading</span>, <span class="cr">error</span> };
+}
+
+<span class="cc">// Use it in any component:</span>
+<span class="ck">const</span> { <span class="cr">data</span>, <span class="cr">loading</span>, <span class="cr">error</span> } = <span class="ci">useFetch</span>&lt;<span class="ct">Note</span>[]&gt;(<span class="cs">"/api/notes"</span>);</div>
+    </div>
+    <p class="explain">
+      Now every component that fetches data is one line. The pattern lives in one file. If you want to add retries, abort-on-unmount, or caching later, you change one place.
+    </p>
+  </div>
+
+  <!-- TANSTACK -->
+  <div class="topic topic-amber">
+    <h3 class="topic-title">🚀 A peek at production: TanStack Query</h3>
+    <p class="explain">
+      Once your app grows, your <code>useFetch</code> won't be enough. Real apps need:
+    </p>
+    <ul style="padding-left: 1.4rem; color: var(--muted); line-height: 1.8; margin-bottom: 1rem;">
+      <li><strong>Caching</strong> &mdash; don't re-fetch the same data twice</li>
+      <li><strong>Refetch on focus</strong> &mdash; user comes back to the tab? show fresh data</li>
+      <li><strong>Retries</strong> with backoff on transient failures</li>
+      <li><strong>Optimistic updates</strong> &mdash; show the user's change instantly, roll back if the server rejects</li>
+      <li><strong>Sharing data</strong> across components without prop-drilling</li>
+    </ul>
+    <p class="explain">
+      Don't build all this yourself &mdash; use a library. The industry default is <strong>TanStack Query</strong> (formerly React Query).
+    </p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">notes-list.tsx · with TanStack Query</span></div>
+<div class="code-body"><span class="cp">import</span> { <span class="cr">useQuery</span> } <span class="cp">from</span> <span class="cs">"@tanstack/react-query"</span>;
+
+<span class="cp">function</span> <span class="ci">NotesList</span>() {
+  <span class="ck">const</span> { <span class="cr">data</span>, <span class="cr">isLoading</span>, <span class="cr">error</span> } = <span class="ci">useQuery</span>({
+    <span class="cp">queryKey</span>: [<span class="cs">"notes"</span>],
+    <span class="cp">queryFn</span>:  () =&gt; <span class="ci">fetch</span>(<span class="cs">"/api/notes"</span>).<span class="ci">then</span>(<span class="cr">r</span> =&gt; <span class="cr">r</span>.<span class="ci">json</span>()),
+  });
+  <span class="cc">// You get caching, refetching, retries, deduping — all free.</span>
+}</div>
+    </div>
+    <div class="callout callout-blue">
+      <span class="ci">💡</span>
+      <div><strong>Today: see it. Later: learn it.</strong> When your <code>useFetch</code> isn't enough, TanStack Query is what you reach for. Don't worry about it for the first month or two of practice &mdash; the simple pattern is enough.</div>
+    </div>
+  </div>
+
+  <div class="takeaway">
+    <h4>Block 2 takeaways</h4>
+    <ul>
+      <li>Always render three states: <strong>loading</strong>, <strong>error</strong>, <strong>data</strong>.</li>
+      <li><code>res.ok</code> is your friend &mdash; <code>fetch</code> doesn't throw on 4xx/5xx.</li>
+      <li>POST/PUT need <code>method</code>, <code>Content-Type</code>, and <code>JSON.stringify</code>'d body.</li>
+      <li>Auth is a header: <code>Authorization: Bearer &lt;token&gt;</code>.</li>
+      <li>Secrets live in <code>.env</code> &mdash; and frontend env vars are NOT secret.</li>
+      <li>Wrap repeated patterns in custom hooks. When you outgrow them, reach for TanStack Query.</li>
+    </ul>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- ===== BLOCK 3 · FORMS ===== -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div id="forms" class="section-hd">
+    <span class="section-pill pill-purple">Block 3 · 70 minutes</span>
+    <h2 class="section-title">📝 Forms &amp; Validation</h2>
+    <p class="section-desc">Take input from users, trust nothing, show good errors. <code>react-hook-form</code> + <code>zod</code>.</p>
+  </div>
+
+  <!-- CONTROLLED RECAP -->
+  <div class="topic topic-purple">
+    <h3 class="topic-title">🎛️ Controlled inputs &mdash; quick recap</h3>
+    <p class="explain">
+      You saw this in classes 06 and 08. In React, the input's value is owned by component state &mdash; you bind <code>value</code> and <code>onChange</code>:
+    </p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">controlled-input.tsx</span></div>
+<div class="code-body"><span class="ck">const</span> [<span class="cr">title</span>, <span class="ci">setTitle</span>] = <span class="ci">useState</span>(<span class="cs">""</span>);
+
+<span class="ctag">&lt;input</span>
+  <span class="cattr">value</span>={<span class="cr">title</span>}
+  <span class="cattr">onChange</span>={<span class="cr">e</span> =&gt; <span class="ci">setTitle</span>(<span class="cr">e</span>.<span class="cp">target</span>.<span class="cp">value</span>)}
+  <span class="cattr">className</span>=<span class="cs">"border rounded p-2"</span>
+<span class="ctag">/&gt;</span></div>
+    </div>
+    <p class="explain">
+      This works for one input. The problem starts when your form has 5, 10, 15 fields with their own validation rules.
+    </p>
+  </div>
+
+  <!-- THE PAIN -->
+  <div class="topic topic-purple">
+    <h3 class="topic-title">😩 Why hand-rolled forms hurt</h3>
+    <p class="explain">
+      Imagine a registration form with 5 fields. Done by hand, you end up with:
+    </p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#ff5f56"></span><span style="margin-left:auto;">register-form.tsx · 🚩 boilerplate explosion</span></div>
+<div class="code-body"><span class="ck">const</span> [<span class="cr">name</span>, <span class="ci">setName</span>]         = <span class="ci">useState</span>(<span class="cs">""</span>);
+<span class="ck">const</span> [<span class="cr">email</span>, <span class="ci">setEmail</span>]       = <span class="ci">useState</span>(<span class="cs">""</span>);
+<span class="ck">const</span> [<span class="cr">password</span>, <span class="ci">setPassword</span>] = <span class="ci">useState</span>(<span class="cs">""</span>);
+<span class="ck">const</span> [<span class="cr">phone</span>, <span class="ci">setPhone</span>]       = <span class="ci">useState</span>(<span class="cs">""</span>);
+<span class="ck">const</span> [<span class="cr">cid</span>, <span class="ci">setCid</span>]           = <span class="ci">useState</span>(<span class="cs">""</span>);
+
+<span class="ck">const</span> [<span class="cr">errors</span>, <span class="ci">setErrors</span>]   = <span class="ci">useState</span>({});
+<span class="ck">const</span> [<span class="cr">touched</span>, <span class="ci">setTouched</span>] = <span class="ci">useState</span>({});
+
+<span class="cc">// + a validate() function with 5 if-statements
+// + onBlur handlers to mark "touched"
+// + a submit handler that re-validates everything
+// + reset / clear logic
+// + repeated for every form in your app</span></div>
+    </div>
+    <p class="explain">Multiply by 10 forms. This is why form libraries exist.</p>
+  </div>
+
+  <!-- RHF -->
+  <div class="topic topic-purple">
+    <h3 class="topic-title">🪝 react-hook-form &mdash; the form library most teams use</h3>
+    <p class="explain">
+      Three things to learn: <code>useForm</code>, <code>register</code>, <code>handleSubmit</code>. The library wires the inputs &mdash; you don't manage state per field.
+    </p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">note-new.tsx · with RHF, no validation yet</span></div>
+<div class="code-body"><span class="cp">import</span> { <span class="cr">useForm</span> } <span class="cp">from</span> <span class="cs">"react-hook-form"</span>;
+
+<span class="cp">function</span> <span class="ci">NoteNew</span>() {
+  <span class="ck">const</span> { <span class="cr">register</span>, <span class="cr">handleSubmit</span> } = <span class="ci">useForm</span>();
+
+  <span class="ck">const</span> <span class="cr">onSubmit</span> = (<span class="cr">data</span>) =&gt; <span class="cr">console</span>.<span class="ci">log</span>(<span class="cr">data</span>);
+
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;form</span> <span class="cattr">onSubmit</span>={<span class="ci">handleSubmit</span>(<span class="cr">onSubmit</span>)} <span class="cattr">className</span>=<span class="cs">"space-y-3"</span><span class="ctag">&gt;</span>
+      <span class="ctag">&lt;input</span> {...<span class="ci">register</span>(<span class="cs">"title"</span>)} <span class="cattr">placeholder</span>=<span class="cs">"Title"</span>
+             <span class="cattr">className</span>=<span class="cs">"border rounded p-2 w-full"</span> <span class="ctag">/&gt;</span>
+      <span class="ctag">&lt;textarea</span> {...<span class="ci">register</span>(<span class="cs">"body"</span>)} <span class="cattr">placeholder</span>=<span class="cs">"Body"</span>
+                <span class="cattr">className</span>=<span class="cs">"border rounded p-2 w-full"</span> <span class="ctag">/&gt;</span>
+      <span class="ctag">&lt;button</span> <span class="cattr">type</span>=<span class="cs">"submit"</span>
+              <span class="cattr">className</span>=<span class="cs">"bg-blue-600 text-white rounded p-2"</span><span class="ctag">&gt;</span>Save<span class="ctag">&lt;/button&gt;</span>
+    <span class="ctag">&lt;/form&gt;</span>
+  );
+}</div>
+    </div>
+    <p class="explain">
+      <strong>No <code>useState</code>. No <code>onChange</code>.</strong> The spread syntax <code>{...register("title")}</code> attaches the right props (ref, onChange, name, etc.) for you.
+    </p>
+    <div class="callout callout-blue">
+      <span class="ci">💡</span>
+      <div><strong>Why "uncontrolled" is faster:</strong> RHF uses refs instead of React state for input values. Each keystroke doesn't re-render the whole form. For a form with 20 inputs, this is a noticeable speed difference.</div>
+    </div>
+  </div>
+
+  <!-- ZOD -->
+  <div class="topic topic-purple">
+    <h3 class="topic-title">🛡️ zod &mdash; one schema, validation + types</h3>
+    <p class="explain">
+      You <em>could</em> write validation rules inline in <code>register("title", { required: true, minLength: 3 })</code>. But that scatters your rules across the JSX. <code>zod</code> describes the <em>shape</em> of valid data in one place.
+    </p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">schemas/note.ts</span></div>
+<div class="code-body"><span class="cp">import</span> { <span class="cr">z</span> } <span class="cp">from</span> <span class="cs">"zod"</span>;
+
+<span class="cp">export const</span> <span class="cr">noteSchema</span> = <span class="cr">z</span>.<span class="ci">object</span>({
+  <span class="cp">title</span>: <span class="cr">z</span>.<span class="ci">string</span>()
+    .<span class="ci">min</span>(<span class="cn">3</span>,   <span class="cs">"Title must be at least 3 characters"</span>)
+    .<span class="ci">max</span>(<span class="cn">100</span>, <span class="cs">"Title must be under 100 characters"</span>),
+  <span class="cp">body</span>:  <span class="cr">z</span>.<span class="ci">string</span>().<span class="ci">min</span>(<span class="cn">10</span>, <span class="cs">"Body is too short"</span>),
+  <span class="cp">tags</span>:  <span class="cr">z</span>.<span class="ci">array</span>(<span class="cr">z</span>.<span class="ci">string</span>()).<span class="ci">optional</span>(),
+});
+
+<span class="cp">export type</span> <span class="ct">Note</span> = <span class="cr">z</span>.<span class="ci">infer</span>&lt;<span class="cp">typeof</span> <span class="cr">noteSchema</span>&gt;;
+<span class="cc">// Note is { title: string; body: string; tags?: string[] }
+// One schema gives you BOTH validation AND TypeScript types.</span></div>
+    </div>
+    <p class="explain">
+      <code>z.infer&lt;typeof schema&gt;</code> turns your schema into a TypeScript type. So you write the rules once, and your code is type-checked against the same rules.
+    </p>
+  </div>
+
+  <!-- ZOD + RHF -->
+  <div class="topic topic-purple">
+    <h3 class="topic-title">🪢 Connecting zod and react-hook-form</h3>
+    <p class="explain">
+      The bridge is one line: <code>resolver: zodResolver(noteSchema)</code>. Now RHF uses your zod schema for validation.
+    </p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">Terminal</span></div>
+<div class="code-body"><span class="ck">npm</span> install react-hook-form zod @hookform/resolvers</div>
+    </div>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">note-new.tsx · the real version</span></div>
+<div class="code-body"><span class="cp">import</span> { <span class="cr">useForm</span> } <span class="cp">from</span> <span class="cs">"react-hook-form"</span>;
+<span class="cp">import</span> { <span class="cr">zodResolver</span> } <span class="cp">from</span> <span class="cs">"@hookform/resolvers/zod"</span>;
+<span class="cp">import</span> { <span class="cr">noteSchema</span>, <span class="ct">Note</span> } <span class="cp">from</span> <span class="cs">"./schemas/note"</span>;
+
+<span class="cp">function</span> <span class="ci">NoteNew</span>() {
+  <span class="ck">const</span> {
+    <span class="cr">register</span>,
+    <span class="cr">handleSubmit</span>,
+    <span class="cp">formState</span>: { <span class="cr">errors</span>, <span class="cr">isSubmitting</span> },
+  } = <span class="ci">useForm</span>&lt;<span class="ct">Note</span>&gt;({
+    <span class="cp">resolver</span>: <span class="ci">zodResolver</span>(<span class="cr">noteSchema</span>),
+  });
+
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;form</span> <span class="cattr">onSubmit</span>={<span class="ci">handleSubmit</span>(<span class="cr">onSubmit</span>)} <span class="cattr">className</span>=<span class="cs">"space-y-3"</span><span class="ctag">&gt;</span>
+      <span class="ctag">&lt;div&gt;</span>
+        <span class="ctag">&lt;input</span> {...<span class="ci">register</span>(<span class="cs">"title"</span>)}
+               <span class="cattr">className</span>=<span class="cs">"border rounded p-2 w-full"</span> <span class="ctag">/&gt;</span>
+        {<span class="cr">errors</span>.<span class="cp">title</span> &amp;&amp; (
+          <span class="ctag">&lt;p</span> <span class="cattr">className</span>=<span class="cs">"text-red-600 text-sm mt-1"</span><span class="ctag">&gt;</span>
+            {<span class="cr">errors</span>.<span class="cp">title</span>.<span class="cp">message</span>}
+          <span class="ctag">&lt;/p&gt;</span>
+        )}
+      <span class="ctag">&lt;/div&gt;</span>
+
+      <span class="ctag">&lt;button</span> <span class="cattr">type</span>=<span class="cs">"submit"</span> <span class="cattr">disabled</span>={<span class="cr">isSubmitting</span>}
+              <span class="cattr">className</span>=<span class="cs">"bg-blue-600 text-white rounded p-2 disabled:opacity-50"</span><span class="ctag">&gt;</span>
+        {<span class="cr">isSubmitting</span> ? <span class="cs">"Saving…"</span> : <span class="cs">"Save"</span>}
+      <span class="ctag">&lt;/button&gt;</span>
+    <span class="ctag">&lt;/form&gt;</span>
+  );
+}</div>
+    </div>
+    <p class="explain">
+      <code>errors.title</code> is filled in by zod with the message you wrote in the schema. <code>isSubmitting</code> is provided by RHF &mdash; perfect for disabling the button while the network request is in flight.
+    </p>
+  </div>
+
+  <div class="takeaway">
+    <h4>Block 3 takeaways</h4>
+    <ul>
+      <li>Hand-rolled forms produce a boilerplate explosion as fields grow.</li>
+      <li><code>react-hook-form</code>: <code>useForm</code>, <code>register</code>, <code>handleSubmit</code> &mdash; three things, no per-field state.</li>
+      <li><code>zod</code> describes the shape of valid data in one schema.</li>
+      <li><code>z.infer&lt;typeof schema&gt;</code> turns the schema into a TypeScript type for free.</li>
+      <li><code>zodResolver(schema)</code> connects RHF to zod &mdash; one line.</li>
+      <li><code>formState.isSubmitting</code> + button <code>disabled</code> = no double-submits.</li>
+    </ul>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- ===== TYING TOGETHER ===== -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div id="tying-together" class="section-hd">
+    <span class="section-pill pill-indigo">Section · Bringing it all home</span>
+    <h2 class="section-title">🪢 Tying it all together</h2>
+    <p class="section-desc">All three blocks meet in the create-note page.</p>
+  </div>
+
+  <div class="topic topic-indigo">
+    <p class="explain">
+      Here's the final <code>NoteNew</code> component. Watch how routing, APIs, and forms all show up:
+    </p>
+    <div class="code-block">
+      <div class="code-bar"><span class="cb-dot" style="background:#28c840"></span><span style="margin-left:auto;">pages/note-new.tsx · final version</span></div>
+<div class="code-body"><span class="cp">import</span> { <span class="cr">useNavigate</span> } <span class="cp">from</span> <span class="cs">"react-router-dom"</span>;       <span class="cc">// ← Block 1</span>
+<span class="cp">import</span> { <span class="cr">useForm</span> } <span class="cp">from</span> <span class="cs">"react-hook-form"</span>;             <span class="cc">// ← Block 3</span>
+<span class="cp">import</span> { <span class="cr">zodResolver</span> } <span class="cp">from</span> <span class="cs">"@hookform/resolvers/zod"</span>; <span class="cc">// ← Block 3</span>
+<span class="cp">import</span> { <span class="cr">noteSchema</span>, <span class="ct">Note</span> } <span class="cp">from</span> <span class="cs">"../schemas/note"</span>;
+
+<span class="cp">export default function</span> <span class="ci">NoteNew</span>() {
+  <span class="ck">const</span> <span class="cr">navigate</span> = <span class="ci">useNavigate</span>();
+
+  <span class="ck">const</span> { <span class="cr">register</span>, <span class="cr">handleSubmit</span>, <span class="cp">formState</span>: { <span class="cr">errors</span>, <span class="cr">isSubmitting</span> } } =
+    <span class="ci">useForm</span>&lt;<span class="ct">Note</span>&gt;({ <span class="cp">resolver</span>: <span class="ci">zodResolver</span>(<span class="cr">noteSchema</span>) });
+
+  <span class="ck">const</span> <span class="cr">onSubmit</span> = <span class="cp">async</span> (<span class="cr">data</span>: <span class="ct">Note</span>) =&gt; {
+    <span class="ck">const</span> <span class="cr">res</span> = <span class="cp">await</span> <span class="ci">fetch</span>(<span class="cs">"/api/notes"</span>, {            <span class="cc">// ← Block 2</span>
+      <span class="cp">method</span>: <span class="cs">"POST"</span>,
+      <span class="cp">headers</span>: { <span class="cs">"Content-Type"</span>: <span class="cs">"application/json"</span> },
+      <span class="cp">body</span>: <span class="cr">JSON</span>.<span class="ci">stringify</span>(<span class="cr">data</span>),
+    });
+    <span class="ck">if</span> (!<span class="cr">res</span>.<span class="cp">ok</span>) <span class="ck">return</span> <span class="ci">alert</span>(<span class="cs">"Save failed"</span>);
+
+    <span class="ck">const</span> <span class="cr">created</span> = <span class="cp">await</span> <span class="cr">res</span>.<span class="ci">json</span>();
+    <span class="cr">navigate</span>(<span class="cs">`/notes/${</span><span class="cr">created</span>.<span class="cp">id</span><span class="cs">}`</span>);                  <span class="cc">// ← Block 1</span>
+  };
+
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;form</span> <span class="cattr">onSubmit</span>={<span class="ci">handleSubmit</span>(<span class="cr">onSubmit</span>)} <span class="cattr">className</span>=<span class="cs">"space-y-3"</span><span class="ctag">&gt;</span>
+      <span class="ctag">&lt;input</span> {...<span class="ci">register</span>(<span class="cs">"title"</span>)}
+             <span class="cattr">className</span>=<span class="cs">"border rounded p-2 w-full"</span> <span class="ctag">/&gt;</span>
+      {<span class="cr">errors</span>.<span class="cp">title</span> &amp;&amp; <span class="ctag">&lt;p</span> <span class="cattr">className</span>=<span class="cs">"text-red-600 text-sm"</span><span class="ctag">&gt;</span>{<span class="cr">errors</span>.<span class="cp">title</span>.<span class="cp">message</span>}<span class="ctag">&lt;/p&gt;</span>}
+
+      <span class="ctag">&lt;textarea</span> {...<span class="ci">register</span>(<span class="cs">"body"</span>)}
+                <span class="cattr">className</span>=<span class="cs">"border rounded p-2 w-full"</span> <span class="ctag">/&gt;</span>
+      {<span class="cr">errors</span>.<span class="cp">body</span> &amp;&amp; <span class="ctag">&lt;p</span> <span class="cattr">className</span>=<span class="cs">"text-red-600 text-sm"</span><span class="ctag">&gt;</span>{<span class="cr">errors</span>.<span class="cp">body</span>.<span class="cp">message</span>}<span class="ctag">&lt;/p&gt;</span>}
+
+      <span class="ctag">&lt;button</span> <span class="cattr">type</span>=<span class="cs">"submit"</span> <span class="cattr">disabled</span>={<span class="cr">isSubmitting</span>}
+              <span class="cattr">className</span>=<span class="cs">"bg-blue-600 text-white rounded p-2"</span><span class="ctag">&gt;</span>
+        {<span class="cr">isSubmitting</span> ? <span class="cs">"Saving…"</span> : <span class="cs">"Save"</span>}
+      <span class="ctag">&lt;/button&gt;</span>
+    <span class="ctag">&lt;/form&gt;</span>
+  );
+}</div>
+    </div>
+    <p class="explain">
+      One screen, three concepts. <strong>Routing</strong> takes the user there and out again. <strong>API</strong> persists the data. <strong>Forms</strong> capture and validate it. This is the working triangle of every single CRUD app you'll ever build.
+    </p>
+  </div>
+
+  <!-- ===== SUMMARY ===== -->
+  <div class="summary">
+    <h2>Recap</h2>
+    <p>The three pieces that make a real app real</p>
+    <div class="summary-grid">
+      <div class="su-card">
+        <h4>🧭 Routing</h4>
+        <p>URLs map to screens. <code>BrowserRouter</code>, <code>Link</code>, <code>useParams</code>, <code>Outlet</code>, <code>useNavigate</code>.</p>
+      </div>
+      <div class="su-card">
+        <h4>🔌 APIs</h4>
+        <p>Three states, always: loading, error, data. Check <code>res.ok</code>. Auth = a header.</p>
+      </div>
+      <div class="su-card">
+        <h4>📝 Forms</h4>
+        <p>One zod schema · <code>react-hook-form</code> for state · <code>zodResolver</code> bridges them.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PRACTICE ===== -->
+  <div id="practice" class="section-hd">
+    <span class="section-pill pill-amber">At-home practice · ~60 minutes</span>
+    <h2 class="section-title">🛠️ Practice</h2>
+    <p class="section-desc">Fork the notes app from class. Pick one easier task and one stretch task.</p>
+  </div>
+
+  <div class="exercise">
+    <h4><span class="badge">Easier 1</span>Add an About page</h4>
+    <p>Add a new route <code>/about</code> that renders a static page describing the app. Add a <code>NavLink</code> for it in the layout's header. Make sure it shows up as "active" when you're on it.</p>
+    <ol class="step-list">
+      <li>Create <code>src/pages/about.tsx</code> with a simple page (just an <code>&lt;h1&gt;</code> and a paragraph).</li>
+      <li>Add a <code>&lt;Route path="/about" element={&lt;About/&gt;}/&gt;</code> inside your <code>&lt;Layout/&gt;</code> route block.</li>
+      <li>Add <code>&lt;NavLink to="/about"&gt;About&lt;/NavLink&gt;</code> in the header.</li>
+      <li>Style it with Tailwind &mdash; <code>text-blue-600 font-bold</code> for active, <code>text-gray-600</code> otherwise.</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4><span class="badge">Easier 2</span>Make the loading state look nicer</h4>
+    <p>Replace the plain "Loading…" text with a Tailwind spinner or skeleton. (Ask Claude Code: "show me a Tailwind skeleton loader for a list of cards".)</p>
+  </div>
+
+  <div class="exercise">
+    <h4><span class="badge" style="background:#ECF2F8;color:var(--purple);">Stretch 1</span>Add a tags field</h4>
+    <p>Extend the note schema with an optional <code>tags</code> array of strings. Update the form to accept a comma-separated input ("react, typescript, vite") and split it into an array before submitting.</p>
+    <ol class="step-list">
+      <li>In <code>schemas/note.ts</code>, add <code>tags: z.array(z.string()).optional()</code>.</li>
+      <li>In the form, register a <code>tagsInput</code> field as a string.</li>
+      <li>In <code>onSubmit</code>, split <code>data.tagsInput</code> by comma and trim each piece.</li>
+      <li>On the detail page, render each tag as a small Tailwind chip (<code>bg-blue-100 text-blue-700 rounded px-2 py-0.5</code>).</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4><span class="badge" style="background:#ECF2F8;color:var(--purple);">Stretch 2</span>Add a delete button</h4>
+    <p>On the detail page, add a "Delete note" button. On click, send a <code>DELETE</code> request to the API and navigate back to <code>/notes</code> on success.</p>
+    <ol class="step-list">
+      <li>Add a button on the detail page styled with red Tailwind (<code>bg-red-600 text-white rounded p-2</code>).</li>
+      <li>On click, call <code>fetch(`/api/notes/${id}`, { method: "DELETE" })</code>.</li>
+      <li>Check <code>res.ok</code>. If true, call <code>navigate("/notes")</code>.</li>
+      <li>Add a <code>window.confirm("Delete this note?")</code> guard so users don't delete by accident.</li>
+    </ol>
+    <div class="callout callout-amber">
+      <span class="ci">💡</span>
+      <div><strong>Note:</strong> JSONPlaceholder will <em>pretend</em> to delete &mdash; the response succeeds but the data isn't actually changed on their server. That's fine for practice. In a real app you'd use a backend you control.</div>
+    </div>
+  </div>
+
+  <div class="callout callout-green">
+    <span class="ci">🤖</span>
+    <div><strong>Use Claude Code as your pair partner.</strong> Don't memorise &mdash; recognise the patterns and let AI fill in the syntax. Good prompts: "Add a tags array to the zod schema and form, splitting a comma-separated input"; "Show me a Tailwind skeleton for a list of 3 cards while loading".</div>
+  </div>
+
+  <!-- ===== FURTHER ===== -->
+  <div id="further" class="section-hd">
+    <span class="section-pill pill-green">Going further</span>
+    <h2 class="section-title">📚 If you want more</h2>
+  </div>
+
+  <div class="topic topic-green">
+    <ul style="padding-left: 1.2rem; color: var(--muted); font-size: 0.92rem; line-height: 1.85;">
+      <li><strong>React Router docs</strong> &mdash; <a href="https://reactrouter.com/" target="_blank" rel="noopener">reactrouter.com</a>. The "Tutorial" is a great hands-on walkthrough that goes deeper than today.</li>
+      <li><strong>The fetch API on MDN</strong> &mdash; <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch" target="_blank" rel="noopener">Using fetch</a>. Authoritative reference.</li>
+      <li><strong>react-hook-form docs</strong> &mdash; <a href="https://react-hook-form.com/" target="_blank" rel="noopener">react-hook-form.com</a>. Especially the "Get Started" page.</li>
+      <li><strong>zod docs</strong> &mdash; <a href="https://zod.dev/" target="_blank" rel="noopener">zod.dev</a>. The basics page covers <em>everything</em> you'll need for a year.</li>
+      <li><strong>TanStack Query</strong> &mdash; <a href="https://tanstack.com/query/latest" target="_blank" rel="noopener">tanstack.com/query</a>. Worth a read once you're comfortable with the basic 3-state pattern.</li>
+      <li><strong>JSONPlaceholder</strong> &mdash; <a href="https://jsonplaceholder.typicode.com/" target="_blank" rel="noopener">the fake API</a> we used today. Pretends to support all REST verbs &mdash; great for practice.</li>
+      <li>Next class (<strong>Dev 12 · State Management</strong>) &mdash; when component-level state isn't enough, and how to know when you've outgrown a simple <code>useState</code>.</li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div class="footer">
+  <strong>SELISE × Pelsung — Dev Specialization · Classes 09 · 10 · 11</strong><br>
+  Routing · APIs · Forms — Generated for Cohort 3
+</div>
+
+</body>
+</html>
