@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Backlog Grooming Workshop — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      .backlog-card { background:white; border:2px solid var(--blue); border-radius:12px; padding:1rem 1.3rem; max-width:1000px; width:100%; }
+      .backlog-card .head { color:var(--muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.08em; font-weight:700; margin-bottom:0.4rem; font-family:'Bahnschrift','Segoe UI',sans-serif; }
+      .backlog-card ul { list-style:none; padding:0; }
+      .backlog-card li { padding:0.5rem 0.7rem; border-bottom:1px dashed var(--border); display:flex; gap:0.7rem; font-size:0.93rem; line-height:1.55; color:var(--text); }
+      .backlog-card li:last-child { border-bottom:none; }
+      .backlog-card li .id { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; min-width:42px; }
+      .backlog-card li .tag { font-size:0.7rem; padding:0.1rem 0.5rem; border-radius:4px; background:var(--bg); color:var(--muted); font-weight:600; align-self:flex-start; margin-left:auto; flex-shrink:0; }
+      .backlog-card li .tag.dup { background:#FEE9EC; color:var(--red); }
+      .backlog-card li .tag.vague { background:#FFF3D6; color:#8B6914; }
+      .backlog-card li .tag.epic { background:#E6F0F8; color:var(--blue); }
+      .backlog-card li .tag.dead { background:#EAEAEA; color:var(--muted); }
+      .backlog-card li .tag.solution { background:#F0E6F8; color:#7A3D9A; }
+
+      .rot-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:0.8rem; max-width:1100px; width:100%; }
+      @media (max-width: 900px){ .rot-grid { grid-template-columns: 1fr; } }
+      .rot { background:white; border:1px solid var(--border); border-top:4px solid var(--red); border-radius:10px; padding:0.85rem 1.1rem; }
+      .rot h6 { color:var(--red); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.3rem; }
+      .rot p { font-size:0.88rem; color:var(--text); line-height:1.6; }
+      .rot .eg { margin-top:0.3rem; padding-top:0.3rem; border-top:1px dashed var(--border); color:var(--muted); font-size:0.8rem; font-style:italic; }
+
+      .dor-card { background:white; border:2px dashed var(--blue); border-radius:14px; padding:1.1rem 1.4rem; max-width:920px; width:100%; }
+      .dor-card h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-bottom:0.6rem; display:flex; align-items:center; gap:0.5rem; }
+      .dor-card ol { padding-left:1.3rem; }
+      .dor-card li { font-size:0.96rem; line-height:1.85; color:var(--text); padding:0.15rem 0; }
+      .dor-card li strong { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; }
+      .dor-card .footnote { margin-top:0.7rem; padding-top:0.6rem; border-top:1px solid var(--border); color:var(--muted); font-size:0.85rem; font-style:italic; }
+
+      .activity-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:0.7rem; max-width:1150px; width:100%; }
+      @media (max-width: 900px){ .activity-grid { grid-template-columns: 1fr 1fr; } }
+      @media (max-width: 600px){ .activity-grid { grid-template-columns: 1fr; } }
+      .act { background:white; border:1px solid var(--border); border-top:4px solid var(--blue); border-radius:10px; padding:0.8rem 1rem; }
+      .act h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.98rem; margin-bottom:0.3rem; display:flex; align-items:center; gap:0.4rem; }
+      .act p { font-size:0.85rem; color:var(--text); line-height:1.6; }
+      .act .eg { margin-top:0.35rem; font-size:0.78rem; color:var(--muted); font-style:italic; }
+
+      .split-card { background:white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.3rem; max-width:1100px; width:100%; }
+      .split-card h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; margin-bottom:0.5rem; }
+      .split-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:0.8rem; }
+      @media (max-width: 820px){ .split-grid { grid-template-columns: 1fr; } }
+      .split { background:var(--bg); border-left:4px solid var(--blue); border-radius:8px; padding:0.65rem 0.9rem; }
+      .split h6 { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.2rem; }
+      .split p { font-size:0.86rem; color:var(--text); line-height:1.55; }
+      .split .ex { color:var(--muted); font-size:0.78rem; font-style:italic; margin-top:0.2rem; }
+
+      .demo-flow { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px){ .demo-flow { grid-template-columns: 1fr; } }
+      .demo-col { background:white; border:1px solid var(--border); border-radius:10px; padding:0.9rem 1.1rem; }
+      .demo-col.before { border-top:4px solid var(--red); }
+      .demo-col.after { border-top:4px solid var(--green); }
+      .demo-col h5 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.4rem; }
+      .demo-col.before h5 { color:var(--red); }
+      .demo-col.after h5 { color:#3D7A3D; }
+      .demo-col pre { font-family:'Open Sans', sans-serif; font-size:0.85rem; background:var(--bg); border-radius:6px; padding:0.7rem 0.9rem; line-height:1.7; white-space:pre-wrap; color:var(--text); }
+      .demo-col p { font-size:0.85rem; color:var(--muted); margin-top:0.5rem; font-style:italic; }
+
+      .story-good { background:white; border:1px solid var(--border); border-left:5px solid var(--green); border-radius:10px; padding:0.85rem 1.2rem; margin-bottom:0.6rem; }
+      .story-good .lbl { color:var(--muted); font-size:0.74rem; text-transform:uppercase; letter-spacing:0.07em; font-weight:700; font-family:'Bahnschrift','Segoe UI',sans-serif; margin-bottom:0.3rem; }
+      .story-good .st { font-size:0.95rem; color:var(--text); line-height:1.7; font-style:italic; }
+      .story-good .st strong { color:var(--indigo); font-style:normal; }
+      .story-good ul.ac { padding-left:1.2rem; margin-top:0.4rem; }
+      .story-good ul.ac li { font-size:0.86rem; color:var(--text); line-height:1.55; }
+      .story-good .meta { display:flex; gap:0.6rem; flex-wrap:wrap; margin-top:0.5rem; padding-top:0.4rem; border-top:1px dashed var(--border); }
+      .story-good .meta span { font-size:0.75rem; padding:0.15rem 0.5rem; border-radius:4px; background:var(--bg); color:var(--muted); }
+      .story-good .meta .pass { background:#E5F5DC; color:#3D7A3D; font-weight:600; }
+      .story-good .meta .size { background:#E6F0F8; color:var(--blue); font-weight:600; }
+
+      .dor-check { background:white; border:1px solid var(--border); border-radius:10px; padding:0.7rem 1rem; max-width:520px; margin-top:0.5rem; }
+      .dor-check h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.85rem; margin-bottom:0.3rem; }
+      .dor-check ul { padding-left:1rem; list-style:none; }
+      .dor-check li { font-size:0.78rem; color:var(--text); line-height:1.6; }
+      .dor-check li::before { content:"✅ "; color:#3D7A3D; }
+
+      .handson-steps { display:grid; grid-template-columns: repeat(4, 1fr); gap:0.6rem; max-width:1150px; width:100%; }
+      @media (max-width: 900px){ .handson-steps { grid-template-columns: 1fr 1fr; } }
+      .step { background:white; border:1px solid var(--border); border-top:4px solid var(--amber); border-radius:10px; padding:0.7rem 0.9rem; }
+      .step .n { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.5rem; font-weight:700; line-height:1; }
+      .step h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-top:0.2rem; margin-bottom:0.2rem; }
+      .step p { font-size:0.83rem; color:var(--text); line-height:1.55; }
+
+      .moscow-mini { display:grid; grid-template-columns: repeat(4, 1fr); gap:0.5rem; max-width:1100px; width:100%; }
+      @media (max-width: 720px){ .moscow-mini { grid-template-columns: 1fr 1fr; } }
+      .mm { background:white; border:1px solid var(--border); border-top:4px solid var(--blue); border-radius:10px; padding:0.6rem 0.8rem; text-align:center; }
+      .mm .L { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.6rem; font-weight:700; line-height:1; }
+      .mm h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-top:0.2rem; }
+      .mm p { font-size:0.78rem; color:var(--muted); line-height:1.45; margin-top:0.2rem; }
+
+      .recap-card { background:white; border:1px solid var(--border); border-left:5px solid var(--amber); border-radius:10px; padding:0.85rem 1.2rem; max-width:1050px; width:100%; }
+      .recap-card h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.3rem; }
+      .recap-card p { font-size:0.92rem; color:var(--text); line-height:1.65; }
+      .recap-card .ref { color:var(--blue); font-size:0.82rem; font-style:italic; margin-top:0.3rem; }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>BA Vertical · Class 08</div></div>
+          <h1 class="display" style="color: var(--text)">
+            <span style="color: var(--indigo)">Backlog Grooming</span><br />
+            <span style="color: var(--blue)">Workshop</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted)">Refining a messy list of work into a clean, ready-to-build queue. Today is mostly hands-on.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">Grooming</span>
+            <span class="class-tag tag-blue">Refinement</span>
+            <span class="class-tag tag-blue">Definition of Ready</span>
+            <span class="class-tag tag-blue">Workshop</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 AGENDA -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 800px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem"><h2 class="heading">Session Journey · ~90 min</h2></div>
+          <div class="agenda-row" onclick="goTo(2)"><span class="ar-dot" style="background: var(--red)"></span><span class="ar-label">📦 What is a backlog?</span><span class="ar-badge" style="background:#FEE9EC;color:var(--red)">5 min</span></div>
+          <div class="agenda-row" onclick="goTo(4)"><span class="ar-dot" style="background: var(--red)"></span><span class="ar-label">🦠 Why backlogs rot</span><span class="ar-badge" style="background:#FEE9EC;color:var(--red)">5 min</span></div>
+          <div class="agenda-row" onclick="goTo(6)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">✅ Definition of Ready</span><span class="ar-badge" style="background:#E6F0F8;color:var(--indigo)">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(8)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🛠️ Six grooming activities</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(10)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">✂️ Splitting too-big stories</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(11)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🎬 Live grooming demo</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(14)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🧪 Hands-on · groom a real backlog</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">35 min</span></div>
+          <div class="agenda-row" onclick="goTo(19)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🎯 Wrap-up</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">5 min</span></div>
+        </div>
+      </div>
+
+      <!-- 3 HOOK -->
+      <div class="slide bg-dark" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> Hook</div>
+        <div class="center" style="max-width: 880px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎤 A familiar story</div>
+          <p class="disc-prompt" style="font-size:1.4rem; line-height:1.55">
+            Open the kitchen drawer.<br>
+            Three half-pencils, an old phone charger,<br>
+            a spoon you forgot you owned,<br>
+            two duplicate keys, and a paper bill from <span style="color:var(--amber)">2019</span>.
+          </p>
+          <p style="color: rgba(255,255,255,0.78); font-size: 1.05rem; margin-top: 1.5rem; line-height:1.7">
+            That drawer is what every team's <strong style="color:var(--amber)">backlog</strong> looks like<br>
+            after a few months — unless someone keeps grooming it.
+          </p>
+          <p style="color: rgba(255,255,255,0.55); font-size: 0.9rem; margin-top: 1rem; font-style:italic">Today we learn how to clean the drawer.</p>
+        </div>
+      </div>
+
+      <!-- 4 WHAT IS A BACKLOG -->
+      <div class="slide accent-blue bg-subtle" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> What is a backlog?</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:920px">
+            <h2 class="heading">A backlog is the prioritized list of <span style="color:var(--blue)">everything we MIGHT build</span> — always more than we can.</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:1.2rem; max-width:820px">It is not a to-do list. It is a wish list of features, fixes, and ideas — sorted top-to-bottom from "next sprint" to "maybe never". The team only builds the top.</p>
+          </div>
+          <div class="rot-grid" style="grid-template-columns:repeat(3,1fr); max-width:1100px">
+            <div class="rot" style="border-top-color:var(--blue)"><h6 style="color:var(--blue)">📝 Wedding planning list</h6><p>Venue, catering, costumes, music, transport, photography, gifts. 60 items. Wedding is in 8 weeks. Same idea: too much to do, not enough time.</p></div>
+            <div class="rot" style="border-top-color:var(--blue)"><h6 style="color:var(--blue)">🥟 Momo shop opening</h6><p>Find shop space, get licence, buy fryer, design menu, hire helper, source pork, social media. The opening date is fixed. The list is not.</p></div>
+            <div class="rot" style="border-top-color:var(--blue)"><h6 style="color:var(--blue)">📱 mBoB feature wishlist</h6><p>Bill payment, fund transfer, save favourites, dark mode, fingerprint login, group split. Bank cannot ship them all at once. Order matters.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 WHY BACKLOGS ROT -->
+      <div class="slide accent-blue" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span> Why backlogs rot</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Six things that turn a clean backlog into the kitchen drawer</h2></div>
+          <div class="rot-grid">
+            <div class="rot">
+              <h6>1. Duplicates</h6>
+              <p>The same idea added twice by two different people, in different words.</p>
+              <div class="eg">"Add favourites" + "Save frequent billers"</div>
+            </div>
+            <div class="rot">
+              <h6>2. Vague items</h6>
+              <p>One-line wishes nobody can act on. No role, no value, no acceptance criteria.</p>
+              <div class="eg">"Make app faster" / "Improve UX"</div>
+            </div>
+            <div class="rot">
+              <h6>3. Stale items</h6>
+              <p>Added a year ago for a need that no longer exists. Still sitting there.</p>
+              <div class="eg">"Add COVID-19 banner"</div>
+            </div>
+            <div class="rot">
+              <h6>4. No owner</h6>
+              <p>Nobody to clarify, decide, or sign off. The item just floats.</p>
+              <div class="eg">"???" in the requester column</div>
+            </div>
+            <div class="rot">
+              <h6>5. No acceptance criteria</h6>
+              <p>Item has a title and nothing else. Dev has nothing to build to.</p>
+              <div class="eg">"Forgot password screen" — that's it</div>
+            </div>
+            <div class="rot">
+              <h6>6. Way too big</h6>
+              <p>An item that's actually a whole project pretending to be one story.</p>
+              <div class="eg">"Build trainee portal"</div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">A rotting backlog slows the team — every sprint planning becomes a fight to find one ready story.</p>
+        </div>
+      </div>
+
+      <!-- 6 SECTION: DOR -->
+      <div class="slide bg-indigo" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part One</div>
+          <h1 class="display" style="color: white">Definition<br>of Ready</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">The checklist a story must pass before it enters a sprint.</p>
+        </div>
+        <div class="section-num" style="color: white">01</div>
+      </div>
+
+      <!-- 7 DOR CHECKLIST -->
+      <div class="slide accent-blue bg-subtle" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> Definition of Ready · the six checks</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:880px">
+            <h2 class="heading">Like a momo shop opening — you don't open the door until <span style="color:var(--blue)">six things</span> are done.</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:0.8rem">If a story fails any of these, it stays in the backlog. It does not enter the sprint.</p>
+          </div>
+          <div class="dor-card">
+            <h5>📋 A story is READY when…</h5>
+            <ol>
+              <li><strong>1. Story format</strong> — written as <em>"As a … I want … so that …"</em> with role, action, and value (BA #05).</li>
+              <li><strong>2. INVEST checked</strong> — Independent · Negotiable · Valuable · Estimable · Small · Testable (BA #05).</li>
+              <li><strong>3. Acceptance criteria written</strong> — at least 3 Given/When/Then statements (BA+QA #04).</li>
+              <li><strong>4. Dependencies known</strong> — what needs to happen first? Any blockers flagged?</li>
+              <li><strong>5. Estimable</strong> — the team has enough info to give a T-shirt size (S, M, L, XL).</li>
+              <li><strong>6. Designs attached</strong> — if the story has a UI, the wireframe or mockup is linked (BA #06).</li>
+            </ol>
+            <p class="footnote">Think of this like a wedding day checklist — venue booked, food confirmed, costumes ready, transport arranged. Miss one and the day suffers.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8 SECTION: GROOMING -->
+      <div class="slide bg-blue" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Two</div>
+          <h1 class="display" style="color: white">Six Grooming<br>Activities</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">What the BA actually does in a grooming meeting.</p>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- 9 SIX GROOMING ACTIVITIES -->
+      <div class="slide accent-blue bg-subtle" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> Six grooming activities</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Each grooming meeting · pick items off the top · run them through these six</h2></div>
+          <div class="activity-grid">
+            <div class="act">
+              <h6>🔍 1. Clarify ambiguity</h6>
+              <p>Talk to the requester. Replace vague words with concrete behaviours.</p>
+              <div class="eg">"Make it faster" → "Loads in under 3 seconds"</div>
+            </div>
+            <div class="act">
+              <h6>✅ 2. Add or refine AC</h6>
+              <p>Write 3–7 Given/When/Then. Cover happy path + edges. (BA+QA #04.)</p>
+              <div class="eg">Each AC = pass/fail · testable</div>
+            </div>
+            <div class="act">
+              <h6>✂️ 3. Split too-big stories</h6>
+              <p>If a story can't fit in one sprint, break it into smaller stories that can.</p>
+              <div class="eg">"Online leave request" → 3 leave-type stories</div>
+            </div>
+            <div class="act">
+              <h6>🔼 4. Re-prioritize</h6>
+              <p>Move newer-higher-value items up. Use MoSCoW. (BA+QA #05.)</p>
+              <div class="eg">Must · Should · Could · Won't</div>
+            </div>
+            <div class="act">
+              <h6>🗑️ 5. Remove dead items</h6>
+              <p>Delete duplicates, stale, abandoned. Don't be afraid to drop things.</p>
+              <div class="eg">"Add COVID-19 banner" → drop</div>
+            </div>
+            <div class="act">
+              <h6>📏 6. Estimate</h6>
+              <p>Team gives each top story a T-shirt size: S, M, L, or XL.</p>
+              <div class="eg">XL means split it before you build it</div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">Grooming is not a one-time event. Most teams do it weekly · 30–60 min · just enough to keep the top of the backlog ready.</p>
+        </div>
+      </div>
+
+      <!-- 10 SPLITTING TECHNIQUES -->
+      <div class="slide accent-blue" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> Splitting too-big stories</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Four ways to slice a too-big story into ready ones</h2></div>
+          <div class="split-card">
+            <h5>Story too big to fit a sprint? Pick a slice line:</h5>
+            <div class="split-grid">
+              <div class="split">
+                <h6>1. By workflow step</h6>
+                <p>Big = "user does the whole journey". Slice into one story per step.</p>
+                <div class="ex">Wedding RSVP → 1) view invite, 2) confirm attendance, 3) pick meal</div>
+              </div>
+              <div class="split">
+                <h6>2. By user type</h6>
+                <p>Different users need different versions. One story per user type.</p>
+                <div class="ex">Trainee portal login → 1) trainee, 2) trainer, 3) admin</div>
+              </div>
+              <div class="split">
+                <h6>3. By happy path vs alt</h6>
+                <p>Build the main flow first. Edge cases as separate stories.</p>
+                <div class="ex">Bill pay → 1) success, 2) insufficient balance, 3) timeout</div>
+              </div>
+              <div class="split">
+                <h6>4. By data variation</h6>
+                <p>Same flow, different data. One story per variation.</p>
+                <div class="ex">Online leave request → 1) sick, 2) annual, 3) maternity</div>
+              </div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">Rule of thumb: if a story would take more than 3–4 days to build, split it.</p>
+        </div>
+      </div>
+
+      <!-- 11 SECTION: LIVE DEMO -->
+      <div class="slide bg-indigo" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Three</div>
+          <h1 class="display" style="color: white">Live<br>Grooming Demo</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">One messy item · groomed in front of you · into two ready stories.</p>
+        </div>
+        <div class="section-num" style="color: white">03</div>
+      </div>
+
+      <!-- 12 DEMO BEFORE -->
+      <div class="slide accent-blue bg-subtle" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> Demo · BEFORE grooming</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">A messy backlog item from the GMC services portal</h2></div>
+          <div class="demo-flow" style="grid-template-columns: 1fr">
+            <div class="demo-col before">
+              <h5>❌ Raw item · just a title</h5>
+              <pre>BL-027 — "Online leave request system"
+
+Requested by: HR (someone)
+Priority:     High
+Acceptance:   (empty)
+Estimate:     —
+Designs:      —</pre>
+              <p>Problems: no story format · no role/value · vague scope · no AC · way too big · no owner · cannot estimate · cannot test.</p>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px"><strong>Trainer says:</strong> "Watch me run this through the six grooming activities."</p>
+        </div>
+      </div>
+
+      <!-- 13 DEMO AFTER -->
+      <div class="slide accent-blue" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> Demo · AFTER grooming</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="margin-bottom:0.3rem"><h2 class="heading">Split into 2 ready stories · AC written · DoR ticked · sized</h2></div>
+          <div style="max-width:1100px; width:100%">
+            <div class="story-good">
+              <div class="lbl">BL-027a · sliced by data variation (sick leave first)</div>
+              <p class="st">As a <strong>trainee</strong>, I want to <strong>submit a sick-leave request online</strong> so that <strong>I don't have to walk to the office when I'm unwell</strong>.</p>
+              <ul class="ac">
+                <li><strong>AC1:</strong> Given a logged-in trainee, when they fill in dates + reason and tap Submit, then a request is created and shown in their "My requests" list within 2 seconds.</li>
+                <li><strong>AC2:</strong> Given an empty reason field, when they tap Submit, then the system shows "Reason is required" and does not submit.</li>
+                <li><strong>AC3:</strong> Given a submitted request, when the trainer opens it, then they see trainee name, dates, reason, and Approve / Reject buttons.</li>
+              </ul>
+              <div class="meta">
+                <span class="size">Size · M</span>
+                <span class="pass">DoR ✓</span>
+                <span>Owner · HR (Sonam)</span>
+                <span>Designs · Figma link attached</span>
+              </div>
+            </div>
+            <div class="story-good">
+              <div class="lbl">BL-027b · annual leave (built next sprint)</div>
+              <p class="st">As a <strong>trainee</strong>, I want to <strong>submit an annual-leave request with my balance shown</strong> so that <strong>I can plan how many days I have left</strong>.</p>
+              <ul class="ac">
+                <li><strong>AC1:</strong> Given a logged-in trainee with a balance &gt; 0, when they open the form, then their remaining annual-leave days are visible at the top.</li>
+                <li><strong>AC2:</strong> Given a request that exceeds the balance, when they Submit, then the system blocks submission and shows "You have only X days left."</li>
+                <li><strong>AC3:</strong> Given an approved request, when the trainee views balance again, then it has been reduced by the approved days.</li>
+              </ul>
+              <div class="meta">
+                <span class="size">Size · M</span>
+                <span class="pass">DoR ✓</span>
+                <span>Owner · HR (Sonam)</span>
+                <span>Depends on · BL-027a</span>
+              </div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:880px; font-style:italic">One messy XL item · two ready M stories · maternity leave parked for later. The team can pick BL-027a tomorrow.</p>
+        </div>
+      </div>
+
+      <!-- 14 SECTION: HANDS-ON -->
+      <div class="slide bg-blue" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Four · Hands-on</div>
+          <h1 class="display" style="color: white">Groom a<br>Real Backlog</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Groups of 3 · 35 minutes · "Pelsung Cohort 3 trainee portal"</p>
+        </div>
+        <div class="section-num" style="color: white">04</div>
+      </div>
+
+      <!-- 15 HANDS-ON · THE MESSY BACKLOG -->
+      <div class="slide accent-blue bg-subtle" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span> The messy backlog · 12 items</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="margin-bottom:0.2rem"><h2 class="heading" style="font-size:clamp(1.4rem,2.6vw,2rem)">Project: Pelsung Cohort 3 trainee portal · raw backlog</h2></div>
+          <div class="backlog-card">
+            <div class="head">12 items · in the order they were added · not yet groomed</div>
+            <ul>
+              <li><span class="id">BL-01</span><span>Trainees should be able to log in to the portal.</span><span class="tag">basic</span></li>
+              <li><span class="id">BL-02</span><span>Make the dashboard look modern and friendly.</span><span class="tag vague">vague</span></li>
+              <li><span class="id">BL-03</span><span>Build attendance tracking for all 45 trainees across 8 weeks.</span><span class="tag epic">epic</span></li>
+              <li><span class="id">BL-04</span><span>As a trainee, I want to see my own attendance so I know if I'm on track.</span><span class="tag">good</span></li>
+              <li><span class="id">BL-05</span><span>As a trainee, I want to view my attendance record.</span><span class="tag dup">dup of BL-04</span></li>
+              <li><span class="id">BL-06</span><span>Add a chatbot that answers any trainee question using AI.</span><span class="tag epic">epic</span></li>
+              <li><span class="id">BL-07</span><span>Use React with Redux Toolkit for the state management layer.</span><span class="tag solution">solution-leak</span></li>
+              <li><span class="id">BL-08</span><span>Display a banner welcoming Cohort 2 trainees.</span><span class="tag dead">stale · C2 done</span></li>
+              <li><span class="id">BL-09</span><span>As a trainer, I want to mark daily attendance so I have a record.</span><span class="tag">good</span></li>
+              <li><span class="id">BL-10</span><span>Improve performance.</span><span class="tag vague">vague</span></li>
+              <li><span class="id">BL-11</span><span>Trainees should reset their password if they forget it.</span><span class="tag">basic</span></li>
+              <li><span class="id">BL-12</span><span>Build a full LMS with quizzes, video, certificates, and parent reports.</span><span class="tag epic">epic</span></li>
+            </ul>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:880px; font-style:italic">Take a photo of this slide · or take the printed handout. You will work from these 12 items.</p>
+        </div>
+      </div>
+
+      <!-- 16 HANDS-ON · STEPS -->
+      <div class="slide accent-blue" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span> Hands-on · your steps</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Groups of 3 · 35 minutes · do these four steps in order</h2></div>
+          <div class="handson-steps">
+            <div class="step">
+              <div class="n">1</div>
+              <h6>Drop the dead</h6>
+              <p>Cross out duplicates, stale items, and solution-leak. Note WHY you dropped each one.</p>
+              <div class="eg" style="font-size:0.78rem; color:var(--muted); margin-top:0.3rem; font-style:italic">~5 min</div>
+            </div>
+            <div class="step">
+              <div class="n">2</div>
+              <h6>Pick top 5 (MoSCoW)</h6>
+              <p>From what's left, pick the 5 most important. Use Must · Should · Could · Won't.</p>
+              <div class="eg" style="font-size:0.78rem; color:var(--muted); margin-top:0.3rem; font-style:italic">~7 min</div>
+            </div>
+            <div class="step">
+              <div class="n">3</div>
+              <h6>Groom each top-5</h6>
+              <p>Split if too big. Add 3 AC. Run DoR check. T-shirt size. (S/M/L/XL)</p>
+              <div class="eg" style="font-size:0.78rem; color:var(--muted); margin-top:0.3rem; font-style:italic">~18 min</div>
+            </div>
+            <div class="step">
+              <div class="n">4</div>
+              <h6>Present</h6>
+              <p>One group presents their groomed top-5 to another group. 90 seconds each. Question time.</p>
+              <div class="eg" style="font-size:0.78rem; color:var(--muted); margin-top:0.3rem; font-style:italic">~5 min</div>
+            </div>
+          </div>
+          <div class="moscow-mini">
+            <div class="mm"><div class="L">M</div><h6>Must</h6><p>Useless without it</p></div>
+            <div class="mm"><div class="L">S</div><h6>Should</h6><p>Important · not vital</p></div>
+            <div class="mm"><div class="L">C</div><h6>Could</h6><p>Nice to have</p></div>
+            <div class="mm"><div class="L">W</div><h6>Won't</h6><p>Not this time</p></div>
+          </div>
+          <div class="recap-card">
+            <h5>↪︎ Recap from earlier classes — use as you work</h5>
+            <p><strong>BA+QA #04</strong> for AC format · <strong>BA+QA #05</strong> for MoSCoW + T-shirt sizing · <strong>BA #05</strong> for INVEST and the user-story format. Open them on a phone if you need.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 17 HANDS-ON · OUTPUT TEMPLATE -->
+      <div class="slide accent-blue bg-subtle" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span> Hands-on · what each groomed story looks like</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Use this shape for every one of your top-5 groomed stories</h2></div>
+          <div class="story-good" style="max-width:1050px; width:100%">
+            <div class="lbl">Template — fill in for each story</div>
+            <p class="st">As a <strong>[role]</strong>, I want to <strong>[action]</strong> so that <strong>[value]</strong>.</p>
+            <ul class="ac">
+              <li><strong>AC1 (happy path):</strong> Given …, when …, then …</li>
+              <li><strong>AC2 (variation or edge):</strong> Given …, when …, then …</li>
+              <li><strong>AC3 (error or limit):</strong> Given …, when …, then …</li>
+            </ul>
+            <div class="meta">
+              <span class="size">Size · S / M / L / XL</span>
+              <span class="pass">DoR ✓ / ✗</span>
+              <span>MoSCoW · M / S / C / W</span>
+              <span>Owner · ?</span>
+            </div>
+            <div class="dor-check">
+              <h6>DoR check (tick each)</h6>
+              <ul>
+                <li>Story format with role / action / value</li>
+                <li>INVEST checked</li>
+                <li>Acceptance criteria written (3+)</li>
+                <li>Dependencies known</li>
+                <li>Estimable (T-shirt size given)</li>
+                <li>Designs attached if UI</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">If a story fails any DoR check — it goes back to the backlog · not into the sprint.</p>
+        </div>
+      </div>
+
+      <!-- 18 HANDS-ON · DEBRIEF PROMPTS -->
+      <div class="slide accent-blue" data-slide="18">
+        <div class="slide-label"><span class="snum">18</span> Debrief · what to discuss</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">When groups present · use these questions to challenge each other</h2></div>
+          <div class="rot-grid" style="grid-template-columns:repeat(2,1fr); max-width:1100px">
+            <div class="rot" style="border-top-color:var(--blue)">
+              <h6 style="color:var(--blue)">For the presenting group</h6>
+              <p>Walk us through your groomed top-5 in priority order. For each story: what does it mean? Why is it ranked here? Show one AC. T-shirt size and why.</p>
+            </div>
+            <div class="rot" style="border-top-color:var(--amber)">
+              <h6 style="color:var(--amber)">For the listening group</h6>
+              <p>Pick one story · find one AC that's not yet testable · suggest a fix. Spot any item that fails DoR. Argue one priority swap.</p>
+            </div>
+            <div class="rot" style="border-top-color:var(--indigo)">
+              <h6 style="color:var(--indigo)">Reflection · trainer-led</h6>
+              <p>Which item was hardest to groom? Which dead item was hardest to drop? What would you do differently if you ran a real grooming meeting next week?</p>
+            </div>
+            <div class="rot" style="border-top-color:#3D7A3D">
+              <h6 style="color:#3D7A3D">What "good" looks like</h6>
+              <p>BL-03 (attendance) was split. BL-12 (LMS) parked or chopped. BL-04/BL-05 deduped. BL-07 dropped (solution-leak). Top stories all have AC + size + DoR ticks.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 19 WRAP -->
+      <div class="slide bg-dark" data-slide="19">
+        <div class="slide-label"><span class="snum">19</span> Wrap-up</div>
+        <div class="center" style="max-width: 850px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key Takeaways</div>
+          <h2 class="heading" style="color: white;">What we covered today</h2>
+          <ul class="reveal-list" style="color: rgba(255,255,255,0.92); text-align:left; max-width: 740px; margin: 1.5rem auto; font-size: 1rem; line-height: 2;">
+            <li>✅ A backlog is the <strong>prioritized list of what we MIGHT build</strong> — always more than capacity</li>
+            <li>✅ Backlogs rot from <strong>duplicates · vague items · stale items · no owner · no AC · too big</strong></li>
+            <li>✅ <strong>Definition of Ready</strong> = the 6-check gate before any story enters a sprint</li>
+            <li>✅ Six grooming moves: <strong>clarify · add AC · split · re-prioritize · drop dead · estimate</strong></li>
+            <li>✅ Split too-big stories <strong>by workflow step · user type · happy/alt · or data variation</strong></li>
+            <li>✅ Grooming is <strong>weekly · 30–60 min · just enough to keep the top ready</strong></li>
+            <li>✅ A clean backlog is the BA's most visible product — protect it like a kitchen drawer that actually works</li>
+          </ul>
+          <p style="color: var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.2rem; margin-top:1.5rem">A groomed backlog beats a long backlog — every sprint, every time.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 19</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>

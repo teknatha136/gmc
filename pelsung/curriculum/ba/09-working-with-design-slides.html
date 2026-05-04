@@ -1,0 +1,750 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Working with Design — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      /* Workflow chevrons */
+      .workflow { display:grid; grid-template-columns: repeat(3, 1fr); gap:0.7rem; width:100%; max-width:1100px; align-items:stretch; }
+      @media (max-width: 820px){ .workflow { grid-template-columns:1fr; } }
+      .wf-step { background:white; border:1px solid var(--border); border-top:5px solid var(--blue); border-radius:12px; padding:0.95rem 1.1rem; position:relative; }
+      .wf-step.ba   { border-top-color: var(--indigo); }
+      .wf-step.des  { border-top-color: var(--amber); }
+      .wf-step.dev  { border-top-color: var(--blue); }
+      .wf-step .role { color:var(--muted); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em; font-weight:700; margin-bottom:0.2rem; }
+      .wf-step h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; margin-bottom:0.3rem; }
+      .wf-step p { font-size:0.88rem; color:var(--text); line-height:1.6; }
+      .wf-step .out { margin-top:0.5rem; padding-top:0.5rem; border-top:1px dashed var(--border); font-size:0.8rem; color:var(--muted); font-style:italic; }
+      .wf-arrow { display:flex; align-items:center; justify-content:center; color:var(--blue); font-size:1.4rem; font-family:'Bahnschrift','Segoe UI',sans-serif; }
+
+      /* Old vs new compare */
+      .ba0609 { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; width:100%; max-width:1050px; }
+      @media (max-width: 820px){ .ba0609 { grid-template-columns:1fr; } }
+      .ba0609 .col { background:white; border:1px solid var(--border); border-radius:12px; padding:0.95rem 1.2rem; }
+      .ba0609 .col.then { border-top:4px solid var(--amber); }
+      .ba0609 .col.now  { border-top:4px solid var(--blue); }
+      .ba0609 h5 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.3rem; }
+      .ba0609 .col.then h5 { color:var(--amber); }
+      .ba0609 .col.now h5  { color:var(--blue); }
+      .ba0609 p { font-size:0.9rem; color:var(--text); line-height:1.65; }
+      .ba0609 .lbl { color:var(--muted); font-size:0.7rem; text-transform:uppercase; letter-spacing:0.08em; font-weight:700; }
+
+      /* Artifact ladder */
+      .ladder { display:grid; grid-template-columns: repeat(4, 1fr); gap:0.7rem; width:100%; max-width:1200px; }
+      @media (max-width: 820px){ .ladder { grid-template-columns: repeat(2, 1fr); } }
+      .rung { background:white; border:1px solid var(--border); border-radius:12px; padding:0.85rem 0.95rem; display:flex; flex-direction:column; gap:0.4rem; }
+      .rung .step { color:white; background:var(--blue); width:fit-content; padding:0.15rem 0.55rem; border-radius:30px; font-size:0.7rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; }
+      .rung.r1 .step { background:#9CA3AF; }
+      .rung.r2 .step { background:var(--amber); }
+      .rung.r3 .step { background:var(--blue); }
+      .rung.r4 .step { background:var(--indigo); }
+      .rung h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; }
+      .rung p { font-size:0.85rem; color:var(--text); line-height:1.6; }
+      .rung .pic { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:0.4rem; margin-top:auto; }
+      .rung .pic svg { display:block; width:100%; height:auto; }
+
+      /* Handoff parts */
+      .handoff-grid { display:grid; grid-template-columns: 1.2fr 1fr; gap:1rem; width:100%; max-width:1180px; align-items:start; }
+      @media (max-width: 820px){ .handoff-grid { grid-template-columns:1fr; } }
+      .handoff-pic { background:white; border:1px solid var(--border); border-radius:12px; padding:0.7rem; box-shadow:0 6px 18px rgba(0,0,0,0.06); }
+      .handoff-pic svg { display:block; width:100%; height:auto; }
+      .handoff-list { background:white; border:1px solid var(--border); border-radius:12px; padding:0.85rem 1.1rem; }
+      .handoff-list .it { padding:0.5rem 0; border-bottom:1px dashed var(--border); }
+      .handoff-list .it:last-child { border-bottom:none; }
+      .handoff-list .it h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.15rem; }
+      .handoff-list .it p { font-size:0.85rem; color:var(--text); line-height:1.55; }
+
+      /* Review lens */
+      .lens-grid { display:grid; grid-template-columns: repeat(5, 1fr); gap:0.6rem; width:100%; max-width:1200px; }
+      @media (max-width: 1000px){ .lens-grid { grid-template-columns: repeat(2, 1fr); } }
+      @media (max-width: 600px){ .lens-grid { grid-template-columns: 1fr; } }
+      .lens { background:white; border:1px solid var(--border); border-top:4px solid var(--blue); border-radius:12px; padding:0.85rem 0.9rem; }
+      .lens .num { display:flex; align-items:center; justify-content:center; width:34px; height:34px; background:var(--blue); color:white; border-radius:50%; font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; font-size:1rem; margin-bottom:0.4rem; }
+      .lens h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.25rem; line-height:1.3; }
+      .lens p { font-size:0.82rem; color:var(--text); line-height:1.55; }
+      .lens .ask { margin-top:0.4rem; padding-top:0.4rem; border-top:1px dashed var(--border); font-size:0.78rem; color:var(--muted); font-style:italic; }
+
+      /* Heuristic list (recap card) */
+      .heur-card { background:white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.3rem; max-width:1100px; width:100%; }
+      .heur-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:0.4rem 1.4rem; }
+      @media (max-width: 720px){ .heur-grid { grid-template-columns:1fr; } }
+      .heur-grid .h { display:flex; gap:0.6rem; padding:0.35rem 0; border-bottom:1px dotted var(--border); align-items:baseline; }
+      .heur-grid .h:last-child, .heur-grid .h:nth-last-child(2) { border-bottom:none; }
+      .heur-grid .num { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; font-size:0.92rem; min-width:24px; }
+      .heur-grid .name { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-size:0.92rem; }
+
+      /* Heuristic examples */
+      .hx-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:0.7rem; width:100%; max-width:1180px; }
+      @media (max-width: 900px){ .hx-grid { grid-template-columns: 1fr; } }
+      .hx { background:white; border:1px solid var(--border); border-left:4px solid var(--amber); border-radius:10px; padding:0.8rem 0.95rem; }
+      .hx .tag { display:inline-block; background:#EBF0F7; color:var(--blue); font-size:0.7rem; font-weight:700; padding:0.15rem 0.55rem; border-radius:30px; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:0.35rem; }
+      .hx h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.2rem; }
+      .hx p { font-size:0.84rem; color:var(--text); line-height:1.55; }
+
+      /* Feedback bad/good */
+      .fb { background:white; border:1px solid var(--border); border-radius:12px; padding:0.85rem 1rem; display:grid; grid-template-columns: 1fr 1fr; gap:0.9rem; max-width:1150px; width:100%; margin-bottom:0.7rem; }
+      @media (max-width: 820px){ .fb { grid-template-columns:1fr; } }
+      .fb .side { padding:0.6rem 0.8rem; border-radius:8px; }
+      .fb .side.bad  { background:#FEE9EC; border-left:4px solid var(--red); }
+      .fb .side.good { background:#EAF6E1; border-left:4px solid var(--green); }
+      .fb .side .lbl { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.78rem; font-weight:700; letter-spacing:0.07em; text-transform:uppercase; margin-bottom:0.3rem; }
+      .fb .side.bad  .lbl { color:var(--red); }
+      .fb .side.good .lbl { color:#3D7A3D; }
+      .fb .side p { font-size:0.92rem; color:var(--text); line-height:1.6; }
+      .fb .side p em { color:var(--muted); }
+
+      /* Handoff conversation steps */
+      .conv-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:0.6rem; width:100%; max-width:1180px; }
+      @media (max-width: 900px){ .conv-grid { grid-template-columns: repeat(2, 1fr); } }
+      .conv { background:white; border:1px solid var(--border); border-top:4px solid var(--indigo); border-radius:10px; padding:0.75rem 0.9rem; }
+      .conv .step { color:var(--muted); font-size:0.7rem; font-weight:700; letter-spacing:0.07em; text-transform:uppercase; }
+      .conv h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin:0.2rem 0 0.2rem; }
+      .conv p { font-size:0.83rem; color:var(--text); line-height:1.55; }
+
+      /* Hands-on flawed screens */
+      .scr-row { display:grid; grid-template-columns: repeat(4, 1fr); gap:0.7rem; width:100%; max-width:1300px; }
+      @media (max-width: 1000px){ .scr-row { grid-template-columns: repeat(2, 1fr); } }
+      .scr { background:white; border:1px solid var(--border); border-radius:12px; padding:0.5rem; box-shadow:0 4px 12px rgba(0,0,0,0.05); }
+      .scr svg { display:block; width:100%; height:auto; }
+      .scr .cap { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-size:0.85rem; text-align:center; margin-top:0.3rem; }
+
+      /* Brief / debrief */
+      .brief-box { background:white; border:2px dashed var(--blue); border-radius:12px; padding:0.95rem 1.2rem; max-width:1050px; width:100%; }
+      .brief-box .tag { background:#E6F0F8; color:var(--blue); font-size:0.7rem; font-weight:700; padding:0.2rem 0.6rem; border-radius:4px; letter-spacing:0.07em; text-transform:uppercase; }
+      .brief-box h5 { color:var(--indigo); font-size:1.05rem; margin:0.4rem 0 0.4rem; font-family:'Bahnschrift','Segoe UI',sans-serif; }
+      .brief-box ul { margin-left:1.2rem; }
+      .brief-box li { font-size:0.92rem; color:var(--text); line-height:1.7; }
+
+      .findings { background:white; border:1px solid var(--border); border-radius:12px; padding:0.85rem 1.1rem; max-width:1100px; width:100%; }
+      .findings .row { display:grid; grid-template-columns: 90px 1fr 130px; gap:0.6rem; align-items:start; padding:0.5rem 0; border-bottom:1px dashed var(--border); }
+      @media (max-width: 720px){ .findings .row { grid-template-columns:1fr; } }
+      .findings .row:last-child { border-bottom:none; }
+      .findings .where { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--blue); font-weight:700; font-size:0.85rem; }
+      .findings .what  { font-size:0.86rem; color:var(--text); line-height:1.55; }
+      .findings .lens-q { font-size:0.78rem; color:var(--muted); font-style:italic; }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>BA Vertical · Class 09</div></div>
+          <h1 class="display" style="color: var(--text)">
+            <span style="color: var(--blue)">Working</span><br />
+            <span style="color: var(--indigo)">with Design</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted)">A designer has just sent you 12 screens. You are not the artist. You are the BA. What now?</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">Handoffs</span>
+            <span class="class-tag tag-blue">Reviewing wireframes</span>
+            <span class="class-tag tag-blue">Usability heuristics</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 AGENDA -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 800px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem"><h2 class="heading">Session Journey · ~90 min</h2></div>
+          <div class="agenda-row" onclick="goTo(3)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🧭 Where Design sits in the workflow</span><span class="ar-badge" style="background:#E6E9EC;color:var(--indigo)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(6)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">📦 What a designer hands off</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">12 min</span></div>
+          <div class="agenda-row" onclick="goTo(9)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🔎 The BA's review lens · 5 questions</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">12 min</span></div>
+          <div class="agenda-row" onclick="goTo(11)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🧠 Nielsen heuristics — quick recap</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(13)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">💬 Giving useful design feedback</span><span class="ar-badge" style="background:#E6E9EC;color:var(--indigo)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(16)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🛠️ Hands-on · review a flawed handoff</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">25 min</span></div>
+          <div class="agenda-row" onclick="goTo(19)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🎯 Wrap-up</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">3 min</span></div>
+        </div>
+      </div>
+
+      <!-- 3 SECTION: WHERE DESIGN SITS -->
+      <div class="slide bg-indigo" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part One</div>
+          <h1 class="display" style="color: white">Where Design<br>Sits</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">After stories. Before code. The shape of the product gets decided here.</p>
+        </div>
+        <div class="section-num" style="color: white">01</div>
+      </div>
+
+      <!-- 4 WORKFLOW -->
+      <div class="slide accent-blue bg-subtle" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> The order of work</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Three roles · three jobs · in this order</h2></div>
+          <div class="workflow">
+            <div class="wf-step ba">
+              <div class="role">Step 1 · The BA</div>
+              <h5>Writes intent</h5>
+              <p>User stories, acceptance criteria, personas, business rules. Words on a page. <em>What</em> the product should do, and why.</p>
+              <div class="out">Output → stories + AC, ready for design</div>
+            </div>
+            <div class="wf-step des">
+              <div class="role">Step 2 · The Designer</div>
+              <h5>Makes form</h5>
+              <p>Turns those words into screens. Buttons, layout, flow, colour, typography. <em>How</em> the product looks and feels to the user.</p>
+              <div class="out">Output → wireframes, mockups, prototype, specs</div>
+            </div>
+            <div class="wf-step dev">
+              <div class="role">Step 3 · The Developer</div>
+              <h5>Builds it</h5>
+              <p>Turns the design + AC into working software. Picks the technology. <em>How</em> the product runs under the hood.</p>
+              <div class="out">Output → tested, deployable code</div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:880px"><strong>Design is not optional, and it is not "decoration".</strong> It is the bridge between your words and the developer's code. If the bridge is wrong, the code will be wrong.</p>
+        </div>
+      </div>
+
+      <!-- 5 BA-06 VS BA-09 -->
+      <div class="slide accent-blue" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span> Class 06 vs Class 09</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">You already sketched. Today is different.</h2></div>
+          <div class="ba0609">
+            <div class="col then">
+              <div class="lbl">Class 06 · Wireframing for Communication</div>
+              <h5>You sketched <em>to communicate</em></h5>
+              <p>You drew rough boxes-and-lines so a developer or stakeholder could see what was in your head. Your sketches were a <strong>conversation tool</strong> — not the final design.</p>
+            </div>
+            <div class="col now">
+              <div class="lbl">Class 09 · Working with Design</div>
+              <h5>Today you <em>receive</em> design</h5>
+              <p>A real designer hands you finished screens. You are <strong>not the designer</strong>. You are the BA who must check the design against the stories — and tell the designer what's missing.</p>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">SELISE Cohort 3 has no Design vertical — but in real jobs and in your capstone, a designer will hand you screens. You need the muscle to review them well.</p>
+        </div>
+      </div>
+
+      <!-- 6 SECTION: HANDOFF ARTIFACTS -->
+      <div class="slide bg-blue" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Two</div>
+          <h1 class="display" style="color: white">What a Designer<br>Hands Off</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Four artifacts, increasing in fidelity. You will see all of them.</p>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- 7 ARTIFACT LADDER -->
+      <div class="slide accent-blue bg-subtle" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> The handoff ladder</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">From rough boxes to a clickable, build-ready spec</h2></div>
+          <div class="ladder">
+            <div class="rung r1">
+              <span class="step">1 · Wireframe</span>
+              <h6>Boxes and lines</h6>
+              <p>No colour. No real text. Shows what's on the screen and roughly where.</p>
+              <div class="pic"><svg viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="10" width="140" height="14" fill="#E5E7EB"/><rect x="10" y="32" width="90" height="10" fill="#E5E7EB"/><rect x="10" y="48" width="140" height="30" fill="none" stroke="#9CA3AF" stroke-dasharray="3 2"/><rect x="10" y="86" width="60" height="14" fill="#9CA3AF"/></svg></div>
+            </div>
+            <div class="rung r2">
+              <span class="step">2 · Mockup</span>
+              <h6>Pixel-accurate look</h6>
+              <p>Real colours, fonts, real text, real icons. Looks like the final app — but no clicking yet.</p>
+              <div class="pic"><svg viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="160" height="22" fill="#0066B2"/><text x="10" y="15" font-family="Open Sans" font-size="9" fill="white">mBoB</text><rect x="10" y="32" width="140" height="10" fill="#1B2021"/><rect x="10" y="48" width="140" height="30" fill="#F9F9F9" stroke="#EDEDED"/><rect x="10" y="86" width="60" height="14" rx="3" fill="#0066B2"/><text x="22" y="96" font-family="Open Sans" font-size="7" fill="white">Continue</text></svg></div>
+            </div>
+            <div class="rung r3">
+              <span class="step">3 · Prototype</span>
+              <h6>Clickable mockups</h6>
+              <p>A Figma link. Tap a button on screen 1 → it goes to screen 2. You can <em>walk the flow</em>.</p>
+              <div class="pic"><svg viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="14" width="60" height="80" fill="#FFF" stroke="#0066B2"/><rect x="94" y="14" width="60" height="80" fill="#FFF" stroke="#0066B2"/><path d="M70 54 L 90 54" stroke="#0066B2" stroke-width="1.5" marker-end="url(#a)"/><defs><marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L8,5 L0,10 z" fill="#0066B2"/></marker></defs><rect x="14" y="80" width="20" height="6" fill="#0066B2"/></svg></div>
+            </div>
+            <div class="rung r4">
+              <span class="step">4 · Dev specs</span>
+              <h6>Build-ready details</h6>
+              <p>Sizes, spacing, exact colours, behaviours, exported icons and images. Everything the developer needs to build.</p>
+              <div class="pic"><svg viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg"><rect x="20" y="14" width="120" height="40" fill="none" stroke="#0066B2" stroke-dasharray="3 2"/><text x="46" y="68" font-family="Courier" font-size="7" fill="#1B2021">w: 120px · h: 40px</text><text x="46" y="80" font-family="Courier" font-size="7" fill="#1B2021">color: #0066B2</text><text x="46" y="92" font-family="Courier" font-size="7" fill="#1B2021">font: Open Sans 14</text></svg></div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:880px; font-style:italic">A real handoff often skips wireframes and starts at mockups. Your job is the same either way: review against the AC.</p>
+        </div>
+      </div>
+
+      <!-- 8 ONE PAGE HANDOFF -->
+      <div class="slide accent-blue" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> What's actually <em>in</em> a handoff</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">A typical Figma handoff page contains all of this</h2></div>
+          <div class="handoff-grid">
+            <div class="handoff-pic">
+              <svg viewBox="0 0 520 320" xmlns="http://www.w3.org/2000/svg">
+                <!-- Frame outline -->
+                <rect x="0" y="0" width="520" height="320" fill="#F9F9F9"/>
+                <text x="14" y="22" font-family="Bahnschrift,Segoe UI,sans-serif" font-size="13" fill="#001F35">Bill Payment · Confirm screen</text>
+
+                <!-- Phone frame -->
+                <rect x="14" y="40" width="170" height="270" rx="14" fill="white" stroke="#001F35" stroke-width="1.5"/>
+                <rect x="14" y="40" width="170" height="32" rx="14" fill="#0066B2"/>
+                <text x="28" y="60" font-family="Open Sans" font-size="10" fill="white">Confirm payment</text>
+                <rect x="28" y="90" width="142" height="22" fill="#F9F9F9" stroke="#EDEDED"/>
+                <text x="34" y="105" font-family="Open Sans" font-size="9" fill="#1B2021">Biller: Bhutan Power</text>
+                <rect x="28" y="120" width="142" height="22" fill="#F9F9F9" stroke="#EDEDED"/>
+                <text x="34" y="135" font-family="Open Sans" font-size="9" fill="#1B2021">Amount: Nu 1,250</text>
+                <rect x="28" y="150" width="142" height="22" fill="#F9F9F9" stroke="#EDEDED"/>
+                <text x="34" y="165" font-family="Open Sans" font-size="9" fill="#1B2021">Account: ****4231</text>
+                <rect x="28" y="260" width="142" height="32" rx="6" fill="#0066B2"/>
+                <text x="76" y="280" font-family="Open Sans" font-size="11" fill="white">Pay now</text>
+
+                <!-- Annotation lines -->
+                <line x1="184" y1="56" x2="240" y2="56" stroke="#247EC1" stroke-width="1"/>
+                <line x1="184" y1="101" x2="240" y2="101" stroke="#247EC1" stroke-width="1"/>
+                <line x1="184" y1="276" x2="240" y2="276" stroke="#247EC1" stroke-width="1"/>
+
+                <!-- Right panel: specs -->
+                <rect x="244" y="48" width="262" height="40" fill="white" stroke="#EDEDED"/>
+                <text x="252" y="62" font-family="Bahnschrift,Segoe UI,sans-serif" font-size="9" fill="#0066B2">HEADER</text>
+                <text x="252" y="76" font-family="Courier" font-size="9" fill="#1B2021">bg: #0066B2 · h: 32px · text: 14/Open Sans</text>
+
+                <rect x="244" y="93" width="262" height="40" fill="white" stroke="#EDEDED"/>
+                <text x="252" y="107" font-family="Bahnschrift,Segoe UI,sans-serif" font-size="9" fill="#0066B2">FIELD ROW</text>
+                <text x="252" y="121" font-family="Courier" font-size="9" fill="#1B2021">read-only · bg: #F9F9F9 · padding: 6 8</text>
+
+                <rect x="244" y="138" width="262" height="55" fill="white" stroke="#EDEDED"/>
+                <text x="252" y="152" font-family="Bahnschrift,Segoe UI,sans-serif" font-size="9" fill="#0066B2">BEHAVIOUR · Pay now</text>
+                <text x="252" y="166" font-family="Open Sans" font-size="9" fill="#1B2021">tap → show MPIN modal</text>
+                <text x="252" y="178" font-family="Open Sans" font-size="9" fill="#1B2021">success → navigate to receipt</text>
+                <text x="252" y="190" font-family="Open Sans" font-size="9" fill="#1B2021">offline → show "No connection" toast</text>
+
+                <rect x="244" y="198" width="262" height="40" fill="white" stroke="#EDEDED"/>
+                <text x="252" y="212" font-family="Bahnschrift,Segoe UI,sans-serif" font-size="9" fill="#0066B2">ASSETS</text>
+                <text x="252" y="226" font-family="Courier" font-size="9" fill="#1B2021">icon-back.svg · icon-info.svg (24×24)</text>
+
+                <rect x="244" y="243" width="262" height="55" fill="white" stroke="#EDEDED"/>
+                <text x="252" y="257" font-family="Bahnschrift,Segoe UI,sans-serif" font-size="9" fill="#0066B2">EDGE STATES (linked)</text>
+                <text x="252" y="271" font-family="Open Sans" font-size="9" fill="#1B2021">→ Empty (no billers)</text>
+                <text x="252" y="283" font-family="Open Sans" font-size="9" fill="#1B2021">→ Loading (spinner)</text>
+                <text x="252" y="295" font-family="Open Sans" font-size="9" fill="#1B2021">→ Error (server unreachable)</text>
+              </svg>
+            </div>
+            <div class="handoff-list">
+              <div class="it"><h6>1. Screens</h6><p>Every screen the user can see — happy path and edges.</p></div>
+              <div class="it"><h6>2. Specs</h6><p>Sizes, colours, fonts, padding. So a developer doesn't guess.</p></div>
+              <div class="it"><h6>3. Behaviours</h6><p>"Tap this → that happens." Loading, success, error.</p></div>
+              <div class="it"><h6>4. Assets</h6><p>Exported icons and images, ready to drop into code.</p></div>
+              <div class="it"><h6>5. Flow links</h6><p>Arrows or a clickable prototype showing screen-to-screen flow.</p></div>
+              <div class="it"><h6>6. Edge states</h6><p>Empty, loading, error, offline, no-permission.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9 SECTION: REVIEW LENS -->
+      <div class="slide bg-indigo" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Three</div>
+          <h1 class="display" style="color: white">The BA's<br>Review Lens</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Five questions. Every screen. Every time.</p>
+        </div>
+        <div class="section-num" style="color: white">03</div>
+      </div>
+
+      <!-- 10 FIVE QUESTIONS -->
+      <div class="slide accent-blue bg-subtle" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> Five questions to ask every design</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:920px"><h2 class="heading">You are not judging visual taste. You are checking against intent.</h2><p class="body-md" style="color:var(--muted); margin-top:0.5rem">"I don't like the orange" is not a BA review. These five questions are.</p></div>
+          <div class="lens-grid">
+            <div class="lens">
+              <div class="num">1</div>
+              <h6>Match to story &amp; AC?</h6>
+              <p>Does what's on screen actually deliver the user story and every acceptance criterion?</p>
+              <div class="ask">"AC says user can save biller — where's the button?"</div>
+            </div>
+            <div class="lens">
+              <div class="num">2</div>
+              <h6>Anything in AC missing?</h6>
+              <p>Walk every AC. Tick off where each one shows up in the design. Untickable AC = gap.</p>
+              <div class="ask">"AC 4 says 'limit reached' message — I don't see it anywhere."</div>
+            </div>
+            <div class="lens">
+              <div class="num">3</div>
+              <h6>Edges handled?</h6>
+              <p>Empty state. Error state. Loading state. Offline. No permission. Are they shown?</p>
+              <div class="ask">"What does this list look like for a brand-new user?"</div>
+            </div>
+            <div class="lens">
+              <div class="num">4</div>
+              <h6>Accessibility basics?</h6>
+              <p>Text readable against background? Buttons big enough to tap (~44 × 44 px)? Form fields labelled?</p>
+              <div class="ask">"Grey text on light grey — can my mother read this?"</div>
+            </div>
+            <div class="lens">
+              <div class="num">5</div>
+              <h6>Flow makes sense to the persona?</h6>
+              <p>Walk it as the user from your persona doc. Does each step feel obvious to <em>them</em>?</p>
+              <div class="ask">"A first-time user — would they know to scroll?"</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11 HEURISTICS RECAP LIST -->
+      <div class="slide accent-blue" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> Heuristics · quick recap</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:900px"><h2 class="heading">Nielsen's 10 heuristics — your reference card</h2><p class="body-md" style="color:var(--muted); margin-top:0.5rem">You learned these in <strong>Extra E1 — UX &amp; HCI Basics</strong>. We're not re-teaching today; this is your one-page card to glance at while reviewing a design.</p></div>
+          <div class="heur-card">
+            <div class="heur-grid">
+              <div class="h"><span class="num">#1</span><span class="name">Visibility of system status</span></div>
+              <div class="h"><span class="num">#6</span><span class="name">Recognition rather than recall</span></div>
+              <div class="h"><span class="num">#2</span><span class="name">Match between system &amp; real world</span></div>
+              <div class="h"><span class="num">#7</span><span class="name">Flexibility &amp; efficiency of use</span></div>
+              <div class="h"><span class="num">#3</span><span class="name">User control &amp; freedom</span></div>
+              <div class="h"><span class="num">#8</span><span class="name">Aesthetic &amp; minimalist design</span></div>
+              <div class="h"><span class="num">#4</span><span class="name">Consistency &amp; standards</span></div>
+              <div class="h"><span class="num">#9</span><span class="name">Help users recognise, diagnose &amp; recover from errors</span></div>
+              <div class="h"><span class="num">#5</span><span class="name">Error prevention</span></div>
+              <div class="h"><span class="num">#10</span><span class="name">Help &amp; documentation</span></div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">When you spot a problem in a design, naming the heuristic makes your feedback land. "Heuristic #1 — there's no loading indicator on the transfer screen" beats "feels slow".</p>
+        </div>
+      </div>
+
+      <!-- 12 HEURISTIC EXAMPLES -->
+      <div class="slide accent-blue bg-subtle" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> Heuristics · in apps you already use</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Spotting heuristic violations in everyday Bhutanese apps</h2></div>
+          <div class="hx-grid">
+            <div class="hx">
+              <span class="tag">Heuristic #1 · Visibility</span>
+              <h6>mBoB · funds transfer</h6>
+              <p>You tap "Send", and the screen freezes for 4 seconds with no spinner, no "Processing", nothing. You don't know if it worked or if the network is down. <strong>Status is invisible.</strong></p>
+            </div>
+            <div class="hx">
+              <span class="tag">Heuristic #5 · Error prevention</span>
+              <h6>Druk Air booking</h6>
+              <p>The date picker lets you pick a return date <em>earlier</em> than the departure date. Only when you submit do you get a "Bad dates" error. <strong>The design should not let the bad input happen.</strong></p>
+            </div>
+            <div class="hx">
+              <span class="tag">Heuristic #9 · Recover from errors</span>
+              <h6>Tashi Cell self-service</h6>
+              <p>You enter the wrong recharge amount. The screen says "Error code 4012". Nothing about what went wrong. No "Try again". <strong>The error message tells you nothing actionable.</strong></p>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:880px"><strong>Reviewer's habit:</strong> when a screen feels off, ask "which heuristic is being broken here?" — that's the language to use with the designer.</p>
+        </div>
+      </div>
+
+      <!-- 13 SECTION: FEEDBACK -->
+      <div class="slide bg-blue" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Four</div>
+          <h1 class="display" style="color: white">Giving Useful<br>Design Feedback</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Specific. Behavioural. Action-oriented.</p>
+        </div>
+        <div class="section-num" style="color: white">04</div>
+      </div>
+
+      <!-- 14 BAD VS GOOD FEEDBACK -->
+      <div class="slide accent-blue bg-subtle" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> Bad → good feedback</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:900px"><h2 class="heading">Three rewrites — same problem, different result</h2><p class="body-md" style="color:var(--muted); margin-top:0.4rem">A designer cannot act on a feeling. They can act on a specific, observable problem with a suggested next step.</p></div>
+          <div class="fb">
+            <div class="side bad">
+              <div class="lbl">❌ Bad — taste-based</div>
+              <p>"I don't like the colours."<br><em>What does the designer change? Nothing — there's no problem named.</em></p>
+            </div>
+            <div class="side good">
+              <div class="lbl">✅ Good — specific &amp; actionable</div>
+              <p>"The orange CTA blends into the orange header — Heuristic #4, consistency. Can we test the SELISE blue from the brand palette so the button stands out?"</p>
+            </div>
+          </div>
+          <div class="fb">
+            <div class="side bad">
+              <div class="lbl">❌ Bad — vague</div>
+              <p>"This screen is confusing."<br><em>Confusing how? To whom? Doing what?</em></p>
+            </div>
+            <div class="side good">
+              <div class="lbl">✅ Good — persona + behaviour</div>
+              <p>"Walking this as our 'first-time user' persona — once they tap Continue, there's no indication anything happened. Heuristic #1. Can we add a loading state?"</p>
+            </div>
+          </div>
+          <div class="fb">
+            <div class="side bad">
+              <div class="lbl">❌ Bad — opinion as fact</div>
+              <p>"The button is too small."<br><em>Smaller than what? By how much?</em></p>
+            </div>
+            <div class="side good">
+              <div class="lbl">✅ Good — measurable</div>
+              <p>"The 'Submit' button is ~28 px tall. Mobile target guideline is ~44 px. On a phone it'll be hard to tap accurately. Can we bump it to match the other primary buttons?"</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 15 HANDOFF CONVERSATION -->
+      <div class="slide accent-blue" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span> The handoff conversation</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:920px"><h2 class="heading">Never approve a design without walking every story it covers</h2><p class="body-md" style="color:var(--muted); margin-top:0.4rem">Design review is a meeting — not an email. Schedule 30 minutes with the designer and run this loop.</p></div>
+          <div class="conv-grid">
+            <div class="conv">
+              <span class="step">Step 1</span>
+              <h6>Open the stories</h6>
+              <p>Have the user stories and AC open beside the design file. You will read them out loud.</p>
+            </div>
+            <div class="conv">
+              <span class="step">Step 2</span>
+              <h6>Walk every AC</h6>
+              <p>For each AC, point to where in the design it is satisfied. If you can't point — flag it.</p>
+            </div>
+            <div class="conv">
+              <span class="step">Step 3</span>
+              <h6>Walk the edges</h6>
+              <p>Ask: "Show me empty. Show me error. Show me loading." If the designer doesn't have it — flag it.</p>
+            </div>
+            <div class="conv">
+              <span class="step">Step 4</span>
+              <h6>Write it down</h6>
+              <p>Every flag becomes a written comment in Figma or a row in a feedback list. Verbal feedback evaporates.</p>
+            </div>
+          </div>
+          <div class="card" style="max-width:920px; background:linear-gradient(135deg,#0067A3,#002D72); color:white; border:none; padding:0.95rem 1.3rem">
+            <h4 style="color:white; margin-bottom:0.3rem; font-size:1.05rem">The one rule</h4>
+            <p style="font-size:0.95rem; line-height:1.65; color:rgba(255,255,255,0.92)"><strong>If a story has no design — or a design has no story</strong> — you've found a gap. Both directions matter. Never let the conversation end without resolving every gap or writing it down.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 16 SECTION: HANDS-ON -->
+      <div class="slide bg-blue" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Five · Hands-on</div>
+          <h1 class="display" style="color: white">Review a<br>Flawed Handoff</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Pairs · 20 min · Pelsung leave-request app.</p>
+        </div>
+        <div class="section-num" style="color: white">05</div>
+      </div>
+
+      <!-- 17 HANDS-ON SCREENS + BRIEF -->
+      <div class="slide accent-blue bg-subtle" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span> The flawed handoff</div>
+        <div class="stack" style="align-items:center; width:100%; gap:0.8rem">
+          <div class="center" style="max-width:1000px"><h2 class="heading" style="font-size:clamp(1.4rem, 2.6vw, 1.9rem)">A designer just sent these 4 screens for "Pelsung Leave Request"</h2></div>
+          <div class="scr-row">
+            <!-- SCREEN 1: HOME / MY LEAVES -->
+            <div class="scr">
+              <svg viewBox="0 0 200 340" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="200" height="340" fill="white" stroke="#001F35"/>
+                <rect x="0" y="0" width="200" height="38" fill="#F08533"/>
+                <text x="14" y="24" font-family="Open Sans" font-size="12" fill="white">Pelsung Leave</text>
+                <!-- Faint "My leaves" header -->
+                <text x="14" y="58" font-family="Open Sans" font-size="9" fill="#C8CCD0">My leaves</text>
+                <!-- Big empty whitespace, no empty state shown -->
+                <rect x="14" y="68" width="172" height="200" fill="#FCFCFC" stroke="#EDEDED" stroke-dasharray="2 2"/>
+                <text x="56" y="170" font-family="Open Sans" font-size="9" fill="#C8CCD0">[ list area ]</text>
+                <!-- Ambiguous primary button -->
+                <rect x="14" y="290" width="172" height="32" rx="4" fill="#F08533"/>
+                <text x="86" y="310" font-family="Open Sans" font-size="11" fill="white">Process</text>
+              </svg>
+              <div class="cap">1 · Home / My leaves</div>
+            </div>
+
+            <!-- SCREEN 2: NEW REQUEST -->
+            <div class="scr">
+              <svg viewBox="0 0 200 340" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="200" height="340" fill="white" stroke="#001F35"/>
+                <rect x="0" y="0" width="200" height="38" fill="#F08533"/>
+                <text x="14" y="24" font-family="Open Sans" font-size="12" fill="white">New request</text>
+                <!-- Type field -->
+                <text x="14" y="62" font-family="Open Sans" font-size="9" fill="#1B2021">Type</text>
+                <rect x="14" y="68" width="172" height="22" fill="#F9F9F9" stroke="#EDEDED"/>
+                <!-- Date fields, tiny -->
+                <text x="14" y="106" font-family="Open Sans" font-size="9" fill="#1B2021">From</text>
+                <rect x="14" y="112" width="80" height="14" fill="#F9F9F9" stroke="#EDEDED"/>
+                <text x="100" y="106" font-family="Open Sans" font-size="9" fill="#1B2021">To</text>
+                <rect x="100" y="112" width="86" height="14" fill="#F9F9F9" stroke="#EDEDED"/>
+                <!-- Reason -->
+                <text x="14" y="146" font-family="Open Sans" font-size="9" fill="#1B2021">Reason</text>
+                <rect x="14" y="152" width="172" height="50" fill="#F9F9F9" stroke="#EDEDED"/>
+                <!-- Submit button -->
+                <rect x="14" y="290" width="172" height="32" rx="4" fill="#F08533"/>
+                <text x="92" y="310" font-family="Open Sans" font-size="11" fill="white">Go</text>
+              </svg>
+              <div class="cap">2 · New request</div>
+            </div>
+
+            <!-- SCREEN 3: SUBMIT / CONFIRM -->
+            <div class="scr">
+              <svg viewBox="0 0 200 340" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="200" height="340" fill="white" stroke="#001F35"/>
+                <rect x="0" y="0" width="200" height="38" fill="#F08533"/>
+                <text x="14" y="24" font-family="Open Sans" font-size="12" fill="white">Confirm</text>
+                <!-- Summary -->
+                <text x="14" y="62" font-family="Open Sans" font-size="10" fill="#1B2021">Casual · 3 days</text>
+                <text x="14" y="80" font-family="Open Sans" font-size="9" fill="#7B7C7F">15 May → 17 May</text>
+                <!-- Low contrast secondary text -->
+                <text x="14" y="120" font-family="Open Sans" font-size="8" fill="#D4D6D8">Reason: family event in Punakha</text>
+                <text x="14" y="138" font-family="Open Sans" font-size="8" fill="#D4D6D8">Approver: Pema Wangchuk</text>
+                <!-- Single button "Done" -->
+                <rect x="14" y="290" width="172" height="32" rx="4" fill="#F08533"/>
+                <text x="92" y="310" font-family="Open Sans" font-size="11" fill="white">Done</text>
+              </svg>
+              <div class="cap">3 · Confirm submit</div>
+            </div>
+
+            <!-- SCREEN 4: STATUS -->
+            <div class="scr">
+              <svg viewBox="0 0 200 340" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="200" height="340" fill="white" stroke="#001F35"/>
+                <rect x="0" y="0" width="200" height="38" fill="#F08533"/>
+                <text x="14" y="24" font-family="Open Sans" font-size="12" fill="white">Status</text>
+                <!-- Single status label -->
+                <text x="14" y="76" font-family="Open Sans" font-size="11" fill="#1B2021">Casual · 15 May → 17 May</text>
+                <rect x="14" y="92" width="60" height="22" rx="3" fill="#F4F4F4" stroke="#EDEDED"/>
+                <text x="22" y="107" font-family="Open Sans" font-size="9" fill="#7B7C7F">Pending</text>
+                <!-- No explanation. Lots of empty whitespace below. -->
+                <rect x="14" y="140" width="172" height="120" fill="#FCFCFC" stroke="none"/>
+              </svg>
+              <div class="cap">4 · Status</div>
+            </div>
+          </div>
+          <div class="brief-box">
+            <span class="tag">Activity · 20 min</span>
+            <h5>In pairs, review these 4 screens with the BA review lens</h5>
+            <ul>
+              <li><strong>5 min</strong> — read the brief below + the AC. Walk all 4 screens silently.</li>
+              <li><strong>10 min</strong> — list every problem you find. Tag each with the lens question (1–5) <em>or</em> the heuristic number.</li>
+              <li><strong>5 min</strong> — for your top 3 problems, write the feedback you'd send the designer (specific, behavioural, action-oriented).</li>
+            </ul>
+            <p style="font-size:0.86rem; color:var(--muted); margin-top:0.4rem; font-style:italic">Story: <strong>"As a Pelsung trainee, I want to request leave from my phone so my supervisor can approve it without paperwork."</strong> AC includes: see my pending leaves on home, submit a new request with type/dates/reason, get confirmation, see status with reason if rejected. Brand colour is SELISE blue (#0066B2).</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 18 DEBRIEF -->
+      <div class="slide accent-blue" data-slide="18">
+        <div class="slide-label"><span class="snum">18</span> Debrief · what a strong reviewer would catch</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">A defensible list of findings — mapped to the lens</h2></div>
+          <div class="findings">
+            <div class="row">
+              <div class="where">Screen 1</div>
+              <div class="what"><strong>No empty state.</strong> A first-time trainee with zero leaves sees a blank box. No "You haven't requested any leave yet — tap + to start."</div>
+              <div class="lens-q">Q3 · edges · H#1</div>
+            </div>
+            <div class="row">
+              <div class="where">Screen 1</div>
+              <div class="what"><strong>"Process" button is meaningless.</strong> Process what? The label should describe the action: "+ New leave request".</div>
+              <div class="lens-q">Q5 · flow · H#2, H#4</div>
+            </div>
+            <div class="row">
+              <div class="where">All screens</div>
+              <div class="what"><strong>Brand colour is wrong.</strong> Header is orange (#F08533) — brief said SELISE blue (#0066B2). Doesn't match the brand palette.</div>
+              <div class="lens-q">Q1 · match · H#4</div>
+            </div>
+            <div class="row">
+              <div class="where">Screen 2</div>
+              <div class="what"><strong>Required fields not marked.</strong> No asterisks, no "(required)". User won't know what's mandatory until submit fails.</div>
+              <div class="lens-q">Q4 · accessibility · H#5</div>
+            </div>
+            <div class="row">
+              <div class="where">Screen 2</div>
+              <div class="what"><strong>Date fields too small.</strong> ~14 px tall — way under 44 px tap target. Hard to tap on a phone.</div>
+              <div class="lens-q">Q4 · accessibility</div>
+            </div>
+            <div class="row">
+              <div class="where">Screen 2</div>
+              <div class="what"><strong>"Go" is the wrong submit label.</strong> The user is submitting a leave request — say "Submit request".</div>
+              <div class="lens-q">Q5 · flow · H#2</div>
+            </div>
+            <div class="row">
+              <div class="where">Screen 3</div>
+              <div class="what"><strong>Low-contrast text (#D4D6D8 on white).</strong> Reason and approver are nearly invisible. Fails accessibility contrast.</div>
+              <div class="lens-q">Q4 · accessibility</div>
+            </div>
+            <div class="row">
+              <div class="where">Screen 3</div>
+              <div class="what"><strong>"Done" is ambiguous.</strong> Has the request been submitted, or is "Done" what the user taps to submit? Should be "Submit" or "Confirm &amp; submit".</div>
+              <div class="lens-q">Q5 · flow · H#1, H#3</div>
+            </div>
+            <div class="row">
+              <div class="where">Screen 3</div>
+              <div class="what"><strong>No loading or error path.</strong> What happens between tap and the next screen? AC implies confirmation must be shown.</div>
+              <div class="lens-q">Q3 · edges · H#1</div>
+            </div>
+            <div class="row">
+              <div class="where">Screen 4</div>
+              <div class="what"><strong>"Pending" gives no information.</strong> Pending with whom? Since when? AC says rejected status must show a reason — what about pending or approved?</div>
+              <div class="lens-q">Q2 · AC missing · H#1</div>
+            </div>
+            <div class="row">
+              <div class="where">Screen 4</div>
+              <div class="what"><strong>No rejected or approved variant.</strong> AC requires "see status with reason if rejected" — that screen variant is missing entirely.</div>
+              <div class="lens-q">Q2 · AC missing</div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:920px; font-style:italic">If your pair caught 6+ of these, you're already reviewing like a real BA. The lens questions are how you got there — every finding is tagged to one.</p>
+        </div>
+      </div>
+
+      <!-- 19 WRAP -->
+      <div class="slide bg-dark" data-slide="19">
+        <div class="slide-label"><span class="snum">19</span> Wrap-up</div>
+        <div class="center" style="max-width: 820px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key Takeaways</div>
+          <h2 class="heading" style="color: white;">What we covered today</h2>
+          <ul class="reveal-list" style="color: rgba(255,255,255,0.9); text-align:left; max-width: 720px; margin: 1.5rem auto; font-size: 1rem; line-height: 2;">
+            <li>✅ Design sits <strong>between BA and Dev</strong> — words become form, then form becomes code</li>
+            <li>✅ A handoff includes <strong>screens, specs, behaviours, assets, flow links, edge states</strong></li>
+            <li>✅ The BA review lens is <strong>five questions</strong> — not visual taste</li>
+            <li>✅ Use the <strong>Nielsen heuristic numbers</strong> to name problems precisely</li>
+            <li>✅ Feedback must be <strong>specific, behavioural, action-oriented</strong> — never "I don't like it"</li>
+            <li>✅ Never approve a design without walking <strong>every story and every edge</strong></li>
+            <li>✅ A story with no design, or a design with no story, is a <strong>gap</strong></li>
+          </ul>
+          <p style="color: var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.2rem; margin-top:1.5rem">Your job is not to design. Your job is to make sure the design delivers the story.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 19</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>

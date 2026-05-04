@@ -1,0 +1,711 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Writing Test Cases — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      /* ===== Generic content cards ===== */
+      .big-card { background:white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.3rem; max-width:1050px; width:100%; }
+      .big-card h4 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.12rem; margin-bottom:0.5rem; }
+      .big-card .tag { color:var(--muted); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.07em; font-weight:700; margin-bottom:0.25rem; }
+      .big-card ul { padding-left:1.2rem; margin:0.4rem 0; }
+      .big-card li { font-size:0.9rem; line-height:1.65; color:var(--text); margin:0.2rem 0; }
+
+      .dual { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px) { .dual { grid-template-columns: 1fr; } }
+
+      /* ===== User story + AC bridge ===== */
+      .story-box { background:white; border:2px dashed var(--blue); border-radius:12px; padding:0.9rem 1.2rem; max-width:1000px; width:100%; }
+      .story-box .tag { background:#E6F0F8; color:var(--blue); font-size:0.7rem; font-weight:700; padding:0.2rem 0.6rem; border-radius:4px; letter-spacing:0.07em; text-transform:uppercase; }
+      .story-box h5 { color:var(--indigo); font-size:1.05rem; margin:0.4rem 0 0.3rem; font-family:'Bahnschrift','Segoe UI',sans-serif; }
+      .story-box p { font-size:0.92rem; color:var(--text); line-height:1.7; font-style:italic; }
+      .story-box p strong { color:var(--indigo); font-style:normal; }
+
+      .ac-list { background:white; border:1px solid var(--border); border-radius:10px; padding:0.7rem 1rem; max-width:1000px; width:100%; }
+      .ac-list .ac { border-left:4px solid var(--green); padding:0.4rem 0.8rem; margin:0.3rem 0; background:var(--bg); border-radius:6px; }
+      .ac-list .ac .lbl { color:var(--muted); font-size:0.7rem; text-transform:uppercase; letter-spacing:0.07em; font-weight:700; margin-bottom:0.15rem; }
+      .ac-list .ac p { font-size:0.88rem; line-height:1.6; color:var(--text); margin:0.05rem 0; }
+      .ac-list .ac p .k { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; }
+
+      .bridge { display:grid; grid-template-columns: 1.05fr auto 1fr; gap:0.7rem; align-items:stretch; width:100%; max-width:1180px; }
+      @media (max-width: 900px){ .bridge { grid-template-columns: 1fr; } }
+      .bridge .arrow { display:flex; align-items:center; justify-content:center; font-size:1.6rem; color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; }
+      .bridge .col { background:white; border:1px solid var(--border); border-radius:10px; padding:0.7rem 0.9rem; }
+      .bridge .col h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.9rem; margin-bottom:0.3rem; }
+      .bridge .col ul { padding-left:1rem; margin:0; }
+      .bridge .col li { font-size:0.82rem; color:var(--text); line-height:1.55; margin:0.2rem 0; }
+      .bridge .col.ac { border-left:4px solid var(--green); }
+      .bridge .col.tc { border-left:4px solid var(--blue); }
+
+      /* ===== Anatomy cards ===== */
+      .anat-grid { display:grid; grid-template-columns: repeat(5, 1fr); gap:0.55rem; max-width:1200px; width:100%; }
+      @media (max-width: 1000px) { .anat-grid { grid-template-columns: repeat(3, 1fr); } }
+      @media (max-width: 700px) { .anat-grid { grid-template-columns: 1fr 1fr; } }
+      .anat { background:white; border:1px solid var(--border); border-left:4px solid var(--blue); border-radius:8px; padding:0.55rem 0.8rem; }
+      .anat .num { font-family:'Courier New',monospace; font-size:0.7rem; color:var(--muted); }
+      .anat h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.88rem; margin:0.1rem 0 0.15rem; }
+      .anat p { font-size:0.74rem; color:var(--text); line-height:1.5; }
+      .anat.ident { border-left-color:var(--muted); }
+      .anat.context { border-left-color:var(--blue); }
+      .anat.exec { border-left-color:var(--indigo); }
+      .anat.outcome { border-left-color:var(--amber); }
+      .anat.status { border-left-color:#3D7A3D; }
+
+      /* ===== Test case template / table ===== */
+      .tc-tbl { max-width:1100px; width:100%; background:white; border:1px solid var(--border); border-radius:12px; overflow:hidden; box-shadow:0 4px 16px rgba(0,0,0,0.06); }
+      .tc-tbl table { width:100%; border-collapse:collapse; font-size:0.85rem; }
+      .tc-tbl th { background:#E6F0F8; color:var(--blue); padding:0.55rem 0.75rem; text-align:left; font-size:0.72rem; font-family:'Bahnschrift','Segoe UI',sans-serif; text-transform:uppercase; letter-spacing:0.06em; font-weight:700; border-bottom:1px solid var(--border); width:24%; vertical-align:top; }
+      .tc-tbl td { padding:0.55rem 0.85rem; border-bottom:1px solid var(--border); color:var(--text); line-height:1.6; vertical-align:top; }
+      .tc-tbl tr:last-child td, .tc-tbl tr:last-child th { border-bottom:none; }
+      .tc-tbl ol { margin:0; padding-left:1.1rem; }
+      .tc-tbl ol li { margin:0.15rem 0; font-size:0.85rem; line-height:1.55; }
+      .tc-tbl .pass { color:#3D7A3D; font-weight:700; }
+      .tc-tbl .pill-id { font-family:'Courier New',monospace; background:var(--bg); border:1px solid var(--border); padding:0.1rem 0.5rem; border-radius:6px; font-size:0.78rem; }
+
+      /* ===== 7 rules · bad → good ===== */
+      .rule { background:white; border:1px solid var(--border); border-radius:12px; padding:0.85rem 1.1rem; max-width:1080px; width:100%; }
+      .rule .rule-head { display:flex; align-items:center; gap:0.6rem; margin-bottom:0.5rem; }
+      .rule .rule-num { width:34px; height:34px; min-width:34px; border-radius:50%; background:var(--blue); color:white; display:flex; align-items:center; justify-content:center; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; font-weight:700; }
+      .rule h4 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; }
+      .rule .sub { color:var(--muted); font-size:0.82rem; margin-top:0.1rem; }
+      .rule-cmp { display:grid; grid-template-columns: 1fr 1fr; gap:0.7rem; margin-top:0.2rem; }
+      @media (max-width: 820px){ .rule-cmp { grid-template-columns: 1fr; } }
+      .rule-cmp .col { border-radius:8px; padding:0.55rem 0.85rem; font-size:0.85rem; line-height:1.55; }
+      .rule-cmp .bad { background:#FFF5F7; border:1px solid #FADCE3; }
+      .rule-cmp .good { background:#F3FAE9; border:1px solid #D4E8BD; }
+      .rule-cmp .bad h6 { color:var(--red); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.78rem; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.2rem; }
+      .rule-cmp .good h6 { color:#3D7A3D; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.78rem; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.2rem; }
+      .rule-cmp p { font-size:0.84rem; line-height:1.6; }
+      .rule-cmp code { font-family:'Courier New',monospace; font-size:0.8rem; background:rgba(255,255,255,0.6); border-radius:4px; padding:0.05rem 0.3rem; }
+
+      /* ===== positive vs negative ===== */
+      .pn-grid { display:grid; grid-template-columns: 1fr 1fr; gap:0.9rem; max-width:1150px; width:100%; }
+      @media (max-width: 820px){ .pn-grid { grid-template-columns: 1fr; } }
+      .pn { background:white; border:1px solid var(--border); border-top:4px solid var(--green); border-radius:10px; padding:0.85rem 1.05rem; }
+      .pn.neg { border-top-color:var(--red); }
+      .pn h5 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.4rem; }
+      .pn.pos h5 { color:#3D7A3D; }
+      .pn.neg h5 { color:var(--red); }
+      .pn ul { list-style:none; padding:0; margin:0; }
+      .pn li { padding:0.4rem 0; border-bottom:1px dashed var(--border); font-size:0.86rem; line-height:1.55; }
+      .pn li:last-child { border-bottom:none; }
+      .pn li .id { font-family:'Courier New',monospace; color:var(--muted); font-size:0.74rem; }
+      .pn li strong { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; }
+
+      /* ===== Common mistakes table ===== */
+      .miss-tbl { max-width:1120px; width:100%; background:white; border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+      .miss-tbl table { width:100%; border-collapse:collapse; font-size:0.83rem; }
+      .miss-tbl th { background:var(--bg); padding:0.5rem 0.75rem; text-align:left; color:var(--muted); font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; font-weight:700; border-bottom:1px solid var(--border); }
+      .miss-tbl td { padding:0.5rem 0.75rem; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.55; }
+      .miss-tbl tr:last-child td { border-bottom:none; }
+      .miss-tbl td:first-child { color:var(--red); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; width:32%; }
+      .miss-tbl td:last-child { color:#3D7A3D; }
+
+      /* ===== Hands-on activity card ===== */
+      .ho-box { background:white; border:1px solid var(--border); border-left:5px solid var(--amber); border-radius:12px; padding:1rem 1.3rem; max-width:1100px; width:100%; }
+      .ho-box h4 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-bottom:0.4rem; }
+      .ho-box .ho-grid { display:grid; grid-template-columns: 1fr 1fr; gap:0.9rem; margin-top:0.4rem; }
+      @media (max-width: 820px){ .ho-box .ho-grid { grid-template-columns: 1fr; } }
+      .ho-box ul { padding-left:1.1rem; margin:0.3rem 0; }
+      .ho-box li { font-size:0.86rem; line-height:1.6; color:var(--text); margin:0.15rem 0; }
+      .ho-box .step { color:var(--muted); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.06em; font-weight:700; }
+      .ho-box .ac-mini { background:var(--bg); border-left:3px solid var(--green); border-radius:6px; padding:0.45rem 0.7rem; margin:0.25rem 0; font-size:0.84rem; line-height:1.55; }
+
+      /* ===== Recap chip strip ===== */
+      .recap-strip { display:flex; gap:0.5rem; flex-wrap:wrap; justify-content:center; max-width:1080px; width:100%; }
+      .recap-chip { background:white; border:1px solid var(--border); border-radius:10px; padding:0.6rem 0.85rem; flex:1 1 200px; min-width:190px; }
+      .recap-chip .lbl { color:var(--muted); font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; font-weight:700; }
+      .recap-chip h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.92rem; margin:0.1rem 0 0.15rem; }
+      .recap-chip p { font-size:0.78rem; color:var(--text); line-height:1.5; }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>Software Testing · Class 04</div></div>
+          <h1 class="display" style="color: var(--text)">
+            <span style="color: var(--blue)">Writing</span><br />
+            <span style="color: var(--indigo)">Test Cases</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted)">Structure · pre-conditions · steps · expected results.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">From AC to test cases</span>
+            <span class="class-tag tag-blue">Anatomy</span>
+            <span class="class-tag tag-blue">7 rules</span>
+            <span class="class-tag tag-indigo">Hands-on</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 AGENDA -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 820px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem"><h2 class="heading">Session Journey</h2></div>
+          <div class="agenda-row" onclick="goTo(3)"><span class="ar-dot" style="background: var(--muted)"></span><span class="ar-label">↩️ Where this fits · recap</span><span class="ar-badge" style="background:#E6E9EC;color:var(--indigo)">5 min</span></div>
+          <div class="agenda-row" onclick="goTo(5)"><span class="ar-dot" style="background: var(--green)"></span><span class="ar-label">🌉 From AC to test cases</span><span class="ar-badge" style="background:#F3FAE9;color:#3D7A3D">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(8)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🧬 Anatomy of a test case</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(11)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">📏 The 7 rules · bad → good</span><span class="ar-badge" style="background:#E6E9EC;color:var(--indigo)">20 min</span></div>
+          <div class="agenda-row" onclick="goTo(19)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">➕➖ Positive vs negative</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(20)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">📄 Worked example · leave request</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">7 min</span></div>
+          <div class="agenda-row" onclick="goTo(21)"><span class="ar-dot" style="background: var(--red)"></span><span class="ar-label">⚠️ Common mistakes</span><span class="ar-badge" style="background:#FEE9EC;color:var(--red)">5 min</span></div>
+          <div class="agenda-row" onclick="goTo(22)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🛠 Hands-on · pair-write 6+ cases</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">30 min</span></div>
+        </div>
+      </div>
+
+      <!-- 3 RECAP / WHERE WE ARE -->
+      <div class="slide accent-blue bg-subtle" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> Where this class fits</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">You already know the why · today is the how</h2></div>
+          <div class="recap-strip">
+            <div class="recap-chip"><div class="lbl">BA+QA · 04</div><h6>Acceptance Criteria</h6><p>The rules a feature must pass. Source of test cases.</p></div>
+            <div class="recap-chip"><div class="lbl">Quality · 01</div><h6>Testing Fundamentals</h6><p>Verification vs validation · levels.</p></div>
+            <div class="recap-chip"><div class="lbl">QA · 01–02</div><h6>Types · principles</h6><p>Functional · regression · positive · negative.</p></div>
+            <div class="recap-chip"><div class="lbl">QA · 03</div><h6>Test Plan Document</h6><p>The container · what · how · who · when. <em>Test cases live inside it.</em></p></div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:880px; font-style:italic; margin-top:0.6rem">
+            Today: we open the container and start writing the actual test cases.
+          </p>
+        </div>
+      </div>
+
+      <!-- 4 HOOK -->
+      <div class="slide bg-dark" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> Hook</div>
+        <div class="center" style="max-width: 940px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎤 A familiar moment</div>
+          <p class="disc-prompt" style="font-size:1.3rem">
+            Manager says: <em>"Test the leave-request feature."</em><br>
+            QA opens the screen.<br>
+            QA clicks around.<br>
+            QA says: <em>"Looks fine."</em>
+          </p>
+          <p style="color: rgba(255,255,255,0.88); font-size: 1.05rem; margin-top:2rem; line-height:1.8;">
+            Two days later, a bug ships.<br>
+            Manager: <strong style="color:var(--amber)">"Did you test that?"</strong><br>
+            QA: <em>"…I think so."</em>
+          </p>
+          <p style="color: var(--amber); font-size: 1.15rem; margin-top: 2rem; font-family:'Bahnschrift','Segoe UI',sans-serif">
+            A test case turns "I think so" into "Yes — here is the proof."
+          </p>
+        </div>
+      </div>
+
+      <!-- 5 SECTION · AC TO TEST CASES -->
+      <div class="slide bg-blue" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part One</div>
+          <h1 class="display" style="color: white">From AC<br/>to Test Cases</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Acceptance Criteria → 1 or more test cases · always.</p>
+        </div>
+        <div class="section-num" style="color: white">01</div>
+      </div>
+
+      <!-- 6 USER STORY + AC -->
+      <div class="slide accent-blue bg-subtle" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> The story we test</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Mr. Tshering applies for leave</h2></div>
+          <div class="story-box">
+            <span class="tag">User Story</span>
+            <h5>Apply for annual leave</h5>
+            <p><strong>As an</strong> employee,<br>
+               <strong>I want to</strong> submit a leave request from the HR app,<br>
+               <strong>so that</strong> my manager can approve it without paperwork.</p>
+          </div>
+          <div class="ac-list">
+            <div class="ac">
+              <div class="lbl">AC 1 · Happy path</div>
+              <p><span class="k">Given</span> I am logged in as an employee with at least 3 days of leave balance,<br>
+                 <span class="k">When</span> I submit a request for 3 days of annual leave with a reason,<br>
+                 <span class="k">Then</span> the request is saved and shown as <em>Pending</em> on my dashboard.</p>
+            </div>
+            <div class="ac">
+              <div class="lbl">AC 2 · Not enough balance</div>
+              <p><span class="k">Given</span> I have only 2 days of leave balance,<br>
+                 <span class="k">When</span> I submit a request for 3 days,<br>
+                 <span class="k">Then</span> the system blocks the request and shows: <em>"Not enough leave balance."</em></p>
+            </div>
+            <div class="ac">
+              <div class="lbl">AC 3 · Missing reason</div>
+              <p><span class="k">Given</span> I am on the leave form,<br>
+                 <span class="k">When</span> I click <em>Submit</em> with the reason field empty,<br>
+                 <span class="k">Then</span> the form shows: <em>"Reason is required."</em> and does not submit.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7 BRIDGE: AC → TC -->
+      <div class="slide accent-blue" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> Each AC becomes one or more test cases</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="margin-bottom:0.3rem"><h2 class="heading" style="font-size:clamp(1.6rem,3vw,2.2rem)">Read AC · write the test that proves it</h2></div>
+          <div class="bridge">
+            <div class="col ac">
+              <h6>AC 1 · Happy path</h6>
+              <ul><li>Logged in · 3 days balance</li><li>Submit 3 days · with reason</li><li>Request saved · status <em>Pending</em></li></ul>
+            </div>
+            <div class="arrow">→</div>
+            <div class="col tc">
+              <h6>TC-LEAVE-01 · Submit annual leave (3 days)</h6>
+              <ul><li>Pre: user logged in, balance = 12 days</li><li>Steps: open form · pick dates · type reason · click <em>Submit</em></li><li>Expected: success message · request visible on dashboard, status <em>Pending</em></li></ul>
+            </div>
+          </div>
+          <div class="bridge">
+            <div class="col ac">
+              <h6>AC 2 · Not enough balance</h6>
+              <ul><li>Balance = 2 days</li><li>Try 3-day request</li><li>System blocks · shows error</li></ul>
+            </div>
+            <div class="arrow">→</div>
+            <div class="col tc">
+              <h6>TC-LEAVE-02 · Block request when balance &lt; days</h6>
+              <ul><li>Pre: user logged in, balance = 2 days</li><li>Steps: open form · pick 3 days · type reason · click <em>Submit</em></li><li>Expected: red message <em>"Not enough leave balance."</em> · request NOT created</li></ul>
+            </div>
+          </div>
+          <div class="bridge">
+            <div class="col ac">
+              <h6>AC 3 · Missing reason</h6>
+              <ul><li>On the form</li><li>Submit with empty reason</li><li>Show <em>"Reason is required."</em></li></ul>
+            </div>
+            <div class="arrow">→</div>
+            <div class="col tc">
+              <h6>TC-LEAVE-03 · Block submit when reason empty</h6>
+              <ul><li>Pre: user logged in, balance = 12 days</li><li>Steps: pick dates · leave reason empty · click <em>Submit</em></li><li>Expected: error <em>"Reason is required."</em> · form stays open · no request created</li></ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:920px; font-style:italic">One AC can become 1, 2 or even 5 test cases. Never zero.</p>
+        </div>
+      </div>
+
+      <!-- 8 SECTION · ANATOMY -->
+      <div class="slide bg-indigo" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Two</div>
+          <h1 class="display" style="color: white">Anatomy<br/>of a Test Case</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">10 fields. Same shape every time.</p>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- 9 ANATOMY GRID -->
+      <div class="slide accent-blue bg-subtle" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> The 10 fields of a test case</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Identification · Context · Execution · Outcome · Status</h2></div>
+          <div class="anat-grid">
+            <div class="anat ident"><div class="num">① Identification</div><h6>ID</h6><p>Unique code · TC-LEAVE-01</p></div>
+            <div class="anat ident"><div class="num">① Identification</div><h6>Title</h6><p>One-line summary of what this case does</p></div>
+            <div class="anat context"><div class="num">② Context</div><h6>Module / Feature</h6><p>e.g. HR App · Leave Request</p></div>
+            <div class="anat context"><div class="num">② Context</div><h6>Pre-conditions</h6><p>The exact state before step 1</p></div>
+            <div class="anat context"><div class="num">② Context</div><h6>Test Data</h6><p>Real values · 3 days · "Family wedding"</p></div>
+            <div class="anat exec"><div class="num">③ Execution</div><h6>Steps</h6><p>Numbered · one action each</p></div>
+            <div class="anat outcome"><div class="num">④ Outcome</div><h6>Expected Result</h6><p>What MUST happen · checked at the end</p></div>
+            <div class="anat outcome"><div class="num">④ Outcome</div><h6>Actual Result</h6><p>What you saw when you ran it</p></div>
+            <div class="anat status"><div class="num">⑤ Status</div><h6>Status</h6><p>Pass · Fail · Blocked</p></div>
+            <div class="anat status"><div class="num">⑤ Status</div><h6>Notes / Trace</h6><p>Link back to AC · story · bug ID</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10 ANATOMY · BLANK TEMPLATE TABLE -->
+      <div class="slide accent-blue" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> The blank template you fill in every time</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="tc-tbl">
+            <table>
+              <tbody>
+                <tr><th>Test Case ID</th><td><span class="pill-id">TC-XXXX-NN</span></td></tr>
+                <tr><th>Title</th><td>Short, action-oriented sentence — what the test verifies</td></tr>
+                <tr><th>Module / Feature</th><td>Where this lives (e.g. HR App · Leave Request · Submit form)</td></tr>
+                <tr><th>Pre-conditions</th><td>Exact starting state · user · role · data already in the system</td></tr>
+                <tr><th>Test Data</th><td>The exact values you will type — never "valid input"</td></tr>
+                <tr><th>Steps</th><td><ol><li>One action</li><li>Next action</li><li>Final action</li></ol></td></tr>
+                <tr><th>Expected Result</th><td>The one specific thing that MUST be true at the end</td></tr>
+                <tr><th>Actual Result</th><td><em>(filled at run-time — what actually happened)</em></td></tr>
+                <tr><th>Status</th><td>Pass · Fail · Blocked</td></tr>
+                <tr><th>Notes / Trace</th><td>Linked AC · story ID · bug ticket if failed</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:880px; font-style:italic">Same shape · every time. A new joiner can read any of your test cases.</p>
+        </div>
+      </div>
+
+      <!-- 11 SECTION · 7 RULES -->
+      <div class="slide bg-blue" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Three</div>
+          <h1 class="display" style="color: white">The 7 Rules<br/>of a Good Test Case</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Bad → Good. Every rule.</p>
+        </div>
+        <div class="section-num" style="color: white">03</div>
+      </div>
+
+      <!-- 12 RULE 1 · ATOMIC STEPS -->
+      <div class="slide accent-blue bg-subtle" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> Rule 1 of 7</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="rule">
+            <div class="rule-head">
+              <div class="rule-num">1</div>
+              <div><h4>Atomic steps · one action per step</h4><div class="sub">If the step has the word <em>"and"</em>, split it.</div></div>
+            </div>
+            <div class="rule-cmp">
+              <div class="col bad"><h6>❌ Bad</h6><p>1. Open the leave form, pick dates, type the reason and click <em>Submit</em>.</p></div>
+              <div class="col good"><h6>✅ Good</h6>
+                <p>1. Open the leave form.<br>
+                   2. Pick start date <code>2026-06-01</code> and end date <code>2026-06-03</code>.<br>
+                   3. Type reason: <code>Family wedding</code>.<br>
+                   4. Click <em>Submit</em>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 13 RULE 2 · NUMBERED -->
+      <div class="slide accent-blue" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> Rule 2 of 7</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="rule">
+            <div class="rule-head">
+              <div class="rule-num">2</div>
+              <div><h4>Numbered &amp; sequenced</h4><div class="sub">A reader should never wonder "what comes next?"</div></div>
+            </div>
+            <div class="rule-cmp">
+              <div class="col bad"><h6>❌ Bad · bullet soup</h6>
+                <p>• Open mBoB<br>• Transfer money<br>• Confirm</p>
+              </div>
+              <div class="col good"><h6>✅ Good · ordered</h6>
+                <p>1. Open mBoB.<br>2. Tap <em>Send Money</em>.<br>3. Pick <em>Sonam Lhamo</em> from contacts.<br>4. Enter amount <code>500</code>.<br>5. Tap <em>Confirm</em>.<br>6. Enter PIN <code>4321</code>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 14 RULE 3 · CONCRETE TEST DATA -->
+      <div class="slide accent-blue bg-subtle" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> Rule 3 of 7</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="rule">
+            <div class="rule-head">
+              <div class="rule-num">3</div>
+              <div><h4>Concrete test data · not "valid input"</h4><div class="sub">If 5 testers run this, they should all type the same thing.</div></div>
+            </div>
+            <div class="rule-cmp">
+              <div class="col bad"><h6>❌ Bad</h6>
+                <p>Steps: <em>"Enter a valid CID and a valid amount."</em></p>
+              </div>
+              <div class="col good"><h6>✅ Good</h6>
+                <p>Test Data:<br>
+                  CID: <code>10901001234</code><br>
+                  Amount: <code>500</code> Nu<br>
+                  Recipient: <code>Sonam Lhamo · 17712345</code></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 15 RULE 4 · SPECIFIC EXPECTED -->
+      <div class="slide accent-blue" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span> Rule 4 of 7</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="rule">
+            <div class="rule-head">
+              <div class="rule-num">4</div>
+              <div><h4>Specific expected result · not "should work"</h4><div class="sub">"Works" is not a result. A message, a value, a screen — that is a result.</div></div>
+            </div>
+            <div class="rule-cmp">
+              <div class="col bad"><h6>❌ Bad</h6>
+                <p>Expected: <em>"The transfer should work."</em></p>
+              </div>
+              <div class="col good"><h6>✅ Good</h6>
+                <p>Expected:<br>
+                  • Green banner: <em>"Transfer successful · Ref BNB-2026-0419-7732"</em><br>
+                  • Sender balance reduced by <code>500</code> Nu<br>
+                  • Transaction shown in <em>History</em> with today's date</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 16 RULE 5 · INDEPENDENT -->
+      <div class="slide accent-blue bg-subtle" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span> Rule 5 of 7</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="rule">
+            <div class="rule-head">
+              <div class="rule-num">5</div>
+              <div><h4>Independent · doesn't depend on the previous case</h4><div class="sub">If TC-02 fails, TC-03 must still be runnable.</div></div>
+            </div>
+            <div class="rule-cmp">
+              <div class="col bad"><h6>❌ Bad · chained</h6>
+                <p>TC-03 Pre-condition: <em>"TC-02 has just passed and a leave request exists."</em></p>
+              </div>
+              <div class="col good"><h6>✅ Good · stands alone</h6>
+                <p>TC-03 Pre-condition: <em>"User <code>tshering@selisegroup.com</code> is logged in. A pending leave request <code>LR-2026-0512</code> already exists in the database (seeded)."</em></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 17 RULE 6 · REUSABLE -->
+      <div class="slide accent-blue" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span> Rule 6 of 7</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="rule">
+            <div class="rule-head">
+              <div class="rule-num">6</div>
+              <div><h4>Reusable · clear enough that anyone can run it</h4><div class="sub">A new joiner with no context should be able to execute it.</div></div>
+            </div>
+            <div class="rule-cmp">
+              <div class="col bad"><h6>❌ Bad</h6>
+                <p>Steps: <em>"Use the school registration form like we did last week."</em></p>
+              </div>
+              <div class="col good"><h6>✅ Good</h6>
+                <p>1. Open <code>https://school.gov.bt/register</code>.<br>
+                   2. Select <em>Class IX · Drukgyel Higher Secondary</em>.<br>
+                   3. Fill student name <code>Pema Choden</code>, CID <code>11308002211</code>, DOB <code>2010-04-12</code>.<br>
+                   4. Upload <em>cid.pdf</em>.<br>
+                   5. Click <em>Register</em>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 18 RULE 7 · TRACEABLE -->
+      <div class="slide accent-blue bg-subtle" data-slide="18">
+        <div class="slide-label"><span class="snum">18</span> Rule 7 of 7</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="rule">
+            <div class="rule-head">
+              <div class="rule-num">7</div>
+              <div><h4>Traceable · linked to AC / story / requirement</h4><div class="sub">Every test case must answer: "Why does this exist?"</div></div>
+            </div>
+            <div class="rule-cmp">
+              <div class="col bad"><h6>❌ Bad</h6>
+                <p>Notes: <em>(empty)</em></p>
+              </div>
+              <div class="col good"><h6>✅ Good</h6>
+                <p>Notes / Trace:<br>
+                  • Story: <code>HR-142 · Apply for leave</code><br>
+                  • AC: <code>AC-2 (not enough balance)</code><br>
+                  • Test Plan: <code>TP-HR-v1.0 § 05</code><br>
+                  • Bug if failed: <code>HR-BUG-091</code></p>
+              </div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:880px; font-style:italic">No trace = nobody can prove the requirement was tested.</p>
+        </div>
+      </div>
+
+      <!-- 19 POSITIVE vs NEGATIVE -->
+      <div class="slide accent-blue" data-slide="19">
+        <div class="slide-label"><span class="snum">19</span> Positive vs negative · both matter</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">"Log in" feature · 2 positive · 2 negative</h2></div>
+          <div class="pn-grid">
+            <div class="pn pos">
+              <h5>✅ Positive · the system DOES allow it</h5>
+              <ul>
+                <li><span class="id">TC-LOGIN-01</span><br><strong>Valid email + correct password →</strong> user lands on dashboard.</li>
+                <li><span class="id">TC-LOGIN-02</span><br><strong>Valid email + correct password + "Remember me" ON →</strong> closing &amp; reopening browser keeps user logged in.</li>
+              </ul>
+            </div>
+            <div class="pn neg">
+              <h5>⛔ Negative · the system MUST block it</h5>
+              <ul>
+                <li><span class="id">TC-LOGIN-03</span><br><strong>Valid email + wrong password →</strong> error <em>"Email or password is wrong."</em> · still on login screen.</li>
+                <li><span class="id">TC-LOGIN-04</span><br><strong>Empty email + any password →</strong> form shows <em>"Email is required."</em> · no request sent.</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:880px; font-style:italic">A test suite with only positive cases is half a test suite.</p>
+        </div>
+      </div>
+
+      <!-- 20 WORKED EXAMPLE · LEAVE -->
+      <div class="slide accent-blue bg-subtle" data-slide="20">
+        <div class="slide-label"><span class="snum">20</span> Worked example · TC-LEAVE-01 · full anatomy</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="tc-tbl">
+            <table>
+              <tbody>
+                <tr><th>Test Case ID</th><td><span class="pill-id">TC-LEAVE-01</span></td></tr>
+                <tr><th>Title</th><td>Submit annual leave for 3 days · happy path</td></tr>
+                <tr><th>Module / Feature</th><td>HR App · Leave Request · Submit form</td></tr>
+                <tr><th>Pre-conditions</th><td>User <code>tshering@selisegroup.com</code> is logged in with role <em>Employee</em>. Annual leave balance = <strong>12 days</strong>. Today's date = <strong>2026-05-04</strong>.</td></tr>
+                <tr><th>Test Data</th><td>
+                  Start date: <code>2026-06-01</code> (Mon)<br>
+                  End date: <code>2026-06-03</code> (Wed)<br>
+                  Leave type: <em>Annual</em><br>
+                  Reason: <code>Family wedding in Paro</code>
+                </td></tr>
+                <tr><th>Steps</th><td><ol>
+                  <li>From the dashboard, click <em>Apply for Leave</em>.</li>
+                  <li>In <em>Leave type</em>, choose <em>Annual</em>.</li>
+                  <li>Pick <em>Start date</em> = <code>2026-06-01</code>.</li>
+                  <li>Pick <em>End date</em> = <code>2026-06-03</code>.</li>
+                  <li>In <em>Reason</em>, type <code>Family wedding in Paro</code>.</li>
+                  <li>Click <em>Submit</em>.</li>
+                </ol></td></tr>
+                <tr><th>Expected Result</th><td>
+                  • Green banner: <em>"Leave request submitted. Reference LR-2026-0512."</em><br>
+                  • New row on the dashboard: <em>1 Jun – 3 Jun · Annual · Pending</em><br>
+                  • Annual leave balance still shows <strong>12 days</strong> (only deducted on approval).<br>
+                  • Manager <em>Karma Wangchuk</em> receives a notification.
+                </td></tr>
+                <tr><th>Actual Result</th><td><em>(to be filled when the test is run)</em></td></tr>
+                <tr><th>Status</th><td><span class="pass">Pass</span> · Fail · Blocked</td></tr>
+                <tr><th>Notes / Trace</th><td>Story <code>HR-142</code> · AC-1 · Test Plan <code>TP-HR-v1.0 § 05</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 21 COMMON MISTAKES -->
+      <div class="slide accent-blue" data-slide="21">
+        <div class="slide-label"><span class="snum">21</span> The 5 mistakes we see every cohort</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="miss-tbl">
+            <table>
+              <thead><tr><th>The mistake</th><th>Why it hurts</th><th>Fix</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td>"Click around" steps</td>
+                  <td>Two testers run two different tests · results are not comparable</td>
+                  <td>Numbered, atomic steps with exact button names</td>
+                </tr>
+                <tr>
+                  <td>"Verify it works" expected result</td>
+                  <td>"Works" is opinion, not fact · everyone passes everything</td>
+                  <td>One specific message, value or screen the tester must see</td>
+                </tr>
+                <tr>
+                  <td>5 actions in 1 step</td>
+                  <td>If step 3 fails, you don't know which of the 5 broke</td>
+                  <td>Split until each step is one verb, one click, one type</td>
+                </tr>
+                <tr>
+                  <td>Vague pre-conditions ("logged in")</td>
+                  <td>Logged in as whom? With what data? Bug is unreproducible</td>
+                  <td>"Logged in as user with role <em>Manager</em> and 12 days leave balance"</td>
+                </tr>
+                <tr>
+                  <td>Skipping negative test cases</td>
+                  <td>Real bugs hide in the "we don't allow this" paths</td>
+                  <td>For every positive case, ask: "what should the system refuse?"</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 22 HANDS-ON -->
+      <div class="slide accent-amber bg-subtle" data-slide="22">
+        <div class="slide-label"><span class="snum">22</span> Hands-on · 30 minutes</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="ho-box">
+            <span class="step">Activity · in pairs</span>
+            <h4>Approve a sick leave request as a manager</h4>
+            <p style="font-size:0.92rem; color:var(--text); line-height:1.7">
+              <strong>User story:</strong> As a manager, I want to approve or reject sick leave requests from my team, so that my employees can take time off without delay.
+            </p>
+            <div class="ho-grid">
+              <div>
+                <span class="step">Acceptance Criteria</span>
+                <div class="ac-mini"><strong>AC 1.</strong> Manager sees pending leave requests on the dashboard.</div>
+                <div class="ac-mini"><strong>AC 2.</strong> Manager can approve a request and the employee is notified.</div>
+                <div class="ac-mini"><strong>AC 3.</strong> Manager can reject a request and a reason is required.</div>
+              </div>
+              <div>
+                <span class="step">Your task · in pairs</span>
+                <ul>
+                  <li><strong>20 min:</strong> Write <strong>6+ test cases</strong> · mix positive and negative.</li>
+                  <li>Use the <strong>full anatomy template</strong> · all 10 fields.</li>
+                  <li>Cover all 3 ACs.</li>
+                  <li><strong>10 min:</strong> Swap with another pair · review against the <strong>7 rules</strong> · mark each rule ✅ or ❌.</li>
+                  <li>Each pair shares 1 test case &amp; 1 finding from the review.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:880px; font-style:italic; margin-top:0.4rem">Hint: think about empty fields · wrong roles · already-approved requests · and what happens when reason is blank.</p>
+        </div>
+      </div>
+
+      <!-- 23 WRAP -->
+      <div class="slide bg-dark" data-slide="23">
+        <div class="slide-label"><span class="snum">23</span> Wrap-up</div>
+        <div class="center" style="max-width: 860px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key Takeaways</div>
+          <h2 class="heading" style="color: white;">What we covered today</h2>
+          <ul class="reveal-list" style="color: rgba(255,255,255,0.9); text-align:left; max-width: 760px; margin: 1.5rem auto; font-size: 0.95rem; line-height: 1.9;">
+            <li>✅ Every <strong>AC</strong> becomes <strong>1 or more test cases</strong> · never zero</li>
+            <li>✅ Same <strong>10 fields</strong> every time: ID · Title · Module · Pre-conditions · Test Data · Steps · Expected · Actual · Status · Notes</li>
+            <li>✅ The <strong>7 rules:</strong> atomic · numbered · concrete data · specific expected · independent · reusable · traceable</li>
+            <li>✅ Write <strong>positive AND negative</strong> test cases · always</li>
+            <li>✅ Pre-conditions = <strong>state</strong> (role, balance, data) · not "logged in"</li>
+            <li>✅ Expected result = a <strong>thing you can see</strong> · not "should work"</li>
+            <li>✅ A good test case can be run by <strong>someone who has never seen the feature</strong></li>
+          </ul>
+          <p style="color: var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.15rem; margin-top:1.5rem">
+            Next class · QA #05 · <strong>Bug Reporting</strong> — what to write when a test case fails.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 23</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>

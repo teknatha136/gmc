@@ -1,0 +1,896 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Testing Theory I — Test Types (ISTQB Taxonomy) — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      /* ===== Type-card layout (carried over) ===== */
+      .type-card {
+        background:white; border:1px solid var(--border); border-left:5px solid var(--blue);
+        border-radius:14px; padding:1.1rem 1.4rem; max-width:1080px; width:100%;
+      }
+      .type-card .row { display:grid; grid-template-columns: 130px 1fr; gap:0.9rem; padding:0.55rem 0; border-top:1px solid var(--border); }
+      .type-card .row:first-of-type { border-top:none; }
+      .type-card .row .lbl {
+        color:var(--muted); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.07em;
+        font-weight:700; font-family:'Bahnschrift','Segoe UI',sans-serif; align-self:start; padding-top:0.15rem;
+      }
+      .type-card .row .val { font-size:0.95rem; line-height:1.7; color:var(--text); }
+      .type-card .row .val strong { color:var(--indigo); }
+      .type-card.amber { border-left-color:var(--amber); }
+      .type-card.green { border-left-color:var(--green); }
+      .type-card.red { border-left-color:var(--red); }
+      .type-card.indigo { border-left-color:var(--indigo); }
+      .type-card.purple { border-left-color:var(--purple); }
+
+      .big-q {
+        font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--blue);
+        font-size:clamp(1.05rem,1.6vw,1.3rem); margin-bottom:0.4rem;
+      }
+      .big-q.amber { color:var(--amber); }
+      .big-q.green { color:#3D7A3D; }
+      .big-q.red { color:var(--red); }
+      .big-q.indigo { color:var(--indigo); }
+      .big-q.purple { color:var(--purple); }
+
+      .tip-box {
+        background:#F0F7EC; border:1px solid #C8E0B7; border-radius:8px;
+        padding:0.55rem 0.9rem; font-size:0.86rem; color:#2A4D14; line-height:1.6;
+        max-width:1080px; width:100%;
+      }
+      .tip-box strong { color:#1F3B0F; }
+
+      .info-box {
+        background:#E6F0F8; border:1px solid #BFD7EC; border-radius:8px;
+        padding:0.55rem 0.9rem; font-size:0.88rem; color:#0F3F65; line-height:1.65;
+        max-width:1080px; width:100%;
+      }
+      .info-box strong { color:#072B47; }
+
+      /* ===== Comparison table ===== */
+      .cmp-tbl { width:100%; max-width:1180px; background:white; border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+      .cmp-tbl table { width:100%; border-collapse:collapse; font-size:0.85rem; }
+      .cmp-tbl th { background:var(--bg); padding:0.7rem 0.9rem; text-align:left; color:var(--muted); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.06em; font-weight:700; border-bottom:1px solid var(--border); font-family:'Bahnschrift','Segoe UI',sans-serif; }
+      .cmp-tbl td { padding:0.6rem 0.9rem; border-bottom:1px solid var(--border); color:var(--text); vertical-align:top; line-height:1.55; }
+      .cmp-tbl tr:last-child td { border-bottom:none; }
+      .cmp-tbl td:first-child { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-weight:600; }
+      .cmp-tbl .name-smoke { color:var(--red); }
+      .cmp-tbl .name-sanity { color:var(--amber); }
+      .cmp-tbl .name-retest { color:var(--blue); }
+      .cmp-tbl .name-regression { color:#3D7A3D; }
+
+      /* ===== Recap pills ===== */
+      .recap-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:0.7rem; max-width:1100px; width:100%; }
+      @media (max-width: 900px) { .recap-grid { grid-template-columns: 1fr 1fr; } }
+      @media (max-width: 600px) { .recap-grid { grid-template-columns: 1fr; } }
+      .recap-card { background:white; border:1px solid var(--border); border-top:3px solid var(--blue); border-radius:10px; padding:0.7rem 0.95rem; }
+      .recap-card h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.92rem; margin-bottom:0.2rem; }
+      .recap-card p { font-size:0.82rem; color:var(--muted); line-height:1.55; }
+
+      /* ===== Hands-on scenarios ===== */
+      .scen-list { display:grid; grid-template-columns:1fr 1fr; gap:0.6rem; max-width:1180px; width:100%; }
+      @media (max-width: 900px) { .scen-list { grid-template-columns: 1fr; } }
+      .scen { background:white; border:1px solid var(--border); border-left:4px solid var(--amber); border-radius:10px; padding:0.55rem 0.85rem; }
+      .scen .num { color:var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.74rem; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; }
+      .scen p { font-size:0.85rem; color:var(--text); line-height:1.55; margin-top:0.15rem; }
+
+      /* ===== Mini analogy band ===== */
+      .analogy-band {
+        display:flex; align-items:center; gap:0.7rem;
+        background:#FFF8E8; border:1px solid #F1DDA5; border-radius:10px;
+        padding:0.55rem 0.9rem; font-size:0.9rem; color:#5C4308; line-height:1.6;
+        max-width:1080px; width:100%;
+      }
+      .analogy-band .icon { font-size:1.4rem; line-height:1; }
+      .analogy-band strong { color:#3F2C00; }
+
+      /* ===== 4-up overview cards (the four ISTQB types) ===== */
+      .four-types { display:grid; grid-template-columns: repeat(4, 1fr); gap:0.7rem; max-width:1180px; width:100%; }
+      @media (max-width: 900px) { .four-types { grid-template-columns: 1fr 1fr; } }
+      @media (max-width: 560px) { .four-types { grid-template-columns: 1fr; } }
+      .four-card {
+        background:white; border:1px solid var(--border); border-top:5px solid var(--blue);
+        border-radius:12px; padding:0.85rem 1rem;
+      }
+      .four-card .num {
+        font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.7rem; letter-spacing:0.07em;
+        text-transform:uppercase; color:var(--muted); font-weight:700;
+      }
+      .four-card h5 {
+        color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem;
+        margin:0.15rem 0 0.35rem;
+      }
+      .four-card p { font-size:0.82rem; line-height:1.6; color:var(--text); }
+      .four-card.amber { border-top-color:var(--amber); }
+      .four-card.purple { border-top-color:var(--purple); }
+      .four-card.green { border-top-color:var(--green); }
+
+      /* ===== Non-functional flavour grid ===== */
+      .nf-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:0.7rem; max-width:1100px; width:100%; }
+      @media (max-width: 720px) { .nf-grid { grid-template-columns: 1fr; } }
+      .nf-card { background:white; border:1px solid var(--border); border-left:4px solid var(--blue); border-radius:10px; padding:0.7rem 1rem; }
+      .nf-card h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.2rem; }
+      .nf-card p { font-size:0.82rem; color:var(--text); line-height:1.6; }
+      .nf-card .meta { display:inline-block; margin-top:0.25rem; font-size:0.72rem; color:var(--muted); font-style:italic; }
+      .nf-card.amber { border-left-color:var(--amber); }
+      .nf-card.purple { border-left-color:var(--purple); }
+      .nf-card.red { border-left-color:var(--red); }
+
+      /* ===== Perf/Load/Stress ===== */
+      .pls { display:grid; grid-template-columns: repeat(3, 1fr); gap:0.7rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px) { .pls { grid-template-columns: 1fr; } }
+      .pls-card { background:white; border:1px solid var(--border); border-top:4px solid var(--blue); border-radius:10px; padding:0.8rem 1rem; }
+      .pls-card h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.25rem; }
+      .pls-card .q { font-size:0.85rem; color:var(--blue); font-weight:600; margin-bottom:0.3rem; }
+      .pls-card p { font-size:0.83rem; color:var(--text); line-height:1.6; }
+      .pls-card.amber { border-top-color:var(--amber); }
+      .pls-card.amber .q { color:var(--amber); }
+      .pls-card.red { border-top-color:var(--red); }
+      .pls-card.red .q { color:var(--red); }
+
+      /* ===== Dimensions table (Type vs Level vs Technique vs Stage) ===== */
+      .dim-tbl { width:100%; max-width:1180px; background:white; border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+      .dim-tbl table { width:100%; border-collapse:collapse; font-size:0.86rem; }
+      .dim-tbl th { background:var(--bg); padding:0.7rem 0.9rem; text-align:left; color:var(--muted); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.06em; font-weight:700; border-bottom:1px solid var(--border); font-family:'Bahnschrift','Segoe UI',sans-serif; }
+      .dim-tbl td { padding:0.7rem 0.9rem; border-bottom:1px solid var(--border); color:var(--text); vertical-align:top; line-height:1.6; }
+      .dim-tbl tr:last-child td { border-bottom:none; }
+      .dim-tbl td:first-child { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-weight:700; width:140px; }
+      .dim-tbl em { color:var(--blue); font-style:normal; font-weight:600; }
+
+      /* ===== Taxonomy map (visual one-page summary) ===== */
+      .tax-wrap {
+        background:white; border:1px solid var(--border); border-radius:14px;
+        padding:1rem 1.2rem; max-width:1180px; width:100%;
+      }
+      .tax-row {
+        display:grid; grid-template-columns: 150px 1fr; gap:0.8rem;
+        padding:0.55rem 0; border-top:1px solid var(--border);
+      }
+      .tax-row:first-of-type { border-top:none; }
+      .tax-row .axis {
+        font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--blue);
+        font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em;
+        align-self:start; padding-top:0.2rem;
+      }
+      .tax-row .items { display:flex; flex-wrap:wrap; gap:0.35rem; }
+      .tax-chip {
+        display:inline-block; padding:0.25rem 0.6rem; border-radius:999px;
+        font-size:0.78rem; line-height:1.4;
+        background:#E6F0F8; color:#0F3F65; border:1px solid #BFD7EC;
+        font-family:'Open Sans',sans-serif;
+      }
+      .tax-chip.amber { background:#FFF3DD; color:#7A4E00; border-color:#F1D49A; }
+      .tax-chip.green { background:#EAF7DC; color:#2F5C19; border-color:#CFE5B0; }
+      .tax-chip.red   { background:#FDE3E8; color:#8C0A22; border-color:#F4B7C1; }
+      .tax-chip.purple { background:#ECF1F8; color:#22436F; border-color:#C9D6E8; }
+      .tax-chip.muted { background:#F0F1F3; color:#5A5C5F; border-color:#DDDFE2; font-style:italic; }
+      .tax-row .axis-note {
+        font-size:0.74rem; color:var(--muted); font-weight:500;
+        text-transform:none; letter-spacing:0; display:block; margin-top:0.15rem; font-style:italic;
+        font-family:'Open Sans',sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient bg-dark" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center" style="display:flex; flex-direction:column; align-items:center; gap:1.3rem; max-width:980px">
+          <div class="date-badge"><span class="db-dot"></span>QA Vertical · Class 01</div>
+          <h1 class="display" style="color:white">
+            <span style="color: var(--amber)">Testing Theory I</span><br />
+            <span style="color: white">Test Types — the ISTQB Taxonomy</span>
+          </h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85)">A test "type" is a category by what we're checking. ISTQB defines exactly four. Many words you'll hear — smoke, sanity, alpha, beta, A/B — sit <em>inside</em> this taxonomy or are separate concepts. Today we map every term to its right place.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">Functional · Non-functional</span>
+            <span class="class-tag tag-blue">Structural · Change-related</span>
+            <span class="class-tag tag-blue">Smoke · Sanity · Retest · Regression</span>
+            <span class="class-tag tag-blue">Alpha · Beta · A/B · Exploratory</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 AGENDA -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's plan</div>
+        <div class="stack" style="max-width:820px; width:100%">
+          <div class="center" style="margin-bottom:0.4rem"><h2 class="heading">Session journey · ~90 min</h2></div>
+          <div class="agenda-row" onclick="goTo(2)"><span class="ar-dot" style="background:var(--indigo)"></span><span class="ar-label">🎯 Why a taxonomy matters</span><span class="ar-badge" style="background:#E6E9EC;color:var(--indigo)">5 min</span></div>
+          <div class="agenda-row" onclick="goTo(3)"><span class="ar-dot" style="background:var(--blue)"></span><span class="ar-label">🔁 Recap from Quality #01</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">5 min</span></div>
+          <div class="agenda-row" onclick="goTo(4)"><span class="ar-dot" style="background:var(--purple)"></span><span class="ar-label">🧭 Type vs Level vs Technique vs Stage</span><span class="ar-badge" style="background:#ECF2F8;color:var(--purple)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(6)"><span class="ar-dot" style="background:var(--blue)"></span><span class="ar-label">📦 The 4 ISTQB test types</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">25 min</span></div>
+          <div class="agenda-row" onclick="goTo(14)"><span class="ar-dot" style="background:var(--red)"></span><span class="ar-label">🔧 Change-related: smoke · sanity · retest · regression</span><span class="ar-badge" style="background:#FEE9EC;color:var(--red)">20 min</span></div>
+          <div class="agenda-row" onclick="goTo(20)"><span class="ar-dot" style="background:var(--amber)"></span><span class="ar-label">🍽️ Not types: alpha · beta · A/B · exploratory</span><span class="ar-badge" style="background:#FFF3DD;color:#7A4E00">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(24)"><span class="ar-dot" style="background:#3D7A3D"></span><span class="ar-label">🗺️ The taxonomy on one page · hands-on · wrap</span><span class="ar-badge" style="background:#F0F7EC;color:#3D7A3D">15 min</span></div>
+        </div>
+      </div>
+
+      <!-- 3 WHY A TAXONOMY -->
+      <div class="slide bg-indigo" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span></div>
+        <div class="center" style="max-width:920px">
+          <div class="pill pill-white" style="margin:0 auto 1.2rem"><span class="pill-dot"></span>Why a taxonomy matters</div>
+          <h1 class="display" style="color:white; font-size:clamp(1.8rem,3.6vw,2.5rem); line-height:1.25">Without a shared taxonomy, you can't have a real testing conversation.</h1>
+          <p style="color:rgba(255,255,255,0.85); font-size:1.02rem; margin-top:1.2rem; line-height:1.85">
+            Devs and POs say things like <em>"did you smoke it?"</em>, <em>"is regression done?"</em>, <em>"can we send it to beta?"</em>, <em>"is this functional or non-functional?"</em>. If you don't know which <strong>box</strong> each word belongs to, you can't follow the conversation — and worse, you'll do the <em>wrong</em> test for the moment.<br><br>
+            Today we use <strong>ISTQB Foundation Level</strong> — the same taxonomy used in CS courses and standard textbooks (Ammann &amp; Offutt, Naik &amp; Tripathy). It's the vocabulary the rest of the industry uses.
+          </p>
+          <p style="color:var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; margin-top:1.1rem">A box for every word. A word for every box.</p>
+        </div>
+      </div>
+
+      <!-- 4 RECAP -->
+      <div class="slide accent-blue bg-subtle" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> Quick recap from Quality #01</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">You already know this — we're building on it</h2></div>
+          <div class="recap-grid">
+            <div class="recap-card"><h6>Verification vs Validation</h6><p>"Built it right?" vs "Built the right thing?" Both checks matter.</p></div>
+            <div class="recap-card" style="border-top-color:#3D7A3D"><h6>Functional vs Non-functional</h6><p>"Does it work?" vs "How well does it work?" — both required.</p></div>
+            <div class="recap-card" style="border-top-color:var(--purple)"><h6>ISO 25010 · 8 quality attributes</h6><p>Functional suitability, performance, compatibility, usability, reliability, security, maintainability, portability.</p></div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:900px; font-style:italic">Today is about <strong style="color:var(--blue)">test types</strong> — categories <em>by what we're checking</em>. A different angle on the same world.</p>
+        </div>
+      </div>
+
+      <!-- 5 SECTION : What is a test "type"? -->
+      <div class="slide bg-blue" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin:0 auto 1.2rem"><span class="pill-dot"></span>Part one</div>
+          <h1 class="display" style="color:white">What is a test<br>"type", anyway?</h1>
+          <p class="body-lg" style="color:rgba(255,255,255,0.85); margin-top:0.9rem">Type vs Level vs Technique vs Stage — four different questions, not synonyms.</p>
+        </div>
+        <div class="section-num" style="color:white">01</div>
+      </div>
+
+      <!-- 6 TYPE vs LEVEL vs TECHNIQUE vs STAGE -->
+      <div class="slide accent-blue bg-subtle" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> Four questions, four answers — don't confuse them</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Type · Level · Technique · Stage</h2></div>
+          <div class="dim-tbl">
+            <table>
+              <thead>
+                <tr><th>Concept</th><th>The question it answers</th><th>Examples</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Test <em>Type</em></td>
+                  <td><strong>WHAT</strong> are we checking about the system?</td>
+                  <td>Functional · Non-functional · Structural (white-box) · Change-related</td>
+                </tr>
+                <tr>
+                  <td>Test <em>Level</em></td>
+                  <td><strong>HOW BIG</strong> a piece are we testing — and who does it?</td>
+                  <td>Unit · Integration · System · Acceptance <span style="color:var(--muted)">(taught in Quality #01)</span></td>
+                </tr>
+                <tr>
+                  <td>Test <em>Technique</em></td>
+                  <td><strong>HOW</strong> do we design the test cases?</td>
+                  <td>Boundary value · Equivalence partitioning · Decision tables · Exploratory <span style="color:var(--muted)">(QA #05/#06 — next classes)</span></td>
+                </tr>
+                <tr>
+                  <td>Test <em>Stage</em> / process</td>
+                  <td><strong>WHEN</strong> in the release journey, and <strong>BY WHOM</strong>?</td>
+                  <td>Alpha (internal) · Beta (limited external) · UAT (customer sign-off)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="info-box"><strong>Why this slide matters:</strong> people mix these up constantly. Saying <em>"smoke is a test type"</em> is technically wrong — smoke is a <em>change-related test</em> (a type) often performed at <em>system level</em> (a level) at the <em>build-acceptance stage</em>. Three different boxes. Today we focus on <strong>type</strong>.</div>
+        </div>
+      </div>
+
+      <!-- 7 SECTION : The 4 ISTQB Test Types -->
+      <div class="slide bg-indigo" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin:0 auto 1.2rem"><span class="pill-dot"></span>Part two</div>
+          <h1 class="display" style="color:white">The 4 ISTQB<br>Test Types</h1>
+          <p class="body-lg" style="color:rgba(255,255,255,0.85); margin-top:0.9rem">Functional · Non-functional · Structural · Change-related</p>
+        </div>
+        <div class="section-num" style="color:white">02</div>
+      </div>
+
+      <!-- 8 OVERVIEW : the four -->
+      <div class="slide accent-blue bg-subtle" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> The four — at a glance</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:920px"><h2 class="heading">Every test you'll ever do fits in one of these four boxes</h2></div>
+          <div class="four-types">
+            <div class="four-card">
+              <span class="num">Type 1</span>
+              <h5>Functional</h5>
+              <p><strong>WHAT</strong> the system does. "Does the feature behave as required?" Black-box, requirement-driven.</p>
+            </div>
+            <div class="four-card amber">
+              <span class="num">Type 2</span>
+              <h5>Non-functional</h5>
+              <p><strong>HOW WELL</strong> it does it. Speed, security, usability, compatibility — the ISO 25010 attributes.</p>
+            </div>
+            <div class="four-card purple">
+              <span class="num">Type 3</span>
+              <h5>Structural (white-box)</h5>
+              <p><strong>HOW BUILT</strong> — testing the code paths inside. Done by devs, not QAs. Recognise the term.</p>
+            </div>
+            <div class="four-card green">
+              <span class="num">Type 4</span>
+              <h5>Change-related</h5>
+              <p><strong>AFTER A CHANGE</strong> — re-testing fixed bugs and re-checking everything else still works.</p>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:880px; font-style:italic">Source: ISTQB Foundation Level syllabus. Used by Ammann &amp; Offutt and most undergraduate software-testing textbooks.</p>
+        </div>
+      </div>
+
+      <!-- 9 FUNCTIONAL -->
+      <div class="slide accent-blue" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> Type 1 · Functional testing</div>
+        <div class="stack" style="align-items:center; width:100%; max-width:1100px">
+          <div class="center" style="max-width:900px">
+            <p class="big-q">"Does the feature do <em>what</em> it's supposed to do?"</p>
+            <h2 class="heading" style="font-size:clamp(1.5rem,3vw,2.2rem)">Functional testing</h2>
+          </div>
+          <div class="analogy-band">
+            <span class="icon">🏧</span>
+            <span><strong>Everyday picture:</strong> the bank tells you the new ATM should let a customer enter PIN, choose "withdraw", pick an amount, and dispense the cash. Functional testing is checking <em>each of those steps actually happens, in the right order, with the right result</em>. Did the cash come out? Did the balance update?</span>
+          </div>
+          <div class="type-card">
+            <div class="row"><div class="lbl">Definition</div><div class="val">Testing <strong>what</strong> the system does — against the documented functional requirements. Black-box: you treat the system as a sealed box and push buttons.</div></div>
+            <div class="row"><div class="lbl">Software example</div><div class="val">In <strong>mBoB</strong>, the requirement says: "given a valid TIN and a valid amount, the user can pay electricity." A functional test logs in, picks BPC, enters TIN + amount, taps Pay, checks the receipt screen and the new balance.</div></div>
+            <div class="row"><div class="lbl">Owned by</div><div class="val">QA — this is the bulk of what you'll do every day.</div></div>
+          </div>
+          <div class="tip-box"><strong>Key tip:</strong> if a test starts with <em>"the spec says…"</em> or <em>"the user should be able to…"</em>, it is almost certainly a functional test.</div>
+        </div>
+      </div>
+
+      <!-- 10 INSIDE FUNCTIONAL : Positive AND Negative -->
+      <div class="slide accent-blue bg-subtle" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> Inside Functional · positive AND negative</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:900px"><h2 class="heading">Negative testing is a <em>flavour</em> of functional testing — not a separate type</h2></div>
+          <div class="four-types" style="grid-template-columns:1fr 1fr; max-width:1100px">
+            <div class="four-card">
+              <span class="num">Positive (happy path)</span>
+              <h5>"User does what the spec said"</h5>
+              <p>Valid PIN · valid amount · network OK. Does it succeed? <em>This is what most beginners write first.</em></p>
+            </div>
+            <div class="four-card red" style="border-top-color:var(--red)">
+              <span class="num">Negative</span>
+              <h5>"User does the opposite"</h5>
+              <p>Wrong PIN 5 times — does the card lock? Negative balance — rejected? Empty form — clear message? <em>Real users break rules by accident, all the time.</em></p>
+            </div>
+          </div>
+          <div class="info-box"><strong>The point:</strong> both positive and negative tests check <em>what the system does</em> — so both are functional. Negative is not a fifth ISTQB type. It's a sub-flavour of Type 1. Half your test cases should be negative.</div>
+        </div>
+      </div>
+
+      <!-- 11 NON-FUNCTIONAL -->
+      <div class="slide accent-blue" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> Type 2 · Non-functional testing</div>
+        <div class="stack" style="align-items:center; width:100%; max-width:1100px">
+          <div class="center" style="max-width:900px">
+            <p class="big-q amber">"Does the feature do it <em>well enough</em>?"</p>
+            <h2 class="heading" style="font-size:clamp(1.5rem,3vw,2.2rem)">Non-functional testing</h2>
+          </div>
+          <div class="analogy-band">
+            <span class="icon">🚌</span>
+            <span><strong>Everyday picture:</strong> the bus reaches Phuentsholing — that's functional, it did its job. But: was it on time? Was the ride comfortable? Did the engine survive the climb? Were the seatbelts secure? <em>The journey was OK; the quality of the journey is the non-functional question.</em></span>
+          </div>
+          <div class="type-card amber">
+            <div class="row"><div class="lbl">Definition</div><div class="val">Testing <strong>how well</strong> the system does its job — its quality attributes. Speed, security, usability, reliability, compatibility, etc.</div></div>
+            <div class="row"><div class="lbl">Recap link</div><div class="val">These are the <strong>ISO 25010</strong> quality attributes you saw in <em>Quality &amp; Compliance #01</em>. Every non-functional test you'll ever hear of belongs under one of those eight headings.</div></div>
+            <div class="row"><div class="lbl">Owned by</div><div class="val">Mixed — performance and security usually need specialists; usability and compatibility often sit with QA.</div></div>
+          </div>
+          <div class="tip-box"><strong>Key tip:</strong> if the test result is a <em>number</em> (response in 1.4 s) or a <em>quality score</em> (works on 8 of 10 phones), you're almost certainly in non-functional territory.</div>
+        </div>
+      </div>
+
+      <!-- 12 NON-FUNC FLAVOUR : Performance / Load / Stress -->
+      <div class="slide accent-blue bg-subtle" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> Non-functional · performance · load · stress</div>
+        <div class="stack" style="align-items:center; width:100%; max-width:1100px">
+          <div class="center" style="max-width:920px">
+            <h2 class="heading" style="font-size:clamp(1.5rem,3vw,2.2rem)">Three cousins · same family</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:0.3rem">Concept only today — no tools, no scripts.</p>
+          </div>
+          <div class="analogy-band">
+            <span class="icon">🚌</span>
+            <span><strong>The Coaster bus:</strong> <strong>Performance</strong> = how fast on a normal trip? <strong>Load</strong> = built for 30 — does it still drive smoothly with 30 inside? <strong>Stress</strong> = pack 60 in — at what point does it stop, break, or refuse to start?</span>
+          </div>
+          <div class="pls">
+            <div class="pls-card">
+              <h6>Performance</h6>
+              <p class="q">"How fast does it respond?"</p>
+              <p>One user, normal use. <strong>mBoB:</strong> the dashboard opens in under 2 seconds.</p>
+            </div>
+            <div class="pls-card amber">
+              <h6>Load</h6>
+              <p class="q">"How does it cope with many normal users?"</p>
+              <p>Expected number, at the same time. <strong>mBoB:</strong> 5,000 customers paying bills at 10 a.m. on the 1st of the month — still smooth?</p>
+            </div>
+            <div class="pls-card red">
+              <h6>Stress</h6>
+              <p class="q">"How much before it breaks?"</p>
+              <p>Push <em>beyond</em> normal — find the breaking point. <strong>mBoB:</strong> 50,000 users at once. Slows down? Crashes? Recovers?</p>
+            </div>
+          </div>
+          <div class="tip-box"><strong>Key tip:</strong> all three live under <em>Performance Efficiency</em> in ISO 25010. As QA Cohort 3 you won't run them — but if a dev says "we did a load test of 5k users", you must know what they mean.</div>
+        </div>
+      </div>
+
+      <!-- 13 NON-FUNC FLAVOURS : compatibility / usability / security / reliability -->
+      <div class="slide accent-blue" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> Other non-functional flavours</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:900px"><h2 class="heading">Compatibility · Usability · Security · Reliability</h2><p class="body-md" style="color:var(--muted); margin-top:0.3rem">Recognise the names. Know the question. Know who owns it.</p></div>
+          <div class="nf-grid">
+            <div class="nf-card amber">
+              <h6>Compatibility</h6>
+              <p>"Does it work on different devices, browsers, networks?" — <strong>mBoB</strong> on iPhone &amp; Android, on 3G in Trashigang and 4G in Thimphu.</p>
+              <span class="meta">Often QA. We touch this in QA #04 (test environments).</span>
+            </div>
+            <div class="nf-card">
+              <h6>Usability</h6>
+              <p>"Can a regular person figure it out without help?" — Can a Druk PNB customer find <em>statement download</em> without calling support?</p>
+              <span class="meta">Often QA + UX. Linked to ISO 25010 usability attribute.</span>
+            </div>
+            <div class="nf-card red">
+              <h6>Security</h6>
+              <p>"Can someone get in or get data they shouldn't?" — Login throttling, password rules, session timeouts on mBoB.</p>
+              <span class="meta">Specialists. Touched in <em>BA-QA Quality #05</em>.</span>
+            </div>
+            <div class="nf-card purple">
+              <h6>Reliability</h6>
+              <p>"Does it stay up and recover from problems?" — Tashi Cell network drops mid-payment; does mBoB lose your money?</p>
+              <span class="meta">Mixed; SRE / dev-ops oriented.</span>
+            </div>
+          </div>
+          <div class="info-box"><strong>Reading the map:</strong> every word here is a <em>flavour</em> of Type 2 (non-functional). They are not separate ISTQB types.</div>
+        </div>
+      </div>
+
+      <!-- 14 STRUCTURAL -->
+      <div class="slide accent-blue bg-subtle" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> Type 3 · Structural (white-box) testing</div>
+        <div class="stack" style="align-items:center; width:100%; max-width:1100px">
+          <div class="center" style="max-width:900px">
+            <p class="big-q purple">"Did every line of <em>code</em> get exercised?"</p>
+            <h2 class="heading" style="font-size:clamp(1.5rem,3vw,2.2rem)">Structural / White-box testing</h2>
+          </div>
+          <div class="analogy-band">
+            <span class="icon">🔬</span>
+            <span><strong>Everyday picture:</strong> a mechanic doesn't just test-drive the car (that's black-box) — they also pop the hood, check that every wire and pipe was actually inspected. Structural testing is the inside-the-engine view.</span>
+          </div>
+          <div class="type-card purple">
+            <div class="row"><div class="lbl">Definition</div><div class="val">Testing the <strong>internal structure</strong> of the code — every branch, every condition, every line. Needs source-code access.</div></div>
+            <div class="row"><div class="lbl">Owned by</div><div class="val"><strong>Devs</strong>, in unit tests. <em>QAs almost never write structural tests.</em> But you must <strong>recognise the term</strong> when devs say "we have 80% code coverage" — that's a structural metric.</div></div>
+            <div class="row"><div class="lbl">Why we mention it</div><div class="val">Because ISTQB lists it as one of the four types. Naming it makes the taxonomy complete.</div></div>
+          </div>
+          <div class="tip-box"><strong>Key tip:</strong> "black-box" = testing the system as a sealed box — that's everything else we do as QA. "White-box" = looking inside the code — devs only.</div>
+        </div>
+      </div>
+
+      <!-- 15 SECTION DIVIDER : Change-related -->
+      <div class="slide bg-blue" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin:0 auto 1.2rem"><span class="pill-dot"></span>Type 4</div>
+          <h1 class="display" style="color:white">Change-related<br>testing</h1>
+          <p class="body-lg" style="color:rgba(255,255,255,0.85); margin-top:0.9rem">After a fix or change · the four words that confuse everyone:<br>Confirmation · Regression · Smoke · Sanity</p>
+        </div>
+        <div class="section-num" style="color:white">03</div>
+      </div>
+
+      <!-- 16 CONFIRMATION (RETEST) -->
+      <div class="slide accent-blue bg-subtle" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span> Confirmation (re-testing)</div>
+        <div class="stack" style="align-items:center; width:100%; max-width:1100px">
+          <div class="center" style="max-width:900px">
+            <p class="big-q blue">"Is THIS specific fix actually fixed?"</p>
+            <h2 class="heading" style="font-size:clamp(1.5rem,3vw,2.2rem)">Confirmation testing · also called re-testing</h2>
+          </div>
+          <div class="analogy-band">
+            <span class="icon">🔧</span>
+            <span><strong>Everyday picture:</strong> the radio in the car was broken yesterday. Today the mechanic says "fixed". You don't drive 50 km — you only test the radio. Same broken steps, same channel, same volume. <em>Did THIS bug go away?</em></span>
+          </div>
+          <div class="type-card">
+            <div class="row"><div class="lbl">Definition</div><div class="val">Running the <strong>same test that found the bug</strong> — after the dev says "fixed" — to confirm it really is fixed. Pinpoint, single-bug focused.</div></div>
+            <div class="row"><div class="lbl">Software example</div><div class="val">Bug: in <strong>Druk PNB Mobile</strong>, the date "29-Feb" wouldn't save in the leave form. Dev fixes it. Confirmation = open the same screen, type 29-Feb, save. Did it save? Only this.</div></div>
+            <div class="row"><div class="lbl">When you do it</div><div class="val">Right after a bug is marked "fixed", before regression.</div></div>
+          </div>
+          <div class="tip-box"><strong>ISTQB term tip:</strong> the formal name is <em>confirmation testing</em>; everyone in industry calls it <em>retest</em>. They're the same thing.</div>
+        </div>
+      </div>
+
+      <!-- 17 REGRESSION -->
+      <div class="slide accent-blue" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span> Regression testing</div>
+        <div class="stack" style="align-items:center; width:100%; max-width:1100px">
+          <div class="center" style="max-width:900px">
+            <p class="big-q green">"Did our change break anything <em>else</em>?"</p>
+            <h2 class="heading" style="font-size:clamp(1.5rem,3vw,2.2rem)">Regression testing</h2>
+          </div>
+          <div class="analogy-band">
+            <span class="icon">🛞</span>
+            <span><strong>Everyday picture:</strong> the mechanic replaced one tyre. Smart you doesn't only check that tyre — you also press the brakes, check the steering, check that nothing was loosened by mistake. <em>Re-check the things that were already working.</em></span>
+          </div>
+          <div class="type-card green">
+            <div class="row"><div class="lbl">Definition</div><div class="val">Re-running tests on areas that <strong>were already working</strong>, to catch unintended breakage caused by a new change. Wide and deep — the safety net.</div></div>
+            <div class="row"><div class="lbl">Software example</div><div class="val">Devs added <strong>scheduled payments</strong> in mBoB. Regression = re-run the existing checks on login, balance, normal payment, statement download — to make sure none of those got broken by the new code.</div></div>
+            <div class="row"><div class="lbl">When you do it</div><div class="val">Before every release, or whenever a meaningful change goes in.</div></div>
+          </div>
+          <div class="tip-box"><strong>Key tip:</strong> regression is the <em>biggest, slowest</em> test pass — and the most important. Without it, every fix risks breaking something else.</div>
+        </div>
+      </div>
+
+      <!-- 18 SMOKE -->
+      <div class="slide accent-blue bg-subtle" data-slide="18">
+        <div class="slide-label"><span class="snum">18</span> Smoke testing</div>
+        <div class="stack" style="align-items:center; width:100%; max-width:1100px">
+          <div class="center" style="max-width:900px">
+            <p class="big-q red">"Is this build alive at all? Wide and shallow."</p>
+            <h2 class="heading" style="font-size:clamp(1.5rem,3vw,2.2rem)">Smoke testing</h2>
+          </div>
+          <div class="analogy-band">
+            <span class="icon">🚗</span>
+            <span><strong>Everyday picture:</strong> you turn the car key in the morning. Before driving anywhere, you wait 5 seconds — does the engine start? Any black smoke? Lights work? You're just checking <em>"is this thing alive?"</em></span>
+          </div>
+          <div class="type-card red">
+            <div class="row"><div class="lbl">Definition</div><div class="val">A short, broad check on a brand-new build — <strong>5–10 minutes</strong>, only the most important screens. Wide, shallow. If smoke fails, send the build back.</div></div>
+            <div class="row"><div class="lbl">Software example</div><div class="val">A fresh <strong>Druk Air booking app</strong> build arrives. You open the app, log in, see the dashboard, search a flight, close. If any of these break — build rejected.</div></div>
+            <div class="row"><div class="lbl">Where it sits</div><div class="val">Smoke is often a <strong>subset of regression</strong>, run on every build as a quick gate. ISTQB lists it under change-related.</div></div>
+          </div>
+          <div class="tip-box"><strong>Key tip:</strong> smoke = <em>build acceptance</em>. It protects your time, not the user. Wide and shallow, never deep.</div>
+        </div>
+      </div>
+
+      <!-- 19 SANITY -->
+      <div class="slide accent-blue" data-slide="19">
+        <div class="slide-label"><span class="snum">19</span> Sanity testing</div>
+        <div class="stack" style="align-items:center; width:100%; max-width:1100px">
+          <div class="center" style="max-width:900px">
+            <p class="big-q amber">"We fixed a small thing — does that small thing work, narrow and a bit deeper?"</p>
+            <h2 class="heading" style="font-size:clamp(1.5rem,3vw,2.2rem)">Sanity testing</h2>
+          </div>
+          <div class="analogy-band">
+            <span class="icon">📻</span>
+            <span><strong>Everyday picture:</strong> the mechanic fixed your car radio. You don't drive 50 km to test everything. You turn the key, switch on the radio, change two stations, check the volume. <em>Narrow but a little deeper.</em> Just the area that was touched.</span>
+          </div>
+          <div class="type-card amber">
+            <div class="row"><div class="lbl">Definition</div><div class="val">A <strong>narrow, focused, slightly deeper</strong> check on the area of a recent fix — when there's no time for a full regression pass.</div></div>
+            <div class="row"><div class="lbl">Software example</div><div class="val">Devs changed how the <strong>mBoB date picker</strong> works. Sanity = open the date picker on 2–3 screens, pick a date, save, reopen. Don't run the entire app's tests — just check the date picker behaves.</div></div>
+            <div class="row"><div class="lbl">Where it sits</div><div class="val">Sanity is also a <strong>subset of regression</strong> — scoped to just the changed area instead of the whole app.</div></div>
+          </div>
+          <div class="tip-box"><strong>Smoke vs sanity in one breath:</strong> smoke = wide &amp; shallow on a new build. Sanity = narrow &amp; a bit deeper on a fixed area.</div>
+        </div>
+      </div>
+
+      <!-- 20 BIG-FOUR COMPARISON -->
+      <div class="slide accent-blue bg-subtle" data-slide="20">
+        <div class="slide-label"><span class="snum">20</span> Change-related · the big four side by side</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">If you only remember one slide today, make it this one</h2></div>
+          <div class="cmp-tbl">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th><th>One-line meaning</th><th>Scope</th><th>When</th><th>Everyday picture</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="name-smoke">Smoke</td>
+                  <td>"Is this build alive at all?"</td>
+                  <td>Wide · very shallow</td>
+                  <td>Each new build, before deeper testing</td>
+                  <td>Start the car — any smoke?</td>
+                </tr>
+                <tr>
+                  <td class="name-sanity">Sanity</td>
+                  <td>"Is this small change actually working?"</td>
+                  <td>Narrow · a little deeper</td>
+                  <td>After a small fix, no time for full regression</td>
+                  <td>Radio fixed — switch it on, change 2 stations</td>
+                </tr>
+                <tr>
+                  <td class="name-retest">Retest <span style="color:var(--muted);font-weight:400">(confirmation)</span></td>
+                  <td>"Is THIS specific bug fixed?"</td>
+                  <td>Pinpoint · same steps as the bug</td>
+                  <td>Right after dev marks a bug fixed</td>
+                  <td>Re-check ONLY the broken radio</td>
+                </tr>
+                <tr>
+                  <td class="name-regression">Regression</td>
+                  <td>"Did our change break anything else?"</td>
+                  <td>Wide · deep</td>
+                  <td>Before every release, after big changes</td>
+                  <td>New tyre — also check brakes, steering, alignment</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:980px"><strong>Order on a release day:</strong> Smoke (build alive?) → Retest (this bug?) → Sanity (this small fix?) → Regression (everything else still OK?). All four are <em>change-related</em> tests — one ISTQB type, four flavours.</p>
+        </div>
+      </div>
+
+      <!-- 21 SECTION : NOT test types -->
+      <div class="slide bg-amber" data-slide="21">
+        <div class="slide-label"><span class="snum">21</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin:0 auto 1.2rem"><span class="pill-dot"></span>Part four</div>
+          <h1 class="display" style="color:white">NOT test types —<br>but you'll hear them</h1>
+          <p class="body-lg" style="color:rgba(255,255,255,0.85); margin-top:0.9rem">Alpha · Beta · A/B · Exploratory · Ad-hoc — place each one in its right box.</p>
+        </div>
+        <div class="section-num" style="color:white">04</div>
+      </div>
+
+      <!-- 22 ALPHA + BETA -->
+      <div class="slide accent-blue bg-subtle" data-slide="22">
+        <div class="slide-label"><span class="snum">22</span> Alpha &amp; Beta · operational <em>stages</em>, not types</div>
+        <div class="stack" style="align-items:center; width:100%; max-width:1100px">
+          <div class="center" style="max-width:920px">
+            <p class="big-q indigo">"Who is allowed to use this version yet?"</p>
+            <h2 class="heading" style="font-size:clamp(1.5rem,3vw,2.2rem)">Alpha &amp; Beta testing</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:0.3rem">Categorised by <em>audience</em>, not by what's tested. ISTQB calls this an <strong>operational stage</strong>, not a test type.</p>
+          </div>
+          <div class="four-types" style="grid-template-columns:1fr 1fr; max-width:1100px">
+            <div class="four-card">
+              <span class="num">Alpha</span>
+              <h5>Internal users · controlled</h5>
+              <p><strong>Inside SELISE / inside Bank of Bhutan staff.</strong> They use the new mBoB version internally for a week before any external user sees it. Bugs come back internally only.</p>
+            </div>
+            <div class="four-card amber">
+              <span class="num">Beta</span>
+              <h5>Limited external users · real conditions</h5>
+              <p><strong>500 willing mBoB customers</strong> get the new version for 2 weeks. Real banking, real devices, real complaints — before full public release.</p>
+            </div>
+          </div>
+          <div class="info-box"><strong>Inside each stage:</strong> what those users <em>do</em> is still functional + non-functional + change-related testing. The "alpha" / "beta" word only tells you <em>who is using it and when</em>.</div>
+        </div>
+      </div>
+
+      <!-- 23 A/B -->
+      <div class="slide accent-blue" data-slide="23">
+        <div class="slide-label"><span class="snum">23</span> A/B testing · product experiment, not a test type</div>
+        <div class="stack" style="align-items:center; width:100%; max-width:1100px">
+          <div class="center" style="max-width:900px">
+            <p class="big-q green">"Which version of the feature do real users prefer?"</p>
+            <h2 class="heading" style="font-size:clamp(1.5rem,3vw,2.2rem)">A/B testing</h2>
+          </div>
+          <div class="analogy-band">
+            <span class="icon">🥟</span>
+            <span><strong>Everyday picture:</strong> a momo shop in Thimphu wants to know which sells more on a weekday — chicken or veg. They put both on the menu at the same price for two weeks, count what each customer orders, pick the winner. <em>Two real options · real users · count what wins.</em></span>
+          </div>
+          <div class="type-card green">
+            <div class="row"><div class="lbl">What it is</div><div class="val">Releasing <strong>two versions (A and B)</strong> of a feature to different groups of real users at the same time, then measuring which performs better on a chosen number (clicks, sign-ups, time spent).</div></div>
+            <div class="row"><div class="lbl">Software example</div><div class="val">mBoB tries two designs of "Send Money" — half users see a <strong>blue button</strong>, half see a <strong>green button</strong>. After a week, count which group tapped Send more. Keep the winner.</div></div>
+            <div class="row"><div class="lbl">Where it sits</div><div class="val"><strong>Not in the ISTQB taxonomy.</strong> It's <em>product experimentation</em> — a marketing / product-management activity. QA's job: make sure both A and B work, and the right user sees the right one.</div></div>
+          </div>
+          <div class="tip-box"><strong>Key tip:</strong> A/B is not <em>bug-finding</em>. Don't classify it as functional or non-functional — it's a separate concept. Place it correctly when you hear it.</div>
+        </div>
+      </div>
+
+      <!-- 24 EXPLORATORY / AD-HOC -->
+      <div class="slide accent-blue bg-subtle" data-slide="24">
+        <div class="slide-label"><span class="snum">24</span> Exploratory &amp; Ad-hoc · <em>techniques</em>, not types</div>
+        <div class="stack" style="align-items:center; width:100%; max-width:1100px">
+          <div class="center" style="max-width:920px"><h2 class="heading">These are <em>how you design tests</em>, not <em>what you check</em></h2></div>
+          <div class="four-types" style="grid-template-columns:1fr 1fr; max-width:1100px">
+            <div class="four-card purple">
+              <span class="num">Exploratory</span>
+              <h5>Think while you test (with intent + notes)</h5>
+              <p>One hour, charter-driven: "explore mBoB login on slow Wi-Fi". No fixed script — design the next step from what you just saw. <em>Real work; bugs are filed.</em></p>
+            </div>
+            <div class="four-card" style="border-top-color:var(--red)">
+              <span class="num">Ad-hoc</span>
+              <h5>No plan, no notes</h5>
+              <p>5 minutes before a demo, click randomly. Not repeatable. Not a strategy — a quick pre-flight check.</p>
+            </div>
+          </div>
+          <div class="info-box"><strong>Where they sit on the map:</strong> ISTQB classifies these as <strong>experience-based test design techniques</strong> — they belong in the <em>Technique</em> column from slide 06, not the <em>Type</em> column. We'll teach them properly in <strong>QA #05 / #06</strong>. Today: just place them correctly.</div>
+        </div>
+      </div>
+
+      <!-- 25 TAXONOMY ON ONE PAGE -->
+      <div class="slide accent-blue" data-slide="25">
+        <div class="slide-label"><span class="snum">25</span> The taxonomy on one page</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:920px"><h2 class="heading">Every name from today, placed on the map</h2></div>
+          <div class="tax-wrap">
+            <div class="tax-row">
+              <div class="axis">Type<span class="axis-note">WHAT we check</span></div>
+              <div class="items">
+                <span class="tax-chip">Functional</span>
+                <span class="tax-chip amber">Non-functional</span>
+                <span class="tax-chip purple">Structural (white-box)</span>
+                <span class="tax-chip green">Change-related</span>
+              </div>
+            </div>
+            <div class="tax-row">
+              <div class="axis">Sub-flavours<span class="axis-note">inside a type</span></div>
+              <div class="items">
+                <span class="tax-chip">Positive</span>
+                <span class="tax-chip red">Negative</span>
+                <span class="tax-chip amber">Performance · Load · Stress</span>
+                <span class="tax-chip amber">Compatibility · Usability · Security · Reliability</span>
+                <span class="tax-chip green">Smoke · Sanity · Retest · Regression</span>
+              </div>
+            </div>
+            <div class="tax-row">
+              <div class="axis">Level<span class="axis-note">how big a piece</span></div>
+              <div class="items">
+                <span class="tax-chip muted">Unit</span>
+                <span class="tax-chip muted">Integration</span>
+                <span class="tax-chip muted">System</span>
+                <span class="tax-chip muted">Acceptance</span>
+              </div>
+            </div>
+            <div class="tax-row">
+              <div class="axis">Technique<span class="axis-note">how we design tests</span></div>
+              <div class="items">
+                <span class="tax-chip purple">Exploratory</span>
+                <span class="tax-chip purple">Ad-hoc</span>
+                <span class="tax-chip muted">Boundary value · Equivalence · Decision tables (QA #05/#06)</span>
+              </div>
+            </div>
+            <div class="tax-row">
+              <div class="axis">Stage<span class="axis-note">when &amp; by whom</span></div>
+              <div class="items">
+                <span class="tax-chip">Alpha</span>
+                <span class="tax-chip amber">Beta</span>
+                <span class="tax-chip muted">UAT</span>
+              </div>
+            </div>
+            <div class="tax-row">
+              <div class="axis">Outside ISTQB<span class="axis-note">separate concept</span></div>
+              <div class="items">
+                <span class="tax-chip green">A/B testing (product experiment)</span>
+              </div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:920px; font-style:italic">Same world, different axes. A single test usually has a value on every row.</p>
+        </div>
+      </div>
+
+      <!-- 26 HANDS-ON -->
+      <div class="slide accent-amber bg-subtle" data-slide="26">
+        <div class="slide-label"><span class="snum">26</span> Hands-on · 15 min</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:920px">
+            <div class="pill pill-amber">🧪 Activity</div>
+            <h2 class="heading" style="font-size:clamp(1.5rem,3vw,2.2rem)">Place each scenario on the map</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:0.3rem">For each, name (a) the <strong>Type</strong> if it's a type, OR (b) say <strong>"this is a stage"</strong> / <strong>"this is a technique"</strong> / <strong>"this is outside ISTQB"</strong> and which one. Work in pairs.</p>
+          </div>
+          <div class="scen-list">
+            <div class="scen">
+              <span class="num">Scenario 1</span>
+              <p>"A new mBoB build dropped. We run 5 minutes of checks on login, dashboard, one transfer — to decide if it's worth deeper testing."</p>
+            </div>
+            <div class="scen">
+              <span class="num">Scenario 2</span>
+              <p>"Devs fixed the bug where dates wouldn't save in the Druk PNB leave form. We re-test only that — type a date, save, reopen."</p>
+            </div>
+            <div class="scen">
+              <span class="num">Scenario 3</span>
+              <p>"We released a green Send button to half our users and a blue Send button to the rest. After a week we count which group tapped Send more."</p>
+            </div>
+            <div class="scen">
+              <span class="num">Scenario 4</span>
+              <p>"30 selected SELISE staff use the next mBoB version internally for two weeks before public release."</p>
+            </div>
+            <div class="scen">
+              <span class="num">Scenario 5</span>
+              <p>"500 willing mBoB customers get the new version on their real phones for two weeks before everyone gets it."</p>
+            </div>
+            <div class="scen">
+              <span class="num">Scenario 6</span>
+              <p>"For one hour, with no script, you click around the new GMC services portal, switch screens, try odd things, and write down everything that feels wrong."</p>
+            </div>
+            <div class="scen">
+              <span class="num">Scenario 7</span>
+              <p>"We try to log in to mBoB with a wrong password 100 times in a row to see what happens — does the account lock, does it crash?"</p>
+            </div>
+            <div class="scen">
+              <span class="num">Scenario 8</span>
+              <p>"We open the Druk Air app on an old Samsung running Android 9, on slow 3G in Trashigang, to check if booking still works."</p>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:980px; font-style:italic">Trainer-only answers · 1 = Change-related (Smoke) · 2 = Change-related (Retest/Confirmation) · 3 = Outside ISTQB (A/B — product experiment) · 4 = Stage (Alpha) · 5 = Stage (Beta) · 6 = Technique (Exploratory) · 7 = Functional (Negative flavour) · 8 = Non-functional (Compatibility).</p>
+        </div>
+      </div>
+
+      <!-- 27 WRAP -->
+      <div class="slide bg-indigo" data-slide="27">
+        <div class="slide-label"><span class="snum">27</span> Wrap-up</div>
+        <div class="center" style="max-width:940px">
+          <div class="pill pill-white" style="margin:0 auto 1.2rem">🎯 Key takeaways</div>
+          <h2 class="heading" style="color:white">Test types · what to carry forward</h2>
+          <ul class="reveal-list" style="color:rgba(255,255,255,0.9); text-align:left; max-width:840px; margin:1.3rem auto; font-size:0.95rem; line-height:1.8;">
+            <li>✅ A test <strong>type</strong> answers <em>WHAT</em> we check — ISTQB defines exactly four.</li>
+            <li>✅ <strong>Functional</strong> = does it do what it should? · positive &amp; negative are sub-flavours.</li>
+            <li>✅ <strong>Non-functional</strong> = does it do it well enough? · performance, load, stress, compatibility, usability, security, reliability all live here (ISO 25010).</li>
+            <li>✅ <strong>Structural / white-box</strong> = inside the code · devs do this · QA only needs to recognise the term.</li>
+            <li>✅ <strong>Change-related</strong> = after a fix · Smoke, Sanity, Retest (Confirmation), Regression. Order: smoke → retest → sanity → regression.</li>
+            <li>✅ <strong>Alpha / Beta</strong> are <em>stages</em> (who's using it, when), not types.</li>
+            <li>✅ <strong>A/B</strong> is product experimentation, <em>outside</em> the ISTQB taxonomy.</li>
+            <li>✅ <strong>Exploratory / Ad-hoc</strong> are <em>techniques</em> — how you design tests, not what you check. Taught properly in QA #05 / #06.</li>
+            <li>✅ Next class: <strong>Testing Theory II</strong> — test design techniques (boundary value, equivalence partitioning, decision tables).</li>
+          </ul>
+          <p style="color:var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; margin-top:1.1rem">A box for every word. A word for every box.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 27</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){
+        slides.forEach(s => s.classList.remove("active"));
+        current = Math.max(0, Math.min(n, total-1));
+        slides[current].classList.add("active");
+        document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+        document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+        localStorage.setItem(STORAGE_KEY, current);
+        initReveal(slides[current]);
+      }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => {
+        if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); }
+        if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); }
+        if(e.key === "f" || e.key === "F") toggleFullscreen();
+      });
+      document.getElementById("deck").addEventListener("click", function(e){
+        if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return;
+        const pct = e.clientX / window.innerWidth;
+        if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward();
+      });
+      function handleForward(){
+        const active = slides[current];
+        const list = active.querySelector(".reveal-list");
+        if(list){
+          const hidden = list.querySelectorAll("li:not(.shown)");
+          if(hidden.length > 0){ hidden[0].classList.add("shown"); return; }
+        }
+        nextSlide();
+      }
+      function initReveal(slide){
+        const list = slide.querySelector(".reveal-list");
+        if(!list) return;
+        list.querySelectorAll("li").forEach(li => li.classList.remove("shown"));
+      }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){
+        if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{});
+        else document.exitFullscreen().catch(()=>{});
+      }
+    </script>
+  </body>
+</html>

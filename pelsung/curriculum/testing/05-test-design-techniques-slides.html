@@ -1,0 +1,895 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Design Techniques — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      /* ---------- shared local helpers ---------- */
+      .lead { max-width: 920px; }
+      .big-num { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:clamp(2.4rem,5vw,4rem); color:var(--blue); line-height:1; }
+
+      /* problem framing */
+      .problem-card { background:white; border:2px solid var(--blue); border-radius:14px; padding:1.2rem 1.6rem; max-width:920px; width:100%; }
+      .problem-card .pq { color:var(--muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.08em; font-weight:700; margin-bottom:0.4rem; }
+      .problem-card .ans { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-size:1.4rem; line-height:1.5; }
+      .problem-card .ans strong { color:var(--blue); }
+
+      /* technique intro */
+      .tech-card { background:white; border:1px solid var(--border); border-left:6px solid var(--blue); border-radius:12px; padding:1.1rem 1.4rem; max-width:960px; width:100%; }
+      .tech-card .lbl { color:var(--muted); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em; font-weight:700; margin-bottom:0.3rem; }
+      .tech-card h3 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.5rem; margin-bottom:0.5rem; }
+      .tech-card p { font-size:1rem; line-height:1.7; color:var(--text); }
+      .tech-card p strong { color:var(--blue); }
+      .tech-card.bva { border-left-color:#247EC1; }
+      .tech-card.dt  { border-left-color:var(--indigo); }
+      .tech-card.st  { border-left-color:var(--purple); }
+      .tech-card.uc  { border-left-color:#7BC950; }
+
+      /* equivalence partition example */
+      .ep-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:0.8rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px){ .ep-grid { grid-template-columns: 1fr; } }
+      .ep-class { background:white; border:1px solid var(--border); border-top:4px solid var(--blue); border-radius:10px; padding:0.85rem 1.05rem; }
+      .ep-class h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.25rem; }
+      .ep-class .range { font-family:'Courier New',monospace; font-size:0.85rem; color:var(--muted); margin-bottom:0.4rem; }
+      .ep-class .pick { font-size:0.9rem; color:var(--text); line-height:1.55; }
+      .ep-class .pick strong { color:var(--blue); }
+      .ep-class.minor { border-top-color:#247EC1; }
+      .ep-class.adult { border-top-color:var(--blue); }
+      .ep-class.senior { border-top-color:var(--purple); }
+      .ep-class.invalid { border-top-color:var(--red); }
+      .ep-class.valid { border-top-color:#3D7A3D; }
+
+      /* boundary value visual */
+      .bva-line { background:white; border:1px solid var(--border); border-radius:14px; padding:1.6rem 1.2rem 1.2rem; max-width:1050px; width:100%; }
+      .bva-axis { position:relative; height:80px; margin:0.5rem 0 1.2rem; }
+      .bva-track { position:absolute; left:6%; right:6%; top:38px; height:6px; background:linear-gradient(90deg, #F2E8EA 0 18%, #F0F7EC 18% 82%, #F2E8EA 82% 100%); border-radius:4px; }
+      .bva-tick { position:absolute; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:4px; top:14px; }
+      .bva-tick .dot { width:14px; height:14px; border-radius:50%; border:3px solid white; box-shadow:0 0 0 2px var(--border); }
+      .bva-tick.bad .dot { background:var(--red); box-shadow:0 0 0 2px var(--red); }
+      .bva-tick.edge .dot { background:var(--blue); box-shadow:0 0 0 2px var(--blue); }
+      .bva-tick.ok .dot { background:#3D7A3D; box-shadow:0 0 0 2px #3D7A3D; }
+      .bva-tick .num { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; font-weight:600; color:var(--indigo); margin-top:24px; }
+      .bva-tick .lbl { font-size:0.65rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; }
+      .bva-legend { display:flex; gap:1.4rem; justify-content:center; flex-wrap:wrap; font-size:0.82rem; color:var(--muted); margin-top:0.6rem; }
+      .bva-legend .sw { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px; vertical-align:middle; }
+
+      /* decision table */
+      .dt-wrap { background:white; border:1px solid var(--border); border-radius:12px; overflow:hidden; max-width:1150px; width:100%; }
+      .dt-wrap table { width:100%; border-collapse:collapse; font-size:0.86rem; }
+      .dt-wrap th { background:var(--bg); padding:0.65rem 0.7rem; text-align:center; color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.78rem; text-transform:uppercase; letter-spacing:0.04em; border-bottom:1px solid var(--border); }
+      .dt-wrap th:first-child { text-align:left; padding-left:1rem; width:26%; }
+      .dt-wrap td { padding:0.55rem 0.7rem; text-align:center; border-bottom:1px solid var(--border); color:var(--text); }
+      .dt-wrap td:first-child { text-align:left; padding-left:1rem; color:var(--indigo); font-weight:600; font-family:'Bahnschrift','Segoe UI',sans-serif; }
+      .dt-wrap tr.cond td { background:#FAFCFE; }
+      .dt-wrap tr.outcome td { background:white; border-top:2px solid var(--blue); font-weight:700; }
+      .dt-wrap tr.outcome td:first-child { color:var(--blue); }
+      .yes { color:#3D7A3D; font-weight:700; }
+      .no  { color:var(--red); font-weight:700; }
+      .dt-out-0 { color:var(--muted); }
+      .dt-out-5 { color:#247EC1; }
+      .dt-out-10 { color:var(--blue); }
+      .dt-out-20 { color:#3D7A3D; }
+
+      /* state diagram */
+      .state-svg-wrap { background:white; border:1px solid var(--border); border-radius:14px; padding:1rem; max-width:1100px; width:100%; }
+      .state-svg-wrap svg { width:100%; height:auto; display:block; }
+      .state-legend { font-size:0.82rem; color:var(--muted); text-align:center; margin-top:0.5rem; }
+
+      /* state transition table */
+      .st-tbl { background:white; border:1px solid var(--border); border-radius:12px; overflow:hidden; max-width:1050px; width:100%; }
+      .st-tbl table { width:100%; border-collapse:collapse; font-size:0.86rem; }
+      .st-tbl th { background:var(--bg); padding:0.6rem 0.7rem; text-align:left; color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.78rem; text-transform:uppercase; letter-spacing:0.04em; border-bottom:1px solid var(--border); }
+      .st-tbl td { padding:0.55rem 0.7rem; border-bottom:1px solid var(--border); color:var(--text); line-height:1.55; vertical-align:top; }
+      .st-tbl tr:last-child td { border-bottom:none; }
+      .st-tbl .pill-ok { display:inline-block; background:#F0F7EC; color:#3D7A3D; padding:0.1rem 0.5rem; border-radius:6px; font-weight:700; font-size:0.75rem; }
+      .st-tbl .pill-no { display:inline-block; background:#F2E8EA; color:var(--red); padding:0.1rem 0.5rem; border-radius:6px; font-weight:700; font-size:0.75rem; }
+
+      /* use case test box */
+      .uc-grid { display:grid; grid-template-columns: 1fr 1fr 1fr; gap:0.8rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px){ .uc-grid { grid-template-columns:1fr; } }
+      .uc-card { background:white; border:1px solid var(--border); border-top:4px solid var(--blue); border-radius:10px; padding:0.85rem 1rem; }
+      .uc-card.alt { border-top-color:var(--amber); }
+      .uc-card.exc { border-top-color:var(--red); }
+      .uc-card h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.3rem; }
+      .uc-card p { font-size:0.85rem; line-height:1.55; color:var(--text); }
+      .uc-card .tc { font-size:0.78rem; color:var(--muted); margin-top:0.4rem; padding-top:0.4rem; border-top:1px dashed var(--border); font-style:italic; }
+
+      /* cheat sheet */
+      .cheat { background:white; border:1px solid var(--border); border-radius:12px; overflow:hidden; max-width:1100px; width:100%; }
+      .cheat table { width:100%; border-collapse:collapse; font-size:0.92rem; }
+      .cheat th { background:linear-gradient(135deg,#0067A3,#002D72); color:white; padding:0.7rem 0.9rem; text-align:left; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.04em; }
+      .cheat td { padding:0.7rem 0.9rem; border-bottom:1px solid var(--border); color:var(--text); line-height:1.6; vertical-align:top; }
+      .cheat tr:last-child td { border-bottom:none; }
+      .cheat td:first-child { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:600; width:30%; }
+
+      /* tip box */
+      .tip { background:white; border:1px solid var(--border); border-left:4px solid var(--amber); border-radius:10px; padding:0.85rem 1.2rem; max-width:1000px; width:100%; }
+      .tip h5 { color:#1C5B8C; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.3rem; }
+      .tip p { font-size:0.92rem; color:var(--text); line-height:1.65; }
+      .tip p strong { color:var(--blue); }
+
+      /* hands-on cards */
+      .ho-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:0.9rem; max-width:1200px; width:100%; }
+      @media (max-width: 920px){ .ho-grid { grid-template-columns:1fr; } }
+      .ho-card { background:white; border:2px dashed var(--blue); border-radius:12px; padding:0.95rem 1.1rem; }
+      .ho-card .tag { display:inline-block; background:#E6F0F8; color:var(--blue); font-size:0.7rem; font-weight:700; padding:0.2rem 0.55rem; border-radius:4px; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:0.4rem; }
+      .ho-card h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.4rem; }
+      .ho-card p { font-size:0.86rem; line-height:1.6; color:var(--text); }
+      .ho-card p strong { color:var(--indigo); }
+
+      /* combo example mbob */
+      .mbob-card { background:white; border:1px solid var(--border); border-left:4px solid var(--blue); border-radius:10px; padding:0.9rem 1.2rem; max-width:980px; width:100%; }
+      .mbob-card h5 { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.4rem; }
+      .mbob-card p { font-size:0.92rem; line-height:1.65; color:var(--text); }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>QA Vertical · Class 05</div></div>
+          <h1 class="display" style="color: var(--text)">
+            <span style="color: var(--blue)">Test Design</span><br />
+            <span style="color: var(--indigo)">Techniques</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted)">How to pick the fewest test cases that catch the most bugs.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">Equivalence</span>
+            <span class="class-tag tag-blue">Boundary</span>
+            <span class="class-tag tag-blue">Decision Table</span>
+            <span class="class-tag tag-blue">State Transition</span>
+            <span class="class-tag tag-blue">Use Case</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 AGENDA -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 820px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem"><h2 class="heading">Session Journey</h2></div>
+          <div class="agenda-row" onclick="goTo(2)"><span class="ar-dot" style="background: var(--red)"></span><span class="ar-label">🤔 Why we can't test everything</span><span class="ar-badge" style="background:#FEE9EC;color:var(--red)">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(5)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🎯 Equivalence Partitioning</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">12 min</span></div>
+          <div class="agenda-row" onclick="goTo(9)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">📏 Boundary Value Analysis</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">12 min</span></div>
+          <div class="agenda-row" onclick="goTo(13)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">📋 Decision Tables</span><span class="ar-badge" style="background:#E6E9EC;color:var(--indigo)">12 min</span></div>
+          <div class="agenda-row" onclick="goTo(17)"><span class="ar-dot" style="background: var(--purple)"></span><span class="ar-label">🔄 State Transition Testing</span><span class="ar-badge" style="background:#ECF2F8;color:var(--purple)">12 min</span></div>
+          <div class="agenda-row" onclick="goTo(20)"><span class="ar-dot" style="background: var(--green)"></span><span class="ar-label">📖 Use Case Testing</span><span class="ar-badge" style="background:#F0F7EC;color:var(--green)">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(22)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🤔 Error Guessing</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">5 min</span></div>
+          <div class="agenda-row" onclick="goTo(23)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🧮 Pairwise Testing</span><span class="ar-badge" style="background:#E6E9EC;color:var(--indigo)">5 min</span></div>
+          <div class="agenda-row" onclick="goTo(24)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🧭 When to use which</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">5 min</span></div>
+          <div class="agenda-row" onclick="goTo(25)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🛠 Hands-on · 3 mini-problems</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">30 min</span></div>
+          <div class="agenda-row" onclick="goTo(29)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🎯 Wrap-up</span><span class="ar-badge" style="background:#E6E9EC;color:var(--indigo)">3 min</span></div>
+        </div>
+      </div>
+
+      <!-- 3 WHY THIS MATTERS -->
+      <div class="slide bg-dark" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> The problem</div>
+        <div class="center lead" style="margin: 0 auto;">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🤯 You can't test everything</div>
+          <h2 class="heading" style="color: white;">A Tashi Cell number has 8 digits.</h2>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:0.6rem; max-width:720px; margin-left:auto; margin-right:auto;">That's <span style="color:var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.6rem">100,000,000</span> possible inputs to test the phone-number field.</p>
+          <p class="body-md" style="color: rgba(255,255,255,0.7); margin-top:1.2rem; max-width:780px; margin-left:auto; margin-right:auto;">If you tested one number per second, it would take you <strong style="color:white">3 years and 2 months</strong> — for a single field. Then there are 50 more fields in the app.</p>
+          <p class="body-md" style="color: var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.3rem; margin-top:2rem;">So how does QA actually work?</p>
+        </div>
+      </div>
+
+      <!-- 4 THE ANSWER -->
+      <div class="slide accent-blue bg-subtle" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> The answer</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Test design techniques pick the <span style="color:var(--blue)">fewest cases</span> that catch the <span style="color:var(--blue)">most bugs</span>.</h2></div>
+          <div class="problem-card">
+            <div class="pq">The mindset shift</div>
+            <p class="ans">Don't ask <em>"What can I test?"</em><br>Ask <strong>"What groups of inputs behave differently — and which one example from each group will show me the truth?"</strong></p>
+          </div>
+          <div class="cols-3" style="max-width:1100px; gap:1rem">
+            <div class="card" style="border-top:3px solid var(--blue); text-align:center"><div style="font-size:2.4rem">🎯</div><h4 style="color:var(--blue); justify-content:center">Smart, not many</h4><p style="font-size:0.88rem; color:var(--muted); line-height:1.55">5 well-chosen tests beat 50 random ones.</p></div>
+            <div class="card" style="border-top:3px solid var(--amber); text-align:center"><div style="font-size:2.4rem">🧠</div><h4 style="color:#1C5B8C; justify-content:center">Think before clicking</h4><p style="font-size:0.88rem; color:var(--muted); line-height:1.55">Design first. Then test.</p></div>
+            <div class="card" style="border-top:3px solid var(--green); text-align:center"><div style="font-size:2.4rem">📚</div><h4 style="color:#3D7A3D; justify-content:center">5 techniques today</h4><p style="font-size:0.88rem; color:var(--muted); line-height:1.55">Each works best in a different situation.</p></div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">Last class (#04) you learned how to <em>write</em> a test case. Today you learn how to <em>pick</em> which test cases to write.</p>
+        </div>
+      </div>
+
+      <!-- 5 SECTION: EP -->
+      <div class="slide bg-blue" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Technique 1 of 5</div>
+          <h1 class="display" style="color: white">Equivalence<br>Partitioning</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Group inputs that behave the same. Pick one from each group.</p>
+        </div>
+        <div class="section-num" style="color: white">01</div>
+      </div>
+
+      <!-- 6 EP — IDEA -->
+      <div class="slide accent-blue bg-subtle" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> The idea</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">If two inputs make the system behave the <span style="color:var(--blue)">same way</span>, you only need to test <span style="color:var(--blue)">one of them</span>.</h2></div>
+          <div class="tech-card">
+            <div class="lbl">Equivalence Partitioning · EP</div>
+            <h3>Sort the inputs into groups (called classes). Pick one example per group.</h3>
+            <p>Every group is one "kind" of input. The system should treat every input in the group the <strong>exact same way</strong>. So testing one tells you about all of them.</p>
+          </div>
+          <div class="cols-2" style="max-width:1050px; gap:1rem">
+            <div class="card" style="border-top:3px solid var(--green)">
+              <h4 style="color:#3D7A3D">✅ Why it helps</h4>
+              <ul style="font-size:0.92rem; line-height:1.75; padding-left:1.2rem; color:var(--text)">
+                <li>Cuts thousands of test cases down to a handful</li>
+                <li>Forces you to think about <strong>every kind of input</strong>, not just the easy one</li>
+                <li>Makes a clean, complete test list</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--amber)">
+              <h4 style="color:#1C5B8C">🧠 Two types of groups</h4>
+              <ul style="font-size:0.92rem; line-height:1.75; padding-left:1.2rem; color:var(--text)">
+                <li><strong>Valid</strong> — the system should accept it</li>
+                <li><strong>Invalid</strong> — the system should reject it</li>
+                <li>Always test <strong>both</strong>. Most bugs hide in the invalid groups.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7 EP — AGE EXAMPLE -->
+      <div class="slide accent-blue" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> Worked example · age field</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Field: "Age in years (0 to 120)"</h2><p class="body-md" style="color:var(--muted)">Different age ranges get different treatment in our app: minor / adult / senior.</p></div>
+          <div class="ep-grid">
+            <div class="ep-class minor">
+              <h5>👶 Minor</h5>
+              <div class="range">0 – 17</div>
+              <div class="pick">Pick one: <strong>10</strong><br><span style="color:var(--muted); font-size:0.82rem">(any age 0–17 would do — they all behave the same)</span></div>
+            </div>
+            <div class="ep-class adult">
+              <h5>🧑 Adult</h5>
+              <div class="range">18 – 60</div>
+              <div class="pick">Pick one: <strong>30</strong><br><span style="color:var(--muted); font-size:0.82rem">(any age 18–60 would do)</span></div>
+            </div>
+            <div class="ep-class senior">
+              <h5>🧓 Senior</h5>
+              <div class="range">61 – 120</div>
+              <div class="pick">Pick one: <strong>70</strong><br><span style="color:var(--muted); font-size:0.82rem">(any age 61–120 would do)</span></div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px; font-family:'Bahnschrift','Segoe UI',sans-serif"><strong style="color:var(--blue)">3 valid groups → 3 test cases</strong> (instead of all 121 ages).</p>
+          <div class="tip">
+            <h5>💡 Don't forget the <em>invalid</em> groups</h5>
+            <p>Also test: <strong>−5</strong> (negative · should reject), <strong>121</strong> (too high · should reject), <strong>"abc"</strong> (letters · should reject), <strong>blank</strong> (empty · should reject). 3 valid + 4 invalid = <strong>7 test cases for a field with infinite possibilities.</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8 EP — PIN EXAMPLE + TIP -->
+      <div class="slide accent-blue bg-subtle" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> One more · mBoB login PIN</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Rule: "Login PIN must be exactly 4 digits"</h2></div>
+          <div class="ep-grid" style="grid-template-columns: repeat(4, 1fr); max-width:1180px;">
+            <div class="ep-class valid">
+              <h5>✅ Valid · 4 digits</h5>
+              <div class="range">"1234"</div>
+              <div class="pick">Should let me log in.</div>
+            </div>
+            <div class="ep-class invalid">
+              <h5>❌ Too short</h5>
+              <div class="range">"123"</div>
+              <div class="pick">Should show error.</div>
+            </div>
+            <div class="ep-class invalid">
+              <h5>❌ Too long</h5>
+              <div class="range">"12345"</div>
+              <div class="pick">Should show error.</div>
+            </div>
+            <div class="ep-class invalid">
+              <h5>❌ Letters</h5>
+              <div class="range">"abcd"</div>
+              <div class="pick">Should reject.</div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px"><strong>4 test cases</strong> cover the 10,000 valid PINs and the infinite invalid ones.</p>
+          <div class="tip">
+            <h5>💡 The EP rule of thumb</h5>
+            <p>For every input field, write down the groups: <strong>valid groups + invalid groups</strong>. Pick exactly one example from each. That's your starting test list.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9 SECTION: BVA -->
+      <div class="slide bg-amber" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Technique 2 of 5</div>
+          <h1 class="display" style="color: white">Boundary<br>Value Analysis</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Bugs cluster at the edges. Test on, just below, just above each edge.</p>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- 10 BVA — IDEA -->
+      <div class="slide accent-amber bg-subtle" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> The idea</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading"><span style="color:#1C5B8C">Most bugs hide at the edges</span> of valid ranges.</h2><p class="body-md" style="color:var(--muted); max-width:820px">Developers write code like <code style="background:var(--bg); padding:2px 6px; border-radius:4px; font-family:'Courier New',monospace">if (age &gt; 18)</code> when they meant <code style="background:var(--bg); padding:2px 6px; border-radius:4px; font-family:'Courier New',monospace">if (age &gt;= 18)</code>. Off-by-one bugs are <em>extremely</em> common.</p></div>
+          <div class="tech-card bva">
+            <div class="lbl">Boundary Value Analysis · BVA</div>
+            <h3>For every boundary, test 3 values: <em>just below</em> · <em>on</em> · <em>just above</em>.</h3>
+            <p>If a range is "<strong>18 to 60</strong>" then the boundaries are 18 and 60. Test: <strong>17, 18, 19</strong> at the lower edge and <strong>59, 60, 61</strong> at the upper edge.</p>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px; font-style:italic">EP and BVA work together. EP picks the groups; BVA picks the values right at the edges where the groups meet.</p>
+        </div>
+      </div>
+
+      <!-- 11 BVA — VISUAL EXAMPLE -->
+      <div class="slide accent-amber" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> Worked example · age check 18–60</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">"Allowed age: 18 – 60. Test these 6 values."</h2></div>
+          <div class="bva-line">
+            <div class="bva-axis">
+              <div class="bva-track"></div>
+              <div class="bva-tick bad"   style="left:8%"><div class="dot"></div><span class="num">17</span><span class="lbl">just below ↓</span></div>
+              <div class="bva-tick edge"  style="left:20%"><div class="dot"></div><span class="num">18</span><span class="lbl">on edge ✓</span></div>
+              <div class="bva-tick ok"    style="left:32%"><div class="dot"></div><span class="num">19</span><span class="lbl">just above ✓</span></div>
+              <div class="bva-tick ok"    style="left:62%"><div class="dot"></div><span class="num">59</span><span class="lbl">just below ✓</span></div>
+              <div class="bva-tick edge"  style="left:74%"><div class="dot"></div><span class="num">60</span><span class="lbl">on edge ✓</span></div>
+              <div class="bva-tick bad"   style="left:88%"><div class="dot"></div><span class="num">61</span><span class="lbl">just above ↑</span></div>
+            </div>
+            <div class="bva-legend">
+              <span><span class="sw" style="background:var(--red)"></span>Should reject</span>
+              <span><span class="sw" style="background:var(--blue)"></span>The boundary itself</span>
+              <span><span class="sw" style="background:#3D7A3D"></span>Should accept</span>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px"><strong style="color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif">6 test cases</strong> instead of 100. The 6 values are exactly where bugs love to hide.</p>
+        </div>
+      </div>
+
+      <!-- 12 BVA — MBOB EXAMPLE + TIP -->
+      <div class="slide accent-amber bg-subtle" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> Real-world · mBoB transfer</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">"Transfer amount: Nu. 100 to 50,000 per transaction"</h2></div>
+          <div class="mbob-card">
+            <h5>🏦 The 6 values to test</h5>
+            <p style="font-family:'Courier New',monospace; font-size:1rem; color:var(--text)">
+              Nu. <strong style="color:var(--red)">99</strong> → reject<br>
+              Nu. <strong style="color:var(--blue)">100</strong> → accept (lowest allowed)<br>
+              Nu. <strong style="color:#3D7A3D">101</strong> → accept<br>
+              Nu. <strong style="color:#3D7A3D">49,999</strong> → accept<br>
+              Nu. <strong style="color:var(--blue)">50,000</strong> → accept (highest allowed)<br>
+              Nu. <strong style="color:var(--red)">50,001</strong> → reject
+            </p>
+          </div>
+          <div class="tip">
+            <h5>💡 Always also test the "weird zeros"</h5>
+            <p>Add: <strong>Nu. 0</strong>, <strong>negative numbers</strong> (−500), <strong>decimals</strong> (100.50), and <strong>blank</strong>. These boundary-like edge cases catch the most embarrassing bugs.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 13 SECTION: DECISION TABLES -->
+      <div class="slide bg-indigo" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Technique 3 of 5</div>
+          <h1 class="display" style="color: white">Decision<br>Tables</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">For complex business rules — multiple conditions, multiple outcomes.</p>
+        </div>
+        <div class="section-num" style="color: white">03</div>
+      </div>
+
+      <!-- 14 DT — IDEA -->
+      <div class="slide accent-indigo bg-subtle" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> The idea</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">When the rule has <span style="color:var(--indigo)">several "if this AND that"</span> conditions, draw a table.</h2></div>
+          <div class="tech-card dt">
+            <div class="lbl">Decision Table</div>
+            <h3>List every condition. List every combination. Write the outcome for each row.</h3>
+            <p>If you have <strong>3 yes/no conditions</strong> there are <strong>2 × 2 × 2 = 8 combinations</strong>. Each combination becomes one test case. Nothing gets missed; nothing gets duplicated.</p>
+          </div>
+          <div class="cols-2" style="max-width:1050px; gap:1rem">
+            <div class="card" style="border-top:3px solid var(--indigo)">
+              <h4 style="color:var(--indigo)">📋 Use it when…</h4>
+              <ul style="font-size:0.92rem; line-height:1.75; padding-left:1.2rem; color:var(--text)">
+                <li>Pricing or discount rules</li>
+                <li>Eligibility rules ("if X and Y, allow…")</li>
+                <li>Insurance, banking, ticketing rules</li>
+                <li>Anything described with many "if…and…then…"</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--amber)">
+              <h4 style="color:#1C5B8C">🧠 Why it works</h4>
+              <ul style="font-size:0.92rem; line-height:1.75; padding-left:1.2rem; color:var(--text)">
+                <li>Easy to spot a missing combination</li>
+                <li>Easy to spot a contradiction in the rules</li>
+                <li>Same table works for BA, Dev, and QA</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 15 DT — DRUK AIR -->
+      <div class="slide accent-indigo" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span> Worked example · Druk Air discount</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Druk Air ticket discount rule</h2><p class="body-md" style="color:var(--muted); max-width:880px">Discount = <strong>30%</strong> if senior <em>and</em> loyalty member <em>and</em> booking 30+ days early; <strong>20%</strong> if any two of those; <strong>10%</strong> if only one; <strong>0%</strong> if none.</p></div>
+          <div class="dt-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Conditions / Outcome</th>
+                  <th>T1</th><th>T2</th><th>T3</th><th>T4</th><th>T5</th><th>T6</th><th>T7</th><th>T8</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="cond"><td>Senior (60+)</td><td class="no">N</td><td class="no">N</td><td class="no">N</td><td class="no">N</td><td class="yes">Y</td><td class="yes">Y</td><td class="yes">Y</td><td class="yes">Y</td></tr>
+                <tr class="cond"><td>Loyalty member</td><td class="no">N</td><td class="no">N</td><td class="yes">Y</td><td class="yes">Y</td><td class="no">N</td><td class="no">N</td><td class="yes">Y</td><td class="yes">Y</td></tr>
+                <tr class="cond"><td>Booked 30+ days early</td><td class="no">N</td><td class="yes">Y</td><td class="no">N</td><td class="yes">Y</td><td class="no">N</td><td class="yes">Y</td><td class="no">N</td><td class="yes">Y</td></tr>
+                <tr class="outcome"><td>→ Discount applied</td><td class="dt-out-0">0%</td><td class="dt-out-10">10%</td><td class="dt-out-10">10%</td><td class="dt-out-20">20%</td><td class="dt-out-10">10%</td><td class="dt-out-20">20%</td><td class="dt-out-20">20%</td><td style="color:#3D7A3D; font-weight:700">30%</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px"><strong style="color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif">8 combinations → 8 test cases.</strong> No combination forgotten.</p>
+        </div>
+      </div>
+
+      <!-- 16 DT — TIP -->
+      <div class="slide accent-indigo bg-subtle" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span> Tip · how to build one</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Building a decision table · 4 simple steps</h2></div>
+          <div class="cols-2" style="max-width:1100px; gap:1rem">
+            <div class="card" style="border-top:3px solid var(--blue)">
+              <h4 style="color:var(--blue)">Step-by-step</h4>
+              <ol style="font-size:0.95rem; line-height:1.85; padding-left:1.4rem; color:var(--text)">
+                <li>List every <strong>condition</strong> from the spec (each with Yes / No)</li>
+                <li>Calculate combinations: <strong>2<sup>n</sup></strong> for n conditions</li>
+                <li>Fill the column for each combination — alternate Y/N like binary counting</li>
+                <li>Look up the spec and write the <strong>outcome</strong> for each column</li>
+              </ol>
+            </div>
+            <div class="card" style="border-top:3px solid var(--red)">
+              <h4 style="color:var(--red)">Common mistakes</h4>
+              <ul style="font-size:0.92rem; line-height:1.75; padding-left:1.2rem; color:var(--text)">
+                <li>Missing a condition → table is incomplete</li>
+                <li>Two columns with the same conditions but different outcomes → spec contradicts itself; <strong>flag it to the BA</strong></li>
+                <li>Skipping a "boring" combination ("no one would do that") — that's exactly where bugs hide</li>
+              </ul>
+            </div>
+          </div>
+          <div class="tip">
+            <h5>💡 If the table gets huge</h5>
+            <p>If you have 5+ conditions = 32+ rows. Group similar combinations. Or split into two smaller tables. <strong>A 2-page table is unreadable</strong>.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 17 SECTION: STATE TRANSITION -->
+      <div class="slide bg-blue" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Technique 4 of 5</div>
+          <h1 class="display" style="color: white">State Transition<br>Testing</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">For things that move through stages — orders, requests, accounts.</p>
+        </div>
+        <div class="section-num" style="color: white">04</div>
+      </div>
+
+      <!-- 18 ST — DIAGRAM (LEAVE REQUEST) -->
+      <div class="slide accent-blue bg-subtle" data-slide="18">
+        <div class="slide-label"><span class="snum">18</span> Worked example · leave request states</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">A leave request lives in one state at a time.</h2><p class="body-md" style="color:var(--muted); max-width:820px">Test the <strong>arrows</strong> (transitions) — both the ones that should work, and the ones that should be blocked.</p></div>
+          <div class="state-svg-wrap">
+            <svg viewBox="0 0 1100 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Leave request state diagram">
+              <defs>
+                <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#0066B2"/>
+                </marker>
+                <marker id="arrred" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#D80032"/>
+                </marker>
+              </defs>
+              <!-- nodes -->
+              <g font-family="Bahnschrift, Segoe UI, sans-serif" font-size="20" fill="#001F35">
+                <!-- Draft -->
+                <rect x="40"  y="140" width="170" height="70" rx="14" fill="#F9F9F9" stroke="#7B7C7F" stroke-width="2"/>
+                <text x="125" y="170" text-anchor="middle" font-weight="600">Draft</text>
+                <text x="125" y="195" text-anchor="middle" font-size="13" fill="#4A4C4F">(not sent yet)</text>
+
+                <!-- Submitted -->
+                <rect x="290" y="140" width="180" height="70" rx="14" fill="#E6F0F8" stroke="#0066B2" stroke-width="2"/>
+                <text x="380" y="170" text-anchor="middle" font-weight="600">Submitted</text>
+                <text x="380" y="195" text-anchor="middle" font-size="13" fill="#4A4C4F">(awaiting decision)</text>
+
+                <!-- Approved -->
+                <rect x="560" y="40"  width="170" height="70" rx="14" fill="#F0F7EC" stroke="#3D7A3D" stroke-width="2"/>
+                <text x="645" y="70"  text-anchor="middle" font-weight="600">Approved</text>
+                <text x="645" y="95"  text-anchor="middle" font-size="13" fill="#4A4C4F">(can be used)</text>
+
+                <!-- Rejected -->
+                <rect x="560" y="140" width="170" height="70" rx="14" fill="#F2E8EA" stroke="#D80032" stroke-width="2"/>
+                <text x="645" y="170" text-anchor="middle" font-weight="600">Rejected</text>
+                <text x="645" y="195" text-anchor="middle" font-size="13" fill="#4A4C4F">(declined)</text>
+
+                <!-- Cancelled -->
+                <rect x="560" y="240" width="170" height="70" rx="14" fill="#F9F9F9" stroke="#7B7C7F" stroke-width="2"/>
+                <text x="645" y="270" text-anchor="middle" font-weight="600">Cancelled</text>
+                <text x="645" y="295" text-anchor="middle" font-size="13" fill="#4A4C4F">(by employee)</text>
+
+                <!-- Used -->
+                <rect x="830" y="40"  width="170" height="70" rx="14" fill="#0066B2"/>
+                <text x="915" y="70"  text-anchor="middle" font-weight="600" fill="white">Used</text>
+                <text x="915" y="95"  text-anchor="middle" font-size="13" fill="white" opacity="0.85">(final)</text>
+              </g>
+
+              <!-- arrows (transitions) -->
+              <g stroke="#0066B2" stroke-width="2.5" fill="none" marker-end="url(#arr)">
+                <!-- Draft -> Submitted -->
+                <path d="M 215 175 L 285 175"/>
+                <!-- Submitted -> Approved -->
+                <path d="M 470 160 Q 520 135 555 90"/>
+                <!-- Submitted -> Rejected -->
+                <path d="M 475 175 L 555 175"/>
+                <!-- Submitted -> Cancelled -->
+                <path d="M 470 195 Q 520 220 555 265"/>
+                <!-- Approved -> Used -->
+                <path d="M 735 75 L 825 75"/>
+              </g>
+
+              <!-- transition labels -->
+              <g font-family="Open Sans, sans-serif" font-size="13" fill="#0066B2" font-weight="600">
+                <text x="250" y="165" text-anchor="middle">submit</text>
+                <text x="495" y="115" text-anchor="middle">manager approves</text>
+                <text x="515" y="167" text-anchor="middle">manager rejects</text>
+                <text x="495" y="240" text-anchor="middle">employee cancels</text>
+                <text x="780" y="65"  text-anchor="middle">leave date arrives</text>
+              </g>
+            </svg>
+          </div>
+          <p class="state-legend">5 valid arrows. 5 valid test cases. But also — many <strong style="color:var(--red)">invalid arrows</strong> that should be blocked.</p>
+        </div>
+      </div>
+
+      <!-- 19 ST — VALID + INVALID + TIP -->
+      <div class="slide accent-blue" data-slide="19">
+        <div class="slide-label"><span class="snum">19</span> Test the arrows that <em>shouldn't</em> work too</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Valid transitions <span style="color:var(--muted); font-size:0.7em">vs.</span> Invalid (should be blocked)</h2></div>
+          <div class="st-tbl">
+            <table>
+              <thead>
+                <tr><th style="width:18%">From state</th><th style="width:24%">Action</th><th style="width:18%">To state</th><th>What QA tests</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Draft</td><td>Submit</td><td>Submitted</td><td><span class="pill-ok">VALID</span> The request appears in the manager's queue.</td></tr>
+                <tr><td>Submitted</td><td>Manager approves</td><td>Approved</td><td><span class="pill-ok">VALID</span> Status updates · employee gets a notification.</td></tr>
+                <tr><td>Submitted</td><td>Manager rejects</td><td>Rejected</td><td><span class="pill-ok">VALID</span> Reason is captured · employee notified.</td></tr>
+                <tr><td>Submitted</td><td>Employee cancels</td><td>Cancelled</td><td><span class="pill-ok">VALID</span> Manager queue updates immediately.</td></tr>
+                <tr><td>Approved</td><td>Leave date arrives</td><td>Used</td><td><span class="pill-ok">VALID</span> Days deducted from balance.</td></tr>
+                <tr><td>Rejected</td><td>Employee tries to cancel</td><td>—</td><td><span class="pill-no">INVALID</span> System should refuse — already rejected.</td></tr>
+                <tr><td>Used</td><td>Manager tries to approve again</td><td>—</td><td><span class="pill-no">INVALID</span> System should refuse — final state.</td></tr>
+                <tr><td>Draft</td><td>Manager tries to approve</td><td>—</td><td><span class="pill-no">INVALID</span> Manager can't even see drafts — should not appear.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tip">
+            <h5>💡 The most-missed bugs in state testing</h5>
+            <p>Junior testers test only the <strong>happy path arrows</strong>. The bugs are usually in the <strong>blocked arrows</strong> — when the system <em>shouldn't</em> let something happen but accidentally does. Always test both.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 20 SECTION: USE CASE -->
+      <div class="slide bg-green" data-slide="20">
+        <div class="slide-label"><span class="snum">20</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Technique 5 of 5</div>
+          <h1 class="display" style="color: white">Use Case<br>Testing</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Walk every flow of a use case — main, alternate, and exception.</p>
+        </div>
+        <div class="section-num" style="color: white">05</div>
+      </div>
+
+      <!-- 21 UC — IDEA + EXAMPLE -->
+      <div class="slide accent-green bg-subtle" data-slide="21">
+        <div class="slide-label"><span class="snum">21</span> Use case testing · the quick version</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">From a use case, write tests for <span style="color:#3D7A3D">main flow</span>, <span style="color:#1C5B8C">alternate flows</span>, and <span style="color:var(--red)">exception flows</span>.</h2><p class="body-md" style="color:var(--muted); max-width:880px">You met use cases in BA+QA Diagrams class #01. Today is just the <strong>testing</strong> use of them.</p></div>
+          <div class="tech-card uc">
+            <div class="lbl">Use case · school admission form</div>
+            <h3 style="font-size:1.2rem">Use case: "Parent submits a school admission form."</h3>
+            <p style="font-size:0.95rem">A use case describes a feature end-to-end from a user's point of view — the steps they take, what they need, what they get.</p>
+          </div>
+          <div class="uc-grid">
+            <div class="uc-card">
+              <h6>✅ Main flow</h6>
+              <p>Parent fills all required fields, uploads CID + photo, pays the fee, sees confirmation.</p>
+              <p class="tc">Test: walk the happy path end-to-end. 1 test case.</p>
+            </div>
+            <div class="uc-card alt">
+              <h6>↪ Alternate flow</h6>
+              <p>Parent saves a draft and returns later to finish.</p>
+              <p class="tc">Test: leave halfway · come back · data still there. 1 test case.</p>
+            </div>
+            <div class="uc-card exc">
+              <h6>⚠ Exception flow</h6>
+              <p>Required field empty · uploaded file too large · payment fails · session times out.</p>
+              <p class="tc">Test each exception. 4 test cases.</p>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px; font-style:italic">One use case → 1 main + 1 alternate + 4 exceptions = <strong>6 test cases that cover the whole feature</strong>.</p>
+        </div>
+      </div>
+
+      <!-- 22 ERROR GUESSING -->
+      <div class="slide accent-amber bg-subtle" data-slide="22">
+        <div class="slide-label"><span class="snum">22</span> Error Guessing · the tester's sixth sense</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Sometimes the best test is the one <span style="color:#1C5B8C">your gut tells you</span> to write.</h2><p class="body-md" style="color:var(--muted); max-width:880px">All five techniques so far are <strong>systematic</strong>. Error guessing is <strong>experience-based</strong> — you use intuition and memory of past bugs to predict where new bugs are hiding.</p></div>
+          <div class="tech-card bva">
+            <div class="lbl">Error Guessing · experience-based technique</div>
+            <h3>"What would a careless or sneaky user do?"</h3>
+            <p>EP, BVA, decision tables, state transition and use cases will catch most bugs in the spec. Error guessing catches the bugs that <strong>nobody thought to write down</strong> — the ones that come from real-world chaos.</p>
+          </div>
+          <div class="cols-2" style="max-width:1100px; gap:1rem">
+            <div class="card" style="border-top:3px solid var(--amber)">
+              <h4 style="color:#1C5B8C">🤔 Common error-guessing prompts</h4>
+              <ul style="font-size:0.92rem; line-height:1.75; padding-left:1.2rem; color:var(--text)">
+                <li>What if they enter something stupid? <strong>0, negative, very large, special chars</strong></li>
+                <li>What if the <strong>network drops</strong> mid-action?</li>
+                <li>What if the user <strong>double-taps</strong> the Submit button?</li>
+                <li>What if they paste a <strong>10,000-character string</strong>?</li>
+                <li>What if they hit <strong>Back</strong> after paying?</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--green)">
+              <h4 style="color:#3D7A3D">🇧🇹 Bhutanese example · mBoB transfer</h4>
+              <ul style="font-size:0.92rem; line-height:1.75; padding-left:1.2rem; color:var(--text)">
+                <li>What if the user enters <strong>Nu. 0</strong>?</li>
+                <li>Phone number with <strong>+975</strong> vs without?</li>
+                <li>What if the receiver number <strong>has a space</strong>?</li>
+                <li>What if they tap Send <strong>twice quickly</strong> — does it transfer twice?</li>
+                <li>What if the screen <strong>rotates</strong> mid-transfer?</li>
+              </ul>
+            </div>
+          </div>
+          <div class="tip">
+            <h5>💡 Keep a personal "bug catalog"</h5>
+            <p>Bugs you've seen before are bugs that <strong>come back</strong>. Write down every bug you find — by the time you have 30+ entries, you'll have your own private error-guessing checklist that nobody else can match.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 23 PAIRWISE TESTING -->
+      <div class="slide accent-indigo" data-slide="23">
+        <div class="slide-label"><span class="snum">23</span> Pairwise · combination coverage without explosion</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">When inputs <span style="color:var(--indigo)">multiply</span>, you can't test every combination — but you <em>can</em> cover every <strong>pair</strong>.</h2><p class="body-md" style="color:var(--muted); max-width:880px">5 browsers × 3 devices × 4 user roles = <strong>60 combinations</strong>. Most teams test 5–10. Pairwise picks a smart ~10 that cover every <strong>pair of inputs</strong> at least once.</p></div>
+          <div class="tech-card dt">
+            <div class="lbl">Pairwise · combinatorial technique</div>
+            <h3>Cover every pair of inputs once. Don't try to cover every full combination.</h3>
+            <p>Research shows ~<strong>80% of bugs</strong> are triggered by <em>one or two</em> inputs together — not three or more. So pairwise gets ~80% of the coverage with ~20% of the effort.</p>
+          </div>
+          <div class="cols-2" style="max-width:1100px; gap:1rem">
+            <div class="card" style="border-top:3px solid var(--indigo)">
+              <h4 style="color:var(--indigo)">🇧🇹 Druk Air booking example</h4>
+              <p style="font-size:0.9rem; line-height:1.7; color:var(--text)">Inputs:<br>· Cabin: <strong>Y / J</strong> (2)<br>· Payment: <strong>mBoB / Card / Cash</strong> (3)<br>· Loyalty: <strong>Yes / No</strong> (2)<br>· Departure: <strong>Paro / Bumthang / Gelephu</strong> (3)</p>
+              <p style="font-size:0.92rem; line-height:1.7; color:var(--text); margin-top:0.5rem">Full combinations: <strong>2 × 3 × 2 × 3 = 36 tests</strong><br>Pairwise: <strong>≈ 9 tests</strong> — every pair still covered.</p>
+            </div>
+            <div class="card" style="border-top:3px solid var(--green)">
+              <h4 style="color:#3D7A3D">🛠 Free tools do the math</h4>
+              <ul style="font-size:0.92rem; line-height:1.75; padding-left:1.2rem; color:var(--text)">
+                <li><strong>PICT</strong> (Microsoft, free, command-line)</li>
+                <li><strong>pairwise.teremokgames.com</strong> · online generator</li>
+                <li><strong>Hexawise</strong>, <strong>ACTS</strong> (NIST) — more advanced</li>
+                <li>You don't need to memorize the math · just feed it your inputs</li>
+              </ul>
+            </div>
+          </div>
+          <div class="tip">
+            <h5>💡 What to remember from this slide</h5>
+            <p>Pairwise has the <strong>steepest learning curve</strong> in this list. For now, just <strong>recognize the term</strong> and know <strong>when to reach for it</strong>: many independent inputs that multiply into too many combinations to test fully.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 24 WHEN TO USE WHICH -->
+      <div class="slide accent-blue bg-subtle" data-slide="24">
+        <div class="slide-label"><span class="snum">24</span> Cheat sheet · when to use which</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Pick the technique that matches the situation.</h2></div>
+          <div class="cheat">
+            <table>
+              <thead>
+                <tr><th>Use this technique…</th><th>…when you're testing</th><th>Bhutan example</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Equivalence Partitioning + Boundary Values</td><td>An input field with a range or a set of options</td><td>Age field · phone number · transfer amount</td></tr>
+                <tr><td>Decision Table</td><td>Business rules with several "if X and Y" conditions</td><td>Druk Air discount · loan eligibility · school admission rules</td></tr>
+                <tr><td>State Transition</td><td>Anything with a lifecycle that moves through stages</td><td>Leave request · order status · account suspension</td></tr>
+                <tr><td>Use Case Testing</td><td>A feature end-to-end · main + alternate + exception flows</td><td>Submit admission form · book a ticket · transfer money</td></tr>
+                <tr><td>Error Guessing</td><td>Anywhere — as a final sweep using your gut + past bug experience</td><td>mBoB · "what if user enters Nu. 0?" · pasting 10,000 chars · double-tap submit</td></tr>
+                <tr><td>Pairwise Testing</td><td>Many input combinations (browser × device × role × payment …)</td><td>Druk Air booking · cabin × payment × loyalty × departure combos</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">In real projects you'll often <strong>combine</strong> them — EP + BVA on each input field <em>inside</em> a use-case flow, then a quick error-guessing sweep at the end.</p>
+        </div>
+      </div>
+
+      <!-- 25 SECTION: HANDS-ON -->
+      <div class="slide bg-blue" data-slide="25">
+        <div class="slide-label"><span class="snum">25</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Hands-on · 30 min</div>
+          <h1 class="display" style="color: white">Your Turn</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Three mini-problems · in pairs · each uses a different technique.</p>
+        </div>
+        <div class="section-num" style="color: white">HO</div>
+      </div>
+
+      <!-- 26 HANDS-ON BRIEF -->
+      <div class="slide accent-blue bg-subtle" data-slide="26">
+        <div class="slide-label"><span class="snum">26</span> The 3 mini-problems</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Pairs · 25 min work · 5 min debrief</h2><p class="body-md" style="color:var(--muted); max-width:840px">For each problem, decide which technique fits, then write your test cases. Use a notebook or shared doc.</p></div>
+          <div class="ho-grid">
+            <div class="ho-card">
+              <span class="tag">Problem 1 · EP + BVA</span>
+              <h5>Trainee discount card</h5>
+              <p>The Pelsung trainee discount card is valid for <strong>ages 18 to 35</strong>. <br><br>Design test cases for the age check — both valid and invalid.</p>
+            </div>
+            <div class="ho-card">
+              <span class="tag">Problem 2 · Decision table</span>
+              <h5>Booking discount</h5>
+              <p>Discount rules:<br>· loyalty member <strong>AND</strong> booked 30+ days early → <strong>20%</strong><br>· loyalty only → <strong>10%</strong><br>· early only → <strong>5%</strong><br>· neither → <strong>0%</strong><br><br>Design test cases covering <strong>all combinations</strong>.</p>
+            </div>
+            <div class="ho-card">
+              <span class="tag">Problem 3 · State transition</span>
+              <h5>Leave request lifecycle</h5>
+              <p>States:<br>Draft → Submitted → Approved → Used<br>Submitted → Rejected<br>Submitted → Cancelled (by employee)<br><br>Design test cases for <strong>both valid and invalid transitions</strong>.</p>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px; font-family:'Bahnschrift','Segoe UI',sans-serif"><strong style="color:var(--blue)">Time-box:</strong> ~8 min per problem · then group debrief.</p>
+        </div>
+      </div>
+
+      <!-- 27 HANDS-ON HINTS -->
+      <div class="slide accent-blue" data-slide="27">
+        <div class="slide-label"><span class="snum">27</span> Hints · what "good" looks like</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">If you're stuck, here's the shape of a good answer.</h2></div>
+          <div class="cols-3" style="max-width:1200px; gap:0.9rem">
+            <div class="card" style="border-top:3px solid var(--blue)">
+              <h4 style="color:var(--blue)">Problem 1 · target ~7 cases</h4>
+              <ul style="font-size:0.86rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li>17 → reject (just below)</li>
+                <li>18 → accept (boundary)</li>
+                <li>19 → accept</li>
+                <li>34 → accept</li>
+                <li>35 → accept (boundary)</li>
+                <li>36 → reject (just above)</li>
+                <li>"abc" / blank / negative → reject</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--indigo)">
+              <h4 style="color:var(--indigo)">Problem 2 · target 4 cases</h4>
+              <ul style="font-size:0.86rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li>Loyalty=Y · Early=Y → 20%</li>
+                <li>Loyalty=Y · Early=N → 10%</li>
+                <li>Loyalty=N · Early=Y → 5%</li>
+                <li>Loyalty=N · Early=N → 0%</li>
+                <li>(2 conditions × 2 = 4 rows · all covered)</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--purple)">
+              <h4 style="color:var(--purple)">Problem 3 · target ~8 cases</h4>
+              <ul style="font-size:0.86rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li>5 valid arrows (one each)</li>
+                <li>Plus invalid attempts:</li>
+                <li>Approve a Draft → blocked</li>
+                <li>Cancel a Rejected → blocked</li>
+                <li>Approve a Used → blocked</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">Don't peek before you try! These are reference targets — your set might be slightly different and still correct.</p>
+        </div>
+      </div>
+
+      <!-- 28 DEBRIEF -->
+      <div class="slide accent-blue bg-subtle" data-slide="28">
+        <div class="slide-label"><span class="snum">28</span> Debrief · group discussion</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Let's talk about what we found.</h2></div>
+          <div class="cols-2" style="max-width:1100px; gap:1rem">
+            <div class="card" style="border-top:3px solid var(--blue)">
+              <h4 style="color:var(--blue)">Questions for each pair</h4>
+              <ul style="font-size:0.95rem; line-height:1.8; padding-left:1.2rem; color:var(--text)">
+                <li>Which technique was <strong>clearest</strong>?</li>
+                <li>Which one was <strong>hardest</strong> to apply?</li>
+                <li>Where did you <strong>under-cover</strong>? (forget invalid? forget a boundary?)</li>
+                <li>Did you find a place where <strong>two techniques combined</strong>?</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--green)">
+              <h4 style="color:#3D7A3D">What good QA habits look like</h4>
+              <ul style="font-size:0.95rem; line-height:1.8; padding-left:1.2rem; color:var(--text)">
+                <li>Always ask: <strong>"What groups are there?"</strong></li>
+                <li>Always test the <strong>edges</strong></li>
+                <li>Always test the <strong>invalid path</strong></li>
+                <li>Always think: <strong>"What can't happen?"</strong> and try to make it happen</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 29 WRAP -->
+      <div class="slide bg-dark" data-slide="29">
+        <div class="slide-label"><span class="snum">29</span> Wrap-up</div>
+        <div class="center" style="max-width: 860px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key Takeaways</div>
+          <h2 class="heading" style="color: white;">What we covered today</h2>
+          <ul class="reveal-list" style="color: rgba(255,255,255,0.9); text-align:left; max-width: 760px; margin: 1.5rem auto; font-size: 1rem; line-height: 2;">
+            <li>✅ You <strong>can't test everything</strong> — use techniques to pick smart cases</li>
+            <li>✅ <strong>Equivalence Partitioning</strong> — group inputs, pick one per group (valid + invalid)</li>
+            <li>✅ <strong>Boundary Value Analysis</strong> — bugs hide at the edges, test on / just below / just above</li>
+            <li>✅ <strong>Decision Tables</strong> — for "if X and Y" rules · 2<sup>n</sup> rows · cover every combination</li>
+            <li>✅ <strong>State Transition</strong> — test valid arrows AND blocked arrows in a lifecycle</li>
+            <li>✅ <strong>Use Case Testing</strong> — main flow + alternate flows + exception flows</li>
+            <li>✅ Combine techniques · EP+BVA on inputs <em>inside</em> a use-case flow</li>
+          </ul>
+          <p style="color: var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.2rem; margin-top:1.5rem">A great QA tests fewer cases — but the right ones.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 29</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>

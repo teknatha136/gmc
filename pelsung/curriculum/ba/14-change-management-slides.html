@@ -1,0 +1,723 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Change Management — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      /* Truth card — used on the "hard truth" slide */
+      .truth-card { background:white; border:2px solid var(--blue); border-left:6px solid var(--amber); border-radius:12px; padding:1.2rem 1.6rem; max-width:880px; width:100%; }
+      .truth-card .lbl { color:var(--muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.08em; font-weight:700; margin-bottom:0.4rem; }
+      .truth-card h3 { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-size:clamp(1.3rem, 2.5vw, 1.85rem); line-height:1.4; margin-bottom:0.5rem; }
+      .truth-card p { font-size:0.98rem; color:var(--text); line-height:1.7; }
+      .truth-card p strong { color:var(--blue); }
+
+      /* Resistance reasons grid */
+      .res-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:0.8rem; width:100%; max-width:1100px; }
+      @media (max-width: 820px){ .res-grid { grid-template-columns:1fr 1fr; } }
+      @media (max-width: 540px){ .res-grid { grid-template-columns:1fr; } }
+      .res-card { background:white; border:1px solid var(--border); border-top:4px solid var(--red); border-radius:10px; padding:0.85rem 1.05rem; }
+      .res-card h6 { color:var(--red); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.3rem; display:flex; align-items:center; gap:0.4rem; }
+      .res-card p { font-size:0.88rem; color:var(--text); line-height:1.6; }
+      .res-card .eg { margin-top:0.4rem; padding-top:0.35rem; border-top:1px dashed var(--border); color:var(--muted); font-size:0.82rem; font-style:italic; }
+
+      /* Kotter list */
+      .kotter-list { background:white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.3rem; max-width:920px; width:100%; }
+      .kotter-list ol { list-style:none; counter-reset:k; padding:0; margin:0; }
+      .kotter-list ol li { counter-increment:k; padding:0.55rem 0.7rem 0.55rem 3rem; position:relative; font-size:0.95rem; line-height:1.55; color:var(--text); border-bottom:1px solid var(--border); }
+      .kotter-list ol li:last-child { border-bottom:none; }
+      .kotter-list ol li::before { content:counter(k); position:absolute; left:0.7rem; top:50%; transform:translateY(-50%); width:1.7rem; height:1.7rem; border-radius:50%; background:var(--bg); color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; display:flex; align-items:center; justify-content:center; font-size:0.85rem; }
+      .kotter-list ol li.hl { background:linear-gradient(90deg, rgba(36,126,193,0.07), transparent); border-left:3px solid var(--amber); padding-left:2.7rem; }
+      .kotter-list ol li.hl::before { background:var(--amber); color:white; }
+      .kotter-list ol li strong { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; }
+
+      /* Single Kotter step deep-dive card */
+      .step-card { background:white; border:1px solid var(--border); border-left:5px solid var(--blue); border-radius:12px; padding:1.1rem 1.4rem; max-width:880px; width:100%; }
+      .step-card .step-tag { display:inline-block; background:var(--blue); color:white; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.78rem; padding:0.2rem 0.65rem; border-radius:4px; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.5rem; }
+      .step-card h3 { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-size:clamp(1.3rem, 2.4vw, 1.7rem); margin-bottom:0.5rem; }
+      .step-card p { font-size:0.95rem; color:var(--text); line-height:1.7; margin-bottom:0.5rem; }
+      .step-card p strong { color:var(--blue); }
+      .step-card .ex { background:var(--bg); border-left:3px solid var(--amber); border-radius:6px; padding:0.7rem 0.9rem; margin-top:0.5rem; }
+      .step-card .ex .ex-lbl { color:var(--muted); font-size:0.74rem; text-transform:uppercase; letter-spacing:0.08em; font-weight:700; margin-bottom:0.2rem; }
+      .step-card .ex p { font-size:0.9rem; line-height:1.6; margin:0; color:var(--text); font-style:italic; }
+
+      /* 3-track plan */
+      .tracks { display:grid; grid-template-columns:repeat(3, 1fr); gap:0.9rem; width:100%; max-width:1150px; }
+      @media (max-width: 820px){ .tracks { grid-template-columns:1fr; } }
+      .track { background:white; border:1px solid var(--border); border-top:4px solid var(--blue); border-radius:10px; padding:0.95rem 1.1rem; }
+      .track.t1 { border-top-color:var(--blue); }
+      .track.t2 { border-top-color:var(--indigo); }
+      .track.t3 { border-top-color:var(--amber); }
+      .track h5 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; margin-bottom:0.2rem; display:flex; align-items:center; gap:0.45rem; }
+      .track.t1 h5 { color:var(--blue); }
+      .track.t2 h5 { color:var(--indigo); }
+      .track.t3 h5 { color:var(--amber); }
+      .track .pur { color:var(--muted); font-size:0.82rem; margin-bottom:0.5rem; font-style:italic; }
+      .track ul { font-size:0.88rem; line-height:1.65; padding-left:1.1rem; color:var(--text); }
+      .track ul li { margin-bottom:0.25rem; }
+
+      /* Resistance toolkit */
+      .toolkit { display:grid; grid-template-columns:repeat(2, 1fr); gap:0.7rem; width:100%; max-width:1100px; }
+      @media (max-width: 720px){ .toolkit { grid-template-columns:1fr; } }
+      .tool { background:white; border:1px solid var(--border); border-left:4px solid var(--green); border-radius:10px; padding:0.8rem 1rem; }
+      .tool h6 { color:#3D7A3D; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.98rem; margin-bottom:0.25rem; display:flex; align-items:center; gap:0.4rem; }
+      .tool p { font-size:0.88rem; color:var(--text); line-height:1.6; }
+      .tool .ex { color:var(--muted); font-size:0.82rem; font-style:italic; margin-top:0.3rem; padding-top:0.3rem; border-top:1px dashed var(--border); }
+
+      /* Pilot vs big-bang compare */
+      .pbb { display:grid; grid-template-columns:1fr 1fr; gap:0.9rem; width:100%; max-width:1100px; }
+      @media (max-width: 820px){ .pbb { grid-template-columns:1fr; } }
+      .pbb .col { background:white; border:1px solid var(--border); border-radius:10px; padding:0.95rem 1.15rem; }
+      .pbb .col.pilot { border-top:4px solid var(--green); }
+      .pbb .col.bang { border-top:4px solid var(--red); }
+      .pbb .col h5 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-bottom:0.4rem; }
+      .pbb .col.pilot h5 { color:#3D7A3D; }
+      .pbb .col.bang h5 { color:var(--red); }
+      .pbb .col .lbl { color:var(--muted); font-size:0.74rem; text-transform:uppercase; letter-spacing:0.08em; font-weight:700; margin-top:0.55rem; margin-bottom:0.2rem; }
+      .pbb .col ul { font-size:0.88rem; line-height:1.65; padding-left:1.1rem; color:var(--text); }
+      .pbb .col ul li { margin-bottom:0.2rem; }
+
+      /* Metrics cards */
+      .metrics-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:0.7rem; width:100%; max-width:1050px; }
+      @media (max-width: 720px){ .metrics-grid { grid-template-columns:1fr; } }
+      .metric { background:white; border:1px solid var(--border); border-left:4px solid var(--blue); border-radius:10px; padding:0.85rem 1.05rem; }
+      .metric h6 { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.25rem; display:flex; align-items:center; gap:0.4rem; }
+      .metric p { font-size:0.88rem; color:var(--text); line-height:1.6; }
+      .metric .eg { color:var(--muted); font-size:0.82rem; font-style:italic; margin-top:0.3rem; }
+
+      /* Hands-on options */
+      .scenario-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:0.7rem; width:100%; max-width:1150px; }
+      @media (max-width: 820px){ .scenario-grid { grid-template-columns:1fr; } }
+      .scenario { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.18); border-left:4px solid var(--amber); border-radius:10px; padding:0.85rem 1.05rem; color:white; }
+      .scenario .num { display:inline-block; background:var(--amber); color:white; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.78rem; padding:0.18rem 0.6rem; border-radius:4px; margin-bottom:0.4rem; letter-spacing:0.06em; }
+      .scenario h6 { color:white; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.98rem; line-height:1.4; margin-bottom:0.3rem; }
+      .scenario p { font-size:0.85rem; color:rgba(255,255,255,0.8); line-height:1.55; }
+
+      /* Deliverables list (hands-on brief) */
+      .deliv { background:white; border:2px dashed var(--blue); border-radius:12px; padding:1rem 1.3rem; max-width:920px; width:100%; }
+      .deliv h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; margin-bottom:0.4rem; }
+      .deliv ol { font-size:0.93rem; line-height:1.7; padding-left:1.3rem; color:var(--text); }
+      .deliv ol li { margin-bottom:0.3rem; }
+      .deliv ol li strong { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; }
+
+      /* Bhutan example chip strip */
+      .examples-strip { display:flex; gap:0.5rem; flex-wrap:wrap; justify-content:center; max-width:1100px; }
+      .ex-chip { background:white; border:1px solid var(--border); border-radius:100px; padding:0.4rem 0.85rem; font-size:0.82rem; color:var(--text); display:inline-flex; align-items:center; gap:0.35rem; }
+      .ex-chip strong { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>BA Vertical · Class 14</div></div>
+          <h1 class="display" style="color: var(--text)">
+            <span style="color: var(--blue)">Change</span><br />
+            <span style="color: var(--indigo)">Management</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted)">Software ships. But change is what makes software actually used.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">Rollout Plans</span>
+            <span class="class-tag tag-blue">Training Users</span>
+            <span class="class-tag tag-blue">Managing Resistance</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 AGENDA -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 800px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem"><h2 class="heading">Session Journey</h2></div>
+          <div class="agenda-row" onclick="goTo(2)"><span class="ar-dot" style="background: var(--red)"></span><span class="ar-label">💥 The hard truth — most projects fail at change, not code</span><span class="ar-badge" style="background:#FEE9EC;color:var(--red)">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(4)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">😟 Why people resist change</span><span class="ar-badge" style="background:#E6F0F8;color:var(--indigo)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(6)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🪜 Kotter's 8 steps — lite version</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">15 min</span></div>
+          <div class="agenda-row" onclick="goTo(11)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🛤️ The 3-track rollout plan</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">12 min</span></div>
+          <div class="agenda-row" onclick="goTo(13)"><span class="ar-dot" style="background: var(--green)"></span><span class="ar-label">🧰 Resistance toolkit — what to actually do</span><span class="ar-badge" style="background:#EAF7E2;color:#3D7A3D">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(14)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">⚖️ Pilot vs big-bang</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">7 min</span></div>
+          <div class="agenda-row" onclick="goTo(15)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">📊 Measuring success</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">7 min</span></div>
+          <div class="agenda-row" onclick="goTo(16)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🛠️ Hands-on — plan a real rollout</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">25 min</span></div>
+          <div class="agenda-row" onclick="goTo(20)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🎯 Wrap-up</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">3 min</span></div>
+        </div>
+      </div>
+
+      <!-- 3 HARD TRUTH -->
+      <div class="slide bg-dark" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> The hard truth</div>
+        <div class="center" style="max-width: 920px">
+          <div class="pill pill-white" style="margin: 0 auto 1.2rem">💥 The thing nobody warns you about</div>
+          <div class="truth-card" style="background:rgba(255,255,255,0.06); border-color:var(--amber); margin: 1rem auto;">
+            <div class="lbl" style="color:rgba(255,255,255,0.6)">A truth from real projects</div>
+            <h3 style="color:white">The software ships.<br>But change is what makes the software actually <em style="color:var(--amber)">used</em>.</h3>
+            <p style="color:rgba(255,255,255,0.85)">Most "failed projects" did not fail because the code was bad. They failed because <strong style="color:var(--amber)">people did not switch over</strong> — they kept using the old way. The new system sat there, mostly empty, while the old habits continued.</p>
+          </div>
+          <p style="color: rgba(255,255,255,0.75); font-size: 0.95rem; margin-top: 1.2rem; max-width:780px; margin-left:auto; margin-right:auto;">A BA who only delivers requirements is half-done. The other half is helping people <strong style="color:white">stop doing the old thing and start doing the new thing</strong>. That's change management.</p>
+        </div>
+      </div>
+
+      <!-- 4 BHUTAN EXAMPLES STRIP -->
+      <div class="slide accent-blue bg-subtle" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> Change is everywhere around us</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:880px">
+            <h2 class="heading" style="font-size:clamp(1.6rem, 3vw, 2.3rem)">You have already seen change management — and seen it fail</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:0.6rem">Each of these is a real change. Some went smoothly. Some did not. The software was rarely the reason.</p>
+          </div>
+          <div class="examples-strip" style="margin-top:0.8rem">
+            <span class="ex-chip">💵 → 📱 <strong>Cash to QR</strong> at a Thimphu shop</span>
+            <span class="ex-chip">📄 → 💻 <strong>Paper to digital</strong> records in a govt office</span>
+            <span class="ex-chip">📓 → 📲 <strong>Tablets in schools</strong> for attendance / lessons</span>
+            <span class="ex-chip">🏦 <strong>mBoB rolls out</strong> a new feature to all users</span>
+            <span class="ex-chip">🪪 <strong>Druk e-Pass</strong> replacing physical IDs</span>
+            <span class="ex-chip">🧾 <strong>e-leave</strong> replacing paper leave forms</span>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px; margin-top:0.6rem"><strong>Today we learn the playbook</strong> — so the next time something like this rolls out, you know how to plan it well, not just hope.</p>
+        </div>
+      </div>
+
+      <!-- 5 SECTION: WHY RESIST -->
+      <div class="slide bg-indigo" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.2rem"><span class="pill-dot"></span> Part One</div>
+          <h1 class="display" style="color: white">Why People<br>Resist Change</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">If you understand the reasons, you stop being surprised — and start being prepared.</p>
+        </div>
+        <div class="section-num" style="color: white">01</div>
+      </div>
+
+      <!-- 6 RESISTANCE REASONS -->
+      <div class="slide accent-blue bg-subtle" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> Five reasons people resist</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:880px">
+            <h2 class="heading">Resistance is not stupidity. It's a signal.</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:0.4rem">When people push back, they are telling you something. Listen first.</p>
+          </div>
+          <div class="res-grid">
+            <div class="res-card">
+              <h6>😨 Fear</h6>
+              <p>"Will I lose my job? Will I look stupid? Will I be slower than the kid who already knows it?"</p>
+              <div class="eg">A 50-year-old shopkeeper hears "QR payments" and pictures losing customers because she can't operate it.</div>
+            </div>
+            <div class="res-card">
+              <h6>🛋️ Comfort with the old way</h6>
+              <p>"It works. I've done it for 15 years. Why fix what isn't broken?"</p>
+              <div class="eg">A clerk who knows every page of the paper register can find a record in 10 seconds. The new app feels slower at first.</div>
+            </div>
+            <div class="res-card">
+              <h6>🤷 No "What's in it for me"</h6>
+              <p>If a person cannot see what <em>they</em> gain, they will not adopt. The benefit must be personal, not just organisational.</p>
+              <div class="eg">"It saves the office 40% time" — great for the boss. The clerk needs a different answer.</div>
+            </div>
+            <div class="res-card">
+              <h6>🔥 Bad memory of the last change</h6>
+              <p>The last system was launched with no training, broke for 2 weeks, and they got blamed. Why trust this one?</p>
+              <div class="eg">A staff member who was burned once is the loudest sceptic at the next launch. That's a memory, not stubbornness.</div>
+            </div>
+            <div class="res-card">
+              <h6>📵 Poor communication</h6>
+              <p>People hear about the change late, from the wrong person, with the wrong tone. By the time you arrive to "explain", the rumour is already louder.</p>
+              <div class="eg">Staff find out from a WhatsApp group, not from their manager — and the group's version is half wrong.</div>
+            </div>
+            <div class="res-card">
+              <h6>🧠 Habit, not opinion</h6>
+              <p>Most "resistance" is not a thought-out position. It's the body just doing what it has always done, without thinking.</p>
+              <div class="eg">Even a willing user reaches for the paper form on autopilot for the first 2 weeks. That is normal — plan for it.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7 SECTION: KOTTER -->
+      <div class="slide bg-blue" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.2rem"><span class="pill-dot"></span> Part Two</div>
+          <h1 class="display" style="color: white">Kotter's 8 Steps<br>Lite Version</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">A famous playbook for leading change. We'll keep it practical.</p>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- 8 KOTTER LIST -->
+      <div class="slide accent-blue bg-subtle" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> The 8 steps at a glance</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:880px">
+            <h2 class="heading">Eight steps · in order</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:0.4rem">We'll zoom into the four highlighted steps next — those are where most rollouts succeed or die.</p>
+          </div>
+          <div class="kotter-list">
+            <ol>
+              <li class="hl"><strong>Create urgency</strong> — give a clear reason this change must happen, and now</li>
+              <li><strong>Build a guiding coalition</strong> — gather the people who can actually unblock work</li>
+              <li><strong>Form a strategic vision</strong> — paint the picture of "after" so people can imagine it</li>
+              <li><strong>Enlist a volunteer army</strong> — find willing early adopters and let them lead from the inside</li>
+              <li class="hl"><strong>Enable action — remove barriers</strong> — strip away the things that make the new way painful</li>
+              <li class="hl"><strong>Generate short-term wins</strong> — find a quick visible victory to prove the change works</li>
+              <li><strong>Sustain acceleration</strong> — keep going · don't declare victory after the first win</li>
+              <li class="hl"><strong>Institute change</strong> — bake the new way into how the place runs, so it doesn't slip back</li>
+            </ol>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">Highlighted steps are where Bhutanese rollouts most often stumble. Let's look at each one.</p>
+        </div>
+      </div>
+
+      <!-- 9 KOTTER STEP 1 — URGENCY -->
+      <div class="slide accent-blue" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> Kotter Step 1 · Urgency</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Step 1 · Create urgency</h2></div>
+          <div class="step-card">
+            <span class="step-tag">Step 1 of 8</span>
+            <h3>Give a clear, honest reason this must happen — now</h3>
+            <p>Without urgency, people put the change at the bottom of their list. "We'll get to it." A good urgency message is short, true, and tied to something the audience cares about. It is <strong>not</strong> threats, and it is <strong>not</strong> hype.</p>
+            <div class="ex">
+              <div class="ex-lbl">Bhutanese example · QR payments at a Thimphu shop</div>
+              <p>"Tourists are walking out because they don't carry cash. Three shops on this street already lost weekend sales. We have 6 weeks before the festival rush." That's urgency — concrete, recent, and pointed at the shopkeeper's wallet.</p>
+            </div>
+            <div class="ex">
+              <div class="ex-lbl">What weak urgency sounds like</div>
+              <p>"Digital payments are the future." True, but it is a slogan, not a reason to act this month.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10 KOTTER STEP 5 — REMOVE BARRIERS -->
+      <div class="slide accent-blue bg-subtle" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> Kotter Step 5 · Remove barriers</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Step 5 · Enable action — remove barriers</h2></div>
+          <div class="step-card" style="border-left-color:var(--amber)">
+            <span class="step-tag" style="background:var(--amber)">Step 5 of 8</span>
+            <h3>Make the new way <em>easier</em> than the old way</h3>
+            <p>People do not adopt the better thing. They adopt the <strong>easier</strong> thing. If your new system requires 5 extra steps, a password they don't remember, and a printer that's broken — they will quietly go back to paper.</p>
+            <div class="ex">
+              <div class="ex-lbl">Bhutanese example · paper-to-digital records, govt office</div>
+              <p>The new system is great. But staff need to walk to the one shared computer in the corridor, log in with a password they wrote on a sticky note, and the wifi cuts out. Until you fix the laptop, the password reset, and the wifi, no training session will help.</p>
+            </div>
+            <div class="ex">
+              <div class="ex-lbl">What "remove barriers" looks like in practice</div>
+              <p>One person, one laptop, on their desk. SSO so they don't fumble with passwords. A 2-page cheat sheet pinned to the wall. A WhatsApp number they can text when stuck.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11 KOTTER STEP 6 — SHORT-TERM WINS -->
+      <div class="slide accent-blue" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> Kotter Step 6 · Short-term wins</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Step 6 · Generate short-term wins</h2></div>
+          <div class="step-card" style="border-left-color:var(--green)">
+            <span class="step-tag" style="background:var(--green)">Step 6 of 8</span>
+            <h3>Find a small, fast, visible win — and tell everyone about it</h3>
+            <p>People stop believing after 4–6 weeks if nothing concrete has changed. You need a real, measurable result early. Then you publicise it — loudly. The story is the win, not the feature.</p>
+            <div class="ex">
+              <div class="ex-lbl">Bhutanese example · tablet attendance in schools</div>
+              <p>In Week 3, the principal walks into morning assembly and announces: "Last week, our teachers saved 4 hours combined just on attendance. Pema-ma'am sent her class register from her classroom while the kids were still settling in." That story does more than 10 training sessions.</p>
+            </div>
+            <div class="ex">
+              <div class="ex-lbl">Pick wins that the sceptics can see</div>
+              <p>Not "we improved data quality by 18%". That's a slide for the headmaster. Pick the win the resisting teacher feels in her own day.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12 KOTTER STEP 8 — INSTITUTE CHANGE -->
+      <div class="slide accent-blue bg-subtle" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> Kotter Step 8 · Institute change</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Step 8 · Institute change</h2></div>
+          <div class="step-card" style="border-left-color:var(--indigo)">
+            <span class="step-tag" style="background:var(--indigo)">Step 8 of 8</span>
+            <h3>Bake the new way into "how things are done here"</h3>
+            <p>Change does not stick because people change their minds. It sticks when the <strong>system around them</strong> changes — when it would actually be harder to go back than to keep going. If the old system is still running in the back room, it will win.</p>
+            <div class="ex">
+              <div class="ex-lbl">Bhutanese example · e-leave replacing paper leave forms</div>
+              <p>Six months in, leave is "mostly digital but HR still accepts paper if you bring it". Result: half the office is still on paper. The fix: HR stops accepting paper. The form is removed from the cabinet. The old leave register is archived. Now there is no back door.</p>
+            </div>
+            <div class="ex">
+              <div class="ex-lbl">Signals that change has stuck</div>
+              <p>New hires learn the new way as the only way. Performance reviews track usage. Old templates are deleted. Senior staff use the new system in front of others.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 13 SECTION: 3-TRACK PLAN -->
+      <div class="slide bg-indigo" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.2rem"><span class="pill-dot"></span> Part Three</div>
+          <h1 class="display" style="color: white">The 3-Track<br>Rollout Plan</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Every change runs three tracks at the same time. Drop any one and the rollout limps.</p>
+        </div>
+        <div class="section-num" style="color: white">03</div>
+      </div>
+
+      <!-- 14 THREE TRACKS -->
+      <div class="slide accent-blue bg-subtle" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> Three tracks · in parallel</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:900px">
+            <h2 class="heading">Communication · Training · Support</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:0.4rem">All three start <em>before</em> launch and continue <em>after</em>. They are not phases — they run together.</p>
+          </div>
+          <div class="tracks">
+            <div class="track t1">
+              <h5>📣 1. Communication</h5>
+              <p class="pur">What message · when · to whom · by what channel</p>
+              <ul>
+                <li>Who needs to hear, in what order? (Boss → managers → staff)</li>
+                <li>What is the message at each stage? (Why · what · when · what's in it for me)</li>
+                <li>Which channel? (Town hall · email · WhatsApp · poster · 1-on-1)</li>
+                <li>How often? (Day 0, Day 7, Day 14, Day 30 — not just one announcement)</li>
+              </ul>
+            </div>
+            <div class="track t2">
+              <h5>🎓 2. Training</h5>
+              <p class="pur">Who needs to learn what · by when · in what format</p>
+              <ul>
+                <li>Who needs which level of training? (Power users · daily users · occasional users)</li>
+                <li>What format? (Hands-on session · short video · printed cheat sheet · WhatsApp tip-of-the-day)</li>
+                <li>When? (Before go-live, not on the day. Repeat at week 2 and week 4.)</li>
+                <li>How do you know it worked? (A simple test — can they do task X unaided?)</li>
+              </ul>
+            </div>
+            <div class="track t3">
+              <h5>🛟 3. Support</h5>
+              <p class="pur">When they get stuck · who do they call</p>
+              <ul>
+                <li>A help desk or single phone number — known to everyone</li>
+                <li>Top 10 FAQs — answered in plain Dzongkha / English on a one-pager</li>
+                <li>"Super-users" inside each team — peers who can help in the moment</li>
+                <li>An escalation path for the hard problems — and a promise on response time</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px; font-style:italic">Drop comms — rumours fill the silence. Drop training — adoption stalls. Drop support — people give up at the first error.</p>
+        </div>
+      </div>
+
+      <!-- 15 RESISTANCE TOOLKIT -->
+      <div class="slide accent-blue" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span> Resistance toolkit</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:880px">
+            <h2 class="heading">When you meet resistance — what to actually do</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:0.4rem">Five moves. Use them in order. Most BAs skip the first two and wonder why nothing works.</p>
+          </div>
+          <div class="toolkit">
+            <div class="tool">
+              <h6>1. 👂 Listen first</h6>
+              <p>Before you defend the change, ask: "What's your worry?" Then shut up and let them finish. You will hear the real reason — which is rarely what they said in the first sentence.</p>
+              <div class="ex">A clerk who says "I'm too old for this" usually means "I'm scared I'll be slower in front of my juniors."</div>
+            </div>
+            <div class="tool">
+              <h6>2. 🙏 Acknowledge the loss</h6>
+              <p>Every change takes something away — even good change. Status, comfort, mastery, a familiar routine. Name it out loud: "Yes, this is harder than what you were used to." That single sentence opens doors.</p>
+              <div class="ex">"You were the fastest with the paper register. We know. The new system will feel slow for 3 weeks." Honest. Disarming.</div>
+            </div>
+            <div class="tool">
+              <h6>3. 🎯 Find the WIIFM</h6>
+              <p>"What's In It For Me" — for <em>this</em> person, not the org. Different roles have different answers. The shopkeeper, the cashier, the back-office clerk all need their own version.</p>
+              <div class="ex">Cashier's WIIFM for QR: "No more counting cash at end of shift. Faster close-out. Home earlier."</div>
+            </div>
+            <div class="tool">
+              <h6>4. 🌟 Use influencers within the group</h6>
+              <p>Every group has 2–3 people whose opinion others copy. Find them. Win them first. They will do more than 10 of your emails ever could.</p>
+              <div class="ex">In a school, the senior teacher everyone respects. In a shop, the cashier the others ask when they're confused.</div>
+            </div>
+            <div class="tool">
+              <h6>5. 🛤️ Make the new way easier than the old way</h6>
+              <p>Same as Kotter Step 5. Worth saying twice. If the old way is one click and the new way is six, you will lose. Do the painful work to flatten the path.</p>
+              <div class="ex">Pre-fill data. Auto-login. Default values. A button that says "Do this for me." Reduce typing.</div>
+            </div>
+            <div class="tool">
+              <h6>6. ⚠️ Know when not to push</h6>
+              <p>A small number of people will never come along. Don't burn the rollout fighting them. Move ahead with the willing 80%; the resisters either join when momentum is clear, or they self-select out.</p>
+              <div class="ex">Time-box arguments. After 2 conversations with no movement, stop persuading and keep building wins elsewhere.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 16 PILOT VS BIG-BANG -->
+      <div class="slide accent-blue bg-subtle" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span> Pilot vs big-bang</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:880px">
+            <h2 class="heading">How do you switch over? Two main strategies.</h2>
+          </div>
+          <div class="pbb">
+            <div class="col pilot">
+              <h5>🧪 Pilot — start small, learn, scale</h5>
+              <p style="font-size:0.92rem; color:var(--text); line-height:1.65">Roll the change out to <strong>one team, one shop, one school</strong> first. Watch what breaks. Fix it. Then expand to ten. Then a hundred.</p>
+              <div class="lbl">Pick a pilot when…</div>
+              <ul>
+                <li>The change is risky or new — you don't yet know what will go wrong</li>
+                <li>You can afford the time (you have 3+ months)</li>
+                <li>A bad first impression would kill the whole programme</li>
+                <li>You have a willing, friendly group to test with</li>
+              </ul>
+              <div class="lbl">Bhutanese example</div>
+              <p style="font-size:0.88rem; color:var(--muted); font-style:italic">QR-payments to 200 Thimphu shops — start with 10 shops on one street. Iron out the wrinkles for 4 weeks. Then expand by 30 shops a week.</p>
+            </div>
+            <div class="col bang">
+              <h5>💥 Big-bang — everyone at once</h5>
+              <p style="font-size:0.92rem; color:var(--text); line-height:1.65">On the chosen date, <strong>everyone switches together</strong>. The old system is turned off. There is no "running both."</p>
+              <div class="lbl">Pick big-bang when…</div>
+              <ul>
+                <li>The change is regulatory or legal — must happen on a fixed date</li>
+                <li>Running two systems in parallel is impossible or dangerous (e.g. payroll, tax)</li>
+                <li>The change is small and well-understood</li>
+                <li>Delay is more expensive than risk</li>
+              </ul>
+              <div class="lbl">Bhutanese example</div>
+              <p style="font-size:0.88rem; color:var(--muted); font-style:italic">A bank moves to a new core banking date — 1 March, midnight, switch. Pilot is impossible because customers can't have two account systems running at once.</p>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">Default to pilot when you can. Default to big-bang only when you must.</p>
+        </div>
+      </div>
+
+      <!-- 17 MEASURING SUCCESS -->
+      <div class="slide accent-blue" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span> Measuring success</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:880px">
+            <h2 class="heading">How do you know the rollout is actually working?</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:0.4rem">"People seem happy" is not a measurement. Pick numbers — the same numbers, every week.</p>
+          </div>
+          <div class="metrics-grid">
+            <div class="metric">
+              <h6>📈 Adoption rate</h6>
+              <p>What % of the target users have used the new system at least once this week?</p>
+              <div class="eg">e.g. 38 of 45 teachers used the tablet attendance app this week → 84%.</div>
+            </div>
+            <div class="metric">
+              <h6>⚖️ Volume — old vs new system</h6>
+              <p>How many transactions / records / forms went through the new system vs the old? You want the new line going up and the old line going down.</p>
+              <div class="eg">Week 4: paper leave forms = 12, digital leave forms = 56. Going the right way.</div>
+            </div>
+            <div class="metric">
+              <h6>📞 Help-desk ticket trend</h6>
+              <p>How many "how do I…" tickets per week? A good rollout shows tickets <strong>rising in week 1, peaking by week 3, falling by week 6</strong>. If they keep rising past week 6, something is wrong.</p>
+              <div class="eg">Watch for the same question repeated — that's a training gap, not a software bug.</div>
+            </div>
+            <div class="metric">
+              <h6>😊 User satisfaction</h6>
+              <p>One simple question, asked monthly: "On a scale of 1 to 5, how easy is the new way?" Track the score over time. Read the comments — they tell you the next problem.</p>
+              <div class="eg">Score of 2.8 in week 2, 3.6 in week 6 = healthy. Flat or falling = act now.</div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:880px; margin-top:0.5rem">Pick <strong>2–4 metrics</strong>, publish them weekly to the team, and let the trend tell you what to do next.</p>
+        </div>
+      </div>
+
+      <!-- 18 SECTION: HANDS-ON -->
+      <div class="slide bg-blue" data-slide="18">
+        <div class="slide-label"><span class="snum">18</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.2rem"><span class="pill-dot"></span> Part Four · Hands-on</div>
+          <h1 class="display" style="color: white">Plan a Real<br>Rollout</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Pick one of three real Bhutanese scenarios. 25 minutes. Groups of 4–5.</p>
+        </div>
+        <div class="section-num" style="color: white">04</div>
+      </div>
+
+      <!-- 19 EXERCISE BRIEF -->
+      <div class="slide bg-indigo" data-slide="19">
+        <div class="slide-label"><span class="snum">19</span> Hands-on · the brief</div>
+        <div style="display:flex; gap:clamp(1.2rem, 3vw, 2.5rem); align-items:flex-start; width:100%; justify-content:center; flex-wrap:wrap; max-width:1250px;">
+          <div style="flex:1 1 360px; min-width:300px; max-width:520px;">
+            <div class="pill pill-white" style="margin-bottom:1rem">🛠️ 25 min · groups of 4–5</div>
+            <h2 class="heading" style="color: white; margin-bottom: 0.5rem; font-size:clamp(1.5rem, 2.6vw, 2rem)">Pick one scenario.<br>Build the rollout plan.</h2>
+            <div class="timer-ring" style="margin: 1rem 0 0.5rem">
+              <div class="timer-display" id="timer1">25:00</div>
+            </div>
+            <div class="timer-controls">
+              <button class="timer-btn tbtn-start" onclick="startTimer('timer1', 25)">▶ Start</button>
+              <button class="timer-btn tbtn-reset" onclick="resetTimer('timer1', 25)">↺ Reset</button>
+            </div>
+            <p style="color:rgba(255,255,255,0.7); font-size:0.88rem; margin-top:0.8rem; line-height:1.55">15 min plan · 5 min internal review · 5 min volunteer share. One person from each group will present.</p>
+          </div>
+          <div style="flex:2 1 480px; min-width:340px;">
+            <p style="color:rgba(255,255,255,0.6); font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.5rem;">Three scenarios — pick exactly one</p>
+            <div class="scenario-grid" style="grid-template-columns:1fr; gap:0.55rem">
+              <div class="scenario">
+                <span class="num">A</span>
+                <h6>Replace paper leave forms with a digital leave system at GMC offices</h6>
+                <p>~150 staff across 5 buildings. Mix of senior officers, junior officers, support staff. Some are very comfortable with phones, some are not.</p>
+              </div>
+              <div class="scenario">
+                <span class="num">B</span>
+                <h6>Roll out QR-payment acceptance to 200 small Thimphu shops</h6>
+                <p>Mostly family-run shops. Owners aged 30–60. Many already use mBoB personally but have not used it for their business. Tourist season starts in 8 weeks.</p>
+              </div>
+              <div class="scenario">
+                <span class="num">C</span>
+                <h6>Schools moving from paper attendance to a tablet-based attendance app</h6>
+                <p>20 schools, ~600 teachers total. Tablets and wifi already provided. Teachers range from 22 to 60 years old. School year starts in 6 weeks.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 20 EXERCISE DELIVERABLES -->
+      <div class="slide accent-blue bg-subtle" data-slide="20">
+        <div class="slide-label"><span class="snum">20</span> What to produce</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:880px">
+            <h2 class="heading">For your chosen scenario · 4 deliverables</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:0.3rem">Use one flipchart sheet or one shared doc. Headings only — no essays.</p>
+          </div>
+          <div class="deliv">
+            <h5>Your group will hand in:</h5>
+            <ol>
+              <li><strong>3 stakeholder groups</strong> — for each, list (a) who they are, (b) their WIIFM in this rollout, (c) the resistance you most expect from them.</li>
+              <li><strong>3-track plan</strong> — for <em>communication</em>, <em>training</em>, and <em>support</em> — list <strong>2 concrete actions</strong> per track. Not "do training" — "1-hour hands-on session for power users in week 2".</li>
+              <li><strong>Pilot or big-bang?</strong> — make the call. Then write 2 sentences justifying it.</li>
+              <li><strong>2 success metrics</strong> — what will you measure weekly to know it's working?</li>
+            </ol>
+          </div>
+          <div class="card" style="max-width:880px; background:white; border-left:4px solid var(--amber); padding:0.85rem 1.2rem">
+            <h4 style="color:var(--indigo); margin-bottom:0.3rem; font-size:1rem">Tip: do it in this order</h4>
+            <p style="font-size:0.92rem; color:var(--text); line-height:1.65">Stakeholders + WIIFM <strong>first</strong> (5 min) — once you know <em>who</em> and <em>what they care about</em>, the comms / training / support choices fall out almost automatically. Then pilot vs big-bang. Metrics last.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 21 WRAP -->
+      <div class="slide bg-dark" data-slide="21">
+        <div class="slide-label"><span class="snum">21</span> Wrap-up</div>
+        <div class="center" style="max-width: 880px">
+          <div class="pill pill-white" style="margin: 0 auto 1.2rem">🎯 Key Takeaways</div>
+          <h2 class="heading" style="color: white;">What we covered today</h2>
+          <ul class="reveal-list" style="color: rgba(255,255,255,0.9); text-align:left; max-width: 760px; margin: 1.2rem auto; font-size: 1rem; line-height: 1.95;">
+            <li>✅ Software ships — but <strong>change</strong> is what makes software actually used. Most "failed projects" failed at change, not code.</li>
+            <li>✅ Resistance is a signal, not stubbornness — <strong>fear · comfort · no WIIFM · bad memory · poor comms · habit</strong>.</li>
+            <li>✅ Kotter's playbook in 4 highlights: <strong>create urgency · remove barriers · short-term wins · institute the change</strong>.</li>
+            <li>✅ Every rollout runs <strong>three tracks in parallel</strong> — communication · training · support. Drop any one and the rollout limps.</li>
+            <li>✅ Resistance toolkit: <strong>listen · acknowledge the loss · find the WIIFM · use influencers · make the new way easier</strong>.</li>
+            <li>✅ <strong>Pilot</strong> when you can (learn before scaling). <strong>Big-bang</strong> only when you must.</li>
+            <li>✅ Measure weekly: <strong>adoption rate · old-vs-new volume · ticket trend · user satisfaction</strong>.</li>
+          </ul>
+          <p style="color: var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.15rem; margin-top:1.2rem; line-height:1.5">A BA who only writes requirements is half-done.<br>The other half is helping people actually switch over.</p>
+          <p style="font-size:0.8rem; color:rgba(255,255,255,0.5); margin-top:0.8rem;">SELISE × Pelsung · BA Vertical · Class 14 · Change Management</p>
+        </div>
+      </div>
+
+    </div>
+    <!-- /#deck -->
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 21</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+
+      function goTo(n){
+        slides.forEach(s => s.classList.remove("active"));
+        current = Math.max(0, Math.min(n, total-1));
+        slides[current].classList.add("active");
+        document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+        document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+        localStorage.setItem(STORAGE_KEY, current);
+        initReveal(slides[current]);
+      }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+
+      document.addEventListener("keydown", (e) => {
+        if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); }
+        if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); }
+        if(e.key === "f" || e.key === "F") toggleFullscreen();
+      });
+      document.getElementById("deck").addEventListener("click", function(e){
+        if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return;
+        const pct = e.clientX / window.innerWidth;
+        if(pct < 0.15) prevSlide();
+        else if(pct > 0.85) handleForward();
+      });
+      function handleForward(){
+        const active = slides[current];
+        const list = active.querySelector(".reveal-list");
+        if(list){
+          const hidden = list.querySelectorAll("li:not(.shown)");
+          if(hidden.length > 0){ hidden[0].classList.add("shown"); return; }
+        }
+        nextSlide();
+      }
+      function initReveal(slide){
+        const list = slide.querySelector(".reveal-list");
+        if(!list) return;
+        list.querySelectorAll("li").forEach(li => li.classList.remove("shown"));
+      }
+
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+
+      function toggleFullscreen(){
+        if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{});
+        else document.exitFullscreen().catch(()=>{});
+      }
+
+      /* ============================
+         TIMERS
+      ============================ */
+      const timerState = {};
+      function startTimer(id, minutes){
+        if(timerState[id]?.interval) return;
+        if(!timerState[id]) timerState[id] = { remaining: minutes * 60 };
+        timerState[id].interval = setInterval(() => {
+          timerState[id].remaining--;
+          const el = document.getElementById(id);
+          if(!el) return;
+          if(timerState[id].remaining <= 0){
+            clearInterval(timerState[id].interval);
+            timerState[id].interval = null;
+            el.textContent = "00:00";
+            el.style.color = "#ff5f56";
+            return;
+          }
+          const m = Math.floor(timerState[id].remaining / 60).toString().padStart(2, "0");
+          const s = (timerState[id].remaining % 60).toString().padStart(2, "0");
+          el.textContent = `${m}:${s}`;
+          if(timerState[id].remaining <= 60) el.style.color = "#febc2e";
+        }, 1000);
+      }
+      function resetTimer(id, minutes){
+        if(timerState[id]?.interval){ clearInterval(timerState[id].interval); timerState[id].interval = null; }
+        timerState[id] = { remaining: minutes * 60 };
+        const el = document.getElementById(id);
+        if(el){ el.textContent = `${minutes.toString().padStart(2,"0")}:00`; el.style.color = ""; }
+      }
+    </script>
+  </body>
+</html>

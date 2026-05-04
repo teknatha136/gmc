@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Personas &amp; Journey Maps — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      /* ───── Persona card (template + worked example) ───── */
+      .persona-card {
+        background: white;
+        border: 1px solid var(--border);
+        border-top: 5px solid var(--blue);
+        border-radius: 14px;
+        max-width: 1100px;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 1.2rem;
+        padding: 1.2rem 1.4rem;
+        box-shadow: 0 6px 22px rgba(0, 31, 53, 0.06);
+      }
+      @media (max-width: 820px) { .persona-card { grid-template-columns: 1fr; } }
+      .persona-photo {
+        background: linear-gradient(135deg, #E6F0F8, #C9DFEE);
+        border-radius: 12px;
+        min-height: 180px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: var(--indigo);
+        font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+        text-align: center;
+        padding: 0.8rem;
+      }
+      .persona-photo .ph-icon { font-size: 3.4rem; line-height: 1; margin-bottom: 0.4rem; }
+      .persona-photo .ph-name { font-size: 1.15rem; color: var(--indigo); font-weight: 700; }
+      .persona-photo .ph-tag { font-size: 0.78rem; color: var(--blue); margin-top: 0.2rem; letter-spacing: 0.06em; text-transform: uppercase; }
+      .persona-fields { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.55rem; }
+      @media (max-width: 720px) { .persona-fields { grid-template-columns: 1fr; } }
+      .pf {
+        background: var(--bg);
+        border-left: 3px solid var(--blue);
+        border-radius: 6px;
+        padding: 0.55rem 0.8rem;
+      }
+      .pf .pf-lbl { color: var(--muted); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 0.18rem; font-family: 'Bahnschrift', 'Segoe UI', sans-serif; }
+      .pf p { font-size: 0.85rem; color: var(--text); line-height: 1.55; margin: 0; }
+      .pf.demo { border-left-color: var(--indigo); }
+      .pf.goal { border-left-color: #3D7A3D; }
+      .pf.pain { border-left-color: var(--red); }
+      .pf.behav { border-left-color: var(--amber); }
+      .pf.scen { border-left-color: var(--purple); }
+
+      /* ───── Single-field spotlight (one slide per template field) ───── */
+      .field-spotlight {
+        background: white;
+        border: 1px solid var(--border);
+        border-left: 6px solid var(--blue);
+        border-radius: 12px;
+        max-width: 980px;
+        width: 100%;
+        padding: 1.1rem 1.4rem;
+        display: grid;
+        grid-template-columns: 90px 1fr;
+        gap: 1rem;
+        align-items: center;
+      }
+      .field-spotlight .fs-icon { font-size: 3rem; text-align: center; line-height: 1; }
+      .field-spotlight h3 { color: var(--indigo); font-family: 'Bahnschrift', 'Segoe UI', sans-serif; font-size: 1.4rem; margin-bottom: 0.3rem; }
+      .field-spotlight p.what { font-size: 0.98rem; color: var(--text); line-height: 1.6; margin-bottom: 0.5rem; }
+      .field-spotlight .eg {
+        background: var(--bg);
+        border-left: 3px solid var(--amber);
+        border-radius: 6px;
+        padding: 0.55rem 0.8rem;
+        font-size: 0.88rem;
+        color: var(--text);
+        line-height: 1.6;
+      }
+      .field-spotlight .eg strong { color: var(--blue); }
+
+      /* ───── Is / Isn't comparison ───── */
+      .is-isnt {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        max-width: 1100px;
+        width: 100%;
+      }
+      @media (max-width: 820px) { .is-isnt { grid-template-columns: 1fr; } }
+      .ii-col {
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1rem 1.2rem;
+      }
+      .ii-col.is { border-top: 4px solid #3D7A3D; }
+      .ii-col.isnt { border-top: 4px solid var(--red); }
+      .ii-col h5 { font-family: 'Bahnschrift', 'Segoe UI', sans-serif; font-size: 1.1rem; margin-bottom: 0.5rem; }
+      .ii-col.is h5 { color: #3D7A3D; }
+      .ii-col.isnt h5 { color: var(--red); }
+      .ii-col ul { list-style: none; padding: 0; }
+      .ii-col li { font-size: 0.92rem; line-height: 1.65; color: var(--text); padding: 0.4rem 0; border-bottom: 1px dashed var(--border); }
+      .ii-col li:last-child { border-bottom: none; }
+      .ii-col li::before { content: ""; display: inline-block; width: 0.5rem; height: 0.5rem; border-radius: 50%; margin-right: 0.6rem; vertical-align: middle; }
+      .ii-col.is li::before { background: #3D7A3D; }
+      .ii-col.isnt li::before { background: var(--red); }
+
+      /* ───── Journey map (5-column grid) ───── */
+      .jmap {
+        width: 100%;
+        max-width: 1200px;
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+      .jmap-row {
+        display: grid;
+        grid-template-columns: 130px repeat(5, 1fr);
+        border-bottom: 1px solid var(--border);
+      }
+      .jmap-row:last-child { border-bottom: none; }
+      .jmap-row.head { background: linear-gradient(135deg, #0067A3, #002D72); color: white; }
+      .jmap-row.head .jmap-cell { color: white; font-family: 'Bahnschrift', 'Segoe UI', sans-serif; font-weight: 700; }
+      .jmap-row.head .jmap-cell.row-label { background: transparent; }
+      .jmap-cell {
+        padding: 0.55rem 0.7rem;
+        font-size: 0.82rem;
+        line-height: 1.5;
+        color: var(--text);
+        border-right: 1px solid var(--border);
+      }
+      .jmap-cell:last-child { border-right: none; }
+      .jmap-cell.row-label {
+        background: var(--bg);
+        font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+        color: var(--indigo);
+        font-weight: 700;
+        font-size: 0.78rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+      }
+      .jmap-cell.emo { font-size: 1.5rem; text-align: center; line-height: 1.3; }
+      .jmap-cell.opp { background: #FFF8E6; }
+
+      /* ───── Journey row anatomy (template) ───── */
+      .row-anatomy {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.7rem;
+        max-width: 1100px;
+        width: 100%;
+      }
+      @media (max-width: 720px) { .row-anatomy { grid-template-columns: 1fr; } }
+      .ra {
+        background: white;
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--blue);
+        border-radius: 10px;
+        padding: 0.7rem 1rem;
+      }
+      .ra h6 { color: var(--indigo); font-family: 'Bahnschrift', 'Segoe UI', sans-serif; font-size: 1rem; margin-bottom: 0.2rem; display: flex; align-items: center; gap: 0.4rem; }
+      .ra p { font-size: 0.88rem; color: var(--text); line-height: 1.55; }
+
+      /* ───── Hands-on prompt cards ───── */
+      .scenario-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.8rem;
+        max-width: 1100px;
+        width: 100%;
+      }
+      @media (max-width: 720px) { .scenario-grid { grid-template-columns: 1fr; } }
+      .sc {
+        background: white;
+        border: 1px solid var(--border);
+        border-top: 4px solid var(--amber);
+        border-radius: 10px;
+        padding: 0.85rem 1.05rem;
+      }
+      .sc .sc-tag { color: var(--muted); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.25rem; font-family: 'Bahnschrift', 'Segoe UI', sans-serif; }
+      .sc h6 { color: var(--indigo); font-family: 'Bahnschrift', 'Segoe UI', sans-serif; font-size: 1rem; margin-bottom: 0.25rem; }
+      .sc p { font-size: 0.86rem; color: var(--text); line-height: 1.55; }
+
+      /* ───── Feeds-into chain (wrap slide) ───── */
+      .feeds {
+        display: flex;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        max-width: 1150px;
+        width: 100%;
+      }
+      .fd {
+        background: white;
+        border: 1px solid var(--border);
+        border-top: 4px solid var(--blue);
+        border-radius: 10px;
+        padding: 0.8rem 1rem;
+        flex: 1 1 200px;
+        min-width: 190px;
+      }
+      .fd .fd-step { color: var(--muted); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; margin-bottom: 0.2rem; }
+      .fd h6 { color: var(--indigo); font-family: 'Bahnschrift', 'Segoe UI', sans-serif; font-size: 1rem; margin-bottom: 0.2rem; }
+      .fd p { font-size: 0.83rem; color: var(--text); line-height: 1.55; }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>BA Vertical · Class 04</div></div>
+          <h1 class="display" style="color: var(--text)">
+            <span style="color: var(--blue)">User Personas</span><br />
+            <span style="color: var(--indigo)">&amp; Journey Maps</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted)">Empathy artifacts that turn real users into pictures the whole team can see.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">Personas</span>
+            <span class="class-tag tag-blue">Journey Maps</span>
+            <span class="class-tag tag-blue">Empathy</span>
+            <span class="class-tag tag-blue">User Research</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 AGENDA -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 800px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem"><h2 class="heading">Session Journey · ~90 min</h2></div>
+          <div class="agenda-row" onclick="goTo(3)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🤔 Why we draw users · the empathy gap</span><span class="ar-badge" style="background:#E6F0F8;color:var(--indigo)">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(5)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">👤 What a persona is · and what it isn't</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">12 min</span></div>
+          <div class="agenda-row" onclick="goTo(8)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">📋 The persona template · field by field</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">15 min</span></div>
+          <div class="agenda-row" onclick="goTo(10)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🧓 Worked example · meet Tashi</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(11)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🗺️ Journey maps · the steps to a goal</span><span class="ar-badge" style="background:#E6F0F8;color:var(--indigo)">15 min</span></div>
+          <div class="agenda-row" onclick="goTo(14)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🚌 Worked journey · Tashi tries mBoB</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">7 min</span></div>
+          <div class="agenda-row" onclick="goTo(15)"><span class="ar-dot" style="background: var(--red)"></span><span class="ar-label">🛠️ Hands-on · build a persona + journey</span><span class="ar-badge" style="background:#FEE9EC;color:var(--red)">25 min</span></div>
+          <div class="agenda-row" onclick="goTo(18)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🎯 Wrap · what these feed into</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">5 min</span></div>
+        </div>
+      </div>
+
+      <!-- 3 HOOK -->
+      <div class="slide bg-dark" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> The empathy gap</div>
+        <div class="center" style="max-width: 880px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🤔 Think about it</div>
+          <h2 class="heading" style="color: white; margin-bottom: 1.4rem">Who is "the user"?</h2>
+          <p style="color: rgba(255,255,255,0.85); font-size: 1.1rem; line-height: 1.8; max-width: 760px; margin: 0 auto;">
+            A team builds an mBoB feature. Someone says <em style="color:var(--amber)">"the user wants this."</em>
+            But the developer is picturing a 28-year-old in Thimphu with fast Wi-Fi.
+            The BA is picturing a shopkeeper in Phuentsholing.
+            The QA is picturing her own grandmother in Punakha.
+          </p>
+          <p style="color: white; font-size: 1.15rem; margin-top: 1.5rem; font-family: 'Bahnschrift', 'Segoe UI', sans-serif;">Three different "users." Three different products.</p>
+          <p style="color: var(--amber); font-size: 1.05rem; margin-top: 1rem;">A persona is how we all start picturing the same person.</p>
+        </div>
+      </div>
+
+      <!-- 4 SECTION: WHAT IS A PERSONA -->
+      <div class="slide bg-blue" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part One</div>
+          <h1 class="display" style="color: white">What a Persona<br>Actually Is</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top: 1rem">A fictional person, built from real research.</p>
+        </div>
+        <div class="section-num" style="color: white">01</div>
+      </div>
+
+      <!-- 5 DEFINITION -->
+      <div class="slide accent-blue bg-subtle" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span> The 30-second definition</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width: 900px">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3.2vw, 2.4rem)">A persona is a <span style="color: var(--blue)">fictional but realistic</span> picture of a real <span style="color: var(--blue)">type of user</span> — built from things we actually learned about people.</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 1.4rem; max-width: 820px">Think of it like a character in a novel — not a real person, but believable. You can guess what they would do in a new situation, because you know who they are.</p>
+          </div>
+          <div class="card" style="max-width: 880px; background: white; border-left: 5px solid var(--amber); padding: 1rem 1.3rem">
+            <h4 style="color: var(--indigo); margin-bottom: 0.3rem; font-size: 1rem">Why "fictional but realistic"?</h4>
+            <p style="font-size: 0.92rem; color: var(--text); line-height: 1.65">If we talk about "Pema, 34, shopkeeper in Gelephu," the whole team pictures the same Pema. If we just say "the shopkeeper user," everyone pictures someone different.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 IS / ISN'T -->
+      <div class="slide accent-blue" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> What it is · what it isn't</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Get this right or the whole exercise breaks</h2></div>
+          <div class="is-isnt">
+            <div class="ii-col is">
+              <h5>✅ A persona IS</h5>
+              <ul>
+                <li>A picture of a <strong>type</strong> of user</li>
+                <li>Built from <strong>real research</strong> — interviews, observation, surveys</li>
+                <li>Specific enough to feel like a person</li>
+                <li>Useful for <strong>making product decisions</strong> ("would Tashi do this?")</li>
+                <li>Updated when we learn new things</li>
+              </ul>
+            </div>
+            <div class="ii-col isnt">
+              <h5>❌ A persona is NOT</h5>
+              <ul>
+                <li>A real, named person from your village</li>
+                <li>A demographic stereotype ("women aged 40+ like…")</li>
+                <li>"The average user" — the average user doesn't exist</li>
+                <li>Random invention — guessing at a desk</li>
+                <li>A marketing target list</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 820px; font-style: italic">If you made it up at your desk in 5 minutes, it's not a persona — it's a guess.</p>
+        </div>
+      </div>
+
+      <!-- 7 WHERE THE INFO COMES FROM -->
+      <div class="slide accent-blue bg-subtle" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> Where the persona comes from</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width: 900px">
+            <h2 class="heading">Real research feeds the persona</h2>
+            <p class="body-md" style="color: var(--muted); max-width: 820px; margin-top: 0.5rem">A persona is only as good as the homework behind it.</p>
+          </div>
+          <div class="cols-3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.9rem; max-width: 1100px; width: 100%">
+            <div class="card" style="border-top: 3px solid var(--blue)">
+              <h4 style="color: var(--blue); font-size: 1rem">🎤 Interviews</h4>
+              <p style="font-size: 0.9rem; color: var(--text); line-height: 1.65">Sit with 5–10 actual users. Ask them about their day, their frustrations, what they were trying to do.</p>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--indigo)">
+              <h4 style="color: var(--indigo); font-size: 1rem">👀 Observation</h4>
+              <p style="font-size: 0.9rem; color: var(--text); line-height: 1.65">Watch them use the current product (or the competitor). Notice where they pause, retry, ask for help.</p>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--amber)">
+              <h4 style="color: var(--amber); font-size: 1rem">📊 Surveys &amp; data</h4>
+              <p style="font-size: 0.9rem; color: var(--text); line-height: 1.65">Look at support tickets, app reviews, age data, location data — patterns across many users.</p>
+            </div>
+          </div>
+          <div class="card" style="max-width: 900px; background: linear-gradient(135deg,#0067A3,#002D72); color: white; border: none; padding: 1rem 1.4rem">
+            <p style="font-size: 0.95rem; line-height: 1.65; color: rgba(255,255,255,0.92)"><strong style="color: white">Rule of thumb:</strong> if you can't say "we learned this from talking to 5 real people," you don't have a persona — you have an assumption.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8 SECTION: TEMPLATE -->
+      <div class="slide bg-indigo" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Two</div>
+          <h1 class="display" style="color: white">The Persona<br>Template</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top: 1rem">Six fields. One page. Pin it to the wall.</p>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- 9 PERSONA TEMPLATE — ALL 6 FIELDS -->
+      <div class="slide accent-blue bg-subtle" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> The persona template · 6 fields</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">The persona template · 6 fields</h2><p class="body-md" style="color: var(--muted); margin-top: 0.3rem; max-width: 820px">One page, six labelled boxes. This is the shape you'll fill out in the exercise.</p></div>
+          <div class="persona-card">
+            <div class="persona-photo">
+              <div class="ph-icon">👤</div>
+              <div class="ph-name">Persona</div>
+              <div class="ph-tag">6 fields · 1 page</div>
+              <div style="margin-top: 0.4rem; font-size: 0.78rem; color: var(--muted)">Anchor: Tashi · 62 · Punakha</div>
+            </div>
+            <div class="persona-fields">
+              <div class="pf">
+                <div class="pf-lbl">🪪 Name + photo</div>
+                <p>A real-sounding name and a simple picture so the team pictures the same someone. <em>Tashi Wangmo, with a small portrait.</em></p>
+              </div>
+              <div class="pf demo">
+                <div class="pf-lbl">📋 Demographics</div>
+                <p>Just enough background to ground the persona — age, place, work, language, tech comfort. <em>62, retired teacher in Punakha, Dzongkha first.</em></p>
+              </div>
+              <div class="pf goal">
+                <div class="pf-lbl">🎯 Goals</div>
+                <p>What does this person actually want to accomplish, in life terms not button terms? <em>Tashi wants to receive his pension on his phone without help.</em></p>
+              </div>
+              <div class="pf pain">
+                <div class="pf-lbl">😣 Pain points</div>
+                <p>Real frustrations they feel today, in their words — not a wishlist. <em>"The OTP disappears before I can read it."</em></p>
+              </div>
+              <div class="pf behav">
+                <div class="pf-lbl">📱 Behaviors</div>
+                <p>The apps and habits they actually have today — not what we wish they did. <em>Uses WhatsApp daily; opens mBoB only when his son visits.</em></p>
+              </div>
+              <div class="pf scen">
+                <div class="pf-lbl">🎬 Scenarios</div>
+                <p>A short story of when they'd use the product — time, place, who's around. <em>1st of the month, 8 am at home, pension SMS just arrived.</em></p>
+              </div>
+            </div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 880px; font-style: italic">Six fields. One page. Pin it to the wall — and from now on, decisions get tested against this person.</p>
+        </div>
+      </div>
+
+      <!-- 10 WORKED EXAMPLE — MEET TASHI -->
+      <div class="slide accent-amber bg-subtle" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> Worked example · Tashi</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Meet Tashi — a full persona on one page</h2></div>
+          <div class="persona-card">
+            <div class="persona-photo">
+              <div class="ph-icon">🧓</div>
+              <div class="ph-name">Tashi Wangmo</div>
+              <div class="ph-tag">"Pension by phone"</div>
+              <div style="margin-top: 0.4rem; font-size: 0.78rem; color: var(--muted)">62 · Punakha</div>
+            </div>
+            <div class="persona-fields">
+              <div class="pf demo">
+                <div class="pf-lbl">Demographics</div>
+                <p>62 yrs · retired primary-school teacher · Punakha · Dzongkha first language · basic Android phone (gift from son).</p>
+              </div>
+              <div class="pf goal">
+                <div class="pf-lbl">Goals</div>
+                <p>Receive pension at home each month. Send small amounts to grandchildren. Avoid the long walk to the bank.</p>
+              </div>
+              <div class="pf pain">
+                <div class="pf-lbl">Pain points</div>
+                <p>OTP SMS disappears too fast. Text is small. Forgets MPIN. Worries about pressing wrong button and losing money.</p>
+              </div>
+              <div class="pf behav">
+                <div class="pf-lbl">Behaviors</div>
+                <p>WhatsApp daily with family. YouTube on home Wi-Fi. Calls son when stuck. Never uses email. Doesn't trust ads.</p>
+              </div>
+              <div class="pf scen" style="grid-column: 1 / -1">
+                <div class="pf-lbl">Typical scenario</div>
+                <p>1st of the month, 8 am at home. Pension SMS arrives. Wants to send Nu. 5,000 to his daughter before she leaves for work. Grandson is at school — no help nearby.</p>
+              </div>
+            </div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 880px; font-style: italic">Now when the team designs an OTP screen, someone says <em>"would Tashi be able to read it in time?"</em> — and the question is concrete, not abstract.</p>
+        </div>
+      </div>
+
+      <!-- 11 SECTION: JOURNEY MAPS -->
+      <div class="slide bg-blue" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Three</div>
+          <h1 class="display" style="color: white">Journey Maps</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top: 1rem">The steps a persona takes to reach a goal — and how they feel along the way.</p>
+        </div>
+        <div class="section-num" style="color: white">03</div>
+      </div>
+
+      <!-- 12 JOURNEY DEFINITION -->
+      <div class="slide accent-blue bg-subtle" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> What a journey map is</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width: 920px">
+            <h2 class="heading" style="font-size: clamp(1.5rem, 3vw, 2.2rem)">A journey map shows <span style="color: var(--blue)">every step</span> a persona takes to reach a goal — and what they <span style="color: var(--blue)">do, think, and feel</span> at each step.</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 1.2rem; max-width: 820px">Think of it like a story-board for one trip. Across the top: the phases of the trip. Down the side: what's happening inside the user (action, thought, emotion) and where they touch your product.</p>
+          </div>
+          <div class="card" style="max-width: 880px; background: white; border-left: 5px solid var(--amber); padding: 1rem 1.3rem">
+            <h4 style="color: var(--indigo); margin-bottom: 0.3rem; font-size: 1rem">Why bother?</h4>
+            <p style="font-size: 0.92rem; color: var(--text); line-height: 1.65">A persona tells you <em>who</em>. A journey map tells you <em>what they go through</em>. Until you draw the steps, your product is a pile of screens, not an experience.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 13 JOURNEY ROW ANATOMY -->
+      <div class="slide accent-blue" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> The five rows of a journey map</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Across: phases. Down: what we want to know.</h2></div>
+          <div class="row-anatomy">
+            <div class="ra"><h6>🦵 Action</h6><p>What the user actually does — open app, tap button, enter number, ask grandson.</p></div>
+            <div class="ra" style="border-left-color: var(--indigo)"><h6>💭 Thought</h6><p>What's running through their head — "is this safe?", "did it work?", "where's the confirm button?"</p></div>
+            <div class="ra" style="border-left-color: var(--red)"><h6>😀 Emotion</h6><p>How they feel — hopeful, confused, frustrated, relieved. Use simple emojis to mark highs and lows.</p></div>
+            <div class="ra" style="border-left-color: var(--amber)"><h6>📱 Touchpoint</h6><p>Which screen, message, app, or person they interact with at this step.</p></div>
+            <div class="ra" style="border-left-color: #3D7A3D"><h6>💡 Opportunity</h6><p>Where the experience could be better. Each pain point is a chance for the team to act.</p></div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 820px; font-style: italic">Five rows is the standard. Some teams use four. Don't add ten — the map stops being readable.</p>
+        </div>
+      </div>
+
+      <!-- 14 WORKED JOURNEY — TASHI ON mBoB -->
+      <div class="slide accent-amber bg-subtle" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> Worked journey · Tashi tries mBoB</div>
+        <div class="stack" style="align-items:center; width:100%; gap:0.8rem">
+          <div class="center"><h2 class="heading" style="font-size: clamp(1.4rem, 2.7vw, 2rem)">Goal: send Nu. 5,000 to his daughter</h2></div>
+          <div class="jmap">
+            <div class="jmap-row head">
+              <div class="jmap-cell row-label">Phase →</div>
+              <div class="jmap-cell">1. Open app</div>
+              <div class="jmap-cell">2. Enter phone</div>
+              <div class="jmap-cell">3. Wait for OTP</div>
+              <div class="jmap-cell">4. Enter amount</div>
+              <div class="jmap-cell">5. Confirm</div>
+            </div>
+            <div class="jmap-row">
+              <div class="jmap-cell row-label">🦵 Action</div>
+              <div class="jmap-cell">Taps mBoB icon. Sees login screen.</div>
+              <div class="jmap-cell">Types phone number slowly. Taps Continue.</div>
+              <div class="jmap-cell">SMS arrives. Tries to read 6-digit code.</div>
+              <div class="jmap-cell">Picks daughter from list. Types 5000.</div>
+              <div class="jmap-cell">Calls grandson to read MPIN aloud. Taps Confirm.</div>
+            </div>
+            <div class="jmap-row">
+              <div class="jmap-cell row-label">💭 Thought</div>
+              <div class="jmap-cell">"OK, I remember this part."</div>
+              <div class="jmap-cell">"Am I typing my own number or hers?"</div>
+              <div class="jmap-cell">"The numbers are too small. It already disappeared."</div>
+              <div class="jmap-cell">"Did I add an extra zero?"</div>
+              <div class="jmap-cell">"What if it goes to the wrong person?"</div>
+            </div>
+            <div class="jmap-row">
+              <div class="jmap-cell row-label">😀 Emotion</div>
+              <div class="jmap-cell emo">🙂</div>
+              <div class="jmap-cell emo">😐</div>
+              <div class="jmap-cell emo">😟</div>
+              <div class="jmap-cell emo">😬</div>
+              <div class="jmap-cell emo">😅</div>
+            </div>
+            <div class="jmap-row">
+              <div class="jmap-cell row-label">📱 Touchpoint</div>
+              <div class="jmap-cell">App home screen.</div>
+              <div class="jmap-cell">Phone-number screen.</div>
+              <div class="jmap-cell">SMS app + OTP screen.</div>
+              <div class="jmap-cell">Transfer form.</div>
+              <div class="jmap-cell">MPIN dialog + receipt.</div>
+            </div>
+            <div class="jmap-row">
+              <div class="jmap-cell row-label opp" style="background: #FFF3CC">💡 Opportunity</div>
+              <div class="jmap-cell opp">Bigger icons. Show last login.</div>
+              <div class="jmap-cell opp">Confirm whose number this is.</div>
+              <div class="jmap-cell opp">Auto-fill OTP. Bigger digits. Read aloud.</div>
+              <div class="jmap-cell opp">Show amount in words ("five thousand").</div>
+              <div class="jmap-cell opp">Show daughter's photo + name big before confirm.</div>
+            </div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 880px; font-style: italic">The emotional dip in the middle (the OTP step) is exactly where the team should focus first.</p>
+        </div>
+      </div>
+
+      <!-- 15 SECTION: HANDS-ON -->
+      <div class="slide bg-blue" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Four · Hands-on</div>
+          <h1 class="display" style="color: white">Build a Persona<br>+ Journey Map</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top: 1rem">Groups of 3 · 25 minutes · pick one scenario.</p>
+        </div>
+        <div class="section-num" style="color: white">04</div>
+      </div>
+
+      <!-- 16 EXERCISE BRIEF -->
+      <div class="slide accent-blue bg-subtle" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span> The brief</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width: 900px">
+            <h2 class="heading">Pick ONE scenario. Build one persona + a 5-step journey.</h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem">Groups of 3. One sheet per group. Use the persona template (6 fields) and the journey grid (5 phases × 5 rows).</p>
+          </div>
+          <div class="scenario-grid">
+            <div class="sc">
+              <div class="sc-tag">Scenario A</div>
+              <h6>🧓 Bhutanese elder using a pension portal</h6>
+              <p>An older relative who needs to check or claim their pension online from home for the first time.</p>
+            </div>
+            <div class="sc">
+              <div class="sc-tag">Scenario B</div>
+              <h6>🛂 First-time tourist booking a Bhutan visa online</h6>
+              <p>A foreign visitor planning their first trip — needs to apply, pay, and receive an e-visa via the official portal.</p>
+            </div>
+            <div class="sc">
+              <div class="sc-tag">Scenario C</div>
+              <h6>🎓 Pelsung trainee enrolling in a new course</h6>
+              <p>One of you, signing up for a fresh course on the learning portal — registering, choosing a track, getting confirmed.</p>
+            </div>
+            <div class="sc">
+              <div class="sc-tag">Scenario D</div>
+              <h6>🏪 Shopkeeper accepting first QR payment</h6>
+              <p>A small Druk PNB / mBoB shopkeeper, taking their very first QR payment from a customer at the counter.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 17 EXERCISE HOW -->
+      <div class="slide accent-blue" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span> How to work · 25 minutes</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Three roles in your group of 3</h2></div>
+          <div class="cols-3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.9rem; max-width: 1100px; width: 100%">
+            <div class="card" style="border-top: 3px solid var(--indigo)">
+              <h4 style="color: var(--indigo); font-size: 1rem">📝 Scribe</h4>
+              <p style="font-size: 0.9rem; line-height: 1.65; color: var(--text)">Holds the pen. Writes the persona fields and the journey rows on the sheet.</p>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--blue)">
+              <h4 style="color: var(--blue); font-size: 1rem">🗣️ Storyteller</h4>
+              <p style="font-size: 0.9rem; line-height: 1.65; color: var(--text)">Tells the story step-by-step ("she opens the app… she sees…"). Narrates each phase out loud.</p>
+            </div>
+            <div class="card" style="border-top: 3px solid var(--red)">
+              <h4 style="color: var(--red); font-size: 1rem">🤔 Sceptic</h4>
+              <p style="font-size: 0.9rem; line-height: 1.65; color: var(--text)">Pushes back: "Is this real or are we guessing? Would she really do that? Where's the pain?"</p>
+            </div>
+          </div>
+          <div class="card" style="max-width: 1000px; background: white; border-left: 5px solid var(--amber); padding: 0.9rem 1.3rem">
+            <h4 style="color: var(--indigo); margin-bottom: 0.4rem; font-size: 1rem">Suggested timing</h4>
+            <p style="font-size: 0.92rem; color: var(--text); line-height: 1.7"><strong>0–10 min:</strong> Build the persona (all 6 fields) · <strong>10–20 min:</strong> Map the 5-step journey (action, thought, emotion, touchpoint, opportunity) · <strong>20–25 min:</strong> Pick the biggest emotional dip and write one improvement. Two volunteer groups present in debrief.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 18 SECTION: WRAP -->
+      <div class="slide bg-indigo" data-slide="18">
+        <div class="slide-label"><span class="snum">18</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Five</div>
+          <h1 class="display" style="color: white">What These<br>Feed Into</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top: 1rem">A persona on the wall is decoration. A persona in your specs is leverage.</p>
+        </div>
+        <div class="section-num" style="color: white">05</div>
+      </div>
+
+      <!-- 19 FEEDS-INTO -->
+      <div class="slide accent-blue bg-subtle" data-slide="19">
+        <div class="slide-label"><span class="snum">19</span> Where personas + journeys go next</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">From empathy → into the artifacts you're already learning</h2></div>
+          <div class="feeds">
+            <div class="fd"><div class="fd-step">Feeds →</div><h6>📜 Requirements</h6><p>Pain points become real requirements. "OTP must stay on screen for 30 seconds" — because Tashi told us why.</p></div>
+            <div class="fd" style="border-top-color: var(--indigo)"><div class="fd-step">Feeds →</div><h6>📝 User stories</h6><p>"As <strong>Tashi</strong>, I want larger OTP digits so that I can read them before they disappear."</p></div>
+            <div class="fd" style="border-top-color: #3D7A3D"><div class="fd-step">Feeds →</div><h6>✅ Acceptance criteria</h6><p>Each opportunity becomes a testable AC. The journey map is a checklist of what "done" must cover.</p></div>
+            <div class="fd" style="border-top-color: var(--amber)"><div class="fd-step">Feeds →</div><h6>🎨 Design</h6><p>Designers test mockups against the journey: "would the screen at step 3 actually help Tashi?"</p></div>
+            <div class="fd" style="border-top-color: var(--red)"><div class="fd-step">Feeds →</div><h6>🧪 Testing</h6><p>QA uses the journey to check the real flow — not just one screen at a time.</p></div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 820px; font-style: italic">If a persona never shows up in any other document, it was a poster. Use it.</p>
+        </div>
+      </div>
+
+      <!-- 20 WRAP -->
+      <div class="slide bg-dark" data-slide="20">
+        <div class="slide-label"><span class="snum">20</span> Wrap-up</div>
+        <div class="center" style="max-width: 880px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key takeaways</div>
+          <h2 class="heading" style="color: white">What we covered today</h2>
+          <ul class="reveal-list" style="color: rgba(255,255,255,0.92); text-align: left; max-width: 760px; margin: 1.5rem auto; font-size: 1rem; line-height: 2">
+            <li>✅ A persona is a <strong>fictional but realistic</strong> picture of a user <em>type</em> — built from real research, not guessing</li>
+            <li>✅ Six fields: <strong>name + photo · demographics · goals · pain points · behaviors · scenarios</strong></li>
+            <li>✅ A persona is NOT a real person, a stereotype, or "the average user"</li>
+            <li>✅ A journey map shows the <strong>steps a persona takes to reach a goal</strong> — across phases, down rows (action / thought / emotion / touchpoint / opportunity)</li>
+            <li>✅ The <strong>emotional dip</strong> in the journey is where the team should focus first</li>
+            <li>✅ Personas + journeys feed into <strong>requirements, user stories, AC, design, and testing</strong></li>
+            <li>✅ A persona on the wall is decoration. A persona inside your specs is leverage.</li>
+          </ul>
+          <p style="color: var(--amber); font-family: 'Bahnschrift', 'Segoe UI', sans-serif; font-size: 1.15rem; margin-top: 1.4rem">"Would Tashi be able to do this?" — the most useful question a BA can ask.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 20</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>

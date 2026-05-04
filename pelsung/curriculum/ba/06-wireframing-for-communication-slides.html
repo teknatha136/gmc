@@ -1,0 +1,765 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wireframing for Communication — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      /* Wireframe canvas */
+      .wf-canvas {
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1rem;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+      }
+      .wf-canvas svg { display:block; width:100%; height:auto; }
+
+      /* Spectrum */
+      .spectrum-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:1rem; width:100%; max-width:1100px; }
+      @media (max-width: 820px){ .spectrum-grid { grid-template-columns:1fr; } }
+      .sp-card { background:white; border:1px solid var(--border); border-radius:12px; padding:0.9rem 1rem; }
+      .sp-card.lo { border-top:4px solid var(--amber); }
+      .sp-card.hi { border-top:4px solid var(--blue); }
+      .sp-card.proto { border-top:4px solid var(--indigo); }
+      .sp-card h5 { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); margin-bottom:0.3rem; font-size:1rem; }
+      .sp-card p { font-size:0.85rem; color:var(--text); line-height:1.55; }
+      .sp-card .tag { display:inline-block; font-size:0.65rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-bottom:0.3rem; }
+
+      /* Tools list */
+      .tools-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:0.8rem; width:100%; max-width:1100px; }
+      @media (max-width: 720px){ .tools-grid { grid-template-columns:1fr; } }
+      .tool { background:white; border:1px solid var(--border); border-left:4px solid var(--blue); border-radius:10px; padding:0.8rem 1rem; }
+      .tool h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.98rem; margin-bottom:0.2rem; display:flex; align-items:center; gap:0.4rem; }
+      .tool p { font-size:0.85rem; color:var(--text); line-height:1.55; }
+      .tool.pen { border-left-color:#B88730; }
+      .tool.board { border-left-color:var(--amber); }
+      .tool.figma { border-left-color:var(--blue); }
+      .tool.balsa { border-left-color:var(--indigo); }
+
+      /* Layout principle cards */
+      .lp-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:0.9rem; width:100%; max-width:1150px; }
+      @media (max-width: 820px){ .lp-grid { grid-template-columns:1fr; } }
+      .lp { background:white; border:1px solid var(--border); border-radius:12px; padding:0.85rem 1rem; display:grid; grid-template-columns: 1.1fr 1fr; gap:0.9rem; align-items:center; }
+      @media (max-width: 720px){ .lp { grid-template-columns:1fr; } }
+      .lp h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.2rem; }
+      .lp p { font-size:0.85rem; color:var(--text); line-height:1.55; }
+      .lp .pic { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:0.4rem; }
+      .lp .pic svg { width:100%; height:auto; display:block; }
+
+      /* Annotation example */
+      .anno-row { display:grid; grid-template-columns: 1.1fr 1fr; gap:1rem; width:100%; max-width:1150px; align-items:start; }
+      @media (max-width: 820px){ .anno-row { grid-template-columns:1fr; } }
+      .anno-list { background:white; border:1px solid var(--border); border-radius:12px; padding:0.9rem 1.1rem; }
+      .anno-list .it { display:flex; gap:0.7rem; align-items:flex-start; padding:0.45rem 0; border-bottom:1px dashed var(--border); }
+      .anno-list .it:last-child { border-bottom:none; }
+      .anno-list .num { width:26px; height:26px; flex-shrink:0; background:var(--blue); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; font-size:0.85rem; }
+      .anno-list p { font-size:0.88rem; color:var(--text); line-height:1.55; }
+
+      /* Three screens row */
+      .screens-row { display:grid; grid-template-columns: repeat(3, 1fr); gap:0.9rem; width:100%; max-width:1200px; }
+      @media (max-width: 820px){ .screens-row { grid-template-columns:1fr; } }
+      .screen { background:white; border:1px solid var(--border); border-radius:12px; padding:0.6rem; }
+      .screen .cap { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-size:0.9rem; text-align:center; margin-top:0.4rem; }
+
+      /* Activity choice cards */
+      .choice-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:0.9rem; width:100%; max-width:1150px; }
+      @media (max-width: 820px){ .choice-grid { grid-template-columns:1fr; } }
+      .choice { background:white; border:2px dashed var(--blue); border-radius:12px; padding:0.9rem 1rem; }
+      .choice h6 { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.3rem; }
+      .choice p { font-size:0.85rem; color:var(--text); line-height:1.55; }
+
+      /* Comparison */
+      .compare { display:grid; grid-template-columns: 1fr 1fr; gap:0.9rem; width:100%; max-width:1100px; }
+      @media (max-width: 820px){ .compare { grid-template-columns:1fr; } }
+      .compare .col { background:white; border:1px solid var(--border); border-radius:10px; padding:0.85rem 1rem; }
+      .compare .col.bad { border-top:4px solid var(--red); }
+      .compare .col.good { border-top:4px solid var(--green); }
+      .compare .col h5 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.4rem; }
+      .compare .col.bad h5 { color:var(--red); }
+      .compare .col.good h5 { color:#3D7A3D; }
+      .compare .col p { font-size:0.86rem; color:var(--text); line-height:1.55; }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>BA Vertical · Class 06</div></div>
+          <h1 class="display" style="color: var(--text)">
+            <span style="color: var(--blue)">Wireframing</span><br />
+            <span style="color: var(--indigo)">for Communication</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted)">A box-and-line sketch resolves more arguments than a thousand-word spec.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">Low-fi sketches</span>
+            <span class="class-tag tag-blue">Figma basics</span>
+            <span class="class-tag tag-blue">Clickthroughs</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 AGENDA -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 800px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem"><h2 class="heading">Session Journey · ~90 min</h2></div>
+          <div class="agenda-row" onclick="goTo(3)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🎯 Why BAs wireframe</span><span class="ar-badge" style="background:#E6E9EC;color:var(--indigo)">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(5)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">📐 Wireframe vs mockup vs prototype</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">7 min</span></div>
+          <div class="agenda-row" onclick="goTo(7)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🛠️ Tools — and why the pen is fine</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(9)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🎨 Figma — what BAs need to know (and not)</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">5 min</span></div>
+          <div class="agenda-row" onclick="goTo(10)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🧱 Layout principles for BAs</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">15 min</span></div>
+          <div class="agenda-row" onclick="goTo(12)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🏷️ Annotations — the BA superpower</span><span class="ar-badge" style="background:#E6E9EC;color:var(--indigo)">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(14)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">💡 Worked example · leave request app</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(16)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">✏️ Hands-on · paper & pen</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">25 min</span></div>
+          <div class="agenda-row" onclick="goTo(19)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🎯 Wrap-up</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">2 min</span></div>
+        </div>
+      </div>
+
+      <!-- 3 WHY BAs WIREFRAME -->
+      <div class="slide bg-indigo" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span></div>
+        <div class="center" style="position:relative; z-index:1; max-width:880px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part One</div>
+          <h1 class="display" style="color: white">Why BAs<br>Wireframe</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">To <em>communicate</em> intent — not to design.</p>
+        </div>
+        <div class="section-num" style="color: white">01</div>
+      </div>
+
+      <!-- 4 BOX AND LINE BEATS A SPEC -->
+      <div class="slide accent-blue bg-subtle" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> The whole point</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:980px">
+            <h2 class="heading">A picture beats a paragraph.</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:1rem; max-width:820px; margin-left:auto; margin-right:auto">Imagine writing: <em>"The leave request screen should show a list of past requests with status, plus a button to create a new one."</em> Two devs read it. They build two very different screens.</p>
+          </div>
+          <div class="cols-2" style="max-width:1150px; gap:1rem">
+            <div class="card" style="border-top:3px solid var(--red); background:white;">
+              <h4 style="color:var(--red)">📝 Words alone</h4>
+              <p style="font-size:0.92rem; color:var(--text); line-height:1.65">Where is the button? Top? Bottom? Floating? What does "status" look like — text, a coloured dot, an icon? The dev guesses. The QA argues. The trainer redesigns. Two weeks lost.</p>
+            </div>
+            <div class="card" style="border-top:3px solid var(--green); background:white;">
+              <h4 style="color:#3D7A3D">📐 Words + a sketch</h4>
+              <p style="font-size:0.92rem; color:var(--text); line-height:1.65">Everyone sees the same picture. They argue about the sketch in 5 minutes — not the built app in 5 weeks. <strong>That's why BAs wireframe.</strong></p>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--blue); text-align:center; max-width:820px; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.15rem; margin-top:0.5rem"><strong>You are not designing. You are communicating.</strong></p>
+        </div>
+      </div>
+
+      <!-- 5 SECTION: SPECTRUM -->
+      <div class="slide bg-blue" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Two</div>
+          <h1 class="display" style="color: white">Wireframe<br>vs Mockup<br>vs Prototype</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Three points on one spectrum.</p>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- 6 SPECTRUM CARDS -->
+      <div class="slide accent-blue bg-subtle" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> The fidelity spectrum</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Low-fi → Hi-fi → Interactive</h2><p class="body-md" style="color:var(--muted)">All three are fine. But each one costs more time than the last. <strong>Wireframes are where BAs live.</strong></p></div>
+          <div class="spectrum-grid">
+            <div class="sp-card lo">
+              <span class="tag">Low-fi · BA</span>
+              <h5>📦 Wireframe</h5>
+              <div class="wf-canvas" style="margin:0.5rem 0; padding:0.4rem;">
+                <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <rect x="6" y="6" width="188" height="118" fill="#fff" stroke="#7B7C7F" stroke-width="1.5"/>
+                  <rect x="14" y="14" width="172" height="14" fill="#EDEDED" stroke="#7B7C7F" stroke-width="1"/>
+                  <rect x="14" y="36" width="172" height="32" fill="none" stroke="#7B7C7F" stroke-width="1"/>
+                  <line x1="14" y1="36" x2="186" y2="68" stroke="#7B7C7F" stroke-width="1"/>
+                  <line x1="14" y1="68" x2="186" y2="36" stroke="#7B7C7F" stroke-width="1"/>
+                  <rect x="14" y="76" width="100" height="10" fill="#EDEDED"/>
+                  <rect x="14" y="92" width="80" height="10" fill="#EDEDED"/>
+                  <rect x="14" y="108" width="60" height="14" fill="none" stroke="#7B7C7F" stroke-width="1.2"/>
+                </svg>
+              </div>
+              <p>Boxes, lines, scribbled labels. No colour. No icons. Just <strong>structure and intent</strong>. Cheap to throw away.</p>
+            </div>
+            <div class="sp-card hi">
+              <span class="tag">Hi-fi · Designer</span>
+              <h5>🎨 Mockup</h5>
+              <div class="wf-canvas" style="margin:0.5rem 0; padding:0.4rem;">
+                <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <rect x="6" y="6" width="188" height="118" rx="6" fill="#fff" stroke="#0066B2" stroke-width="1"/>
+                  <rect x="6" y="6" width="188" height="22" rx="6" fill="#0066B2"/>
+                  <text x="14" y="21" fill="white" font-family="Open Sans" font-size="9" font-weight="700">Leave</text>
+                  <rect x="14" y="38" width="172" height="34" rx="4" fill="#F1F5F9" stroke="#CBD5E1"/>
+                  <circle cx="26" cy="55" r="6" fill="#7BC950"/>
+                  <rect x="38" y="48" width="80" height="6" rx="2" fill="#1B2021"/>
+                  <rect x="38" y="58" width="60" height="5" rx="2" fill="#7B7C7F"/>
+                  <rect x="14" y="78" width="172" height="34" rx="4" fill="#F1F5F9" stroke="#CBD5E1"/>
+                  <circle cx="26" cy="95" r="6" fill="#D80032"/>
+                  <rect x="38" y="88" width="80" height="6" rx="2" fill="#1B2021"/>
+                  <rect x="38" y="98" width="60" height="5" rx="2" fill="#7B7C7F"/>
+                </svg>
+              </div>
+              <p>Real colours, real fonts, real icons. Pixel-perfect. Looks like the final product. <strong>Designers do this</strong>, not BAs.</p>
+            </div>
+            <div class="sp-card proto">
+              <span class="tag">Interactive · Designer</span>
+              <h5>▶️ Prototype</h5>
+              <div class="wf-canvas" style="margin:0.5rem 0; padding:0.4rem;">
+                <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <rect x="4" y="20" width="80" height="100" rx="6" fill="#fff" stroke="#001F35" stroke-width="1.2"/>
+                  <rect x="116" y="20" width="80" height="100" rx="6" fill="#fff" stroke="#001F35" stroke-width="1.2"/>
+                  <rect x="12" y="30" width="64" height="10" fill="#0066B2"/>
+                  <rect x="12" y="48" width="64" height="20" fill="#EDEDED"/>
+                  <rect x="12" y="74" width="64" height="20" fill="#EDEDED"/>
+                  <rect x="124" y="30" width="64" height="10" fill="#001F35"/>
+                  <rect x="124" y="48" width="64" height="46" fill="#F1F5F9" stroke="#CBD5E1"/>
+                  <path d="M86 70 L114 70" stroke="#0066B2" stroke-width="2" fill="none" marker-end="url(#a6)"/>
+                  <defs><marker id="a6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#0066B2"/></marker></defs>
+                </svg>
+              </div>
+              <p>Mockups <em>linked together</em>. Click here, jump there. Feels like a real app, but no real code. Used for user testing.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7 SECTION: TOOLS -->
+      <div class="slide bg-indigo" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Three</div>
+          <h1 class="display" style="color: white">Tools</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Including the one already in your hand.</p>
+        </div>
+        <div class="section-num" style="color: white">03</div>
+      </div>
+
+      <!-- 8 TOOLS GRID -->
+      <div class="slide accent-blue bg-subtle" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> Pick what fits</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Four good tools. <span style="color:var(--blue)">The pen is fine.</span></h2></div>
+          <div class="tools-grid">
+            <div class="tool pen">
+              <h6>✏️ Paper + pen</h6>
+              <p>Free. Fast. Throw it away without guilt. <strong>The most used wireframing tool in the world.</strong> If a stakeholder is sitting next to you, this is almost always the right answer.</p>
+            </div>
+            <div class="tool board">
+              <h6>📋 Whiteboard</h6>
+              <p>Group sketching. Big enough that the whole team can stand around it. Take a phone photo when you're done — that's your "saved file".</p>
+            </div>
+            <div class="tool balsa">
+              <h6>🧰 Balsamiq</h6>
+              <p>Looks hand-drawn on purpose. Stops people from arguing about colours and fonts. Drag-and-drop boxes, buttons, dropdowns. Easy to learn.</p>
+            </div>
+            <div class="tool figma">
+              <h6>🎨 Figma (low-fi mode)</h6>
+              <p>The industry standard. We'll show you the basics next — but as a BA you only need a tiny slice of Figma. <strong>Designers do the heavy lifting.</strong></p>
+            </div>
+          </div>
+          <div class="card" style="max-width:980px; background:white; border-left:5px solid var(--amber); padding:0.9rem 1.3rem;">
+            <h4 style="color:var(--indigo); font-size:1rem">Rule of thumb</h4>
+            <p style="font-size:0.92rem; color:var(--text); line-height:1.65">Start on paper. <strong>Always.</strong> Move to Figma only when the sketch is settled and you need to share it with people who aren't in the room.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9 FIGMA - the tool you'll see designers use -->
+      <div class="slide accent-blue bg-subtle" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> Figma · the tool you'll see designers use</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Figma · <span style="color:var(--blue)">the tool you'll see designers use</span></h2></div>
+          <div class="cols-2" style="max-width:1150px; gap:1rem; align-items:center">
+            <div class="wf-canvas">
+              <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <!-- Frame label -->
+                <text x="14" y="18" font-family="Bahnschrift, Segoe UI" font-size="11" fill="#0066B2" font-weight="700">📱 Frame: "Leave Request"</text>
+                <!-- Frame -->
+                <rect x="14" y="26" width="180" height="160" fill="#fff" stroke="#0066B2" stroke-width="2"/>
+                <rect x="26" y="38" width="156" height="22" fill="#EDEDED" stroke="#7B7C7F"/>
+                <text x="34" y="53" font-family="Open Sans" font-size="9" fill="#1B2021" font-weight="600">Header</text>
+                <rect x="26" y="70" width="156" height="30" fill="#fff" stroke="#7B7C7F"/>
+                <text x="34" y="88" font-family="Open Sans" font-size="9" fill="#1B2021">Past request</text>
+                <rect x="26" y="108" width="156" height="30" fill="#fff" stroke="#7B7C7F"/>
+                <text x="34" y="126" font-family="Open Sans" font-size="9" fill="#1B2021">Past request</text>
+                <rect x="100" y="150" width="80" height="26" fill="none" stroke="#0066B2" stroke-width="1.5" rx="3"/>
+                <text x="118" y="167" font-family="Open Sans" font-size="9" fill="#0066B2" font-weight="700">+ New</text>
+                <!-- Comment bubble -->
+                <circle cx="210" cy="70" r="10" fill="#247EC1"/>
+                <text x="210" y="73" text-anchor="middle" font-family="Bahnschrift" font-size="10" fill="white" font-weight="700">💬</text>
+                <line x1="220" y1="70" x2="244" y2="70" stroke="#247EC1" stroke-width="1"/>
+                <text x="248" y="74" font-family="Open Sans" font-size="9" fill="#1B2021">Comment thread</text>
+              </svg>
+            </div>
+            <div class="stack" style="gap:0.7rem; align-items:flex-start">
+              <div class="card" style="border-left:4px solid var(--blue); background:white; padding:0.75rem 1rem; width:100%">
+                <p style="font-size:0.95rem; color:var(--text); line-height:1.6"><strong style="color:var(--blue)">What it is.</strong> An online design tool that runs in your browser. Like Google Docs, but for app screens.</p>
+              </div>
+              <div class="card" style="border-left:4px solid var(--green); background:white; padding:0.75rem 1rem; width:100%">
+                <p style="font-size:0.95rem; color:var(--text); line-height:1.6"><strong style="color:#3D7A3D">What BAs need to know.</strong> Open the file. Find the <em>frames</em> (one per screen). Drop <em>comments</em> on anything that's wrong. That's it.</p>
+              </div>
+              <div class="card" style="border-left:4px solid var(--red); background:white; padding:0.75rem 1rem; width:100%">
+                <p style="font-size:0.95rem; color:var(--text); line-height:1.6"><strong style="color:var(--red)">What BAs do NOT do.</strong> Master components. Build design systems. Pixel-align. Pick fonts. Choose colours. <strong>That's the Designer's job.</strong></p>
+              </div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--blue); text-align:center; max-width:880px; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-top:0.3rem"><strong>If you can sketch on paper, you can communicate. Figma is optional polish.</strong></p>
+        </div>
+      </div>
+
+      <!-- 10 SECTION: LAYOUT PRINCIPLES -->
+      <div class="slide bg-blue" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Four</div>
+          <h1 class="display" style="color: white">Layout<br>Principles</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Four ideas that cover most BA wireframes.</p>
+        </div>
+        <div class="section-num" style="color: white">04</div>
+      </div>
+
+      <!-- 11 LAYOUT PRINCIPLES GRID -->
+      <div class="slide accent-blue bg-subtle" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> Four layout principles</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading" style="font-size:clamp(1.6rem, 3.2vw, 2.4rem)">Content priority · Navigation · Reading order · Whitespace</h2></div>
+          <div class="lp-grid">
+
+            <!-- Content priority -->
+            <div class="lp">
+              <div>
+                <h6>1. Content priority</h6>
+                <p>Ask: <em>"What is the ONE thing the user came here to see?"</em> That goes biggest, top-most. Everything else is smaller.</p>
+                <p style="margin-top:0.4rem; color:var(--muted); font-style:italic; font-size:0.8rem">mBoB-like example: account balance is huge. "Last 5 transactions" is smaller below it.</p>
+              </div>
+              <div class="pic">
+                <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <rect x="6" y="6" width="188" height="118" fill="#fff" stroke="#7B7C7F"/>
+                  <rect x="14" y="14" width="172" height="40" fill="#E6F0F8" stroke="#0066B2"/>
+                  <text x="100" y="40" text-anchor="middle" font-family="Bahnschrift" font-size="14" fill="#0066B2" font-weight="700">Nu. 24,150</text>
+                  <text x="100" y="50" text-anchor="middle" font-family="Open Sans" font-size="7" fill="#7B7C7F">Account balance</text>
+                  <rect x="14" y="62" width="172" height="14" fill="#EDEDED"/>
+                  <rect x="14" y="80" width="172" height="14" fill="#EDEDED"/>
+                  <rect x="14" y="98" width="172" height="14" fill="#EDEDED"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="lp">
+              <div>
+                <h6>2. Navigation</h6>
+                <p>Three patterns to know: <strong>top nav</strong> (websites), <strong>side nav</strong> (admin tools), <strong>bottom tabs</strong> (phone apps).</p>
+                <p style="margin-top:0.4rem; color:var(--muted); font-style:italic; font-size:0.8rem">For phone apps in Bhutan (mBoB, BoB, Druk PNB) — almost always bottom tabs.</p>
+              </div>
+              <div class="pic">
+                <svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <!-- top nav -->
+                  <rect x="6" y="6" width="70" height="88" fill="#fff" stroke="#7B7C7F"/>
+                  <rect x="6" y="6" width="70" height="14" fill="#0066B2"/>
+                  <text x="41" y="98" text-anchor="middle" font-family="Open Sans" font-size="6" fill="#7B7C7F">Top</text>
+                  <!-- side nav -->
+                  <rect x="86" y="6" width="70" height="88" fill="#fff" stroke="#7B7C7F"/>
+                  <rect x="86" y="6" width="20" height="88" fill="#001F35"/>
+                  <text x="121" y="98" text-anchor="middle" font-family="Open Sans" font-size="6" fill="#7B7C7F">Side</text>
+                  <!-- bottom tabs -->
+                  <rect x="166" y="6" width="70" height="88" fill="#fff" stroke="#7B7C7F"/>
+                  <rect x="166" y="80" width="70" height="14" fill="#247EC1"/>
+                  <line x1="183.5" y1="80" x2="183.5" y2="94" stroke="white"/>
+                  <line x1="201" y1="80" x2="201" y2="94" stroke="white"/>
+                  <line x1="218.5" y1="80" x2="218.5" y2="94" stroke="white"/>
+                  <text x="201" y="98" text-anchor="middle" font-family="Open Sans" font-size="6" fill="#7B7C7F">Bottom tabs</text>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Reading order -->
+            <div class="lp">
+              <div>
+                <h6>3. Reading order — Z and F</h6>
+                <p>Eyes scan top-left to bottom-right. <strong>Z pattern</strong> for simple pages (landing). <strong>F pattern</strong> for content-heavy pages (lists, articles).</p>
+                <p style="margin-top:0.4rem; color:var(--muted); font-style:italic; font-size:0.8rem">Put the most important thing where the eye lands first — never bottom-right.</p>
+              </div>
+              <div class="pic">
+                <svg viewBox="0 0 240 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <!-- Z -->
+                  <rect x="6" y="10" width="100" height="90" fill="#fff" stroke="#7B7C7F"/>
+                  <text x="56" y="6" text-anchor="middle" font-family="Bahnschrift" font-size="9" fill="#0066B2" font-weight="700">Z</text>
+                  <path d="M14 22 L98 22 L14 90 L98 90" stroke="#0066B2" stroke-width="1.8" fill="none"/>
+                  <circle cx="14" cy="22" r="3" fill="#0066B2"/><text x="22" y="20" font-family="Open Sans" font-size="6" fill="#0066B2">1</text>
+                  <circle cx="98" cy="22" r="3" fill="#0066B2"/><text x="86" y="20" font-family="Open Sans" font-size="6" fill="#0066B2">2</text>
+                  <circle cx="14" cy="90" r="3" fill="#0066B2"/><text x="22" y="100" font-family="Open Sans" font-size="6" fill="#0066B2">3</text>
+                  <circle cx="98" cy="90" r="3" fill="#0066B2"/><text x="86" y="100" font-family="Open Sans" font-size="6" fill="#0066B2">4</text>
+                  <!-- F -->
+                  <rect x="134" y="10" width="100" height="90" fill="#fff" stroke="#7B7C7F"/>
+                  <text x="184" y="6" text-anchor="middle" font-family="Bahnschrift" font-size="9" fill="#247EC1" font-weight="700">F</text>
+                  <path d="M142 22 L226 22 M142 22 L142 90 M142 50 L210 50 M142 75 L190 75" stroke="#247EC1" stroke-width="1.8" fill="none"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Whitespace -->
+            <div class="lp">
+              <div>
+                <h6>4. Whitespace = readability</h6>
+                <p>Empty space is not wasted space. It tells the eye where to rest. <strong>Cramped wireframes feel cramped in the final app too.</strong></p>
+                <p style="margin-top:0.4rem; color:var(--muted); font-style:italic; font-size:0.8rem">If your screen looks busy in grey boxes, it'll look chaotic in colour.</p>
+              </div>
+              <div class="pic">
+                <svg viewBox="0 0 240 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <!-- bad -->
+                  <rect x="6" y="10" width="100" height="90" fill="#fff" stroke="#D80032"/>
+                  <text x="56" y="6" text-anchor="middle" font-family="Bahnschrift" font-size="9" fill="#D80032" font-weight="700">Cramped</text>
+                  <rect x="10" y="14" width="92" height="10" fill="#EDEDED"/>
+                  <rect x="10" y="26" width="92" height="10" fill="#EDEDED"/>
+                  <rect x="10" y="38" width="92" height="10" fill="#EDEDED"/>
+                  <rect x="10" y="50" width="92" height="10" fill="#EDEDED"/>
+                  <rect x="10" y="62" width="92" height="10" fill="#EDEDED"/>
+                  <rect x="10" y="74" width="92" height="10" fill="#EDEDED"/>
+                  <rect x="10" y="86" width="92" height="10" fill="#EDEDED"/>
+                  <!-- good -->
+                  <rect x="134" y="10" width="100" height="90" fill="#fff" stroke="#7BC950"/>
+                  <text x="184" y="6" text-anchor="middle" font-family="Bahnschrift" font-size="9" fill="#3D7A3D" font-weight="700">Breathing</text>
+                  <rect x="142" y="20" width="84" height="14" fill="#EDEDED"/>
+                  <rect x="142" y="44" width="84" height="14" fill="#EDEDED"/>
+                  <rect x="142" y="68" width="84" height="14" fill="#EDEDED"/>
+                </svg>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- 12 SECTION: ANNOTATIONS -->
+      <div class="slide bg-indigo" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Five</div>
+          <h1 class="display" style="color: white">Annotations</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">The BA's superpower.</p>
+        </div>
+        <div class="section-num" style="color: white">05</div>
+      </div>
+
+      <!-- 13 ANNOTATIONS EXAMPLE -->
+      <div class="slide accent-blue bg-subtle" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> Every box gets a number</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">A wireframe without annotations is just a doodle.</h2></div>
+          <div class="anno-row">
+            <div class="wf-canvas">
+              <svg viewBox="0 0 320 360" xmlns="http://www.w3.org/2000/svg">
+                <!-- Phone frame -->
+                <rect x="20" y="10" width="200" height="340" fill="#fff" stroke="#1B2021" stroke-width="1.5"/>
+                <!-- Header -->
+                <rect x="28" y="20" width="184" height="34" fill="#EDEDED" stroke="#7B7C7F"/>
+                <text x="120" y="42" text-anchor="middle" font-family="Bahnschrift" font-size="13" fill="#1B2021">New leave request</text>
+                <!-- Field: From date -->
+                <text x="34" y="76" font-family="Open Sans" font-size="11" fill="#1B2021">From date</text>
+                <rect x="34" y="82" width="172" height="28" fill="none" stroke="#7B7C7F"/>
+                <text x="42" y="100" font-family="Open Sans" font-size="10" fill="#7B7C7F">DD / MM / YYYY</text>
+                <!-- Field: To date -->
+                <text x="34" y="128" font-family="Open Sans" font-size="11" fill="#1B2021">To date</text>
+                <rect x="34" y="134" width="172" height="28" fill="none" stroke="#7B7C7F"/>
+                <text x="42" y="152" font-family="Open Sans" font-size="10" fill="#7B7C7F">DD / MM / YYYY</text>
+                <!-- Reason dropdown -->
+                <text x="34" y="180" font-family="Open Sans" font-size="11" fill="#1B2021">Reason</text>
+                <rect x="34" y="186" width="172" height="28" fill="none" stroke="#7B7C7F"/>
+                <text x="42" y="204" font-family="Open Sans" font-size="10" fill="#7B7C7F">Select…</text>
+                <polygon points="194,196 202,196 198,204" fill="#7B7C7F"/>
+                <!-- Notes -->
+                <text x="34" y="232" font-family="Open Sans" font-size="11" fill="#1B2021">Notes (optional)</text>
+                <rect x="34" y="238" width="172" height="50" fill="none" stroke="#7B7C7F"/>
+                <!-- Submit -->
+                <rect x="34" y="304" width="172" height="32" fill="#0066B2" stroke="#0066B2"/>
+                <text x="120" y="324" text-anchor="middle" font-family="Bahnschrift" font-size="12" fill="white" font-weight="700">Submit</text>
+
+                <!-- Annotation circles + leader lines -->
+                <line x1="212" y1="37" x2="244" y2="37" stroke="#0066B2" stroke-width="1"/>
+                <circle cx="252" cy="37" r="10" fill="#0066B2"/><text x="252" y="40" text-anchor="middle" font-family="Bahnschrift" font-size="10" fill="white" font-weight="700">1</text>
+
+                <line x1="206" y1="96" x2="244" y2="96" stroke="#0066B2" stroke-width="1"/>
+                <circle cx="252" cy="96" r="10" fill="#0066B2"/><text x="252" y="99" text-anchor="middle" font-family="Bahnschrift" font-size="10" fill="white" font-weight="700">2</text>
+
+                <line x1="206" y1="200" x2="244" y2="200" stroke="#0066B2" stroke-width="1"/>
+                <circle cx="252" cy="200" r="10" fill="#0066B2"/><text x="252" y="203" text-anchor="middle" font-family="Bahnschrift" font-size="10" fill="white" font-weight="700">3</text>
+
+                <line x1="206" y1="320" x2="244" y2="320" stroke="#0066B2" stroke-width="1"/>
+                <circle cx="252" cy="320" r="10" fill="#0066B2"/><text x="252" y="323" text-anchor="middle" font-family="Bahnschrift" font-size="10" fill="white" font-weight="700">4</text>
+              </svg>
+            </div>
+            <div class="anno-list">
+              <div class="it"><div class="num">1</div><p><strong>Header.</strong> Static. Always reads "New leave request" — does not change between users.</p></div>
+              <div class="it"><div class="num">2</div><p><strong>From date / To date.</strong> Tap opens a calendar picker. From-date cannot be in the past. To-date must be ≥ From-date.</p></div>
+              <div class="it"><div class="num">3</div><p><strong>Reason.</strong> Dropdown with fixed list: Sick, Personal, Bereavement, Other. "Other" reveals a free-text field below.</p></div>
+              <div class="it"><div class="num">4</div><p><strong>Submit.</strong> Disabled until both dates and reason are filled. On tap, submits and goes to the Confirmation screen.</p></div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--blue); text-align:center; max-width:820px; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem"><strong>Number every interactive element. Write the intent in plain words.</strong></p>
+        </div>
+      </div>
+
+      <!-- 14 SECTION: WORKED EXAMPLE -->
+      <div class="slide bg-blue" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Six</div>
+          <h1 class="display" style="color: white">Worked Example</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Three screens for a leave request app.</p>
+        </div>
+        <div class="section-num" style="color: white">06</div>
+      </div>
+
+      <!-- 15 THREE SCREENS -->
+      <div class="slide accent-blue bg-subtle" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span> Three screens · one user journey</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading" style="font-size:clamp(1.5rem, 3vw, 2.2rem)">List · New request · Confirmation</h2></div>
+          <div class="screens-row">
+
+            <!-- Screen 1: List -->
+            <div class="screen">
+              <div class="wf-canvas" style="padding:0.4rem;">
+                <svg viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <rect x="6" y="6" width="188" height="308" fill="#fff" stroke="#7B7C7F"/>
+                  <rect x="6" y="6" width="188" height="30" fill="#EDEDED"/>
+                  <text x="100" y="26" text-anchor="middle" font-family="Bahnschrift" font-size="11" fill="#1B2021">My leave requests</text>
+                  <!-- list items -->
+                  <rect x="14" y="44" width="172" height="40" fill="none" stroke="#7B7C7F"/>
+                  <circle cx="26" cy="64" r="5" fill="#7BC950"/>
+                  <text x="38" y="60" font-family="Open Sans" font-size="9" fill="#1B2021" font-weight="700">12 – 14 May</text>
+                  <text x="38" y="74" font-family="Open Sans" font-size="8" fill="#7B7C7F">Approved</text>
+                  <rect x="14" y="92" width="172" height="40" fill="none" stroke="#7B7C7F"/>
+                  <circle cx="26" cy="112" r="5" fill="#247EC1"/>
+                  <text x="38" y="108" font-family="Open Sans" font-size="9" fill="#1B2021" font-weight="700">2 Jun</text>
+                  <text x="38" y="122" font-family="Open Sans" font-size="8" fill="#7B7C7F">Pending</text>
+                  <rect x="14" y="140" width="172" height="40" fill="none" stroke="#7B7C7F"/>
+                  <circle cx="26" cy="160" r="5" fill="#D80032"/>
+                  <text x="38" y="156" font-family="Open Sans" font-size="9" fill="#1B2021" font-weight="700">8 Jun</text>
+                  <text x="38" y="170" font-family="Open Sans" font-size="8" fill="#7B7C7F">Rejected</text>
+                  <!-- Bottom button -->
+                  <rect x="40" y="270" width="120" height="32" fill="#0066B2"/>
+                  <text x="100" y="290" text-anchor="middle" font-family="Bahnschrift" font-size="11" fill="white" font-weight="700">+ New request</text>
+                  <!-- Annotation tags -->
+                  <circle cx="190" cy="20" r="9" fill="#0066B2"/><text x="190" y="23" text-anchor="middle" font-family="Bahnschrift" font-size="9" fill="white" font-weight="700">1</text>
+                  <circle cx="190" cy="64" r="9" fill="#0066B2"/><text x="190" y="67" text-anchor="middle" font-family="Bahnschrift" font-size="9" fill="white" font-weight="700">2</text>
+                  <circle cx="170" cy="286" r="9" fill="#0066B2"/><text x="170" y="289" text-anchor="middle" font-family="Bahnschrift" font-size="9" fill="white" font-weight="700">3</text>
+                </svg>
+              </div>
+              <div class="cap">Screen 1 · List</div>
+              <div style="font-size:0.78rem; color:var(--muted); padding:0.4rem 0.5rem 0; line-height:1.5">
+                <p><strong>1.</strong> Header. Static.</p>
+                <p><strong>2.</strong> Tap a row to view details. Dot colour = status (green/blue/red).</p>
+                <p><strong>3.</strong> Tap to go to Screen 2.</p>
+              </div>
+            </div>
+
+            <!-- Screen 2: New -->
+            <div class="screen">
+              <div class="wf-canvas" style="padding:0.4rem;">
+                <svg viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <rect x="6" y="6" width="188" height="308" fill="#fff" stroke="#7B7C7F"/>
+                  <rect x="6" y="6" width="188" height="30" fill="#EDEDED"/>
+                  <text x="100" y="26" text-anchor="middle" font-family="Bahnschrift" font-size="11" fill="#1B2021">New request</text>
+                  <text x="14" y="56" font-family="Open Sans" font-size="9" fill="#1B2021">From date</text>
+                  <rect x="14" y="62" width="172" height="22" fill="none" stroke="#7B7C7F"/>
+                  <text x="14" y="100" font-family="Open Sans" font-size="9" fill="#1B2021">To date</text>
+                  <rect x="14" y="106" width="172" height="22" fill="none" stroke="#7B7C7F"/>
+                  <text x="14" y="144" font-family="Open Sans" font-size="9" fill="#1B2021">Reason</text>
+                  <rect x="14" y="150" width="172" height="22" fill="none" stroke="#7B7C7F"/>
+                  <text x="14" y="188" font-family="Open Sans" font-size="9" fill="#1B2021">Notes</text>
+                  <rect x="14" y="194" width="172" height="50" fill="none" stroke="#7B7C7F"/>
+                  <rect x="40" y="270" width="120" height="32" fill="#0066B2"/>
+                  <text x="100" y="290" text-anchor="middle" font-family="Bahnschrift" font-size="11" fill="white" font-weight="700">Submit</text>
+                  <!-- annotation tags -->
+                  <circle cx="190" cy="73" r="9" fill="#0066B2"/><text x="190" y="76" text-anchor="middle" font-family="Bahnschrift" font-size="9" fill="white" font-weight="700">1</text>
+                  <circle cx="190" cy="161" r="9" fill="#0066B2"/><text x="190" y="164" text-anchor="middle" font-family="Bahnschrift" font-size="9" fill="white" font-weight="700">2</text>
+                  <circle cx="170" cy="286" r="9" fill="#0066B2"/><text x="170" y="289" text-anchor="middle" font-family="Bahnschrift" font-size="9" fill="white" font-weight="700">3</text>
+                </svg>
+              </div>
+              <div class="cap">Screen 2 · New request</div>
+              <div style="font-size:0.78rem; color:var(--muted); padding:0.4rem 0.5rem 0; line-height:1.5">
+                <p><strong>1.</strong> Calendar opens on tap. From ≤ To.</p>
+                <p><strong>2.</strong> Dropdown: Sick / Personal / Bereavement / Other.</p>
+                <p><strong>3.</strong> Disabled until 1 + 2 are filled. On tap → Screen 3.</p>
+              </div>
+            </div>
+
+            <!-- Screen 3: Confirmation -->
+            <div class="screen">
+              <div class="wf-canvas" style="padding:0.4rem;">
+                <svg viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <rect x="6" y="6" width="188" height="308" fill="#fff" stroke="#7B7C7F"/>
+                  <rect x="6" y="6" width="188" height="30" fill="#EDEDED"/>
+                  <text x="100" y="26" text-anchor="middle" font-family="Bahnschrift" font-size="11" fill="#1B2021">Submitted</text>
+                  <!-- check icon -->
+                  <circle cx="100" cy="100" r="32" fill="none" stroke="#7BC950" stroke-width="2.5"/>
+                  <path d="M85 100 L97 112 L116 90" stroke="#7BC950" stroke-width="3" fill="none" stroke-linecap="round"/>
+                  <text x="100" y="158" text-anchor="middle" font-family="Bahnschrift" font-size="13" fill="#1B2021" font-weight="700">Request sent</text>
+                  <text x="100" y="178" text-anchor="middle" font-family="Open Sans" font-size="9" fill="#7B7C7F">12 – 14 May · Sick leave</text>
+                  <text x="100" y="200" text-anchor="middle" font-family="Open Sans" font-size="9" fill="#7B7C7F">Your manager has been notified.</text>
+                  <rect x="40" y="240" width="120" height="32" fill="none" stroke="#0066B2" stroke-width="1.5"/>
+                  <text x="100" y="260" text-anchor="middle" font-family="Bahnschrift" font-size="11" fill="#0066B2" font-weight="700">Back to list</text>
+                  <!-- annotation tags -->
+                  <circle cx="160" cy="100" r="9" fill="#0066B2"/><text x="160" y="103" text-anchor="middle" font-family="Bahnschrift" font-size="9" fill="white" font-weight="700">1</text>
+                  <circle cx="170" cy="256" r="9" fill="#0066B2"/><text x="170" y="259" text-anchor="middle" font-family="Bahnschrift" font-size="9" fill="white" font-weight="700">2</text>
+                </svg>
+              </div>
+              <div class="cap">Screen 3 · Confirmation</div>
+              <div style="font-size:0.78rem; color:var(--muted); padding:0.4rem 0.5rem 0; line-height:1.5">
+                <p><strong>1.</strong> Green check confirms send. Echo dates + reason so the user can verify.</p>
+                <p><strong>2.</strong> Tap to return to Screen 1. The new request appears at top of the list, status "Pending".</p>
+              </div>
+            </div>
+
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">Three grey screens. A few annotations. The whole feature is now agreeable in 5 minutes.</p>
+        </div>
+      </div>
+
+      <!-- 16 SECTION: HANDS-ON -->
+      <div class="slide bg-blue" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Seven · Hands-on</div>
+          <h1 class="display" style="color: white">Paper.<br>Pen.<br>25 minutes.</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Wireframe 3 screens. Annotate them. Pin them up.</p>
+        </div>
+        <div class="section-num" style="color: white">07</div>
+      </div>
+
+      <!-- 17 ACTIVITY BRIEF -->
+      <div class="slide accent-blue bg-subtle" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span> Pick one. Sketch three screens.</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading" style="font-size:clamp(1.6rem, 3.2vw, 2.4rem)">Pick ONE feature. Sketch <span style="color:var(--blue)">three screens</span> for it.</h2></div>
+          <div class="choice-grid">
+            <div class="choice">
+              <h6>🏛️ Option A</h6>
+              <p style="font-weight:700; color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; margin-bottom:0.4rem">GMC visitor registration</h6>
+              <p>A new visitor arrives at GMC. They need to register, get a visitor pass, and see where to go next.</p>
+            </div>
+            <div class="choice">
+              <h6>🍱 Option B</h6>
+              <p style="font-weight:700; color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; margin-bottom:0.4rem">Pelsung canteen lunch ordering</h6>
+              <p>A trainee picks today's lunch in the morning. Pays via mBoB. Gets a token to collect at noon.</p>
+            </div>
+            <div class="choice">
+              <h6>🏫 Option C</h6>
+              <p style="font-weight:700; color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; margin-bottom:0.4rem">Parent-teacher meeting booking</h6>
+              <p>A parent books a 15-minute slot with their child's class teacher. Sees available slots and confirms one.</p>
+            </div>
+          </div>
+          <div class="cols-2" style="max-width:1100px; gap:1rem">
+            <div class="card" style="border-top:3px solid var(--blue)">
+              <h4 style="color:var(--blue)">How to spend 25 minutes</h4>
+              <ul style="font-size:0.92rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li><strong>0–3 min</strong> — pick one option. Just pick.</li>
+                <li><strong>3–8 min</strong> — list the 3 screens you'll draw on a small note.</li>
+                <li><strong>8–22 min</strong> — sketch them. Keep them grey. Add numbers.</li>
+                <li><strong>22–25 min</strong> — write the annotation list next to each number.</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--amber)">
+              <h4 style="color:#1C5B8C">Rules</h4>
+              <ul style="font-size:0.92rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li>No phones. No Figma. <strong>Paper only.</strong></li>
+                <li>One screen per page.</li>
+                <li>Number every button, field, dropdown.</li>
+                <li>If you find yourself drawing icons or picking colours — stop. You're designing, not communicating.</li>
+                <li>Stuck on one screen? Move on. You can come back.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 18 GROUP SHARE -->
+      <div class="slide accent-blue" data-slide="18">
+        <div class="slide-label"><span class="snum">18</span> Pin them up · 10 min walk-through</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Pin sketches on the wall. Walk through your annotations.</h2></div>
+          <div class="cols-2" style="max-width:1100px; gap:1rem">
+            <div class="card" style="border-top:3px solid var(--indigo)">
+              <h4 style="color:var(--indigo)">If you're sharing</h4>
+              <ul style="font-size:0.92rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li>Read your annotations out loud — point at each number.</li>
+                <li>Don't apologise for the drawing. Nobody's grading the lines.</li>
+                <li>Say what the user does, not what the system does. ("The user taps Submit" — not "the API returns 200").</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--blue)">
+              <h4 style="color:var(--blue)">If you're listening</h4>
+              <ul style="font-size:0.92rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li>Ask: <em>"What happens if I tap [thing] but [field] is empty?"</em></li>
+                <li>Ask: <em>"What's the most important thing on this screen? Is it the biggest?"</em></li>
+                <li>Ask: <em>"Where do I go after I tap this?"</em></li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">These three questions will catch most missing requirements before a single line of code is written.</p>
+        </div>
+      </div>
+
+      <!-- 19 WRAP -->
+      <div class="slide bg-dark" data-slide="19">
+        <div class="slide-label"><span class="snum">19</span> Wrap-up</div>
+        <div class="center" style="max-width: 860px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key takeaways</div>
+          <h2 class="heading" style="color: white;">What we covered today</h2>
+          <ul class="reveal-list" style="color: rgba(255,255,255,0.9); text-align:left; max-width: 760px; margin: 1.5rem auto; font-size: 1rem; line-height: 2;">
+            <li>✅ BAs wireframe to <strong>communicate intent</strong> — not to design.</li>
+            <li>✅ Three points on one spectrum: <strong>wireframe → mockup → prototype</strong>. BAs live at wireframe.</li>
+            <li>✅ <strong>Paper and pen are fine.</strong> Whiteboard, Balsamiq, Figma — all valid. Pick the cheapest one that works.</li>
+            <li>✅ Figma for BAs = <strong>read frames, drop comments</strong>. Designers do the rest.</li>
+            <li>✅ Layout: <strong>content priority · navigation · reading order · whitespace</strong>.</li>
+            <li>✅ <strong>Number every interactive element.</strong> Write the intent in plain words next to it.</li>
+            <li>✅ Stay grey. Stay rough. <strong>The roughness is a feature.</strong></li>
+          </ul>
+          <p style="color: var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.2rem; margin-top:1.5rem">A box-and-line sketch resolves more arguments than a thousand-word spec.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 19</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>

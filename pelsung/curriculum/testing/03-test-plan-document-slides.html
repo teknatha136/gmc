@@ -120,7 +120,9 @@
           <div class="agenda-row" onclick="goTo(10)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🧪 Strategy · levels · types · techniques</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">10 min</span></div>
           <div class="agenda-row" onclick="goTo(12)"><span class="ar-dot" style="background: var(--red)"></span><span class="ar-label">🚦 The 4 gates · entry → exit</span><span class="ar-badge" style="background:#FEE9EC;color:var(--red)">12 min</span></div>
           <div class="agenda-row" onclick="goTo(15)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">👥 RACI · schedule · defects</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">10 min</span></div>
-          <div class="agenda-row" onclick="goTo(19)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">📄 Worked example &amp; pitfalls</span><span class="ar-badge" style="background:#E6F0F8;color:var(--indigo)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(19)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">📄 Worked example</span><span class="ar-badge" style="background:#E6F0F8;color:var(--indigo)">5 min</span></div>
+          <div class="agenda-row" onclick="goTo(20)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🛠️ Hands-on · Build a Mini Test Plan</span><span class="ar-badge" style="background:#FFF4E3;color:#C48200">25 min</span></div>
+          <div class="agenda-row" onclick="goTo(22)"><span class="ar-dot" style="background: var(--red)"></span><span class="ar-label">⚠️ Pitfalls &amp; wrap</span><span class="ar-badge" style="background:#FEE9EC;color:var(--red)">5 min</span></div>
         </div>
       </div>
 
@@ -455,9 +457,61 @@
         </div>
       </div>
 
-      <!-- 20 PITFALLS -->
-      <div class="slide accent-blue" data-slide="20">
-        <div class="slide-label"><span class="snum">20</span> The 9 most common Test Plan mistakes</div>
+      <!-- 20 HANDS-ON · BRIEF + DELIVERABLES -->
+      <div class="slide accent-blue bg-subtle" data-slide="20">
+        <div class="slide-label"><span class="snum">20</span> Hands-on · Build a Mini Test Plan</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="margin-bottom:0.3rem">
+            <h2 class="heading">Pairs · 25 min · 15 build · 10 share</h2>
+          </div>
+          <div class="big-card" style="border-left:4px solid var(--amber); max-width:1100px;">
+            <div class="tag">📄 Project brief</div>
+            <h4 style="color:var(--blue)">GMC Visitor Portal</h4>
+            <p style="font-size:0.88rem; line-height:1.7; color:var(--text); margin:0">Bhutanese tourists pre-register for visa, hotels, and guides <strong>30 days before arrival</strong>. We're going live in <strong>6 weeks</strong>; QA team is <strong>1 lead + 2 engineers</strong>. Browsers must work on <strong>Chrome, Safari, and on Bhutan-typical 3G</strong>. Languages: <strong>English + Dzongkha</strong>. Payments via <strong>mBoB</strong>. Demo to <strong>GMC Authority on launch day</strong>.</p>
+          </div>
+          <div class="sec-grid" style="max-width:1200px;">
+            <div class="sec-card scope"><div class="num">1 · SCOPE</div><h6>3 IN · 3 OUT</h6><p>Pick 3 features in scope · 3 explicitly out (with a reason each).</p></div>
+            <div class="sec-card strat"><div class="num">2 · LEVELS</div><h6>Which to run?</h6><p>Unit · Integration · System · UAT — pick the levels you need.</p></div>
+            <div class="sec-card strat"><div class="num">3 · TYPES</div><h6>Pick 3–4</h6><p>Functional + 2–3 non-functional flavors (perf · security · a11y · localisation · compatibility · recovery).</p></div>
+            <div class="sec-card gate"><div class="num">4 · GATES</div><h6>3 Entry · 3 Exit</h6><p>What must be true to <em>start</em>? What must be true to <em>ship</em>?</p></div>
+            <div class="sec-card people"><div class="num">5 · RACI / RCI</div><h6>3 roles × 3 activities</h6><p>QA Lead · Dev Lead · PM across <em>write plan · execute · sign-off</em>. One R per row.</p></div>
+            <div class="sec-card risk"><div class="num">6 · RISKS</div><h6>Top 3 + mitigation</h6><p>What could derail this? Name an owner / mitigation for each.</p></div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:900px; font-style:italic">A4 sheet or notebook · one mini-plan per pair · we'll share at the end.</p>
+        </div>
+      </div>
+
+      <!-- 21 HANDS-ON · DEBRIEF -->
+      <div class="slide accent-blue" data-slide="21">
+        <div class="slide-label"><span class="snum">21</span> Debrief · share &amp; compare</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">10 min · quick group share</h2></div>
+          <div class="dual">
+            <div class="big-card" style="border-left:4px solid var(--blue)">
+              <h4>What each pair shares</h4>
+              <ul>
+                <li><strong>One row</strong> of your RACI/RCI table — read it out (activity · QA Lead · Dev Lead · PM)</li>
+                <li>Trainer reads back <strong>common entry/exit gaps</strong> across pairs</li>
+                <li><strong>One prize observation</strong> per pair — the sharpest call you made</li>
+              </ul>
+            </div>
+            <div class="big-card" style="border-left:4px solid var(--amber)">
+              <h4>What we listen for</h4>
+              <ul>
+                <li>Are exit criteria <strong>binary</strong>? ("0 P0 open" — not "few P0")</li>
+                <li>Did you put <strong>3G + Dzongkha + mBoB</strong> in scope or out — with a reason?</li>
+                <li>Is there <strong>exactly one R</strong> per RACI row?</li>
+                <li>Are risks tied to a <strong>named owner</strong>?</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:900px; font-style:italic">No "right answer" — defensible answers win. The plan is a contract; we listen for clarity.</p>
+        </div>
+      </div>
+
+      <!-- 22 PITFALLS -->
+      <div class="slide accent-blue" data-slide="22">
+        <div class="slide-label"><span class="snum">22</span> The 9 most common Test Plan mistakes</div>
         <div class="stack" style="align-items:center; width:100%">
           <div class="pitfall-tbl">
             <table>
@@ -478,9 +532,9 @@
         </div>
       </div>
 
-      <!-- 21 WRAP -->
-      <div class="slide bg-dark" data-slide="21">
-        <div class="slide-label"><span class="snum">21</span> Wrap-up</div>
+      <!-- 23 WRAP -->
+      <div class="slide bg-dark" data-slide="23">
+        <div class="slide-label"><span class="snum">23</span> Wrap-up</div>
         <div class="center" style="max-width: 860px">
           <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key Takeaways</div>
           <h2 class="heading" style="color: white;">What we covered today</h2>
@@ -503,7 +557,7 @@
     <div id="progress"></div>
     <div id="nav">
       <button class="nav-btn" onclick="prevSlide()">←</button>
-      <span id="slide-counter">1 / 21</span>
+      <span id="slide-counter">1 / 23</span>
       <button class="nav-btn" onclick="nextSlide()">→</button>
     </div>
     <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>

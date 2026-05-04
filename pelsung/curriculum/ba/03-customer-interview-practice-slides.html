@@ -1,0 +1,833 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customer Interview Practice — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      /* ========== Class-specific helpers ========== */
+
+      /* Brand watermark on every content slide */
+      .brand-watermark {
+        position: absolute;
+        bottom: 16px;
+        right: 22px;
+        height: 22px;
+        opacity: 0.35;
+        z-index: 0;
+        pointer-events: none;
+      }
+      .brand-watermark.on-dark { filter: brightness(0) invert(1); opacity: 0.55; }
+
+      /* Recap pair card */
+      .pair-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.9rem; width:100%; max-width:1050px; }
+      @media (max-width: 820px){ .pair-grid { grid-template-columns:1fr; } }
+      .pair-col { background:white; border:1px solid var(--border); border-radius:10px; padding:0.9rem 1.1rem; }
+      .pair-col.bad { border-top:4px solid var(--red); }
+      .pair-col.good { border-top:4px solid var(--green); }
+      .pair-col h5 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.4rem; }
+      .pair-col.bad h5 { color:var(--red); }
+      .pair-col.good h5 { color:#3D7A3D; }
+      .pair-col ul { padding-left:1.1rem; }
+      .pair-col li { font-size:0.92rem; color:var(--text); line-height:1.65; margin:0.25rem 0; }
+      .pair-col li em { color:var(--muted); font-style:normal; font-size:0.82rem; display:block; margin-top:0.1rem; }
+
+      /* Interview arc */
+      .arc-row { display:flex; gap:0.7rem; flex-wrap:wrap; justify-content:center; width:100%; max-width:1150px; }
+      .arc-step { background:white; border:1px solid var(--border); border-top:4px solid var(--blue); border-radius:10px; padding:0.85rem 1rem; flex:1 1 200px; min-width:190px; }
+      .arc-step .num { color:var(--muted); font-size:0.7rem; text-transform:uppercase; letter-spacing:0.08em; font-weight:700; margin-bottom:0.25rem; }
+      .arc-step h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; margin-bottom:0.3rem; }
+      .arc-step p { font-size:0.85rem; color:var(--text); line-height:1.55; }
+      .arc-step .mins { display:inline-block; margin-top:0.45rem; font-size:0.72rem; color:var(--blue); font-weight:700; background:#E6F0F8; padding:0.15rem 0.55rem; border-radius:100px; letter-spacing:0.04em; }
+      .arc-step.s1 { border-top-color:var(--amber); }
+      .arc-step.s2 { border-top-color:var(--blue); }
+      .arc-step.s3 { border-top-color:var(--indigo); }
+      .arc-step.s4 { border-top-color:var(--green); }
+      .arc-step.s1 .mins { color:#1C5B8C; background:#EBF0F7; }
+      .arc-step.s3 .mins { color:var(--indigo); background:#E6F0F8; }
+      .arc-step.s4 .mins { color:#3D7A3D; background:#EAF6E0; }
+
+      /* Pain-point cues grid */
+      .cue-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:0.8rem; width:100%; max-width:1050px; }
+      @media (max-width: 720px){ .cue-grid { grid-template-columns:1fr; } }
+      .cue { background:white; border:1px solid var(--border); border-left:4px solid var(--amber); border-radius:10px; padding:0.85rem 1.05rem; }
+      .cue h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.3rem; }
+      .cue p { font-size:0.88rem; color:var(--text); line-height:1.6; }
+      .cue p .quote { color:var(--blue); font-style:italic; }
+
+      /* Leading → Neutral transformations */
+      .lead-list { width:100%; max-width:1050px; display:flex; flex-direction:column; gap:0.55rem; }
+      .lead-row { display:grid; grid-template-columns: 1fr auto 1fr; gap:0.8rem; align-items:stretch; background:white; border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+      @media (max-width: 720px){ .lead-row { grid-template-columns: 1fr; } }
+      .lead-bad { background:#FFF3F4; padding:0.7rem 1rem; border-right:1px solid var(--border); }
+      .lead-good { background:#F1F8EB; padding:0.7rem 1rem; }
+      .lead-row .arrow { display:flex; align-items:center; justify-content:center; padding:0 0.6rem; color:var(--muted); font-size:1.2rem; }
+      @media (max-width: 720px){ .lead-row .arrow { padding:0.2rem 0; } .lead-bad { border-right:0; border-bottom:1px solid var(--border); } }
+      .lead-row .lbl { font-size:0.7rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.2rem; }
+      .lead-bad .lbl { color:var(--red); }
+      .lead-good .lbl { color:#3D7A3D; }
+      .lead-row p { font-size:0.9rem; color:var(--text); line-height:1.55; }
+      .lead-row .ctx { font-size:0.72rem; color:var(--muted); font-style:italic; margin-top:0.25rem; }
+
+      /* Two-column note method */
+      .notebook { background:white; border:1px solid var(--border); border-radius:12px; overflow:hidden; max-width:1000px; width:100%; box-shadow:0 6px 18px rgba(0,0,0,0.05); }
+      .notebook-head { background:var(--bg); padding:0.55rem 1rem; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:0.5rem; color:var(--muted); font-size:0.75rem; text-transform:uppercase; letter-spacing:0.07em; font-weight:700; }
+      .notebook-cols { display:grid; grid-template-columns: 1.2fr 1fr; min-height:280px; }
+      @media (max-width: 720px){ .notebook-cols { grid-template-columns:1fr; } }
+      .nb-col { padding:0.9rem 1.1rem; }
+      .nb-col.left { border-right:1px solid var(--border); }
+      @media (max-width: 720px){ .nb-col.left { border-right:0; border-bottom:1px solid var(--border); } }
+      .nb-col h6 { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.4rem; }
+      .nb-col.right h6 { color:var(--indigo); }
+      .nb-col ul { list-style:none; padding:0; }
+      .nb-col li { font-size:0.86rem; color:var(--text); line-height:1.6; padding:0.3rem 0; border-bottom:1px dashed var(--border); }
+      .nb-col li:last-child { border-bottom:0; }
+      .nb-col .verbatim { color:var(--blue); font-style:italic; }
+      .nb-col .obs { color:var(--muted); font-size:0.8rem; }
+
+      /* Roleplay role chip cards */
+      .role-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:0.85rem; width:100%; max-width:1050px; }
+      @media (max-width: 820px){ .role-grid { grid-template-columns:1fr; } }
+      .role { background:white; border:1px solid var(--border); border-radius:10px; padding:0.95rem 1.1rem; text-align:left; position:relative; }
+      .role.interviewer { border-top:4px solid var(--blue); }
+      .role.customer { border-top:4px solid var(--amber); }
+      .role.observer { border-top:4px solid var(--indigo); }
+      .role .role-tag { font-size:0.7rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-bottom:0.25rem; }
+      .role h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; margin-bottom:0.4rem; }
+      .role ul { padding-left:1.1rem; }
+      .role li { font-size:0.85rem; color:var(--text); line-height:1.55; margin:0.2rem 0; }
+
+      .scenario-card { background:white; border:2px solid var(--blue); border-radius:14px; padding:1.1rem 1.4rem; max-width:880px; width:100%; }
+      .scenario-card .tag { background:#E6F0F8; color:var(--blue); font-size:0.7rem; font-weight:700; padding:0.2rem 0.6rem; border-radius:4px; letter-spacing:0.07em; text-transform:uppercase; }
+      .scenario-card h4 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.25rem; margin:0.45rem 0 0.4rem; }
+      .scenario-card p { font-size:0.95rem; color:var(--text); line-height:1.7; }
+      .scenario-card p strong { color:var(--blue); }
+
+      /* Timer ring (simple, reuses timer-display from shared, but standalone here) */
+      .ring-wrap { display:flex; flex-direction:column; align-items:center; gap:0.6rem; }
+      .ring { width:170px; height:170px; border-radius:50%; background:rgba(255,255,255,0.08); border:6px solid rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center; }
+      .ring .num { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:2.6rem; color:white; font-weight:700; letter-spacing:0.02em; }
+      .ring-controls { display:flex; gap:0.5rem; }
+      .ring-btn { background:rgba(255,255,255,0.16); color:white; border:1px solid rgba(255,255,255,0.24); padding:0.4rem 1rem; border-radius:100px; font-size:0.82rem; font-weight:600; cursor:pointer; }
+      .ring-btn:hover { background:rgba(255,255,255,0.26); }
+
+      .round-tasks { background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.18); border-radius:12px; padding:1rem 1.2rem; max-width:520px; }
+      .round-tasks h5 { color:white; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; margin-bottom:0.5rem; }
+      .round-tasks ul { list-style:none; padding:0; }
+      .round-tasks li { color:rgba(255,255,255,0.85); font-size:0.9rem; line-height:1.7; padding:0.25rem 0; display:flex; gap:0.6rem; }
+      .round-tasks li .dot { color:var(--amber); font-weight:800; }
+
+      /* Debrief prompts */
+      .debrief-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:0.9rem; max-width:1050px; width:100%; }
+      @media (max-width: 820px){ .debrief-grid { grid-template-columns:1fr; } }
+      .deb { background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.18); border-radius:12px; padding:1rem 1.15rem; color:white; }
+      .deb .ic { font-size:1.6rem; }
+      .deb h5 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; margin:0.3rem 0; }
+      .deb p { color:rgba(255,255,255,0.78); font-size:0.88rem; line-height:1.6; }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 1 — TITLE
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-gradient" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <img class="brand-watermark" src="../../../selise-brand/assets/SELISE_Logo_Primary.png" alt="SELISE" style="height:32px; opacity:0.85;" />
+        <div class="title-grid center">
+          <div>
+            <div class="date-badge"><span class="db-dot"></span> Business Analysis · Class 03</div>
+          </div>
+          <h1 class="display" style="color: var(--text)">
+            <span style="color: var(--blue)">Customer</span><br />
+            <span style="color: var(--indigo)">Interview Practice</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted)">
+            Live role-play · Listening for pain · Open questions · Notes that survive the room
+          </p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">Role-play</span>
+            <span class="class-tag tag-blue">Pain Points</span>
+            <span class="class-tag tag-blue">Open Questions</span>
+            <span class="class-tag tag-indigo">Note-Taking</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → or click the right side to advance</div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 2 — AGENDA
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <img class="brand-watermark" src="../../../selise-brand/assets/SELISE_Logo_Primary.png" alt="SELISE" />
+        <div class="stack" style="max-width: 780px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">Session Journey · ~90 min</h2>
+            <p class="body-md" style="color: var(--muted); margin-top:0.3rem">Light recap, then we practice. A lot.</p>
+          </div>
+          <div class="agenda-row" onclick="goTo(2)">
+            <span class="ar-dot" style="background: var(--blue)"></span>
+            <span class="ar-label">🧠 Quick recap from Class 02</span>
+            <span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">8 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(5)">
+            <span class="ar-dot" style="background: var(--indigo)"></span>
+            <span class="ar-label">🛤 The interview arc · 4 phases</span>
+            <span class="ar-badge" style="background:#E6F0F8;color:var(--indigo)">7 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(6)">
+            <span class="ar-dot" style="background: var(--amber)"></span>
+            <span class="ar-label">👂 Listening for pain points</span>
+            <span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">8 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(7)">
+            <span class="ar-dot" style="background: var(--red)"></span>
+            <span class="ar-label">🚧 Leading → Neutral questions</span>
+            <span class="ar-badge" style="background:#FEE9EC;color:var(--red)">7 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(8)">
+            <span class="ar-dot" style="background: var(--blue)"></span>
+            <span class="ar-label">📓 Two-column note method</span>
+            <span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">5 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(9)">
+            <span class="ar-dot" style="background: var(--amber)"></span>
+            <span class="ar-label">🎭 Round 1 · mBoB &amp; an elderly user</span>
+            <span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">17 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(11)">
+            <span class="ar-dot" style="background: var(--amber)"></span>
+            <span class="ar-label">🎭 Round 2 · Shop owner &amp; QR payments</span>
+            <span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">17 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(13)">
+            <span class="ar-dot" style="background: var(--green)"></span>
+            <span class="ar-label">💬 Group debrief &amp; wrap</span>
+            <span class="ar-badge" style="background:#EAF6E0;color:#3D7A3D">10 min</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 3 — RECAP: OPEN VS CLOSED
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> Recap · Open vs Closed</div>
+        <img class="brand-watermark" src="../../../selise-brand/assets/SELISE_Logo_Primary.png" alt="SELISE" />
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center">
+            <div class="pill pill-blue">Quick Recap</div>
+            <h2 class="heading" style="font-size: clamp(1.7rem, 3.2vw, 2.5rem)">Open questions open mouths.<br/>Closed questions close them.</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:0.4rem">From last class — same idea, fresh examples.</p>
+          </div>
+          <div class="pair-grid">
+            <div class="pair-col bad">
+              <h5>✗ Closed — yes / no / one word</h5>
+              <ul>
+                <li>"Do you use mBoB?"<em>Answer: "Yes." End of trail.</em></li>
+                <li>"Is the bus schedule okay?"<em>You learn nothing useful.</em></li>
+                <li>"Are you happy with your bank?"<em>Most people say "yes" to be polite.</em></li>
+              </ul>
+            </div>
+            <div class="pair-col good">
+              <h5>✓ Open — invites a story</h5>
+              <ul>
+                <li>"Walk me through the last time you sent money on mBoB."<em>You hear the whole journey.</em></li>
+                <li>"Tell me how you usually plan a bus trip to Thimphu."<em>You hear what they actually do.</em></li>
+                <li>"What's the most frustrating part of banking for you?"<em>Now we're getting somewhere.</em></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 4 — RECAP: PROBLEM VS SOLUTION LANGUAGE + "TELL ME ABOUT A TIME"
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> Recap · Problem-language &amp; "Tell me about…"</div>
+        <img class="brand-watermark" src="../../../selise-brand/assets/SELISE_Logo_Primary.png" alt="SELISE" />
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.3rem)">Two habits that change every interview</h2>
+          </div>
+          <div class="pair-grid">
+            <div class="pair-col bad">
+              <h5>✗ Solution-language</h5>
+              <ul>
+                <li>"Should we add a bigger Send button?"<em>You're guessing the fix. Skip the problem.</em></li>
+                <li>"Would an SMS reminder help?"<em>Customer says "sure" — means nothing.</em></li>
+                <li>"Do you want a simpler login?"<em>Everyone wants simpler. Tells you zero.</em></li>
+              </ul>
+            </div>
+            <div class="pair-col good">
+              <h5>✓ Problem-language &amp; stories</h5>
+              <ul>
+                <li>"<strong>Tell me about a time</strong> you tried to send money and it didn't go through."<em>Real moment. Real friction.</em></li>
+                <li>"What did you do <strong>last time</strong> you missed a bill payment?"<em>You hear the workaround.</em></li>
+                <li>"<strong>Walk me through</strong> the last time you used the bank app."<em>Step-by-step truth.</em></li>
+              </ul>
+            </div>
+          </div>
+          <div class="card" style="background:var(--bg); border:2px dashed var(--border); text-align:center; max-width:760px; padding:0.8rem 1rem;">
+            <p class="body-md" style="color:var(--text)">
+              🎯 <strong>Golden phrase for today:</strong>
+              <span style="color:var(--blue); font-weight:700">"Tell me about a time when…"</span>
+              — use it whenever you feel the conversation drifting into hypotheticals.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 5 — INTERVIEW ARC
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo bg-subtle" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span> The Interview Arc</div>
+        <img class="brand-watermark" src="../../../selise-brand/assets/SELISE_Logo_Primary.png" alt="SELISE" />
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center">
+            <div class="pill pill-indigo">A 20-minute interview has shape</div>
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.3rem)">Warm-up → Explore → Dig → Wrap</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:0.3rem">Don't open with the hardest question. Build trust, then go deep.</p>
+          </div>
+          <div class="arc-row">
+            <div class="arc-step s1">
+              <div class="num">Phase 1</div>
+              <h6>👋 Warm-up</h6>
+              <p>Smile. Introduce yourself. Explain why you're talking to them. Ask one easy life question — "How was your morning?"</p>
+              <span class="mins">~2 min</span>
+            </div>
+            <div class="arc-step s2">
+              <div class="num">Phase 2</div>
+              <h6>🌅 Open exploration</h6>
+              <p>Big, broad questions. Let them talk. "Tell me about a typical day at the shop." Don't interrupt. Don't pitch ideas.</p>
+              <span class="mins">~5 min</span>
+            </div>
+            <div class="arc-step s3">
+              <div class="num">Phase 3</div>
+              <h6>🔍 Focused dig</h6>
+              <p>Pick the most painful thing they mentioned and follow it. "You said the QR code never scans — when did that last happen?"</p>
+              <span class="mins">~10 min</span>
+            </div>
+            <div class="arc-step s4">
+              <div class="num">Phase 4</div>
+              <h6>🤝 Wrap &amp; summary</h6>
+              <p>Read back 2–3 things you heard. "So the biggest pain was X — did I get that right?" Thank them. Ask if you can follow up.</p>
+              <span class="mins">~3 min</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 6 — LISTENING FOR PAIN POINTS
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-amber" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> Listening for Pain Points</div>
+        <img class="brand-watermark" src="../../../selise-brand/assets/SELISE_Logo_Primary.png" alt="SELISE" />
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center">
+            <div class="pill pill-amber">No customer says "I have a pain point"</div>
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.3rem)">Listen for these 4 signals instead</h2>
+          </div>
+          <div class="cue-grid">
+            <div class="cue">
+              <h6>😤 Emotion</h6>
+              <p>Sighs, frustration, "ugh", a little laugh of defeat. <span class="quote">"Oh, mBoB? Don't even start me."</span></p>
+            </div>
+            <div class="cue">
+              <h6>🪨 Friction</h6>
+              <p>Moments where they slow down, repeat themselves, or describe doing the same step twice. <span class="quote">"Sometimes I have to log in three times before it works."</span></p>
+            </div>
+            <div class="cue">
+              <h6>🛠 Workarounds</h6>
+              <p>Anything they invented to cope. Spreadsheets, paper notebooks, calling a relative for help. <span class="quote">"I write the bus times in my diary because the app keeps crashing."</span></p>
+            </div>
+            <div class="cue">
+              <h6>📣 Complaints &amp; comparisons</h6>
+              <p>"It used to be better when…", "My friend's bank does it differently", "I gave up on it." <span class="quote">"I just go to the branch now."</span></p>
+            </div>
+          </div>
+          <p class="body-md" style="color:rgba(255,255,255,0.9); max-width:780px; text-align:center; margin-top:0.4rem;">
+            When you hear any of these — <strong style="color:white">slow down and dig</strong>. That's the gold.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 7 — LEADING → NEUTRAL QUESTIONS
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> Leading → Neutral Questions</div>
+        <img class="brand-watermark" src="../../../selise-brand/assets/SELISE_Logo_Primary.png" alt="SELISE" />
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center">
+            <div class="pill pill-blue">Don't put the answer in the question</div>
+            <h2 class="heading" style="font-size: clamp(1.5rem, 2.8vw, 2.1rem)">Rewrite each leading question on the right</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:0.3rem">A leading question tells the customer what you want to hear. They'll oblige — and you'll learn nothing real.</p>
+          </div>
+          <div class="lead-list">
+            <div class="lead-row">
+              <div class="lead-bad">
+                <div class="lbl">✗ Leading</div>
+                <p>"The new mBoB update is much better, right?"</p>
+                <div class="ctx">Banking</div>
+              </div>
+              <div class="arrow">→</div>
+              <div class="lead-good">
+                <div class="lbl">✓ Neutral</div>
+                <p>"How has the latest mBoB update been for you?"</p>
+              </div>
+            </div>
+            <div class="lead-row">
+              <div class="lead-bad">
+                <div class="lbl">✗ Leading</div>
+                <p>"Don't you think the buses are always late?"</p>
+                <div class="ctx">Transport</div>
+              </div>
+              <div class="arrow">→</div>
+              <div class="lead-good">
+                <div class="lbl">✓ Neutral</div>
+                <p>"How reliable have the buses been on your usual route?"</p>
+              </div>
+            </div>
+            <div class="lead-row">
+              <div class="lead-bad">
+                <div class="lbl">✗ Leading</div>
+                <p>"Wouldn't a faster login save you a lot of time?"</p>
+                <div class="ctx">Banking</div>
+              </div>
+              <div class="arrow">→</div>
+              <div class="lead-good">
+                <div class="lbl">✓ Neutral</div>
+                <p>"Tell me what logging in usually feels like for you."</p>
+              </div>
+            </div>
+            <div class="lead-row">
+              <div class="lead-bad">
+                <div class="lbl">✗ Leading</div>
+                <p>"The college schedule is confusing, isn't it?"</p>
+                <div class="ctx">Schools</div>
+              </div>
+              <div class="arrow">→</div>
+              <div class="lead-good">
+                <div class="lbl">✓ Neutral</div>
+                <p>"Walk me through how you find out your weekly classes."</p>
+              </div>
+            </div>
+            <div class="lead-row">
+              <div class="lead-bad">
+                <div class="lbl">✗ Leading</div>
+                <p>"You'd prefer paying by QR than cash, no?"</p>
+                <div class="ctx">Shop owners</div>
+              </div>
+              <div class="arrow">→</div>
+              <div class="lead-good">
+                <div class="lbl">✓ Neutral</div>
+                <p>"How do customers usually pay you these days?"</p>
+              </div>
+            </div>
+            <div class="lead-row">
+              <div class="lead-bad">
+                <div class="lbl">✗ Leading</div>
+                <p>"Government offices are always slow, right?"</p>
+                <div class="ctx">Public services</div>
+              </div>
+              <div class="arrow">→</div>
+              <div class="lead-good">
+                <div class="lbl">✓ Neutral</div>
+                <p>"Tell me about the last time you visited a government office."</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 8 — TWO-COLUMN NOTE METHOD
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> Two-Column Note Method</div>
+        <img class="brand-watermark" src="../../../selise-brand/assets/SELISE_Logo_Primary.png" alt="SELISE" />
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center">
+            <div class="pill pill-blue">Notes that survive the room</div>
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.3rem)">Left column: their words. Right column: yours.</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:0.3rem">Write a customer's actual words on the left — exactly. Your observations and follow-ups go on the right.</p>
+          </div>
+          <div class="notebook">
+            <div class="notebook-head">📓 Interview · Pema · 2026-04-22 · mBoB</div>
+            <div class="notebook-cols">
+              <div class="nb-col left">
+                <h6>🗣 Verbatim phrases</h6>
+                <ul>
+                  <li class="verbatim">"It always asks me to log in twice."</li>
+                  <li class="verbatim">"My daughter does it for me, actually."</li>
+                  <li class="verbatim">"I don't trust the QR thing."</li>
+                  <li class="verbatim">"I wrote my password on a paper inside my purse."</li>
+                </ul>
+              </div>
+              <div class="nb-col right">
+                <h6>👀 Observations &amp; follow-ups</h6>
+                <ul>
+                  <li class="obs">Body language: sighed and looked away when describing login</li>
+                  <li class="obs">Contradiction: said "I use it daily" then said "my daughter does it"</li>
+                  <li class="obs">Workaround: paper password — security risk worth digging into</li>
+                  <li class="obs">→ Follow-up: ask <em>when</em> the double-login started</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); max-width:820px; text-align:center;">
+            Capture <strong style="color:var(--text)">verbatim quotes</strong>, <strong style="color:var(--text)">body language</strong>, <strong style="color:var(--text)">contradictions</strong>, and a <strong style="color:var(--text)">follow-ups list</strong>. Don't try to write everything — write what surprises you.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 9 — ROUND 1 SETUP
+      ══════════════════════════════════════════ -->
+      <div class="slide bg-blue" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> Round 1 · Role-Play Setup</div>
+        <img class="brand-watermark on-dark" src="../../../selise-brand/assets/SELISE_Logo_Reversed.png" alt="SELISE" />
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center">
+            <div class="pill pill-white" style="margin:0 auto 1rem">🎭 Trios — pick now, sit knee-to-knee</div>
+            <h2 class="heading" style="color:white; font-size:clamp(1.7rem, 3.2vw, 2.5rem)">Round 1<br/>The mBoB First-Timer</h2>
+          </div>
+          <div class="scenario-card" style="background:white">
+            <span class="tag">Scenario</span>
+            <h4>👵 An elderly person trying to use mBoB for the first time</h4>
+            <p>Your customer is in their 60s, lives in Gelephu, has a smartphone their son set up. They've never used a banking app — but their pension is now coming through it. They want to send Nu. 500 to their grandchild for losar. <strong>Interviewer: find out what's hard, what's confusing, and what they actually do when stuck.</strong></p>
+          </div>
+          <div class="role-grid">
+            <div class="role interviewer">
+              <div class="role-tag">Role 1</div>
+              <h5>🎤 Interviewer</h5>
+              <ul>
+                <li>Warm-up → explore → dig → wrap</li>
+                <li>Open questions only</li>
+                <li>"Tell me about a time…"</li>
+                <li>Don't pitch solutions</li>
+              </ul>
+            </div>
+            <div class="role customer">
+              <div class="role-tag">Role 2</div>
+              <h5>🧓 Customer</h5>
+              <ul>
+                <li>Stay in character — be honest, a bit confused</li>
+                <li>Don't volunteer everything; make them ask</li>
+                <li>Use real Bhutanese context if you can</li>
+              </ul>
+            </div>
+            <div class="role observer">
+              <div class="role-tag">Role 3</div>
+              <h5>📓 Observer / Notetaker</h5>
+              <ul>
+                <li>Two-column notes</li>
+                <li>Tally leading questions</li>
+                <li>Spot one missed follow-up</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 10 — ROUND 1 TIMER
+      ══════════════════════════════════════════ -->
+      <div class="slide bg-indigo" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> Round 1 · Go!</div>
+        <img class="brand-watermark on-dark" src="../../../selise-brand/assets/SELISE_Logo_Reversed.png" alt="SELISE" />
+        <div style="display:flex; gap:clamp(2rem, 5vw, 4rem); align-items:center; justify-content:center; flex-wrap:wrap; width:100%;">
+          <div class="ring-wrap">
+            <div class="pill pill-white" style="margin:0 auto 0.5rem">⏱ 12 min interview · 5 min debrief</div>
+            <div class="ring"><div class="num" id="r1timer">12:00</div></div>
+            <div class="ring-controls">
+              <button class="ring-btn" onclick="startRing('r1timer', 12)">▶ Start</button>
+              <button class="ring-btn" onclick="resetRing('r1timer', 12)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="round-tasks">
+            <h5>What to do now</h5>
+            <ul>
+              <li><span class="dot">1.</span> Interviewer runs the arc · Customer stays in character</li>
+              <li><span class="dot">2.</span> Observer takes two-column notes · counts leading questions</li>
+              <li><span class="dot">3.</span> When timer ends — observer leads a 5-minute debrief inside the trio:
+                <em style="color:rgba(255,255,255,0.7);">what was the strongest pain point heard? one missed follow-up?</em></li>
+              <li><span class="dot">4.</span> <strong style="color:white">Then rotate</strong> roles for Round 2 (next slide).</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 11 — ROUND 2 SETUP
+      ══════════════════════════════════════════ -->
+      <div class="slide bg-blue" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> Round 2 · Rotate Roles</div>
+        <img class="brand-watermark on-dark" src="../../../selise-brand/assets/SELISE_Logo_Reversed.png" alt="SELISE" />
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center">
+            <div class="pill pill-white" style="margin:0 auto 1rem">🔁 Same trios, new roles</div>
+            <h2 class="heading" style="color:white; font-size:clamp(1.7rem, 3.2vw, 2.5rem)">Round 2<br/>The QR-Curious Shop Owner</h2>
+          </div>
+          <div class="scenario-card" style="background:white">
+            <span class="tag">Scenario</span>
+            <h4>🏪 A small shop owner switching from cash-only to QR payments</h4>
+            <p>Your customer runs a small grocery shop in Thimphu. Their kids told them to start accepting QR payments. They tried last week. Some customers managed; others got annoyed and walked out. They're not sure if it's worth keeping. <strong>Interviewer: find the friction, the workarounds, and what's actually stopping them.</strong></p>
+          </div>
+          <div class="role-grid">
+            <div class="role interviewer">
+              <div class="role-tag">New Role 1</div>
+              <h5>🎤 Interviewer</h5>
+              <ul>
+                <li>Whoever was Customer last time</li>
+                <li>Keep questions open and neutral</li>
+                <li>Listen for the 4 pain signals</li>
+              </ul>
+            </div>
+            <div class="role customer">
+              <div class="role-tag">New Role 2</div>
+              <h5>🛍 Customer</h5>
+              <ul>
+                <li>Whoever was Observer last time</li>
+                <li>Be a real shop owner — not too dramatic</li>
+                <li>Mention at least one workaround</li>
+              </ul>
+            </div>
+            <div class="role observer">
+              <div class="role-tag">New Role 3</div>
+              <h5>📓 Observer / Notetaker</h5>
+              <ul>
+                <li>Whoever was Interviewer last time</li>
+                <li>Mark every "Tell me about a time…"</li>
+                <li>Capture one verbatim quote you'd quote in a meeting</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 12 — ROUND 2 TIMER + OPTIONAL R3
+      ══════════════════════════════════════════ -->
+      <div class="slide bg-indigo" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> Round 2 · Go! &nbsp; (optional Round 3)</div>
+        <img class="brand-watermark on-dark" src="../../../selise-brand/assets/SELISE_Logo_Reversed.png" alt="SELISE" />
+        <div style="display:flex; gap:clamp(2rem, 5vw, 4rem); align-items:center; justify-content:center; flex-wrap:wrap; width:100%;">
+          <div class="ring-wrap">
+            <div class="pill pill-white" style="margin:0 auto 0.5rem">⏱ 12 min interview · 5 min debrief</div>
+            <div class="ring"><div class="num" id="r2timer">12:00</div></div>
+            <div class="ring-controls">
+              <button class="ring-btn" onclick="startRing('r2timer', 12)">▶ Start</button>
+              <button class="ring-btn" onclick="resetRing('r2timer', 12)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="round-tasks">
+            <h5>If we have time → Round 3</h5>
+            <ul>
+              <li><span class="dot">★</span> Pick a <strong style="color:white">real Pelsung trainee experience</strong> — Desuung life, the journey to Gelephu, juggling training with family.</li>
+              <li><span class="dot">★</span> Customer plays themselves. Interviewer runs the same arc.</li>
+              <li><span class="dot">★</span> Goal: prove you can run a real interview, not just a scripted one.</li>
+              <li><span class="dot">★</span> 10 min interview · 3 min debrief.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 13 — GROUP DEBRIEF
+      ══════════════════════════════════════════ -->
+      <div class="slide bg-dark" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> Group Debrief</div>
+        <img class="brand-watermark on-dark" src="../../../selise-brand/assets/SELISE_Logo_Reversed.png" alt="SELISE" />
+        <div class="center" style="max-width:1100px">
+          <div class="pill pill-white" style="margin:0 auto 1rem">🎤 Whole class · ~8 min</div>
+          <h2 class="heading" style="color:white; font-size:clamp(1.7rem, 3.2vw, 2.5rem); margin-bottom:1rem">Three questions. One trio at a time.</h2>
+          <div class="debrief-grid">
+            <div class="deb">
+              <div class="ic">😯</div>
+              <h5>What surprised you?</h5>
+              <p>A pain point you didn't expect. A workaround you'd never imagined. A quote that stuck.</p>
+            </div>
+            <div class="deb">
+              <div class="ic">😬</div>
+              <h5>What felt awkward?</h5>
+              <p>Did silence feel uncomfortable? Did you slip into solution-mode? Did a leading question sneak out?</p>
+            </div>
+            <div class="deb">
+              <div class="ic">✨</div>
+              <h5>What worked?</h5>
+              <p>One question that opened the customer up. One follow-up that paid off. One observation the notetaker caught.</p>
+            </div>
+          </div>
+          <p style="color:rgba(255,255,255,0.6); font-size:clamp(0.82rem, 1.1vw, 0.95rem); margin-top:1.5rem; line-height:1.6;">
+            Trainer: take 2–3 trios maximum. Pull out one verbatim quote per trio if possible.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 14 — WRAP & NEXT CLASS
+      ══════════════════════════════════════════ -->
+      <div class="slide accent-gradient" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> Wrap-up</div>
+        <img class="brand-watermark" src="../../../selise-brand/assets/SELISE_Logo_Primary.png" alt="SELISE" style="height:32px; opacity:0.9;" />
+        <div class="center" style="max-width:820px">
+          <div class="pill pill-blue" style="margin:0 auto 1rem">What you can now do</div>
+          <h1 class="display" style="font-size:clamp(1.9rem, 4.5vw, 3.4rem)">
+            <span style="color: var(--blue)">You ran</span><br/>
+            <span style="color: var(--indigo)">a real interview.</span>
+          </h1>
+          <ul class="reveal-list" id="wrap-list" style="max-width:680px; margin-top:1rem">
+            <li>Open questions, problem-language, "tell me about a time…" — used live, not just on slides.</li>
+            <li>Heard pain through <strong>emotion, friction, workarounds, and complaints</strong>.</li>
+            <li>Spotted leading questions and rewrote them on the fly.</li>
+            <li>Took two-column notes that capture <strong>their words</strong> and <strong>your thinking</strong>.</li>
+            <li>Next class: turning interview notes into a clean <strong>findings summary</strong> a stakeholder can read.</li>
+          </ul>
+          <p class="reveal-hint" id="wrap-hint">Press → / space to reveal each takeaway</p>
+          <p style="font-size:clamp(0.75rem, 1vw, 0.85rem); color:var(--faint); margin-top:1.5rem">
+            SELISE × Pelsung · Business Analysis · Class 03
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- /#deck -->
+
+    <!-- ===== CONTROLS ===== -->
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 14</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      /* ============================
+         SLIDE ENGINE
+      ============================ */
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      let current = 0;
+
+      function goTo(n) {
+        slides[current].classList.remove("active");
+        slides[current].classList.add("exit");
+        const old = current;
+        setTimeout(() => slides[old].classList.remove("exit"), 380);
+        current = Math.max(0, Math.min(n, total - 1));
+        slides[current].classList.add("active");
+        document.getElementById("slide-counter").textContent =
+          `${current + 1} / ${total}`;
+        document.getElementById("progress").style.width =
+          `${((current + 1) / total) * 100}%`;
+        initReveal(slides[current]);
+      }
+
+      function nextSlide() { if (current < total - 1) goTo(current + 1); }
+      function prevSlide() { if (current > 0) goTo(current - 1); }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight" || e.key === " ") { e.preventDefault(); handleForward(); }
+        if (e.key === "ArrowLeft") { e.preventDefault(); prevSlide(); }
+        if (e.key === "f" || e.key === "F") toggleFullscreen();
+      });
+
+      document.getElementById("deck").addEventListener("click", function (e) {
+        if (e.target.closest("button, .quiz-opt, .sl-item, .mq, a, input, select, textarea, .agenda-row, [data-noclick]")) return;
+        const pct = e.clientX / window.innerWidth;
+        if (pct < 0.15) prevSlide();
+        else if (pct > 0.85) handleForward();
+      });
+
+      function handleForward() {
+        const active = slides[current];
+        const list = active.querySelector(".reveal-list");
+        if (list) {
+          const hidden = list.querySelectorAll("li:not(.shown)");
+          if (hidden.length > 0) {
+            hidden[0].classList.add("shown");
+            const hint = active.querySelector(".reveal-hint");
+            if (hint && hidden.length === 1) hint.style.opacity = "0";
+            return;
+          }
+        }
+        nextSlide();
+      }
+
+      function initReveal(slide) {
+        const list = slide.querySelector(".reveal-list");
+        if (!list) return;
+        list.querySelectorAll("li").forEach((li) => li.classList.remove("shown"));
+        const hint = slide.querySelector(".reveal-hint");
+        if (hint) hint.style.opacity = "1";
+      }
+
+      slides[0].classList.add("active");
+      document.getElementById("progress").style.width = `${(1 / total) * 100}%`;
+
+      /* ============================
+         FULLSCREEN
+      ============================ */
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+          document.exitFullscreen().catch(() => {});
+        }
+      }
+
+      /* ============================
+         RING TIMERS (Round 1 / Round 2)
+      ============================ */
+      const ringState = {};
+      function startRing(id, minutes) {
+        if (ringState[id]?.interval) return;
+        if (!ringState[id]) ringState[id] = { remaining: minutes * 60 };
+        ringState[id].interval = setInterval(() => {
+          ringState[id].remaining--;
+          const el = document.getElementById(id);
+          if (!el) return;
+          if (ringState[id].remaining <= 0) {
+            clearInterval(ringState[id].interval);
+            ringState[id].interval = null;
+            el.textContent = "00:00";
+            el.style.color = "#ff5f56";
+            return;
+          }
+          const m = Math.floor(ringState[id].remaining / 60).toString().padStart(2, "0");
+          const s = (ringState[id].remaining % 60).toString().padStart(2, "0");
+          el.textContent = `${m}:${s}`;
+          if (ringState[id].remaining <= 60) el.style.color = "#febc2e";
+        }, 1000);
+      }
+      function resetRing(id, minutes) {
+        if (ringState[id]?.interval) {
+          clearInterval(ringState[id].interval);
+          ringState[id].interval = null;
+        }
+        ringState[id] = { remaining: minutes * 60 };
+        const el = document.getElementById(id);
+        if (el) {
+          el.textContent = `${minutes.toString().padStart(2, "0")}:00`;
+          el.style.color = "";
+        }
+      }
+    </script>
+  </body>
+</html>

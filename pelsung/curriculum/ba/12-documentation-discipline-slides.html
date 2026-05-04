@@ -1,0 +1,645 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentation Discipline — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      .tax-card { background:white; border:2px solid var(--blue); border-radius:12px; padding:1.1rem 1.4rem; max-width:880px; width:100%; }
+      .tax-card .lbl { color:var(--muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.08em; font-weight:700; margin-bottom:0.4rem; }
+      .tax-card h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-bottom:0.4rem; }
+      .tax-card p { font-size:0.96rem; color:var(--text); line-height:1.7; }
+
+      .wl-grid { display:grid; grid-template-columns: 1fr 1fr; gap:0.9rem; width:100%; max-width:1100px; }
+      @media (max-width: 820px){ .wl-grid { grid-template-columns: 1fr; } }
+      .wl { background:white; border:1px solid var(--border); border-radius:10px; padding:0.9rem 1.15rem; }
+      .wl.write { border-top:4px solid var(--blue); }
+      .wl.link { border-top:4px solid var(--amber); }
+      .wl h5 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; margin-bottom:0.4rem; }
+      .wl.write h5 { color:var(--blue); }
+      .wl.link h5 { color:#1C5B8C; }
+      .wl ul { padding-left:1.1rem; margin:0.2rem 0; }
+      .wl li { font-size:0.88rem; color:var(--text); line-height:1.7; margin:0.1rem 0; }
+      .wl .eg { margin-top:0.5rem; padding:0.5rem 0.7rem; background:var(--bg); border-radius:6px; font-size:0.82rem; color:var(--muted); font-style:italic; }
+
+      .hier { display:flex; flex-direction:column; gap:0.45rem; width:100%; max-width:920px; }
+      .hier-row { display:grid; grid-template-columns: 130px 1fr; gap:0.9rem; align-items:start; background:white; border:1px solid var(--border); border-left:5px solid var(--blue); border-radius:10px; padding:0.75rem 1rem; }
+      .hier-row.l1 { border-left-color:var(--indigo); }
+      .hier-row.l2 { border-left-color:var(--blue); }
+      .hier-row.l3 { border-left-color:var(--amber); }
+      .hier-row.l4 { border-left-color:#3D7A3D; }
+      .hier-row.l5 { border-left-color:var(--muted); }
+      .hier-row .lvlname { font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; color:var(--indigo); font-size:0.95rem; }
+      .hier-row .lvlname .sub { display:block; color:var(--muted); font-size:0.7rem; font-weight:400; text-transform:uppercase; letter-spacing:0.06em; margin-top:0.15rem; }
+      .hier-row .ex { font-size:0.9rem; color:var(--text); line-height:1.6; }
+      .hier-row .ex em { color:var(--muted); font-style:italic; font-size:0.83rem; display:block; margin-top:0.15rem; }
+
+      .lvf { display:grid; grid-template-columns: 1fr 1fr; gap:0.9rem; width:100%; max-width:1050px; }
+      @media (max-width: 820px){ .lvf { grid-template-columns: 1fr; } }
+      .lvf .col { background:white; border:1px solid var(--border); border-radius:10px; padding:0.9rem 1.15rem; }
+      .lvf .col.frozen { border-top:4px solid var(--indigo); }
+      .lvf .col.living { border-top:4px solid var(--green); }
+      .lvf .col h5 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; margin-bottom:0.4rem; }
+      .lvf .col.frozen h5 { color:var(--indigo); }
+      .lvf .col.living h5 { color:#3D7A3D; }
+      .lvf .col p { font-size:0.88rem; color:var(--text); line-height:1.6; }
+      .lvf .col ul { padding-left:1.1rem; margin-top:0.4rem; }
+      .lvf .col li { font-size:0.85rem; color:var(--text); line-height:1.65; margin:0.1rem 0; }
+      .lvf .col .stamp { display:inline-block; background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:0.2rem 0.5rem; font-size:0.72rem; color:var(--muted); font-family:'Courier New',monospace; margin-top:0.4rem; }
+
+      .decay-grid { display:grid; grid-template-columns: 1fr 1fr; gap:0.7rem; width:100%; max-width:1100px; }
+      @media (max-width: 820px){ .decay-grid { grid-template-columns: 1fr; } }
+      .dec { background:white; border:1px solid var(--border); border-left:4px solid var(--red); border-radius:10px; padding:0.8rem 1rem; }
+      .dec h6 { color:var(--red); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.25rem; }
+      .dec p { font-size:0.86rem; color:var(--text); line-height:1.55; }
+      .dec .eg { margin-top:0.3rem; padding-top:0.3rem; border-top:1px dashed var(--border); color:var(--muted); font-size:0.8rem; font-style:italic; }
+
+      .practice-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:0.7rem; width:100%; max-width:1100px; }
+      @media (max-width: 820px){ .practice-grid { grid-template-columns: 1fr; } }
+      .pr { background:white; border:1px solid var(--border); border-left:4px solid #3D7A3D; border-radius:10px; padding:0.8rem 1rem; }
+      .pr h6 { color:#3D7A3D; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.25rem; }
+      .pr p { font-size:0.86rem; color:var(--text); line-height:1.55; }
+      .pr .eg { margin-top:0.3rem; padding-top:0.3rem; border-top:1px dashed var(--border); color:var(--muted); font-size:0.8rem; font-style:italic; }
+
+      .tree { background:#001F35; color:#E6F0F8; border-radius:10px; padding:1rem 1.3rem; max-width:780px; width:100%; font-family:'Courier New',monospace; font-size:0.88rem; line-height:1.75; }
+      .tree .fld { color:#7dd3fc; font-weight:700; }
+      .tree .file { color:#86efac; }
+      .tree .cmt { color:rgba(255,255,255,0.45); font-style:italic; }
+
+      .specbox { background:white; border:1px solid var(--border); border-radius:12px; padding:0.9rem 1.2rem; max-width:900px; width:100%; }
+      .specbox h6 { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.92rem; margin:0.5rem 0 0.2rem; border-bottom:1px solid var(--border); padding-bottom:0.2rem; }
+      .specbox h6:first-child { margin-top:0; }
+      .specbox p { font-size:0.86rem; color:var(--text); line-height:1.65; margin:0.2rem 0; }
+      .specbox ul { padding-left:1.2rem; margin:0.2rem 0; }
+      .specbox li { font-size:0.85rem; color:var(--text); line-height:1.6; margin:0.1rem 0; }
+
+      .why-ai { display:grid; grid-template-columns: 1fr 1fr; gap:0.9rem; width:100%; max-width:1050px; }
+      @media (max-width: 820px){ .why-ai { grid-template-columns: 1fr; } }
+      .wai { background:white; border:1px solid var(--border); border-radius:10px; padding:0.9rem 1.15rem; }
+      .wai.bad { border-top:4px solid var(--red); }
+      .wai.good { border-top:4px solid #3D7A3D; }
+      .wai h5 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; margin-bottom:0.4rem; }
+      .wai.bad h5 { color:var(--red); }
+      .wai.good h5 { color:#3D7A3D; }
+      .wai pre { font-family:'Courier New',monospace; font-size:0.82rem; background:var(--bg); border-radius:6px; padding:0.6rem 0.85rem; line-height:1.6; white-space:pre-wrap; color:var(--text); }
+      .wai p { font-size:0.83rem; color:var(--muted); margin-top:0.5rem; font-style:italic; }
+
+      .claude-md { background:#001F35; color:#E6F0F8; border-radius:10px; padding:1rem 1.3rem; max-width:820px; width:100%; font-family:'Courier New',monospace; font-size:0.88rem; line-height:1.7; }
+      .claude-md .h { color:#7dd3fc; font-weight:700; }
+      .claude-md .v { color:#86efac; }
+      .claude-md .c { color:rgba(255,255,255,0.45); font-style:italic; }
+
+      .brief-box { background:white; border:2px dashed var(--blue); border-radius:12px; padding:1rem 1.3rem; max-width:900px; width:100%; }
+      .brief-box .tag { background:#E6F0F8; color:var(--blue); font-size:0.7rem; font-weight:700; padding:0.2rem 0.6rem; border-radius:4px; letter-spacing:0.07em; text-transform:uppercase; }
+      .brief-box h5 { color:var(--indigo); font-size:1.1rem; margin:0.4rem 0 0.3rem; font-family:'Bahnschrift','Segoe UI',sans-serif; }
+      .brief-box p { font-size:0.95rem; color:var(--text); line-height:1.7; }
+      .brief-box p strong { color:var(--indigo); }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>BA Vertical · Class 12</div></div>
+          <h1 class="display" style="color: var(--text)">
+            <span style="color: var(--blue)">Documentation</span><br />
+            <span style="color: var(--indigo)">Discipline</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted)">Docs are a tax. Pay it deliberately. Write the minimum that's maximally useful — and keep it alive.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">Write vs Link</span>
+            <span class="class-tag tag-blue">Living Docs</span>
+            <span class="class-tag tag-blue">agent-os</span>
+            <span class="class-tag tag-indigo">CLAUDE.md</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 AGENDA -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 800px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem"><h2 class="heading">Session Journey · ~90 min</h2></div>
+          <div class="agenda-row" onclick="goTo(2)"><span class="ar-dot" style="background: var(--red)"></span><span class="ar-label">💸 Docs are a tax — pay it deliberately</span><span class="ar-badge" style="background:#FEE9EC;color:var(--red)">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(5)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">📝 What to write down vs link</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(7)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🏛 The doc hierarchy</span><span class="ar-badge" style="background:#E6F0F8;color:var(--indigo)">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(8)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">❄️ Living vs frozen docs</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">7 min</span></div>
+          <div class="agenda-row" onclick="goTo(9)"><span class="ar-dot" style="background: var(--red)"></span><span class="ar-label">🍂 Why docs decay · 4 causes</span><span class="ar-badge" style="background:#FEE9EC;color:var(--red)">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(10)"><span class="ar-dot" style="background: #3D7A3D"></span><span class="ar-label">🌱 Practices that keep docs alive</span><span class="ar-badge" style="background:#F0F7EC;color:#3D7A3D">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(11)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🤖 agent-os · AI-friendly spec format</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">15 min</span></div>
+          <div class="agenda-row" onclick="goTo(17)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">📌 The CLAUDE.md pattern</span><span class="ar-badge" style="background:#E6F0F8;color:var(--indigo)">5 min</span></div>
+          <div class="agenda-row" onclick="goTo(18)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🧪 Hands-on · convert a casual spec</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">20 min</span></div>
+          <div class="agenda-row" onclick="goTo(20)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🎯 Wrap-up</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">2 min</span></div>
+        </div>
+      </div>
+
+      <!-- 3 SECTION: TAX -->
+      <div class="slide bg-dark" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part One</div>
+          <h1 class="display" style="color: white">Docs are<br>a Tax</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Every word you write is a word someone will need to update later.</p>
+        </div>
+        <div class="section-num" style="color: white">01</div>
+      </div>
+
+      <!-- 4 TAX FRAMING -->
+      <div class="slide accent-blue bg-subtle" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> The wedding-notes problem</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:880px">
+            <h2 class="heading">Think of a family wedding planning notebook.</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:1rem">You write down the guest count. The venue. The menu. The car list. Every detail. Then a cousin gets added. The menu changes. The driver cancels. <strong style="color:var(--indigo)">Every word you wrote is now a word someone has to fix.</strong></p>
+          </div>
+          <div class="tax-card">
+            <div class="lbl">The rule</div>
+            <h5>Documentation is not free.</h5>
+            <p>Every page you write costs effort to <strong>write</strong>, costs effort to <strong>read</strong>, and costs effort to <strong>keep correct</strong>. So the goal of a good BA is never "write more docs". It is: <strong style="color:var(--blue)">write the minimum that is maximally useful, and keep that alive.</strong></p>
+          </div>
+          <p class="body-md" style="color:var(--amber); text-align:center; max-width:820px; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem"><strong>Pay the tax deliberately. Don't write what you can't maintain.</strong></p>
+        </div>
+      </div>
+
+      <!-- 5 SECTION: WRITE VS LINK -->
+      <div class="slide bg-blue" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Two</div>
+          <h1 class="display" style="color: white">Write vs<br>Link</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Two columns. One decision aid you can use every day.</p>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- 6 WRITE VS LINK -->
+      <div class="slide accent-blue bg-subtle" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> A school-handbook example</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">A school handbook tells you what to do — but links the timetable.</h2><p class="body-md" style="color:var(--muted); max-width:840px">If the school <em>wrote</em> the timetable into the handbook, every change in the period schedule would force a reprint. So they <em>link</em> to the live one. Same idea in software docs.</p></div>
+          <div class="wl-grid">
+            <div class="wl write">
+              <h5>📝 Write it down</h5>
+              <ul>
+                <li><strong>Decisions</strong> — and the reason behind each one</li>
+                <li><strong>Acceptance criteria</strong> — what "done" looks like</li>
+                <li><strong>Requirements</strong> — what the system must do</li>
+                <li><strong>Sign-offs</strong> — who agreed and when</li>
+                <li><strong>Glossary</strong> — what each term means here</li>
+              </ul>
+              <div class="eg">These don't change daily. They are the <em>handbook</em>.</div>
+            </div>
+            <div class="wl link">
+              <h5>🔗 Link to it</h5>
+              <ul>
+                <li><strong>Dashboards</strong> — live numbers, not screenshots</li>
+                <li><strong>Code</strong> — the repo, not pasted snippets</li>
+                <li><strong>Designs</strong> — Figma file, not exported PNGs</li>
+                <li><strong>Schedules / rosters</strong> — the live sheet</li>
+                <li>Anything <strong>maintained somewhere else</strong></li>
+              </ul>
+              <div class="eg">These change often. They are the <em>timetable</em>.</div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px"><strong>The test:</strong> "Will this fact change without me knowing?" If yes — link, don't copy.</p>
+        </div>
+      </div>
+
+      <!-- 7 HIERARCHY -->
+      <div class="slide accent-blue" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> The doc hierarchy</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Docs cascade — like a government circular.</h2><p class="body-md" style="color:var(--muted); max-width:820px">A national policy comes down. Each ministry adds its own. Each office adds a memo. Software docs work the same way — each level narrows the scope.</p></div>
+          <div class="hier">
+            <div class="hier-row l1">
+              <div class="lvlname">Org-wide<span class="sub">Level 1</span></div>
+              <div class="ex">Brand guide, security policy, code of conduct, hiring rules.<em>SELISE Brand Guidelines applies to every team, every project, every cohort.</em></div>
+            </div>
+            <div class="hier-row l2">
+              <div class="lvlname">Project-wide<span class="sub">Level 2</span></div>
+              <div class="ex">Vision, scope, glossary, stakeholders, the project's CLAUDE.md.<em>"GMC Portal — what it is, who uses it, what's in/out of scope."</em></div>
+            </div>
+            <div class="hier-row l3">
+              <div class="lvlname">Feature-level<span class="sub">Level 3</span></div>
+              <div class="ex">BRD, SRS, AC, HLD/LLD for one feature.<em>"Password reset" — its own folder, its own spec.</em></div>
+            </div>
+            <div class="hier-row l4">
+              <div class="lvlname">Sprint-level<span class="sub">Level 4</span></div>
+              <div class="ex">User stories, tasks, the day-to-day work cards.<em>"As a user I want… · Task 1: build the OTP screen."</em></div>
+            </div>
+            <div class="hier-row l5">
+              <div class="lvlname">Decision log<span class="sub">Running across all levels</span></div>
+              <div class="ex">Short notes: "We chose X because Y, on Z date." Saves the team from re-arguing the same thing six months later.<em>One running document per project.</em></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8 LIVING VS FROZEN -->
+      <div class="slide accent-blue bg-subtle" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> Living vs frozen docs</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Some docs freeze. Some breathe. Mark which is which.</h2><p class="body-md" style="color:var(--muted); max-width:820px">A signed contract is frozen — you don't quietly edit it later. A glossary is alive — you add terms as the project grows. <strong>If a reader can't tell which kind it is, the doc has already lost their trust.</strong></p></div>
+          <div class="lvf">
+            <div class="col frozen">
+              <h5>❄️ Frozen — sign-off docs</h5>
+              <p>Captured at a moment in time. Changing them needs a new version, a new approval, and a new date.</p>
+              <ul>
+                <li>Signed BRD for a release</li>
+                <li>Approved scope statement</li>
+                <li>Bhutan visa rule sheet for a specific year</li>
+                <li>The school handbook printed for 2026</li>
+              </ul>
+              <div class="stamp">Status: APPROVED · Locked · v1.0 · 2026-04-09</div>
+            </div>
+            <div class="col living">
+              <h5>🌱 Living — ongoing reference</h5>
+              <p>Expected to change. Updated as the project moves. Has an owner who keeps it correct.</p>
+              <ul>
+                <li>Project glossary</li>
+                <li>Decision log</li>
+                <li>Risks register</li>
+                <li>The team's CLAUDE.md / agent-os files</li>
+              </ul>
+              <div class="stamp">Status: LIVING · Owner: Tek · Last reviewed: 2026-05-01</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9 DECAY -->
+      <div class="slide accent-blue" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> Why docs decay</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Four reasons docs rot — every BA has seen all of them.</h2></div>
+          <div class="decay-grid">
+            <div class="dec">
+              <h6>1. No owner</h6>
+              <p>If "everyone" owns it, no one updates it. By month three the doc is wrong and no one feels responsible.</p>
+              <div class="eg">"Who keeps the requirements current?" → silence.</div>
+            </div>
+            <div class="dec">
+              <h6>2. Buried in folders</h6>
+              <p>Three clicks deep, in a drive only the original author knows. People give up looking — or worse, write a second one.</p>
+              <div class="eg">/Shared/Old/2024/temp/_v3/spec.docx</div>
+            </div>
+            <div class="dec">
+              <h6>3. Versioned by filename</h6>
+              <p>"v3_final_FINAL_FINAL2_use-this.pdf". Looks familiar? It's a confession that no one trusts the doc to live in one place.</p>
+              <div class="eg">Bhutan-visa-rules_v3 final FINAL.pdf</div>
+            </div>
+            <div class="dec">
+              <h6>4. Duplicated across tools</h6>
+              <p>The "real" requirements are in a Word doc, a Confluence page, a Slack thread, and someone's notebook — and they disagree.</p>
+              <div class="eg">Three sources of truth means zero sources of truth.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10 PRACTICES -->
+      <div class="slide accent-blue bg-subtle" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> Practices that keep docs alive</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Four habits that turn rotting docs into trusted ones.</h2></div>
+          <div class="practice-grid">
+            <div class="pr">
+              <h6>1. One canonical location per topic</h6>
+              <p>Every topic has one home. If you want the latest, you go there. No "is this the one?" guessing.</p>
+              <div class="eg">"GMC portal requirements live here — and only here."</div>
+            </div>
+            <div class="pr">
+              <h6>2. Visible "last reviewed" + owner</h6>
+              <p>Every living doc shows who owns it and when it was last checked. Same idea as the school handbook's review page.</p>
+              <div class="eg">Owner: Bhuwan · Last reviewed: 2026-04-30</div>
+            </div>
+            <div class="pr">
+              <h6>3. Quarterly review ritual</h6>
+              <p>Block 30 minutes every quarter. Walk every living doc. Mark stale, fix, or archive. Small effort · huge payoff.</p>
+              <div class="eg">"First Friday of the quarter — doc-cleaning day."</div>
+            </div>
+            <div class="pr">
+              <h6>4. Link from where work happens</h6>
+              <p>Put the doc link inside the Jira ticket, the Slack channel topic, the team's home page. People won't search — they will click what's in front of them.</p>
+              <div class="eg">Jira ticket → "Spec: link" pinned on every story.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11 SECTION: AGENT-OS -->
+      <div class="slide bg-indigo" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Three</div>
+          <h1 class="display" style="color: white">agent-os<br>The AI-Friendly Spec Format</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">A folder shape that turns your specs into context an AI agent can actually read.</p>
+        </div>
+        <div class="section-num" style="color: white">03</div>
+      </div>
+
+      <!-- 12 WHY AI NEEDS STRUCTURE -->
+      <div class="slide accent-blue bg-subtle" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> Why AI needs structured docs</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Vague docs in → vague code out.</h2><p class="body-md" style="color:var(--muted); max-width:840px">When you ask Claude Code to build a feature, it reads what you give it. If your "spec" is a chat message saying "make a password reset thing", you get something that <em>kind of</em> works. If your spec has clear sections, you get something that <em>matches</em>.</p></div>
+          <div class="why-ai">
+            <div class="wai bad">
+              <h5>❌ What you give the AI today</h5>
+              <pre>"Add password reset to the GMC
+portal. Make it work like the
+banking app. Should be secure
+and quick. Use OTP I think."</pre>
+              <p>The AI guesses. You get whatever it imagined — phone OTP or email link, 5 min expiry or 15, error wording made up. Same problem as the "two implementations" story from earlier.</p>
+            </div>
+            <div class="wai good">
+              <h5>✅ What a structured spec gives it</h5>
+              <pre>spec.md
+  Overview · 2 lines
+  User stories · 3 stories
+  Scope · in / out
+  Technical notes · OTP via SMS,
+                    5-min expiry,
+                    rate-limit 3/10min
+tasks.md
+  1. OTP request screen
+  2. OTP verify + new password
+  3. Rate-limit + audit log</pre>
+              <p>The AI reads sections, not vibes. The output matches the spec — because the spec specified.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 13 WHAT IS AGENT-OS -->
+      <div class="slide accent-blue" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> What agent-os is</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:920px">
+            <h2 class="heading">A naming convention. That's it.</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:1rem"><strong>agent-os</strong> is an open project structure (from <em>Builder Methods</em>) that says: put your standards, your product context, and your per-feature specs in <strong>well-named markdown files inside well-named folders</strong>, so any AI agent — or any new teammate — can read them in order and understand the project.</p>
+            <p class="body-md" style="color:var(--muted); margin-top:0.7rem">No tool to install. No magic. Just <strong style="color:var(--indigo)">opinionated folders + opinionated filenames</strong> — and a habit of writing things in those files instead of in chat.</p>
+          </div>
+          <div class="card" style="max-width:850px; background:white; border-left:5px solid var(--amber); padding:1rem 1.3rem;">
+            <h4 style="color:var(--indigo); margin-bottom:0.3rem; font-size:1rem">Why a BA should care</h4>
+            <p style="font-size:0.92rem; color:var(--text); line-height:1.65">If you write a spec in agent-os shape, a developer can hand it straight to Claude Code and the AI will produce code that matches. <strong>Your spec becomes the prompt.</strong> The clearer the spec, the better the build. That is your leverage.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 14 THE SHAPE -->
+      <div class="slide accent-blue bg-subtle" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> The shape · folders &amp; files</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">A typical agent-os layout</h2><p class="body-md" style="color:var(--muted); max-width:840px">Three top-level folders inside a hidden <code>.agent-os/</code> directory. Each holds a small set of named markdown files.</p></div>
+          <div class="tree">
+.agent-os/
+├── <span class="fld">product/</span>           <span class="cmt"># the project's "constitution"</span>
+│   ├── <span class="file">mission.md</span>      <span class="cmt"># what we're building &amp; for whom</span>
+│   ├── <span class="file">roadmap.md</span>      <span class="cmt"># phases / planned features</span>
+│   ├── <span class="file">decisions.md</span>    <span class="cmt"># why we chose what we chose</span>
+│   └── <span class="file">tech-stack.md</span>   <span class="cmt"># what it's built on</span>
+│
+├── <span class="fld">specs/</span>             <span class="cmt"># one folder per feature, dated</span>
+│   └── <span class="fld">2026-05-02-password-reset/</span>
+│       ├── <span class="file">spec.md</span>     <span class="cmt"># the feature itself</span>
+│       └── <span class="file">tasks.md</span>    <span class="cmt"># numbered work breakdown</span>
+│
+└── <span class="fld">standards/</span>         <span class="cmt"># house style, applies everywhere</span>
+    ├── <span class="file">code-style.md</span>
+    └── <span class="file">best-practices.md</span>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:840px; font-style:italic">Same shape every project. New BA, new dev, new AI session — they all know where to look.</p>
+        </div>
+      </div>
+
+      <!-- 15 PER-FEATURE SPEC FORMAT -->
+      <div class="slide accent-blue" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span> Inside spec.md</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Six sections. Every feature spec. Same order.</h2></div>
+          <div class="specbox">
+            <h6># Overview</h6>
+            <p>Two or three sentences. What is this feature, and why are we building it now? A teammate or AI should understand the point in 20 seconds.</p>
+
+            <h6># User Stories</h6>
+            <p>The "As a … I want … so that …" stories this spec covers. Usually 2 to 5 stories.</p>
+
+            <h6># Scope · In</h6>
+            <p>A bulleted list of what this feature <strong>does</strong>. Be specific.</p>
+
+            <h6># Out of Scope</h6>
+            <p>What this feature <strong>does not</strong> do. The single biggest gift you can give a developer or AI — most rework comes from unclear out-of-scope.</p>
+
+            <h6># Technical Notes</h6>
+            <p>Constraints the BA already knows: "OTP via SMS", "must work offline", "uses existing user table". Not full design — just the pinned facts.</p>
+
+            <h6># Dependencies</h6>
+            <p>What must exist first. Other specs this depends on, external services, third-party APIs, decisions still pending.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 16 SAMPLE SPEC -->
+      <div class="slide accent-blue bg-subtle" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span> Sample · password-reset/spec.md</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">A real spec — short, structured, prompt-ready</h2></div>
+          <div class="specbox" style="max-width:1000px">
+            <h6># Overview</h6>
+            <p>Let a GMC portal user reset their forgotten password without contacting support. Phone-based OTP flow, mirrors our login design.</p>
+
+            <h6># User Stories</h6>
+            <ul>
+              <li>As a user with a forgotten password, I want to reset it online, so I can log back in without help.</li>
+              <li>As a user, I want a clear error if my number isn't registered, so I'm not stuck guessing.</li>
+              <li>As a user, I want to be told if my code expired, so I can request a new one.</li>
+            </ul>
+
+            <h6># Scope · In</h6>
+            <ul><li>"Forgot password" link on login screen</li><li>Phone-based OTP (6 digits, 5-min expiry)</li><li>New password screen with policy check (≥ 8 chars, not last 5)</li><li>Rate-limit: 3 OTPs per number per 10 minutes</li></ul>
+
+            <h6># Out of Scope</h6>
+            <ul><li>Email-based reset (separate spec, later)</li><li>Biometric reset</li><li>Admin-initiated password reset</li></ul>
+
+            <h6># Technical Notes</h6>
+            <ul><li>OTP delivery: existing SMS gateway (Bhutan Telecom)</li><li>Reuse login screen styling — no new design needed</li><li>Audit log entry for every reset attempt</li></ul>
+
+            <h6># Dependencies</h6>
+            <ul><li>SMS gateway credentials provisioned (DevOps)</li><li>Spec 2026-04-15-audit-log already merged</li></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 17 CLAUDE.MD PATTERN -->
+      <div class="slide accent-blue" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span> The CLAUDE.md pattern</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:900px"><h2 class="heading">Every project gets a CLAUDE.md at its root.</h2><p class="body-md" style="color:var(--muted); margin-top:0.7rem">Same idea as agent-os — opinionated context the AI reads <em>before</em> doing anything. A short file that says "this is the project, this is the audience, here's what not to touch." We use it on this very Pelsung project.</p></div>
+          <div class="claude-md">
+<span class="h"># GMC Portal</span>
+
+<span class="c"># Audience</span>
+GMC residents and staff. Many are first-time digital users.
+Plain-English copy, no jargon. Bhutanese examples preferred.
+
+<span class="c"># Brand</span>
+SELISE blue (<span class="v">#0066B2</span>). Bahnschrift headings, Open Sans body.
+Logo on every page (top-right). Never use red as a feature colour.
+
+<span class="c"># Do not touch</span>
+- <span class="v">/auth/legacy/</span> — frozen, audit in progress
+- Existing translation keys — coordinate with content team
+
+<span class="c"># House rule</span>
+Spec-driven only. New work needs a <span class="v">spec.md</span> in <span class="v">.agent-os/specs/</span>.
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">Five sections. The AI reads it on every session. No surprises.</p>
+        </div>
+      </div>
+
+      <!-- 18 SECTION: HANDS-ON -->
+      <div class="slide bg-blue" data-slide="18">
+        <div class="slide-label"><span class="snum">18</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Four · Hands-on</div>
+          <h1 class="display" style="color: white">Convert a Casual<br>Spec into agent-os</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Pairs · 20 minutes · produce spec.md + tasks.md</p>
+        </div>
+        <div class="section-num" style="color: white">04</div>
+      </div>
+
+      <!-- 19 EXERCISE BRIEF -->
+      <div class="slide accent-blue bg-subtle" data-slide="19">
+        <div class="slide-label"><span class="snum">19</span> The brief</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Take this casual one-paragraph spec — turn it into agent-os shape.</h2></div>
+          <div class="brief-box">
+            <span class="tag">Casual spec — given to you in chat</span>
+            <h5>Add password reset to the GMC portal</h5>
+            <p>"We need a forgot-password thing on the GMC portal. Use phone OTP like the banking app. Five-minute expiry should be fine. Don't let people spam it. Block them after a few tries. Re-using the same old password should not be allowed. Make it look like the rest of the login screens — no new design. Email reset can come later."</p>
+          </div>
+          <div class="cols-2" style="max-width:1050px; gap:1rem">
+            <div class="card" style="border-top:3px solid var(--blue)">
+              <h4 style="color:var(--blue)">Produce two files</h4>
+              <ul style="font-size:0.9rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li><strong>spec.md</strong> with all six sections: Overview · User Stories · Scope In · Out of Scope · Technical Notes · Dependencies</li>
+                <li><strong>tasks.md</strong> with a numbered task list (5–8 tasks)</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--amber)">
+              <h4 style="color:var(--amber)">How to work</h4>
+              <ul style="font-size:0.9rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li>Pair up</li>
+                <li>One person drafts spec.md · the other drafts tasks.md</li>
+                <li>Swap and challenge each other — is anything implied? Is anything in both?</li>
+                <li>Two volunteer pairs share at debrief</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px">12 min writing · 5 min pair-challenge · 3 min debrief.</p>
+        </div>
+      </div>
+
+      <!-- 20 REFERENCE ANSWER -->
+      <div class="slide accent-blue" data-slide="20">
+        <div class="slide-label"><span class="snum">20</span> Debrief · one good answer</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">spec.md (compressed) + tasks.md</h2></div>
+          <div class="cols-2" style="max-width:1150px; gap:1rem; align-items:start">
+            <div class="specbox" style="max-width:none">
+              <h6># spec.md</h6>
+              <p style="color:var(--muted); font-size:0.78rem; font-style:italic">.agent-os/specs/2026-05-02-password-reset/spec.md</p>
+              <h6 style="font-size:0.85rem; margin-top:0.5rem">## Overview</h6>
+              <p>Phone-OTP password reset for GMC portal users.</p>
+              <h6 style="font-size:0.85rem">## User Stories</h6>
+              <ul><li>As a user with a forgotten password, I want to reset it online.</li><li>As a user, I want a clear error if my number isn't registered.</li><li>As a user, I want to know if my OTP expired.</li></ul>
+              <h6 style="font-size:0.85rem">## Scope · In</h6>
+              <ul><li>"Forgot password" link on login</li><li>6-digit OTP, 5-min expiry</li><li>New-password policy: ≥ 8 chars, not last 5</li><li>Rate-limit: 3 OTPs / number / 10 min</li></ul>
+              <h6 style="font-size:0.85rem">## Out of Scope</h6>
+              <ul><li>Email reset · Biometric reset · Admin-initiated reset</li></ul>
+              <h6 style="font-size:0.85rem">## Technical Notes</h6>
+              <ul><li>SMS gateway: Bhutan Telecom (existing)</li><li>Reuse login screen styling</li><li>Audit-log every attempt</li></ul>
+              <h6 style="font-size:0.85rem">## Dependencies</h6>
+              <ul><li>SMS gateway credentials</li><li>Audit-log spec (already merged)</li></ul>
+            </div>
+            <div class="specbox" style="max-width:none">
+              <h6># tasks.md</h6>
+              <p style="color:var(--muted); font-size:0.78rem; font-style:italic">.agent-os/specs/2026-05-02-password-reset/tasks.md</p>
+              <ul style="margin-top:0.4rem">
+                <li>1. Add "Forgot password?" link to login screen</li>
+                <li>2. Build OTP-request screen (phone input + Submit)</li>
+                <li>3. Wire SMS gateway · send 6-digit OTP · 5-min expiry</li>
+                <li>4. Build OTP-verify + new-password screen</li>
+                <li>5. Enforce password policy (≥ 8 chars, not last 5)</li>
+                <li>6. Apply rate-limit (3 OTPs / number / 10 min)</li>
+                <li>7. Write audit-log entry on every attempt</li>
+                <li>8. End-to-end test: happy path + 4 edges</li>
+              </ul>
+              <p style="color:var(--muted); font-size:0.82rem; font-style:italic; margin-top:0.5rem">Notice: tasks are <strong>verbs</strong>, in order, each one a developer (or AI) can pick up alone.</p>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:880px; font-style:italic">Same casual paragraph · now ready to hand to Claude Code or a developer with no clarifying questions.</p>
+        </div>
+      </div>
+
+      <!-- 21 WRAP -->
+      <div class="slide bg-dark" data-slide="21">
+        <div class="slide-label"><span class="snum">21</span> Wrap-up</div>
+        <div class="center" style="max-width: 840px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key Takeaways</div>
+          <h2 class="heading" style="color: white;">What we covered today</h2>
+          <ul class="reveal-list" style="color: rgba(255,255,255,0.9); text-align:left; max-width: 760px; margin: 1.5rem auto; font-size: 1rem; line-height: 2;">
+            <li>✅ Docs are a <strong>tax</strong> — write the minimum that's maximally useful</li>
+            <li>✅ <strong>Write</strong> decisions, AC, requirements, sign-offs, glossary · <strong>link</strong> dashboards, code, designs, schedules</li>
+            <li>✅ Docs cascade in a <strong>hierarchy</strong>: org → project → feature → sprint, with a running decision log</li>
+            <li>✅ Mark every doc as <strong>frozen</strong> or <strong>living</strong>, with an owner and a "last reviewed" stamp</li>
+            <li>✅ Docs decay from <strong>no owner, burial, filename versions, duplication</strong> — fix each one deliberately</li>
+            <li>✅ <strong>agent-os</strong> = opinionated folders (<code>product/</code>, <code>specs/</code>, <code>standards/</code>) with named markdown files an AI can read in order</li>
+            <li>✅ A spec.md with <strong>Overview · Stories · Scope · Out of Scope · Tech Notes · Dependencies</strong> is prompt-ready</li>
+            <li>✅ Every project gets a <strong>CLAUDE.md</strong> at its root — short opinionated context the AI reads first</li>
+          </ul>
+          <p style="color: var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.2rem; margin-top:1.5rem">Your spec is your prompt. Write it like one.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 21</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>

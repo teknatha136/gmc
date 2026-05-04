@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Validation &amp; UAT — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      .vv-grid { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px){ .vv-grid { grid-template-columns: 1fr; } }
+      .vv-card { background:white; border:1px solid var(--border); border-radius:10px; padding:1rem 1.2rem; }
+      .vv-card.verify { border-left:4px solid var(--blue); }
+      .vv-card.valid  { border-left:4px solid var(--amber); }
+      .vv-card h4 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-bottom:0.35rem; }
+      .vv-card .q { font-size:1rem; color:var(--text); font-weight:600; line-height:1.6; }
+      .vv-card p { font-size:0.9rem; line-height:1.7; color:var(--text); margin-top:0.4rem; }
+      .vv-card .eg { font-size:0.85rem; color:var(--muted); margin-top:0.5rem; font-style:italic; }
+
+      .isnot-grid { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px){ .isnot-grid { grid-template-columns: 1fr; } }
+      .isnot { background:white; border:1px solid var(--border); border-radius:10px; padding:0.95rem 1.15rem; }
+      .isnot.is { border-top:4px solid var(--green); }
+      .isnot.isnt { border-top:4px solid var(--red); }
+      .isnot h5 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.35rem; }
+      .isnot.is h5   { color:#3D7A3D; }
+      .isnot.isnt h5 { color:var(--red); }
+      .isnot ul { padding-left:1.15rem; margin:0; }
+      .isnot li { font-size:0.9rem; line-height:1.7; color:var(--text); margin:0.2rem 0; }
+
+      .checklist-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:0.7rem; width:100%; max-width:1100px; }
+      @media (max-width: 820px){ .checklist-grid { grid-template-columns: 1fr; } }
+      .ck { background:white; border:1px solid var(--border); border-left:4px solid var(--blue); border-radius:10px; padding:0.8rem 1rem; }
+      .ck h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.2rem; display:flex; align-items:center; gap:0.4rem; }
+      .ck p { font-size:0.88rem; color:var(--text); line-height:1.6; }
+      .ck .eg { margin-top:0.3rem; font-size:0.8rem; color:var(--muted); font-style:italic; }
+
+      .planning-card { background:white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.3rem; max-width:1050px; width:100%; }
+      .planning-card h4 { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.15rem; margin-bottom:0.35rem; }
+      .planning-card .lead { font-size:0.95rem; line-height:1.7; color:var(--text); margin-bottom:0.5rem; }
+      .planning-card ul { padding-left:1.2rem; margin:0; }
+      .planning-card li { font-size:0.92rem; line-height:1.7; color:var(--text); margin:0.2rem 0; }
+      .planning-card li strong { color:var(--indigo); }
+      .planning-card .note { background:var(--bg); border-radius:8px; padding:0.55rem 0.8rem; font-size:0.85rem; color:var(--muted); margin-top:0.6rem; font-style:italic; }
+
+      .anatomy { background:white; border:2px dashed var(--blue); border-radius:12px; padding:1rem 1.4rem; max-width:1050px; width:100%; }
+      .anatomy h4 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; margin-bottom:0.45rem; }
+      .anatomy ol { padding-left:1.4rem; }
+      .anatomy li { font-size:0.93rem; color:var(--text); line-height:1.75; margin:0.25rem 0; }
+      .anatomy li strong { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; }
+
+      .uat-tbl { width:100%; max-width:1150px; background:white; border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+      .uat-tbl table { width:100%; border-collapse:collapse; font-size:0.86rem; }
+      .uat-tbl th { background:var(--bg); padding:0.6rem 0.8rem; text-align:left; color:var(--muted); font-size:0.74rem; text-transform:uppercase; letter-spacing:0.06em; font-weight:700; border-bottom:1px solid var(--border); }
+      .uat-tbl td { padding:0.55rem 0.8rem; border-bottom:1px solid var(--border); color:var(--text); vertical-align:top; line-height:1.55; }
+      .uat-tbl tr:last-child td { border-bottom:none; }
+      .uat-tbl td.step { width:6%; font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--blue); font-weight:700; text-align:center; }
+      .uat-tbl td.res  { width:14%; font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--muted); text-align:center; font-style:italic; }
+      .uat-tbl td.cmt  { width:18%; color:var(--muted); font-style:italic; }
+      .uat-tbl .meta-row td { background:#F4F8FC; color:var(--indigo); font-size:0.83rem; }
+
+      .signoff-card { background:white; border-left:5px solid var(--green); border:1px solid var(--border); border-radius:10px; padding:1rem 1.3rem; max-width:1050px; width:100%; }
+      .signoff-card h4 { color:#3D7A3D; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-bottom:0.4rem; }
+      .signoff-card .row { display:grid; grid-template-columns: 1fr 1fr; gap:0.9rem; margin-top:0.4rem; }
+      @media (max-width: 820px){ .signoff-card .row { grid-template-columns: 1fr; } }
+      .signoff-card .row h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.2rem; }
+      .signoff-card .row p { font-size:0.88rem; line-height:1.65; color:var(--text); }
+      .signoff-card .row ul { padding-left:1.1rem; }
+      .signoff-card .row li { font-size:0.86rem; line-height:1.65; color:var(--text); margin:0.15rem 0; }
+
+      .fail-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:0.7rem; width:100%; max-width:1100px; }
+      @media (max-width: 820px){ .fail-grid { grid-template-columns: 1fr; } }
+      .fail { background:white; border:1px solid var(--border); border-left:4px solid var(--red); border-radius:10px; padding:0.75rem 1rem; }
+      .fail h6 { color:var(--red); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.97rem; margin-bottom:0.2rem; }
+      .fail p { font-size:0.88rem; color:var(--text); line-height:1.6; }
+      .fail .fix { margin-top:0.3rem; padding-top:0.3rem; border-top:1px dashed var(--border); color:var(--muted); font-size:0.83rem; }
+      .fail .fix strong { color:#3D7A3D; }
+
+      .recap-card { background:white; border:1px solid var(--border); border-left:5px solid var(--amber); border-radius:10px; padding:0.8rem 1.2rem; max-width:1050px; width:100%; }
+      .recap-card h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.3rem; }
+      .recap-card p { font-size:0.9rem; color:var(--text); line-height:1.65; }
+      .recap-card .ref { color:var(--blue); font-size:0.8rem; font-style:italic; margin-top:0.3rem; }
+
+      .story-card { background:white; border:2px solid var(--blue); border-radius:12px; padding:1rem 1.3rem; max-width:900px; width:100%; }
+      .story-card .tag { background:#E6F0F8; color:var(--blue); font-size:0.7rem; font-weight:700; padding:0.2rem 0.6rem; border-radius:4px; letter-spacing:0.07em; text-transform:uppercase; }
+      .story-card h5 { color:var(--indigo); font-size:1.1rem; margin:0.4rem 0 0.3rem; font-family:'Bahnschrift','Segoe UI',sans-serif; }
+      .story-card .body { font-size:0.96rem; color:var(--text); line-height:1.75; font-style:italic; }
+      .story-card .body strong { color:var(--indigo); font-style:normal; }
+      .story-card .ac { background:var(--bg); border-radius:8px; padding:0.5rem 0.8rem; margin-top:0.5rem; font-size:0.86rem; color:var(--text); line-height:1.65; font-style:normal; }
+      .story-card .ac strong { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; }
+
+      .timeline-bar { display:flex; width:100%; max-width:1100px; border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+      .timeline-bar .seg { flex:1; padding:0.7rem 0.5rem; text-align:center; color:white; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.85rem; }
+      .timeline-bar .seg .l { font-size:0.7rem; opacity:0.85; text-transform:uppercase; letter-spacing:0.06em; }
+      .timeline-bar .seg .v { font-size:0.95rem; margin-top:0.15rem; }
+      .timeline-bar .s1 { background:#247EC1; }
+      .timeline-bar .s2 { background:#0066B2; }
+      .timeline-bar .s3 { background:#001F35; }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>BA Vertical · Class 11</div></div>
+          <h1 class="display" style="color: var(--text)">
+            <span style="color: var(--blue)">Validation</span><br />
+            <span style="color: var(--indigo)">&amp; UAT</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted)">Test scripts for business users · sign-off flows · UAT planning. The last gate before go-live — and the BA owns it.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">UAT</span>
+            <span class="class-tag tag-blue">Test Scripts</span>
+            <span class="class-tag tag-blue">Sign-off</span>
+            <span class="class-tag tag-blue">Validation</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 AGENDA -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 800px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem"><h2 class="heading">Session Journey · ~90 min</h2></div>
+          <div class="agenda-row" onclick="goTo(3)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🔁 Recap · verification vs validation</span><span class="ar-badge" style="background:#E6F0F8;color:var(--indigo)">5 min</span></div>
+          <div class="agenda-row" onclick="goTo(5)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">📜 What UAT is (and isn't)</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(8)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🗓️ UAT planning checklist</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">20 min</span></div>
+          <div class="agenda-row" onclick="goTo(15)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🧩 Anatomy of a UAT script</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(17)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">📋 Worked example · sick-leave approval</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(19)"><span class="ar-dot" style="background: var(--green)"></span><span class="ar-label">✍ The sign-off conversation</span><span class="ar-badge" style="background:#EFF8E5;color:#3D7A3D">5 min</span></div>
+          <div class="agenda-row" onclick="goTo(20)"><span class="ar-dot" style="background: var(--red)"></span><span class="ar-label">⚠️ Common UAT failures</span><span class="ar-badge" style="background:#FEE9EC;color:var(--red)">5 min</span></div>
+          <div class="agenda-row" onclick="goTo(21)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🧪 Hands-on · write a UAT script</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">25 min</span></div>
+          <div class="agenda-row" onclick="goTo(24)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🎯 Wrap-up</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">2 min</span></div>
+        </div>
+      </div>
+
+      <!-- 3 SECTION RECAP -->
+      <div class="slide bg-indigo" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Recap</div>
+          <h1 class="display" style="color: white">Verification<br>vs Validation</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Two questions. Two checks. UAT is the second one.</p>
+        </div>
+        <div class="section-num" style="color: white">01</div>
+      </div>
+
+      <!-- 4 V vs V RECAP -->
+      <div class="slide accent-blue bg-subtle" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> The two questions</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Did we build it right? — vs — Did we build the right thing?</h2></div>
+          <div class="vv-grid">
+            <div class="vv-card verify">
+              <h4>Verification</h4>
+              <p class="q">"Did we build it <em>right</em>?"</p>
+              <p>Does the system match the written spec? Reviews, unit tests, integration tests, system tests. <strong>QA does most of this.</strong></p>
+              <p class="eg">Example: the spec says "leave balance must update after approval". Did the code do that?</p>
+            </div>
+            <div class="vv-card valid">
+              <h4>Validation</h4>
+              <p class="q">"Did we build the <em>right thing</em>?"</p>
+              <p>Does it actually solve the user's problem in real life? Real users walking through real workflows. <strong>UAT is the main validation activity.</strong></p>
+              <p class="eg">Example: leave balance updates correctly — but does the manager <em>trust</em> the new screen enough to approve from it?</p>
+            </div>
+          </div>
+          <div class="recap-card">
+            <h5>UAT lives on the validation side</h5>
+            <p>UAT (User Acceptance Testing) is real business users confirming the system solves the problem it was built for — before it goes live. It is <strong>not</strong> a second round of QA.</p>
+            <p class="ref">Already covered in: BA+QA Quality #01 (Testing Fundamentals) · BA+QA Combined #04 (Acceptance Criteria).</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 SECTION WHAT IS UAT -->
+      <div class="slide bg-blue" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part One</div>
+          <h1 class="display" style="color: white">What UAT Is<br>(and isn't)</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">A clear definition before we plan one.</p>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- 6 UAT DEFINITION -->
+      <div class="slide accent-blue bg-subtle" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> The 30-second definition</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:900px">
+            <h2 class="heading" style="font-size:clamp(1.5rem, 3vw, 2.2rem)">UAT is <span style="color:var(--blue)">real business users</span> running through <span style="color:var(--blue)">real workflows</span> on a <span style="color:var(--blue)">realistic system</span>, signing off that it solves the problem.</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:1.5rem; max-width:830px">It is the last check before go-live. If UAT passes, the business says "yes, ship it." If UAT fails, we don't ship — even if every QA test passed.</p>
+          </div>
+          <div class="card" style="max-width:900px; background:white; border-left:5px solid var(--amber); padding:0.9rem 1.3rem;">
+            <h4 style="color:var(--indigo); margin-bottom:0.3rem; font-size:1rem">Who is "the business user"?</h4>
+            <p style="font-size:0.92rem; color:var(--text); line-height:1.65">The people who will actually use the system every day. For an mBoB feature: a Druk PNB account holder. For a leave-approval system: a real line manager and a real HR officer. <strong>Not the developer. Not the QA. Not the BA pretending to be a user.</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7 IS / IS NOT -->
+      <div class="slide accent-blue" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> What UAT is — and isn't</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Easy to confuse with QA testing. They are not the same.</h2></div>
+          <div class="isnot-grid">
+            <div class="isnot is">
+              <h5>✅ UAT IS</h5>
+              <ul>
+                <li>Business users walking through <strong>real workflows</strong> end-to-end</li>
+                <li>A check that the system <strong>solves the problem</strong> it was built for</li>
+                <li>Anchored to <strong>user stories and acceptance criteria</strong> — same ones the BA wrote</li>
+                <li>The <strong>final gate</strong> before go-live and sign-off</li>
+                <li>Conducted in a <strong>UAT environment</strong> with realistic data</li>
+              </ul>
+            </div>
+            <div class="isnot isnt">
+              <h5>❌ UAT IS NOT</h5>
+              <ul>
+                <li><strong>Functional re-testing</strong> — QA already did that</li>
+                <li><strong>Bug hunting</strong> — bugs are a side-effect, not the goal</li>
+                <li><strong>Exploratory testing</strong> — we follow scripts, not curiosity</li>
+                <li><strong>Performance or security testing</strong> — different activities, different specialists</li>
+                <li>Done by <strong>developers, QAs, or the BA alone</strong> — that's not "user" testing</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:840px; font-style:italic">If you find yourself "trying to break it" during UAT — stop. That's QA's job. UAT asks: "can a normal user finish this task and trust the result?"</p>
+        </div>
+      </div>
+
+      <!-- 8 SECTION PLANNING -->
+      <div class="slide bg-indigo" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Two</div>
+          <h1 class="display" style="color: white">Planning a UAT</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Six things to settle before a single test runs.</p>
+        </div>
+        <div class="section-num" style="color: white">03</div>
+      </div>
+
+      <!-- 9 CHECKLIST OVERVIEW -->
+      <div class="slide accent-blue bg-subtle" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> The UAT planning checklist</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Six items the BA settles before UAT starts</h2></div>
+          <div class="checklist-grid">
+            <div class="ck"><h6>🗓️ Timing</h6><p>When does UAT happen — and how much room do we have?</p></div>
+            <div class="ck"><h6>🖥️ Environment</h6><p>Where will users test — and with what data?</p></div>
+            <div class="ck"><h6>👥 Participants</h6><p>Who runs the tests, and who is on standby?</p></div>
+            <div class="ck"><h6>📜 Scripts</h6><p>What workflows do they walk through, step by step?</p></div>
+            <div class="ck"><h6>🐛 Defect handling</h6><p>What happens when something doesn't work?</p></div>
+            <div class="ck"><h6>✍ Sign-off</h6><p>How do we close UAT — and what does "pass" mean?</p></div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">If any of these is fuzzy on day one of UAT — UAT will fail. Walk through each one in the next slides.</p>
+        </div>
+      </div>
+
+      <!-- 10 TIMING -->
+      <div class="slide accent-blue" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> Planning · Timing</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">When does UAT happen?</h2></div>
+          <div class="timeline-bar">
+            <div class="seg s1"><div class="l">Earlier</div><div class="v">Dev + QA testing</div></div>
+            <div class="seg s2"><div class="l">Then</div><div class="v">UAT (1–2 weeks)</div></div>
+            <div class="seg s3"><div class="l">Finally</div><div class="v">Go-live</div></div>
+          </div>
+          <div class="planning-card">
+            <h4>The rule</h4>
+            <p class="lead">UAT starts <strong>after QA has signed off</strong> on functional testing — and ends <strong>before go-live</strong>, with a buffer.</p>
+            <ul>
+              <li><strong>Allow 1–2 weeks</strong> for UAT itself. Less than a week and users feel rushed; more than two and they lose focus.</li>
+              <li><strong>Add 3–5 days buffer</strong> after UAT to fix any blocking issues found, before the go-live date.</li>
+              <li><strong>Don't squeeze it.</strong> UAT compressed into two days is theatre, not testing.</li>
+              <li><strong>Don't run it during month-end or festival weeks.</strong> Real users have day jobs — Losar week is not the time.</li>
+            </ul>
+            <p class="note">Example: GMC visa system go-live is set for May 1. QA sign-off must land by April 14. UAT runs April 15 – April 26. Buffer + go-live prep April 27 – May 1.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11 ENVIRONMENT -->
+      <div class="slide accent-blue bg-subtle" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> Planning · Environment</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Where do users test — and with what data?</h2></div>
+          <div class="planning-card">
+            <h4>UAT environment, not production</h4>
+            <p class="lead">A <strong>separate UAT environment</strong> that looks and behaves like production — but isn't.</p>
+            <ul>
+              <li><strong>Same screens, same buttons, same flows</strong> as the real system. If the UAT screen looks different, the test is invalid.</li>
+              <li><strong>Realistic-but-fake data.</strong> Test accounts named "Tashi Dorji" and "Karma Wangmo" — not real customers. Realistic balances, realistic dates.</li>
+              <li><strong>Never use production.</strong> A test approval in prod is a real approval. A test withdrawal in prod is a real withdrawal. This rule is non-negotiable.</li>
+              <li><strong>Connections to other systems</strong> (SMS, email, payment) point to safe test endpoints — not real customer phone numbers.</li>
+            </ul>
+            <p class="note">Concrete: for an mBoB onboarding test, the UAT environment uses fake CIDs, fake phone numbers (test SIMs), and a sandboxed payment gateway. No real customer ever receives a UAT SMS.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12 PARTICIPANTS -->
+      <div class="slide accent-blue" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> Planning · Participants</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Who is in the room?</h2></div>
+          <div class="planning-card">
+            <h4>3–7 real business users, plus a small support cast</h4>
+            <p class="lead">Pick people who will actually use the system in their day jobs.</p>
+            <ul>
+              <li><strong>3–7 business users.</strong> Fewer than 3 = not enough perspective. More than 7 = chaos to coordinate.</li>
+              <li><strong>BA = facilitator.</strong> Walks users through scripts, answers questions, captures issues. Does not "do" the test for them.</li>
+              <li><strong>Dev + QA on standby.</strong> Available to triage issues as they appear, not in the same room dictating.</li>
+              <li><strong>One business sponsor.</strong> Senior person from the business side who will sign off at the end.</li>
+            </ul>
+            <p class="note">Example for a school registration system: 2 admission officers, 2 parents (or BAs role-playing parents only if real ones are not available), 1 principal. BA facilitates. Dev + QA reachable on chat.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 13 DEFECTS + SIGN-OFF (combined) -->
+      <div class="slide accent-blue bg-subtle" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> Planning · Defect handling</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">What happens when something doesn't work?</h2></div>
+          <div class="planning-card">
+            <h4>Log · severity-tag · decide</h4>
+            <p class="lead">Bugs <em>will</em> appear in UAT. Have the process ready before day one.</p>
+            <ul>
+              <li><strong>Log every issue</strong> in a single tracker (Jira, a shared sheet — pick one and stick to it). Title, steps, expected, actual, screenshot.</li>
+              <li><strong>Severity-tag</strong> each one: Blocker · High · Medium · Low. Defined upfront, not improvised.</li>
+              <li><strong>Daily triage</strong> — BA + Dev + QA + sponsor decide for each issue: <em>fix-now</em> (blocks UAT) or <em>post-launch</em> (acceptable to ship, fix later).</li>
+              <li><strong>Re-test</strong> fixed issues in UAT before sign-off — don't accept a developer's "trust me, it's fixed".</li>
+            </ul>
+            <p class="note">A clear severity ladder prevents the worst UAT pattern: the team arguing about whether to ship for two days while the user waits for an answer.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 14 SIGN-OFF PLANNING -->
+      <div class="slide accent-blue" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> Planning · Sign-off</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">How does UAT end?</h2></div>
+          <div class="planning-card">
+            <h4>Explicit. Written. Specific.</h4>
+            <p class="lead">UAT ends with a written sign-off — not a verbal "looks fine, go ahead".</p>
+            <ul>
+              <li><strong>Written</strong> — email, document, ticket. Not a hallway conversation.</li>
+              <li><strong>Names what was tested.</strong> "All 12 scripts in the leave-approval workflow were executed." Not "we tested the system."</li>
+              <li><strong>Names what was NOT tested.</strong> "Mobile view was deferred to post-launch." Honesty here saves arguments later.</li>
+              <li><strong>Lists known issues</strong> being shipped with — and which release will fix them.</li>
+              <li><strong>Signed by the business sponsor</strong> — the person whose name carries weight if something breaks.</li>
+            </ul>
+            <p class="note">We dig into the sign-off conversation in a few slides — what to actually say, and what not to.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 15 SECTION ANATOMY -->
+      <div class="slide bg-blue" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Three</div>
+          <h1 class="display" style="color: white">Anatomy of a<br>UAT Script</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Five parts. Every script. Every time.</p>
+        </div>
+        <div class="section-num" style="color: white">04</div>
+      </div>
+
+      <!-- 16 ANATOMY -->
+      <div class="slide accent-blue bg-subtle" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span> What every UAT script contains</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">A script is a recipe. Same five ingredients, every time.</h2></div>
+          <div class="anatomy">
+            <ol>
+              <li><strong>Story it covers.</strong> Which user story (and which AC) is this script validating? One script may cover one story.</li>
+              <li><strong>Pre-conditions.</strong> What state must the system, account, and data be in before the user starts? (Logged in? Account has Nu. 5,000 balance? Test biller already saved?)</li>
+              <li><strong>Numbered steps.</strong> Plain-language actions the user takes. "Tap Pay Bills." "Enter 500 in the amount field." "Tap Confirm."</li>
+              <li><strong>Expected outcome at each step.</strong> What should the user see or experience after that step? "Confirmation screen with reference number appears."</li>
+              <li><strong>Pass / Fail / Comments column.</strong> The user (or facilitator) marks each step. Comments capture surprises.</li>
+            </ol>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">A good UAT script can be handed to any business user — they should be able to run it without asking what to do next.</p>
+        </div>
+      </div>
+
+      <!-- 17 WORKED EXAMPLE — STORY -->
+      <div class="slide accent-blue" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span> Worked example · the story</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Story: a manager approves a sick leave request</h2></div>
+          <div class="story-card">
+            <span class="tag">User Story</span>
+            <h5>Approve a sick leave request</h5>
+            <p class="body">As a <strong>line manager</strong>,<br>I want to <strong>approve or reject sick leave requests from my team</strong><br>so that <strong>my team's leave balance updates and HR sees the decision the same day</strong>.</p>
+            <div class="ac"><strong>AC 1</strong> — Given a pending sick leave request from a direct report, when the manager taps Approve, then the request status changes to Approved within 2 seconds and the team member is notified by email.</div>
+            <div class="ac"><strong>AC 2</strong> — Given an approved sick leave, when the manager opens the team's leave balance, then the days approved are deducted from the team member's annual sick leave balance.</div>
+            <div class="ac"><strong>AC 3</strong> — Given the manager rejects a request, when they confirm the rejection, then the team member is notified with the rejection reason and the leave balance is unchanged.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 18 WORKED EXAMPLE — SCRIPT TABLE -->
+      <div class="slide accent-blue bg-subtle" data-slide="18">
+        <div class="slide-label"><span class="snum">18</span> Worked example · the UAT script</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">UAT-001 · Approve a sick leave request (happy path)</h2></div>
+          <div class="uat-tbl">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:6%">#</th>
+                  <th style="width:30%">Step (what the user does)</th>
+                  <th style="width:32%">Expected outcome</th>
+                  <th style="width:14%">Pass / Fail</th>
+                  <th style="width:18%">Comments</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="meta-row"><td colspan="5"><strong>Story:</strong> Approve a sick leave request &nbsp;·&nbsp; <strong>Pre-conditions:</strong> Manager logged in. Team member "Tashi Dorji" has submitted a 2-day sick leave for next Monday–Tuesday. Tashi's current sick leave balance: 8 days.</td></tr>
+                <tr><td class="step">1</td><td>From the home screen, tap "My Team's Leave Requests".</td><td>List of pending requests appears. Tashi's request is at the top.</td><td class="res">Pass / Fail</td><td class="cmt">—</td></tr>
+                <tr><td class="step">2</td><td>Tap on Tashi's request to open it.</td><td>Request detail screen shows: name, dates, leave type "Sick", reason, status "Pending".</td><td class="res">Pass / Fail</td><td class="cmt">—</td></tr>
+                <tr><td class="step">3</td><td>Tap the green "Approve" button.</td><td>Confirmation popup appears: "Approve 2 days of sick leave for Tashi Dorji?"</td><td class="res">Pass / Fail</td><td class="cmt">—</td></tr>
+                <tr><td class="step">4</td><td>Tap "Yes, approve" in the popup.</td><td>Within 2 seconds, status changes to "Approved" and a green tick appears.</td><td class="res">Pass / Fail</td><td class="cmt">—</td></tr>
+                <tr><td class="step">5</td><td>Go back to "My Team" and open Tashi's leave balance.</td><td>Sick leave balance shows 6 days (was 8, minus 2 approved).</td><td class="res">Pass / Fail</td><td class="cmt">—</td></tr>
+                <tr><td class="step">6</td><td>Open Tashi's test inbox (UAT mail account).</td><td>Email received: subject "Your sick leave has been approved", with the dates listed.</td><td class="res">Pass / Fail</td><td class="cmt">—</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:840px; font-style:italic">Six steps. Each one observable. Each one yes/no. A real manager can run this without a developer in the room.</p>
+        </div>
+      </div>
+
+      <!-- 19 SIGN-OFF CONVERSATION -->
+      <div class="slide accent-blue" data-slide="19">
+        <div class="slide-label"><span class="snum">19</span> The sign-off conversation</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">What to actually say when UAT ends</h2></div>
+          <div class="signoff-card">
+            <h4>The four things every sign-off names</h4>
+            <div class="row">
+              <div>
+                <h6>✅ What's in scope (and passed)</h6>
+                <p>"All 12 scripts of the leave-approval workflow ran end-to-end and passed. Approve, reject, balance update, email notification — all working."</p>
+              </div>
+              <div>
+                <h6>📋 What's out of scope</h6>
+                <p>"Bulk approval of multiple requests at once was not part of this release — it's planned for v1.2."</p>
+              </div>
+              <div>
+                <h6>⚠️ Known limitations</h6>
+                <ul>
+                  <li>Mobile app rejection reason field is limited to 200 characters — confirmed acceptable</li>
+                  <li>Email notifications take up to 5 minutes during peak hours</li>
+                </ul>
+              </div>
+              <div>
+                <h6>📌 Conditions for go-live</h6>
+                <ul>
+                  <li>2 medium-severity issues (#JIRA-203, #JIRA-211) must be fixed before launch</li>
+                  <li>HR team trained on the new screens before go-live day</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">A vague "looks good to me" is not sign-off. The four-part shape above is what protects the BA, the team, and the business.</p>
+        </div>
+      </div>
+
+      <!-- 20 COMMON FAILURES -->
+      <div class="slide accent-blue bg-subtle" data-slide="20">
+        <div class="slide-label"><span class="snum">20</span> Common UAT failures</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Four ways UAT goes wrong — spot them early</h2></div>
+          <div class="fail-grid">
+            <div class="fail">
+              <h6>1. Treated as a tick-box at the end</h6>
+              <p>UAT is added to the plan a week before go-live, with no time to fix anything users find. Becomes ceremony.</p>
+              <span class="fix"><strong>Fix:</strong> book UAT into the plan from day one. Two weeks, with a buffer. Defend that calendar.</span>
+            </div>
+            <div class="fail">
+              <h6>2. Wrong people doing it</h6>
+              <p>Devs, QAs, or "the BA pretending to be the user" run the scripts. Real users never see the system before launch.</p>
+              <span class="fix"><strong>Fix:</strong> get 3–7 actual business users committed up-front, written into the project plan.</span>
+            </div>
+            <div class="fail">
+              <h6>3. Wrong environment</h6>
+              <p>Tests are run in production (creates real records) — or in a stripped-down dev environment with no realistic data.</p>
+              <span class="fix"><strong>Fix:</strong> a UAT environment that mirrors prod, with realistic-but-fake data. Set this up before users arrive.</span>
+            </div>
+            <div class="fail">
+              <h6>4. Vague scripts</h6>
+              <p>"Try the leave approval flow." That's not a script — that's a hint. Users wander, important paths get missed.</p>
+              <span class="fix"><strong>Fix:</strong> numbered steps, clear expected outcomes, anchored to AC. The scripts you saw on slide 18.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 21 SECTION HANDS-ON -->
+      <div class="slide bg-blue" data-slide="21">
+        <div class="slide-label"><span class="snum">21</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Four · Hands-on</div>
+          <h1 class="display" style="color: white">Write a UAT Script<br>for mBoB</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Pairs · 25 minutes · happy path + error path.</p>
+        </div>
+        <div class="section-num" style="color: white">05</div>
+      </div>
+
+      <!-- 22 EXERCISE BRIEF -->
+      <div class="slide accent-blue bg-subtle" data-slide="22">
+        <div class="slide-label"><span class="snum">22</span> The brief</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Write two UAT scripts: one happy, one error</h2></div>
+          <div class="story-card">
+            <span class="tag">User Story</span>
+            <h5>Cancel a confirmed Druk Air booking via mBoB</h5>
+            <p class="body">As an <strong>mBoB user with a confirmed Druk Air ticket</strong>,<br>I want to <strong>cancel the booking from inside mBoB</strong><br>so that <strong>I get my refund processed without calling the airline.</strong></p>
+            <div class="ac"><strong>AC 1</strong> — Given the user has a confirmed Druk Air booking visible in mBoB, when they tap "Cancel booking" and confirm, then the booking status changes to "Cancelled" within 5 seconds and a refund reference number is shown.</div>
+            <div class="ac"><strong>AC 2</strong> — Given the user cancels more than 24 hours before departure, when the cancellation completes, then the full ticket amount is credited back to the original mBoB account within 3 working days.</div>
+            <div class="ac"><strong>AC 3</strong> — Given the user tries to cancel less than 2 hours before departure, when they tap "Cancel booking", then the system shows "Cancellation not allowed within 2 hours of departure — please call Druk Air" and does nothing.</div>
+          </div>
+          <div class="cols-2" style="max-width:1050px; gap:1rem">
+            <div class="card" style="border-top:3px solid var(--blue)">
+              <h4 style="color:var(--blue)">What to produce</h4>
+              <ul style="font-size:0.92rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li><strong>Script 1 — Happy path:</strong> 5–8 numbered steps, expected outcome per step, Pass/Fail column. User cancels &gt; 24h before flight and gets the refund reference.</li>
+                <li><strong>Script 2 — Error path:</strong> 5–8 numbered steps. User tries to cancel within 2h of departure — system blocks them with the right message.</li>
+                <li>Both scripts must include <strong>pre-conditions</strong> at the top (account, booking, time-to-departure).</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--amber)">
+              <h4 style="color:var(--amber)">How to work</h4>
+              <ul style="font-size:0.92rem; line-height:1.7; padding-left:1.2rem; color:var(--text)">
+                <li>Pair up.</li>
+                <li>One person drafts, the other plays "the user" and questions every step ("how do I know it worked?").</li>
+                <li>Use the worked example on slide 18 as your template.</li>
+                <li>15 min writing · 5 min pair check · 5 min volunteer share.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 23 EXERCISE DEBRIEF -->
+      <div class="slide accent-blue" data-slide="23">
+        <div class="slide-label"><span class="snum">23</span> Debrief · what good looks like</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">UAT-DA-002 · Cancel within 2 hours (error path) — reference</h2></div>
+          <div class="uat-tbl">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:6%">#</th>
+                  <th style="width:30%">Step</th>
+                  <th style="width:32%">Expected outcome</th>
+                  <th style="width:14%">Pass / Fail</th>
+                  <th style="width:18%">Comments</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="meta-row"><td colspan="5"><strong>Story:</strong> Cancel a Druk Air booking via mBoB &nbsp;·&nbsp; <strong>Pre-conditions:</strong> mBoB account "Karma Wangmo" logged in. One confirmed Druk Air booking, departure in 90 minutes. Test booking ID DA-9876.</td></tr>
+                <tr><td class="step">1</td><td>From mBoB home, tap "My Bookings".</td><td>List shows the booking DA-9876 with status "Confirmed" and departure time.</td><td class="res">Pass / Fail</td><td class="cmt">—</td></tr>
+                <tr><td class="step">2</td><td>Tap the booking DA-9876.</td><td>Booking detail screen shows flight info, fare, and a "Cancel booking" button.</td><td class="res">Pass / Fail</td><td class="cmt">—</td></tr>
+                <tr><td class="step">3</td><td>Tap "Cancel booking".</td><td>Within 2 seconds, a message appears: "Cancellation not allowed within 2 hours of departure — please call Druk Air on 1300."</td><td class="res">Pass / Fail</td><td class="cmt">—</td></tr>
+                <tr><td class="step">4</td><td>Tap "OK" on the message.</td><td>User is returned to the booking detail screen. Booking status is still "Confirmed". No "Cancellation pending" state.</td><td class="res">Pass / Fail</td><td class="cmt">—</td></tr>
+                <tr><td class="step">5</td><td>Go back to "My Bookings".</td><td>Booking DA-9876 is still listed as "Confirmed" with the same departure time.</td><td class="res">Pass / Fail</td><td class="cmt">—</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:840px; font-style:italic">Notice: the error path checks both that the system <em>blocks</em> the action <strong>and</strong> that nothing changed afterwards. Both halves matter.</p>
+        </div>
+      </div>
+
+      <!-- 24 WRAP -->
+      <div class="slide bg-dark" data-slide="24">
+        <div class="slide-label"><span class="snum">24</span> Wrap-up</div>
+        <div class="center" style="max-width: 820px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key Takeaways</div>
+          <h2 class="heading" style="color: white;">What we covered today</h2>
+          <ul class="reveal-list" style="color: rgba(255,255,255,0.9); text-align:left; max-width: 740px; margin: 1.5rem auto; font-size: 1rem; line-height: 2;">
+            <li>✅ <strong>Verification</strong> = built it right · <strong>Validation</strong> = built the right thing · UAT = validation</li>
+            <li>✅ UAT is <strong>real business users</strong> on a <strong>realistic system</strong>, signing off that it solves the problem</li>
+            <li>✅ Plan six things up-front: <strong>timing · environment · participants · scripts · defects · sign-off</strong></li>
+            <li>✅ Every UAT script has 5 parts: <strong>story · pre-conditions · numbered steps · expected outcomes · pass/fail</strong></li>
+            <li>✅ Sign-off is <strong>written</strong> and names what was tested, what wasn't, known limitations, and conditions</li>
+            <li>✅ The four common failures: <strong>last-minute · wrong people · wrong environment · vague scripts</strong></li>
+            <li>✅ The BA owns UAT — facilitates, doesn't perform it</li>
+          </ul>
+          <p style="color: var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.2rem; margin-top:1.5rem">If real users haven't run real scripts in a real-ish environment — you haven't done UAT.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 24</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>

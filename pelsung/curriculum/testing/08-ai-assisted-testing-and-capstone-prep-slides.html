@@ -1,0 +1,1143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI-Assisted Testing &amp; Capstone Prep — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      /* ----- page-specific additions ----- */
+      .help-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:0.7rem; max-width:1100px; width:100%; }
+      @media (max-width: 900px) { .help-grid { grid-template-columns: 1fr 1fr; } }
+      .help-card { background:white; border:1px solid var(--border); border-top:3px solid var(--blue); border-radius:10px; padding:0.8rem 1rem; }
+      .help-card .num { color:var(--muted); font-family:'Courier New',monospace; font-size:0.7rem; letter-spacing:0.06em; }
+      .help-card h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.96rem; margin:0.2rem 0 0.3rem; }
+      .help-card p { font-size:0.78rem; color:var(--text); line-height:1.55; }
+      .help-card .ex { color:var(--muted); font-size:0.72rem; font-style:italic; margin-top:0.4rem; padding-top:0.35rem; border-top:1px dashed var(--border); }
+
+      /* prompt comparison cards */
+      .prompt-cmp { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; max-width:1100px; width:100%; }
+      @media (max-width: 900px) { .prompt-cmp { grid-template-columns: 1fr; } }
+      .pcard { background:white; border:1px solid var(--border); border-radius:12px; padding:0.95rem 1.1rem; }
+      .pcard.bad { border-left:5px solid var(--red); }
+      .pcard.good { border-left:5px solid #3D7A3D; }
+      .pcard .verdict { font-size:0.7rem; text-transform:uppercase; letter-spacing:0.08em; font-weight:700; }
+      .pcard.bad .verdict { color:var(--red); }
+      .pcard.good .verdict { color:#3D7A3D; }
+      .pcard h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin:0.2rem 0 0.5rem; }
+      .pcard .ptext { background:var(--bg); border-radius:8px; padding:0.65rem 0.8rem; font-family:'Courier New',monospace; font-size:0.78rem; color:var(--text); line-height:1.6; white-space:pre-wrap; }
+      .pcard ul { padding-left:1rem; margin-top:0.55rem; }
+      .pcard li { font-size:0.76rem; color:var(--muted); line-height:1.5; margin:0.15rem 0; }
+
+      /* loop steps */
+      .loop-row { display:grid; grid-template-columns: repeat(3, 1fr); gap:0.8rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px) { .loop-row { grid-template-columns: 1fr; } }
+      .loop-step { background:white; border:1px solid var(--border); border-radius:12px; padding:0.95rem 1.1rem; position:relative; }
+      .loop-step .step-num { display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:50%; background:var(--blue); color:white; font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; font-size:1rem; margin-bottom:0.4rem; }
+      .loop-step.s1 .step-num { background:var(--blue); }
+      .loop-step.s2 .step-num { background:var(--amber); }
+      .loop-step.s3 .step-num { background:#3D7A3D; }
+      .loop-step h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.3rem; }
+      .loop-step p { font-size:0.82rem; color:var(--text); line-height:1.6; }
+      .loop-arrow { color:var(--muted); font-size:1.5rem; align-self:center; text-align:center; }
+
+      /* terminal-style code blocks */
+      .term { background:#001f35; border-radius:12px; overflow:hidden; max-width:1000px; width:100%; }
+      .term-bar { background:#0a2a45; padding:0.45rem 0.85rem; display:flex; gap:6px; align-items:center; font-family:'Open Sans',sans-serif; font-size:0.72rem; color:rgba(255,255,255,0.45); }
+      .term-bar .dot { width:10px; height:10px; border-radius:50%; }
+      .term-bar .title { margin-left:0.5rem; }
+      .term-body { padding:0.85rem 1.1rem; font-family:'Courier New',monospace; font-size:0.8rem; color:rgba(255,255,255,0.9); line-height:1.7; white-space:pre-wrap; }
+      .term-body .you { color:#7dd3fc; }
+      .term-body .ai { color:#86efac; }
+      .term-body .note { color:#fde68a; }
+      .term-body .dim { color:rgba(255,255,255,0.45); }
+
+      /* worked-walk: chat bubble pair */
+      .chat-wrap { display:flex; flex-direction:column; gap:0.7rem; max-width:980px; width:100%; }
+      .bubble { border-radius:14px; padding:0.85rem 1.1rem; max-width:85%; font-size:0.84rem; line-height:1.65; }
+      .bubble.you { background:var(--blue); color:white; align-self:flex-end; border-bottom-right-radius:4px; }
+      .bubble.ai { background:var(--bg); border:1px solid var(--border); color:var(--text); align-self:flex-start; border-bottom-left-radius:4px; }
+      .bubble .who { font-size:0.7rem; text-transform:uppercase; letter-spacing:0.08em; font-weight:700; opacity:0.75; margin-bottom:0.3rem; display:block; }
+      .bubble.you .who { color:rgba(255,255,255,0.85); }
+      .bubble.ai .who { color:var(--muted); }
+      .bubble pre { font-family:'Courier New',monospace; font-size:0.74rem; line-height:1.55; white-space:pre-wrap; margin-top:0.3rem; }
+
+      /* simple test-case mini-table */
+      .tc-tbl { width:100%; max-width:980px; background:white; border:1px solid var(--border); border-radius:10px; overflow:hidden; font-size:0.74rem; }
+      .tc-tbl table { width:100%; border-collapse:collapse; }
+      .tc-tbl th { background:var(--bg); padding:0.45rem 0.6rem; text-align:left; color:var(--muted); font-size:0.66rem; text-transform:uppercase; letter-spacing:0.06em; font-weight:700; border-bottom:1px solid var(--border); }
+      .tc-tbl td { padding:0.45rem 0.6rem; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.55; }
+      .tc-tbl tr:last-child td { border-bottom:none; }
+      .tc-tbl .id { color:var(--blue); font-family:'Courier New',monospace; font-weight:700; }
+      .tc-tbl .pos { color:#3D7A3D; font-weight:700; font-size:0.68rem; }
+      .tc-tbl .neg { color:var(--red); font-weight:700; font-size:0.68rem; }
+      .tc-tbl .edge { color:var(--amber); font-weight:700; font-size:0.68rem; }
+
+      /* checklist box */
+      .chk-box { background:white; border:1px solid var(--border); border-left:5px solid var(--blue); border-radius:10px; padding:0.95rem 1.2rem; max-width:920px; width:100%; }
+      .chk-box h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.5rem; }
+      .chk-box ul { list-style:none; padding:0; margin:0; }
+      .chk-box li { padding:0.35rem 0; border-bottom:1px dashed var(--border); font-size:0.85rem; color:var(--text); line-height:1.55; }
+      .chk-box li:last-child { border-bottom:none; }
+      .chk-box li::before { content:'☐'; color:var(--blue); margin-right:0.55rem; font-weight:700; }
+      .chk-box li strong { color:var(--indigo); }
+
+      /* "AI is bad at" warning cards */
+      .warn-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:0.7rem; max-width:1000px; width:100%; }
+      @media (max-width: 820px) { .warn-grid { grid-template-columns: 1fr; } }
+      .warn-card { background:white; border:1px solid var(--border); border-left:4px solid var(--red); border-radius:10px; padding:0.75rem 1rem; }
+      .warn-card h6 { color:var(--red); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.9rem; margin-bottom:0.25rem; }
+      .warn-card p { font-size:0.78rem; color:var(--text); line-height:1.55; }
+
+      /* strategy template numbered list */
+      .strat-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:0.7rem; max-width:1100px; width:100%; }
+      @media (max-width: 900px) { .strat-grid { grid-template-columns: 1fr 1fr; } }
+      .strat-card { background:white; border:1px solid var(--border); border-radius:10px; padding:0.75rem 1rem; }
+      .strat-card .step { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.4rem; font-weight:700; }
+      .strat-card h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.92rem; margin:0.1rem 0 0.3rem; }
+      .strat-card p { font-size:0.76rem; color:var(--text); line-height:1.55; }
+
+      /* QA role on capstone */
+      .role-grid { display:grid; grid-template-columns: 1fr 1fr; gap:0.7rem; max-width:1000px; width:100%; }
+      @media (max-width: 820px) { .role-grid { grid-template-columns: 1fr; } }
+      .role-card { background:white; border:1px solid var(--border); border-top:3px solid var(--indigo); border-radius:10px; padding:0.7rem 0.95rem; }
+      .role-card h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.9rem; margin-bottom:0.2rem; }
+      .role-card p { font-size:0.78rem; color:var(--text); line-height:1.55; }
+
+      /* feature options for hands-on */
+      .feat-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:0.8rem; max-width:1100px; width:100%; }
+      @media (max-width: 900px) { .feat-grid { grid-template-columns: 1fr; } }
+      .feat-card { background:white; border:1px solid var(--border); border-top:5px solid var(--blue); border-radius:12px; padding:1rem 1.15rem; }
+      .feat-card .tag { color:var(--muted); font-size:0.7rem; text-transform:uppercase; letter-spacing:0.07em; font-weight:700; }
+      .feat-card h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; margin:0.2rem 0 0.4rem; }
+      .feat-card p { font-size:0.8rem; color:var(--text); line-height:1.6; }
+
+      .step-list { background:white; border:1px solid var(--border); border-radius:12px; padding:0.95rem 1.2rem; max-width:920px; width:100%; }
+      .step-list ol { padding-left:1.4rem; }
+      .step-list li { font-size:0.88rem; color:var(--text); line-height:1.7; margin:0.35rem 0; }
+      .step-list li strong { color:var(--indigo); }
+
+      /* doc-tier produces */
+      .doc-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:0.7rem; max-width:1000px; width:100%; }
+      @media (max-width: 820px) { .doc-grid { grid-template-columns: 1fr; } }
+      .doc-card { background:white; border:1px solid var(--border); border-top:3px solid var(--amber); border-radius:10px; padding:0.85rem 1.1rem; text-align:center; }
+      .doc-card .ic { font-size:1.6rem; }
+      .doc-card h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin:0.3rem 0 0.25rem; }
+      .doc-card p { font-size:0.76rem; color:var(--text); line-height:1.55; }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+      <!-- ══════════════════════════════════════════
+       SLIDE 1 — TITLE
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-gradient" data-slide="1">
+        <div class="slide-label">
+          <span class="snum">01</span> SELISE × Pelsung · QA Class 08
+        </div>
+        <div class="title-grid center">
+          <div>
+            <div class="date-badge">
+              <span class="db-dot"></span>
+              Software Testing · Final Class
+            </div>
+          </div>
+          <h1 class="display" style="color: var(--text)">
+            <span style="color: var(--blue)">AI-Assisted Testing</span><br />
+            <span style="color: var(--amber); font-style: italic">+</span>
+            <span style="color: var(--indigo)">Capstone Prep</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted)">
+            Generating test cases with Claude · Reviewing AI output · Capstone test strategy
+          </p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">AI-Assisted Testing</span>
+            <span class="class-tag tag-indigo">Capstone Prep</span>
+          </div>
+        </div>
+        <div class="interact-hint">
+          Press → or click the right side to advance
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 2 — AGENDA
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 760px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              Session Journey
+            </h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.3rem">
+              Two halves — AI as your test buddy, then capstone readiness
+            </p>
+          </div>
+          <div class="agenda-row" onclick="goTo(3)">
+            <span class="ar-dot" style="background: var(--blue)"></span>
+            <span class="ar-label">🤖 AI-Assisted Testing — where AI helps a manual QA</span>
+            <span class="ar-badge" style="background: #E6F0F8; color: var(--blue)">~60%</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(5)">
+            <span class="ar-dot" style="background: var(--amber)"></span>
+            <span class="ar-label">✏️ Prompt anatomy — bad vs good</span>
+            <span class="ar-badge" style="background: #EBF0F7; color: #1C5B8C">15 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(8)">
+            <span class="ar-dot" style="background: var(--blue)"></span>
+            <span class="ar-label">🔁 Worked walkthrough — leave request</span>
+            <span class="ar-badge" style="background: #E6F0F8; color: var(--blue)">20 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(13)">
+            <span class="ar-dot" style="background: var(--red)"></span>
+            <span class="ar-label">⚠️ Where AI is BAD + reviewer's checklist</span>
+            <span class="ar-badge" style="background: #FEE9EC; color: var(--red)">10 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(15)">
+            <span class="ar-dot" style="background: var(--indigo)"></span>
+            <span class="ar-label">🎯 Capstone Prep — your role + test strategy</span>
+            <span class="ar-badge" style="background: #E6E9EC; color: var(--indigo)">~40%</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(20)">
+            <span class="ar-dot" style="background: var(--amber)"></span>
+            <span class="ar-label">✍ Hands-on — pick a feature, prompt + critique</span>
+            <span class="ar-badge" style="background: #EBF0F7; color: #1C5B8C">30 min</span>
+          </div>
+          <div class="agenda-row" onclick="goTo(23)">
+            <span class="ar-dot" style="background: var(--green)"></span>
+            <span class="ar-label">🇧🇹 Wrap — final QA class, what's next</span>
+            <span class="ar-badge" style="background: #F3FAE9; color: #3D7A3D">5 min</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 3 — SECTION INTRO: AI-ASSISTED TESTING
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-blue" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span> Half 1 · AI-Assisted Testing
+          </div>
+          <h1 class="display" style="color: white">AI is your<br />test-design buddy.</h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.78); margin-top: 1rem; max-width: 720px;">
+            Not your replacement. Not a magic test-case machine.<br />
+            You generate with it, then you <strong style="color: white">critique</strong> what it gave you.
+          </p>
+        </div>
+        <div class="section-num" style="color: white">01</div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 4 — WHERE AI HELPS A MANUAL QA
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="4">
+        <div class="slide-label">
+          <span class="snum">04</span> Where AI Helps
+        </div>
+        <div class="stack" style="align-items: center; width: 100%">
+          <div class="center">
+            <div class="pill pill-blue">6 Real Uses</div>
+            <h2 class="heading" style="font-size: clamp(1.7rem, 3.2vw, 2.6rem)">
+              Where AI Helps a Manual QA
+            </h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem; max-width: 720px;">
+              Same Claude Code you used in Foundation #06a — now pointed at test work.
+            </p>
+          </div>
+          <div class="help-grid">
+            <div class="help-card">
+              <span class="num">01</span>
+              <h5>Test case skeletons from AC</h5>
+              <p>Paste the user story + acceptance criteria. Get 8–10 cases drafted to your template.</p>
+              <span class="ex">"Approve a leave request" → 10 cases</span>
+            </div>
+            <div class="help-card">
+              <span class="num">02</span>
+              <h5>Negative &amp; edge cases you'd miss</h5>
+              <p>Ask: "what could break this?" Claude lists ideas a human might not think of when tired.</p>
+              <span class="ex">mBoB transfer with Nu. 0, max+1, expired session</span>
+            </div>
+            <div class="help-card">
+              <span class="num">03</span>
+              <h5>Prose spec → structured cases</h5>
+              <p>Ugly paragraph from BA becomes a clean table with ID, Steps, Expected.</p>
+              <span class="ex">GMC visa form spec → row-by-row cases</span>
+            </div>
+            <div class="help-card">
+              <span class="num">04</span>
+              <h5>Test data sets</h5>
+              <p>Get realistic-looking sample data to populate your steps. Always sanity-check it.</p>
+              <span class="ex">10 fake CIDs, names, school IDs</span>
+            </div>
+            <div class="help-card">
+              <span class="num">05</span>
+              <h5>Review &amp; critique your cases</h5>
+              <p>Paste your own draft. Ask Claude to find missing scenarios or vague steps.</p>
+              <span class="ex">"What's missing from these 8 cases?"</span>
+            </div>
+            <div class="help-card">
+              <span class="num">06</span>
+              <h5>Translate to / from Dzongkha</h5>
+              <p>Stakeholder needs Dzongkha summary? Trainee reads English better? Claude bridges both.</p>
+              <span class="ex">Test plan summary → Dzongkha for sponsor</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 5 — BAD vs GOOD PROMPT
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="5">
+        <div class="slide-label">
+          <span class="snum">05</span> Prompt Anatomy · Bad vs Good
+        </div>
+        <div class="stack" style="align-items: center; width: 100%">
+          <div class="center">
+            <div class="pill pill-blue">Same goal · two prompts · very different output</div>
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              The Difference is Context
+            </h2>
+          </div>
+          <div class="prompt-cmp">
+            <div class="pcard bad">
+              <span class="verdict">✗ Bad prompt</span>
+              <h5>Vague, no role, no template</h5>
+              <div class="ptext">give me test cases for login</div>
+              <ul>
+                <li>What system? Web? Mobile?</li>
+                <li>How many cases? What format?</li>
+                <li>Positive only? Negative? Edge?</li>
+                <li>Result: generic, unusable, you rewrite everything</li>
+              </ul>
+            </div>
+            <div class="pcard good">
+              <span class="verdict">✓ Good prompt</span>
+              <h5>Role, context, template, examples</h5>
+              <div class="ptext">I'm a QA writing manual test cases. Here's the user story and 3 acceptance criteria for [feature]. Generate 8–10 test cases (mix positive, negative, edge) using this template: ID, Title, Pre-conditions, Steps (numbered, atomic), Expected Result. Use realistic Bhutanese-context test data.</div>
+              <ul>
+                <li>Tells Claude WHO it's writing for</li>
+                <li>Gives the template you'll paste into</li>
+                <li>Asks for the right MIX of cases</li>
+                <li>Locks the data style — no fake "John Smith"</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 6 — PROMPT ANATOMY TEMPLATE
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="6">
+        <div class="slide-label">
+          <span class="snum">06</span> Prompt Template
+        </div>
+        <div class="stack" style="align-items: center; width: 100%; max-width: 1000px;">
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              Five Parts of a QA Prompt
+            </h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem; max-width: 720px;">
+              Memorise this shape. Every good test-case prompt has these five.
+            </p>
+          </div>
+          <div class="term">
+            <div class="term-bar">
+              <span class="dot" style="background:#FF5F57"></span>
+              <span class="dot" style="background:#FEBC2E"></span>
+              <span class="dot" style="background:#28C840"></span>
+              <span class="title">Claude Code · QA prompt template</span>
+            </div>
+            <div class="term-body"><span class="note"># 1. ROLE</span>
+<span class="ai">I'm a manual QA on a banking app project.</span>
+
+<span class="note"># 2. CONTEXT — the story &amp; AC</span>
+<span class="ai">Story: As a Druk PNB customer, I want to transfer
+money to a saved beneficiary using mBoB.
+AC1: Amount must be between Nu. 1 and Nu. 100,000.
+AC2: OTP must be entered within 60 seconds.
+AC3: Insufficient balance shows an error before OTP.</span>
+
+<span class="note"># 3. TASK</span>
+<span class="ai">Generate 8–10 manual test cases — mix of positive,
+negative, and edge.</span>
+
+<span class="note"># 4. FORMAT</span>
+<span class="ai">Use this template per case:
+ID | Title | Pre-conditions | Steps (numbered) | Expected Result</span>
+
+<span class="note"># 5. CONSTRAINTS</span>
+<span class="ai">Use realistic Bhutanese names and amounts in Ngultrum.
+Keep steps atomic — one action per step.
+Mark each case as POSITIVE / NEGATIVE / EDGE.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 7 — GENERATE-CRITIQUE-REFINE LOOP
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-amber" data-slide="7">
+        <div class="slide-label">
+          <span class="snum">07</span> The Loop
+        </div>
+        <div class="stack" style="align-items: center; width: 100%">
+          <div class="center">
+            <div class="pill pill-blue">The most important slide of the day</div>
+            <h2 class="heading" style="font-size: clamp(1.7rem, 3.2vw, 2.6rem)">
+              Generate → Critique → Refine
+            </h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem; max-width: 760px;">
+              Never accept Claude's first answer. Apply your QA brain to it.
+            </p>
+          </div>
+          <div class="loop-row">
+            <div class="loop-step s1">
+              <div class="step-num">1</div>
+              <h5>Generate</h5>
+              <p>Send the 5-part prompt with story + AC. Get 8–10 candidate cases.</p>
+            </div>
+            <div class="loop-step s2">
+              <div class="step-num">2</div>
+              <h5>Critique</h5>
+              <p>Apply the 7 rules from QA #04: atomic steps, concrete pre-conditions, real expected results, edge values, no hallucinations.</p>
+            </div>
+            <div class="loop-step s3">
+              <div class="step-num">3</div>
+              <h5>Refine</h5>
+              <p>Re-prompt: "Fix case 4 — pre-condition is vague. Add 2 cases for max+1 amount." Repeat until tight.</p>
+            </div>
+          </div>
+          <div class="card" style="background: var(--bg); border: 2px dashed var(--border); text-align: center; padding: 0.75rem 1.1rem; max-width: 760px; margin-top: 0.5rem;">
+            <p class="body-md" style="color: var(--muted)">
+              🎯 <strong style="color: var(--text)">Rule of thumb:</strong>
+              if you would not be comfortable putting your name on the output, loop again.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 8 — WORKED WALKTHROUGH · STORY + AC
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="8">
+        <div class="slide-label">
+          <span class="snum">08</span> Worked Walkthrough · Step 0
+        </div>
+        <div class="stack" style="align-items: center; width: 100%; max-width: 1000px;">
+          <div class="center">
+            <div class="pill pill-blue">Real example we will run together</div>
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              Feature: Approve a Leave Request
+            </h2>
+          </div>
+          <div class="big-card-box" style="background: white; border:1px solid var(--border); border-left:5px solid var(--blue); border-radius:12px; padding:1rem 1.3rem; max-width:920px; width:100%;">
+            <p style="color: var(--muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 700; margin-bottom: 0.4rem;">User story</p>
+            <p style="font-size: 0.92rem; color: var(--text); line-height: 1.7;">
+              As a <strong>line manager</strong>, I want to <strong>approve or reject</strong> a leave request from my team member, so that they know whether they can take leave.
+            </p>
+            <p style="color: var(--muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 700; margin: 0.8rem 0 0.4rem;">Acceptance criteria</p>
+            <ul style="padding-left: 1.2rem;">
+              <li style="font-size: 0.86rem; color: var(--text); line-height: 1.7;"><strong>AC1:</strong> Manager sees pending requests on their dashboard.</li>
+              <li style="font-size: 0.86rem; color: var(--text); line-height: 1.7;"><strong>AC2:</strong> Approve or Reject must include a comment.</li>
+              <li style="font-size: 0.86rem; color: var(--text); line-height: 1.7;"><strong>AC3:</strong> Once decided, the trainee gets a notification and the request status updates.</li>
+            </ul>
+          </div>
+          <p class="body-md" style="color: var(--muted); margin-top: 0.4rem;">
+            We will now prompt Claude with this. Watch what comes back.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 9 — WALKTHROUGH · CLAUDE'S FIRST OUTPUT
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="9">
+        <div class="slide-label">
+          <span class="snum">09</span> Worked Walkthrough · Step 1 Generate
+        </div>
+        <div class="stack" style="align-items: center; width: 100%">
+          <div class="center" style="margin-bottom: 0.4rem;">
+            <h2 class="heading" style="font-size: clamp(1.4rem, 2.6vw, 2rem)">Claude's first output (good — but flawed)</h2>
+          </div>
+          <div class="tc-tbl">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:80px">ID</th>
+                  <th>Title</th>
+                  <th>Pre-conditions</th>
+                  <th>Expected Result</th>
+                  <th style="width:70px">Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td class="id">TC-01</td><td>Manager approves a pending leave</td><td>Manager logged in</td><td>Status = Approved, trainee notified</td><td><span class="pos">POS</span></td></tr>
+                <tr><td class="id">TC-02</td><td>Manager rejects without comment</td><td>Manager logged in, request open</td><td>Error: "Comment required"</td><td><span class="neg">NEG</span></td></tr>
+                <tr><td class="id">TC-03</td><td>Manager approves with very long comment</td><td>Logged in</td><td>System accepts comment</td><td><span class="edge">EDGE</span></td></tr>
+                <tr><td class="id">TC-04</td><td>Trainee tries to approve own request</td><td>Trainee logged in</td><td>Approve button hidden</td><td><span class="neg">NEG</span></td></tr>
+                <tr><td class="id">TC-05</td><td>Approve a leave already approved</td><td>Logged in</td><td>System shows already-approved status</td><td><span class="edge">EDGE</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="body-md" style="color: var(--muted); max-width: 880px; text-align: center; margin-top: 0.4rem;">
+            Looks decent, right? Now let's apply our QA brain.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 10 — WALKTHROUGH · CRITIQUE
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-amber bg-subtle" data-slide="10">
+        <div class="slide-label">
+          <span class="snum">10</span> Worked Walkthrough · Step 2 Critique
+        </div>
+        <div class="stack" style="align-items: center; width: 100%; max-width: 980px;">
+          <div class="center">
+            <div class="pill pill-blue">Flaws we found</div>
+            <h2 class="heading" style="font-size: clamp(1.5rem, 2.8vw, 2.2rem)">What's wrong with that table?</h2>
+          </div>
+          <div class="chk-box" style="border-left-color: var(--red);">
+            <h5 style="color: var(--red);">⚠️ Issues a real QA would flag</h5>
+            <ul>
+              <li><strong>TC-01:</strong> "Manager logged in" is too vague. Need: "Manager has 1 pending request from a trainee in their team."</li>
+              <li><strong>TC-03:</strong> "Very long comment" — how long? 500 chars? 5000? <strong>Pin the edge value.</strong></li>
+              <li><strong>Missing:</strong> request from trainee NOT in this manager's team — should be hidden / forbidden.</li>
+              <li><strong>Missing:</strong> approve a leave whose dates already passed (stale request).</li>
+              <li><strong>Missing:</strong> approve while offline / no network — what happens to the comment?</li>
+              <li><strong>Hallucination check:</strong> AC2 says comment required for both approve AND reject. Claude only tested reject.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 11 — WALKTHROUGH · REFINE PROMPT
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="11">
+        <div class="slide-label">
+          <span class="snum">11</span> Worked Walkthrough · Step 3 Refine
+        </div>
+        <div class="stack" style="align-items: center; width: 100%">
+          <div class="center" style="margin-bottom: 0.4rem;">
+            <h2 class="heading" style="font-size: clamp(1.5rem, 2.8vw, 2.2rem)">The follow-up prompt we send</h2>
+          </div>
+          <div class="chat-wrap">
+            <div class="bubble you">
+              <span class="who">You · refine prompt</span>
+              Thanks. Now revise:
+              (a) Pin every "long comment" to a specific char limit — assume max 500.
+              (b) TC-01 pre-condition must say: "Manager has exactly 1 pending request from Karma Wangmo on their team." Use that style for all cases.
+              (c) Add 3 missing cases: trainee outside team, stale request (dates in the past), approve with no network.
+              (d) Add a case for AC2 that approves WITHOUT a comment — should also fail.
+              Re-print the full table.
+            </div>
+            <div class="bubble ai">
+              <span class="who">Claude · revised output</span>
+              Sure — here's the updated table with 9 cases. Pre-conditions are now concrete (named user, exact request count). I added TC-06 (trainee outside team — Approve hidden), TC-07 (stale request — system blocks with "dates passed" error), TC-08 (offline approve — UI shows queued state, syncs when back online), and TC-09 (approve without comment — same "Comment required" error as reject).
+              <pre>… clean 9-row table follows …</pre>
+            </div>
+          </div>
+          <p class="body-md" style="color: var(--muted); margin-top: 0.4rem;">
+            That's the loop. Generate → critique → refine. Two cycles is normal.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 12 — WHAT AI IS BAD AT
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-dark" data-slide="12">
+        <div class="slide-label">
+          <span class="snum">12</span> AI Weaknesses
+        </div>
+        <div class="stack" style="align-items: center; width: 100%">
+          <div class="center">
+            <div class="pill pill-white">Where you must NOT trust it</div>
+            <h2 class="heading" style="color: white; font-size: clamp(1.7rem, 3.2vw, 2.6rem)">
+              What AI Is Bad At
+            </h2>
+            <p class="body-md" style="color: rgba(255,255,255,0.7); margin-top: 0.4rem; max-width: 760px;">
+              Treat these as red zones. Always double-check.
+            </p>
+          </div>
+          <div class="warn-grid">
+            <div class="warn-card">
+              <h6>🇧🇹 Real Bhutan-specific data</h6>
+              <p>Currency formats, district names, school IDs, CID structure — Claude often guesses. Verify against a real example.</p>
+            </div>
+            <div class="warn-card">
+              <h6>🔧 Your specific system's quirks</h6>
+              <p>Claude doesn't know your app's button labels, error wording, or that screen #4 is broken on Tuesdays. You do.</p>
+            </div>
+            <div class="warn-card">
+              <h6>❓ Ambiguity in your own prompt</h6>
+              <p>If your AC is fuzzy, Claude will quietly fill the gap with assumptions. It will not stop and ask.</p>
+            </div>
+            <div class="warn-card">
+              <h6>🔍 Replacing exploratory testing</h6>
+              <p>Clicking around with curiosity, breaking things in unexpected ways — that's a human job. Always.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 13 — REVIEWER'S CHECKLIST
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="13">
+        <div class="slide-label">
+          <span class="snum">13</span> Reviewer's Checklist
+        </div>
+        <div class="stack" style="align-items: center; width: 100%">
+          <div class="center">
+            <div class="pill pill-blue">Use this every time you read AI test cases</div>
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              Reviewer's 5-Question Checklist
+            </h2>
+          </div>
+          <div class="chk-box">
+            <ul>
+              <li><strong>1. UI map:</strong> Do the steps actually map to a screen / button we have? Or did Claude invent a "Bulk Approve" feature?</li>
+              <li><strong>2. Concrete pre-conditions:</strong> Is system state pinned (specific user, specific record), not just "logged in"?</li>
+              <li><strong>3. Negative coverage:</strong> Did it cover the bad paths — empty fields, wrong role, expired session?</li>
+              <li><strong>4. Specific edge values:</strong> Are edges named (0, 1, max−1, max, max+1) — not "a really big number"?</li>
+              <li><strong>5. Hallucination scan:</strong> Is anything described that does NOT exist in our app? Cross-check against the BA's spec.</li>
+            </ul>
+          </div>
+          <p class="body-md" style="color: var(--muted); max-width: 720px; text-align: center; margin-top: 0.3rem;">
+            If even one answer is "no", loop again before you save the file.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 14 — DISCUSSION BREAK
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-amber" data-slide="14">
+        <div class="slide-label">
+          <span class="snum">14</span> Discussion · 5 min
+        </div>
+        <div class="center" style="max-width: 760px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            🎤 Quick Show-of-Hands
+          </div>
+          <p class="disc-prompt" style="font-size: clamp(1.4rem, 2.8vw, 2.2rem); color: white; line-height: 1.4;">
+            "When you read AI's first answer,<br />
+            <span style="color: white; font-style: italic;">what's your default reaction?</span>"
+          </p>
+          <p style="color: rgba(255,255,255,0.85); font-size: clamp(0.9rem, 1.3vw, 1.05rem); margin-top: 1.5rem; line-height: 1.6;">
+            🤖 "Looks good, copy-paste"<br />
+            🧐 "Sounds suspicious, let me check"<br />
+            ❓ "I have no idea if it's right"
+          </p>
+          <p style="color: rgba(255,255,255,0.65); font-size: clamp(0.78rem, 1.1vw, 0.9rem); margin-top: 1.5rem;">
+            Be honest. The right answer is the middle one — and it's a habit, not a personality.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 15 — SECTION INTRO: CAPSTONE PREP
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-indigo" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span></div>
+        <div class="center" style="position: relative; z-index: 1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span> Half 2 · Capstone Prep
+          </div>
+          <h1 class="display" style="color: white">From training<br />to a real team.</h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem; max-width: 760px;">
+            You'll join a mixed BA + Dev + QA team building a GMC product.<br />
+            Or: a documentation-tier team producing the test plan and cases.<br />
+            <strong style="color: white;">Both are real capstones.</strong>
+          </p>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 16 — CAPSTONE SETUP RECAP + QA ROLE
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-indigo bg-subtle" data-slide="16">
+        <div class="slide-label">
+          <span class="snum">16</span> The QA's Role on a Capstone Team
+        </div>
+        <div class="stack" style="align-items: center; width: 100%">
+          <div class="center">
+            <div class="pill pill-blue">What the QA does — week by week</div>
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              Your Job on the Team
+            </h2>
+          </div>
+          <div class="role-grid">
+            <div class="role-card">
+              <h6>1. Read BA's stories &amp; AC</h6>
+              <p>Day 1, before any code. If AC is unclear, push back — that's QA's job.</p>
+            </div>
+            <div class="role-card">
+              <h6>2. Build mini test plan</h6>
+              <p>Use the template from QA #03. One page is enough — scope, levels, types, sign-off.</p>
+            </div>
+            <div class="role-card">
+              <h6>3. Write cases for top features</h6>
+              <p>Don't try to cover everything. Pick the 3–5 most important user journeys.</p>
+            </div>
+            <div class="role-card">
+              <h6>4. Manual + exploratory pass</h6>
+              <p>Run scripted cases first. Then click around like a curious user. Both find different bugs.</p>
+            </div>
+            <div class="role-card">
+              <h6>5. Log bugs · triage with dev</h6>
+              <p>Use the bug template from BA-QA Quality block. Severity, steps, expected vs actual. No drama.</p>
+            </div>
+            <div class="role-card">
+              <h6>6. Sign off before demo day</h6>
+              <p>Make the call: ship, ship-with-known-bugs, or hold. The team trusts your judgement.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 17 — STRATEGY TEMPLATE
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue" data-slide="17">
+        <div class="slide-label">
+          <span class="snum">17</span> Capstone Test Strategy Template
+        </div>
+        <div class="stack" style="align-items: center; width: 100%">
+          <div class="center">
+            <div class="pill pill-blue">Mini test strategy · 6 sections · fits on one page</div>
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              Capstone Test Strategy
+            </h2>
+          </div>
+          <div class="strat-grid">
+            <div class="strat-card">
+              <span class="step">1</span>
+              <h6>Scope</h6>
+              <p>Which features ARE in. Which are explicitly OUT. Demo day is short — pick.</p>
+            </div>
+            <div class="strat-card">
+              <span class="step">2</span>
+              <h6>Levels</h6>
+              <p>System + UAT. (Unit and integration are the dev's responsibility — ignore for now.)</p>
+            </div>
+            <div class="strat-card">
+              <span class="step">3</span>
+              <h6>Types</h6>
+              <p>Smoke + Functional + Exploratory + Cross-browser. Skip everything else this round.</p>
+            </div>
+            <div class="strat-card">
+              <span class="step">4</span>
+              <h6>Tools</h6>
+              <p>Manual execution. A browser. Optional: Claude for prompts and translation.</p>
+            </div>
+            <div class="strat-card">
+              <span class="step">5</span>
+              <h6>Sign-off criteria</h6>
+              <p>What "good enough for demo" means: e.g., zero S1 bugs, ≤3 S2 bugs known.</p>
+            </div>
+            <div class="strat-card">
+              <span class="step">6</span>
+              <h6>Risks</h6>
+              <p>Honest list: "Only 2 days for full regression." "Demo network may be slow."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 18 — WORKED STRATEGY: GMC COMPANION APP
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="18">
+        <div class="slide-label">
+          <span class="snum">18</span> Worked Strategy · GMC Companion App
+        </div>
+        <div class="stack" style="align-items: center; width: 100%; max-width: 1000px;">
+          <div class="center">
+            <div class="pill pill-blue">A real-looking mini test strategy</div>
+            <h2 class="heading" style="font-size: clamp(1.5rem, 2.8vw, 2.2rem)">
+              Sample · "GMC Companion App"
+            </h2>
+          </div>
+          <div class="big-card-box" style="background: white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.3rem; max-width:980px; width:100%;">
+            <p style="font-size: 0.82rem; color: var(--text); line-height: 1.75;">
+              <strong style="color: var(--indigo);">Scope —</strong> visitor sign-in, daily mindfulness check-in, find-a-place map. <em style="color: var(--muted);">Out:</em> push notifications, multi-language (Phase 2).
+            </p>
+            <p style="font-size: 0.82rem; color: var(--text); line-height: 1.75; margin-top: 0.55rem;">
+              <strong style="color: var(--indigo);">Levels —</strong> System + UAT only. Dev team handles unit tests in their pipeline.
+            </p>
+            <p style="font-size: 0.82rem; color: var(--text); line-height: 1.75; margin-top: 0.55rem;">
+              <strong style="color: var(--indigo);">Types —</strong> Smoke (5 min, before every demo build), Functional (3 top journeys), Exploratory (1 hour by 2 QAs), Cross-browser (Chrome + Safari).
+            </p>
+            <p style="font-size: 0.82rem; color: var(--text); line-height: 1.75; margin-top: 0.55rem;">
+              <strong style="color: var(--indigo);">Tools —</strong> Manual on real laptop + phone. Claude Code for generating prompts and Dzongkha summary. Bug log: shared spreadsheet.
+            </p>
+            <p style="font-size: 0.82rem; color: var(--text); line-height: 1.75; margin-top: 0.55rem;">
+              <strong style="color: var(--indigo);">Sign-off —</strong> 0 S1 bugs, ≤2 S2 bugs known &amp; documented, all 3 top journeys pass smoke twice in a row.
+            </p>
+            <p style="font-size: 0.82rem; color: var(--text); line-height: 1.75; margin-top: 0.55rem;">
+              <strong style="color: var(--indigo);">Risks —</strong> Only 2 days for full regression. Demo wifi may be slow. One QA on the team is also doing BA review — divided focus.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 19 — DOC-TIER PRODUCES
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-amber" data-slide="19">
+        <div class="slide-label">
+          <span class="snum">19</span> Documentation Tier
+        </div>
+        <div class="stack" style="align-items: center; width: 100%">
+          <div class="center">
+            <div class="pill pill-blue">If your team produces docs only — same craft, different output</div>
+            <h2 class="heading" style="font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              Documentation-Tier QA Output
+            </h2>
+            <p class="body-md" style="color: var(--muted); margin-top: 0.4rem; max-width: 760px;">
+              No code shipped. Real artifacts produced. Both demoed at exhibition.
+            </p>
+          </div>
+          <div class="doc-grid">
+            <div class="doc-card">
+              <span class="ic">📋</span>
+              <h6>Full test plan</h6>
+              <p>The complete document from QA #03. Scope, strategy, schedule, sign-off — for the project as if you'd ship it.</p>
+            </div>
+            <div class="doc-card">
+              <span class="ic">📝</span>
+              <h6>Test cases for top stories</h6>
+              <p>3–5 user stories, 8–10 cases each. Polished using the AI-assisted loop you just learned.</p>
+            </div>
+            <div class="doc-card">
+              <span class="ic">⚠️</span>
+              <h6>Risk register</h6>
+              <p>What could go wrong, likelihood × impact, mitigation. The thing that proves you thought hard.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 20 — HANDS-ON · FEATURE OPTIONS
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-blue" data-slide="20">
+        <div class="slide-label">
+          <span class="snum">20</span> Hands-on · Pick One
+        </div>
+        <div class="stack" style="align-items: center; width: 100%">
+          <div class="center">
+            <div class="pill pill-white" style="margin: 0 auto 1rem;">
+              <span class="pill-dot"></span> 30-minute exercise · individual work
+            </div>
+            <h2 class="heading" style="color: white; font-size: clamp(1.6rem, 3vw, 2.4rem)">
+              Pick a capstone-style feature
+            </h2>
+          </div>
+          <div class="feat-grid">
+            <div class="feat-card">
+              <span class="tag">Option A</span>
+              <h5>GMC visitor self-check-in kiosk</h5>
+              <p>Visitor scans CID, picks reason for visit, kiosk prints a badge. Top stories: scan CID, choose reason, print fail/retry.</p>
+            </div>
+            <div class="feat-card">
+              <span class="tag">Option B</span>
+              <h5>Pelsung trainee feedback portal</h5>
+              <p>Trainees rate each class 1–5 + free comment. Top stories: submit rating, edit within 24h, trainer sees aggregated view.</p>
+            </div>
+            <div class="feat-card">
+              <span class="tag">Option C</span>
+              <h5>Druk PNB savings goal tracker</h5>
+              <p>Customer sets a goal (Nu. amount + date), app tracks progress. Top stories: create goal, log a deposit, see "on/off track".</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 21 — HANDS-ON · STEPS + TIMER
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-indigo" data-slide="21">
+        <div class="slide-label">
+          <span class="snum">21</span> Hands-on · 4 Steps
+        </div>
+        <div style="display: flex; gap: clamp(1.5rem, 4vw, 3.5rem); align-items: center; width: 100%; justify-content: center; flex-wrap: wrap;">
+          <div class="center">
+            <div class="pill pill-white" style="margin: 0 auto 1rem">
+              ⏱ 30 minutes · individual
+            </div>
+            <h2 class="heading" style="color: white; margin-bottom: 0.5rem">
+              Generate · Critique · Refine
+            </h2>
+            <div class="timer-ring">
+              <div class="timer-display" id="timer1">30:00</div>
+            </div>
+            <div class="timer-controls">
+              <button class="timer-btn tbtn-start" onclick="startTimer('timer1', 30)">▶ Start</button>
+              <button class="timer-btn tbtn-reset" onclick="resetTimer('timer1', 30)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="step-list" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: white; max-width: 540px;">
+            <ol style="padding-left: 1.4rem;">
+              <li style="color: white; line-height: 1.7;"><strong style="color: white;">Strategy</strong> — write a 2-paragraph test strategy for your chosen feature. Cover scope, types, risks.</li>
+              <li style="color: white; line-height: 1.7;"><strong style="color: white;">Generate</strong> — use Claude Code (or any AI) to generate 6 test cases for ONE chosen story. PASTE the AI output into your doc.</li>
+              <li style="color: white; line-height: 1.7;"><strong style="color: white;">Critique</strong> — apply the reviewer's checklist. Mark <strong style="color: white;">3 specific issues</strong> in the AI output. Propose a fix for each.</li>
+              <li style="color: white; line-height: 1.7;"><strong style="color: white;">Refine</strong> — write the final, cleaned-up test cases after one more loop.</li>
+            </ol>
+            <p style="color: rgba(255,255,255,0.7); font-size: 0.78rem; margin-top: 0.6rem; padding-top: 0.55rem; border-top: 1px dashed rgba(255,255,255,0.2);">
+              Group share at the end: best AI miss caught · best critique line.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 22 — GROUP SHARE
+  ══════════════════════════════════════════ -->
+      <div class="slide bg-dark" data-slide="22">
+        <div class="slide-label">
+          <span class="snum">22</span> Group Share · 10 min
+        </div>
+        <div class="center" style="max-width: 780px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            🎤 Round the room
+          </div>
+          <p class="disc-prompt" style="font-size: clamp(1.4rem, 2.6vw, 2.2rem); color: white; line-height: 1.4;">
+            Each person:<br />
+            <span style="color: var(--amber);">"Best AI miss I caught + best critique I wrote."</span>
+          </p>
+          <div class="card-dark" style="margin-top: 2rem; text-align: left; max-width: 600px; margin-left: auto; margin-right: auto;">
+            <p style="color: rgba(255,255,255,0.85); font-size: clamp(0.85rem, 1.2vw, 1rem); line-height: 1.7;">
+              <strong style="color: white;">Listen for patterns:</strong><br />
+              • Same hallucinations across different features?<br />
+              • Same kind of edge case everyone forgot to ask for?<br />
+              • Whose critique was sharpest — why?
+            </p>
+          </div>
+          <p style="color: rgba(255,255,255,0.55); font-size: clamp(0.8rem, 1.1vw, 0.9rem); margin-top: 1.5rem;">
+            We're learning from each other's reviews — that is the skill.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 23 — TAKEAWAYS
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-blue bg-subtle" data-slide="23">
+        <div class="slide-label">
+          <span class="snum">23</span> Takeaways
+        </div>
+        <div class="stack" style="align-items: center; width: 100%; max-width: 880px;">
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.7rem, 3.2vw, 2.6rem)">
+              What you leave with today
+            </h2>
+          </div>
+          <ul class="reveal-list" id="tk-list" style="max-width: 760px">
+            <li>AI is a <strong>test-design buddy</strong> — generate-then-critique is the only safe mode.</li>
+            <li>Every good QA prompt has <strong>5 parts</strong>: role, context, task, format, constraints.</li>
+            <li>The <strong>reviewer's checklist</strong> beats trust: UI map · concrete pre-conditions · negatives · edges · hallucinations.</li>
+            <li>On capstone, your job is <strong>plan → cases → exploratory → bugs → sign-off</strong>.</li>
+            <li>Documentation tier is real work — same craft, different deliverable.</li>
+          </ul>
+          <p class="reveal-hint" id="tk-hint">
+            Press space / right to reveal each
+          </p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+       SLIDE 24 — FINAL QA CLASS WRAP
+  ══════════════════════════════════════════ -->
+      <div class="slide accent-gradient" data-slide="24">
+        <div class="slide-label"><span class="snum">24</span></div>
+        <div class="center" style="max-width: 780px">
+          <div style="font-size: clamp(2.5rem, 6vw, 4rem); margin-bottom: 1rem">🎉🇧🇹</div>
+          <div class="pill pill-blue" style="margin: 0 auto 1rem">
+            <span class="pill-dot"></span> This is your final QA class
+          </div>
+          <h1 class="display" style="font-size: clamp(1.8rem, 4.5vw, 3.5rem)">
+            <span style="color: var(--blue)">QA Track —</span><br />
+            <span style="color: var(--indigo)">complete.</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted); margin: 1.2rem 0 0.5rem; line-height: 1.6;">
+            Eight QA classes · test plans · test cases · design techniques · bugs · risk · AI-assisted · capstone-ready.<br />
+            <strong style="color: var(--text);">You are now ready to test like a software QA.</strong>
+          </p>
+          <div style="background: var(--bg); border: 2px dashed var(--border); border-radius: 12px; padding: 0.85rem 1.1rem; max-width: 620px; margin: 1.5rem auto 0;">
+            <p style="color: var(--muted); font-size: clamp(0.8rem, 1.1vw, 0.92rem); line-height: 1.6;">
+              <strong style="color: var(--indigo);">What's next →</strong>
+              Combined Capstone Prep class (BA + Dev + QA together), then your capstone weeks.<br />
+              Bring your test strategy from today. You'll use it.
+            </p>
+          </div>
+          <p style="font-size: clamp(0.75rem, 1vw, 0.85rem); color: var(--faint); margin-top: 1.2rem;">
+            SELISE × Pelsung · Software Testing · Class 08 · Final
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- /#deck -->
+
+    <!-- ===== CONTROLS ===== -->
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 24</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      /* ============================
+   SLIDE ENGINE
+============================ */
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      let current = 0;
+
+      function goTo(n) {
+        slides[current].classList.remove("active");
+        slides[current].classList.add("exit");
+        const old = current;
+        setTimeout(() => slides[old].classList.remove("exit"), 380);
+        current = Math.max(0, Math.min(n, total - 1));
+        slides[current].classList.add("active");
+        document.getElementById("slide-counter").textContent =
+          `${current + 1} / ${total}`;
+        document.getElementById("progress").style.width =
+          `${((current + 1) / total) * 100}%`;
+        initReveal(slides[current]);
+      }
+
+      function nextSlide() {
+        if (current < total - 1) goTo(current + 1);
+      }
+      function prevSlide() {
+        if (current > 0) goTo(current - 1);
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight" || e.key === " ") {
+          e.preventDefault();
+          handleForward();
+        }
+        if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          prevSlide();
+        }
+        if (e.key === "f" || e.key === "F") toggleFullscreen();
+      });
+
+      document.getElementById("deck").addEventListener("click", function (e) {
+        if (
+          e.target.closest(
+            "button, .quiz-opt, .sl-item, .mq, a, input, select, textarea, .agenda-row, [data-noclick]",
+          )
+        )
+          return;
+        const pct = e.clientX / window.innerWidth;
+        if (pct < 0.15) prevSlide();
+        else if (pct > 0.85) handleForward();
+      });
+
+      function handleForward() {
+        const active = slides[current];
+        const list = active.querySelector(".reveal-list");
+        if (list) {
+          const hidden = list.querySelectorAll("li:not(.shown)");
+          if (hidden.length > 0) {
+            hidden[0].classList.add("shown");
+            const hint = active.querySelector(".reveal-hint");
+            if (hint && hidden.length === 1) hint.style.opacity = "0";
+            return;
+          }
+        }
+        nextSlide();
+      }
+
+      function initReveal(slide) {
+        const list = slide.querySelector(".reveal-list");
+        if (!list) return;
+        list
+          .querySelectorAll("li")
+          .forEach((li) => li.classList.remove("shown"));
+        const hint = slide.querySelector(".reveal-hint");
+        if (hint) hint.style.opacity = "1";
+      }
+
+      slides[0].classList.add("active");
+      document.getElementById("progress").style.width = `${(1 / total) * 100}%`;
+
+      /* ============================
+   FULLSCREEN
+============================ */
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+          document.exitFullscreen().catch(() => {});
+        }
+      }
+
+      /* ============================
+   TIMERS
+============================ */
+      const timerState = {};
+
+      function startTimer(id, minutes) {
+        if (timerState[id]?.interval) return;
+        if (!timerState[id]) timerState[id] = { remaining: minutes * 60 };
+        timerState[id].interval = setInterval(() => {
+          timerState[id].remaining--;
+          const el = document.getElementById(id);
+          if (!el) return;
+          if (timerState[id].remaining <= 0) {
+            clearInterval(timerState[id].interval);
+            timerState[id].interval = null;
+            el.textContent = "00:00";
+            el.style.color = "#ff5f56";
+            return;
+          }
+          const m = Math.floor(timerState[id].remaining / 60)
+            .toString()
+            .padStart(2, "0");
+          const s = (timerState[id].remaining % 60).toString().padStart(2, "0");
+          el.textContent = `${m}:${s}`;
+          if (timerState[id].remaining <= 60) el.style.color = "#febc2e";
+        }, 1000);
+      }
+
+      function resetTimer(id, minutes) {
+        if (timerState[id]?.interval) {
+          clearInterval(timerState[id].interval);
+          timerState[id].interval = null;
+        }
+        timerState[id] = { remaining: minutes * 60 };
+        const el = document.getElementById(id);
+        if (el) {
+          const m = minutes.toString().padStart(2, "0");
+          el.textContent = `${m}:00`;
+          el.style.color = "";
+        }
+      }
+    </script>
+  </body>
+</html>

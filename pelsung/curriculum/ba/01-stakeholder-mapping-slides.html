@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stakeholder Mapping — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      /* Wedding hook card */
+      .hook-card { background:rgba(255,255,255,0.06); border:1.5px solid rgba(255,255,255,0.18); border-radius:14px; padding:1.2rem 1.5rem; max-width:880px; width:100%; }
+      .hook-card .lead { color:white; font-size:1.05rem; line-height:1.75; }
+      .hook-card .lead strong { color:var(--amber); }
+      .hook-card .twist { margin-top:0.9rem; padding-top:0.9rem; border-top:1px dashed rgba(255,255,255,0.2); color:rgba(255,255,255,0.85); font-size:0.95rem; line-height:1.7; font-style:italic; }
+
+      /* Plain definition */
+      .def-card { background:white; border:2px solid var(--blue); border-radius:14px; padding:1.4rem 1.8rem; max-width:920px; width:100%; }
+      .def-card .label { color:var(--muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.1em; font-weight:700; margin-bottom:0.5rem; }
+      .def-card .txt { color:var(--text); font-size:1.2rem; line-height:1.75; }
+      .def-card .txt strong { color:var(--indigo); }
+
+      /* Four framing questions */
+      .qgrid { display:grid; grid-template-columns:repeat(2, 1fr); gap:0.8rem; max-width:1050px; width:100%; }
+      @media (max-width: 820px){ .qgrid { grid-template-columns:1fr; } }
+      .qcard { background:white; border:1px solid var(--border); border-left:4px solid var(--blue); border-radius:10px; padding:0.85rem 1.1rem; }
+      .qcard h6 { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; margin-bottom:0.25rem; }
+      .qcard p { font-size:0.92rem; color:var(--text); line-height:1.6; }
+      .qcard p em { color:var(--muted); font-style:normal; }
+
+      /* Identification techniques */
+      .tech-list { display:flex; flex-direction:column; gap:0.55rem; max-width:980px; width:100%; }
+      .tech { background:white; border:1px solid var(--border); border-radius:10px; padding:0.75rem 1.1rem; display:flex; align-items:flex-start; gap:0.9rem; }
+      .tech .num { background:var(--blue); color:white; font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; }
+      .tech .body h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.15rem; }
+      .tech .body p { font-size:0.9rem; color:var(--text); line-height:1.6; }
+
+      /* Stakeholder list (worked example) */
+      .sk-list { background:white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.3rem; max-width:1050px; width:100%; }
+      .sk-list h5 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.6rem; }
+      .sk-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:0.4rem 1.2rem; }
+      @media (max-width: 720px){ .sk-grid { grid-template-columns:1fr; } }
+      .sk { font-size:0.92rem; color:var(--text); line-height:1.6; padding:0.25rem 0; border-bottom:1px dashed var(--border); }
+      .sk strong { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; }
+      .sk em { color:var(--muted); font-style:normal; }
+
+      /* Mendelow intro card */
+      .mend-card { background:white; border:2px dashed var(--blue); border-radius:14px; padding:1.2rem 1.6rem; max-width:900px; width:100%; }
+      .mend-card .who { color:var(--muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.1em; font-weight:700; margin-bottom:0.4rem; }
+      .mend-card p { font-size:1rem; color:var(--text); line-height:1.75; }
+      .mend-card p strong { color:var(--indigo); }
+
+      /* The 2x2 power/interest grid */
+      .pi-wrap { position:relative; max-width:920px; width:100%; padding:0 0 0 60px; }
+      .pi-wrap .y-axis { position:absolute; left:0; top:30px; bottom:60px; width:30px; display:flex; flex-direction:column; justify-content:space-between; align-items:center; }
+      .pi-wrap .y-axis .ylabel { writing-mode:vertical-rl; transform:rotate(180deg); color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; font-size:0.95rem; letter-spacing:0.08em; text-transform:uppercase; }
+      .pi-wrap .y-axis .yhi { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; font-size:0.7rem; letter-spacing:0.07em; }
+      .pi-wrap .y-axis .ylo { color:var(--muted); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; font-size:0.7rem; letter-spacing:0.07em; }
+      .pi-grid { display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:0.6rem; aspect-ratio: 16 / 9; }
+      .pi-cell { background:white; border:1.5px solid var(--border); border-radius:12px; padding:0.85rem 1rem; display:flex; flex-direction:column; }
+      .pi-cell .strat { font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; font-size:1.05rem; margin-bottom:0.3rem; }
+      .pi-cell .pos { font-size:0.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.07em; font-weight:700; margin-bottom:0.15rem; }
+      .pi-cell p { font-size:0.85rem; color:var(--text); line-height:1.5; }
+      .pi-cell p em { color:var(--muted); font-style:italic; }
+      .pi-cell.q1 { border-top:5px solid var(--blue); }
+      .pi-cell.q2 { border-top:5px solid var(--indigo); }
+      .pi-cell.q3 { border-top:5px solid var(--amber); }
+      .pi-cell.q4 { border-top:5px solid var(--faint); }
+      .pi-cell.q1 .strat { color:var(--blue); }
+      .pi-cell.q2 .strat { color:var(--indigo); }
+      .pi-cell.q3 .strat { color:var(--amber); }
+      .pi-cell.q4 .strat { color:var(--muted); }
+      .pi-xaxis { display:flex; justify-content:space-between; align-items:center; padding:0.5rem 0 0; }
+      .pi-xaxis .lo { color:var(--muted); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; font-size:0.7rem; letter-spacing:0.07em; text-transform:uppercase; }
+      .pi-xaxis .xlabel { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; font-size:0.95rem; letter-spacing:0.08em; text-transform:uppercase; }
+      .pi-xaxis .hi { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; font-size:0.7rem; letter-spacing:0.07em; text-transform:uppercase; }
+
+      /* Filled grid (worked example placements) */
+      .pi-cell .placements { margin-top:0.4rem; padding-top:0.4rem; border-top:1px dashed var(--border); display:flex; flex-direction:column; gap:0.2rem; }
+      .pi-cell .placements .p { font-size:0.8rem; color:var(--text); line-height:1.45; padding-left:0.6rem; border-left:2px solid currentColor; }
+
+      /* RACI vs RCI table */
+      .rc-tbl { width:100%; max-width:980px; background:white; border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+      .rc-tbl table { width:100%; border-collapse:collapse; font-size:0.92rem; }
+      .rc-tbl th { background:var(--bg); padding:0.7rem 0.9rem; text-align:left; color:var(--muted); font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; border-bottom:1px solid var(--border); }
+      .rc-tbl td { padding:0.65rem 0.9rem; border-bottom:1px solid var(--border); color:var(--text); vertical-align:top; line-height:1.6; }
+      .rc-tbl tr:last-child td { border-bottom:none; }
+      .rc-tbl td:first-child { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-weight:600; width:18%; }
+      .rc-tbl td:nth-child(2) { width:14%; font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--blue); font-weight:700; text-align:center; }
+      .rc-tbl td.dropped { color:var(--red); text-decoration:line-through; }
+
+      /* Link card (WHO + WHAT) */
+      .who-what { display:grid; grid-template-columns:1fr auto 1fr; gap:1rem; align-items:stretch; max-width:1000px; width:100%; }
+      @media (max-width: 820px){ .who-what { grid-template-columns:1fr; } .who-what .arr { display:none; } }
+      .ww-box { background:white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.2rem; }
+      .ww-box.who { border-top:4px solid var(--blue); }
+      .ww-box.what { border-top:4px solid var(--amber); }
+      .ww-box h6 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; margin-bottom:0.4rem; }
+      .ww-box.who h6 { color:var(--blue); }
+      .ww-box.what h6 { color:var(--amber); }
+      .ww-box p { font-size:0.92rem; color:var(--text); line-height:1.65; }
+      .ww-box .eg { margin-top:0.4rem; font-size:0.82rem; color:var(--muted); font-style:italic; border-top:1px dashed var(--border); padding-top:0.4rem; }
+      .arr { display:flex; align-items:center; justify-content:center; font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--blue); font-size:1.6rem; font-weight:700; }
+
+      /* Exercise brief box */
+      .ex-box { background:white; border:2px dashed var(--amber); border-radius:14px; padding:1rem 1.4rem; max-width:980px; width:100%; }
+      .ex-box .tag { background:#EBF0F7; color:#1C5B8C; font-size:0.7rem; font-weight:700; padding:0.2rem 0.6rem; border-radius:4px; letter-spacing:0.07em; text-transform:uppercase; }
+      .ex-box h5 { color:var(--indigo); font-size:1.1rem; margin:0.5rem 0 0.3rem; font-family:'Bahnschrift','Segoe UI',sans-serif; }
+      .ex-box p { font-size:0.95rem; color:var(--text); line-height:1.7; }
+      .ex-steps { display:grid; grid-template-columns:repeat(3, 1fr); gap:0.7rem; max-width:1050px; width:100%; }
+      @media (max-width: 820px){ .ex-steps { grid-template-columns:1fr; } }
+      .ex-step { background:white; border:1px solid var(--border); border-top:4px solid var(--blue); border-radius:10px; padding:0.8rem 1rem; }
+      .ex-step .step-n { color:var(--muted); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.07em; font-weight:700; margin-bottom:0.2rem; }
+      .ex-step h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.25rem; }
+      .ex-step p { font-size:0.86rem; color:var(--text); line-height:1.55; }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>BA Vertical · Class 01</div></div>
+          <h1 class="display" style="color: var(--text)">
+            <span style="color: var(--blue)">Stakeholder</span><br />
+            <span style="color: var(--indigo)">Mapping</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted)">Find every person who can make or break your project — and decide how to work with each one.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">Identifying Stakeholders</span>
+            <span class="class-tag tag-blue">Power / Interest Grid</span>
+            <span class="class-tag tag-blue">RACI vs RCI Recap</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 AGENDA -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 800px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem"><h2 class="heading">Session Journey · ~75 min</h2></div>
+          <div class="agenda-row" onclick="goTo(2)"><span class="ar-dot" style="background: var(--red)"></span><span class="ar-label">🎤 Hook · the wedding planner problem</span><span class="ar-badge" style="background:#FEE9EC;color:var(--red)">5 min</span></div>
+          <div class="agenda-row" onclick="goTo(3)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">👥 Who is a stakeholder, really?</span><span class="ar-badge" style="background:#E6F0F8;color:var(--indigo)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(6)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🔎 How to find them — five techniques</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">12 min</span></div>
+          <div class="agenda-row" onclick="goTo(9)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">📊 The Power / Interest Grid</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">15 min</span></div>
+          <div class="agenda-row" onclick="goTo(13)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🔁 RACI vs RCI · the link to the map</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(15)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🧪 Hands-on · build a stakeholder map</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">15 min</span></div>
+          <div class="agenda-row" onclick="goTo(17)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🎯 Wrap-up</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">3 min</span></div>
+        </div>
+      </div>
+
+      <!-- 3 SECTION: WHO IS A STAKEHOLDER (also serves as the hook) -->
+      <div class="slide bg-dark" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> Hook</div>
+        <div class="center" style="max-width: 920px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎤 A familiar story</div>
+          <h2 class="heading" style="color:white; margin-bottom:1.2rem">You are planning a Bhutanese wedding.</h2>
+          <div class="hook-card" style="margin: 0 auto;">
+            <p class="lead">
+              You think the job is simple — book the venue, order the food, send the invites.<br><br>
+              Then your <strong>aunt</strong> calls: "You forgot to invite the village lama."<br>
+              Your <strong>boss</strong> says: "I need three days off approved before you confirm the date."<br>
+              The <strong>caterer</strong> asks: "Will the dzongkhag allow tents on that field?"<br>
+              Your <strong>fiancé's mother</strong> wants the menu changed.
+            </p>
+            <p class="twist">You didn't fail at planning. You failed at <strong style="color:var(--amber)">stakeholder mapping</strong> — finding everyone who can affect, or is affected by, the wedding, before you start.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 SECTION INTRO: WHO IS A STAKEHOLDER -->
+      <div class="slide bg-indigo" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part One</div>
+          <h1 class="display" style="color: white">Who is a<br>Stakeholder?</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Wider than just "users".</p>
+        </div>
+        <div class="section-num" style="color: white">01</div>
+      </div>
+
+      <!-- 5 PLAIN DEFINITION -->
+      <div class="slide accent-blue bg-subtle" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span> The plain definition</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">A simple sentence to remember</h2></div>
+          <div class="def-card">
+            <div class="label">Stakeholder</div>
+            <p class="txt">A <strong>stakeholder</strong> is anyone who can <strong>affect</strong> your project — or who will be <strong>affected by</strong> it — even if they never use it themselves.</p>
+          </div>
+          <div class="card" style="max-width:880px; background:white; border-left:5px solid var(--amber); padding:0.9rem 1.3rem;">
+            <h4 style="color:var(--indigo); margin-bottom:0.3rem; font-size:1rem">Why "wider than users" matters</h4>
+            <p style="font-size:0.93rem; color:var(--text); line-height:1.7">If you only think about users, you'll miss the people who <em>approve, pay, block, or feel the side-effects</em>. A new mBoB feature has users — but it also has Druk PNB's compliance officer, the Royal Monetary Authority, and the call-centre team who will get the complaint calls. All four are stakeholders. Forgetting any one of them is how projects go wrong late.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 FOUR FRAMING QUESTIONS -->
+      <div class="slide accent-blue" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> Four questions to find stakeholders</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">If you're stuck, ask these four questions</h2><p class="body-md" style="color:var(--muted); max-width:820px">Each question pulls a different group out of the shadows.</p></div>
+          <div class="qgrid">
+            <div class="qcard"><h6>1. Who decides?</h6><p>Whose "yes" do you need before the project can move? <em>Example: the GMC project lead, the school principal, the bank's CEO.</em></p></div>
+            <div class="qcard"><h6>2. Who pays?</h6><p>Whose budget funds the work? They will ask hard questions. <em>Example: SELISE finance, the donor agency, the trainee's employer.</em></p></div>
+            <div class="qcard"><h6>3. Who suffers?</h6><p>Whose work gets harder, or whose job changes, because of the project? <em>Example: the call-centre staff, the front-desk clerk, the village postman.</em></p></div>
+            <div class="qcard"><h6>4. Who benefits?</h6><p>Whose life gets easier? Not just end users — also their family, their community. <em>Example: a farmer using mBoB; their wife who no longer travels to the bank.</em></p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7 SECTION: HOW TO FIND THEM -->
+      <div class="slide bg-blue" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Two</div>
+          <h1 class="display" style="color: white">Finding<br>Stakeholders</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Five practical techniques.</p>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- 8 FIVE TECHNIQUES -->
+      <div class="slide accent-blue bg-subtle" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> Five ways to identify stakeholders</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Use all five — they each catch different people</h2></div>
+          <div class="tech-list">
+            <div class="tech"><div class="num">1</div><div class="body"><h6>Brainstorm by role, not by name</h6><p>List the <em>roles</em> first, not specific people. "School principal", "front-desk clerk", "Tashi Cell tower technician". Names come after.</p></div></div>
+            <div class="tech"><div class="num">2</div><div class="body"><h6>Scan the org chart</h6><p>Walk up and down the chart of any organisation involved. Don't stop at managers — go to the team that does the actual work, and to the leader who signs the budget.</p></div></div>
+            <div class="tech"><div class="num">3</div><div class="body"><h6>Ask the four framing questions</h6><p>Who decides · who pays · who suffers · who benefits. Each pulls out a group you'd otherwise miss.</p></div></div>
+            <div class="tech"><div class="num">4</div><div class="body"><h6>Review the project artifacts</h6><p>Read the project brief, the existing process documents, the contract. Every name, role, or department mentioned is a stakeholder candidate.</p></div></div>
+            <div class="tech"><div class="num">5</div><div class="body"><h6>Ask: who shows up when it goes wrong?</h6><p>If the system breaks tonight, whose phone rings? That person is a stakeholder you forgot. <em>(Often the IT team, the compliance officer, or a regulator.)</em></p></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9 WORKED EXAMPLE: GMC PORTAL STAKEHOLDER LIST -->
+      <div class="slide accent-blue" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> Worked example · GMC citizen services portal</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">A 60-second brainstorm for a real GMC project</h2><p class="body-md" style="color:var(--muted); max-width:880px"><strong>Project:</strong> "GMC online citizen services portal" — apply for permits, pay fees, get notifications.</p></div>
+          <div class="sk-list">
+            <h5>Stakeholders we'd map (10):</h5>
+            <div class="sk-grid">
+              <div class="sk"><strong>1. GMC residents</strong> <em>— end users; apply for things online</em></div>
+              <div class="sk"><strong>2. GMC project leadership</strong> <em>— sponsors; fund and approve scope</em></div>
+              <div class="sk"><strong>3. Government ministries</strong> <em>— issue the permits/services behind the portal</em></div>
+              <div class="sk"><strong>4. Front-desk clerks</strong> <em>— their daily work changes the most</em></div>
+              <div class="sk"><strong>5. Call-centre / helpdesk team</strong> <em>— they handle every confused user</em></div>
+              <div class="sk"><strong>6. SELISE delivery team</strong> <em>— BA, Dev, QA, Design building it</em></div>
+              <div class="sk"><strong>7. Druk PNB / payment partners</strong> <em>— fee collection runs through them</em></div>
+              <div class="sk"><strong>8. Bhutan InfoComm regulator</strong> <em>— data protection and digital ID rules</em></div>
+              <div class="sk"><strong>9. Village representatives</strong> <em>— voice of citizens with low connectivity</em></div>
+              <div class="sk"><strong>10. Future GMC investors</strong> <em>— a working portal signals readiness</em></div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">Notice: only #1 actually clicks the portal. The other nine still shape whether the project succeeds.</p>
+        </div>
+      </div>
+
+      <!-- 10 SECTION: POWER / INTEREST GRID -->
+      <div class="slide bg-indigo" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Three</div>
+          <h1 class="display" style="color: white">The Power /<br>Interest Grid</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Knowing who they are isn't enough — you need a strategy for each.</p>
+        </div>
+        <div class="section-num" style="color: white">03</div>
+      </div>
+
+      <!-- 11 MENDELOW INTRO -->
+      <div class="slide accent-blue bg-subtle" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> Mendelow's grid · two simple questions</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Two questions per stakeholder. Two answers each.</h2></div>
+          <div class="mend-card">
+            <div class="who">Aubrey Mendelow · 1991</div>
+            <p>For each stakeholder, ask just two questions:</p>
+            <p style="margin-top:0.5rem"><strong>1. How much POWER do they have</strong> over the project?<br><em style="color:var(--muted)">(Can they stop it, change it, or fund it?)</em></p>
+            <p style="margin-top:0.5rem"><strong>2. How much INTEREST do they have</strong> in the project?<br><em style="color:var(--muted)">(Do they care about the outcome? Will they be affected day-to-day?)</em></p>
+            <p style="margin-top:0.7rem; font-style:italic; color:var(--muted); font-size:0.92rem">Each answer is just "high" or "low". Two questions × two answers = four groups. Each group needs a different way of working with you.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12 THE 2x2 GRID + STRATEGIES -->
+      <div class="slide accent-blue" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> The four quadrants</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="margin-bottom:0.3rem"><h2 class="heading" style="font-size:clamp(1.6rem,3vw,2.4rem)">One strategy per quadrant</h2></div>
+          <div class="pi-wrap">
+            <div class="y-axis">
+              <span class="yhi">HIGH</span>
+              <span class="ylabel">Power</span>
+              <span class="ylo">LOW</span>
+            </div>
+            <div class="pi-grid">
+              <div class="pi-cell q2">
+                <span class="pos">High Power · Low Interest</span>
+                <span class="strat">Keep Satisfied</span>
+                <p>They <em>can</em> derail the project but don't watch it daily. Brief them only on big decisions and risks. Don't drown them in detail.</p>
+              </div>
+              <div class="pi-cell q1">
+                <span class="pos">High Power · High Interest</span>
+                <span class="strat">Manage Closely</span>
+                <p>The key players. Talk to them often, involve them in trade-offs, get their buy-in early. They make or break delivery.</p>
+              </div>
+              <div class="pi-cell q4">
+                <span class="pos">Low Power · Low Interest</span>
+                <span class="strat">Monitor</span>
+                <p>Acknowledge they exist; check in occasionally. Don't spend time managing them — but don't forget them either.</p>
+              </div>
+              <div class="pi-cell q3">
+                <span class="pos">Low Power · High Interest</span>
+                <span class="strat">Keep Informed</span>
+                <p>They care a lot but can't change much. Send updates, listen to feedback, treat them as allies and an early-warning system.</p>
+              </div>
+            </div>
+            <div class="pi-xaxis">
+              <span class="lo">LOW</span>
+              <span class="xlabel">Interest</span>
+              <span class="hi">HIGH</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 13 WORKED PLACEMENT ON GRID -->
+      <div class="slide accent-blue bg-subtle" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> Placing the GMC portal stakeholders</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="margin-bottom:0.3rem"><h2 class="heading" style="font-size:clamp(1.5rem,3vw,2.2rem)">The same 10 people, sorted onto the grid</h2></div>
+          <div class="pi-wrap">
+            <div class="y-axis">
+              <span class="yhi">HIGH</span>
+              <span class="ylabel">Power</span>
+              <span class="ylo">LOW</span>
+            </div>
+            <div class="pi-grid">
+              <div class="pi-cell q2">
+                <span class="pos">Keep Satisfied</span>
+                <span class="strat" style="font-size:0.95rem">High Power · Low Interest</span>
+                <div class="placements">
+                  <div class="p">InfoComm regulator</div>
+                  <div class="p">Government ministries</div>
+                </div>
+              </div>
+              <div class="pi-cell q1">
+                <span class="pos">Manage Closely</span>
+                <span class="strat" style="font-size:0.95rem">High Power · High Interest</span>
+                <div class="placements">
+                  <div class="p">GMC project leadership</div>
+                  <div class="p">SELISE delivery team</div>
+                  <div class="p">Druk PNB (payments)</div>
+                </div>
+              </div>
+              <div class="pi-cell q4">
+                <span class="pos">Monitor</span>
+                <span class="strat" style="font-size:0.95rem">Low Power · Low Interest</span>
+                <div class="placements">
+                  <div class="p">Future GMC investors</div>
+                </div>
+              </div>
+              <div class="pi-cell q3">
+                <span class="pos">Keep Informed</span>
+                <span class="strat" style="font-size:0.95rem">Low Power · High Interest</span>
+                <div class="placements">
+                  <div class="p">GMC residents</div>
+                  <div class="p">Front-desk clerks</div>
+                  <div class="p">Call-centre / helpdesk</div>
+                  <div class="p">Village representatives</div>
+                </div>
+              </div>
+            </div>
+            <div class="pi-xaxis">
+              <span class="lo">LOW</span>
+              <span class="xlabel">Interest</span>
+              <span class="hi">HIGH</span>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:880px; font-style:italic">Placements are a judgement call — and they shift as the project moves. A regulator's interest jumps from low to high the moment a complaint is filed.</p>
+        </div>
+      </div>
+
+      <!-- 14 SECTION: RACI vs RCI LINK -->
+      <div class="slide bg-blue" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Four · Recap + link</div>
+          <h1 class="display" style="color: white">RACI vs RCI</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">From Foundation 08 — the SELISE adaptation, and how it connects to your map.</p>
+        </div>
+        <div class="section-num" style="color: white">04</div>
+      </div>
+
+      <!-- 15 RACI vs RCI RECAP + WHO/WHAT LINK -->
+      <div class="slide accent-blue bg-subtle" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span> Quick recap · then the link</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading" style="font-size:clamp(1.5rem,3vw,2.2rem)">RACI is the industry standard. SELISE uses RCI.</h2></div>
+          <div class="rc-tbl">
+            <table>
+              <thead>
+                <tr><th>Letter</th><th style="text-align:center">RACI</th><th style="text-align:center">RCI (SELISE)</th><th>What it means</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>R · Responsible</td><td>✓</td><td>✓</td><td>The one person who actually does the work. Always exactly one.</td></tr>
+                <tr><td>A · Accountable</td><td>✓</td><td class="dropped">dropped</td><td>"Final answerable owner." Julian dropped it — no clean German equivalent, and R already implies ownership.</td></tr>
+                <tr><td>C · Consulted</td><td>✓</td><td>✓</td><td>People whose input is needed before the work is finished.</td></tr>
+                <tr><td>I · Informed</td><td>✓</td><td>✓</td><td>People who need to know the result, but don't shape it.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="who-what" style="margin-top:0.5rem">
+            <div class="ww-box who">
+              <h6>📍 Stakeholder map</h6>
+              <p>Tells you <strong>WHO</strong> the people are, and <strong>how</strong> to engage each one (manage closely, keep informed, …).</p>
+              <div class="eg">"GMC residents are Low-Power High-Interest — keep them informed."</div>
+            </div>
+            <div class="arr">→</div>
+            <div class="ww-box what">
+              <h6>📋 RCI</h6>
+              <p>Tells you, for a specific deliverable, <strong>WHAT each one does</strong> — Responsible, Consulted, or Informed.</p>
+              <div class="eg">"For the user-permission spec: BA = R, GMC lead = C, residents = I."</div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:920px; font-style:italic">First map the people. Then, deliverable by deliverable, decide their role with RCI.</p>
+        </div>
+      </div>
+
+      <!-- 16 SECTION: HANDS-ON -->
+      <div class="slide bg-blue" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Five · Hands-on</div>
+          <h1 class="display" style="color: white">Build a<br>Stakeholder Map</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Pairs · 15 minutes · brainstorm + grid + strategy.</p>
+        </div>
+        <div class="section-num" style="color: white">05</div>
+      </div>
+
+      <!-- 17 EXERCISE BRIEF -->
+      <div class="slide accent-blue bg-subtle" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span> Exercise · the brief</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading" style="font-size:clamp(1.5rem,3vw,2.2rem)">In pairs · 15 minutes · pick one project</h2></div>
+          <div class="ex-box">
+            <span class="tag">Pick ONE</span>
+            <h5>Option A — GMC online citizen services portal</h5>
+            <p style="font-size:0.9rem">A one-stop website for GMC residents to apply for permits, pay fees, and get notifications.</p>
+            <h5 style="margin-top:0.6rem">Option B — Druk PNB launches a new mobile app</h5>
+            <p style="font-size:0.9rem">A redesigned banking app with bill pay, savings goals, and Tashi Cell top-ups.</p>
+          </div>
+          <div class="ex-steps">
+            <div class="ex-step">
+              <div class="step-n">Step 1 · 5 min</div>
+              <h6>Brainstorm 8–10 stakeholders</h6>
+              <p>Use the four framing questions: who decides, pays, suffers, benefits? Roles, not names.</p>
+            </div>
+            <div class="ex-step">
+              <div class="step-n">Step 2 · 5 min</div>
+              <h6>Place each on the grid</h6>
+              <p>For each one, decide: high or low power? High or low interest? Drop them into a quadrant.</p>
+            </div>
+            <div class="ex-step">
+              <div class="step-n">Step 3 · 5 min</div>
+              <h6>Pick the strategy</h6>
+              <p>Write the engagement strategy next to each name (manage closely · keep satisfied · keep informed · monitor).</p>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:880px; font-style:italic">Two volunteer pairs share their map in the debrief. Disagreements are normal — say <em>why</em> you placed someone where you did.</p>
+        </div>
+      </div>
+
+      <!-- 18 WRAP -->
+      <div class="slide bg-dark" data-slide="18">
+        <div class="slide-label"><span class="snum">18</span> Wrap-up</div>
+        <div class="center" style="max-width: 860px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key Takeaways</div>
+          <h2 class="heading" style="color: white;">What we covered today</h2>
+          <ul class="reveal-list" style="color: rgba(255,255,255,0.9); text-align:left; max-width: 760px; margin: 1.5rem auto; font-size: 1rem; line-height: 2;">
+            <li>✅ A <strong>stakeholder</strong> is anyone who can affect the project, or be affected by it — wider than just users</li>
+            <li>✅ Find them with five techniques: brainstorm by role, scan the org chart, ask the four framing questions, review artifacts, "who shows up when it breaks"</li>
+            <li>✅ The <strong>Power / Interest Grid</strong> sorts them into four quadrants, each with one strategy</li>
+            <li>✅ <strong>Manage Closely · Keep Satisfied · Keep Informed · Monitor</strong> — match the strategy to the quadrant</li>
+            <li>✅ Stakeholder map answers <strong>WHO</strong>; <strong>RCI</strong> answers <strong>WHAT</strong> each one does on a deliverable</li>
+            <li>✅ Placements shift over time — re-map at every phase change</li>
+          </ul>
+          <p style="color: var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.2rem; margin-top:1.5rem">Find the people first. Then decide how to work with each one.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 18</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>

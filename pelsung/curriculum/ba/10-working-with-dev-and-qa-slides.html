@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Working with Dev &amp; QA — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      /* loop diagram */
+      .loop { display:flex; flex-wrap:wrap; gap:0.5rem; justify-content:center; align-items:stretch; max-width:1150px; width:100%; }
+      .loop .step { background:white; border:1px solid var(--border); border-top:4px solid var(--blue); border-radius:10px; padding:0.7rem 0.9rem; flex:1 1 150px; min-width:140px; max-width:200px; text-align:center; }
+      .loop .step .who { font-size:0.7rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; font-weight:700; margin-bottom:0.2rem; }
+      .loop .step h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; line-height:1.3; margin-bottom:0.2rem; }
+      .loop .step p { font-size:0.78rem; color:var(--text); line-height:1.45; }
+      .loop .step.ba { border-top-color:var(--indigo); }
+      .loop .step.dev { border-top-color:var(--blue); }
+      .loop .step.qa { border-top-color:var(--amber); }
+      .loop .arr { display:flex; align-items:center; color:var(--faint); font-size:1.4rem; padding:0 0.1rem; }
+      .loop .arr.down { width:100%; justify-content:center; }
+
+      /* clarifying-question rules */
+      .rules { display:grid; grid-template-columns: repeat(3, 1fr); gap:0.8rem; max-width:1150px; width:100%; }
+      @media (max-width: 900px){ .rules { grid-template-columns: 1fr; } }
+      .rule { background:white; border:1px solid var(--border); border-top:4px solid var(--blue); border-radius:10px; padding:0.95rem 1.1rem; }
+      .rule .num { display:inline-flex; align-items:center; justify-content:center; width:1.8rem; height:1.8rem; background:var(--blue); color:white; border-radius:6px; font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; font-size:1rem; margin-bottom:0.4rem; }
+      .rule h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; margin-bottom:0.3rem; }
+      .rule p { font-size:0.9rem; color:var(--text); line-height:1.6; }
+      .rule .eg { margin-top:0.5rem; padding-top:0.4rem; border-top:1px dashed var(--border); font-size:0.82rem; color:var(--muted); font-style:italic; }
+
+      /* ambiguity workshop card */
+      .amb-card { background:white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.3rem; max-width:1050px; width:100%; }
+      .amb-card .ac-line { background:#FFF5F7; border-left:4px solid var(--red); padding:0.55rem 0.9rem; border-radius:6px; margin:0.4rem 0; font-size:0.92rem; line-height:1.55; color:var(--text); }
+      .amb-card .ac-line .lbl { color:var(--red); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.06em; display:block; margin-bottom:0.15rem; }
+      .amb-card .q-line { background:#FFF8E6; border-left:4px solid #B88730; padding:0.55rem 0.9rem; border-radius:6px; margin:0.4rem 0; font-size:0.9rem; line-height:1.55; color:var(--text); }
+      .amb-card .q-line .lbl { color:#8a6d0c; font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.06em; display:block; margin-bottom:0.15rem; }
+      .amb-card .fix-line { background:#F3FAE9; border-left:4px solid #7BC950; padding:0.55rem 0.9rem; border-radius:6px; margin:0.4rem 0; font-size:0.9rem; line-height:1.6; color:var(--text); }
+      .amb-card .fix-line .lbl { color:#3D7A3D; font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.06em; display:block; margin-bottom:0.15rem; }
+      .amb-card .fix-line .k { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; }
+
+      /* sev/priority recap */
+      .sev-pri-recap { display:grid; grid-template-columns: 1fr 1fr; gap:0.9rem; max-width:1050px; width:100%; }
+      @media (max-width: 820px){ .sev-pri-recap { grid-template-columns: 1fr; } }
+      .spr { background:white; border:1px solid var(--border); border-radius:10px; padding:0.95rem 1.15rem; }
+      .spr.sev { border-top:4px solid var(--red); }
+      .spr.pri { border-top:4px solid var(--blue); }
+      .spr h5 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; margin-bottom:0.3rem; }
+      .spr.sev h5 { color:var(--red); }
+      .spr.pri h5 { color:var(--blue); }
+      .spr .one-liner { font-size:0.95rem; color:var(--text); line-height:1.55; margin-bottom:0.5rem; }
+      .spr ul { padding-left:1.1rem; }
+      .spr li { font-size:0.85rem; color:var(--text); line-height:1.6; margin:0.15rem 0; }
+      .spr .who { margin-top:0.5rem; padding-top:0.4rem; border-top:1px dashed var(--border); font-size:0.82rem; color:var(--muted); font-style:italic; }
+
+      /* 4-quadrant matrix */
+      .quad { display:grid; grid-template-columns: 90px 1fr 1fr; grid-template-rows: auto 1fr 1fr; gap:0.4rem; max-width:1050px; width:100%; }
+      .quad .corner { background:transparent; }
+      .quad .col-h { background:transparent; padding:0.4rem 0.6rem; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.85rem; color:var(--muted); text-align:center; font-weight:700; }
+      .quad .row-h { background:transparent; padding:0.5rem; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.82rem; color:var(--muted); text-align:right; font-weight:700; align-self:center; }
+      .quad .cell { padding:0.85rem 1rem; border-radius:8px; font-size:0.82rem; line-height:1.55; color:var(--text); border:1px solid; }
+      .quad .cell h6 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.25rem; }
+      .quad .cell p { font-size:0.8rem; line-height:1.5; }
+      .quad .cell .eg { margin-top:0.3rem; font-size:0.75rem; font-style:italic; opacity:0.85; }
+      .quad .cell.hh { background:#FEE9EC; border-color:#FADCE3; }
+      .quad .cell.hh h6 { color:#9e0022; }
+      .quad .cell.hl { background:#FFF4E3; border-color:#F4E0A8; }
+      .quad .cell.hl h6 { color:#8a6d0c; }
+      .quad .cell.lh { background:#EBF0F7; border-color:#A3C4E0; }
+      .quad .cell.lh h6 { color:#1C5B8C; }
+      .quad .cell.ll { background:#F3FAE9; border-color:#D4E8BD; }
+      .quad .cell.ll h6 { color:#3D7A3D; }
+
+      /* triage table */
+      .triage-tbl { width:100%; max-width:1050px; background:white; border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+      .triage-tbl table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+      .triage-tbl th { background:var(--bg); padding:0.7rem 0.9rem; text-align:left; color:var(--muted); font-size:0.74rem; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; border-bottom:1px solid var(--border); }
+      .triage-tbl td { padding:0.6rem 0.9rem; border-bottom:1px solid var(--border); color:var(--text); vertical-align:top; line-height:1.55; font-size:0.86rem; }
+      .triage-tbl tr:last-child td { border-bottom:none; }
+      .triage-tbl td:first-child { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-weight:600; width:22%; }
+
+      /* hands-on bug list */
+      .bug-list { background:white; border:1px solid var(--border); border-radius:12px; padding:0.85rem 1.1rem; max-width:1100px; width:100%; }
+      .bug-list .bug { background:var(--bg); border-left:3px solid var(--blue); border-radius:6px; padding:0.5rem 0.85rem; margin:0.35rem 0; font-size:0.84rem; line-height:1.55; color:var(--text); }
+      .bug-list .bug .id { font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; color:var(--blue); margin-right:0.5rem; }
+      .bug-list .bug em { color:var(--muted); }
+
+      /* role-card style for at role */
+      .at-role { display:grid; grid-template-columns: repeat(3, 1fr); gap:0.8rem; max-width:1100px; width:100%; }
+      @media (max-width: 820px){ .at-role { grid-template-columns: 1fr; } }
+      .arl { background:white; border:1px solid var(--border); border-top:4px solid var(--blue); border-radius:10px; padding:0.85rem 1.05rem; }
+      .arl h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.3rem; }
+      .arl p { font-size:0.86rem; color:var(--text); line-height:1.6; }
+      .arl.do { border-top-color:var(--green); }
+      .arl.dont { border-top-color:var(--red); }
+      .arl.do h6 { color:#3D7A3D; }
+      .arl.dont h6 { color:var(--red); }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>Business Analysis · Class 10</div></div>
+          <h1 class="display" style="color: var(--text)">
+            <span style="color: var(--blue)">Working with</span><br />
+            <span style="color: var(--indigo)">Dev &amp; QA</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted)">A BA hands stories to developers and gets bug reports from testers. Today: how to make both flows work — and what to do when they don't.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">Clarifying questions</span>
+            <span class="class-tag tag-blue">Acceptance testing</span>
+            <span class="class-tag tag-blue">Defect triage</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 AGENDA -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 800px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem"><h2 class="heading">Session Journey · ~90 min</h2></div>
+          <div class="agenda-row" onclick="goTo(3)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🔄 Why this class · the daily loop</span><span class="ar-badge" style="background:#E6F0F8;color:var(--indigo)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(6)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">❓ When a developer asks a clarifying question</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">12 min</span></div>
+          <div class="agenda-row" onclick="goTo(8)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🔍 Spec ambiguity workshop · 3 examples</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">15 min</span></div>
+          <div class="agenda-row" onclick="goTo(11)"><span class="ar-dot" style="background: var(--red)"></span><span class="ar-label">🐞 Defect triage · severity, priority, who decides</span><span class="ar-badge" style="background:#FEE9EC;color:var(--red)">15 min</span></div>
+          <div class="agenda-row" onclick="goTo(15)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">✅ Acceptance testing · the BA's role</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(17)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🧪 Hands-on · triage 8 bugs (GMC appointments)</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">20 min</span></div>
+          <div class="agenda-row" onclick="goTo(18)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🎯 Wrap-up</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">5 min</span></div>
+        </div>
+      </div>
+
+      <!-- 3 SECTION: WHY -->
+      <div class="slide bg-indigo" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part One</div>
+          <h1 class="display" style="color: white">The Daily Loop</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">A BA sits in the middle. Stories flow out. Bugs flow in. Both flows fail in known ways.</p>
+        </div>
+        <div class="section-num" style="color: white">01</div>
+      </div>
+
+      <!-- 4 WHY THIS CLASS -->
+      <div class="slide accent-blue bg-subtle" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> Why this class exists</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center" style="max-width:920px">
+            <h2 class="heading">You wrote a clear story. Why is the team still confused?</h2>
+            <p class="body-md" style="color:var(--muted); margin-top:1.2rem; max-width:820px; margin-left:auto; margin-right:auto">In your day-to-day, two flows happen over and over:</p>
+          </div>
+          <div class="cols-2" style="max-width:1050px; gap:1rem">
+            <div class="card" style="border-top:3px solid var(--blue); background:white">
+              <h4 style="color:var(--blue)">📤 Stories go out</h4>
+              <p style="font-size:0.95rem; color:var(--text); line-height:1.7">You hand a story to a developer. They start asking questions. Some you can answer. Some you didn't think about. Some don't have an answer yet.</p>
+            </div>
+            <div class="card" style="border-top:3px solid var(--amber); background:white">
+              <h4 style="color:var(--amber)">📥 Bugs come in</h4>
+              <p style="font-size:0.95rem; color:var(--text); line-height:1.7">QA tests the build and files bug reports. Some are critical. Some are not. You help decide what to fix, what to defer, and what wasn't really a bug — it was a missing AC.</p>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:860px; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.1rem; margin-top:0.8rem">Today is about <span style="color:var(--blue)">how to handle both flows well</span> — so the team moves faster, not slower.</p>
+        </div>
+      </div>
+
+      <!-- 5 LOOP DIAGRAM -->
+      <div class="slide accent-blue" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span> The collaboration loop</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">One feature · one week · the BA touches it five times</h2></div>
+          <div class="loop">
+            <div class="step ba"><div class="who">BA</div><h6>📋 Standup</h6><p>You report status. Flag any unclear story for the day.</p></div>
+            <div class="arr">→</div>
+            <div class="step ba"><div class="who">BA</div><h6>🤝 Refinement</h6><p>Walk Dev + QA through the story and AC before they start.</p></div>
+            <div class="arr">→</div>
+            <div class="step dev"><div class="who">Dev</div><h6>💻 Builds</h6><p>Asks clarifying questions. You answer — and update the story.</p></div>
+            <div class="arr">→</div>
+            <div class="step qa"><div class="who">QA</div><h6>🔍 Tests</h6><p>QA runs the AC against the build. Files bugs for any miss.</p></div>
+            <div class="arr down">↓</div>
+            <div class="step ba"><div class="who">BA</div><h6>🐞 Triage</h6><p>You join Dev Lead + QA + Product to decide priority.</p></div>
+            <div class="arr">→</div>
+            <div class="step dev"><div class="who">Dev</div><h6>🔧 Fixes</h6><p>If new behaviour was discovered, the story or AC gets updated.</p></div>
+            <div class="arr">→</div>
+            <div class="step qa"><div class="who">QA</div><h6>♻️ Re-tests</h6><p>QA re-runs the failed cases. Closes the bug if the fix works.</p></div>
+            <div class="arr">→</div>
+            <div class="step ba"><div class="who">BA</div><h6>✅ Sign-off</h6><p>You confirm the story delivers what the user actually needed.</p></div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:860px; font-style:italic">Every step has a small failure mode. Today we cover the three that hurt teams the most.</p>
+        </div>
+      </div>
+
+      <!-- 6 SECTION: CLARIFYING -->
+      <div class="slide bg-blue" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Two</div>
+          <h1 class="display" style="color: white">Clarifying<br>Questions</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">When a developer asks "what should happen if…?" — that's a gift, not an interruption.</p>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- 7 THREE RULES FOR Q&A -->
+      <div class="slide accent-blue bg-subtle" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> Three rules when a dev asks</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">A question from Dev = a hole in your spec. Treat it that way.</h2></div>
+          <div class="rules">
+            <div class="rule">
+              <span class="num">1</span>
+              <h6>Don't dismiss it</h6>
+              <p>If a smart developer is confused, the story is unclear. The question is real. Saying "just use your judgement" pushes a decision onto someone who can't make it for the business.</p>
+              <div class="eg">"Just do whatever" → you'll get whatever.</div>
+            </div>
+            <div class="rule">
+              <span class="num">2</span>
+              <h6>Update the story · don't answer in chat</h6>
+              <p>Answering on WhatsApp solves it for one developer, today. Tomorrow QA will hit the same gap and won't see your message. Add the answer to the story or the AC where everyone can find it.</p>
+              <div class="eg">Chat reply = lost in 24 hours. Updated AC = forever.</div>
+            </div>
+            <div class="rule">
+              <span class="num">3</span>
+              <h6>Tribal knowledge is the enemy</h6>
+              <p>"Tribal knowledge" = stuff that lives only in someone's head. New joiners can't learn it. If only you know how leave approval works, the team breaks when you're sick.</p>
+              <div class="eg">Write it down. Always. Even the obvious things.</div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:840px; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem">A clarifying question is a free QA review before the code is even written. Welcome it.</p>
+        </div>
+      </div>
+
+      <!-- 8 SECTION: AMBIGUITY -->
+      <div class="slide bg-amber" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Three</div>
+          <h1 class="display" style="color: white">Spec Ambiguity<br>Workshop</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Three real AC. Three real questions. Three fixes.</p>
+        </div>
+        <div class="section-num" style="color: white">03</div>
+      </div>
+
+      <!-- 9 AMBIGUITY EX 1 + 2 -->
+      <div class="slide accent-blue bg-subtle" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span> Ambiguity · examples 1 &amp; 2</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading" style="font-size:clamp(1.5rem, 3vw, 2.2rem)">Read the AC · spot what's missing · ask · fix</h2></div>
+          <div class="amb-card">
+            <div style="font-size:0.78rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; font-weight:700; margin-bottom:0.3rem">Example 1 · Government leave portal</div>
+            <div class="ac-line"><span class="lbl">⚠️ Ambiguous AC</span>"User receives a notification when their leave is approved."</div>
+            <div class="q-line"><span class="lbl">❓ Clarifying questions</span>Which channel — email, SMS, in-app, all three? What's the message text? When exactly — instantly, or by end of day? What if the user is offline?</div>
+            <div class="fix-line"><span class="lbl">✅ Fixed AC</span><span class="k">Given</span> a user's leave request is approved by their manager, <span class="k">when</span> the approval is saved, <span class="k">then</span> the system sends an SMS within 2 minutes with the text "Your leave from {start} to {end} is approved" and shows the same message in the app's Notifications tab.</div>
+          </div>
+          <div class="amb-card">
+            <div style="font-size:0.78rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; font-weight:700; margin-bottom:0.3rem">Example 2 · School attendance app</div>
+            <div class="ac-line"><span class="lbl">⚠️ Ambiguous AC</span>"Teacher can mark students absent."</div>
+            <div class="q-line"><span class="lbl">❓ Clarifying questions</span>Can they mark only their own class, or any class? Can they edit yesterday's record? What if the student already has a leave application? How does the parent get told?</div>
+            <div class="fix-line"><span class="lbl">✅ Fixed AC</span><span class="k">Given</span> a teacher is logged in and viewing today's roll-call for a class they are assigned to, <span class="k">when</span> they tap "Absent" next to a student's name, <span class="k">then</span> the student's status is saved as Absent for today, the parent receives an SMS within 5 minutes, and the teacher cannot change the record after midnight.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10 AMBIGUITY EX 3 + LESSON -->
+      <div class="slide accent-blue" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> Ambiguity · example 3 &amp; lesson</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="amb-card">
+            <div style="font-size:0.78rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; font-weight:700; margin-bottom:0.3rem">Example 3 · mBoB transfer</div>
+            <div class="ac-line"><span class="lbl">⚠️ Ambiguous AC</span>"Transfer fails gracefully if there are not enough funds."</div>
+            <div class="q-line"><span class="lbl">❓ Clarifying questions</span>What does "gracefully" mean here? What message does the user see? Does the amount stay typed-in or get cleared? Is the transaction logged anywhere? Can they tap "Retry"?</div>
+            <div class="fix-line"><span class="lbl">✅ Fixed AC</span><span class="k">Given</span> a user enters a transfer amount greater than their available balance, <span class="k">when</span> they tap "Confirm transfer", <span class="k">then</span> the system shows the message "Insufficient balance. Available: Nu {x}" in red below the amount field, keeps the amount and recipient filled in, and does not deduct any money or charge any fee.</div>
+          </div>
+          <div class="card" style="max-width:950px; background:linear-gradient(135deg,#0067A3,#002D72); color:white; border:none; padding:1rem 1.4rem">
+            <h4 style="color:white; margin-bottom:0.4rem; font-size:1.05rem">The pattern in all three</h4>
+            <p style="font-size:0.94rem; line-height:1.7; color:rgba(255,255,255,0.92)">The original AC sounded right when you wrote it. It only became "wrong" when a developer tried to build it. <strong>Vague verbs</strong> ("notify", "mark", "gracefully") hide a dozen choices. The fix isn't more text — it's more <strong>specifics</strong>: which channel · who can do it · what message · when exactly · what happens to the data.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11 SECTION: TRIAGE -->
+      <div class="slide bg-indigo" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Four</div>
+          <h1 class="display" style="color: white">Defect Triage</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Bugs are filed. Now: which ones get fixed, when, by whom?</p>
+        </div>
+        <div class="section-num" style="color: white">04</div>
+      </div>
+
+      <!-- 12 SEV vs PRI RECAP -->
+      <div class="slide accent-blue bg-subtle" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> Severity vs priority · quick recap</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Two different questions. Two different answers.</h2><p class="body-md" style="color:var(--muted); max-width:820px; margin:0.4rem auto 0">You met these in Quality &amp; Compliance Class 02. Here's the short version.</p></div>
+          <div class="sev-pri-recap">
+            <div class="spr sev">
+              <h5>🔴 Severity</h5>
+              <p class="one-liner"><strong>How broken is it?</strong> A technical fact about the bug.</p>
+              <ul>
+                <li><strong>Critical</strong> — app unusable, data lost</li>
+                <li><strong>High</strong> — major feature broken, no workaround</li>
+                <li><strong>Medium</strong> — minor feature broken, workaround exists</li>
+                <li><strong>Low</strong> — cosmetic, typo, alignment</li>
+              </ul>
+              <p class="who">Set by QA when filing. Mostly objective.</p>
+            </div>
+            <div class="spr pri">
+              <h5>🔵 Priority</h5>
+              <p class="one-liner"><strong>How urgent is the fix?</strong> A business decision.</p>
+              <ul>
+                <li><strong>P0</strong> — fix now, drop other work</li>
+                <li><strong>P1</strong> — fix this sprint</li>
+                <li><strong>P2</strong> — fix next sprint</li>
+                <li><strong>P3</strong> — backlog · maybe never</li>
+              </ul>
+              <p class="who">Set in triage by BA + Product. Subjective. <strong>Your main lever.</strong></p>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:880px; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem">Severity is about the bug. Priority is about the business. <span style="color:var(--blue)">Set them independently.</span></p>
+        </div>
+      </div>
+
+      <!-- 13 4-QUADRANT -->
+      <div class="slide accent-blue" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> Severity × priority · what to do</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Four corners · four very different responses</h2></div>
+          <div class="quad">
+            <div class="corner"></div>
+            <div class="col-h">High priority →</div>
+            <div class="col-h">Low priority →</div>
+
+            <div class="row-h">High<br>severity</div>
+            <div class="cell hh">
+              <h6>🚨 Stop the line</h6>
+              <p>Drop the sprint. Fix today. Hotfix to production if it's already live.</p>
+              <div class="eg">e.g. mBoB transfer takes the money but doesn't reach the receiver — for everyone.</div>
+            </div>
+            <div class="cell hl">
+              <h6>📋 Schedule it</h6>
+              <p>Yes, it's bad — but it almost never happens. Plan a fix in an upcoming sprint, don't panic.</p>
+              <div class="eg">e.g. crash that triggers only on Feb 29 in a leap year.</div>
+            </div>
+
+            <div class="row-h">Low<br>severity</div>
+            <div class="cell lh">
+              <h6>⏱️ Fix this sprint</h6>
+              <p>Tiny bug, but it's visible to important people right now. Get it cleaned up before the audience sees it.</p>
+              <div class="eg">e.g. typo on the leave-portal homepage during a regulator visit tomorrow.</div>
+            </div>
+            <div class="cell ll">
+              <h6>📦 Backlog</h6>
+              <p>Log it. Fix when convenient. Maybe never. Don't waste a sprint slot on it.</p>
+              <div class="eg">e.g. footer copyright still says 2025 in mid-2026.</div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:880px; font-style:italic">High severity ≠ urgent. Low severity ≠ ignore. The combination tells you what to do.</p>
+        </div>
+      </div>
+
+      <!-- 14 WHO DECIDES -->
+      <div class="slide accent-blue bg-subtle" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> The triage call · who decides</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Triage is a meeting · not a vote · not a guess</h2><p class="body-md" style="color:var(--muted); max-width:820px; margin:0.4rem auto 0">Most teams meet 2–3 times a week for 20 minutes. Walk every new bug. Decide four things per bug.</p></div>
+          <div class="triage-tbl">
+            <table>
+              <thead>
+                <tr><th>Person</th><th>Brings to the table</th><th>Decides</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>📋 BA (you)</td><td>Business impact · which user is hurt · is this a bug or a missing AC?</td><td>Priority (with Product)</td></tr>
+                <tr><td>🔍 QA Lead</td><td>How often does it happen · severity rating · how did it slip past testing</td><td>Severity</td></tr>
+                <tr><td>💻 Dev Lead</td><td>How risky is the fix · is it 1 hour or 3 days · any side effects</td><td>Effort &amp; owner</td></tr>
+                <tr><td>📦 Product</td><td>Roadmap · upcoming releases · external commitments</td><td>Priority (with BA)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:870px; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem">Four people in a 20-minute call. Faster than a 3-day chat thread.</p>
+        </div>
+      </div>
+
+      <!-- 15 SECTION: AT -->
+      <div class="slide bg-blue" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Five</div>
+          <h1 class="display" style="color: white">Acceptance<br>Testing</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">QA tests. You're the source of truth on what the user actually wanted.</p>
+        </div>
+        <div class="section-num" style="color: white">05</div>
+      </div>
+
+      <!-- 16 BA ROLE IN AT -->
+      <div class="slide accent-blue bg-subtle" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span> Your role in the QA walkthrough</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Sit with QA · watch the feature run · answer "is this what we wanted?"</h2></div>
+          <div class="at-role">
+            <div class="arl do">
+              <h6>✅ Do</h6>
+              <p>Sit with QA when they walk a feature for the first time. Speak up the moment something looks off. You're the only person in the room who knows what the user actually meant.</p>
+            </div>
+            <div class="arl do">
+              <h6>✅ Do</h6>
+              <p>If a developer met the AC but the feature feels wrong — that's a signal the AC was incomplete. Open a new story or update this one. Don't pretend it's fine.</p>
+            </div>
+            <div class="arl dont">
+              <h6>❌ Don't</h6>
+              <p>Don't be a second QA. You're not there to find typos. Your job is intent — does this match what the stakeholder asked for?</p>
+            </div>
+          </div>
+          <div class="card" style="max-width:920px; background:white; border-left:4px solid var(--amber); padding:0.9rem 1.3rem">
+            <h4 style="color:var(--indigo); margin-bottom:0.3rem; font-size:1rem">A useful question to ask in every walkthrough</h4>
+            <p style="font-size:0.93rem; color:var(--text); line-height:1.65">"If I were the user the story is about — would I be happy with this?" If you hesitate, the team needs to talk before you sign off.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 17 HANDS-ON -->
+      <div class="slide accent-amber bg-subtle" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span> Hands-on · 20 minutes</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading" style="font-size:clamp(1.6rem, 3.2vw, 2.4rem)">Triage 8 bugs on the GMC online appointment system</h2><p class="body-md" style="color:var(--muted); max-width:820px; margin:0.4rem auto 0">Imagine GMC has launched an online appointment system for visa, business permit, and clinic bookings. QA filed 8 bugs this morning.</p></div>
+          <div class="bug-list">
+            <div class="bug"><span class="id">BUG-101</span>App crashes when a user taps "Book appointment" on iOS 17 — happens for everyone, no workaround.</div>
+            <div class="bug"><span class="id">BUG-102</span>The "Submit" button on the visa form is light blue instead of SELISE blue.</div>
+            <div class="bug"><span class="id">BUG-103</span>If a user picks a date in the past, the system accepts it and creates an appointment.</div>
+            <div class="bug"><span class="id">BUG-104</span>Confirmation SMS arrives in English even when the user selected Dzongkha. <em>(Minister demoing the app to press tomorrow.)</em></div>
+            <div class="bug"><span class="id">BUG-105</span>Calendar widget overlaps the keyboard on Android phones with screens smaller than 5 inches.</div>
+            <div class="bug"><span class="id">BUG-106</span>Logo on the login screen is slightly off-centre on tablets.</div>
+            <div class="bug"><span class="id">BUG-107</span>If two users try to book the last slot at the exact same second, both get "Confirmed" — system overbooks.</div>
+            <div class="bug"><span class="id">BUG-108</span>The booking history page shows times in UTC instead of Bhutan time. Users are showing up at the wrong hour.</div>
+          </div>
+          <div class="cols-2" style="max-width:1100px; gap:1rem">
+            <div class="card" style="border-top:3px solid var(--blue)">
+              <h4 style="color:var(--blue)">In pairs · do three things</h4>
+              <ul style="font-size:0.9rem; line-height:1.75; padding-left:1.2rem; color:var(--text)">
+                <li>For each bug, write <strong>severity</strong> (Critical / High / Med / Low) and <strong>priority</strong> (P0 / P1 / P2 / P3).</li>
+                <li>Write a one-line decision: <em>fix this sprint · next sprint · backlog · clarify with reporter.</em></li>
+                <li>Pick the one bug that was clearly a <strong>missing AC</strong>, not a real defect. Write the AC that should have caught it.</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--amber)">
+              <h4 style="color:var(--amber)">Tips while you work</h4>
+              <ul style="font-size:0.9rem; line-height:1.75; padding-left:1.2rem; color:var(--text)">
+                <li>Don't argue about severity for 5 minutes. Pick one. Move on.</li>
+                <li>Priority depends on context — re-read the bug for the business clue.</li>
+                <li>"Missing AC" bugs sound like a feature instead of a defect.</li>
+                <li>Two pairs share in debrief — pick your most disputed bug.</li>
+              </ul>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px">15 min triage · 5 min debrief.</p>
+        </div>
+      </div>
+
+      <!-- 18 WRAP -->
+      <div class="slide bg-dark" data-slide="18">
+        <div class="slide-label"><span class="snum">18</span> Wrap-up</div>
+        <div class="center" style="max-width: 840px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key Takeaways</div>
+          <h2 class="heading" style="color: white;">What we covered today</h2>
+          <ul class="reveal-list" style="color: rgba(255,255,255,0.9); text-align:left; max-width: 740px; margin: 1.5rem auto; font-size: 1rem; line-height: 2;">
+            <li>✅ A BA sits in the loop — stories go out, bugs come in. Both flows fail in known ways.</li>
+            <li>✅ A clarifying question from a developer is a <strong>gift</strong> — don't dismiss, update the story, kill tribal knowledge.</li>
+            <li>✅ Vague verbs ("notify", "gracefully", "handle") hide a dozen choices. <strong>Specifics</strong> close the gap.</li>
+            <li>✅ <strong>Severity</strong> = how broken (QA's call) · <strong>Priority</strong> = how urgent (your call, with Product). They're independent.</li>
+            <li>✅ The four corners of severity × priority drive four different responses — not the same playbook.</li>
+            <li>✅ Triage is a 20-minute meeting · BA + Dev Lead + QA + Product · 4 decisions per bug.</li>
+            <li>✅ In acceptance testing, your job is <strong>intent</strong> — does this match what the user actually wanted?</li>
+          </ul>
+          <p style="color: var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.2rem; margin-top:1.5rem">Good BAs don't just write specs. They keep the team aligned through the whole loop.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 18</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>

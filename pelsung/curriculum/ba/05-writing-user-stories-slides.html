@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Writing Clear User Stories — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      .story-card { background:white; border:2px solid var(--blue); border-radius:12px; padding:1.1rem 1.4rem; max-width:820px; width:100%; font-family:'Bahnschrift','Segoe UI',sans-serif; }
+      .story-card .st { color:var(--muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.08em; font-weight:700; margin-bottom:0.4rem; }
+      .story-card .txt { font-size:1.15rem; line-height:1.85; color:var(--text); }
+      .story-card .txt strong { color:var(--indigo); }
+
+      .story-anatomy { display:grid; grid-template-columns: 1fr 1fr 1fr; gap:0.9rem; width:100%; max-width:1100px; }
+      @media (max-width: 820px){ .story-anatomy { grid-template-columns: 1fr; } }
+      .anat { background:white; border:1px solid var(--border); border-top:4px solid var(--blue); border-radius:10px; padding:0.9rem 1.1rem; }
+      .anat .lbl { color:var(--muted); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.07em; font-weight:700; margin-bottom:0.3rem; }
+      .anat h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; margin-bottom:0.3rem; }
+      .anat p { font-size:0.88rem; color:var(--text); line-height:1.6; }
+      .anat .eg { margin-top:0.4rem; font-size:0.82rem; color:var(--muted); font-style:italic; padding-top:0.4rem; border-top:1px dashed var(--border); }
+      .anat.role { border-top-color:var(--indigo); }
+      .anat.action { border-top-color:var(--blue); }
+      .anat.value { border-top-color:var(--amber); }
+
+      .compare { display:grid; grid-template-columns: 1fr 1fr; gap:0.9rem; width:100%; max-width:1100px; }
+      @media (max-width: 820px){ .compare { grid-template-columns: 1fr; } }
+      .compare .col { background:white; border:1px solid var(--border); border-radius:10px; padding:0.9rem 1.1rem; }
+      .compare .col.bad { border-top:4px solid var(--red); }
+      .compare .col.good { border-top:4px solid var(--green); }
+      .compare .col h5 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.5rem; }
+      .compare .col.bad h5 { color:var(--red); }
+      .compare .col.good h5 { color:#3D7A3D; }
+      .compare pre { font-family:'Courier New',monospace; font-size:0.85rem; background:var(--bg); border-radius:6px; padding:0.7rem 0.9rem; white-space:pre-wrap; line-height:1.6; color:var(--text); }
+      .compare .why { font-size:0.84rem; color:var(--muted); margin-top:0.5rem; font-style:italic; }
+
+      .smells-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:0.7rem; width:100%; max-width:1100px; }
+      @media (max-width: 900px){ .smells-grid { grid-template-columns: 1fr; } }
+      .smell { background:white; border:1px solid var(--border); border-left:4px solid var(--red); border-radius:10px; padding:0.8rem 1rem; }
+      .smell h6 { color:var(--red); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.3rem; }
+      .smell p { font-size:0.85rem; color:var(--text); line-height:1.55; }
+      .smell .eg { margin-top:0.4rem; padding:0.4rem 0.55rem; background:var(--bg); border-radius:5px; font-family:'Courier New',monospace; font-size:0.78rem; color:var(--muted); }
+      .smell .fix { margin-top:0.3rem; font-size:0.82rem; color:#3D7A3D; }
+      .smell .fix strong { color:#3D7A3D; }
+
+      .invest-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:0.7rem; width:100%; max-width:1100px; }
+      @media (max-width: 900px){ .invest-grid { grid-template-columns: repeat(2, 1fr); } }
+      @media (max-width: 600px){ .invest-grid { grid-template-columns: 1fr; } }
+      .inv { background:white; border:1px solid var(--border); border-left:4px solid var(--blue); border-radius:10px; padding:0.8rem 1rem; }
+      .inv h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; margin-bottom:0.2rem; display:flex; align-items:center; gap:0.4rem; }
+      .inv .letter { display:inline-flex; align-items:center; justify-content:center; width:1.6rem; height:1.6rem; background:var(--blue); color:white; border-radius:6px; font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; font-size:0.95rem; }
+      .inv p { font-size:0.86rem; color:var(--text); line-height:1.55; margin-top:0.3rem; }
+      .inv .eg { margin-top:0.35rem; font-size:0.8rem; color:var(--muted); font-style:italic; }
+
+      .hierarchy { display:flex; flex-direction:column; gap:0.5rem; width:100%; max-width:900px; }
+      .level { display:grid; grid-template-columns: 130px 1fr; gap:0.9rem; align-items:start; background:white; border:1px solid var(--border); border-left:5px solid var(--blue); border-radius:10px; padding:0.75rem 1rem; }
+      .level.epic { border-left-color:var(--indigo); }
+      .level.feature { border-left-color:var(--blue); }
+      .level.story { border-left-color:var(--amber); }
+      .level.task { border-left-color:var(--green); }
+      .level .lvlname { font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; color:var(--indigo); font-size:0.95rem; }
+      .level .lvlname .sub { display:block; color:var(--muted); font-size:0.72rem; font-weight:400; text-transform:uppercase; letter-spacing:0.06em; margin-top:0.15rem; }
+      .level .ex { font-size:0.9rem; color:var(--text); line-height:1.6; }
+      .level .ex em { color:var(--muted); font-style:italic; font-size:0.85rem; display:block; margin-top:0.2rem; }
+
+      .pair-box { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; width:100%; max-width:1100px; }
+      @media (max-width: 820px){ .pair-box { grid-template-columns: 1fr; } }
+      .pair-box .pb { background:white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.3rem; }
+      .pair-box .pb.story-side { border-top:4px solid var(--blue); }
+      .pair-box .pb.ac-side { border-top:4px solid var(--amber); }
+      .pair-box .pb h5 { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-size:1.05rem; margin-bottom:0.5rem; }
+      .pair-box .pb .badge { display:inline-block; background:#E6F0F8; color:var(--blue); font-size:0.7rem; font-weight:700; padding:0.2rem 0.6rem; border-radius:4px; letter-spacing:0.07em; text-transform:uppercase; margin-bottom:0.4rem; }
+      .pair-box .pb .badge.ac { background:#EBF0F7; color:#1C5B8C; }
+      .pair-box .pb .story-text { font-size:0.95rem; color:var(--text); line-height:1.75; font-style:italic; }
+      .pair-box .pb .story-text strong { color:var(--indigo); font-style:normal; }
+      .pair-box .pb .ac-item { border-left:3px solid var(--green); padding:0.5rem 0.7rem; margin:0.4rem 0; background:var(--bg); border-radius:5px; }
+      .pair-box .pb .ac-item p { font-size:0.85rem; line-height:1.6; color:var(--text); margin:0; }
+      .pair-box .pb .ac-item p .k { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; }
+
+      .raw-req { background:#FFF7E6; border:1px dashed #B88730; border-radius:10px; padding:0.75rem 1rem; max-width:900px; width:100%; }
+      .raw-req .lbl { color:#B88730; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.07em; font-weight:700; margin-bottom:0.25rem; }
+      .raw-req p { font-size:0.92rem; color:var(--text); line-height:1.6; font-style:italic; }
+
+      .exercise-grid { display:grid; grid-template-columns: 1fr 1fr 1fr; gap:0.7rem; width:100%; max-width:1100px; }
+      @media (max-width: 900px){ .exercise-grid { grid-template-columns: 1fr; } }
+      .ex-card { background:white; border:1px solid var(--border); border-top:4px solid var(--amber); border-radius:10px; padding:0.8rem 1rem; }
+      .ex-card .num { background:var(--amber); color:white; font-family:'Bahnschrift','Segoe UI',sans-serif; font-weight:700; padding:0.15rem 0.6rem; border-radius:4px; font-size:0.78rem; display:inline-block; margin-bottom:0.4rem; }
+      .ex-card h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.3rem; }
+      .ex-card p { font-size:0.85rem; color:var(--text); line-height:1.55; font-style:italic; }
+
+      .checklist { background:white; border:1px solid var(--border); border-radius:12px; padding:1rem 1.3rem; max-width:900px; width:100%; }
+      .checklist h5 { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); margin-bottom:0.5rem; font-size:1rem; }
+      .checklist ul { list-style:none; padding:0; margin:0; }
+      .checklist li { padding:0.35rem 0; font-size:0.92rem; color:var(--text); line-height:1.6; border-bottom:1px dashed var(--border); }
+      .checklist li:last-child { border-bottom:none; }
+      .checklist li::before { content:"☐ "; color:var(--blue); font-weight:700; margin-right:0.3rem; }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>BA Vertical · Class 05</div></div>
+          <h1 class="display" style="color: var(--text)">
+            <span style="color: var(--blue)">Writing Clear</span><br />
+            <span style="color: var(--indigo)">User Stories</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted)">The shortest, most-read sentence a BA writes — and the most often written badly.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">Story Format</span>
+            <span class="class-tag tag-blue">INVEST</span>
+            <span class="class-tag tag-blue">Story + AC</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 AGENDA -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 780px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem"><h2 class="heading">Session Journey · ~75 min</h2></div>
+          <div class="agenda-row" onclick="goTo(2)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">📝 The story format · As a / I want / so that</span><span class="ar-badge" style="background:#E6F0F8;color:var(--indigo)">12 min</span></div>
+          <div class="agenda-row" onclick="goTo(7)"><span class="ar-dot" style="background: var(--red)"></span><span class="ar-label">⚠️ Three story smells</span><span class="ar-badge" style="background:#FEE9EC;color:var(--red)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(9)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">⭐ INVEST · the six checks</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">12 min</span></div>
+          <div class="agenda-row" onclick="goTo(12)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🪜 Epic · Feature · Story · Task</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(13)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🤝 Story + AC · paired artifacts</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(15)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🧪 Hands-on · rewrite three vague requirements</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">20 min</span></div>
+          <div class="agenda-row" onclick="goTo(17)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🎯 Wrap-up</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">5 min</span></div>
+        </div>
+      </div>
+
+      <!-- 3 SECTION: STORY FORMAT -->
+      <div class="slide bg-indigo" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part One</div>
+          <h1 class="display" style="color: white">The Story<br>Format</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">One sentence. Three parts. Read by everyone on the team.</p>
+        </div>
+        <div class="section-num" style="color: white">01</div>
+      </div>
+
+      <!-- 4 STORY FORMAT -->
+      <div class="slide accent-blue bg-subtle" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> The shape of a user story</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Every user story has the same three parts</h2></div>
+          <div class="story-card">
+            <div class="st">User story · template</div>
+            <p class="txt">
+              As a <strong>[role]</strong>,<br>
+              I want to <strong>[action]</strong><br>
+              so that <strong>[value]</strong>.
+            </p>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">A story is short on purpose. It is not the full requirement — it is a <strong>placeholder for a conversation</strong>. The acceptance criteria (last class) carries the testable detail.</p>
+        </div>
+      </div>
+
+      <!-- 5 ANATOMY: WHY EACH PART -->
+      <div class="slide accent-blue" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span> Why each part matters</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Each part answers a different question</h2></div>
+          <div class="story-anatomy">
+            <div class="anat role">
+              <div class="lbl">Part 1 · Who</div>
+              <h6>As a [role]</h6>
+              <p>Names the persona. Grounds the story in a real human, not "the user." Connects back to the personas we built last class.</p>
+              <div class="eg">As a Class IV employee on monthly leave…</div>
+            </div>
+            <div class="anat action">
+              <div class="lbl">Part 2 · What</div>
+              <h6>I want to [action]</h6>
+              <p>Describes the <strong>behaviour</strong> the user wants — not the screen, button, or solution. The dev decides the "how".</p>
+              <div class="eg">…I want to request a leave day…</div>
+            </div>
+            <div class="anat value">
+              <div class="lbl">Part 3 · Why</div>
+              <h6>so that [value]</h6>
+              <p>Forces the WHY. If you cannot finish this part, the story has no business value and shouldn't exist yet.</p>
+              <div class="eg">…so that my supervisor can approve it before I travel.</div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">Three parts. Three different jobs. Each one stops the BA from skipping a question.</p>
+        </div>
+      </div>
+
+      <!-- 6 GOOD VS BAD STORY -->
+      <div class="slide accent-blue bg-subtle" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> A good story vs a bad story</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Same need · two stories · only one is workable</h2></div>
+          <div class="compare">
+            <div class="col bad">
+              <h5>❌ Bad story</h5>
+              <pre>As a user,
+I want a button on the home
+screen that opens a leave form
+with a dropdown for leave type,
+so that I can apply for leave.</pre>
+              <p class="why">Vague role ("user"). Action describes the <em>screen</em>, not the behaviour. Value just repeats the action. The dev has no room — and no reason.</p>
+            </div>
+            <div class="col good">
+              <h5>✅ Good story</h5>
+              <pre>As a Class IV employee,
+I want to request a leave day
+without visiting the HR office,
+so that I don't lose half a day
+travelling to submit the form.</pre>
+              <p class="why">Specific role. Action is the behaviour ("request leave online"). Value is real ("don't lose half a day"). The dev can choose buttons, dropdowns, or none.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7 SECTION: SMELLS -->
+      <div class="slide bg-blue" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Two</div>
+          <h1 class="display" style="color: white">Three Story<br>Smells</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">If your story has any of these — fix it before passing it on.</p>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- 8 SMELLS -->
+      <div class="slide accent-blue bg-subtle" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> Three smells to spot in your stories</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Most "bad" stories fall into one of three traps</h2></div>
+          <div class="smells-grid">
+            <div class="smell">
+              <h6>1. Solution leaking in</h6>
+              <p>The action describes the screen, button, or design — instead of the behaviour the user wants.</p>
+              <div class="eg">"As a user I want a dropdown to pick my leave type…"</div>
+              <div class="fix"><strong>Fix:</strong> ask "what do they want to do?" not "what do they want to see?"</div>
+            </div>
+            <div class="smell">
+              <h6>2. Missing or empty value</h6>
+              <p>The "so that" repeats the action, or has been deleted because it felt obvious. The WHY is gone.</p>
+              <div class="eg">"…so that I can request leave."</div>
+              <div class="fix"><strong>Fix:</strong> ask <em>why</em> twice. "Why request leave?" → "So I can travel home."</div>
+            </div>
+            <div class="smell">
+              <h6>3. Vague role</h6>
+              <p>"As a user…" tells you nothing. Every system has users. The whole point of the role is to be specific.</p>
+              <div class="eg">"As a user I want to recharge my phone…"</div>
+              <div class="fix"><strong>Fix:</strong> use the persona name. "As a Tashi Cell prepaid customer…"</div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">If a story smells, the dev guesses. If the dev guesses, you get something nobody asked for.</p>
+        </div>
+      </div>
+
+      <!-- 9 SECTION: INVEST -->
+      <div class="slide bg-indigo" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Three</div>
+          <h1 class="display" style="color: white">INVEST</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Six checks for a healthy user story.</p>
+        </div>
+        <div class="section-num" style="color: white">03</div>
+      </div>
+
+      <!-- 10 INVEST -->
+      <div class="slide accent-blue bg-subtle" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> The INVEST checklist</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">A good story is INVEST · run every story past these six checks</h2></div>
+          <div class="invest-grid">
+            <div class="inv"><h6><span class="letter">I</span> Independent</h6><p>The story can be built on its own. It doesn't depend on three other stories shipping first.</p><div class="eg">"Save a favourite biller" can ship without "Edit a saved biller".</div></div>
+            <div class="inv"><h6><span class="letter">N</span> Negotiable</h6><p>The story is not a contract. The team can discuss the details and adjust before building.</p><div class="eg">"…request a leave day" — exact form fields are open for discussion.</div></div>
+            <div class="inv"><h6><span class="letter">V</span> Valuable</h6><p>Someone real benefits when the story ships. If you can't say who or how — drop the story.</p><div class="eg">"…so that I don't lose half a day travelling" — the value is plain.</div></div>
+            <div class="inv"><h6><span class="letter">E</span> Estimable</h6><p>The team can roughly say how big it is. If they can't, the story is too vague or too big.</p><div class="eg">"Build a school portal" — not estimable. "Show today's attendance" — yes.</div></div>
+            <div class="inv"><h6><span class="letter">S</span> Small</h6><p>Fits in one short delivery cycle (typically &lt; 1 week of build). Big stories are split.</p><div class="eg">"Recharge any Tashi Cell number" — small. "Run all telecom payments" — not.</div></div>
+            <div class="inv"><h6><span class="letter">T</span> Testable</h6><p>You can write acceptance criteria for it. If you can't — the story is wishful, not real.</p><div class="eg">"App should feel modern" — not testable. AC writes itself for "Save a favourite".</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11 INVEST APPLIED -->
+      <div class="slide accent-blue" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> INVEST in practice</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Run a real story past the six checks</h2></div>
+          <div class="story-card" style="max-width:820px">
+            <div class="st">Story under test</div>
+            <p class="txt">As a <strong>mBoB customer</strong>, I want to <strong>recharge my own Tashi Cell number</strong> so that <strong>I don't run out of balance during the day</strong>.</p>
+          </div>
+          <div class="checklist">
+            <h5>Walk it through INVEST</h5>
+            <ul>
+              <li><strong>Independent</strong> — Yes. Doesn't need "recharge a friend's number" to ship first.</li>
+              <li><strong>Negotiable</strong> — Yes. Maximum amount, saved-recharge values, OTP rules — all open for discussion with the bank.</li>
+              <li><strong>Valuable</strong> — Yes. Customer keeps connectivity; bank keeps the customer in-app.</li>
+              <li><strong>Estimable</strong> — Yes. The team can sketch a rough size — small to medium.</li>
+              <li><strong>Small</strong> — Yes. Single feature, one telecom, one customer's own number.</li>
+              <li><strong>Testable</strong> — Yes. Easy to write AC: registered customer, valid number, balance updates within a known time.</li>
+            </ul>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">Six green checks. This story is ready for AC.</p>
+        </div>
+      </div>
+
+      <!-- 12 STORY HIERARCHY -->
+      <div class="slide accent-blue bg-subtle" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> Epic · Feature · Story · Task</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Stories sit inside a hierarchy</h2><p class="body-md" style="color:var(--muted); max-width:820px">Example: an <strong>Online Leave Request System</strong> for a government office.</p></div>
+          <div class="hierarchy">
+            <div class="level epic">
+              <div class="lvlname">Epic<span class="sub">Months of work</span></div>
+              <div class="ex">Online Leave Request System for the office<em>Big goal. Many teams. Months of work. Cannot be built as one piece.</em></div>
+            </div>
+            <div class="level feature">
+              <div class="lvlname">Feature<span class="sub">Weeks of work</span></div>
+              <div class="ex">Employee self-service leave application<em>One slice of the epic. Still bigger than one story.</em></div>
+            </div>
+            <div class="level story">
+              <div class="lvlname">Story<span class="sub">Days of work</span></div>
+              <div class="ex">As a Class IV employee, I want to request a leave day online so that I don't lose half a day travelling to HR.<em>One user, one behaviour, one piece of value. Has acceptance criteria.</em></div>
+            </div>
+            <div class="level task">
+              <div class="lvlname">Task<span class="sub">Hours of work</span></div>
+              <div class="ex">Build the leave-type dropdown · validate dates · save the application to the database · send a notification to the supervisor.<em>Dev's internal breakdown. The BA usually doesn't write tasks.</em></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 13 SECTION: STORY + AC -->
+      <div class="slide bg-blue" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Four</div>
+          <h1 class="display" style="color: white">Story + AC<br>Paired Artifacts</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">A story without AC is wishful thinking.</p>
+        </div>
+        <div class="section-num" style="color: white">04</div>
+      </div>
+
+      <!-- 14 STORY + AC PAIRING -->
+      <div class="slide accent-blue bg-subtle" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> Story is the WHAT/WHY · AC is the verifiable behaviour</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">A story always travels with its AC</h2></div>
+          <div class="pair-box">
+            <div class="pb story-side">
+              <span class="badge">User Story</span>
+              <h5>What we want and why</h5>
+              <p class="story-text">
+                As a <strong>library member</strong>,<br>
+                I want to <strong>check out a book online</strong><br>
+                so that <strong>I can reserve it before walking to the library</strong>.
+              </p>
+            </div>
+            <div class="pb ac-side">
+              <span class="badge ac">Acceptance Criteria</span>
+              <h5>How we know it's done</h5>
+              <div class="ac-item"><p><span class="k">Given</span> a member is logged in and the book shows "Available", <span class="k">when</span> they tap "Check out", <span class="k">then</span> the book is held in their name for 24 hours and shows "Reserved · expires tomorrow".</p></div>
+              <div class="ac-item"><p><span class="k">Given</span> the book is already checked out by someone else, <span class="k">when</span> the member taps "Check out", <span class="k">then</span> the system shows "Currently unavailable. Join the waitlist?" and offers a Join button.</p></div>
+              <div class="ac-item"><p><span class="k">Given</span> a member already has 3 books on hold, <span class="k">when</span> they try to check out a fourth, <span class="k">then</span> the system shows "Limit reached. Return one to reserve another." and does not place the hold.</p></div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">Story is one sentence. AC is three to seven testable behaviours. Together they are a complete unit of work — never separated.</p>
+        </div>
+      </div>
+
+      <!-- 15 SECTION: HANDS-ON -->
+      <div class="slide bg-indigo" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Five · Hands-on</div>
+          <h1 class="display" style="color: white">Rewrite Three<br>Vague Requirements</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Pairs · 20 minutes · story + INVEST + 2–3 AC each.</p>
+        </div>
+        <div class="section-num" style="color: white">05</div>
+      </div>
+
+      <!-- 16 EXERCISE BRIEF -->
+      <div class="slide accent-blue bg-subtle" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span> The brief · 20 minutes</div>
+        <div class="stack" style="align-items:center; width:100%; gap:0.7rem">
+          <div class="center"><h2 class="heading" style="font-size:clamp(1.4rem, 2.6vw, 2rem)">Take each vague requirement · turn it into a clean story + AC</h2></div>
+
+          <div class="raw-req">
+            <div class="lbl">Raw requirement #1 · Leave</div>
+            <p>"The system should let employees request leave easily and managers approve it without too many clicks."</p>
+          </div>
+          <div class="raw-req">
+            <div class="lbl">Raw requirement #2 · mBoB recharge</div>
+            <p>"Customers want to recharge their phones from the bank app."</p>
+          </div>
+          <div class="raw-req">
+            <div class="lbl">Raw requirement #3 · School portal</div>
+            <p>"We need parents to be able to check kids' attendance on the school portal."</p>
+          </div>
+
+          <div class="exercise-grid">
+            <div class="ex-card">
+              <span class="num">Step 1</span>
+              <h6>Write a story</h6>
+              <p>One story per requirement. Use As a [specific role] / I want to [behaviour] / so that [real value].</p>
+            </div>
+            <div class="ex-card">
+              <span class="num">Step 2</span>
+              <h6>Run INVEST</h6>
+              <p>Walk each story past all six letters. Mark which pass and which need work. Fix any that fail.</p>
+            </div>
+            <div class="ex-card">
+              <span class="num">Step 3</span>
+              <h6>Add 2–3 AC</h6>
+              <p>For each story write 2–3 acceptance criteria in Given / When / Then form. Cover happy path + at least one edge.</p>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px">Pair up · 6–7 min per requirement · two pairs share their leave story in debrief.</p>
+        </div>
+      </div>
+
+      <!-- 17 WRAP -->
+      <div class="slide bg-dark" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span> Wrap-up</div>
+        <div class="center" style="max-width: 820px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key Takeaways</div>
+          <h2 class="heading" style="color: white;">What we covered today</h2>
+          <ul class="reveal-list" style="color: rgba(255,255,255,0.9); text-align:left; max-width: 720px; margin: 1.5rem auto; font-size: 1rem; line-height: 2;">
+            <li>✅ A user story is one sentence: <strong>As a [role], I want [action], so that [value]</strong></li>
+            <li>✅ Each part has a job: <strong>role</strong> grounds the story · <strong>action</strong> is behaviour, not a screen · <strong>value</strong> forces the WHY</li>
+            <li>✅ Watch for three smells: <strong>solution leaking in · missing value · vague role</strong></li>
+            <li>✅ Run every story past <strong>INVEST</strong> — Independent, Negotiable, Valuable, Estimable, Small, Testable</li>
+            <li>✅ Stories sit inside a hierarchy: <strong>Epic → Feature → Story → Task</strong></li>
+            <li>✅ A story never travels alone — it is paired with its <strong>acceptance criteria</strong> from last class</li>
+            <li>✅ The story is the <strong>placeholder for a conversation</strong>, not the contract</li>
+          </ul>
+          <p style="color: var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.2rem; margin-top:1.5rem">A clear story is the cheapest thing a BA writes — and the most expensive thing to get wrong.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 17</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>

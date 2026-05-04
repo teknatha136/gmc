@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Storytelling &amp; Presentations for BAs — SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      /* ---- audience cards ---- */
+      .aud-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:1rem; width:100%; max-width:1150px; }
+      @media (max-width: 820px){ .aud-grid { grid-template-columns: 1fr; } }
+      .aud { background:white; border:1px solid var(--border); border-top:4px solid var(--blue); border-radius:12px; padding:0.95rem 1.15rem; }
+      .aud.influencer { border-top-color:var(--amber); }
+      .aud.implementer { border-top-color:var(--indigo); }
+      .aud h5 { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; color:var(--blue); margin-bottom:0.3rem; }
+      .aud.influencer h5 { color:#1C5B8C; }
+      .aud.implementer h5 { color:var(--indigo); }
+      .aud .who { font-size:0.78rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; font-weight:700; margin-bottom:0.4rem; }
+      .aud ul { list-style:none; padding:0; margin:0.3rem 0 0 0; }
+      .aud ul li { font-size:0.88rem; color:var(--text); line-height:1.6; padding-left:1.1rem; position:relative; margin-bottom:0.25rem; }
+      .aud ul li::before { content:"→"; position:absolute; left:0; color:var(--faint); }
+      .aud .ex { margin-top:0.5rem; font-size:0.8rem; color:var(--muted); font-style:italic; border-top:1px dashed var(--border); padding-top:0.4rem; }
+
+      /* ---- pyramid ---- */
+      .pyr { display:flex; flex-direction:column; align-items:center; gap:0.5rem; width:100%; max-width:900px; }
+      .pyr .row { display:flex; gap:0.6rem; justify-content:center; width:100%; }
+      .pyr .blk { background:white; border:1.5px solid var(--border); border-radius:10px; padding:0.7rem 1rem; font-size:0.92rem; line-height:1.55; color:var(--text); }
+      .pyr .blk.top { border-top:5px solid var(--blue); background:#E6F0F8; font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.05rem; font-weight:600; color:var(--indigo); max-width:680px; text-align:center; }
+      .pyr .blk.mid { border-top:4px solid var(--amber); flex:1; max-width:280px; }
+      .pyr .blk.mid h6 { font-family:'Bahnschrift','Segoe UI',sans-serif; color:#1C5B8C; font-size:0.9rem; margin-bottom:0.2rem; }
+      .pyr .blk.bot { border-top:3px solid var(--indigo); flex:1; max-width:200px; font-size:0.82rem; color:var(--muted); }
+
+      /* ---- arc steps ---- */
+      .arc-card { background:white; border:1px solid var(--border); border-radius:14px; padding:1.1rem 1.4rem; max-width:880px; width:100%; }
+      .arc-card .num { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:2.4rem; color:var(--blue); line-height:1; margin-bottom:0.3rem; }
+      .arc-card h4 { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-size:1.5rem; margin-bottom:0.5rem; }
+      .arc-card .ask { color:var(--muted); font-size:0.92rem; margin-bottom:0.7rem; font-style:italic; }
+      .arc-card .eg { background:var(--bg); border-left:4px solid var(--amber); padding:0.7rem 1rem; border-radius:6px; font-size:0.95rem; color:var(--text); line-height:1.65; }
+      .arc-card .eg strong { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; }
+
+      /* ---- hygiene rules ---- */
+      .rules-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:0.7rem; width:100%; max-width:1100px; }
+      @media (max-width: 820px){ .rules-grid { grid-template-columns: 1fr; } }
+      .rule { background:white; border:1px solid var(--border); border-left:4px solid var(--blue); border-radius:10px; padding:0.75rem 1rem; }
+      .rule h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.98rem; margin-bottom:0.2rem; }
+      .rule p { font-size:0.86rem; color:var(--text); line-height:1.55; }
+
+      /* ---- mock slides (bad/good side by side) ---- */
+      .mock-grid { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; width:100%; max-width:1100px; }
+      @media (max-width: 820px){ .mock-grid { grid-template-columns: 1fr; } }
+      .mock { background:white; border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+      .mock.bad { border-top:5px solid var(--red); }
+      .mock.good { border-top:5px solid var(--green); }
+      .mock .mk-header { padding:0.55rem 0.9rem; font-size:0.8rem; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; }
+      .mock.bad .mk-header { background:#F2E8EA; color:var(--red); }
+      .mock.good .mk-header { background:#F0F7EC; color:#3D7A3D; }
+      .mock .mk-body { padding:0.9rem 1rem; min-height:180px; font-family:'Open Sans', sans-serif; }
+      .mock .mk-title { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1rem; color:var(--indigo); margin-bottom:0.5rem; line-height:1.35; }
+      .mock .mk-text { font-size:0.74rem; color:var(--muted); line-height:1.5; }
+      .mock .mk-text ul { padding-left:1rem; margin:0.2rem 0; }
+      .mock .mk-text li { margin-bottom:0.15rem; }
+      .mock .mk-foot { font-size:0.62rem; color:var(--faint); padding:0.4rem 0.9rem; border-top:1px dashed var(--border); display:flex; justify-content:space-between; }
+      .mock .mk-bar { background:var(--blue); height:6px; width:60%; border-radius:3px; margin:0.4rem 0; }
+      .mock .mk-num { font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.8rem; color:var(--blue); line-height:1; margin:0.3rem 0; }
+
+      /* ---- headline test ---- */
+      .ht-strip { display:flex; flex-direction:column; gap:0.5rem; width:100%; max-width:900px; }
+      .ht-row { background:white; border:1px solid var(--border); border-left:5px solid var(--blue); border-radius:8px; padding:0.7rem 1rem; }
+      .ht-row .lbl { font-size:0.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; font-weight:700; margin-bottom:0.2rem; }
+      .ht-row .hd { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-size:1.05rem; line-height:1.4; }
+
+      /* ---- failures ---- */
+      .fail-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:0.7rem; width:100%; max-width:1100px; }
+      @media (max-width: 820px){ .fail-grid { grid-template-columns: 1fr; } }
+      .fail { background:white; border:1px solid var(--border); border-left:4px solid var(--red); border-radius:10px; padding:0.75rem 1rem; }
+      .fail h6 { color:var(--red); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin-bottom:0.25rem; }
+      .fail p { font-size:0.86rem; color:var(--text); line-height:1.55; }
+      .fail .fix { margin-top:0.3rem; padding-top:0.3rem; border-top:1px dashed var(--border); color:var(--muted); font-size:0.82rem; }
+      .fail .fix strong { color:#3D7A3D; }
+
+      /* ---- exercise ---- */
+      .brief-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:0.8rem; width:100%; max-width:1150px; }
+      @media (max-width: 820px){ .brief-grid { grid-template-columns: 1fr; } }
+      .brief { background:white; border:1.5px solid var(--blue); border-radius:12px; padding:0.85rem 1.05rem; }
+      .brief .tg { background:#E6F0F8; color:var(--blue); font-size:0.7rem; font-weight:700; padding:0.15rem 0.5rem; border-radius:4px; letter-spacing:0.05em; text-transform:uppercase; }
+      .brief h5 { font-family:'Bahnschrift','Segoe UI',sans-serif; color:var(--indigo); font-size:1rem; margin:0.4rem 0 0.3rem; }
+      .brief p { font-size:0.85rem; color:var(--text); line-height:1.5; }
+
+      .bhutan-callout { background:linear-gradient(135deg,#0067A3,#002D72); color:white; border-radius:14px; padding:1.1rem 1.4rem; max-width:880px; width:100%; }
+      .bhutan-callout h4 { font-family:'Bahnschrift','Segoe UI',sans-serif; color:white; font-size:1.15rem; margin-bottom:0.4rem; }
+      .bhutan-callout p { font-size:0.95rem; line-height:1.7; color:rgba(255,255,255,0.92); }
+      .bhutan-callout p strong { color:#7dd3fc; }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+
+      <!-- 1 TITLE -->
+      <div class="slide accent-gradient" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung</div>
+        <div class="title-grid center">
+          <div><div class="date-badge"><span class="db-dot"></span>BA Vertical · Class 13</div></div>
+          <h1 class="display" style="color: var(--text)">
+            <span style="color: var(--blue)">Storytelling &amp;</span><br />
+            <span style="color: var(--indigo)">Presentations</span>
+          </h1>
+          <p class="body-lg" style="color: var(--muted)">A great analysis is useless if it doesn't land. Today we learn to make it land.</p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">Selling a Recommendation</span>
+            <span class="class-tag tag-blue">Narrative Structure</span>
+            <span class="class-tag tag-blue">Slide Hygiene</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → to advance</div>
+      </div>
+
+      <!-- 2 AGENDA -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> Today's Plan</div>
+        <div class="stack" style="max-width: 800px; width: 100%">
+          <div class="center" style="margin-bottom: 0.5rem"><h2 class="heading">Session Journey · ~90 min</h2></div>
+          <div class="agenda-row" onclick="goTo(3)"><span class="ar-dot" style="background: var(--red)"></span><span class="ar-label">🎯 Why this matters for a BA</span><span class="ar-badge" style="background:#FEE9EC;color:var(--red)">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(4)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">👥 Audience first · three audience types</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(7)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🔺 The Pyramid Principle</span><span class="ar-badge" style="background:#E6E9EC;color:var(--indigo)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(9)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">📖 Story arc for recommendations · 5 parts</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">15 min</span></div>
+          <div class="agenda-row" onclick="goTo(15)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🧹 Slide hygiene · six rules</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(17)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">📝 The headline test</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">5 min</span></div>
+          <div class="agenda-row" onclick="goTo(18)"><span class="ar-dot" style="background: var(--red)"></span><span class="ar-label">⚠️ Common BA presentation failures</span><span class="ar-badge" style="background:#FEE9EC;color:var(--red)">5 min</span></div>
+          <div class="agenda-row" onclick="goTo(19)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🧪 Hands-on · build a 5-slide pitch</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">25 min</span></div>
+          <div class="agenda-row" onclick="goTo(21)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🎯 Wrap-up</span><span class="ar-badge" style="background:#E6E9EC;color:var(--indigo)">2 min</span></div>
+        </div>
+      </div>
+
+      <!-- 3 WHY THIS MATTERS -->
+      <div class="slide bg-dark" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> Why this matters</div>
+        <div class="center" style="max-width: 880px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎤 A familiar moment</div>
+          <p style="color:rgba(255,255,255,0.85); font-size:1.15rem; line-height:1.8; max-width:780px; margin: 0 auto 1.5rem">
+            Your aunt asks you which phone to buy for your cousin. You spent two evenings comparing six phones. You know the right answer. But when you sit down with her, you start with screen sizes, then battery, then prices, then warranties…
+          </p>
+          <p style="color:var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.4rem; margin-top:1rem; line-height:1.4">
+            …and after 20 minutes she just buys whatever the shopkeeper suggests.
+          </p>
+          <p style="color:rgba(255,255,255,0.7); font-size:1rem; margin-top:1.5rem; line-height:1.7; max-width:780px; margin-left:auto; margin-right:auto">
+            A BA's job is full of moments like this. <strong style="color:white">Build vs buy. Vendor A vs B. Change this or change that.</strong> The analysis is only half the work. The other half is making it land in someone else's head.
+          </p>
+        </div>
+      </div>
+
+      <!-- 4 SECTION: AUDIENCE -->
+      <div class="slide bg-blue" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part One</div>
+          <h1 class="display" style="color: white">Audience<br>First</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Who is in the room? Their job decides your story.</p>
+        </div>
+        <div class="section-num" style="color: white">01</div>
+      </div>
+
+      <!-- 5 ONE STORY ≠ EVERY ROOM -->
+      <div class="slide accent-blue bg-subtle" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span> Same recommendation, three rooms</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Before you write a single slide, ask: <span style="color:var(--blue)">who is reading this?</span></h2><p class="body-md" style="color:var(--muted); max-width:820px; margin-top:0.5rem">The same recommendation needs three different presentations for three different audiences.</p></div>
+          <div class="aud-grid">
+            <div class="aud">
+              <div class="who">1 · Decision-makers</div>
+              <h5>The dzongdag</h5>
+              <ul>
+                <li>1–3 people, time-poor</li>
+                <li>Want the <strong>recommendation up front</strong></li>
+                <li>Will skim, not read</li>
+                <li>Care about cost, risk, outcome</li>
+              </ul>
+              <div class="ex">"Sir, we recommend X. Here's why in three points."</div>
+            </div>
+            <div class="aud influencer">
+              <div class="who">2 · Influencers</div>
+              <h5>Your peers and seniors</h5>
+              <ul>
+                <li>Want the detail</li>
+                <li>Want to <strong>challenge</strong> your logic</li>
+                <li>Care about how you ruled out other options</li>
+                <li>Help shape the final decision</li>
+              </ul>
+              <div class="ex">"Walk us through the comparison. Why not B?"</div>
+            </div>
+            <div class="aud implementer">
+              <div class="who">3 · Implementers</div>
+              <h5>Devs, designers, ops</h5>
+              <ul>
+                <li>Want clarity on what to <strong>build or do</strong></li>
+                <li>Care about scope, dependencies</li>
+                <li>Don't need the "why we chose this"</li>
+                <li>Need crisp acceptance criteria</li>
+              </ul>
+              <div class="ex">"What do I need to deliver, and by when?"</div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic; margin-top:0.4rem">Most BA decks fail because they were built for the wrong audience.</p>
+        </div>
+      </div>
+
+      <!-- 6 BHUTAN STYLE CALLOUT -->
+      <div class="slide accent-amber bg-subtle" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span> A note on style</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Bhutanese conversation has a long warm-up. Decks don't.</h2></div>
+          <div class="cols-2" style="max-width:1100px; gap:1rem">
+            <div class="card" style="border-top:3px solid var(--red)">
+              <h4 style="color:var(--red)">😴 Conversational style</h4>
+              <ul style="font-size:0.92rem; line-height:1.8; padding-left:1.2rem; color:var(--text)">
+                <li>"As you know, last year we noticed…"</li>
+                <li>Background first, problem second</li>
+                <li>Recommendation comes after 10 minutes</li>
+                <li>Polite, indirect, lots of context</li>
+              </ul>
+              <p style="font-size:0.85rem; color:var(--muted); margin-top:0.5rem; font-style:italic">Great for tea. Bad for the dzongdag's 15 minutes.</p>
+            </div>
+            <div class="card" style="border-top:3px solid var(--green)">
+              <h4 style="color:#3D7A3D">⚡ Recommendation style</h4>
+              <ul style="font-size:0.92rem; line-height:1.8; padding-left:1.2rem; color:var(--text)">
+                <li>"We recommend mBoB-Lite. Three reasons."</li>
+                <li>Recommendation first, evidence second</li>
+                <li>Background only if asked</li>
+                <li>Direct, structured, time-aware</li>
+              </ul>
+              <p style="font-size:0.85rem; color:var(--muted); margin-top:0.5rem; font-style:italic">Feels abrupt at first. It isn't — it's respectful of their time.</p>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px"><strong>You are not being rude.</strong> A busy decision-maker thanks you for getting to the point.</p>
+        </div>
+      </div>
+
+      <!-- 7 SECTION: PYRAMID -->
+      <div class="slide bg-indigo" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Two</div>
+          <h1 class="display" style="color: white">The Pyramid<br>Principle</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Recommendation first. Then key points. Then evidence.</p>
+        </div>
+        <div class="section-num" style="color: white">02</div>
+      </div>
+
+      <!-- 8 PYRAMID EXAMPLE -->
+      <div class="slide accent-blue bg-subtle" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> A pyramid you'd actually present</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Top says the answer. Below it explains why. Below that proves it.</h2></div>
+          <div class="pyr">
+            <div class="row">
+              <div class="blk top">We recommend <span style="color:var(--blue)">buying mBoB-Lite</span> rather than building our own payment app.</div>
+            </div>
+            <div class="row">
+              <div class="blk mid"><h6>Faster</h6>Live in 6 weeks vs ~10 months in-house.</div>
+              <div class="blk mid"><h6>Cheaper</h6>~Nu 4 lakh/year vs ~Nu 80 lakh build.</div>
+              <div class="blk mid"><h6>Lower risk</h6>Already used by 200k+ Bhutanese; RMA-compliant.</div>
+            </div>
+            <div class="row">
+              <div class="blk bot">Vendor SLA, 3 references, 14-day pilot result.</div>
+              <div class="blk bot">Cost breakdown — license, support, devices.</div>
+              <div class="blk bot">Compliance letter from RMA, security audit.</div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--muted); text-align:center; max-width:820px; font-style:italic">A decision-maker reads only the top box and decides. An influencer reads down one level. An implementer keeps going. Same pyramid serves all three.</p>
+        </div>
+      </div>
+
+      <!-- 9 SECTION: STORY ARC -->
+      <div class="slide bg-blue" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Three</div>
+          <h1 class="display" style="color: white">The Story Arc</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Five parts. One slide each. Use this every time.</p>
+        </div>
+        <div class="section-num" style="color: white">03</div>
+      </div>
+
+      <!-- 10 ARC 1 CONTEXT -->
+      <div class="slide accent-blue bg-subtle" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> Story arc · 1 of 5</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="arc-card">
+            <div class="num">1</div>
+            <h4>Context</h4>
+            <p class="ask">"What's the world we're in? What's true today?"</p>
+            <div class="eg"><strong>Example.</strong> "GMC will open citizen services online in October. Today we have no payment system. Every other agency uses mBoB or builds custom."</div>
+            <p style="font-size:0.85rem; color:var(--muted); margin-top:0.6rem; font-style:italic">Keep it short. 2–3 sentences. Just enough so the audience and you start in the same place.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11 ARC 2 CONFLICT -->
+      <div class="slide accent-blue bg-subtle" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> Story arc · 2 of 5</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="arc-card">
+            <div class="num">2</div>
+            <h4>Conflict</h4>
+            <p class="ask">"What's the problem? Why are we even talking?"</p>
+            <div class="eg"><strong>Example.</strong> "We need to accept payments by October. Building it ourselves takes 10 months and costs ~Nu 80 lakh. We don't have either."</div>
+            <p style="font-size:0.85rem; color:var(--muted); margin-top:0.6rem; font-style:italic">A clear problem creates a need for a decision. No conflict = no reason to listen.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12 ARC 3 CHOICE -->
+      <div class="slide accent-blue bg-subtle" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> Story arc · 3 of 5</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="arc-card">
+            <div class="num">3</div>
+            <h4>Choice</h4>
+            <p class="ask">"What are our options? What did we consider?"</p>
+            <div class="eg"><strong>Example.</strong> "Three options: (A) Build in-house · (B) Use mBoB-Lite · (C) Use Druk Pay. We compared on time, cost, compliance, support."</div>
+            <p style="font-size:0.85rem; color:var(--muted); margin-top:0.6rem; font-style:italic">Showing options builds trust. The audience sees you didn't jump to a conclusion — you weighed alternatives.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 13 ARC 4 RECOMMENDATION -->
+      <div class="slide accent-blue bg-subtle" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> Story arc · 4 of 5</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="arc-card" style="border-left:5px solid var(--blue)">
+            <div class="num">4</div>
+            <h4>Recommendation</h4>
+            <p class="ask">"What do we suggest, and why?"</p>
+            <div class="eg"><strong>Example.</strong> "We recommend <strong>mBoB-Lite</strong>. It's faster (6 weeks), cheaper (Nu 4 lakh/year), and lower-risk (RMA-compliant, already at scale)."</div>
+            <p style="font-size:0.85rem; color:var(--muted); margin-top:0.6rem; font-style:italic">This is the headline. Three reasons is the sweet spot. One sounds weak. Five sounds desperate.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 14 ARC 5 CALL TO ACTION -->
+      <div class="slide accent-blue bg-subtle" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> Story arc · 5 of 5</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="arc-card" style="border-left:5px solid var(--amber)">
+            <div class="num">5</div>
+            <h4>Call to action</h4>
+            <p class="ask">"What decision do we need from you today?"</p>
+            <div class="eg"><strong>Example.</strong> "We need approval today to sign the mBoB-Lite contract by end of week, so we go live by October 15."</div>
+            <p style="font-size:0.85rem; color:var(--muted); margin-top:0.6rem; font-style:italic">If you don't ask for a decision, you won't get one. Be specific: <em>what</em> you need, <em>by when</em>, from <em>whom</em>.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 15 SECTION: SLIDE HYGIENE -->
+      <div class="slide bg-indigo" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span></div>
+        <div class="center" style="position:relative; z-index:1">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem"><span class="pill-dot"></span> Part Four</div>
+          <h1 class="display" style="color: white">Slide Hygiene</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin-top:1rem">Six small rules. They make every deck better.</p>
+        </div>
+        <div class="section-num" style="color: white">04</div>
+      </div>
+
+      <!-- 16 SIX RULES + BAD VS GOOD -->
+      <div class="slide accent-blue bg-subtle" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span> Six rules · and a side-by-side</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading" style="font-size:clamp(1.5rem, 3vw, 2.2rem)">Six rules every BA slide should follow</h2></div>
+          <div class="rules-grid">
+            <div class="rule"><h6>1 · One idea per slide</h6><p>If a slide has two points, split it. Two slides &gt; one crowded slide.</p></div>
+            <div class="rule"><h6>2 · Headlines are full sentences</h6><p>"Costs are rising" is a topic. <em>"Costs are up 30% this year"</em> is the takeaway. Use the takeaway.</p></div>
+            <div class="rule"><h6>3 · Less text. More visual.</h6><p>If you'd put 6 bullets, use a chart, a number, or a single image instead.</p></div>
+            <div class="rule"><h6>4 · Contrast — use SELISE blue</h6><p>One brand colour for emphasis. No rainbow. No 6 different fonts.</p></div>
+            <div class="rule"><h6>5 · No bullet salad</h6><p>Max 3–5 items. Parallel structure (all start with a verb, or all are nouns).</p></div>
+            <div class="rule"><h6>6 · Footer essentials</h6><p>Page number · your name · date. So a printed copy still tells someone what they're holding.</p></div>
+          </div>
+          <div class="mock-grid" style="margin-top:0.5rem">
+            <div class="mock bad">
+              <div class="mk-header">❌ Crowded — fails rules 1, 2, 3, 5</div>
+              <div class="mk-body">
+                <div class="mk-title" style="color:var(--muted); font-size:0.85rem">Costs Overview</div>
+                <div class="mk-text">
+                  <ul>
+                    <li>The current cost of building our own payment system in-house is approximately Nu 80 lakh, which is significantly higher than the alternative which is to use mBoB-Lite at around Nu 4 lakh per year.</li>
+                    <li>It will also take 10 months to build vs 6 weeks to integrate.</li>
+                    <li>There are also concerns regarding compliance with RMA regulations.</li>
+                    <li>Support and maintenance costs need to be considered.</li>
+                    <li>Risk of going over budget is high.</li>
+                    <li>Other agencies use mBoB-Lite already.</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="mk-foot"><span></span><span></span></div>
+            </div>
+            <div class="mock good">
+              <div class="mk-header">✅ Clean — follows all six rules</div>
+              <div class="mk-body">
+                <div class="mk-title">mBoB-Lite costs <span style="color:var(--blue)">95% less</span> than building in-house.</div>
+                <div class="mk-num">Nu 4L <span style="font-size:0.9rem; color:var(--muted)">vs</span> <span style="color:var(--red); font-size:1.4rem">Nu 80L</span></div>
+                <div class="mk-bar"></div>
+                <div class="mk-text">Annual cost · mBoB-Lite licence vs in-house build estimate (3-year horizon).</div>
+              </div>
+              <div class="mk-foot"><span>3 / 12 · Sonam Wangchuk · 2 May 2026</span><span>SELISE × Pelsung</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 17 HEADLINE TEST -->
+      <div class="slide accent-blue" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span> The headline test</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">If someone reads only your headlines, do they get the story?</h2><p class="body-md" style="color:var(--muted); max-width:820px; margin-top:0.4rem">Three slides. Their headlines alone. Read top-to-bottom.</p></div>
+          <div class="ht-strip">
+            <div class="ht-row">
+              <div class="lbl">Slide 4 headline</div>
+              <div class="hd">Building in-house takes 10 months — we have 5.</div>
+            </div>
+            <div class="ht-row">
+              <div class="lbl">Slide 5 headline</div>
+              <div class="hd">mBoB-Lite goes live in 6 weeks at 5% of the cost.</div>
+            </div>
+            <div class="ht-row" style="border-left-color:var(--green); background:#F7FBF4">
+              <div class="lbl">Slide 6 headline</div>
+              <div class="hd" style="color:#3D7A3D">We recommend mBoB-Lite. Sign by Friday to launch by 15 October.</div>
+            </div>
+          </div>
+          <p class="body-md" style="color:var(--text); text-align:center; max-width:820px; margin-top:0.4rem">A reader who only saw these three sentences <strong>still gets the answer</strong>. That's the test.</p>
+        </div>
+      </div>
+
+      <!-- 18 COMMON FAILURES -->
+      <div class="slide accent-blue bg-subtle" data-slide="18">
+        <div class="slide-label"><span class="snum">18</span> Common BA presentation failures</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">Four ways most first-time BA decks die</h2></div>
+          <div class="fail-grid">
+            <div class="fail">
+              <h6>1 · Burying the recommendation</h6>
+              <p>Slide 14 of 16 is the first time you say what you actually think they should do.</p>
+              <span class="fix"><strong>Fix:</strong> recommendation in slide 1 or 2. The rest is the "why".</span>
+            </div>
+            <div class="fail">
+              <h6>2 · Walls of text</h6>
+              <p>You read the slide. They read the slide. Nobody listens to anybody.</p>
+              <span class="fix"><strong>Fix:</strong> ≤ 30 words on a content slide. Charts, numbers, or one clear sentence.</span>
+            </div>
+            <div class="fail">
+              <h6>3 · "Background slides" that aren't background</h6>
+              <p>5 slides of history before the problem is even stated.</p>
+              <span class="fix"><strong>Fix:</strong> 1 slide of context, 1 of conflict. Move the rest to an appendix.</span>
+            </div>
+            <div class="fail">
+              <h6>4 · No call to action</h6>
+              <p>You finish, the room goes quiet, the dzongdag says "thank you", nothing happens.</p>
+              <span class="fix"><strong>Fix:</strong> last slide names the decision, the deadline, and the decider.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 19 HANDS-ON BRIEF -->
+      <div class="slide bg-blue" data-slide="19">
+        <div class="slide-label"><span class="snum">19</span></div>
+        <div class="center" style="position:relative; z-index:1; max-width:1100px">
+          <div class="pill pill-white" style="margin: 0 auto 1rem"><span class="pill-dot"></span> Hands-on · 25 minutes</div>
+          <h1 class="display" style="color: white; font-size:clamp(2rem,4.5vw,3rem)">Build a 5-slide pitch</h1>
+          <p class="body-lg" style="color: rgba(255,255,255,0.85); margin:1rem 0 1.5rem">Pick one brief. Use index cards or paper. One slide per part of the story arc.</p>
+          <div class="brief-grid">
+            <div class="brief">
+              <span class="tg">Brief A</span>
+              <h5>GMC citizen portal vendor</h5>
+              <p>Recommend Vendor A or Vendor B for the new GMC online citizen services portal. (Mock specs are on your handout.)</p>
+            </div>
+            <div class="brief">
+              <span class="tg">Brief B</span>
+              <h5>Build vs SaaS</h5>
+              <p>Recommend buying a SaaS product or building in-house for a school attendance system in Gelephu.</p>
+            </div>
+            <div class="brief">
+              <span class="tg">Brief C</span>
+              <h5>MVP feature set</h5>
+              <p>Recommend the MVP feature set for a Pelsung trainee feedback app — what's in for v1, what waits for v2.</p>
+            </div>
+          </div>
+          <p style="color:rgba(255,255,255,0.75); font-size:0.95rem; margin-top:1.2rem; line-height:1.6">15 min build · 5 min walk-around · 5 min for 3 trainees to give 90-second pitches · group critiques each pitch using the headline test.</p>
+        </div>
+        <div class="section-num" style="color: white">05</div>
+      </div>
+
+      <!-- 20 HANDS-ON RUBRIC -->
+      <div class="slide accent-blue bg-subtle" data-slide="20">
+        <div class="slide-label"><span class="snum">20</span> How to work · pair rubric</div>
+        <div class="stack" style="align-items:center; width:100%">
+          <div class="center"><h2 class="heading">5 slides. Story-arc order. One headline per slide.</h2></div>
+          <div class="cols-2" style="max-width:1100px; gap:1rem">
+            <div class="card" style="border-top:3px solid var(--blue)">
+              <h4 style="color:var(--blue)">Build (15 min) · pair up</h4>
+              <ul style="font-size:0.92rem; line-height:1.75; padding-left:1.2rem; color:var(--text)">
+                <li>One card per slide · 5 cards total</li>
+                <li>Slide 1 = Context · 2 = Conflict · 3 = Choice · 4 = Recommendation · 5 = Call to action</li>
+                <li>Write only the <strong>headline</strong> (full-sentence takeaway) on each card</li>
+                <li>One supporting visual or 1–3 short bullets max under the headline</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--amber)">
+              <h4 style="color:var(--amber)">Critique (with the headline test)</h4>
+              <ul style="font-size:0.92rem; line-height:1.75; padding-left:1.2rem; color:var(--text)">
+                <li>Read only the 5 headlines aloud. Do they tell the story?</li>
+                <li>Where would the dzongdag stop reading and still know what to do?</li>
+                <li>Is there exactly one clear ask on slide 5?</li>
+                <li>Did anyone fall into the four common failures?</li>
+              </ul>
+            </div>
+          </div>
+          <div class="bhutan-callout">
+            <h4>Pitch tip · 90 seconds is enough</h4>
+            <p>Lead with the recommendation. <strong>"We recommend X. Three reasons."</strong> Then context only if asked. End with the ask. If you finish in 60 seconds, that's fine — better short than rambling.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 21 WRAP -->
+      <div class="slide bg-dark" data-slide="21">
+        <div class="slide-label"><span class="snum">21</span> Wrap-up</div>
+        <div class="center" style="max-width: 820px">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">🎯 Key Takeaways</div>
+          <h2 class="heading" style="color: white;">What we covered today</h2>
+          <ul class="reveal-list" style="color: rgba(255,255,255,0.9); text-align:left; max-width: 740px; margin: 1.5rem auto; font-size: 1rem; line-height: 2;">
+            <li>✅ <strong>Audience first.</strong> Decision-maker, influencer, implementer — different rooms, different decks.</li>
+            <li>✅ <strong>Pyramid principle.</strong> Recommendation on top. Key reasons below. Evidence at the bottom.</li>
+            <li>✅ <strong>Story arc:</strong> Context → Conflict → Choice → Recommendation → Call to action.</li>
+            <li>✅ <strong>Headlines are full sentences.</strong> The takeaway, not the topic.</li>
+            <li>✅ <strong>Slide hygiene:</strong> one idea, less text, contrast, no bullet salad, footer always.</li>
+            <li>✅ <strong>The headline test:</strong> reading only the headlines should still tell the story.</li>
+            <li>✅ <strong>End with an ask.</strong> What decision · by when · from whom.</li>
+          </ul>
+          <p style="color: var(--amber); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:1.15rem; margin-top:1.2rem">A great BA isn't the one with the best analysis. It's the one whose analysis lands.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 21</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div id="zone-prev"></div>
+    <div id="zone-next"></div>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
+      function goTo(n){ slides.forEach(s => s.classList.remove("active")); current = Math.max(0, Math.min(n, total-1)); slides[current].classList.add("active"); document.getElementById("slide-counter").textContent = `${current+1} / ${total}`; document.getElementById("progress").style.width = `${((current+1)/total)*100}%`; localStorage.setItem(STORAGE_KEY, current); initReveal(slides[current]); }
+      function nextSlide(){ if(current < total-1) goTo(current+1); }
+      function prevSlide(){ if(current > 0) goTo(current-1); }
+      document.addEventListener("keydown", (e) => { if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); handleForward(); } if(e.key === "ArrowLeft"){ e.preventDefault(); prevSlide(); } if(e.key === "f" || e.key === "F") toggleFullscreen(); });
+      document.getElementById("deck").addEventListener("click", function(e){ if(e.target.closest("button, .agenda-row, a, input, select, textarea, [data-noclick]")) return; const pct = e.clientX / window.innerWidth; if(pct < 0.15) prevSlide(); else if(pct > 0.85) handleForward(); });
+      function handleForward(){ const active = slides[current]; const list = active.querySelector(".reveal-list"); if(list){ const hidden = list.querySelectorAll("li:not(.shown)"); if(hidden.length > 0){ hidden[0].classList.add("shown"); return; } } nextSlide(); }
+      function initReveal(slide){ const list = slide.querySelector(".reveal-list"); if(!list) return; list.querySelectorAll("li").forEach(li => li.classList.remove("shown")); }
+      slides[current].classList.add("active");
+      document.getElementById("slide-counter").textContent = `${current+1} / ${total}`;
+      document.getElementById("progress").style.width = `${((current+1)/total)*100}%`;
+      initReveal(slides[current]);
+      function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); }
+    </script>
+  </body>
+</html>
