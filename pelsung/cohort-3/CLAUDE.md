@@ -23,13 +23,25 @@ Assignment records and per-trainee notes live in `pelsung-c3-vertical-selection.
 
 ## Class Structure (Cohort 3)
 - **Foundation:** 11 classes (all 45 together)
-- **Core Specialization:** per-vertical counts below
-  - Dev: **20 classes**
-  - Testing (QA): **26 classes**
-  - Business Analysis (BA): **27 classes**
+- **BA + QA shared blocks** (taught to BA and QA together before they split):
+  - Combined Opener — 5 classes (`curriculum/ba-qa-combined/`)
+  - Spec Stack — 6 classes (`curriculum/ba-qa-specs/`)
+  - Diagrams — 7 classes (`curriculum/ba-qa-diagrams/`)
+  - Quality & Compliance — 5 classes (`curriculum/ba-qa-quality/`)
+- **Vertical-only specialization** (after the shared blocks):
+  - Dev: **16 classes** (`curriculum/dev/`)
+  - BA: **14 classes** (`curriculum/ba/`)
+  - QA: **8 classes** (`curriculum/testing/`)
   - Software Design: not running this cohort
-  - BA and QA begin with a **5-class combined opener** (`curriculum/ba-qa-combined/`) before splitting into vertical tracks
-- **Capstone:** 10 classes, **tiered** (see below)
+- **Capstone:** 10 classes, **tiered** (see below). One combined Capstone Prep class (BA + Dev + QA together) sits between specialization and capstone — to be planned later.
+
+### Cohort 3 audience reality
+BA and QA trainees are deeply non-technical (Tek, 2026-05-03: "they think login is magic"). Vertical content for BA and QA must avoid:
+- code, schemas, API contracts, system internals
+- security testing, automation, performance, CI, DB testing, API testing (for QA)
+- data modeling (for BA)
+
+Use everyday-life examples (banking, shopping, leave requests, ATMs) instead of system examples. This is a Cohort 3 reality — re-evaluate per cohort.
 
 Full class list lives in `../curriculum/index.html`.
 
