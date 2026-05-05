@@ -1,0 +1,1122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In with Google · Supabase + React TypeScript · SELISE × Pelsung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../shared/slides.css" />
+    <style>
+      .code-block {
+        background: #001f35;
+        border-radius: 14px;
+        overflow: hidden;
+        width: 100%;
+        max-width: 1000px;
+        font-family: "Courier New", monospace;
+      }
+      .code-bar {
+        background: #0a2a45;
+        padding: 8px 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-family: "Open Sans", sans-serif;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.5);
+      }
+      .code-bar .cb-dot { width: 10px; height: 10px; border-radius: 50%; }
+      .code-bar .cb-name { margin-left: 0.6rem; }
+      .code-body {
+        padding: clamp(0.8rem, 1.5vw, 1.2rem);
+        font-size: clamp(0.68rem, 0.9vw, 0.82rem);
+        line-height: 1.75;
+        color: rgba(255, 255, 255, 0.88);
+        white-space: pre;
+        overflow-x: auto;
+      }
+      .code-body.scroll {
+        max-height: 64vh;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255,255,255,0.25) transparent;
+      }
+      .code-body.scroll::-webkit-scrollbar { width: 8px; }
+      .code-body.scroll::-webkit-scrollbar-thumb {
+        background: rgba(255,255,255,0.2);
+        border-radius: 4px;
+      }
+      .code-body.scroll::-webkit-scrollbar-track { background: transparent; }
+      .code-body .ck { color: #7dd3fc; }     /* keyword */
+      .code-body .cs { color: #86efac; }     /* string */
+      .code-body .cn { color: #fde68a; }     /* number */
+      .code-body .cc { color: rgba(255,255,255,0.4); font-style: italic; }
+      .code-body .cp { color: #c4b5fd; }     /* punctuation/prop */
+      .code-body .cr { color: #fca5a5; }     /* warning */
+      .code-body .ci { color: #f0abfc; }     /* identifier */
+      .code-body .ct { color: #fdba74; }     /* type */
+      .code-body .ctag { color: #f472b6; }   /* jsx tag */
+      .code-body .cattr { color: #fde68a; }  /* jsx attr */
+      .code-body .cclass { color: #a5f3fc; } /* tw class string */
+
+      .step-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.7rem;
+        width: 100%;
+        max-width: 900px;
+      }
+      .step-card {
+        background: var(--surf);
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        padding: 0.85rem 1rem;
+        display: flex;
+        gap: 0.75rem;
+        align-items: flex-start;
+      }
+      .step-card .sc-num {
+        flex-shrink: 0;
+        width: 28px; height: 28px;
+        border-radius: 50%;
+        background: var(--blue);
+        color: white;
+        font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+        font-weight: 700;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .step-card .sc-body {
+        font-size: clamp(0.78rem, 1vw, 0.9rem);
+        color: var(--text);
+        line-height: 1.5;
+      }
+      .step-card .sc-body strong { color: var(--indigo); }
+      .step-card .sc-body code {
+        background: var(--bg);
+        padding: 0.05em 0.35em;
+        border-radius: 4px;
+        color: var(--indigo);
+        font-size: 0.92em;
+      }
+
+      .arch {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr auto 1fr;
+        gap: 1rem;
+        align-items: center;
+        max-width: 1000px;
+        width: 100%;
+      }
+      .arch-node {
+        background: var(--surf);
+        border: 2px solid var(--border);
+        border-radius: 14px;
+        padding: 1rem 0.8rem;
+        text-align: center;
+      }
+      .arch-node.blue { border-color: var(--blue); background: #f0f8ff; }
+      .arch-node.indigo { border-color: var(--indigo); background: #eef2f7; }
+      .arch-node.green { border-color: var(--green); background: #f3fcec; }
+      .arch-node .an-icon { font-size: 2rem; margin-bottom: 0.3rem; }
+      .arch-node .an-name {
+        font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+        font-size: 0.95rem;
+        color: var(--indigo);
+        font-weight: 700;
+      }
+      .arch-node .an-sub {
+        font-size: 0.72rem;
+        color: var(--muted);
+        margin-top: 0.2rem;
+      }
+      .arch-arrow {
+        font-size: 1.3rem;
+        color: var(--blue);
+        font-weight: 700;
+      }
+
+      .check-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+        max-width: 800px;
+        width: 100%;
+      }
+      .check-list li {
+        display: flex;
+        gap: 0.7rem;
+        align-items: flex-start;
+        background: var(--surf);
+        border: 1.5px solid var(--border);
+        border-radius: 10px;
+        padding: 0.65rem 0.9rem;
+        font-size: clamp(0.82rem, 1vw, 0.95rem);
+        color: var(--text);
+        list-style: none;
+        line-height: 1.5;
+      }
+      .check-list li::before {
+        content: "✓";
+        flex-shrink: 0;
+        width: 22px; height: 22px;
+        border-radius: 50%;
+        background: var(--green);
+        color: white;
+        font-size: 0.85rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 0.1em;
+      }
+      .check-list li code {
+        background: var(--bg);
+        padding: 0.05em 0.4em;
+        border-radius: 4px;
+        color: var(--indigo);
+        font-family: 'Courier New', monospace;
+      }
+
+      .warn-box {
+        background: #fff7ed;
+        border: 2px solid #fb923c;
+        border-radius: 14px;
+        padding: 1rem 1.2rem;
+        max-width: 880px;
+        width: 100%;
+      }
+      .warn-box .wb-title {
+        font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+        color: #c2410c;
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: 0.4rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .warn-box .wb-text {
+        font-size: 0.88rem;
+        color: var(--text);
+        line-height: 1.6;
+      }
+      .warn-box .wb-text code {
+        background: white;
+        padding: 0.05em 0.35em;
+        border-radius: 4px;
+        color: var(--indigo);
+        font-family: 'Courier New', monospace;
+      }
+
+      .info-box {
+        background: #f0f8ff;
+        border: 2px solid var(--blue);
+        border-radius: 14px;
+        padding: 1rem 1.2rem;
+        max-width: 880px;
+        width: 100%;
+      }
+      .info-box .ib-title {
+        font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+        color: var(--blue);
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: 0.4rem;
+      }
+      .info-box .ib-text {
+        font-size: 0.88rem;
+        color: var(--text);
+        line-height: 1.6;
+      }
+      .info-box .ib-text code {
+        background: white;
+        padding: 0.05em 0.35em;
+        border-radius: 4px;
+        color: var(--indigo);
+        font-family: 'Courier New', monospace;
+      }
+
+      .pitfall-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.7rem;
+        max-width: 1000px;
+        width: 100%;
+      }
+      .pitfall-card {
+        background: var(--surf);
+        border: 1.5px solid var(--border);
+        border-left: 4px solid var(--red);
+        border-radius: 10px;
+        padding: 0.75rem 0.95rem;
+      }
+      .pitfall-card .pf-title {
+        font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+        font-size: 0.9rem;
+        color: var(--red);
+        font-weight: 700;
+        margin-bottom: 0.3rem;
+      }
+      .pitfall-card .pf-body {
+        font-size: 0.8rem;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+      .pitfall-card .pf-body code {
+        background: var(--bg);
+        padding: 0.05em 0.3em;
+        border-radius: 3px;
+        color: var(--indigo);
+        font-family: 'Courier New', monospace;
+        font-size: 0.92em;
+      }
+
+      .file-tab {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-family: 'Courier New', monospace;
+        font-size: 0.78rem;
+        color: rgba(255,255,255,0.85);
+        background: rgba(255,255,255,0.05);
+        padding: 0.15rem 0.6rem;
+        border-radius: 6px;
+        margin-left: 0.5rem;
+      }
+
+      .toc {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.55rem;
+        max-width: 880px;
+        width: 100%;
+      }
+      .toc-row {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        background: var(--surf);
+        border: 1.5px solid var(--border);
+        border-radius: 10px;
+        padding: 0.55rem 0.85rem;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .toc-row:hover {
+        border-color: var(--blue);
+        transform: translateX(2px);
+      }
+      .toc-row .tr-num {
+        font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--blue);
+        min-width: 30px;
+      }
+      .toc-row .tr-label {
+        font-size: 0.85rem;
+        color: var(--text);
+        flex: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="deck">
+      <!-- ══ S1 TITLE ══ -->
+      <div class="slide accent-gradient bg-dark" data-slide="1">
+        <div class="slide-label"><span class="snum">01</span> SELISE × Pelsung · Extra E4</div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 1.4rem; text-align: center; max-width: 980px;">
+          <div class="date-badge">
+            <span class="db-dot"></span>Reference · Self-paced · Add to your own project
+          </div>
+          <h1 class="display" style="color: white">
+            <span style="color: #7dd3fc">Sign In with Google</span><br />
+            <span style="color: white">Supabase + React TypeScript</span>
+          </h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.7)">
+            A complete step-by-step recipe — copy, adapt, ship.
+          </p>
+          <div class="class-tags">
+            <span class="class-tag tag-blue">Supabase</span>
+            <span class="class-tag tag-amber">Google OAuth</span>
+            <span class="class-tag tag-indigo">React + TS</span>
+            <span class="class-tag tag-blue">Tailwind</span>
+          </div>
+        </div>
+        <div class="interact-hint">Press → or click the right side to advance</div>
+      </div>
+
+      <!-- ══ S2 WHAT YOU'LL HAVE ══ -->
+      <div class="slide accent-gradient bg-subtle" data-slide="2">
+        <div class="slide-label"><span class="snum">02</span> What you'll end up with</div>
+        <div class="stack" style="align-items: center; max-width: 980px;">
+          <div class="center">
+            <h2 class="heading">Working Google sign-in in your React app</h2>
+          </div>
+          <ul class="check-list">
+            <li>A <strong>Sign in with Google</strong> button users can click</li>
+            <li>A <strong>session</strong> that survives page reloads (Supabase stores it for you)</li>
+            <li>Access to the user's <code>email</code>, <code>name</code> and <code>avatar_url</code></li>
+            <li>A <strong>protected route</strong> that only signed-in users can see</li>
+            <li>A working <strong>sign out</strong> button</li>
+          </ul>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 760px;">
+            Same flow handles <strong>both sign in AND sign up</strong> — Google OAuth creates the user automatically the first time.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S3 ARCHITECTURE ══ -->
+      <div class="slide" data-slide="3">
+        <div class="slide-label"><span class="snum">03</span> How the pieces fit together</div>
+        <div class="stack" style="align-items: center; max-width: 1100px;">
+          <div class="arch">
+            <div class="arch-node blue">
+              <div class="an-icon">⚛️</div>
+              <div class="an-name">Your React App</div>
+              <div class="an-sub">localhost:5173</div>
+            </div>
+            <div class="arch-arrow">→</div>
+            <div class="arch-node indigo">
+              <div class="an-icon">🔐</div>
+              <div class="an-name">Supabase Auth</div>
+              <div class="an-sub">your-project.supabase.co</div>
+            </div>
+            <div class="arch-arrow">→</div>
+            <div class="arch-node green">
+              <div class="an-icon">🟢</div>
+              <div class="an-name">Google</div>
+              <div class="an-sub">accounts.google.com</div>
+            </div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 820px; margin-top: 0.6rem;">
+            Click button → React asks Supabase → Supabase redirects to Google → user logs in → Google sends them back through Supabase → React gets a <strong>session</strong>.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S4 TABLE OF CONTENTS ══ -->
+      <div class="slide accent-gradient bg-subtle" data-slide="4">
+        <div class="slide-label"><span class="snum">04</span> The 14 steps</div>
+        <div class="stack" style="align-items: center; max-width: 980px;">
+          <div class="center">
+            <h2 class="heading" style="font-size: clamp(1.5rem, 2.6vw, 2rem)">From zero to working Google sign-in</h2>
+          </div>
+          <div class="toc">
+            <div class="toc-row" onclick="goTo(6)"><span class="tr-num">PART 1</span><span class="tr-label">Supabase project setup (2 steps)</span></div>
+            <div class="toc-row" onclick="goTo(9)"><span class="tr-num">PART 2</span><span class="tr-label">Google Cloud OAuth (5 steps)</span></div>
+            <div class="toc-row" onclick="goTo(15)"><span class="tr-num">PART 3</span><span class="tr-label">Wire it into Supabase (1 step)</span></div>
+            <div class="toc-row" onclick="goTo(17)"><span class="tr-num">PART 4</span><span class="tr-label">React + TypeScript code (6 steps)</span></div>
+            <div class="toc-row" onclick="goTo(25)"><span class="tr-num">PART 5</span><span class="tr-label">Test it · pitfalls · next steps</span></div>
+            <div class="toc-row" onclick="goTo(28)"><span class="tr-num">REF</span><span class="tr-label">Full App.tsx skeleton</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S5 PREREQUISITES ══ -->
+      <div class="slide" data-slide="5">
+        <div class="slide-label"><span class="snum">05</span> Before you start</div>
+        <div class="stack" style="align-items: center; max-width: 980px;">
+          <div class="center">
+            <h2 class="heading">You'll need these</h2>
+          </div>
+          <ul class="check-list">
+            <li>A <strong>React + TypeScript</strong> project (Vite recommended — <code>npm create vite@latest</code>)</li>
+            <li>A free <strong>Supabase account</strong> — <code>supabase.com</code></li>
+            <li>A <strong>Google account</strong> — for Google Cloud Console</li>
+            <li><strong>Tailwind CSS</strong> set up in your project (for the styled examples)</li>
+            <li>Node.js 18+ and a terminal</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ══ S6 SECTION DIVIDER — SUPABASE ══ -->
+      <div class="slide bg-blue" data-slide="6">
+        <div class="slide-label"><span class="snum">06</span></div>
+        <div class="center" style="position: relative; z-index: 1; max-width: 800px;">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span>Part 1 · Supabase setup
+          </div>
+          <h1 class="display" style="color: white">Create your Supabase project</h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem;">
+            Steps 1–2 · About 5 minutes
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S7 STEP 1 — CREATE SUPABASE PROJECT ══ -->
+      <div class="slide" data-slide="7">
+        <div class="slide-label"><span class="snum">07</span> Step 1 — Create a Supabase project</div>
+        <div class="stack" style="align-items: center; max-width: 980px;">
+          <div class="step-grid">
+            <div class="step-card"><div class="sc-num">1</div><div class="sc-body">Go to <strong>supabase.com</strong> and click <strong>Start your project</strong>.</div></div>
+            <div class="step-card"><div class="sc-num">2</div><div class="sc-body">Sign in with GitHub (easiest).</div></div>
+            <div class="step-card"><div class="sc-num">3</div><div class="sc-body">Click <strong>New project</strong>. Pick any organization.</div></div>
+            <div class="step-card"><div class="sc-num">4</div><div class="sc-body">Give it a <strong>name</strong> (e.g. <code>my-app</code>) and a <strong>strong database password</strong>. Save the password — you may need it later.</div></div>
+            <div class="step-card"><div class="sc-num">5</div><div class="sc-body">Pick the region closest to you (e.g. <strong>Singapore</strong> for Bhutan).</div></div>
+            <div class="step-card"><div class="sc-num">6</div><div class="sc-body">Click <strong>Create new project</strong>. Wait ~2 minutes while it provisions.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S8 STEP 2 — GET KEYS ══ -->
+      <div class="slide" data-slide="8">
+        <div class="slide-label"><span class="snum">08</span> Step 2 — Copy your project URL &amp; anon key</div>
+        <div class="stack" style="align-items: center; max-width: 1000px;">
+          <p class="body-md" style="color: var(--text); text-align: center; max-width: 800px;">
+            In your Supabase dashboard, go to <strong>Project Settings → API</strong>. You need two values:
+          </p>
+          <ul class="check-list">
+            <li><strong>Project URL</strong> — looks like <code>https://abcdefgh.supabase.co</code></li>
+            <li><strong>anon public key</strong> — a long JWT starting with <code>eyJ...</code></li>
+          </ul>
+          <div class="info-box">
+            <div class="ib-title">💡 Is the anon key secret?</div>
+            <div class="ib-text">
+              No — it's safe to ship in your frontend. It only lets users do what your <strong>Row Level Security (RLS)</strong> rules allow.
+              The <code>service_role</code> key (also on that page) <strong>IS secret</strong> — never put it in frontend code.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S9 SECTION DIVIDER — GOOGLE ══ -->
+      <div class="slide bg-indigo" data-slide="9">
+        <div class="slide-label"><span class="snum">09</span></div>
+        <div class="center" style="position: relative; z-index: 1; max-width: 800px;">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span>Part 2 · Google Cloud Console
+          </div>
+          <h1 class="display" style="color: white">Set up the OAuth client</h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem;">
+            Steps 3–7 · This is the fiddly part. Take your time.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S10 STEP 3 — GOOGLE PROJECT ══ -->
+      <div class="slide" data-slide="10">
+        <div class="slide-label"><span class="snum">10</span> Step 3 — Create a Google Cloud project</div>
+        <div class="stack" style="align-items: center; max-width: 980px;">
+          <div class="step-grid">
+            <div class="step-card"><div class="sc-num">1</div><div class="sc-body">Go to <strong>console.cloud.google.com</strong> and sign in.</div></div>
+            <div class="step-card"><div class="sc-num">2</div><div class="sc-body">Click the project dropdown (top-left) → <strong>New Project</strong>.</div></div>
+            <div class="step-card"><div class="sc-num">3</div><div class="sc-body">Name it (e.g. <code>my-app-auth</code>). No org needed. Click <strong>Create</strong>.</div></div>
+            <div class="step-card"><div class="sc-num">4</div><div class="sc-body">Wait a few seconds, then make sure the new project is <strong>selected</strong> (top-left dropdown).</div></div>
+          </div>
+          <div class="info-box">
+            <div class="ib-title">⚠️ Don't skip step 4</div>
+            <div class="ib-text">
+              All your OAuth config goes inside the selected project. If you create the OAuth client in the wrong project, Google won't find it.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S11 STEP 4 — CONSENT SCREEN ══ -->
+      <div class="slide" data-slide="11">
+        <div class="slide-label"><span class="snum">11</span> Step 4 — Configure the OAuth consent screen</div>
+        <div class="stack" style="align-items: center; max-width: 980px;">
+          <p class="body-md" style="color: var(--text); text-align: center; max-width: 800px;">
+            Left sidebar → <strong>APIs &amp; Services → OAuth consent screen</strong>.
+          </p>
+          <div class="step-grid">
+            <div class="step-card"><div class="sc-num">1</div><div class="sc-body">Pick <strong>External</strong> (anyone with a Google account can sign in). Click <strong>Create</strong>.</div></div>
+            <div class="step-card"><div class="sc-num">2</div><div class="sc-body"><strong>App name:</strong> e.g. <code>My App</code>. <strong>User support email:</strong> your email.</div></div>
+            <div class="step-card"><div class="sc-num">3</div><div class="sc-body">Skip the App logo and domains for now (only needed for production).</div></div>
+            <div class="step-card"><div class="sc-num">4</div><div class="sc-body"><strong>Developer contact:</strong> your email. Click <strong>Save and continue</strong>.</div></div>
+            <div class="step-card"><div class="sc-num">5</div><div class="sc-body"><strong>Scopes</strong> — leave empty. Click <strong>Save and continue</strong>.</div></div>
+            <div class="step-card"><div class="sc-num">6</div><div class="sc-body"><strong>Test users</strong> — add your own Gmail address. Click <strong>Save</strong>.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S12 STEP 5 — CREATE OAUTH CLIENT ══ -->
+      <div class="slide" data-slide="12">
+        <div class="slide-label"><span class="snum">12</span> Step 5 — Create the OAuth Client ID</div>
+        <div class="stack" style="align-items: center; max-width: 980px;">
+          <p class="body-md" style="color: var(--text); text-align: center; max-width: 800px;">
+            Left sidebar → <strong>APIs &amp; Services → Credentials</strong>.
+          </p>
+          <div class="step-grid">
+            <div class="step-card"><div class="sc-num">1</div><div class="sc-body">Click <strong>+ Create credentials → OAuth client ID</strong>.</div></div>
+            <div class="step-card"><div class="sc-num">2</div><div class="sc-body"><strong>Application type:</strong> <code>Web application</code>.</div></div>
+            <div class="step-card"><div class="sc-num">3</div><div class="sc-body"><strong>Name:</strong> e.g. <code>my-app-web-client</code>.</div></div>
+            <div class="step-card"><div class="sc-num">4</div><div class="sc-body">Now the redirect URIs — see the next slide.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S13 STEP 6 — REDIRECT URI ══ -->
+      <div class="slide" data-slide="13">
+        <div class="slide-label"><span class="snum">13</span> Step 6 — Add the redirect URI (CRITICAL)</div>
+        <div class="stack" style="align-items: center; max-width: 1000px;">
+          <p class="body-md" style="color: var(--text); text-align: center; max-width: 800px;">
+            Under <strong>Authorized redirect URIs</strong>, add <strong>exactly one URL</strong> from your Supabase dashboard:
+          </p>
+          <div class="code-block">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f56"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #27c93f"></span>
+              <span class="cb-name">Authorized redirect URI</span>
+            </div>
+            <div class="code-body"><span class="cs">https://&lt;YOUR-PROJECT-REF&gt;.supabase.co/auth/v1/callback</span></div>
+          </div>
+          <div class="warn-box">
+            <div class="wb-title">⚠️ Where do you get this URL?</div>
+            <div class="wb-text">
+              In <strong>Supabase dashboard → Authentication → Providers → Google</strong>, you'll see a "<strong>Callback URL (for OAuth)</strong>" field. <strong>Copy that exact URL</strong> and paste it into Google Cloud. Don't type it by hand — a single character off and Google rejects the login.
+            </div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center;">
+            Click <strong>Create</strong>. Google shows you a <strong>Client ID</strong> and <strong>Client Secret</strong>. Keep that dialog open.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S14 STEP 7 — COPY KEYS ══ -->
+      <div class="slide" data-slide="14">
+        <div class="slide-label"><span class="snum">14</span> Step 7 — Copy your Google Client ID &amp; Secret</div>
+        <div class="stack" style="align-items: center; max-width: 980px;">
+          <ul class="check-list">
+            <li><strong>Client ID</strong> — looks like <code>123456-abcdef.apps.googleusercontent.com</code></li>
+            <li><strong>Client Secret</strong> — looks like <code>GOCSPX-xxxxxxxxxxxxxxxx</code></li>
+          </ul>
+          <div class="warn-box">
+            <div class="wb-title">🔒 Treat the Client Secret like a password</div>
+            <div class="wb-text">
+              It goes into Supabase only — <strong>never</strong> commit it to git or paste it into your React code. If you ever leak it, regenerate it from Google Cloud Console.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S15 SECTION DIVIDER — WIRE INTO SUPABASE ══ -->
+      <div class="slide bg-amber" data-slide="15">
+        <div class="slide-label"><span class="snum">15</span></div>
+        <div class="center" style="position: relative; z-index: 1; max-width: 800px;">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span>Part 3 · Connect Google to Supabase
+          </div>
+          <h1 class="display" style="color: white">One field, then the magic happens</h1>
+        </div>
+      </div>
+
+      <!-- ══ S16 STEP 8 — ENABLE GOOGLE IN SUPABASE ══ -->
+      <div class="slide" data-slide="16">
+        <div class="slide-label"><span class="snum">16</span> Step 8 — Enable Google provider in Supabase</div>
+        <div class="stack" style="align-items: center; max-width: 980px;">
+          <p class="body-md" style="color: var(--text); text-align: center; max-width: 800px;">
+            Back in Supabase: <strong>Authentication → Providers → Google</strong>.
+          </p>
+          <div class="step-grid">
+            <div class="step-card"><div class="sc-num">1</div><div class="sc-body">Toggle <strong>Enable Sign in with Google</strong> ON.</div></div>
+            <div class="step-card"><div class="sc-num">2</div><div class="sc-body">Paste your <strong>Client ID</strong> from Google.</div></div>
+            <div class="step-card"><div class="sc-num">3</div><div class="sc-body">Paste your <strong>Client Secret</strong> from Google.</div></div>
+            <div class="step-card"><div class="sc-num">4</div><div class="sc-body">Click <strong>Save</strong>. That's it — backend is fully wired.</div></div>
+          </div>
+          <div class="info-box">
+            <div class="ib-title">✅ Quick sanity check</div>
+            <div class="ib-text">
+              The "Callback URL (for OAuth)" shown on this Supabase page should match <strong>exactly</strong> the redirect URI you put in Google Cloud. If they don't match, fix it now.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S17 SECTION DIVIDER — REACT CODE ══ -->
+      <div class="slide bg-indigo" data-slide="17">
+        <div class="slide-label"><span class="snum">17</span></div>
+        <div class="center" style="position: relative; z-index: 1; max-width: 800px;">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span>Part 4 · React + TypeScript
+          </div>
+          <h1 class="display" style="color: white">Now the code</h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.75); margin-top: 1rem;">
+            Steps 9–14 · You can copy each block straight into your project.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S18 STEP 9 — INSTALL ══ -->
+      <div class="slide" data-slide="18">
+        <div class="slide-label"><span class="snum">18</span> Step 9 — Install supabase-js</div>
+        <div class="stack" style="align-items: center; max-width: 1000px;">
+          <p class="body-md" style="color: var(--text); text-align: center; max-width: 800px;">
+            In your React project's terminal, run:
+          </p>
+          <div class="code-block">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f56"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #27c93f"></span>
+              <span class="cb-name">terminal</span>
+            </div>
+            <div class="code-body"><span class="cc"># Install the Supabase JS client</span>
+<span class="ci">npm</span> install <span class="cs">@supabase/supabase-js</span>
+
+<span class="cc"># That's it. No other auth library needed.</span></div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center;">
+            Supabase ships TypeScript types out of the box — no <code>@types/...</code> package needed.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S19 STEP 10 — ENV VARS ══ -->
+      <div class="slide" data-slide="19">
+        <div class="slide-label"><span class="snum">19</span> Step 10 — Add environment variables</div>
+        <div class="stack" style="align-items: center; max-width: 1000px;">
+          <p class="body-md" style="color: var(--text); text-align: center; max-width: 800px;">
+            Create a <code>.env.local</code> file in your project root (same level as <code>package.json</code>):
+          </p>
+          <div class="code-block">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f56"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #27c93f"></span>
+              <span class="cb-name">.env.local</span>
+            </div>
+            <div class="code-body"><span class="ci">VITE_SUPABASE_URL</span>=<span class="cs">https://your-project-ref.supabase.co</span>
+<span class="ci">VITE_SUPABASE_ANON_KEY</span>=<span class="cs">eyJhbGciOi...your-long-anon-key</span></div>
+          </div>
+          <div class="warn-box">
+            <div class="wb-title">⚠️ Don't commit this file</div>
+            <div class="wb-text">
+              Add <code>.env.local</code> to your <code>.gitignore</code> (Vite already ignores it by default).
+              For Create React App projects, the prefix is <code>REACT_APP_</code> instead of <code>VITE_</code>.
+              Restart your dev server after creating this file.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S20 STEP 11 — CLIENT ══ -->
+      <div class="slide" data-slide="20">
+        <div class="slide-label"><span class="snum">20</span> Step 11 — Create the Supabase client</div>
+        <div class="stack" style="align-items: center; max-width: 1100px;">
+          <div class="code-block">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f56"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #27c93f"></span>
+              <span class="cb-name">src/lib/supabase.ts</span>
+            </div>
+            <div class="code-body"><span class="ck">import</span> { <span class="ci">createClient</span> } <span class="ck">from</span> <span class="cs">'@supabase/supabase-js'</span>;
+
+<span class="ck">const</span> <span class="ci">supabaseUrl</span> = <span class="ci">import</span>.<span class="cp">meta</span>.<span class="cp">env</span>.<span class="ci">VITE_SUPABASE_URL</span>;
+<span class="ck">const</span> <span class="ci">supabaseAnonKey</span> = <span class="ci">import</span>.<span class="cp">meta</span>.<span class="cp">env</span>.<span class="ci">VITE_SUPABASE_ANON_KEY</span>;
+
+<span class="ck">if</span> (!<span class="ci">supabaseUrl</span> || !<span class="ci">supabaseAnonKey</span>) {
+  <span class="ck">throw new</span> <span class="ct">Error</span>(<span class="cs">'Missing Supabase env vars — check .env.local'</span>);
+}
+
+<span class="ck">export const</span> <span class="ci">supabase</span> = <span class="ci">createClient</span>(<span class="ci">supabaseUrl</span>, <span class="ci">supabaseAnonKey</span>);</div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 820px;">
+            One client, used everywhere. Import it wherever you need to talk to Supabase.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S21 STEP 12 — SIGN IN BUTTON ══ -->
+      <div class="slide" data-slide="21">
+        <div class="slide-label"><span class="snum">21</span> Step 12 — The Sign In with Google button</div>
+        <div class="stack" style="align-items: center; max-width: 1100px;">
+          <div class="code-block">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f56"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #27c93f"></span>
+              <span class="cb-name">src/components/sign-in-button.tsx</span>
+            </div>
+            <div class="code-body scroll"><span class="ck">import</span> { <span class="ci">supabase</span> } <span class="ck">from</span> <span class="cs">'../lib/supabase'</span>;
+
+<span class="ck">export function</span> <span class="ct">SignInButton</span>() {
+  <span class="ck">const</span> <span class="ci">handleSignIn</span> = <span class="ck">async</span> () =&gt; {
+    <span class="ck">const</span> { <span class="ci">error</span> } = <span class="ck">await</span> <span class="ci">supabase</span>.<span class="cp">auth</span>.<span class="ci">signInWithOAuth</span>({
+      <span class="cp">provider</span>: <span class="cs">'google'</span>,
+      <span class="cp">options</span>: {
+        <span class="cp">redirectTo</span>: <span class="cs">`</span><span class="cp">${</span><span class="ci">window</span>.<span class="cp">location</span>.<span class="ci">origin</span><span class="cp">}</span><span class="cs">/auth/callback`</span>,
+      },
+    });
+    <span class="ck">if</span> (<span class="ci">error</span>) <span class="ci">console</span>.<span class="ci">error</span>(<span class="cs">'Sign in failed:'</span>, <span class="ci">error</span>.<span class="cp">message</span>);
+  };
+
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;button</span>
+      <span class="cattr">onClick</span>=<span class="cp">{</span><span class="ci">handleSignIn</span><span class="cp">}</span>
+      <span class="cattr">className</span>=<span class="cs">"</span><span class="cclass">flex items-center gap-3 rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50</span><span class="cs">"</span>
+    <span class="ctag">&gt;</span>
+      <span class="ctag">&lt;img</span> <span class="cattr">src</span>=<span class="cs">"https://www.svgrepo.com/show/475656/google-color.svg"</span> <span class="cattr">alt</span>=<span class="cs">""</span> <span class="cattr">className</span>=<span class="cs">"</span><span class="cclass">h-5 w-5</span><span class="cs">"</span> <span class="ctag">/&gt;</span>
+      Sign in with Google
+    <span class="ctag">&lt;/button&gt;</span>
+  );
+}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S22 STEP 13 — AUTH STATE ══ -->
+      <div class="slide" data-slide="22">
+        <div class="slide-label"><span class="snum">22</span> Step 13 — Track who's signed in (useAuth hook)</div>
+        <div class="stack" style="align-items: center; max-width: 1100px;">
+          <div class="code-block">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f56"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #27c93f"></span>
+              <span class="cb-name">src/hooks/use-auth.ts</span>
+            </div>
+            <div class="code-body scroll"><span class="ck">import</span> { <span class="ci">useEffect</span>, <span class="ci">useState</span> } <span class="ck">from</span> <span class="cs">'react'</span>;
+<span class="ck">import</span> <span class="ck">type</span> { <span class="ct">Session</span>, <span class="ct">User</span> } <span class="ck">from</span> <span class="cs">'@supabase/supabase-js'</span>;
+<span class="ck">import</span> { <span class="ci">supabase</span> } <span class="ck">from</span> <span class="cs">'../lib/supabase'</span>;
+
+<span class="ck">export type</span> <span class="ct">AuthState</span> = {
+  <span class="cp">session</span>: <span class="ct">Session</span> | <span class="ck">null</span>;
+  <span class="cp">user</span>: <span class="ct">User</span> | <span class="ck">null</span>;
+  <span class="cp">loading</span>: <span class="ct">boolean</span>;
+};
+
+<span class="ck">export function</span> <span class="ci">useAuth</span>(): <span class="ct">AuthState</span> {
+  <span class="ck">const</span> [<span class="ci">session</span>, <span class="ci">setSession</span>] = <span class="ci">useState</span>&lt;<span class="ct">Session</span> | <span class="ck">null</span>&gt;(<span class="ck">null</span>);
+  <span class="ck">const</span> [<span class="ci">loading</span>, <span class="ci">setLoading</span>] = <span class="ci">useState</span>(<span class="ck">true</span>);
+
+  <span class="ci">useEffect</span>(() =&gt; {
+    <span class="cc">// 1. read current session on mount</span>
+    <span class="ci">supabase</span>.<span class="cp">auth</span>.<span class="ci">getSession</span>().<span class="ci">then</span>(({ <span class="cp">data</span> }) =&gt; {
+      <span class="ci">setSession</span>(<span class="cp">data</span>.<span class="cp">session</span>);
+      <span class="ci">setLoading</span>(<span class="ck">false</span>);
+    });
+
+    <span class="cc">// 2. listen for sign in / sign out events</span>
+    <span class="ck">const</span> { <span class="cp">data</span>: { <span class="ci">subscription</span> } } = <span class="ci">supabase</span>.<span class="cp">auth</span>
+      .<span class="ci">onAuthStateChange</span>((<span class="ci">_event</span>, <span class="ci">newSession</span>) =&gt; {
+        <span class="ci">setSession</span>(<span class="ci">newSession</span>);
+      });
+
+    <span class="ck">return</span> () =&gt; <span class="ci">subscription</span>.<span class="ci">unsubscribe</span>();
+  }, []);
+
+  <span class="ck">return</span> { <span class="ci">session</span>, <span class="cp">user</span>: <span class="ci">session</span>?.<span class="cp">user</span> ?? <span class="ck">null</span>, <span class="ci">loading</span> };
+}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S23 STEP 14 — SIGN OUT ══ -->
+      <div class="slide" data-slide="23">
+        <div class="slide-label"><span class="snum">23</span> Step 14 — Sign out</div>
+        <div class="stack" style="align-items: center; max-width: 1100px;">
+          <div class="code-block">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f56"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #27c93f"></span>
+              <span class="cb-name">src/components/sign-out-button.tsx</span>
+            </div>
+            <div class="code-body"><span class="ck">import</span> { <span class="ci">supabase</span> } <span class="ck">from</span> <span class="cs">'../lib/supabase'</span>;
+
+<span class="ck">export function</span> <span class="ct">SignOutButton</span>() {
+  <span class="ck">const</span> <span class="ci">handleSignOut</span> = <span class="ck">async</span> () =&gt; {
+    <span class="ck">await</span> <span class="ci">supabase</span>.<span class="cp">auth</span>.<span class="ci">signOut</span>();
+  };
+
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;button</span>
+      <span class="cattr">onClick</span>=<span class="cp">{</span><span class="ci">handleSignOut</span><span class="cp">}</span>
+      <span class="cattr">className</span>=<span class="cs">"</span><span class="cclass">rounded-lg bg-gray-900 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-700</span><span class="cs">"</span>
+    <span class="ctag">&gt;</span>
+      Sign out
+    <span class="ctag">&lt;/button&gt;</span>
+  );
+}</div>
+          </div>
+          <p class="body-md" style="color: var(--muted); text-align: center; max-width: 820px;">
+            <code>signOut()</code> clears the session. Your <code>onAuthStateChange</code> listener will fire — the UI updates automatically.
+          </p>
+        </div>
+      </div>
+
+      <!-- ══ S24 STEP 15 — PROTECTED ROUTE ══ -->
+      <div class="slide" data-slide="24">
+        <div class="slide-label"><span class="snum">24</span> Step 15 — Protected route</div>
+        <div class="stack" style="align-items: center; max-width: 1100px;">
+          <div class="code-block">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f56"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #27c93f"></span>
+              <span class="cb-name">src/components/protected.tsx</span>
+            </div>
+            <div class="code-body scroll"><span class="ck">import</span> <span class="ck">type</span> { <span class="ct">ReactNode</span> } <span class="ck">from</span> <span class="cs">'react'</span>;
+<span class="ck">import</span> { <span class="ci">useAuth</span> } <span class="ck">from</span> <span class="cs">'../hooks/use-auth'</span>;
+<span class="ck">import</span> { <span class="ct">SignInButton</span> } <span class="ck">from</span> <span class="cs">'./sign-in-button'</span>;
+
+<span class="ck">type</span> <span class="ct">Props</span> = { <span class="cp">children</span>: <span class="ct">ReactNode</span> };
+
+<span class="ck">export function</span> <span class="ct">Protected</span>({ <span class="ci">children</span> }: <span class="ct">Props</span>) {
+  <span class="ck">const</span> { <span class="ci">user</span>, <span class="ci">loading</span> } = <span class="ci">useAuth</span>();
+
+  <span class="ck">if</span> (<span class="ci">loading</span>) {
+    <span class="ck">return</span> <span class="ctag">&lt;div</span> <span class="cattr">className</span>=<span class="cs">"</span><span class="cclass">p-8 text-gray-500</span><span class="cs">"</span><span class="ctag">&gt;</span>Loading...<span class="ctag">&lt;/div&gt;</span>;
+  }
+
+  <span class="ck">if</span> (!<span class="ci">user</span>) {
+    <span class="ck">return</span> (
+      <span class="ctag">&lt;div</span> <span class="cattr">className</span>=<span class="cs">"</span><span class="cclass">flex min-h-screen items-center justify-center</span><span class="cs">"</span><span class="ctag">&gt;</span>
+        <span class="ctag">&lt;SignInButton</span> <span class="ctag">/&gt;</span>
+      <span class="ctag">&lt;/div&gt;</span>
+    );
+  }
+
+  <span class="ck">return</span> <span class="ctag">&lt;&gt;</span><span class="cp">{</span><span class="ci">children</span><span class="cp">}</span><span class="ctag">&lt;/&gt;</span>;
+}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S25 SECTION DIVIDER — TEST ══ -->
+      <div class="slide bg-blue" data-slide="25">
+        <div class="slide-label"><span class="snum">25</span></div>
+        <div class="center" style="position: relative; z-index: 1; max-width: 800px;">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span>Part 5 · Test, debug, ship
+          </div>
+          <h1 class="display" style="color: white">Try it · fix common issues</h1>
+        </div>
+      </div>
+
+      <!-- ══ S26 TEST IT ══ -->
+      <div class="slide" data-slide="26">
+        <div class="slide-label"><span class="snum">26</span> Step 16 — Test the full flow</div>
+        <div class="stack" style="align-items: center; max-width: 980px;">
+          <div class="step-grid">
+            <div class="step-card"><div class="sc-num">1</div><div class="sc-body">Run <code>npm run dev</code> and open <code>http://localhost:5173</code>.</div></div>
+            <div class="step-card"><div class="sc-num">2</div><div class="sc-body">Click <strong>Sign in with Google</strong>. You should be redirected to a Google login page.</div></div>
+            <div class="step-card"><div class="sc-num">3</div><div class="sc-body">Pick your Google account. You'll see a consent screen ("My App wants to access...").</div></div>
+            <div class="step-card"><div class="sc-num">4</div><div class="sc-body">Click <strong>Continue</strong>. Google sends you back through Supabase to your app.</div></div>
+            <div class="step-card"><div class="sc-num">5</div><div class="sc-body">In Supabase dashboard → <strong>Authentication → Users</strong>, you should now see your account.</div></div>
+            <div class="step-card"><div class="sc-num">6</div><div class="sc-body">Display the user info — see next slide for example UI.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S27 DISPLAY USER ══ -->
+      <div class="slide" data-slide="27">
+        <div class="slide-label"><span class="snum">27</span> Showing the user's info</div>
+        <div class="stack" style="align-items: center; max-width: 1100px;">
+          <div class="code-block">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f56"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #27c93f"></span>
+              <span class="cb-name">src/components/user-card.tsx</span>
+            </div>
+            <div class="code-body scroll"><span class="ck">import</span> { <span class="ci">useAuth</span> } <span class="ck">from</span> <span class="cs">'../hooks/use-auth'</span>;
+
+<span class="ck">export function</span> <span class="ct">UserCard</span>() {
+  <span class="ck">const</span> { <span class="ci">user</span> } = <span class="ci">useAuth</span>();
+  <span class="ck">if</span> (!<span class="ci">user</span>) <span class="ck">return null</span>;
+
+  <span class="ck">const</span> <span class="ci">name</span> = <span class="ci">user</span>.<span class="cp">user_metadata</span>.<span class="ci">full_name</span> ?? <span class="ci">user</span>.<span class="cp">email</span>;
+  <span class="ck">const</span> <span class="ci">avatar</span> = <span class="ci">user</span>.<span class="cp">user_metadata</span>.<span class="ci">avatar_url</span>;
+
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;div</span> <span class="cattr">className</span>=<span class="cs">"</span><span class="cclass">flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3</span><span class="cs">"</span><span class="ctag">&gt;</span>
+      <span class="cp">{</span><span class="ci">avatar</span> &amp;&amp; (
+        <span class="ctag">&lt;img</span> <span class="cattr">src</span>=<span class="cp">{</span><span class="ci">avatar</span><span class="cp">}</span> <span class="cattr">alt</span>=<span class="cs">""</span> <span class="cattr">className</span>=<span class="cs">"</span><span class="cclass">h-10 w-10 rounded-full</span><span class="cs">"</span> <span class="ctag">/&gt;</span>
+      )<span class="cp">}</span>
+      <span class="ctag">&lt;div&gt;</span>
+        <span class="ctag">&lt;p</span> <span class="cattr">className</span>=<span class="cs">"</span><span class="cclass">font-semibold text-gray-900</span><span class="cs">"</span><span class="ctag">&gt;</span><span class="cp">{</span><span class="ci">name</span><span class="cp">}</span><span class="ctag">&lt;/p&gt;</span>
+        <span class="ctag">&lt;p</span> <span class="cattr">className</span>=<span class="cs">"</span><span class="cclass">text-sm text-gray-500</span><span class="cs">"</span><span class="ctag">&gt;</span><span class="cp">{</span><span class="ci">user</span>.<span class="cp">email</span><span class="cp">}</span><span class="ctag">&lt;/p&gt;</span>
+      <span class="ctag">&lt;/div&gt;</span>
+    <span class="ctag">&lt;/div&gt;</span>
+  );
+}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S28 FULL APP.TSX ══ -->
+      <div class="slide" data-slide="28">
+        <div class="slide-label"><span class="snum">28</span> Putting it together — App.tsx</div>
+        <div class="stack" style="align-items: center; max-width: 1100px;">
+          <div class="code-block">
+            <div class="code-bar">
+              <span class="cb-dot" style="background: #ff5f56"></span>
+              <span class="cb-dot" style="background: #febc2e"></span>
+              <span class="cb-dot" style="background: #27c93f"></span>
+              <span class="cb-name">src/App.tsx</span>
+            </div>
+            <div class="code-body scroll"><span class="ck">import</span> { <span class="ct">Protected</span> } <span class="ck">from</span> <span class="cs">'./components/protected'</span>;
+<span class="ck">import</span> { <span class="ct">UserCard</span> } <span class="ck">from</span> <span class="cs">'./components/user-card'</span>;
+<span class="ck">import</span> { <span class="ct">SignOutButton</span> } <span class="ck">from</span> <span class="cs">'./components/sign-out-button'</span>;
+
+<span class="ck">export default function</span> <span class="ct">App</span>() {
+  <span class="ck">return</span> (
+    <span class="ctag">&lt;Protected&gt;</span>
+      <span class="ctag">&lt;div</span> <span class="cattr">className</span>=<span class="cs">"</span><span class="cclass">min-h-screen bg-gray-50 p-8</span><span class="cs">"</span><span class="ctag">&gt;</span>
+        <span class="ctag">&lt;header</span> <span class="cattr">className</span>=<span class="cs">"</span><span class="cclass">mx-auto flex max-w-3xl items-center justify-between</span><span class="cs">"</span><span class="ctag">&gt;</span>
+          <span class="ctag">&lt;h1</span> <span class="cattr">className</span>=<span class="cs">"</span><span class="cclass">text-2xl font-bold text-gray-900</span><span class="cs">"</span><span class="ctag">&gt;</span>My App<span class="ctag">&lt;/h1&gt;</span>
+          <span class="ctag">&lt;SignOutButton</span> <span class="ctag">/&gt;</span>
+        <span class="ctag">&lt;/header&gt;</span>
+
+        <span class="ctag">&lt;main</span> <span class="cattr">className</span>=<span class="cs">"</span><span class="cclass">mx-auto mt-8 max-w-3xl space-y-6</span><span class="cs">"</span><span class="ctag">&gt;</span>
+          <span class="ctag">&lt;UserCard</span> <span class="ctag">/&gt;</span>
+          <span class="ctag">&lt;p</span> <span class="cattr">className</span>=<span class="cs">"</span><span class="cclass">text-gray-700</span><span class="cs">"</span><span class="ctag">&gt;</span>
+            You're signed in. Build your app from here.
+          <span class="ctag">&lt;/p&gt;</span>
+        <span class="ctag">&lt;/main&gt;</span>
+      <span class="ctag">&lt;/div&gt;</span>
+    <span class="ctag">&lt;/Protected&gt;</span>
+  );
+}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S29 PITFALLS ══ -->
+      <div class="slide" data-slide="29">
+        <div class="slide-label"><span class="snum">29</span> Common pitfalls (read these before you panic)</div>
+        <div class="stack" style="align-items: center; max-width: 1100px;">
+          <div class="pitfall-grid">
+            <div class="pitfall-card">
+              <div class="pf-title">redirect_uri_mismatch</div>
+              <div class="pf-body">The URL in Google Cloud doesn't <strong>exactly</strong> match Supabase's callback URL. Copy-paste — don't retype.</div>
+            </div>
+            <div class="pitfall-card">
+              <div class="pf-title">"App not verified" warning</div>
+              <div class="pf-body">Normal in development. Click <strong>Advanced → Go to [app] (unsafe)</strong>. Submit to Google for verification before going public.</div>
+            </div>
+            <div class="pitfall-card">
+              <div class="pf-title">Env vars come back undefined</div>
+              <div class="pf-body">Restart <code>npm run dev</code> after editing <code>.env.local</code>. Vite only reads env vars at startup.</div>
+            </div>
+            <div class="pitfall-card">
+              <div class="pf-title">"Access blocked: This app's request is invalid"</div>
+              <div class="pf-body">You forgot to enable the Google provider in Supabase, or the Client Secret is wrong. Re-check Step 8.</div>
+            </div>
+            <div class="pitfall-card">
+              <div class="pf-title">User redirects to a blank page</div>
+              <div class="pf-body">Your <code>redirectTo</code> URL doesn't have a route. Either remove it (Supabase defaults to your site URL) or add a route at <code>/auth/callback</code>.</div>
+            </div>
+            <div class="pitfall-card">
+              <div class="pf-title">Session lost on refresh</div>
+              <div class="pf-body">Supabase auto-persists to <code>localStorage</code>. If lost, you may have created two clients — keep only one in <code>src/lib/supabase.ts</code>.</div>
+            </div>
+            <div class="pitfall-card">
+              <div class="pf-title">Only test users can sign in</div>
+              <div class="pf-body">Your OAuth consent screen is in "Testing" mode. Add the user as a Test User, or "Publish" the app for general access.</div>
+            </div>
+            <div class="pitfall-card">
+              <div class="pf-title">CORS errors in console</div>
+              <div class="pf-body">In Supabase → <strong>Authentication → URL Configuration</strong>, add your dev URL (e.g. <code>http://localhost:5173</code>) under Site URL or Redirect URLs.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ S30 PRODUCTION CHECKLIST ══ -->
+      <div class="slide" data-slide="30">
+        <div class="slide-label"><span class="snum">30</span> Before you ship to production</div>
+        <div class="stack" style="align-items: center; max-width: 980px;">
+          <div class="center">
+            <h2 class="heading">Production checklist</h2>
+          </div>
+          <ul class="check-list">
+            <li>Add your <strong>production URL</strong> to Google Cloud's <strong>Authorized redirect URIs</strong> (the Supabase callback stays the same — it's the same Supabase project)</li>
+            <li>Add your production URL to Supabase's <strong>Site URL</strong> and <strong>Redirect URLs</strong></li>
+            <li>Set the same env vars (<code>VITE_SUPABASE_URL</code>, <code>VITE_SUPABASE_ANON_KEY</code>) in your hosting provider (Vercel, Netlify, etc.)</li>
+            <li>Submit your app to Google for <strong>OAuth verification</strong> (removes the scary warning screen)</li>
+            <li>Set up <strong>Row Level Security (RLS)</strong> on every Supabase table — never ship without it</li>
+            <li>Add a custom <strong>logo</strong> and <strong>privacy policy URL</strong> in the OAuth consent screen</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ══ S31 WRAP UP ══ -->
+      <div class="slide accent-gradient bg-dark" data-slide="31">
+        <div class="slide-label"><span class="snum">31</span> Done</div>
+        <div class="center" style="max-width: 900px;">
+          <div class="pill pill-white" style="margin: 0 auto 1.5rem">
+            <span class="pill-dot"></span>Reference complete
+          </div>
+          <h1 class="display" style="color: white">
+            <span style="color: #7dd3fc">You now have</span><br/>
+            sign in with Google.
+          </h1>
+          <p class="body-lg" style="color: rgba(255, 255, 255, 0.75); margin-top: 1.2rem; max-width: 760px; margin-left: auto; margin-right: auto;">
+            Same flow works for GitHub, Apple, Facebook, Microsoft — just swap <code style="background: rgba(255,255,255,0.1); padding: 0.05em 0.4em; border-radius: 4px; color: #7dd3fc;">provider: 'google'</code> in <code style="background: rgba(255,255,255,0.1); padding: 0.05em 0.4em; border-radius: 4px; color: #7dd3fc;">signInWithOAuth</code> and configure that provider in Supabase.
+          </p>
+          <p class="body-md" style="color: rgba(255, 255, 255, 0.55); margin-top: 1.5rem;">
+            Bookmark this deck — refer back to it whenever you add auth to a new project.
+          </p>
+          <div style="margin-top: 1.8rem;">
+            <img src="../assets/SELISE_Logo_Reversed.png" alt="SELISE" style="height: 40px; opacity: 0.8;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════ PROGRESS + NAV ══════════════ -->
+    <div id="progress"></div>
+    <div id="nav">
+      <button class="nav-btn" onclick="prevSlide()">←</button>
+      <span id="slide-counter">1 / 31</span>
+      <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const total = slides.length;
+      let current = 0;
+
+      function goTo(n) {
+        slides[current].classList.remove("active");
+        slides[current].classList.add("exit");
+        const old = current;
+        setTimeout(() => slides[old].classList.remove("exit"), 380);
+        current = Math.max(0, Math.min(n, total - 1));
+        slides[current].classList.add("active");
+        document.getElementById("slide-counter").textContent = `${current + 1} / ${total}`;
+        document.getElementById("progress").style.width = `${((current + 1) / total) * 100}%`;
+      }
+
+      function nextSlide() { if (current < total - 1) goTo(current + 1); }
+      function prevSlide() { if (current > 0) goTo(current - 1); }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+        if (e.key === "ArrowRight" || e.key === " ") { e.preventDefault(); nextSlide(); }
+        if (e.key === "ArrowLeft") { e.preventDefault(); prevSlide(); }
+        if (e.key === "f" || e.key === "F") toggleFullscreen();
+      });
+
+      document.getElementById("deck").addEventListener("click", function (e) {
+        if (e.target.closest("button, a, input, select, textarea, .toc-row, .code-body, [data-noclick]")) return;
+        const pct = e.clientX / window.innerWidth;
+        if (pct < 0.15) prevSlide();
+        else if (pct > 0.85) nextSlide();
+      });
+
+      slides[0].classList.add("active");
+      document.getElementById("progress").style.width = `${(1 / total) * 100}%`;
+
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
+        else document.exitFullscreen().catch(() => {});
+      }
+    </script>
+  </body>
+</html>
