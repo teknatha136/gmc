@@ -2,6 +2,8 @@
 
 > **High-Level Design** · How the system is structured — the blueprint an architect would draw on a whiteboard. Written after requirements are stable, before detailed design. Audience: engineering leads, architects, senior engineers, security/ops reviewers.
 > Target length: 10–25 pages. Concepts and boxes, not code.
+>
+> **For Pelsung BA/QA trainees:** This is the industry-standard template you'll encounter in real projects. You are *not* expected to write one from scratch. Your job is to **read, review, and ask good questions** when an HLD lands on your desk — does §05 (Architecture) match the BRD? Does §07 (Data) cover every entity in the SRS? Does §09 (Security) address the NFRs? Use this template as a checklist, not an assignment.
 
 ---
 

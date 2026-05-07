@@ -2,6 +2,8 @@
 
 > **Low-Level Design** · How a single component is built inside. Written after HLD is stable, before implementation. Audience: the developers who will write the code; reviewers checking correctness and edge cases.
 > Target length: 5–20 pages per component. Classes, functions, data structures, algorithms, error handling — concrete enough that two engineers implementing from this would produce near-identical code.
+>
+> **For Pelsung BA/QA trainees:** This template is intentionally technical — LLDs are written by developers, for developers. Your goal is **awareness, not authorship**: recognize what an LLD looks like, know which sections exist, and understand what to ask developers about (§04 endpoints, §05 data, §08 errors, §09 testing). The code samples below are *examples of the level of detail* engineers work at — you do not need to read or write code to use this template effectively.
 
 ---
 

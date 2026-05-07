@@ -127,7 +127,7 @@
             <div class="card" style="background:white; border:1px solid var(--border); border-left:4px solid var(--amber); padding:1rem 1.2rem;">
               <h4 style="color:var(--indigo); font-size:1.05rem; margin-bottom:0.4rem;">QA's security verify work</h4>
               <ul style="padding-left:1.2rem; font-size:0.88rem; line-height:1.7;">
-                <li>Try injection inputs: <code>'; DROP TABLE users;--</code> etc.</li>
+                <li>Try inputs that look like code or symbols (quotes, semicolons, &lt;script&gt;) — system should reject, never run them</li>
                 <li>Try logging in as one user, accessing another's data</li>
                 <li>Try the auth flow with empty / wrong / expired tokens</li>
                 <li>Verify rate limiting actually triggers</li>
