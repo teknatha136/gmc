@@ -130,6 +130,8 @@
       .doc-card .ic { font-size:1.6rem; }
       .doc-card h6 { color:var(--indigo); font-family:'Bahnschrift','Segoe UI',sans-serif; font-size:0.95rem; margin:0.3rem 0 0.25rem; }
       .doc-card p { font-size:0.76rem; color:var(--text); line-height:1.55; }
+
+      .timer-ring { display:flex; align-items:center; justify-content:center; }
     </style>
   </head>
   <body>
@@ -183,19 +185,19 @@
           <div class="agenda-row" onclick="goTo(3)">
             <span class="ar-dot" style="background: var(--blue)"></span>
             <span class="ar-label">🤖 AI-Assisted Testing — where AI helps a manual QA</span>
-            <span class="ar-badge" style="background: #E6F0F8; color: var(--blue)">~60%</span>
+            <span class="ar-badge" style="background: #E6F0F8; color: var(--blue)">45 min</span>
           </div>
-          <div class="agenda-row" onclick="goTo(5)">
+          <div class="agenda-row" onclick="goTo(4)">
             <span class="ar-dot" style="background: var(--amber)"></span>
             <span class="ar-label">✏️ Prompt anatomy — bad vs good</span>
             <span class="ar-badge" style="background: #EBF0F7; color: #1C5B8C">15 min</span>
           </div>
-          <div class="agenda-row" onclick="goTo(8)">
+          <div class="agenda-row" onclick="goTo(7)">
             <span class="ar-dot" style="background: var(--blue)"></span>
             <span class="ar-label">🔁 Worked walkthrough — leave request</span>
             <span class="ar-badge" style="background: #E6F0F8; color: var(--blue)">20 min</span>
           </div>
-          <div class="agenda-row" onclick="goTo(13)">
+          <div class="agenda-row" onclick="goTo(11)">
             <span class="ar-dot" style="background: var(--red)"></span>
             <span class="ar-label">⚠️ Where AI is BAD + reviewer's checklist</span>
             <span class="ar-badge" style="background: #FEE9EC; color: var(--red)">10 min</span>
@@ -203,7 +205,7 @@
           <div class="agenda-row" onclick="goTo(15)">
             <span class="ar-dot" style="background: var(--indigo)"></span>
             <span class="ar-label">🎯 Capstone Prep — your role + test strategy</span>
-            <span class="ar-badge" style="background: #E6E9EC; color: var(--indigo)">~40%</span>
+            <span class="ar-badge" style="background: #E6E9EC; color: var(--indigo)">35 min</span>
           </div>
           <div class="agenda-row" onclick="goTo(20)">
             <span class="ar-dot" style="background: var(--amber)"></span>
@@ -1011,7 +1013,8 @@ Mark each case as POSITIVE / NEGATIVE / EDGE.</span></div>
 ============================ */
       const slides = document.querySelectorAll(".slide");
       const total = slides.length;
-      let current = 0;
+      const STORAGE_KEY = "slideDeck:" + location.pathname;
+      let current = Math.min(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0, total - 1);
 
       function goTo(n) {
         slides[current].classList.remove("active");
@@ -1020,6 +1023,7 @@ Mark each case as POSITIVE / NEGATIVE / EDGE.</span></div>
         setTimeout(() => slides[old].classList.remove("exit"), 380);
         current = Math.max(0, Math.min(n, total - 1));
         slides[current].classList.add("active");
+        localStorage.setItem(STORAGE_KEY, current);
         document.getElementById("slide-counter").textContent =
           `${current + 1} / ${total}`;
         document.getElementById("progress").style.width =
@@ -1083,8 +1087,8 @@ Mark each case as POSITIVE / NEGATIVE / EDGE.</span></div>
         if (hint) hint.style.opacity = "1";
       }
 
-      slides[0].classList.add("active");
-      document.getElementById("progress").style.width = `${(1 / total) * 100}%`;
+      slides[current].classList.add("active");
+      document.getElementById("progress").style.width = `${((current + 1) / total) * 100}%`;
 
       /* ============================
    FULLSCREEN

@@ -108,6 +108,8 @@
       .examples-strip { display:flex; gap:0.5rem; flex-wrap:wrap; justify-content:center; max-width:1100px; }
       .ex-chip { background:white; border:1px solid var(--border); border-radius:100px; padding:0.4rem 0.85rem; font-size:0.82rem; color:var(--text); display:inline-flex; align-items:center; gap:0.35rem; }
       .ex-chip strong { color:var(--blue); font-family:'Bahnschrift','Segoe UI',sans-serif; }
+
+      .timer-ring { display:flex; align-items:center; justify-content:center; }
     </style>
   </head>
   <body>
@@ -138,13 +140,13 @@
         <div class="stack" style="max-width: 800px; width: 100%">
           <div class="center" style="margin-bottom: 0.5rem"><h2 class="heading">Session Journey</h2></div>
           <div class="agenda-row" onclick="goTo(2)"><span class="ar-dot" style="background: var(--red)"></span><span class="ar-label">💥 The hard truth — most projects fail at change, not code</span><span class="ar-badge" style="background:#FEE9EC;color:var(--red)">8 min</span></div>
-          <div class="agenda-row" onclick="goTo(4)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">😟 Why people resist change</span><span class="ar-badge" style="background:#E6F0F8;color:var(--indigo)">10 min</span></div>
-          <div class="agenda-row" onclick="goTo(6)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🪜 Kotter's 8 steps — lite version</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">15 min</span></div>
-          <div class="agenda-row" onclick="goTo(11)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🛤️ The 3-track rollout plan</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">12 min</span></div>
-          <div class="agenda-row" onclick="goTo(13)"><span class="ar-dot" style="background: var(--green)"></span><span class="ar-label">🧰 Resistance toolkit — what to actually do</span><span class="ar-badge" style="background:#EAF7E2;color:#3D7A3D">8 min</span></div>
-          <div class="agenda-row" onclick="goTo(14)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">⚖️ Pilot vs big-bang</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">7 min</span></div>
-          <div class="agenda-row" onclick="goTo(15)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">📊 Measuring success</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">7 min</span></div>
-          <div class="agenda-row" onclick="goTo(16)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🛠️ Hands-on — plan a real rollout</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">25 min</span></div>
+          <div class="agenda-row" onclick="goTo(5)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">😟 Why people resist change</span><span class="ar-badge" style="background:#E6F0F8;color:var(--indigo)">10 min</span></div>
+          <div class="agenda-row" onclick="goTo(7)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🪜 Kotter's 8 steps — lite version</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">12 min</span></div>
+          <div class="agenda-row" onclick="goTo(13)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">🛤️ The 3-track rollout plan</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">12 min</span></div>
+          <div class="agenda-row" onclick="goTo(14)"><span class="ar-dot" style="background: var(--green)"></span><span class="ar-label">🧰 Resistance toolkit — what to actually do</span><span class="ar-badge" style="background:#EAF7E2;color:#3D7A3D">8 min</span></div>
+          <div class="agenda-row" onclick="goTo(15)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">⚖️ Pilot vs big-bang</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">7 min</span></div>
+          <div class="agenda-row" onclick="goTo(16)"><span class="ar-dot" style="background: var(--blue)"></span><span class="ar-label">📊 Measuring success</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">7 min</span></div>
+          <div class="agenda-row" onclick="goTo(18)"><span class="ar-dot" style="background: var(--amber)"></span><span class="ar-label">🛠️ Hands-on — plan a real rollout</span><span class="ar-badge" style="background:#EBF0F7;color:#1C5B8C">25 min</span></div>
           <div class="agenda-row" onclick="goTo(20)"><span class="ar-dot" style="background: var(--indigo)"></span><span class="ar-label">🎯 Wrap-up</span><span class="ar-badge" style="background:#E6F0F8;color:var(--blue)">3 min</span></div>
         </div>
       </div>
