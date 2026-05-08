@@ -56,7 +56,7 @@ All capstone trainees build a real product. **4 project ideas × 2 groups per id
 
 Tek and Bhuwan evaluate, with a third opinion if an exhibition picks a single group's product.
 
-Detailed plan, group assignments, and open questions live in `cohort-3-capstone-planning.md`.
+Detailed plan, group assignments, and open questions live in `capstone/planning.md`.
 
 (The earlier *tiered* plan — strong cohort builds, leftovers do docs-only — has been dropped for this cohort.)
 
@@ -83,5 +83,7 @@ After 1-on-1 interviews with every trainee (April 17, 2026), Bhuwan and Tek conc
 - `people-notes.yaml` — per-trainee observations (via `/note` skill)
 - `documents/` — per-trainee folders (cv + certificate)
 - `progress/` — attendance, grades, weekly evaluations
-- `capstone-specs/` — candidate capstone project specs (GNH Pulse, GMC Companion, Mindful Workplace, Eco Footprint)
-- `projects/` — capstone project outputs
+- `capstone/` — all capstone-related docs:
+  - `capstone/planning.md` — current plan, group assignments, open questions
+  - `capstone/candidate-specs/` — earlier candidate ideas (GNH Pulse, GMC Companion, Mindful Workplace, Eco Footprint) — **historical**, replaced by PPC / ZorigHub / GMC-ESR / TBD
+  - `capstone/projects/` — capstone project outputs (built per-group during Phase 3)
