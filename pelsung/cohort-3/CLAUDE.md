@@ -5,21 +5,23 @@
 ## Training Overview
 - **Start:** April 9, 2026 (Welcome & Orientation)
 - **Duration:** ~8 weeks + capstone + exhibition
-- **Trainees:** 45 (46 original SELISE sub-cohort − 1 transfer out: Rigzang Dorji to Innovate for GMC, 2026-04-08)
+- **Trainees:** 42 (down from 45 as of 2026-05-08; reasons for the additional drop-offs not yet recorded — verify against current roster before assignments lock)
 - **Verticals:** Software Development (FE-focused), Software Design (UX/UI), Software Testing (QA), Business Analysis
 - **Exhibition/Demo Day:** TBD (may coincide with Pelsung graduation; His Majesty may attend)
 
-## Vertical Assignments (as of 2026-04-17)
-After 1-on-1 interviews, trainees were placed into verticals by Bhuwan and Tek.
+## Vertical Assignments (as of 2026-05-08)
+After 1-on-1 interviews and post-interview adjustments, trainees were placed into verticals by Bhuwan and Tek.
 
 | Vertical | Trainees |
 |----------|----------|
-| Dev      | 12 |
-| BA       | 14 |
-| QA       | 11 |
-| Absent / Pending | 8 |
+| Dev      | 16 |
+| BA       | 18 |
+| QA       | 8  |
+| **Total** | **42** |
 
-Assignment records and per-trainee notes live in `pelsung-c3-vertical-selection.xlsx`.
+Source of truth: `pelsung-c3-vertical-selection.xlsx` — sheets `Dev Track`, `BA Track`, `QA Track`. The `1-to1-interview` sheet has interview notes; `dev-ba-spec-assignment` is a placeholder.
+
+> Pending sheet edit: Chedup Tamang and Tashi Nima reassigned from BA → QA on 2026-05-08 (both attended both class tracks fully; Tashi Nima's interview record already had him as QA). Move them between sheets when next editing the xlsx.
 
 ## Class Structure (Cohort 3)
 - **Foundation:** 11 classes (all 45 together)
@@ -45,12 +47,18 @@ Use everyday-life examples (banking, shopping, leave requests, ATMs) instead of 
 
 Full class list lives in `../curriculum/index.html`.
 
-## Capstone Structure (Cohort 3 — tiered)
-Capstone is split into two parallel tracks based on assessment toward the end of specialization:
-- **Real-project tier:** Strong/usable trainees across verticals form cross-vertical teams and build a real GMC-relevant product together.
-- **Documentation tier:** Remaining trainees pick a project and produce documentation-only deliverables (scope doc, HLD, LLD, or another feasible artifact) — no code expected from this group.
+## Capstone Structure (Cohort 3 — real projects only)
+All capstone trainees build a real product. **4 project ideas × 2 groups per idea = 8 groups.**
 
-Selection happens late (not up-front). Presentation to trainees should treat both tiers as legitimate capstone paths.
+**Group composition rule:**
+- 2 Devs per group — fixed (one acts as Lead).
+- BA and QA distributed flexibly across the 8 groups so all 42 trainees are placed (group sizes will vary).
+
+Tek and Bhuwan evaluate, with a third opinion if an exhibition picks a single group's product.
+
+Detailed plan, group assignments, and open questions live in `cohort-3-capstone-planning.md`.
+
+(The earlier *tiered* plan — strong cohort builds, leftovers do docs-only — has been dropped for this cohort.)
 
 ## Post-Training Hiring Outlook (Internal)
 After 1-on-1 interviews with every trainee (April 17, 2026), Bhuwan and Tek concluded that **~90% of BA and QA vertical trainees will not meet the SELISE hiring baseline**. Several are being flagged through other channels for alternative roles (admin, finance, HR).
