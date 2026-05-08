@@ -4,17 +4,20 @@ Directory of essential services in Gelephu Mindfulness City: services are catego
 
 ## Groups (two parallel teams)
 
-### Group A
-- Dev Lead: **Sonam Rigdhen Thinley** *("RigdenHub guy — looks cocky but can mold")*
-- Dev: Ugyen Tshering *(mixed remarks — keep an eye)*
+### Group A - WIN
+
+- Dev Lead: **Sonam Rigdhen Thinley**
+- Dev: Sangay Choda
 - BA: Lhakpa Tshering Nesor, Thinley Pem
-- QA: Sonam Dendup *(licensed civil engineer; ~4y site engineer; not interviewed 1-on-1)*
+- QA: Sonam Dendup _(licensed civil engineer; ~4y site engineer; not interviewed 1-on-1)_
 
 ### Group B
-- Dev Lead: **Yeshey Wangchuk** *(English degree + JS basics — can be nurtured)*
-- Dev: Kinley Dorji *(struggling per Dev Remarks — pair with strong lead)*
+
+- Dev Lead: **Puran**
+- Dev: Sabika
 - BA: Neten Dema, Thrinlay Dhendup Wangchen
 - QA: Sonam Rinzin
 
 ---
+
 Source of truth for the plan: [`../../planning.md`](../../planning.md)
