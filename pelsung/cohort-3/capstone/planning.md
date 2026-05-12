@@ -23,70 +23,61 @@ Capacity check (verified against `pelsung-c3-vertical-selection.xlsx` on 2026-05
 
 ## Group Assignments
 
-Each idea has 2 groups. **Draft distribution below** — leads previously placed by Tek (Tashi, Yeshi, Sonam Rigdhen) preserved; rest filled by Claude based on Dev Track remarks + people-notes, then BA/QA round-robin alphabetical. Override freely.
+Each idea has 2 groups. Tags: **WIN** = predicted/favored group; **SELISE Hiring Note** = lead flagged for the SELISE hiring track.
 
-### 1. PPC (Pelsung Project Catalogue)
-**Group A**
-- Dev Lead: **Tashi Phuntsho** *(placed; flight risk — paired with strong mid)*
-- Dev: Puran Adhikari
-- BA: Rinzin Seldon, Ugyen Choden
+### 1. PPC — Pelsung Project Catalogue
+**Group A (PPC-A)** — WIN
+- Dev Lead: **Tashi Phuntsho**
+- Dev: Sonam Choki
+- BA: Neten Dema, Yezer Pelzang
+- QA: Chedup Tamang
+
+**Group B (PPC-B)**
+- Dev Lead: **Karma**
+- Dev: Yeshey Wangchuk
+- BA: Tshewang Choden, Ugyen Jamtsho
 - QA: Jigme Choden
 
-**Group B**
-- Dev Lead: **Sabika Chhetri** *(only actual software dev in the cohort per CV; quiet but capable)*
-- Dev: Karma
-- BA: Dawa Zangmo, Sonam Tshering, Ugyen Jamtsho
-- QA: Karma Yezer
-
-### 2. ZorigHub (Artisan Marketplace)
-**Group A**
-- Dev Lead: **Yeshi Dorji** *(placed; pro frontend / NGN experience — fits e-commerce)*
-- Dev: Sangay Choden
-- BA: Deki Pelden, Subhadra Ghalley, Ugyen Tshomo
-- QA: Kinga Wangmo
-
-**Group B**
-- Dev Lead: **Sonam Rinchen** *(experienced, SELISE potential; flagged for prior proxy)*
-- Dev: Thinley Dorji *(proxy once)*
-- BA: Kezang Nima, Yezer Pelzang
-- QA: Leki Choden
-
-### 3. GMC-ESR (Essential Services Registry)
-**Group A**
-- Dev Lead: **Sonam Rigdhen Thinley** *(placed; "RigdenHub guy")*
-- Dev: Ugyen Tshering *(mixed remarks — keep an eye)*
-- BA: Lhakpa Tshering Nesor, Thinley Pem
-- QA: Sonam Dendup
-
-**Group B**
-- Dev Lead: **Yeshey Wangchuk** *(JS basics, can be nurtured)*
-- Dev: Kinley Dorji *(struggling per Dev Remarks — pair with strong lead)*
-- BA: Neten Dema, Thrinlay Dhendup Wangchen
+### 2. ZOH — ZorigHub (Artisan Marketplace)
+**Group A (ZOH-A)**
+- Dev Lead: **Yeshi Dorji** — SELISE Hiring Note
+- Dev: Ugyen Tshering
+- BA: Thrinlay Dhendup Wangchen, Ugyen Tshomo
 - QA: Sonam Rinzin
 
-### 4. TBD (3rd SELISE mini cohort idea)
-*(Idea not yet proposed — group composition is provisional. No QA assigned because the project isn't scoped.)*
+**Group B (ZOH-B)**
+- Dev Lead: **Sonam Rinchen** — SELISE Hiring Note
+- Dev: Phub Lham
+- BA: Nidup Dorji *(#49)*, Subhadra Ghalley
+- QA: Leki Choden
 
-**Group A**
-- Dev Lead: **Sonam Choki** *(Docker/Python/Laravel/CTF — strongest mid)*
-- Dev: Sangay Choda *(BCA, 8 yrs admin)*
-- BA: Nidup Dorji *(unemployed)*, Tshering Peldon
-- QA: **Chedup Tamang** *(reassigned from BA — attended both BA and QA classes fully)*
+### 3. ESR — GMC Essential Services Registry
+**Group A (ESR-A)** — WIN
+- Dev Lead: **Sonam Rigdhen Thinley**
+- Dev: Sangay Choda
+- BA: Nidup Dorji *(#52)*, Sonam Tshering
+- QA: Tashi Nima
 
-**Group B**
-- Dev Lead: **Phub Lham** *(BSc Physics, SDLC interest)*
-- Dev: Nima Yoezer *(prompting strength; "has to go back" flag)*
-- BA: Nidup Dorji *(corporate / BNB)*, Tshewang Choden
-- QA: **Tashi Nima** *(reassigned from BA — attended both BA and QA classes fully)*
+**Group B (ESR-B)**
+- Dev Lead: **Puran Adhikari**
+- Dev: Sabika Chhetri
+- BA: Lhakpa Tshering Nesor, Ugyen Choden
+- QA: Sonam Dendup
 
-## Trainees to Watch
-- **Tashi Phuntsho** (PPC-A Lead) — Laravel/Springboot, but flagged "possibly will go back". Confirm commitment before locking the lead role.
-- **Yeshi Dorji** (ZorigHub-A Lead) — NGN industry experience, pro frontend dev. Solid fit but worth checking he's all-in on the program.
-- **Sonam Rinchen** (ZorigHub-B Lead) — strong, "SELISE potential", but proxy-ed one class (warned). Pair with closer monitoring.
-- **Sonam Rigdhen Thinley** (GMC-ESR-A Lead) — "RigdenHub guy, looks cocky but can mold". Coachable, watch ego dynamics.
-- **Ugyen Tshering / Yugel Tshering** (GMC-ESR-A Dev) — name conflict (roster vs CV); mixed remarks. Confirm identity & engagement.
-- **Kinley Dorji** (GMC-ESR-B Dev) — flagged as struggling in Dev. Different from the Kinley Dorji in older BA notes — verify which person is in the Dev Track.
-- **Dawa Zangmo** (PPC-B BA) — flagged as strong admin candidate (6 languages). Still in BA Track but may transfer out.
+### 4. MC3 — 3rd SELISE Mini Cohort idea
+*(Project name and scope pending the mini cohort's proposal. MC3 groups carry the extra BA slots — 3 BAs each — to absorb full headcount.)*
+
+**Group A (MC3-A)** — WIN
+- Dev Lead: **Kinley Dorji**
+- Dev: Nima Yoezer
+- BA: Kezang Nima, Dawa Zangmo, Deki Pelden
+- QA: Karma Yezer
+
+**Group B (MC3-B)**
+- Dev Lead: **Sangay Choden**
+- Dev: Thinley Dorji
+- BA: Rinzin Seldon, Thinley Pem, Tshering Peldon
+- QA: Kinga Wangmo
 
 ## Exhibition
 If an exhibition is required, one group's product will be selected for showcase. The presenter can come from any group. **Tek and Bhuwan** evaluate, with a third opinion.
@@ -101,9 +92,4 @@ If an exhibition is required, one group's product will be selected for showcase.
   - 1 from current cohort
 
 ## Open Questions
-- **4th project idea** — when does the 3rd SELISE mini cohort propose theirs? Group 4A/4B compositions are provisional until the project exists.
-- **Skill-matching BAs** — current draft is round-robin alphabetical. Worth re-skewing? E.g.:
-  - Finance/banking BAs (Sonam Tshering / Nidup Dorji "corporate" / Neten Dema / Tshering Peldon) → ZorigHub (marketplace = payments)
-  - Govt/services-aware BAs (Tshewang Choden / Deki Pelden) → GMC-ESR
-- **Group 4 leadership** — Sonam Choki + Phub Lham are the two weakest leads in the draft; if Idea 4 turns out complex, consider rotating a stronger lead in.
-- **Identity / commitment confirmations** — Tashi (flight risk), Yeshi (engagement), Ugyen Tshering vs Yugel Tshering (name conflict).
+- **MC3 project scope** — when does the 3rd SELISE mini cohort propose their idea? Team is fixed; only the project itself is pending.

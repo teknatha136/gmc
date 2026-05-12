@@ -4,18 +4,18 @@ E-commerce-style platform that lets Bhutanese artists register their craft and l
 
 ## Groups (two parallel teams)
 
-### Group A
+### Group A (ZOH-A)
 
 - Dev Lead: **Yeshi Dorji** - SELISE Hiring Note
-- Dev: Yugyel
-- BA: Deki Pelden, Subhadra Ghalley, Ugyen Tshomo
-- QA: Kinga Wangmo
+- Dev: Ugyen Tshering
+- BA: Thrinlay Dhendup Wangchen, Ugyen Tshomo
+- QA: Sonam Rinzin
 
-### Group B
+### Group B (ZOH-B)
 
 - Dev Lead: **Sonam Rinchen** - SELISE Hiring Note
 - Dev: Phub Lham
-- BA: Kezang Nima, Yezer Pelzang
+- BA: Nidup Dorji (#49), Subhadra Ghalley
 - QA: Leki Choden
 
 ---

@@ -4,19 +4,19 @@ Directory of essential services in Gelephu Mindfulness City: services are catego
 
 ## Groups (two parallel teams)
 
-### Group A - WIN
+### Group A (ESR-A) - WIN
 
 - Dev Lead: **Sonam Rigdhen Thinley**
 - Dev: Sangay Choda
-- BA: Lhakpa Tshering Nesor, Thinley Pem
-- QA: Sonam Dendup _(licensed civil engineer; ~4y site engineer; not interviewed 1-on-1)_
+- BA: Nidup Dorji (#52), Sonam Tshering
+- QA: Tashi Nima
 
-### Group B
+### Group B (ESR-B)
 
-- Dev Lead: **Puran**
-- Dev: Sabika
-- BA: Neten Dema, Thrinlay Dhendup Wangchen
-- QA: Sonam Rinzin
+- Dev Lead: **Puran Adhikari**
+- Dev: Sabika Chhetri
+- BA: Lhakpa Tshering Nesor, Ugyen Choden
+- QA: Sonam Dendup
 
 ---
 

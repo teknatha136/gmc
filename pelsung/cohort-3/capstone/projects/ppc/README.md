@@ -10,19 +10,19 @@ One-stop directory of all Pelsung project ideas, with options to link to externa
 
 ## Groups (two parallel teams)
 
-### Group A - WIN
+### Group A (PPC-A) - WIN
 
 - Dev Lead: **Tashi Phuntsho**
 - Dev: Sonam Choki
-- BA: Rinzin Seldon, Ugyen Choden
-- QA: Jigme Choden
+- BA: Neten Dema, Yezer Pelzang
+- QA: Chedup Tamang
 
-### Group B
+### Group B (PPC-B)
 
 - Dev Lead: **Karma**
 - Dev: Yeshey Wangchuk
-- BA: Dawa Zangmo, Sonam Tshering, Ugyen Jamtsho
-- QA: Karma Yezer
+- BA: Tshewang Choden, Ugyen Jamtsho
+- QA: Jigme Choden
 
 ---
 
