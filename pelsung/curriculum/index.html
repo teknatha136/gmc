@@ -1,1065 +1,2082 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="robots"
+      content="noindex, nofollow, noarchive, nosnippet, noimageindex"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SELISE × Pelsung — Curriculum Atlas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --blue: #0066b2;
+        --blue-deep: #001f35;
+        --blue-mist: #e8f1f9;
+        --dev: #0066b2;
+        --design: #4796d1;
+        --testing: #7bc950;
+        --ba: #f5a623;
+        --text: #121518;
+        --muted: #4a5058;
+        --faint: #8a9098;
+        --hair: #e5e8ec;
+        --surface: #ffffff;
+        --bg: #fafafb;
+        --grid: rgba(0, 102, 178, 0.045);
+      }
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SELISE × Pelsung — Curriculum Atlas</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@300;400;500;600&display=swap"
-    rel="stylesheet">
-  <style>
-    :root {
-      --blue: #0066B2;
-      --blue-deep: #001F35;
-      --blue-mist: #E8F1F9;
-      --dev: #0066B2;
-      --design: #4796D1;
-      --testing: #7BC950;
-      --ba: #F5A623;
-      --text: #121518;
-      --muted: #4A5058;
-      --faint: #8A9098;
-      --hair: #E5E8EC;
-      --surface: #ffffff;
-      --bg: #FAFAFB;
-      --grid: rgba(0, 102, 178, 0.045);
-    }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+      html,
+      body {
+        height: 100%;
+      }
 
-    html, body { height: 100%; }
+      body {
+        font-family: "Open Sans", "Aptos", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        overflow-x: hidden;
+      }
 
-    body {
-      font-family: 'Open Sans', 'Aptos', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      overflow-x: hidden;
-    }
+      .mono {
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+      }
 
-    .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      /* ===== SHELL ===== */
+      .shell {
+        display: grid;
+        grid-template-rows: auto 1fr;
+        min-height: 100vh;
+      }
 
-    /* ===== SHELL ===== */
-    .shell {
-      display: grid;
-      grid-template-rows: auto 1fr;
-      min-height: 100vh;
-    }
+      /* ===== TOPBAR ===== */
+      .topbar {
+        display: grid;
+        grid-template-columns: 260px 1fr;
+        align-items: center;
+        padding: 1.1rem 2rem;
+        border-bottom: 1px solid var(--hair);
+        background: var(--surface);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
 
-    /* ===== TOPBAR ===== */
-    .topbar {
-      display: grid;
-      grid-template-columns: 260px 1fr;
-      align-items: center;
-      padding: 1.1rem 2rem;
-      border-bottom: 1px solid var(--hair);
-      background: var(--surface);
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+      }
+      .brand img {
+        height: 40px;
+        display: block;
+      }
+      .brand-divider {
+        width: 1px;
+        height: 22px;
+        background: var(--hair);
+      }
+      .brand-mark {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.68rem;
+        letter-spacing: 0.12em;
+        color: var(--muted);
+        text-transform: uppercase;
+        font-weight: 500;
+      }
 
-    .brand { display: flex; align-items: center; gap: 0.85rem; }
-    .brand img { height: 40px; display: block; }
-    .brand-divider { width: 1px; height: 22px; background: var(--hair); }
-    .brand-mark {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.68rem; letter-spacing: 0.12em;
-      color: var(--muted); text-transform: uppercase; font-weight: 500;
-    }
+      .crumbs {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.06em;
+        color: var(--muted);
+        text-transform: uppercase;
+        display: flex;
+        gap: 0.65rem;
+        justify-content: center;
+        align-items: center;
+      }
+      .crumbs .sep {
+        color: var(--faint);
+      }
+      .crumbs .here {
+        color: var(--blue);
+        font-weight: 600;
+      }
 
-    .crumbs {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem; letter-spacing: 0.06em;
-      color: var(--muted); text-transform: uppercase;
-      display: flex; gap: 0.65rem; justify-content: center; align-items: center;
-    }
-    .crumbs .sep { color: var(--faint); }
-    .crumbs .here { color: var(--blue); font-weight: 600; }
+      /* ===== MAIN GRID ===== */
+      .main {
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        min-height: calc(100vh - 65px);
+      }
 
-    /* ===== MAIN GRID ===== */
-    .main {
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      min-height: calc(100vh - 65px);
-    }
+      /* ===== RAIL (phases) ===== */
+      .rail {
+        border-right: 1px solid var(--hair);
+        background: var(--surface);
+        padding: 2rem 0 2rem 2rem;
+        position: relative;
+      }
 
-    /* ===== RAIL (phases) ===== */
-    .rail {
-      border-right: 1px solid var(--hair);
-      background: var(--surface);
-      padding: 2rem 0 2rem 2rem;
-      position: relative;
-    }
+      .rail-title {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.64rem;
+        letter-spacing: 0.18em;
+        color: var(--muted);
+        text-transform: uppercase;
+        margin-bottom: 1.6rem;
+        padding-right: 2rem;
+        display: flex;
+        justify-content: space-between;
+      }
+      .rail-title .hint {
+        color: var(--faint);
+      }
+      .rail-title kbd {
+        font-family: "JetBrains Mono", monospace;
+        background: var(--bg);
+        border: 1px solid var(--hair);
+        padding: 1px 5px;
+        border-radius: 3px;
+        font-size: 0.62rem;
+        color: var(--muted);
+      }
 
-    .rail-title {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.64rem; letter-spacing: 0.18em;
-      color: var(--muted); text-transform: uppercase;
-      margin-bottom: 1.6rem; padding-right: 2rem;
-      display: flex; justify-content: space-between;
-    }
-    .rail-title .hint { color: var(--faint); }
-    .rail-title kbd {
-      font-family: 'JetBrains Mono', monospace;
-      background: var(--bg); border: 1px solid var(--hair);
-      padding: 1px 5px; border-radius: 3px;
-      font-size: 0.62rem; color: var(--muted);
-    }
+      .phase-list {
+        list-style: none;
+        position: relative;
+      }
+      .phase-list::before {
+        content: "";
+        position: absolute;
+        left: 11px;
+        top: 8px;
+        bottom: 8px;
+        width: 1px;
+        background: var(--hair);
+      }
 
-    .phase-list { list-style: none; position: relative; }
-    .phase-list::before {
-      content: ''; position: absolute;
-      left: 11px; top: 8px; bottom: 8px;
-      width: 1px; background: var(--hair);
-    }
+      .phase-item {
+        position: relative;
+        padding: 1rem 2rem 1rem 2.4rem;
+        cursor: pointer;
+        transition: background 0.2s ease;
+      }
+      .phase-item:hover {
+        background: var(--bg);
+      }
+      .phase-item.active {
+        background: linear-gradient(
+          90deg,
+          var(--blue-mist) 0%,
+          transparent 85%
+        );
+      }
 
-    .phase-item {
-      position: relative;
-      padding: 1rem 2rem 1rem 2.4rem;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-    .phase-item:hover { background: var(--bg); }
-    .phase-item.active {
-      background: linear-gradient(90deg, var(--blue-mist) 0%, transparent 85%);
-    }
+      .phase-dot {
+        position: absolute;
+        left: 5px;
+        top: 1.25rem;
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        background: var(--surface);
+        border: 2px solid var(--faint);
+        transition: all 0.25s ease;
+      }
+      .phase-item.active .phase-dot {
+        background: var(--blue);
+        border-color: var(--blue);
+        box-shadow: 0 0 0 4px var(--blue-mist);
+      }
+      .phase-item.active .phase-dot::after {
+        content: "";
+        position: absolute;
+        inset: 2px;
+        border-radius: 50%;
+        background: var(--surface);
+      }
 
-    .phase-dot {
-      position: absolute; left: 5px; top: 1.25rem;
-      width: 13px; height: 13px; border-radius: 50%;
-      background: var(--surface); border: 2px solid var(--faint);
-      transition: all 0.25s ease;
-    }
-    .phase-item.active .phase-dot {
-      background: var(--blue); border-color: var(--blue);
-      box-shadow: 0 0 0 4px var(--blue-mist);
-    }
-    .phase-item.active .phase-dot::after {
-      content: ''; position: absolute; inset: 2px;
-      border-radius: 50%; background: var(--surface);
-    }
+      .phase-num {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.66rem;
+        letter-spacing: 0.14em;
+        color: var(--muted);
+        text-transform: uppercase;
+        margin-bottom: 2px;
+      }
+      .phase-item.active .phase-num {
+        color: var(--blue);
+      }
 
-    .phase-num {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.66rem; letter-spacing: 0.14em;
-      color: var(--muted); text-transform: uppercase; margin-bottom: 2px;
-    }
-    .phase-item.active .phase-num { color: var(--blue); }
+      .phase-name {
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: var(--text);
+        letter-spacing: -0.01em;
+        margin-bottom: 4px;
+      }
+      .phase-item.active .phase-name {
+        color: var(--blue-deep);
+      }
 
-    .phase-name {
-      font-size: 1.05rem; font-weight: 600; color: var(--text);
-      letter-spacing: -0.01em; margin-bottom: 4px;
-    }
-    .phase-item.active .phase-name { color: var(--blue-deep); }
+      .phase-meta {
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin-bottom: 0.7rem;
+      }
 
-    .phase-meta { font-size: 0.85rem; color: var(--muted); margin-bottom: 0.7rem; }
+      .phase-bar {
+        height: 3px;
+        background: var(--hair);
+        border-radius: 2px;
+        overflow: hidden;
+        margin-right: 1rem;
+      }
+      .phase-bar-fill {
+        height: 100%;
+        background: var(--blue);
+        border-radius: 2px;
+        transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .phase-bar-label {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.7rem;
+        color: var(--muted);
+        margin-top: 5px;
+        letter-spacing: 0.04em;
+        font-weight: 500;
+      }
 
-    .phase-bar {
-      height: 3px; background: var(--hair); border-radius: 2px;
-      overflow: hidden; margin-right: 1rem;
-    }
-    .phase-bar-fill {
-      height: 100%; background: var(--blue); border-radius: 2px;
-      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .phase-bar-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem; color: var(--muted);
-      margin-top: 5px; letter-spacing: 0.04em;
-      font-weight: 500;
-    }
+      /* ===== STAGE ===== */
+      .stage {
+        position: relative;
+        padding: 2.2rem 3rem 3rem;
+        background:
+          linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / 40px 40px,
+          linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 40px
+            40px,
+          var(--bg);
+      }
 
-    /* ===== STAGE ===== */
-    .stage {
-      position: relative;
-      padding: 2.2rem 3rem 3rem;
-      background:
-        linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / 40px 40px,
-        linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 40px 40px,
-        var(--bg);
-    }
+      .stage-head {
+        margin-bottom: 2.2rem;
+        padding-bottom: 1.4rem;
+        border-bottom: 1px solid var(--hair);
+      }
 
-    .stage-head {
-      margin-bottom: 2.2rem; padding-bottom: 1.4rem;
-      border-bottom: 1px solid var(--hair);
-    }
+      .stage-eyebrow {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.7rem;
+        letter-spacing: 0.18em;
+        color: var(--blue);
+        text-transform: uppercase;
+        margin-bottom: 0.55rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .stage-eyebrow .tick {
+        display: inline-block;
+        width: 18px;
+        height: 1px;
+        background: var(--blue);
+      }
 
-    .stage-eyebrow {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem; letter-spacing: 0.18em;
-      color: var(--blue); text-transform: uppercase;
-      margin-bottom: 0.55rem;
-      display: flex; align-items: center; gap: 0.5rem;
-    }
-    .stage-eyebrow .tick {
-      display: inline-block; width: 18px; height: 1px; background: var(--blue);
-    }
+      .stage-title {
+        font-size: 2.3rem;
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        color: var(--blue-deep);
+        line-height: 1.05;
+      }
 
-    .stage-title {
-      font-size: 2.3rem; font-weight: 700;
-      letter-spacing: -0.025em; color: var(--blue-deep); line-height: 1.05;
-    }
+      .stage-sub {
+        font-size: 1.02rem;
+        color: var(--muted);
+        margin-top: 0.6rem;
+        max-width: 60ch;
+        line-height: 1.55;
+      }
 
-    .stage-sub {
-      font-size: 1.02rem; color: var(--muted);
-      margin-top: 0.6rem; max-width: 60ch;
-      line-height: 1.55;
-    }
+      /* ==== LADDER ==== */
+      .ladder {
+        position: relative;
+        padding-left: 3.5rem;
+      }
 
-    /* ==== LADDER ==== */
-    .ladder {
-      position: relative;
-      padding-left: 3.5rem;
-    }
+      .ladder::before {
+        content: "";
+        position: absolute;
+        left: 2.25rem;
+        top: 10px;
+        bottom: 10px;
+        width: 1px;
+        background: linear-gradient(
+          to bottom,
+          var(--blue) 0%,
+          var(--blue) var(--progress, 0%),
+          var(--hair) var(--progress, 0%),
+          var(--hair) 100%
+        );
+      }
 
-    .ladder::before {
-      content: '';
-      position: absolute;
-      left: 2.25rem; top: 10px; bottom: 10px;
-      width: 1px;
-      background: linear-gradient(
-        to bottom,
-        var(--blue) 0%,
-        var(--blue) var(--progress, 0%),
-        var(--hair) var(--progress, 0%),
-        var(--hair) 100%
-      );
-    }
+      .row {
+        position: relative;
+        display: grid;
+        grid-template-columns: 64px 1fr auto;
+        gap: 1.25rem;
+        align-items: center;
+        padding: 0.9rem 1rem 0.9rem 0;
+        border-bottom: 1px solid var(--hair);
+        transition:
+          background 0.18s,
+          transform 0.18s;
+      }
+      .row:hover {
+        background: var(--surface);
+        transform: translateX(2px);
+      }
+      .row:hover .r-title {
+        color: var(--blue-deep);
+      }
 
-    .row {
-      position: relative;
-      display: grid;
-      grid-template-columns: 64px 1fr auto;
-      gap: 1.25rem;
-      align-items: center;
-      padding: 0.9rem 1rem 0.9rem 0;
-      border-bottom: 1px solid var(--hair);
-      transition: background 0.18s, transform 0.18s;
-    }
-    .row:hover { background: var(--surface); transform: translateX(2px); }
-    .row:hover .r-title { color: var(--blue-deep); }
+      .row::before {
+        content: "";
+        position: absolute;
+        left: -1.25rem;
+        top: 50%;
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        background: var(--surface);
+        border: 2px solid var(--faint);
+        transform: translateY(-50%);
+        z-index: 2;
+        transition: all 0.25s;
+      }
+      .row.done::before {
+        background: var(--blue);
+        border-color: var(--blue);
+      }
 
-    .row::before {
-      content: '';
-      position: absolute;
-      left: -1.25rem; top: 50%;
-      width: 11px; height: 11px;
-      border-radius: 50%;
-      background: var(--surface);
-      border: 2px solid var(--faint);
-      transform: translateY(-50%);
-      z-index: 2;
-      transition: all 0.25s;
-    }
-    .row.done::before { background: var(--blue); border-color: var(--blue); }
+      .r-num {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 1.6rem;
+        font-weight: 400;
+        color: #6b7178;
+        letter-spacing: -0.02em;
+        line-height: 1;
+      }
+      .row.done .r-num {
+        color: var(--blue-deep);
+        font-weight: 500;
+      }
 
-    .r-num {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 1.6rem; font-weight: 400;
-      color: #6B7178; letter-spacing: -0.02em; line-height: 1;
-    }
-    .row.done .r-num { color: var(--blue-deep); font-weight: 500; }
+      .r-body {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        min-width: 0;
+      }
+      .r-title {
+        font-size: 1.08rem;
+        font-weight: 600;
+        color: var(--text);
+        letter-spacing: -0.01em;
+        transition: color 0.15s;
+      }
+      .r-topics {
+        font-size: 0.88rem;
+        color: var(--muted);
+        font-weight: 400;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 52ch;
+      }
 
-    .r-body { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-    .r-title {
-      font-size: 1.08rem; font-weight: 600;
-      color: var(--text); letter-spacing: -0.01em;
-      transition: color 0.15s;
-    }
-    .r-topics {
-      font-size: 0.88rem; color: var(--muted); font-weight: 400;
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-      max-width: 52ch;
-    }
+      .chips {
+        display: flex;
+        gap: 4px;
+      }
+      .chip {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.64rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 5px 9px;
+        border-radius: 3px;
+        border: 1px solid var(--hair);
+        color: var(--muted);
+        text-decoration: none;
+        background: var(--surface);
+        transition: all 0.15s;
+        white-space: nowrap;
+      }
+      .chip.live {
+        color: var(--blue);
+        border-color: var(--blue-mist);
+        background: var(--blue-mist);
+      }
+      .chip.live:hover {
+        background: var(--blue);
+        color: #fff;
+        border-color: var(--blue);
+        transform: translateY(-1px);
+      }
+      .chip.off {
+        color: var(--faint);
+        border-style: dashed;
+        background: transparent;
+        cursor: not-allowed;
+      }
 
-    .chips { display: flex; gap: 4px; }
-    .chip {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.64rem; letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 5px 9px; border-radius: 3px;
-      border: 1px solid var(--hair);
-      color: var(--muted);
-      text-decoration: none;
-      background: var(--surface);
-      transition: all 0.15s;
-      white-space: nowrap;
-    }
-    .chip.live { color: var(--blue); border-color: var(--blue-mist); background: var(--blue-mist); }
-    .chip.live:hover {
-      background: var(--blue); color: #fff;
-      border-color: var(--blue); transform: translateY(-1px);
-    }
-    .chip.off { color: var(--faint); border-style: dashed; background: transparent; cursor: not-allowed; }
+      .r-status {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.64rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+        padding: 4px 10px;
+        border: 1px dashed var(--faint);
+        background: transparent;
+        border-radius: 3px;
+        white-space: nowrap;
+      }
 
-    .r-status {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.64rem; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--muted);
-      padding: 4px 10px; border: 1px dashed var(--faint);
-      background: transparent;
-      border-radius: 3px;
-      white-space: nowrap;
-    }
+      .stage-head,
+      .ladder {
+        animation: fadeSlide 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      @keyframes fadeSlide {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
-    .stage-head, .ladder {
-      animation: fadeSlide 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    @keyframes fadeSlide {
-      from { opacity: 0; transform: translateY(8px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+      /* ===== SUB-NAV under a phase ===== */
+      .sub-list {
+        list-style: none;
+        margin: 0.3rem 0 0.2rem 2.4rem;
+        padding-left: 0.9rem;
+        border-left: 1px solid var(--hair);
+        display: none;
+      }
+      .phase-item.open + .sub-list {
+        display: block;
+      }
 
-    /* ===== SUB-NAV under a phase ===== */
-    .sub-list {
-      list-style: none;
-      margin: 0.3rem 0 0.2rem 2.4rem;
-      padding-left: 0.9rem;
-      border-left: 1px solid var(--hair);
-      display: none;
-    }
-    .phase-item.open + .sub-list { display: block; }
+      .sub-item {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.55rem 1rem 0.55rem 0.85rem;
+        font-size: 0.95rem;
+        color: var(--text);
+        cursor: pointer;
+        border-radius: 3px;
+        transition: all 0.15s;
+        font-weight: 500;
+      }
+      .sub-item::before {
+        content: "";
+        position: absolute;
+        left: -0.95rem;
+        top: 50%;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--faint);
+        transform: translateY(-50%);
+        transition: background 0.15s;
+      }
+      .sub-item:hover {
+        color: var(--text);
+        background: var(--bg);
+      }
+      .sub-item:hover::before {
+        background: var(--blue);
+      }
+      .sub-item.active {
+        color: var(--blue);
+        font-weight: 600;
+        background: var(--blue-mist);
+      }
+      .sub-item.active::before {
+        background: var(--blue);
+        width: 8px;
+        height: 8px;
+        left: -1.05rem;
+      }
+      .sub-item.muted {
+        color: var(--faint);
+        cursor: default;
+      }
+      .sub-item.muted:hover {
+        background: transparent;
+        color: var(--faint);
+      }
+      .sub-item.muted:hover::before {
+        background: var(--faint);
+      }
+      .sub-item .v-tag {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.68rem;
+        letter-spacing: 0.1em;
+        color: var(--muted);
+        text-transform: uppercase;
+        font-weight: 500;
+      }
 
-    .sub-item {
-      position: relative;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0.55rem 1rem 0.55rem 0.85rem;
-      font-size: 0.95rem;
-      color: var(--text);
-      cursor: pointer;
-      border-radius: 3px;
-      transition: all 0.15s;
-      font-weight: 500;
-    }
-    .sub-item::before {
-      content: ''; position: absolute;
-      left: -0.95rem; top: 50%;
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--faint);
-      transform: translateY(-50%);
-      transition: background 0.15s;
-    }
-    .sub-item:hover { color: var(--text); background: var(--bg); }
-    .sub-item:hover::before { background: var(--blue); }
-    .sub-item.active { color: var(--blue); font-weight: 600; background: var(--blue-mist); }
-    .sub-item.active::before { background: var(--blue); width: 8px; height: 8px; left: -1.05rem; }
-    .sub-item.muted { color: var(--faint); cursor: default; }
-    .sub-item.muted:hover { background: transparent; color: var(--faint); }
-    .sub-item.muted:hover::before { background: var(--faint); }
-    .sub-item .v-tag {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.68rem; letter-spacing: 0.1em;
-      color: var(--muted); text-transform: uppercase;
-      font-weight: 500;
-    }
+      /* ===== BREADCRUMB in stage ===== */
+      .stage-crumb {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.68rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 1.1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+      }
+      .stage-crumb a {
+        color: var(--muted);
+        text-decoration: none;
+        border-bottom: 1px dashed transparent;
+        padding-bottom: 1px;
+        transition: all 0.15s;
+      }
+      .stage-crumb a:hover {
+        color: var(--blue);
+        border-bottom-color: var(--blue-mist);
+      }
+      .stage-crumb .sep {
+        color: var(--faint);
+      }
+      .stage-crumb .here {
+        color: var(--blue-deep);
+        font-weight: 600;
+      }
 
-    /* ===== BREADCRUMB in stage ===== */
-    .stage-crumb {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.68rem; letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 1.1rem;
-      display: flex; align-items: center; gap: 0.55rem;
-    }
-    .stage-crumb a {
-      color: var(--muted); text-decoration: none;
-      border-bottom: 1px dashed transparent;
-      padding-bottom: 1px;
-      transition: all 0.15s;
-    }
-    .stage-crumb a:hover { color: var(--blue); border-bottom-color: var(--blue-mist); }
-    .stage-crumb .sep { color: var(--faint); }
-    .stage-crumb .here { color: var(--blue-deep); font-weight: 600; }
+      /* ===== VERTICAL OVERVIEW CARDS ===== */
+      .v-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1rem;
+        margin-top: 0.6rem;
+      }
+      .v-card {
+        background: var(--surface);
+        border: 1px solid var(--hair);
+        border-left: 3px solid var(--swatch, var(--blue));
+        border-radius: 4px;
+        padding: 1.3rem 1.3rem 1.1rem;
+        cursor: pointer;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.2s;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .v-card:hover {
+        transform: translateY(-2px);
+        border-color: var(--swatch, var(--blue));
+        box-shadow: 0 8px 24px rgba(0, 31, 53, 0.06);
+      }
+      .v-card.muted {
+        opacity: 0.55;
+        cursor: default;
+      }
+      .v-card.muted:hover {
+        transform: none;
+        box-shadow: none;
+        border-color: var(--hair);
+        border-left-color: var(--faint);
+      }
+      .v-card .v-eyebrow {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.62rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--muted);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .v-card .v-count {
+        color: var(--blue-deep);
+        font-weight: 600;
+      }
+      .v-card .v-title {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: var(--blue-deep);
+        letter-spacing: -0.015em;
+      }
+      .v-card .v-topics {
+        font-size: 0.83rem;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+      .v-card .v-cta {
+        margin-top: auto;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.64rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--swatch, var(--blue));
+        padding-top: 0.6rem;
+        border-top: 1px dashed var(--hair);
+      }
+      .v-card.muted .v-cta {
+        color: var(--faint);
+      }
 
-    /* ===== VERTICAL OVERVIEW CARDS ===== */
-    .v-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1rem;
-      margin-top: 0.6rem;
-    }
-    .v-card {
-      background: var(--surface);
-      border: 1px solid var(--hair);
-      border-left: 3px solid var(--swatch, var(--blue));
-      border-radius: 4px;
-      padding: 1.3rem 1.3rem 1.1rem;
-      cursor: pointer;
-      text-decoration: none;
-      color: inherit;
-      transition: all 0.2s;
-      display: flex; flex-direction: column; gap: 0.5rem;
-    }
-    .v-card:hover { transform: translateY(-2px); border-color: var(--swatch, var(--blue)); box-shadow: 0 8px 24px rgba(0,31,53,0.06); }
-    .v-card.muted { opacity: 0.55; cursor: default; }
-    .v-card.muted:hover { transform: none; box-shadow: none; border-color: var(--hair); border-left-color: var(--faint); }
-    .v-card .v-eyebrow {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.62rem; letter-spacing: 0.14em;
-      text-transform: uppercase; color: var(--muted);
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .v-card .v-count { color: var(--blue-deep); font-weight: 600; }
-    .v-card .v-title {
-      font-size: 1.15rem; font-weight: 700;
-      color: var(--blue-deep); letter-spacing: -0.015em;
-    }
-    .v-card .v-topics {
-      font-size: 0.83rem; color: var(--muted); line-height: 1.5;
-    }
-    .v-card .v-cta {
-      margin-top: auto;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.64rem; letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--swatch, var(--blue));
-      padding-top: 0.6rem;
-      border-top: 1px dashed var(--hair);
-    }
-    .v-card.muted .v-cta { color: var(--faint); }
+      @media (max-width: 1000px) {
+        .main {
+          grid-template-columns: 1fr;
+        }
+        .rail {
+          border-right: none;
+          border-bottom: 1px solid var(--hair);
+          padding: 1.5rem;
+        }
+        .phase-list {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 0.5rem;
+        }
+        .phase-list::before {
+          display: none;
+        }
+        .phase-item {
+          padding: 0.8rem;
+          border: 1px solid var(--hair);
+          border-radius: 6px;
+        }
+        .phase-dot {
+          display: none;
+        }
+        .topbar {
+          grid-template-columns: 1fr;
+          padding: 0.9rem 1rem;
+        }
+        .topbar .crumbs {
+          display: none;
+        }
+        .stage {
+          padding: 1.5rem 1.2rem;
+        }
+        .row {
+          grid-template-columns: 44px 1fr;
+          gap: 0.8rem;
+        }
+        .chips {
+          grid-column: 2;
+          justify-self: start;
+        }
+        .r-status {
+          grid-column: 2;
+          justify-self: start;
+        }
+        .r-topics {
+          white-space: normal;
+          max-width: none;
+        }
+      }
 
-    @media (max-width: 1000px) {
-      .main { grid-template-columns: 1fr; }
-      .rail { border-right: none; border-bottom: 1px solid var(--hair); padding: 1.5rem; }
-      .phase-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
-      .phase-list::before { display: none; }
-      .phase-item { padding: 0.8rem; border: 1px solid var(--hair); border-radius: 6px; }
-      .phase-dot { display: none; }
-      .topbar { grid-template-columns: 1fr; padding: 0.9rem 1rem; }
-      .topbar .crumbs { display: none; }
-      .stage { padding: 1.5rem 1.2rem; }
-      .row { grid-template-columns: 44px 1fr; gap: 0.8rem; }
-      .chips { grid-column: 2; justify-self: start; }
-      .r-status { grid-column: 2; justify-self: start; }
-      .r-topics { white-space: normal; max-width: none; }
-    }
+      @media (max-width: 640px) {
+        body {
+          font-size: 15px;
+        }
+        .brand img {
+          height: 32px;
+        }
+        .brand-mark {
+          font-size: 0.9rem;
+        }
+        .topbar {
+          padding: 0.75rem 0.9rem;
+        }
+        .rail {
+          padding: 1.1rem 1rem;
+        }
+        .phase-list {
+          grid-template-columns: 1fr 1fr !important;
+          gap: 0.4rem;
+        }
+        .stage {
+          padding: 1.1rem 0.9rem !important;
+        }
+        .stage h2 {
+          font-size: 1.3rem;
+        }
+        .kpi-val,
+        .kpi-val strong {
+          font-size: 1.6rem !important;
+        }
+        .kpis {
+          grid-template-columns: 1fr 1fr;
+          gap: 0.5rem;
+        }
+        .row {
+          grid-template-columns: 36px 1fr !important;
+          gap: 0.65rem !important;
+          padding: 0.75rem 0.85rem;
+        }
+        .r-num {
+          font-size: 0.9rem;
+        }
+        .r-title {
+          font-size: 0.95rem;
+        }
+        .r-topics,
+        .r-meta {
+          font-size: 0.78rem;
+        }
+        .chips {
+          flex-wrap: wrap;
+        }
+        .v-grid {
+          grid-template-columns: 1fr !important;
+          gap: 0.75rem;
+        }
+        .v-card {
+          padding: 1rem;
+        }
+        table {
+          display: block;
+          overflow-x: auto;
+        }
+        img {
+          max-width: 100%;
+          height: auto;
+        }
+      }
+    </style>
+  </head>
 
-    @media (max-width: 640px) {
-      body { font-size: 15px; }
-      .brand img { height: 32px; }
-      .brand-mark { font-size: 0.9rem; }
-      .topbar { padding: 0.75rem 0.9rem; }
-      .rail { padding: 1.1rem 1rem; }
-      .phase-list { grid-template-columns: 1fr 1fr !important; gap: 0.4rem; }
-      .stage { padding: 1.1rem 0.9rem !important; }
-      .stage h2 { font-size: 1.3rem; }
-      .kpi-val, .kpi-val strong { font-size: 1.6rem !important; }
-      .kpis { grid-template-columns: 1fr 1fr; gap: 0.5rem; }
-      .row { grid-template-columns: 36px 1fr !important; gap: 0.65rem !important; padding: 0.75rem 0.85rem; }
-      .r-num { font-size: 0.9rem; }
-      .r-title { font-size: 0.95rem; }
-      .r-topics, .r-meta { font-size: 0.78rem; }
-      .chips { flex-wrap: wrap; }
-      .v-grid { grid-template-columns: 1fr !important; gap: 0.75rem; }
-      .v-card { padding: 1rem; }
-      table { display: block; overflow-x: auto; }
-      img { max-width: 100%; height: auto; }
-    }
-  </style>
-</head>
-
-<body>
-  <div class="shell">
-
-    <header class="topbar">
-      <div class="brand">
-        <img src="assets/SELISE_Logo_Primary.png" alt="SELISE">
-        <div class="brand-divider"></div>
-        <div class="brand-mark">Pelsung Curriculum</div>
-      </div>
-      <div class="crumbs">
-        <span>curriculum</span>
-        <span class="sep">/</span>
-        <span class="here">atlas</span>
-      </div>
-    </header>
-
-    <div class="main">
-
-      <nav class="rail" aria-label="Phases">
-        <div class="rail-title">
-          <span>Curriculum</span>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <div class="brand">
+          <img src="assets/SELISE_Logo_Primary.png" alt="SELISE" />
+          <div class="brand-divider"></div>
+          <div class="brand-mark">Pelsung Curriculum</div>
         </div>
-        <ul class="phase-list" id="phase-list"></ul>
+        <div class="crumbs">
+          <span>curriculum</span>
+          <span class="sep">/</span>
+          <span class="here">atlas</span>
+        </div>
+      </header>
 
-      </nav>
+      <div class="main">
+        <nav class="rail" aria-label="Phases">
+          <div class="rail-title">
+            <span>Curriculum</span>
+          </div>
+          <ul class="phase-list" id="phase-list"></ul>
+        </nav>
 
-      <section class="stage" id="stage"></section>
+        <section class="stage" id="stage"></section>
+      </div>
     </div>
 
-  </div>
-
-  <script>
-    /* =============================================================
+    <script>
+      /* =============================================================
        CURRICULUM DATA — single source of truth.
        Add a class = add an object. Phases 2 & 3 show vertical buckets
        until class-level materials are built.
        ============================================================= */
-    const PHASES = [
-      { id: 1, num: '01', name: 'Foundation',
-        tag: '11 classes · All trainees together',
-        sub: 'Shared knowledge base before verticals split — professional skills, AI literacy, web basics, tools, product thinking.',
-        kind: 'classes' },
-      { id: 2, num: '02', name: 'Core Specialization',
-        tag: '~60 classes across verticals',
-        sub: 'Trainees split by aptitude and preference. Each vertical trains independently for ~6 weeks. Design is planned for future cohorts.',
-        kind: 'verticals' },
-      { id: 3, num: '03', name: 'Capstone',
-        tag: '10 classes · Cross-vertical teams',
-        sub: 'Mixed teams of Dev, Design, Testing and BA build a real GMC-relevant product, ending in an exhibition.',
-        kind: 'capstone' },
-      { id: 4, num: '04', name: 'Extra',
-        tag: 'Supplementary · self-paced',
-        sub: 'Optional deep-dives that every role benefits from but don\'t fit neatly into foundation or vertical tracks. Read at your own pace.',
-        kind: 'classes' },
-    ];
-
-    const CLASSES = [
-      // PHASE 1
-      { phase: 1, num: '01', title: 'Welcome & Orientation',
-        topics: 'SELISE culture · program overview · expectations',
-        status: 'done', files: {} },
-      { phase: 1, num: '02', title: 'Professional Skills',
-        topics: 'Communication · email etiquette · time management',
-        status: 'done',
-        files: { slides: 'foundation/02-professional-skills-slides.html',
-                 notes:  'foundation/02-professional-skills-notes.html' } },
-      { phase: 1, num: '03', title: 'AI Basics & Prompting',
-        topics: 'Using AI chatbots · ChatGPT / Claude · prompt patterns',
-        status: 'done',
-        files: { slides: 'foundation/03-ai-basics-prompting-slides.html',
-                 notes:  'foundation/03-ai-basics-prompting-notes.html' } },
-      { phase: 1, num: '04', title: 'How the Internet Works',
-        topics: 'DNS · HTTP/HTTPS · browsers · client–server',
-        status: 'done',
-        files: { slides: 'foundation/04-how-internet-works-slides.html',
-                 notes:  'foundation/04-how-internet-works-notes.html' } },
-      { phase: 1, num: '05', title: 'APIs, Data & Databases',
-        topics: 'What is an API · JSON · how data are stored',
-        status: 'done',
-        files: { slides: 'foundation/05-apis-data-databases-slides.html',
-                 notes:  'foundation/05-apis-data-databases-notes.html' } },
-      { phase: 1, num: '06a', title: 'Dev Tools & Version Control',
-        topics: 'VS Code · terminal · Git & GitHub · Claude Code',
-        status: 'done',
-        files: { slides: 'foundation/06a-dev-tools-version-control-slides.html',
-                 notes:  'foundation/06a-dev-tools-version-control-notes.html' } },
-      { phase: 1, num: '06b', title: 'HTML & CSS Basics',
-        topics: 'Markup · selectors · the box model · layout',
-        status: 'done',
-        files: { slides: 'foundation/06b-html-css-basics-slides.html',
-                 notes:  'foundation/06b-html-css-basics-notes.html' } },
-      { phase: 1, num: '07', title: 'SDLC, Agile & the AI Era',
-        topics: 'SDLC stages · Agile & Scrum · the hourglass model',
-        status: 'done',
-        files: { slides: 'foundation/07-sdlc-agile-ai-era-slides.html',
-                 notes:  'foundation/07-sdlc-agile-ai-era-notes.html' } },
-      { phase: 1, num: '08', title: 'Teams: Traditional vs AI-Era',
-        topics: 'PM · Design · Dev · QA · BA · handoffs · RACI vs RCI',
-        status: 'done',
-        files: { slides: 'foundation/08-teams-traditional-vs-ai-era-slides.html',
-                 notes:  'foundation/08-teams-traditional-vs-ai-era-notes.html' } },
-      { phase: 1, num: '09', title: 'Spec-Driven Product Thinking',
-        topics: 'Writing clear specs · user stories as AI prompts',
-        status: 'upcoming',
-        files: { slides: 'foundation/09-spec-driven-product-thinking-slides.html',
-                 notes:  'foundation/09-spec-driven-product-thinking-notes.html' } },
-      { phase: 1, num: '10', title: 'Build Personal Site & Present',
-        topics: 'Personal site with AI · 4-min presentation · aptitude signal',
-        status: 'upcoming', files: {} },
-      { phase: 1, num: '11', title: 'Vertical Assignment',
-        topics: 'Results & feedback · preferences · placement',
-        status: 'upcoming', files: {} },
-
-      // PHASE 3
-      { phase: 3, num: '—', title: 'Capstone · Cross-Vertical Build',
-        topics: 'Mixed teams build a real GMC-relevant product over ~10 classes',
-        status: 'upcoming', files: {} },
-      { phase: 3, num: '—', title: 'Exhibition / Demo Day',
-        topics: 'Public showcase · may coincide with Pelsung graduation',
-        status: 'upcoming', files: {} },
-
-      // PHASE 4 — EXTRA / SUPPLEMENTARY
-      { phase: 4, num: 'E1', title: 'UX & HCI Basics',
-        topics: 'Heuristics · Fitts & Hick · mobile thumb zones · accessibility · mBoB teardown',
-        status: 'done',
-        files: { slides: 'extra/e1-ux-hci-basics-slides.html',
-                 notes:  'extra/e1-ux-hci-basics-notes.html' } },
-      { phase: 4, num: 'E2', title: 'Markdown',
-        topics: 'Syntax · GFM · READMEs · bug reports · specs · AI prompts · live playground',
-        status: 'done',
-        files: { slides: 'extra/e2-markdown-slides.html',
-                 notes:  'extra/e2-markdown-notes.html' } },
-      { phase: 4, num: 'E3', title: 'React Practice Day — 2 Apps',
-        topics: 'Self-paced · master/detail pattern · JSONPlaceholder · PokéAPI · chained fetching',
-        status: 'upcoming',
-        files: { slides: 'extra/e3-react-practice-day-slides.html' } },
-      { phase: 4, num: 'E4', title: 'Sign In with Google — Supabase + React TS',
-        topics: 'Reference · Supabase setup · Google Cloud OAuth · supabase-js · auth state · protected routes',
-        status: 'done',
-        files: { slides: 'extra/e4-supabase-google-auth-slides.html' } },
-    ];
-
-    /* Verticals — Core Specialization (Phase 2). Design is planned for future cohorts. */
-    const VERTICALS = [
-      {
-        id: 'dev', name: 'Software Development', short: 'Dev',
-        tag: '21 classes', active: true,
-        sub: 'Frontend-focused track. Trainees build real web products using HTML/CSS/JS, React, and AI-assisted workflows anchored on Claude Code.',
-        topics: 'FE-focused · HTML/CSS/JS · React · working with AI codegen',
-        classes: [
-          { num:'01', title:'Dev Environment Deep Dive', topics:'Node.js · npm · VS Code extensions · terminal fluency',
-            status: 'done', files: { slides: 'dev/01-dev-environment-deep-dive-slides.html', notes: 'dev/01-dev-environment-deep-dive-notes.html' } },
-          { num:'02', title:'JavaScript Fundamentals I', topics:'Values · variables · functions · control flow',
-            status: 'done', files: { slides: 'dev/02-javascript-fundamentals-slides.html', notes: 'dev/02-javascript-fundamentals-notes.html' } },
-          { num:'03', title:'JavaScript Fundamentals II', topics:'Arrays · objects · iteration · destructuring',
-            status: 'done', files: { slides: 'dev/03-javascript-fundamentals-ii-slides.html', notes: 'dev/03-javascript-fundamentals-ii-notes.html' } },
-          { num:'03b', title:'JavaScript Practice Day', topics:'29 coding problems · reinforce JS I + II · VS Code + Node',
-            status: 'done', files: { slides: 'dev/03b-javascript-practice-slides.html', notes: 'dev/03b-javascript-practice-notes.html' } },
-          { num:'04', title:'DOM, Browser APIs & Async', topics:'Selecting · events · localStorage · promises · fetch',
-            status: 'done', files: { slides: 'dev/04-dom-browser-apis-async-slides.html', notes: 'dev/04-dom-browser-apis-async-notes.html' } },
-          { num:'05', title:'TypeScript Foundations', topics:'Types · interfaces · unions · generics · utility types',
-            status: 'done', files: { slides: 'dev/05-typescript-foundations-slides.html', notes: 'dev/05-typescript-foundations-notes.html' } },
-          { num:'06', title:'Intro to React', topics:'Components · JSX · props · state',
-            status: 'done', files: { slides: 'dev/06-intro-to-react-slides.html', notes: 'dev/06-intro-to-react-notes.html' } },
-          { num:'07', title:'React Hooks', topics:'useState · useEffect · custom hooks',
-            status: 'upcoming', files: { slides: 'dev/07-react-hooks-slides.html', notes: 'dev/07-react-hooks-notes.html' } },
-          { num:'08', title:'React Patterns', topics:'Composition · lifting state · context',
-            status: 'upcoming', files: { slides: 'dev/08-react-patterns-slides.html', notes: 'dev/08-react-patterns-notes.html' } },
-          { num:'09', title:'Routing & Navigation', topics:'React Router · layouts · guards · part of the 09+10+11 combined tour',
-            status: 'today', files: { slides: 'dev/09-routing-apis-forms-tour-slides.html', notes: 'dev/09-routing-apis-forms-tour-notes.html' } },
-          { num:'10', title:'Working with APIs', topics:'REST · auth · error handling · loading states · part of the 09+10+11 combined tour',
-            status: 'today', files: { slides: 'dev/09-routing-apis-forms-tour-slides.html', notes: 'dev/09-routing-apis-forms-tour-notes.html' } },
-          { num:'11', title:'Forms & Validation', topics:'Controlled inputs · react-hook-form · zod · part of the 09+10+11 combined tour',
-            status: 'today', files: { slides: 'dev/09-routing-apis-forms-tour-slides.html', notes: 'dev/09-routing-apis-forms-tour-notes.html' } },
-          { num:'12', title:'State Management', topics:'Context vs libraries · when to reach for Redux/Zustand' },
-          { num:'13', title:'Styling in React', topics:'CSS Modules · Tailwind · component libraries' },
-          { num:'14', title:'Testing Frontend Code', topics:'Vitest · React Testing Library · integration tests' },
-          { num:'15', title:'Build & Deployment', topics:'Vite · env vars · static hosting · CI basics' },
-          { num:'16', title:'Performance', topics:'Core Web Vitals · code splitting · memoization' },
-          { num:'17', title:'AI-Assisted Development', topics:'Claude Code workflows · specs as prompts · review discipline' },
-          { num:'18', title:'Working with a Backend', topics:'API contracts · auth flows · file uploads' },
-          { num:'19', title:'Mini Project Week', topics:'Build a small app end-to-end with AI pair-programming' },
-          { num:'20', title:'Code Review & Shipping', topics:'Pull requests · feedback culture · production readiness' },
-        ]
-      },
-      {
-        id: 'testing', name: 'Quality Assurance', short: 'QA',
-        tag: '8 classes', active: true,
-        sub: 'Manual QA fundamentals for non-technical trainees. Theory of testing first, then hands-on test plans, test cases, design techniques, exploratory and manual web testing, plus AI-assisted test generation.',
-        topics: 'Theory · test plans · test cases · test design · exploratory · manual',
-        classes: [
-          { num:'01', title:'Testing Theory I — Test Types', topics:'Smoke · sanity · regression · retest · exploratory · ad-hoc · alpha/beta · A/B · UAT — plain English with everyday examples',
-            status: 'upcoming', files: { slides: 'testing/01-testing-theory-test-types-slides.html' } },
-          { num:'02', title:'Testing Theory II — Test Levels & Lifecycle', topics:'Unit/integration/system/UAT · V-model · shift-left · agile testing · ISTQB 7 principles · QA vocabulary',
-            status: 'upcoming', files: { slides: 'testing/02-testing-theory-levels-and-lifecycle-slides.html' } },
-          { num:'03', title:'The Test Plan Document', topics:'IEEE 829 · 21 sections · entry/exit criteria · RCI · defect SLA',
-            status: 'upcoming', files: { slides: 'testing/03-test-plan-document-slides.html', notes: 'testing/03-test-plan-document-notes.html' } },
-          { num:'04', title:'Writing Test Cases', topics:'Structure · preconditions · steps · expected results',
-            status: 'upcoming', files: { slides: 'testing/04-writing-test-cases-slides.html' } },
-          { num:'05', title:'Test Design Techniques', topics:'Equivalence partitioning · boundary values · decision tables — taught with everyday examples',
-            status: 'upcoming', files: { slides: 'testing/05-test-design-techniques-slides.html' } },
-          { num:'06', title:'Exploratory Testing', topics:'Charters · session notes · heuristics',
-            status: 'upcoming', files: { slides: 'testing/06-exploratory-testing-slides.html' } },
-          { num:'07', title:'Manual Web App Testing', topics:'Cross-browser · responsive · click-through smoke testing · common UI bugs',
-            status: 'upcoming', files: { slides: 'testing/07-manual-web-app-testing-slides.html' } },
-          { num:'08', title:'AI-Assisted Testing + Capstone Prep', topics:'Generating test cases with Claude · reviewing AI output · capstone test strategy',
-            status: 'upcoming', files: { slides: 'testing/08-ai-assisted-testing-and-capstone-prep-slides.html' } },
-        ]
-      },
-      {
-        id: 'ba-qa-combined', name: 'BA + QA · Foundations', short: 'BA+QA',
-        tag: '5 classes', active: true,
-        sub: 'Common ground both BA and QA need: role reality, spec-reading, functional vs non-functional requirements, acceptance criteria, and estimation.',
-        topics: 'Role clarity · spec reading · FR vs NFR · acceptance criteria',
-        classes: [
-          { num:'01', title:'Role Deep-Dive · BA and QA in Software', topics:'What each role does · artifacts · misconceptions · handoffs · AI shift',
-            status: 'done', files: { slides: 'ba-qa-combined/01-role-deep-dive-slides.html', notes: 'ba-qa-combined/01-role-deep-dive-notes.html' } },
-          { num:'02', title:'Reading Requirements Critically', topics:'The 7 sins · ambiguity · assumptions · testability · leave-request exercise',
-            status: 'done', files: { slides: 'ba-qa-combined/02-reading-requirements-critically-slides.html', notes: 'ba-qa-combined/02-reading-requirements-critically-notes.html' } },
-          { num:'03', title:'Functional vs Non-Functional Requirements', topics:'FR vs NFR · 6 NFR categories · FURPS+ · writing testable NFRs',
-            status: 'done', files: { slides: 'ba-qa-combined/03-functional-vs-non-functional-slides.html', notes: 'ba-qa-combined/03-functional-vs-non-functional-notes.html' } },
-          { num:'04', title:'Acceptance Criteria · The Shared Artifact', topics:'Given/When/Then · SCARCE · BA → QA handoff · password-reset exercise',
-            status: 'done', files: { slides: 'ba-qa-combined/04-acceptance-criteria-slides.html', notes: 'ba-qa-combined/04-acceptance-criteria-notes.html' } },
-          { num:'05', title:'Estimation & Prioritization Basics', topics:'MoSCoW · RICE · relative sizing · MVP thinking · scope conversations',
-            status: 'done', files: { slides: 'ba-qa-combined/05-estimation-and-prioritization-slides.html', notes: 'ba-qa-combined/05-estimation-and-prioritization-notes.html' } },
-        ]
-      },
-      {
-        id: 'ba-qa-specs', name: 'BA + QA · Spec Stack', short: 'BA+QA',
-        tag: '6 classes', active: true,
-        sub: 'The artifact stack both BAs and QAs work with daily. Every spec document type, in the order they sit in the spec lifecycle.',
-        topics: 'Anatomy · BRD · SRS · HLD/LLD · writing mechanics · teardown',
-        classes: [
-          { num:'01', title:'Anatomy of a Dev-Ready Spec', topics:'12 sections · IEEE/PRD/Feature-spec traditions · lifecycle · 20-min rule · template kit',
-            status: 'done', files: { slides: 'ba-qa-specs/01-anatomy-of-a-dev-ready-spec-slides.html', notes: 'ba-qa-specs/01-anatomy-of-a-dev-ready-spec-notes.html' } },
-          { num:'02', title:'The BRD Document', topics:'Pre-solution · business language · as-is/to-be · cost-benefit · stakeholder approvals',
-            status: 'today', files: { slides: 'ba-qa-specs/02-brd-business-requirements-slides.html', notes: 'ba-qa-specs/02-brd-business-requirements-notes.html' } },
-          { num:'03', title:'The SRS Document', topics:'IEEE 29148 · when to use · verification matrix · traceability · worked example',
-            status: 'upcoming', files: { slides: 'ba-qa-specs/03-srs-document-slides.html', notes: 'ba-qa-specs/03-srs-document-notes.html' } },
-          { num:'04', title:'HLD & LLD Workshop', topics:'C4 model · architectural style · quality attributes · error taxonomy · concurrency · BA & QA review lens',
-            status: 'upcoming', files: { slides: 'ba-qa-specs/04-hld-lld-workshop-slides.html', notes: 'ba-qa-specs/04-hld-lld-workshop-notes.html' } },
-          { num:'05', title:'Writing Mechanics for Specs', topics:'Active voice · precise verbs · consistent terminology · lists over prose · diagrams that carry weight' },
-          { num:'06', title:'Spec Teardown Workshop', topics:'Read · annotate · rewrite · sin-by-sin with real specs' },
-        ]
-      },
-      {
-        id: 'ba-qa-diagrams', name: 'Diagrams', short: 'Diagrams',
-        tag: '7 classes · cross-vertical', active: true,
-        sub: 'The seven diagrams every software professional should read fluently — useful across BA, QA, Dev, and Design. BAs draw them, QAs derive tests from them, devs implement what they describe, designers reference them in handoffs. One session per diagram type.',
-        topics: 'Use case · BPMN · flowchart · swimlane · activity · DFD · sequence',
-        classes: [
-          { num:'01', title:'Use Case Diagrams & Scenarios', topics:'UML use case diagram · actors · system boundary · include/extend · main & alt flows',
-            status: 'upcoming', files: { slides: 'ba-qa-diagrams/01-use-case-diagrams-slides.html', notes: 'ba-qa-diagrams/01-use-case-diagrams-notes.html' } },
-          { num:'02', title:'BPMN', topics:'OMG BPMN 2.0 · pools · lanes · events · activities · gateways · flows',
-            status: 'upcoming', files: { slides: 'ba-qa-diagrams/02-bpmn-slides.html', notes: 'ba-qa-diagrams/02-bpmn-notes.html' } },
-          { num:'03', title:'Flowcharts', topics:'Start / process / decision / I-O · algorithmic thinking · eligibility rules',
-            status: 'upcoming', files: { slides: 'ba-qa-diagrams/03-flowcharts-slides.html', notes: 'ba-qa-diagrams/03-flowcharts-notes.html' } },
-          { num:'04', title:'Swimlane Diagrams', topics:'Actors in lanes · handoffs · bottleneck finding · Rummler-Brache',
-            status: 'upcoming', files: { slides: 'ba-qa-diagrams/04-swimlane-slides.html', notes: 'ba-qa-diagrams/04-swimlane-notes.html' } },
-          { num:'05', title:'UML Activity Diagrams', topics:'Fork/join · parallel flow · partitions · choice vs parallel · object flow',
-            status: 'upcoming', files: { slides: 'ba-qa-diagrams/05-activity-diagrams-slides.html', notes: 'ba-qa-diagrams/05-activity-diagrams-notes.html' } },
-          { num:'06', title:'Data Flow Diagrams (DFD)', topics:'External entity · process · data store · data flow · levels · balancing rule',
-            status: 'upcoming', files: { slides: 'ba-qa-diagrams/06-data-flow-diagrams-slides.html', notes: 'ba-qa-diagrams/06-data-flow-diagrams-notes.html' } },
-          { num:'07', title:'UML Sequence Diagrams', topics:'Lifelines · activation bars · sync/async messages · alt/opt/loop · API contracts',
-            status: 'upcoming', files: { slides: 'ba-qa-diagrams/07-sequence-diagrams-slides.html', notes: 'ba-qa-diagrams/07-sequence-diagrams-notes.html' } },
-        ]
-      },
-      {
-        id: 'ba-qa-quality', name: 'Quality & Compliance', short: 'Quality',
-        tag: '5 classes · cross-vertical', active: true,
-        sub: 'Cross-cutting fundamentals every software professional needs — testing basics, bug reporting, risk thinking, data protection law, and post-launch instrumentation. ISO 25010 quality attributes and WCAG accessibility are folded across the block.',
-        topics: 'Testing · bugs · risk · compliance · security · observability · telemetry',
-        classes: [
-          { num:'01', title:'Software Testing Fundamentals', topics:'Verification vs validation · test pyramid · levels · functional vs non-functional · ISO 25010 · WCAG basics',
-            status: 'today', files: { slides: 'ba-qa-quality/01-testing-fundamentals-slides.html', notes: 'ba-qa-quality/01-testing-fundamentals-notes.html' } },
-          { num:'02', title:'Bug Reporting & Defect Lifecycle', topics:'Bug anatomy · severity vs priority · lifecycle state machine · triage · accessibility bugs',
-            status: 'upcoming', files: { slides: 'ba-qa-quality/02-bug-reporting-slides.html', notes: 'ba-qa-quality/02-bug-reporting-notes.html' } },
-          { num:'03', title:'Risk Management & Risk-Based Thinking', topics:'Likelihood × impact · risk register · 4 responses · 6 categories · risk-based testing',
-            status: 'upcoming', files: { slides: 'ba-qa-quality/03-risk-management-slides.html', notes: 'ba-qa-quality/03-risk-management-notes.html' } },
-          { num:'04', title:'Data Protection & Compliance', topics:'Bhutan DPPA · GDPR · PCI-DSS · 7 principles · valid consent · 72-hour breach · WCAG/EAA',
-            status: 'upcoming', files: { slides: 'ba-qa-quality/04-data-protection-compliance-slides.html', notes: 'ba-qa-quality/04-data-protection-compliance-notes.html' } },
-          { num:'05', title:'Security, Observability & Telemetry', topics:'OWASP Top 10 · logs/metrics/traces · SLI/SLO · funnels · KPIs',
-            status: 'upcoming', files: { slides: 'ba-qa-quality/05-security-observability-telemetry-slides.html', notes: 'ba-qa-quality/05-security-observability-telemetry-notes.html' } },
-        ]
-      },
-      {
-        id: 'ba', name: 'Business Analysis', short: 'BA',
-        tag: '14 classes', active: true,
-        sub: 'BA-specific craft for non-technical trainees — stakeholders, elicitation, customer interviews, personas, user stories, wireframes, project planning, backlog grooming, validation, documentation, presentations, change management.',
-        topics: 'Elicitation · interviews · personas · user stories · planning · UAT · presentations',
-        classes: [
-          { num:'01', title:'Stakeholder Mapping', topics:'Identifying stakeholders · power/interest grid · RACI vs RCI',
-            status: 'upcoming', files: { slides: 'ba/01-stakeholder-mapping-slides.html' } },
-          { num:'02', title:'Requirements Elicitation', topics:'Interviews · workshops · observation · surveys',
-            status: 'upcoming', files: { slides: 'ba/02-requirements-elicitation-slides.html' } },
-          { num:'03', title:'Customer Interview Practice', topics:'Live role-play · listening for pain points · open-ended questions · note-taking',
-            status: 'upcoming', files: { slides: 'ba/03-customer-interview-practice-slides.html' } },
-          { num:'04', title:'User Personas & Journey Maps', topics:'Empathy artifacts · persona templates · journey mapping workshop',
-            status: 'upcoming', files: { slides: 'ba/04-personas-and-journey-maps-slides.html' } },
-          { num:'05', title:'Writing Clear User Stories', topics:'Story format · INVEST · acceptance criteria',
-            status: 'upcoming', files: { slides: 'ba/05-writing-user-stories-slides.html' } },
-          { num:'06', title:'Wireframing for Communication', topics:'Low-fi sketches · Figma basics · clickthroughs',
-            status: 'upcoming', files: { slides: 'ba/06-wireframing-for-communication-slides.html' } },
-          { num:'07', title:'Project Planning & Estimation', topics:'Scope · breakdown · estimation techniques · timelines · MoSCoW prioritization',
-            status: 'upcoming', files: { slides: 'ba/07-project-planning-and-estimation-slides.html' } },
-          { num:'08', title:'Backlog Grooming Workshop', topics:'Hands-on grooming · refinement · prioritization · DOR',
-            status: 'upcoming', files: { slides: 'ba/08-backlog-grooming-workshop-slides.html' } },
-          { num:'09', title:'Working with Design', topics:'Handoffs · reviewing wireframes · usability heuristics',
-            status: 'upcoming', files: { slides: 'ba/09-working-with-design-slides.html' } },
-          { num:'10', title:'Working with Dev & QA', topics:'Clarifying questions · acceptance testing · triage',
-            status: 'upcoming', files: { slides: 'ba/10-working-with-dev-and-qa-slides.html' } },
-          { num:'11', title:'Validation & UAT', topics:'Test scripts for business users · sign-off flows',
-            status: 'upcoming', files: { slides: 'ba/11-validation-and-uat-slides.html' } },
-          { num:'12', title:'Documentation Discipline', topics:'What to write down vs link · keeping docs alive · agent-os style spec formatting',
-            status: 'upcoming', files: { slides: 'ba/12-documentation-discipline-slides.html' } },
-          { num:'13', title:'Storytelling & Presentations for BAs', topics:'Selling a recommendation to leadership · narrative structure · slide hygiene',
-            status: 'upcoming', files: { slides: 'ba/13-storytelling-and-presentations-slides.html' } },
-          { num:'14', title:'Change Management', topics:'Rollout plans · training users · managing resistance',
-            status: 'upcoming', files: { slides: 'ba/14-change-management-slides.html' } },
-        ]
-      },
-      {
-        id: 'design', name: 'Software Design', short: 'UX/UI',
-        tag: 'future cohort', active: false,
-        sub: 'UX research, wireframing, visual design, and design-to-dev handoff. Planned for a future cohort.',
-        topics: 'Research · wireframes · Figma · handoff to Dev',
-        classes: []
-      },
-    ];
-
-    const CHIP_LABELS = { slides: 'slides', notes: 'notes' };
-
-    /* ========== DOM helpers (safe — no innerHTML with interpolated strings) ========== */
-    function el(tag, attrs, children) {
-      const n = document.createElement(tag);
-      if (attrs) for (const k in attrs) {
-        if (k === 'class') n.className = attrs[k];
-        else if (k === 'style') n.setAttribute('style', attrs[k]);
-        else if (k.startsWith('data-')) n.setAttribute(k, attrs[k]);
-        else if (k in n) n[k] = attrs[k];
-        else n.setAttribute(k, attrs[k]);
-      }
-      if (children != null) {
-        const arr = Array.isArray(children) ? children : [children];
-        for (const c of arr) {
-          if (c == null || c === false) continue;
-          n.appendChild(typeof c === 'string' ? document.createTextNode(c) : c);
-        }
-      }
-      return n;
-    }
-    function clear(node) { while (node.firstChild) node.removeChild(node.firstChild); }
-
-    /* ========== state ========== */
-    const state = { phase: 1, vertical: null };
-
-    /* ========== counts ========== */
-    function countPhase(id) {
-      if (id === 2) {
-        const total = VERTICALS.filter(v => v.active).reduce((n, v) => n + v.classes.length, 0);
-        return { total, built: 0 };
-      }
-      const rows = CLASSES.filter(c => c.phase === id);
-      const built = rows.filter(c => c.status === 'done').length;
-      return { total: rows.length, built };
-    }
-
-    /* ========== RAIL ========== */
-    function renderRail() {
-      const list = document.getElementById('phase-list');
-      clear(list);
-
-      for (const p of PHASES) {
-        const c = countPhase(p.id);
-        const pct = typeof c.total === 'number' && c.total > 0
-          ? Math.round((c.built / c.total) * 100) : 0;
-
-        const item = el('li', { class: 'phase-item', 'data-phase': String(p.id), tabindex: '0' }, [
-          el('span', { class: 'phase-dot' }),
-          el('div',  { class: 'phase-num' }, p.num),
-          el('div',  { class: 'phase-name' }, p.name),
-          el('div',  { class: 'phase-meta' }, p.tag),
-        ]);
-
-        item.addEventListener('click', () => selectPhase(p.id));
-        item.addEventListener('keydown', (e) => { if (e.key === 'Enter') selectPhase(p.id); });
-        list.appendChild(item);
-
-        // sub-nav for Specialization
-        if (p.kind === 'verticals') {
-          const sub = el('ul', { class: 'sub-list', 'data-sub-for': String(p.id) });
-          for (const v of VERTICALS) {
-            const li = el('li',
-              { class: 'sub-item' + (v.active ? '' : ' muted'), 'data-vertical': v.id },
-              [
-                el('span', {}, v.name),
-                el('span', { class: 'v-tag' }, v.tag)
-              ]);
-            if (v.active) {
-              li.addEventListener('click', (e) => { e.stopPropagation(); selectVertical(v.id); });
-            }
-            sub.appendChild(li);
-          }
-          list.appendChild(sub);
-        }
-      }
-    }
-
-    /* ========== chip ========== */
-    function chipEl(kind, href) {
-      if (!href) {
-        return el('span', { class: 'chip off', title: CHIP_LABELS[kind] + ' not yet built' }, CHIP_LABELS[kind]);
-      }
-      return el('a', { class: 'chip live', href: href, target: '_blank', rel: 'noopener' }, CHIP_LABELS[kind]);
-    }
-
-    /* ========== class row (phase 1 / 3) ========== */
-    function classRow(r) {
-      return el('div', { class: 'row ' + (r.status || '') }, [
-        el('div', { class: 'r-num mono' }, r.num),
-        el('div', { class: 'r-body' }, [
-          el('div', { class: 'r-title' }, r.title),
-          el('div', { class: 'r-topics' }, r.topics)
-        ]),
-        el('div', { class: 'chips' }, [
-          chipEl('slides', r.files && r.files.slides),
-          chipEl('notes',  r.files && r.files.notes),
-        ])
-      ]);
-    }
-
-    /* ========== vertical overview card ========== */
-    function verticalCard(v) {
-      const card = el('a',
+      const PHASES = [
         {
-          class: 'v-card' + (v.active ? '' : ' muted'),
-          style: '--swatch: var(--' + v.id + ');',
-          href: v.active ? '#' : null
+          id: 1,
+          num: "01",
+          name: "Foundation",
+          tag: "11 classes · All trainees together",
+          sub: "Shared knowledge base before verticals split — professional skills, AI literacy, web basics, tools, product thinking.",
+          kind: "classes",
         },
-        [
-          el('div', { class: 'v-eyebrow' }, [
-            el('span', {}, v.short),
-            el('span', { class: 'v-count' }, v.tag)
+        {
+          id: 2,
+          num: "02",
+          name: "Core Specialization",
+          tag: "~60 classes across verticals",
+          sub: "Trainees split by aptitude and preference. Each vertical trains independently for ~6 weeks. Design is planned for future cohorts.",
+          kind: "verticals",
+        },
+        {
+          id: 3,
+          num: "03",
+          name: "Capstone",
+          tag: "10 classes · Cross-vertical teams",
+          sub: "Mixed teams of Dev, Design, Testing and BA build a real GMC-relevant product, ending in an exhibition.",
+          kind: "capstone",
+        },
+        {
+          id: 4,
+          num: "04",
+          name: "Extra",
+          tag: "Supplementary · self-paced",
+          sub: "Optional deep-dives that every role benefits from but don't fit neatly into foundation or vertical tracks. Read at your own pace.",
+          kind: "classes",
+        },
+      ];
+
+      const CLASSES = [
+        // PHASE 1
+        {
+          phase: 1,
+          num: "01",
+          title: "Welcome & Orientation",
+          topics: "SELISE culture · program overview · expectations",
+          status: "done",
+          files: {},
+        },
+        {
+          phase: 1,
+          num: "02",
+          title: "Professional Skills",
+          topics: "Communication · email etiquette · time management",
+          status: "done",
+          files: {
+            slides: "foundation/02-professional-skills-slides.html",
+            notes: "foundation/02-professional-skills-notes.html",
+          },
+        },
+        {
+          phase: 1,
+          num: "03",
+          title: "AI Basics & Prompting",
+          topics: "Using AI chatbots · ChatGPT / Claude · prompt patterns",
+          status: "done",
+          files: {
+            slides: "foundation/03-ai-basics-prompting-slides.html",
+            notes: "foundation/03-ai-basics-prompting-notes.html",
+          },
+        },
+        {
+          phase: 1,
+          num: "04",
+          title: "How the Internet Works",
+          topics: "DNS · HTTP/HTTPS · browsers · client–server",
+          status: "done",
+          files: {
+            slides: "foundation/04-how-internet-works-slides.html",
+            notes: "foundation/04-how-internet-works-notes.html",
+          },
+        },
+        {
+          phase: 1,
+          num: "05",
+          title: "APIs, Data & Databases",
+          topics: "What is an API · JSON · how data are stored",
+          status: "done",
+          files: {
+            slides: "foundation/05-apis-data-databases-slides.html",
+            notes: "foundation/05-apis-data-databases-notes.html",
+          },
+        },
+        {
+          phase: 1,
+          num: "06a",
+          title: "Dev Tools & Version Control",
+          topics: "VS Code · terminal · Git & GitHub · Claude Code",
+          status: "done",
+          files: {
+            slides: "foundation/06a-dev-tools-version-control-slides.html",
+            notes: "foundation/06a-dev-tools-version-control-notes.html",
+          },
+        },
+        {
+          phase: 1,
+          num: "06b",
+          title: "HTML & CSS Basics",
+          topics: "Markup · selectors · the box model · layout",
+          status: "done",
+          files: {
+            slides: "foundation/06b-html-css-basics-slides.html",
+            notes: "foundation/06b-html-css-basics-notes.html",
+          },
+        },
+        {
+          phase: 1,
+          num: "07",
+          title: "SDLC, Agile & the AI Era",
+          topics: "SDLC stages · Agile & Scrum · the hourglass model",
+          status: "done",
+          files: {
+            slides: "foundation/07-sdlc-agile-ai-era-slides.html",
+            notes: "foundation/07-sdlc-agile-ai-era-notes.html",
+          },
+        },
+        {
+          phase: 1,
+          num: "08",
+          title: "Teams: Traditional vs AI-Era",
+          topics: "PM · Design · Dev · QA · BA · handoffs · RACI vs RCI",
+          status: "done",
+          files: {
+            slides: "foundation/08-teams-traditional-vs-ai-era-slides.html",
+            notes: "foundation/08-teams-traditional-vs-ai-era-notes.html",
+          },
+        },
+        {
+          phase: 1,
+          num: "09",
+          title: "Spec-Driven Product Thinking",
+          topics: "Writing clear specs · user stories as AI prompts",
+          status: "done",
+          files: {
+            slides: "foundation/09-spec-driven-product-thinking-slides.html",
+            notes: "foundation/09-spec-driven-product-thinking-notes.html",
+          },
+        },
+        {
+          phase: 1,
+          num: "10",
+          title: "Build Personal Site & Present",
+          topics:
+            "Personal site with AI · 4-min presentation · aptitude signal",
+          status: "done",
+          files: {},
+        },
+        {
+          phase: 1,
+          num: "11",
+          title: "Vertical Assignment",
+          topics: "Results & feedback · preferences · placement",
+          status: "done",
+          files: {},
+        },
+
+        // PHASE 3
+        {
+          phase: 3,
+          num: "—",
+          title: "Capstone · Cross-Vertical Build",
+          topics:
+            "Mixed teams build a real GMC-relevant product over ~10 classes",
+          status: "upcoming",
+          files: {},
+        },
+        {
+          phase: 3,
+          num: "—",
+          title: "Exhibition / Demo Day",
+          topics: "Public showcase · may coincide with Pelsung graduation",
+          status: "upcoming",
+          files: {},
+        },
+
+        // PHASE 4 — EXTRA / SUPPLEMENTARY
+        {
+          phase: 4,
+          num: "E1",
+          title: "UX & HCI Basics",
+          topics:
+            "Heuristics · Fitts & Hick · mobile thumb zones · accessibility · mBoB teardown",
+          status: "done",
+          files: {
+            slides: "extra/e1-ux-hci-basics-slides.html",
+            notes: "extra/e1-ux-hci-basics-notes.html",
+          },
+        },
+        {
+          phase: 4,
+          num: "E2",
+          title: "Markdown",
+          topics:
+            "Syntax · GFM · READMEs · bug reports · specs · AI prompts · live playground",
+          status: "done",
+          files: {
+            slides: "extra/e2-markdown-slides.html",
+            notes: "extra/e2-markdown-notes.html",
+          },
+        },
+        {
+          phase: 4,
+          num: "E3",
+          title: "React Practice Day — 2 Apps",
+          topics:
+            "Self-paced · master/detail pattern · JSONPlaceholder · PokéAPI · chained fetching",
+          status: "done",
+          files: { slides: "extra/e3-react-practice-day-slides.html" },
+        },
+        {
+          phase: 4,
+          num: "E4",
+          title: "Sign In with Google — Supabase + React TS",
+          topics:
+            "Reference · Supabase setup · Google Cloud OAuth · supabase-js · auth state · protected routes",
+          status: "done",
+          files: { slides: "extra/e4-supabase-google-auth-slides.html" },
+        },
+        {
+          phase: 4,
+          num: "R1",
+          title: "Cohort 3 — Progress Report",
+          topics:
+            "Curriculum delivered · Capstone underway · four real-product builds in flight",
+          status: "done",
+          files: { report: "extra/cohort-3-progress-report.html" },
+        },
+      ];
+
+      /* Verticals — Core Specialization (Phase 2). Design is planned for future cohorts. */
+      const VERTICALS = [
+        {
+          id: "dev",
+          name: "Software Development",
+          short: "Dev",
+          tag: "18 classes",
+          active: true,
+          sub: "Frontend-focused track. Trainees build real web products using HTML/CSS/JS, React, and AI-assisted workflows anchored on Claude Code.",
+          topics: "FE-focused · HTML/CSS/JS · React · working with AI codegen",
+          classes: [
+            {
+              num: "01",
+              title: "Dev Environment Deep Dive",
+              topics: "Node.js · npm · VS Code extensions · terminal fluency",
+              status: "done",
+              files: {
+                slides: "dev/01-dev-environment-deep-dive-slides.html",
+                notes: "dev/01-dev-environment-deep-dive-notes.html",
+              },
+            },
+            {
+              num: "02",
+              title: "JavaScript Fundamentals I",
+              topics: "Values · variables · functions · control flow",
+              status: "done",
+              files: {
+                slides: "dev/02-javascript-fundamentals-slides.html",
+                notes: "dev/02-javascript-fundamentals-notes.html",
+              },
+            },
+            {
+              num: "03",
+              title: "JavaScript Fundamentals II",
+              topics: "Arrays · objects · iteration · destructuring",
+              status: "done",
+              files: {
+                slides: "dev/03-javascript-fundamentals-ii-slides.html",
+                notes: "dev/03-javascript-fundamentals-ii-notes.html",
+              },
+            },
+            {
+              num: "03b",
+              title: "JavaScript Practice Day",
+              topics:
+                "29 coding problems · reinforce JS I + II · VS Code + Node",
+              status: "done",
+              files: {
+                slides: "dev/03b-javascript-practice-slides.html",
+                notes: "dev/03b-javascript-practice-notes.html",
+              },
+            },
+            {
+              num: "04",
+              title: "DOM, Browser APIs & Async",
+              topics: "Selecting · events · localStorage · promises · fetch",
+              status: "done",
+              files: {
+                slides: "dev/04-dom-browser-apis-async-slides.html",
+                notes: "dev/04-dom-browser-apis-async-notes.html",
+              },
+            },
+            {
+              num: "05",
+              title: "TypeScript Foundations",
+              topics: "Types · interfaces · unions · generics · utility types",
+              status: "done",
+              files: {
+                slides: "dev/05-typescript-foundations-slides.html",
+                notes: "dev/05-typescript-foundations-notes.html",
+              },
+            },
+            {
+              num: "06",
+              title: "Intro to React",
+              topics: "Components · JSX · props · state",
+              status: "done",
+              files: {
+                slides: "dev/06-intro-to-react-slides.html",
+                notes: "dev/06-intro-to-react-notes.html",
+              },
+            },
+            {
+              num: "07",
+              title: "React Hooks",
+              topics: "useState · useEffect · custom hooks",
+              status: "done",
+              files: {
+                slides: "dev/07-react-hooks-slides.html",
+                notes: "dev/07-react-hooks-notes.html",
+              },
+            },
+            {
+              num: "08",
+              title: "React Patterns",
+              topics: "Composition · lifting state · context",
+              status: "done",
+              files: {
+                slides: "dev/08-react-patterns-slides.html",
+                notes: "dev/08-react-patterns-notes.html",
+              },
+            },
+            {
+              num: "09",
+              title: "Routing & Navigation",
+              topics:
+                "React Router · layouts · guards · part of the 09+10+11 combined tour",
+              status: "done",
+              files: {
+                slides: "dev/09-routing-apis-forms-tour-slides.html",
+                notes: "dev/09-routing-apis-forms-tour-notes.html",
+              },
+            },
+            {
+              num: "10",
+              title: "Working with APIs",
+              topics:
+                "REST · auth · error handling · loading states · part of the 09+10+11 combined tour",
+              status: "done",
+              files: {
+                slides: "dev/09-routing-apis-forms-tour-slides.html",
+                notes: "dev/09-routing-apis-forms-tour-notes.html",
+              },
+            },
+            {
+              num: "11",
+              title: "Forms & Validation",
+              topics:
+                "Controlled inputs · react-hook-form · zod · part of the 09+10+11 combined tour",
+              status: "done",
+              files: {
+                slides: "dev/09-routing-apis-forms-tour-slides.html",
+                notes: "dev/09-routing-apis-forms-tour-notes.html",
+              },
+            },
+            {
+              num: "12",
+              title: "Styling in React",
+              topics: "CSS Modules · Tailwind · component libraries",
+              status: "done",
+            },
+            {
+              num: "13",
+              title: "Build & Deployment",
+              topics: "Vite · env vars · static hosting · CI basics",
+              status: "done",
+            },
+            {
+              num: "14",
+              title: "AI-Assisted Development",
+              topics:
+                "Claude Code workflows · specs as prompts · review discipline",
+              status: "done",
+            },
+            {
+              num: "15",
+              title: "Working with a Backend",
+              topics: "API contracts · auth flows · file uploads",
+              status: "done",
+            },
+            {
+              num: "16",
+              title: "Mini Project Week",
+              topics: "Build a small app end-to-end with AI pair-programming",
+              status: "done",
+            },
+            {
+              num: "17",
+              title: "Code Review & Shipping",
+              topics: "Pull requests · feedback culture · production readiness",
+              status: "done",
+            },
+          ],
+        },
+        {
+          id: "testing",
+          name: "Quality Assurance",
+          short: "QA",
+          tag: "8 classes",
+          active: true,
+          sub: "Manual QA fundamentals for non-technical trainees. Theory of testing first, then hands-on test plans, test cases, design techniques, exploratory and manual web testing, plus AI-assisted test generation.",
+          topics:
+            "Theory · test plans · test cases · test design · exploratory · manual",
+          classes: [
+            {
+              num: "01",
+              title: "Testing Theory I — Test Types",
+              topics:
+                "Smoke · sanity · regression · retest · exploratory · ad-hoc · alpha/beta · A/B · UAT — plain English with everyday examples",
+              status: "upcoming",
+              files: {
+                slides: "testing/01-testing-theory-test-types-slides.html",
+              },
+            },
+            {
+              num: "02",
+              title: "Testing Theory II — Test Levels & Lifecycle",
+              topics:
+                "Unit/integration/system/UAT · V-model · shift-left · agile testing · ISTQB 7 principles · QA vocabulary",
+              status: "upcoming",
+              files: {
+                slides:
+                  "testing/02-testing-theory-levels-and-lifecycle-slides.html",
+              },
+            },
+            {
+              num: "03",
+              title: "The Test Plan Document",
+              topics:
+                "IEEE 829 · 21 sections · entry/exit criteria · RCI · defect SLA",
+              status: "upcoming",
+              files: {
+                slides: "testing/03-test-plan-document-slides.html",
+                notes: "testing/03-test-plan-document-notes.html",
+              },
+            },
+            {
+              num: "04",
+              title: "Writing Test Cases",
+              topics: "Structure · preconditions · steps · expected results",
+              status: "upcoming",
+              files: { slides: "testing/04-writing-test-cases-slides.html" },
+            },
+            {
+              num: "05",
+              title: "Test Design Techniques",
+              topics:
+                "Equivalence partitioning · boundary values · decision tables — taught with everyday examples",
+              status: "upcoming",
+              files: {
+                slides: "testing/05-test-design-techniques-slides.html",
+              },
+            },
+            {
+              num: "06",
+              title: "Exploratory Testing",
+              topics: "Charters · session notes · heuristics",
+              status: "upcoming",
+              files: { slides: "testing/06-exploratory-testing-slides.html" },
+            },
+            {
+              num: "07",
+              title: "Manual Web App Testing",
+              topics:
+                "Cross-browser · responsive · click-through smoke testing · common UI bugs",
+              status: "upcoming",
+              files: {
+                slides: "testing/07-manual-web-app-testing-slides.html",
+              },
+            },
+            {
+              num: "08",
+              title: "AI-Assisted Testing + Capstone Prep",
+              topics:
+                "Generating test cases with Claude · reviewing AI output · capstone test strategy",
+              status: "upcoming",
+              files: {
+                slides:
+                  "testing/08-ai-assisted-testing-and-capstone-prep-slides.html",
+              },
+            },
+          ],
+        },
+        {
+          id: "ba-qa-combined",
+          name: "BA + QA · Foundations",
+          short: "BA+QA",
+          tag: "5 classes",
+          active: true,
+          sub: "Common ground both BA and QA need: role reality, spec-reading, functional vs non-functional requirements, acceptance criteria, and estimation.",
+          topics:
+            "Role clarity · spec reading · FR vs NFR · acceptance criteria",
+          classes: [
+            {
+              num: "01",
+              title: "Role Deep-Dive · BA and QA in Software",
+              topics:
+                "What each role does · artifacts · misconceptions · handoffs · AI shift",
+              status: "done",
+              files: {
+                slides: "ba-qa-combined/01-role-deep-dive-slides.html",
+                notes: "ba-qa-combined/01-role-deep-dive-notes.html",
+              },
+            },
+            {
+              num: "02",
+              title: "Reading Requirements Critically",
+              topics:
+                "The 7 sins · ambiguity · assumptions · testability · leave-request exercise",
+              status: "done",
+              files: {
+                slides:
+                  "ba-qa-combined/02-reading-requirements-critically-slides.html",
+                notes:
+                  "ba-qa-combined/02-reading-requirements-critically-notes.html",
+              },
+            },
+            {
+              num: "03",
+              title: "Functional vs Non-Functional Requirements",
+              topics:
+                "FR vs NFR · 6 NFR categories · FURPS+ · writing testable NFRs",
+              status: "done",
+              files: {
+                slides:
+                  "ba-qa-combined/03-functional-vs-non-functional-slides.html",
+                notes:
+                  "ba-qa-combined/03-functional-vs-non-functional-notes.html",
+              },
+            },
+            {
+              num: "04",
+              title: "Acceptance Criteria · The Shared Artifact",
+              topics:
+                "Given/When/Then · SCARCE · BA → QA handoff · password-reset exercise",
+              status: "done",
+              files: {
+                slides: "ba-qa-combined/04-acceptance-criteria-slides.html",
+                notes: "ba-qa-combined/04-acceptance-criteria-notes.html",
+              },
+            },
+            {
+              num: "05",
+              title: "Estimation & Prioritization Basics",
+              topics:
+                "MoSCoW · RICE · relative sizing · MVP thinking · scope conversations",
+              status: "done",
+              files: {
+                slides:
+                  "ba-qa-combined/05-estimation-and-prioritization-slides.html",
+                notes:
+                  "ba-qa-combined/05-estimation-and-prioritization-notes.html",
+              },
+            },
+          ],
+        },
+        {
+          id: "ba-qa-specs",
+          name: "BA + QA · Spec Stack",
+          short: "BA+QA",
+          tag: "6 classes",
+          active: true,
+          sub: "The artifact stack both BAs and QAs work with daily. Every spec document type, in the order they sit in the spec lifecycle.",
+          topics:
+            "Anatomy · BRD · SRS · HLD/LLD · writing mechanics · teardown",
+          classes: [
+            {
+              num: "01",
+              title: "Anatomy of a Dev-Ready Spec",
+              topics:
+                "12 sections · IEEE/PRD/Feature-spec traditions · lifecycle · 20-min rule · template kit",
+              status: "done",
+              files: {
+                slides:
+                  "ba-qa-specs/01-anatomy-of-a-dev-ready-spec-slides.html",
+                notes: "ba-qa-specs/01-anatomy-of-a-dev-ready-spec-notes.html",
+              },
+            },
+            {
+              num: "02",
+              title: "The BRD Document",
+              topics:
+                "Pre-solution · business language · as-is/to-be · cost-benefit · stakeholder approvals",
+              status: "done",
+              files: {
+                slides: "ba-qa-specs/02-brd-business-requirements-slides.html",
+                notes: "ba-qa-specs/02-brd-business-requirements-notes.html",
+              },
+            },
+            {
+              num: "03",
+              title: "The SRS Document",
+              topics:
+                "IEEE 29148 · when to use · verification matrix · traceability · worked example",
+              status: "done",
+              files: {
+                slides: "ba-qa-specs/03-srs-document-slides.html",
+                notes: "ba-qa-specs/03-srs-document-notes.html",
+              },
+            },
+            {
+              num: "04",
+              title: "HLD & LLD Workshop",
+              topics:
+                "C4 model · architectural style · quality attributes · error taxonomy · concurrency · BA & QA review lens",
+              status: "done",
+              files: {
+                slides: "ba-qa-specs/04-hld-lld-workshop-slides.html",
+                notes: "ba-qa-specs/04-hld-lld-workshop-notes.html",
+              },
+            },
+            {
+              num: "05",
+              title: "Writing Mechanics for Specs",
+              topics:
+                "Active voice · precise verbs · consistent terminology · lists over prose · diagrams that carry weight",
+              status: "done",
+            },
+            {
+              num: "06",
+              title: "Spec Teardown Workshop",
+              topics: "Read · annotate · rewrite · sin-by-sin with real specs",
+              status: "done",
+            },
+          ],
+        },
+        {
+          id: "ba-qa-diagrams",
+          name: "Diagrams",
+          short: "Diagrams",
+          tag: "7 classes · cross-vertical",
+          active: true,
+          sub: "The seven diagrams every software professional should read fluently — useful across BA, QA, Dev, and Design. BAs draw them, QAs derive tests from them, devs implement what they describe, designers reference them in handoffs. One session per diagram type.",
+          topics:
+            "Use case · BPMN · flowchart · swimlane · activity · DFD · sequence",
+          classes: [
+            {
+              num: "01",
+              title: "Use Case Diagrams & Scenarios",
+              topics:
+                "UML use case diagram · actors · system boundary · include/extend · main & alt flows",
+              status: "done",
+              files: {
+                slides: "ba-qa-diagrams/01-use-case-diagrams-slides.html",
+                notes: "ba-qa-diagrams/01-use-case-diagrams-notes.html",
+              },
+            },
+            {
+              num: "02",
+              title: "BPMN",
+              topics:
+                "OMG BPMN 2.0 · pools · lanes · events · activities · gateways · flows",
+              status: "done",
+              files: {
+                slides: "ba-qa-diagrams/02-bpmn-slides.html",
+                notes: "ba-qa-diagrams/02-bpmn-notes.html",
+              },
+            },
+            {
+              num: "03",
+              title: "Flowcharts",
+              topics:
+                "Start / process / decision / I-O · algorithmic thinking · eligibility rules",
+              status: "done",
+              files: {
+                slides: "ba-qa-diagrams/03-flowcharts-slides.html",
+                notes: "ba-qa-diagrams/03-flowcharts-notes.html",
+              },
+            },
+            {
+              num: "04",
+              title: "Swimlane Diagrams",
+              topics:
+                "Actors in lanes · handoffs · bottleneck finding · Rummler-Brache",
+              status: "done",
+              files: {
+                slides: "ba-qa-diagrams/04-swimlane-slides.html",
+                notes: "ba-qa-diagrams/04-swimlane-notes.html",
+              },
+            },
+            {
+              num: "05",
+              title: "UML Activity Diagrams",
+              topics:
+                "Fork/join · parallel flow · partitions · choice vs parallel · object flow",
+              status: "done",
+              files: {
+                slides: "ba-qa-diagrams/05-activity-diagrams-slides.html",
+                notes: "ba-qa-diagrams/05-activity-diagrams-notes.html",
+              },
+            },
+            {
+              num: "06",
+              title: "Data Flow Diagrams (DFD)",
+              topics:
+                "External entity · process · data store · data flow · levels · balancing rule",
+              status: "done",
+              files: {
+                slides: "ba-qa-diagrams/06-data-flow-diagrams-slides.html",
+                notes: "ba-qa-diagrams/06-data-flow-diagrams-notes.html",
+              },
+            },
+            {
+              num: "07",
+              title: "UML Sequence Diagrams",
+              topics:
+                "Lifelines · activation bars · sync/async messages · alt/opt/loop · API contracts",
+              status: "done",
+              files: {
+                slides: "ba-qa-diagrams/07-sequence-diagrams-slides.html",
+                notes: "ba-qa-diagrams/07-sequence-diagrams-notes.html",
+              },
+            },
+          ],
+        },
+        {
+          id: "ba-qa-quality",
+          name: "Quality & Compliance",
+          short: "Quality",
+          tag: "5 classes · cross-vertical",
+          active: true,
+          sub: "Cross-cutting fundamentals every software professional needs — testing basics, bug reporting, risk thinking, data protection law, and post-launch instrumentation. ISO 25010 quality attributes and WCAG accessibility are folded across the block.",
+          topics:
+            "Testing · bugs · risk · compliance · security · observability · telemetry",
+          classes: [
+            {
+              num: "01",
+              title: "Software Testing Fundamentals",
+              topics:
+                "Verification vs validation · test pyramid · levels · functional vs non-functional · ISO 25010 · WCAG basics",
+              status: "done",
+              files: {
+                slides: "ba-qa-quality/01-testing-fundamentals-slides.html",
+                notes: "ba-qa-quality/01-testing-fundamentals-notes.html",
+              },
+            },
+            {
+              num: "02",
+              title: "Bug Reporting & Defect Lifecycle",
+              topics:
+                "Bug anatomy · severity vs priority · lifecycle state machine · triage · accessibility bugs",
+              status: "done",
+              files: {
+                slides: "ba-qa-quality/02-bug-reporting-slides.html",
+                notes: "ba-qa-quality/02-bug-reporting-notes.html",
+              },
+            },
+            {
+              num: "03",
+              title: "Risk Management & Risk-Based Thinking",
+              topics:
+                "Likelihood × impact · risk register · 4 responses · 6 categories · risk-based testing",
+              status: "done",
+              files: {
+                slides: "ba-qa-quality/03-risk-management-slides.html",
+                notes: "ba-qa-quality/03-risk-management-notes.html",
+              },
+            },
+            {
+              num: "04",
+              title: "Data Protection & Compliance",
+              topics:
+                "Bhutan DPPA · GDPR · PCI-DSS · 7 principles · valid consent · 72-hour breach · WCAG/EAA",
+              status: "done",
+              files: {
+                slides:
+                  "ba-qa-quality/04-data-protection-compliance-slides.html",
+                notes: "ba-qa-quality/04-data-protection-compliance-notes.html",
+              },
+            },
+            {
+              num: "05",
+              title: "Security, Observability & Telemetry",
+              topics:
+                "OWASP Top 10 · logs/metrics/traces · SLI/SLO · funnels · KPIs",
+              status: "done",
+              files: {
+                slides:
+                  "ba-qa-quality/05-security-observability-telemetry-slides.html",
+                notes:
+                  "ba-qa-quality/05-security-observability-telemetry-notes.html",
+              },
+            },
+          ],
+        },
+        {
+          id: "ba",
+          name: "Business Analysis",
+          short: "BA",
+          tag: "14 classes",
+          active: true,
+          sub: "BA-specific craft for non-technical trainees — stakeholders, elicitation, customer interviews, personas, user stories, wireframes, project planning, backlog grooming, validation, documentation, presentations, change management.",
+          topics:
+            "Elicitation · interviews · personas · user stories · planning · UAT · presentations",
+          classes: [
+            {
+              num: "01",
+              title: "Stakeholder Mapping",
+              topics:
+                "Identifying stakeholders · power/interest grid · RACI vs RCI",
+              status: "upcoming",
+              files: { slides: "ba/01-stakeholder-mapping-slides.html" },
+            },
+            {
+              num: "02",
+              title: "Requirements Elicitation",
+              topics: "Interviews · workshops · observation · surveys",
+              status: "upcoming",
+              files: { slides: "ba/02-requirements-elicitation-slides.html" },
+            },
+            {
+              num: "03",
+              title: "Customer Interview Practice",
+              topics:
+                "Live role-play · listening for pain points · open-ended questions · note-taking",
+              status: "upcoming",
+              files: {
+                slides: "ba/03-customer-interview-practice-slides.html",
+              },
+            },
+            {
+              num: "04",
+              title: "User Personas & Journey Maps",
+              topics:
+                "Empathy artifacts · persona templates · journey mapping workshop",
+              status: "upcoming",
+              files: { slides: "ba/04-personas-and-journey-maps-slides.html" },
+            },
+            {
+              num: "05",
+              title: "Writing Clear User Stories",
+              topics: "Story format · INVEST · acceptance criteria",
+              status: "upcoming",
+              files: { slides: "ba/05-writing-user-stories-slides.html" },
+            },
+            {
+              num: "06",
+              title: "Wireframing for Communication",
+              topics: "Low-fi sketches · Figma basics · clickthroughs",
+              status: "upcoming",
+              files: {
+                slides: "ba/06-wireframing-for-communication-slides.html",
+              },
+            },
+            {
+              num: "07",
+              title: "Project Planning & Estimation",
+              topics:
+                "Scope · breakdown · estimation techniques · timelines · MoSCoW prioritization",
+              status: "upcoming",
+              files: {
+                slides: "ba/07-project-planning-and-estimation-slides.html",
+              },
+            },
+            {
+              num: "08",
+              title: "Backlog Grooming Workshop",
+              topics: "Hands-on grooming · refinement · prioritization · DOR",
+              status: "upcoming",
+              files: { slides: "ba/08-backlog-grooming-workshop-slides.html" },
+            },
+            {
+              num: "09",
+              title: "Working with Design",
+              topics: "Handoffs · reviewing wireframes · usability heuristics",
+              status: "upcoming",
+              files: { slides: "ba/09-working-with-design-slides.html" },
+            },
+            {
+              num: "10",
+              title: "Working with Dev & QA",
+              topics: "Clarifying questions · acceptance testing · triage",
+              status: "upcoming",
+              files: { slides: "ba/10-working-with-dev-and-qa-slides.html" },
+            },
+            {
+              num: "11",
+              title: "Validation & UAT",
+              topics: "Test scripts for business users · sign-off flows",
+              status: "upcoming",
+              files: { slides: "ba/11-validation-and-uat-slides.html" },
+            },
+            {
+              num: "12",
+              title: "Documentation Discipline",
+              topics:
+                "What to write down vs link · keeping docs alive · agent-os style spec formatting",
+              status: "upcoming",
+              files: { slides: "ba/12-documentation-discipline-slides.html" },
+            },
+            {
+              num: "13",
+              title: "Storytelling & Presentations for BAs",
+              topics:
+                "Selling a recommendation to leadership · narrative structure · slide hygiene",
+              status: "upcoming",
+              files: {
+                slides: "ba/13-storytelling-and-presentations-slides.html",
+              },
+            },
+            {
+              num: "14",
+              title: "Change Management",
+              topics: "Rollout plans · training users · managing resistance",
+              status: "upcoming",
+              files: { slides: "ba/14-change-management-slides.html" },
+            },
+          ],
+        },
+        {
+          id: "design",
+          name: "Software Design",
+          short: "UX/UI",
+          tag: "future cohort",
+          active: false,
+          sub: "UX research, wireframing, visual design, and design-to-dev handoff. Planned for a future cohort.",
+          topics: "Research · wireframes · Figma · handoff to Dev",
+          classes: [],
+        },
+      ];
+
+      const CHIP_LABELS = { slides: "slides", notes: "notes", report: "report" };
+
+      /* ========== DOM helpers (safe — no innerHTML with interpolated strings) ========== */
+      function el(tag, attrs, children) {
+        const n = document.createElement(tag);
+        if (attrs)
+          for (const k in attrs) {
+            if (k === "class") n.className = attrs[k];
+            else if (k === "style") n.setAttribute("style", attrs[k]);
+            else if (k.startsWith("data-")) n.setAttribute(k, attrs[k]);
+            else if (k in n) n[k] = attrs[k];
+            else n.setAttribute(k, attrs[k]);
+          }
+        if (children != null) {
+          const arr = Array.isArray(children) ? children : [children];
+          for (const c of arr) {
+            if (c == null || c === false) continue;
+            n.appendChild(
+              typeof c === "string" ? document.createTextNode(c) : c,
+            );
+          }
+        }
+        return n;
+      }
+      function clear(node) {
+        while (node.firstChild) node.removeChild(node.firstChild);
+      }
+
+      /* ========== state ========== */
+      const state = { phase: 1, vertical: null };
+
+      /* ========== counts ========== */
+      function countPhase(id) {
+        if (id === 2) {
+          const total = VERTICALS.filter((v) => v.active).reduce(
+            (n, v) => n + v.classes.length,
+            0,
+          );
+          return { total, built: 0 };
+        }
+        const rows = CLASSES.filter((c) => c.phase === id);
+        const built = rows.filter((c) => c.status === "done").length;
+        return { total: rows.length, built };
+      }
+
+      /* ========== RAIL ========== */
+      function renderRail() {
+        const list = document.getElementById("phase-list");
+        clear(list);
+
+        for (const p of PHASES) {
+          const c = countPhase(p.id);
+          const pct =
+            typeof c.total === "number" && c.total > 0
+              ? Math.round((c.built / c.total) * 100)
+              : 0;
+
+          const item = el(
+            "li",
+            { class: "phase-item", "data-phase": String(p.id), tabindex: "0" },
+            [
+              el("span", { class: "phase-dot" }),
+              el("div", { class: "phase-num" }, p.num),
+              el("div", { class: "phase-name" }, p.name),
+              el("div", { class: "phase-meta" }, p.tag),
+            ],
+          );
+
+          item.addEventListener("click", () => selectPhase(p.id));
+          item.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") selectPhase(p.id);
+          });
+          list.appendChild(item);
+
+          // sub-nav for Specialization
+          if (p.kind === "verticals") {
+            const sub = el("ul", {
+              class: "sub-list",
+              "data-sub-for": String(p.id),
+            });
+            for (const v of VERTICALS) {
+              const li = el(
+                "li",
+                {
+                  class: "sub-item" + (v.active ? "" : " muted"),
+                  "data-vertical": v.id,
+                },
+                [el("span", {}, v.name), el("span", { class: "v-tag" }, v.tag)],
+              );
+              if (v.active) {
+                li.addEventListener("click", (e) => {
+                  e.stopPropagation();
+                  selectVertical(v.id);
+                });
+              }
+              sub.appendChild(li);
+            }
+            list.appendChild(sub);
+          }
+        }
+      }
+
+      /* ========== chip ========== */
+      function chipEl(kind, href) {
+        if (!href) {
+          return el(
+            "span",
+            { class: "chip off", title: CHIP_LABELS[kind] + " not yet built" },
+            CHIP_LABELS[kind],
+          );
+        }
+        return el(
+          "a",
+          { class: "chip live", href: href, target: "_blank", rel: "noopener" },
+          CHIP_LABELS[kind],
+        );
+      }
+
+      /* ========== class row (phase 1 / 3) ========== */
+      function classRow(r) {
+        const reportHref = r.files && r.files.report;
+        const chips = reportHref
+          ? [chipEl("report", reportHref)]
+          : [
+              chipEl("slides", r.files && r.files.slides),
+              chipEl("notes", r.files && r.files.notes),
+            ];
+        return el("div", { class: "row " + (r.status || "") }, [
+          el("div", { class: "r-num mono" }, r.num),
+          el("div", { class: "r-body" }, [
+            el("div", { class: "r-title" }, r.title),
+            el("div", { class: "r-topics" }, r.topics),
           ]),
-          el('div', { class: 'v-title' }, v.name),
-          el('div', { class: 'v-topics' }, v.sub),
-          el('div', { class: 'v-cta' }, v.active ? 'Open curriculum →' : 'Not in this cohort')
-        ]
-      );
-      if (v.active) {
-        card.addEventListener('click', (e) => { e.preventDefault(); selectVertical(v.id); });
-      } else {
-        card.addEventListener('click', (e) => e.preventDefault());
-      }
-      return card;
-    }
-
-    /* ========== simple class row (for verticals/capstone — shows chips if files exist) ========== */
-    function plainClassRow(r) {
-      if (r.files && (r.files.slides || r.files.notes)) {
-        return classRow(r);
-      }
-      return el('div', { class: 'row' }, [
-        el('div', { class: 'r-num mono' }, r.num),
-        el('div', { class: 'r-body' }, [
-          el('div', { class: 'r-title' }, r.title),
-          el('div', { class: 'r-topics' }, r.topics)
-        ]),
-        el('div', { class: 'r-status' }, 'planned')
-      ]);
-    }
-
-    /* ========== STAGE ========== */
-    function renderStage() {
-      const stage = document.getElementById('stage');
-      clear(stage);
-
-      const p = PHASES.find(x => x.id === state.phase);
-
-      // Phase 2 + vertical selected → vertical detail view
-      if (p.kind === 'verticals' && state.vertical) {
-        const v = VERTICALS.find(x => x.id === state.vertical);
-
-        const crumb = el('div', { class: 'stage-crumb' }, [
-          linkText('Curriculum', () => selectPhase(1)),
-          el('span', { class: 'sep' }, '/'),
-          linkText(p.name, () => selectPhase(2)),
-          el('span', { class: 'sep' }, '/'),
-          el('span', { class: 'here' }, v.name)
+          el("div", { class: "chips" }, chips),
         ]);
+      }
 
-        const head = el('div', { class: 'stage-head' }, [
-          el('div', {}, [
-            el('div', { class: 'stage-eyebrow' }, [
-              el('span', { class: 'tick' }),
-              'Vertical · ' + v.short
+      /* ========== vertical overview card ========== */
+      function verticalCard(v) {
+        const card = el(
+          "a",
+          {
+            class: "v-card" + (v.active ? "" : " muted"),
+            style: "--swatch: var(--" + v.id + ");",
+            href: v.active ? "#" : null,
+          },
+          [
+            el("div", { class: "v-eyebrow" }, [
+              el("span", {}, v.short),
+              el("span", { class: "v-count" }, v.tag),
             ]),
-            el('h1',  { class: 'stage-title' }, v.name),
-            el('p',   { class: 'stage-sub' }, v.sub)
-          ])
+            el("div", { class: "v-title" }, v.name),
+            el("div", { class: "v-topics" }, v.sub),
+            el(
+              "div",
+              { class: "v-cta" },
+              v.active ? "Open curriculum →" : "Not in this cohort",
+            ),
+          ],
+        );
+        if (v.active) {
+          card.addEventListener("click", (e) => {
+            e.preventDefault();
+            selectVertical(v.id);
+          });
+        } else {
+          card.addEventListener("click", (e) => e.preventDefault());
+        }
+        return card;
+      }
+
+      /* ========== simple class row (for verticals/capstone — shows chips if files exist) ========== */
+      function plainClassRow(r) {
+        if (r.files && (r.files.slides || r.files.notes)) {
+          return classRow(r);
+        }
+        const statusLabel = r.status === "done" ? "done" : "planned";
+        return el("div", { class: "row " + (r.status || "") }, [
+          el("div", { class: "r-num mono" }, r.num),
+          el("div", { class: "r-body" }, [
+            el("div", { class: "r-title" }, r.title),
+            el("div", { class: "r-topics" }, r.topics),
+          ]),
+          el("div", { class: "r-status" }, statusLabel),
+        ]);
+      }
+
+      /* ========== STAGE ========== */
+      function renderStage() {
+        const stage = document.getElementById("stage");
+        clear(stage);
+
+        const p = PHASES.find((x) => x.id === state.phase);
+
+        // Phase 2 + vertical selected → vertical detail view
+        if (p.kind === "verticals" && state.vertical) {
+          const v = VERTICALS.find((x) => x.id === state.vertical);
+
+          const crumb = el("div", { class: "stage-crumb" }, [
+            linkText("Curriculum", () => selectPhase(1)),
+            el("span", { class: "sep" }, "/"),
+            linkText(p.name, () => selectPhase(2)),
+            el("span", { class: "sep" }, "/"),
+            el("span", { class: "here" }, v.name),
+          ]);
+
+          const head = el("div", { class: "stage-head" }, [
+            el("div", {}, [
+              el("div", { class: "stage-eyebrow" }, [
+                el("span", { class: "tick" }),
+                "Vertical · " + v.short,
+              ]),
+              el("h1", { class: "stage-title" }, v.name),
+              el("p", { class: "stage-sub" }, v.sub),
+            ]),
+          ]);
+
+          const ladder = el("div", { class: "ladder" });
+          for (const r of v.classes) ladder.appendChild(plainClassRow(r));
+
+          stage.appendChild(crumb);
+          stage.appendChild(head);
+          stage.appendChild(ladder);
+          return;
+        }
+
+        // Phase 2 overview → vertical cards
+        if (p.kind === "verticals") {
+          const crumb = el("div", { class: "stage-crumb" }, [
+            linkText("Curriculum", () => selectPhase(1)),
+            el("span", { class: "sep" }, "/"),
+            el("span", { class: "here" }, p.name),
+          ]);
+
+          const head = el("div", { class: "stage-head" }, [
+            el("div", {}, [
+              el("div", { class: "stage-eyebrow" }, [
+                el("span", { class: "tick" }),
+                p.num,
+              ]),
+              el("h1", { class: "stage-title" }, p.name),
+              el("p", { class: "stage-sub" }, p.sub),
+            ]),
+          ]);
+
+          const grid = el("div", { class: "v-grid" });
+          for (const v of VERTICALS) grid.appendChild(verticalCard(v));
+
+          stage.appendChild(crumb);
+          stage.appendChild(head);
+          stage.appendChild(grid);
+          return;
+        }
+
+        // Phase 1 or 3 → class ladder
+        const c = countPhase(p.id);
+        const progress =
+          c.total > 0
+            ? Math.min(100, Math.round((c.built / c.total) * 100))
+            : 0;
+
+        const head = el("div", { class: "stage-head" }, [
+          el("div", {}, [
+            el("div", { class: "stage-eyebrow" }, [
+              el("span", { class: "tick" }),
+              p.num,
+            ]),
+            el("h1", { class: "stage-title" }, p.name),
+            el("p", { class: "stage-sub" }, p.sub),
+          ]),
         ]);
 
-        const ladder = el('div', { class: 'ladder' });
-        for (const r of v.classes) ladder.appendChild(plainClassRow(r));
+        const ladder = el("div", {
+          class: "ladder",
+          style: "--progress:" + progress + "%",
+        });
+        const rows = CLASSES.filter((c) => c.phase === p.id);
+        for (const r of rows) ladder.appendChild(classRow(r));
 
-        stage.appendChild(crumb);
         stage.appendChild(head);
         stage.appendChild(ladder);
-        return;
       }
 
-      // Phase 2 overview → vertical cards
-      if (p.kind === 'verticals') {
-        const crumb = el('div', { class: 'stage-crumb' }, [
-          linkText('Curriculum', () => selectPhase(1)),
-          el('span', { class: 'sep' }, '/'),
-          el('span', { class: 'here' }, p.name)
-        ]);
-
-        const head = el('div', { class: 'stage-head' }, [
-          el('div', {}, [
-            el('div', { class: 'stage-eyebrow' }, [el('span', { class: 'tick' }), p.num]),
-            el('h1',  { class: 'stage-title' }, p.name),
-            el('p',   { class: 'stage-sub' }, p.sub)
-          ])
-        ]);
-
-        const grid = el('div', { class: 'v-grid' });
-        for (const v of VERTICALS) grid.appendChild(verticalCard(v));
-
-        stage.appendChild(crumb);
-        stage.appendChild(head);
-        stage.appendChild(grid);
-        return;
+      function linkText(text, handler) {
+        const a = el("a", { href: "#" }, text);
+        a.addEventListener("click", (e) => {
+          e.preventDefault();
+          handler();
+        });
+        return a;
       }
 
-      // Phase 1 or 3 → class ladder
-      const c = countPhase(p.id);
-      const progress = c.total > 0 ? Math.min(100, Math.round((c.built / c.total) * 100)) : 0;
+      function syncRail() {
+        document.querySelectorAll(".phase-item").forEach((e) => {
+          const pid = parseInt(e.getAttribute("data-phase"), 10);
+          e.classList.toggle("active", pid === state.phase);
+          e.classList.toggle("open", pid === 2 && state.phase === 2);
+        });
+        document.querySelectorAll(".sub-item").forEach((e) => {
+          e.classList.toggle(
+            "active",
+            e.getAttribute("data-vertical") === state.vertical,
+          );
+        });
+      }
 
-      const head = el('div', { class: 'stage-head' }, [
-        el('div', {}, [
-          el('div', { class: 'stage-eyebrow' }, [el('span', { class: 'tick' }), p.num]),
-          el('h1',  { class: 'stage-title' }, p.name),
-          el('p',   { class: 'stage-sub' }, p.sub)
-        ])
-      ]);
+      function selectPhase(id) {
+        state.phase = id;
+        state.vertical = null;
+        syncRail();
+        renderStage();
+      }
 
-      const ladder = el('div', { class: 'ladder', style: '--progress:' + progress + '%' });
-      const rows = CLASSES.filter(c => c.phase === p.id);
-      for (const r of rows) ladder.appendChild(classRow(r));
+      function selectVertical(id) {
+        state.phase = 2;
+        state.vertical = id;
+        syncRail();
+        renderStage();
+      }
 
-      stage.appendChild(head);
-      stage.appendChild(ladder);
-    }
-
-    function linkText(text, handler) {
-      const a = el('a', { href: '#' }, text);
-      a.addEventListener('click', (e) => { e.preventDefault(); handler(); });
-      return a;
-    }
-
-    function syncRail() {
-      document.querySelectorAll('.phase-item').forEach(e => {
-        const pid = parseInt(e.getAttribute('data-phase'), 10);
-        e.classList.toggle('active', pid === state.phase);
-        e.classList.toggle('open', pid === 2 && state.phase === 2);
+      document.addEventListener("keydown", (e) => {
+        if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")
+          return;
+        if (e.key === "Escape" && state.vertical) selectPhase(2);
       });
-      document.querySelectorAll('.sub-item').forEach(e => {
-        e.classList.toggle('active', e.getAttribute('data-vertical') === state.vertical);
-      });
-    }
 
-    function selectPhase(id) {
-      state.phase = id;
-      state.vertical = null;
-      syncRail();
-      renderStage();
-    }
-
-    function selectVertical(id) {
-      state.phase = 2;
-      state.vertical = id;
-      syncRail();
-      renderStage();
-    }
-
-    document.addEventListener('keydown', (e) => {
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-      if (e.key === 'Escape' && state.vertical) selectPhase(2);
-    });
-
-    renderRail();
-    selectPhase(1);
-  </script>
-</body>
+      renderRail();
+      selectPhase(1);
+    </script>
+  </body>
 </html>
